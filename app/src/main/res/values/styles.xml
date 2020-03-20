@@ -96,4 +96,14 @@
         <item name="android:textSize">@dimen/numpad_button_text_size</item>
         <item name="android:typeface">sans</item>
     </style>
+
+    <style name="InstructionPopup" parent="android:Widget.TextView">
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:minWidth">75dp</item>
+        <item name="android:maxWidth">175dp</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
 </resources>
