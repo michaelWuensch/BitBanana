@@ -1,8 +1,8 @@
 ## How to translate:
 
-1. Fork the Zap Android git repo
+1. Fork the BitBanana git repo
 2. Install Android Studio
-3. Open the Zap Android project in Android Studio
+3. Open the BitBanana project in Android Studio
 4. Open the translations editor in Android Studio (Right-click the strings.xml file, and select Open Translations Editor. )
 5. Select your language in the dropdown or add it, if it is not available yet.
 6. Translate the missing strings.

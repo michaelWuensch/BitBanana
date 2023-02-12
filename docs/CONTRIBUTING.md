@@ -11,7 +11,7 @@ Thanks for being willing to contribute!
 
 #### **Did you find a bug?**
 
-- **Do not open up a GitHub issue if the bug is a security vulnerability in Zap**, and instead to refer to our [Security Policy](../README.md#security).
+- **Do not open up a GitHub issue if the bug is a security vulnerability in BitBanana**, and instead to refer to our [Security Policy](../README.md#security).
 
 - **Ensure the bug was not already reported** by searching on GitHub under [Issues][issues].
 
@@ -27,11 +27,11 @@ Thanks for being willing to contribute!
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-- Please join us on [slack][slack] and check [open issues][issues] to see what contributions are needed before tackling a task to avoid duplicate work.
+- Please join us on [discord][discord] and check [open issues][issues] to see what contributions are needed before tackling a task to avoid duplicate work.
 
 #### **Do you have questions about the source code?**
 
-- Ask any question about the Zap source code in [slack][slack].
+- Ask any question about the BitBanana source code in [discord][discord].
 
 ## Contribution Guidelines
 
@@ -46,6 +46,6 @@ This project has lint rules and pull requests should pass before being merged. T
 We also provide some code style rules within the project. Make sure your IDE is taking the provided files into consideration.
 If you are using IntelliJ or Android Studio, check out the following link for selecting the projects code style: [IntelliJ Code Style][codestyle]
 
-[issues]: https://github.com/LN-Zap/zap-android/issues
-[slack]: https://join.slack.com/t/zaphq/shared_invite/enQtMzgyNDA2NDI2Nzg0LTQwZWQ2ZWEzOWFhMjRiNWZkZWMwYTA4MzA5NzhjMDNhNTM5YzliNDA4MmZkZWZkZTFmODM4ODJkYzU3YmI3ZmI
+[issues]: https://github.com/michaelWuensch/BitBanana/issues
+[discord]: https://discord.gg/Xg85BuTc9A
 [codestyle]: https://www.jetbrains.com/help/idea/configuring-code-style.html
