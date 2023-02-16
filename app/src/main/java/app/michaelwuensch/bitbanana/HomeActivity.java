@@ -460,8 +460,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         App.getAppContext().connectionToLNDEstablished = true;
 
         // Warn the user if an old LND version is used.
-        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.13.3")) < 0) {
-            new UserGuardian(this).securityOldLndVersion("v0.13.3-beta");
+        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.15.0")) < 0) {
+            new UserGuardian(this).securityOldLndVersion("v0.15.0-beta");
         }
 
         // Fetch the transaction history
