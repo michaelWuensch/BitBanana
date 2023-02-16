@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GeneratedRequestActivity">
+    tools:context="app.michaelwuensch.bitbanana.GeneratedRequestActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,14 +104,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_share_black_24dp"
-                    app:tint="@color/lightningOrange" />
+                    app:tint="@color/banana_yellow" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:text="@string/share"
-                    android:textColor="@color/lightningOrange"
+                    android:textColor="@color/banana_yellow"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -144,14 +144,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_content_copy_black_24dp"
-                    app:tint="@color/lightningOrange" />
+                    app:tint="@color/banana_yellow" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:text="@string/copy"
-                    android:textColor="@color/lightningOrange"
+                    android:textColor="@color/banana_yellow"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/receive_requestFullfilled"
                 android:textAlignment="center"
-                android:textColor="@color/superGreen"
+                android:textColor="@color/super_green"
                 android:textSize="36sp" />
 
             <ImageView
@@ -213,7 +213,7 @@
             android:background="@drawable/bg_clickable_item"
             android:text="@string/ok"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"

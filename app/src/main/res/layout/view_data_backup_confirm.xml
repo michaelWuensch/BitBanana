@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_warning_24px"
-        app:tint="@color/lightningOrange" />
+        app:tint="@color/banana_yellow" />
 
     <TextView
         android:id="@+id/data_backup_confirm_title"
@@ -74,7 +74,7 @@
         android:background="@android:color/transparent"
         android:text="@string/cancel"
         android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
+        android:textColor="@color/banana_yellow"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

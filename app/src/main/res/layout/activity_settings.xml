@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/deepSeaBlue"
-    tools:context=".AdvancedSettingsActivity">
+    tools:context="app.michaelwuensch.bitbanana.AdvancedSettingsActivity">
 
     <FrameLayout
         android:id="@+id/mainContent"

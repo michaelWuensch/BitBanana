@@ -1,0 +1,44 @@
+package app.michaelwuensch.bitbanana.lnurl.withdraw;
+
+import java.io.Serializable;
+
+import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
+
+/**
+ * This class helps to work with the received response from a LNURL-withdraw request.
+ * <p>
+ * Please refer to step 3 in the following reference:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/03.md
+ */
+public class LnUrlWithdrawResponse extends LnUrlResponse implements Serializable {
+
+    public static final String ARGS_KEY = "lnurlWithdrawResponse";
+
+    private String k1;
+    private String defaultDescription;
+    /**
+     * In milliSatoshis
+     */
+    private long maxWithdrawable;
+    /**
+     * In milliSatoshis
+     */
+    private long minWithdrawable;
+
+
+    public String getK1() {
+        return k1;
+    }
+
+    public String getDefaultDescription() {
+        return defaultDescription;
+    }
+
+    public long getMaxWithdrawable() {
+        return maxWithdrawable;
+    }
+
+    public long getMinWithdrawable() {
+        return minWithdrawable;
+    }
+}

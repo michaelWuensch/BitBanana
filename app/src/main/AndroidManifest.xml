@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="zapsolutions.zap">
+    package="app.michaelwuensch.bitbanana">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.NFC" />
 
     <application
-        android:name=".baseClasses.App"
+        android:name="app.michaelwuensch.bitbanana.baseClasses.App"
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".LandingActivity"
+            android:name="app.michaelwuensch.bitbanana.LandingActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:noHistory="true"
@@ -45,7 +45,7 @@
             </intent-filter>
             <intent-filter>
 
-                <!-- Enables Zap to be started from NFC Tags containing a bitcoin or lightning uri -->
+                <!-- Enables BitBanana to be started from NFC Tags containing a bitcoin or lightning uri -->
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -56,116 +56,116 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="app.michaelwuensch.bitbanana.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ScanActivity"
+            android:name="app.michaelwuensch.bitbanana.ScanActivity"
             android:label="@string/scan"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name=".GeneratedRequestActivity"
+            android:name="app.michaelwuensch.bitbanana.GeneratedRequestActivity"
             android:label="@string/activity_receive"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".setup.SetupActivity"
+            android:name="app.michaelwuensch.bitbanana.setup.SetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".pin.PinSetupActivity"
+            android:name="app.michaelwuensch.bitbanana.pin.PinSetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".setup.ConnectRemoteNodeActivity"
+            android:name="app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity"
             android:label="@string/activity_connectRemoteNode"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name=".pin.PinEntryActivity"
+            android:name="app.michaelwuensch.bitbanana.pin.PinEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".channelManagement.ManageChannelsActivity"
+            android:name="app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity"
             android:label="@string/activity_manage_channels"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".nodesManagement.ManageNodesActivity"
+            android:name="app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity"
             android:label="@string/activity_manage_nodes"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="app.michaelwuensch.bitbanana.SettingsActivity"
             android:label="@string/navigation_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".AdvancedSettingsActivity"
+            android:name="app.michaelwuensch.bitbanana.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".SupportActivity"
+            android:name="app.michaelwuensch.bitbanana.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".channelManagement.ScanNodePubKeyActivity"
+            android:name="app.michaelwuensch.bitbanana.channelManagement.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".IdentityActivity"
+            android:name="app.michaelwuensch.bitbanana.IdentityActivity"
             android:label="@string/activity_identity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".nodesManagement.NodeDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.nodesManagement.NodeDetailsActivity"
             android:label="@string/activity_node_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".contacts.ScanContactActivity"
+            android:name="app.michaelwuensch.bitbanana.contacts.ScanContactActivity"
             android:label="@string/add_contact"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".contacts.ManageContactsActivity"
+            android:name="app.michaelwuensch.bitbanana.contacts.ManageContactsActivity"
             android:label="@string/activity_manage_contacts"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".contacts.ContactDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity"
             android:label="@string/activity_contact_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".licenses.LicensesActivity"
+            android:name="app.michaelwuensch.bitbanana.licenses.LicensesActivity"
             android:label="@string/third_party_licenses"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".setup.ManualSetup"
+            android:name="app.michaelwuensch.bitbanana.setup.ManualSetup"
             android:label="@string/activity_manual_setup"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".channelManagement.AdvancedChannelDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.channelManagement.AdvancedChannelDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".backup.BackupActivity"
+            android:name="app.michaelwuensch.bitbanana.backup.BackupActivity"
             android:label="@string/activity_backup"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".coinControl.UTXOsActivity"
+            android:name="app.michaelwuensch.bitbanana.coinControl.UTXOsActivity"
             android:label="@string/activity_utxos"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name=".forwarding.ForwardingActivity"
+            android:name="app.michaelwuensch.bitbanana.forwarding.ForwardingActivity"
             android:label="@string/activity_forwarding"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />

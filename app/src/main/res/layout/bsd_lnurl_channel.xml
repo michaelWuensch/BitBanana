@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_bottom_sheets">
 
-    <zapsolutions.zap.customView.BSDScrollableMainView
+    <app.michaelwuensch.bitbanana.customView.BSDScrollableMainView
         android:id="@+id/scrollableBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <zapsolutions.zap.customView.BSDResultView
+            <app.michaelwuensch.bitbanana.customView.BSDResultView
                 android:id="@+id/resultLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                     android:background="@drawable/bg_clickable_item"
                     android:text="@string/channel_open"
                     android:textAllCaps="false"
-                    android:textColor="@color/lightningOrange"
+                    android:textColor="@color/banana_yellow"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
@@ -107,9 +107,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </zapsolutions.zap.customView.BSDScrollableMainView>
+    </app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>
 
-    <zapsolutions.zap.customView.BSDProgressView
+    <app.michaelwuensch.bitbanana.customView.BSDProgressView
         android:id="@+id/paymentProgressLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"

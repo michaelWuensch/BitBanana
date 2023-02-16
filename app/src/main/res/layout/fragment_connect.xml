@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".setup.ConnectFragment">
+    tools:context="app.michaelwuensch.bitbanana.setup.ConnectFragment">
 
     <TextView
         android:id="@+id/heading"
@@ -114,7 +114,7 @@
             android:paddingEnd="15dp"
             android:text="@string/setup_connect_remote_button"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp" />
 
     </LinearLayout>

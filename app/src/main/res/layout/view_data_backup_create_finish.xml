@@ -27,7 +27,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_baseline_archive_24"
-                app:tint="@color/lightningOrange" />
+                app:tint="@color/banana_yellow" />
 
             <TextView
                 android:id="@+id/data_backup_finish_title_success"
@@ -61,7 +61,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_failed_circle_black_60dp"
-                app:tint="@color/superRed" />
+                app:tint="@color/super_red" />
 
             <TextView
                 android:id="@+id/data_backup_finish_title_failed"
@@ -86,7 +86,7 @@
             android:background="@drawable/bg_clickable_item"
             android:text="@string/ok"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

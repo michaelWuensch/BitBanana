@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
         android:text="@string/guardian_Title"
-        android:textColor="@color/lightningOrange"
+        android:textColor="@color/banana_yellow"
         android:textSize="24sp" />
 
     <ImageView

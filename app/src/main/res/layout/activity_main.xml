@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/deepSeaBlue"
     android:fitsSystemWindows="false"
-    tools:context=".HomeActivity"
+    tools:context="app.michaelwuensch.bitbanana.HomeActivity"
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +16,9 @@
         android:layout_height="match_parent"
         android:background="@color/deepSeaBlue"
         android:clickable="true"
-        tools:context=".HomeActivity">
+        tools:context="app.michaelwuensch.bitbanana.HomeActivity">
 
-        <zapsolutions.zap.customView.CustomViewPager
+        <app.michaelwuensch.bitbanana.customView.CustomViewPager
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -50,14 +50,14 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/zapVersion"
+                android:id="@+id/appVersion"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:gravity="center_horizontal"
                 android:paddingTop="5dp"
                 android:textColor="@color/gray"
                 android:textSize="10sp"
-                tools:text="zap version: 0.3.0-beta, build 2018 " />
+                tools:text="BitBanana version: 0.3.0-beta, build 2018 " />
 
             <TextView
                 android:id="@+id/lndVersion"

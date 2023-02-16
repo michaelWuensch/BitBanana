@@ -46,7 +46,7 @@
             android:background="@drawable/bg_clickable_item"
             android:text="@string/paste"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/scannerHelp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
             android:background="@drawable/bg_clickable_item"
             android:text="@string/needHelp"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -90,7 +90,7 @@
             android:layout_marginEnd="50dp"
             android:text="@string/error_cameraPermissionRequired"
             android:textAlignment="center"
-            android:textColor="@color/superRed"
+            android:textColor="@color/super_red"
             android:textSize="16sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -130,7 +130,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:scaleType="center"
                 android:src="@drawable/ic_help_black_24dp"
-                app:tint="@color/lightningOrange" />
+                app:tint="@color/banana_yellow" />
         </LinearLayout>
 
 

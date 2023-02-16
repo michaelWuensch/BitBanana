@@ -19,8 +19,8 @@
                 <corners android:radius="3dip" />
                 <gradient
                     android:angle="0"
-                    android:endColor="@color/lightningOrange"
-                    android:startColor="@color/lightningOrangeGradient" />
+                    android:endColor="@color/banana_yellow"
+                    android:startColor="@color/banana_yellow_gradient" />
             </shape>
         </clip>
     </item>

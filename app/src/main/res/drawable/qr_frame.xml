@@ -8,20 +8,20 @@
         android:fillColor="#00000000"
         android:pathData="M200,0C200,0 200,0 230,0L230,30L230,0"
         android:strokeWidth="8"
-        android:strokeColor="@color/lightningOrange" />
+        android:strokeColor="@color/banana_yellow" />
     <path
         android:fillColor="#00000000"
         android:pathData="M0,30C0,30 0,0 0,0L30,0L30,0"
         android:strokeWidth="8"
-        android:strokeColor="@color/lightningOrange" />
+        android:strokeColor="@color/banana_yellow" />
     <path
         android:fillColor="#00000000"
         android:pathData="M200,230C200,230 200,230 230,230L230,200L230,200"
         android:strokeWidth="8"
-        android:strokeColor="@color/lightningOrange" />
+        android:strokeColor="@color/banana_yellow" />
     <path
         android:fillColor="#00000000"
         android:pathData="M0,200C0,200 0,200 0,230L30,230L0,230"
         android:strokeWidth="8"
-        android:strokeColor="@color/lightningOrange" />
+        android:strokeColor="@color/banana_yellow" />
 </vector>

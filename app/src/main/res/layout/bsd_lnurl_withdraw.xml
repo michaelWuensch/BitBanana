@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_bottom_sheets">
 
-    <zapsolutions.zap.customView.BSDScrollableMainView
+    <app.michaelwuensch.bitbanana.customView.BSDScrollableMainView
         android:id="@+id/scrollableBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <zapsolutions.zap.customView.BSDResultView
+            <app.michaelwuensch.bitbanana.customView.BSDResultView
                 android:id="@+id/resultLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     app:layout_constraintStart_toEndOf="@+id/withdrawAmount"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <zapsolutions.zap.customView.NonClippingTextView
+                    <app.michaelwuensch.bitbanana.customView.NonClippingTextView
                         android:id="@+id/unit"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -115,7 +115,7 @@
                         android:paddingStart="4dp"
                         android:paddingTop="5dp"
                         app:srcCompat="@drawable/ic_swap_vert_black_24dp"
-                        app:tint="@color/lightningOrange" />
+                        app:tint="@color/banana_yellow" />
                 </LinearLayout>
 
                 <ImageView
@@ -195,7 +195,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <zapsolutions.zap.customView.NumpadView
+                <app.michaelwuensch.bitbanana.customView.NumpadView
                     android:id="@+id/numpadView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -215,7 +215,7 @@
                     android:background="@drawable/bg_clickable_item"
                     android:text="@string/withdraw"
                     android:textAllCaps="false"
-                    android:textColor="@color/lightningOrange"
+                    android:textColor="@color/banana_yellow"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
@@ -226,9 +226,9 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </zapsolutions.zap.customView.BSDScrollableMainView>
+    </app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>
 
-    <zapsolutions.zap.customView.BSDProgressView
+    <app.michaelwuensch.bitbanana.customView.BSDProgressView
         android:id="@+id/paymentProgressLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"

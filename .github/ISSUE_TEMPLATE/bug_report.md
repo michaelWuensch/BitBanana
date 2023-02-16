@@ -40,7 +40,7 @@ about: Create a report to help us improve
 
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-- Zap version: _(e.g. 0.2.3-alpha)_
+- BitBanana version: _(e.g. 0.6.0-beta)_
 - Android version: _(e.g. API 28)_
 - Device: _(e.g. Google Pixel 3)_
 - LND Version: _(e.g. 0.7.0-beta)_

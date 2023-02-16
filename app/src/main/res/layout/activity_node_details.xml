@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="zapsolutions.zap.nodesManagement.NodeDetailsActivity">
+        tools:context="michaelwuensch.bitbanana.app.michaelwuensch.bitbanana.nodesManagement.NodeDetailsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/type"
@@ -182,7 +182,7 @@
                 android:padding="15dp"
                 android:text="@string/change_data"
                 android:textAllCaps="false"
-                android:textColor="@color/lightningOrange"
+                android:textColor="@color/banana_yellow"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -199,7 +199,7 @@
             android:padding="15dp"
             android:text="@string/open_node"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/buttonRename"
             app:layout_constraintEnd_toEndOf="parent"
@@ -214,7 +214,7 @@
             android:padding="15dp"
             android:text="@string/rename"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/buttonDelete"
             app:layout_constraintEnd_toEndOf="parent"
@@ -229,7 +229,7 @@
             android:padding="15dp"
             android:text="@string/delete"
             android:textAllCaps="false"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

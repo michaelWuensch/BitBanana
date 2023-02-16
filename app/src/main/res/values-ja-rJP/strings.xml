@@ -59,7 +59,7 @@
     <string name="today">今日</string>
     <string name="yesterday">昨日</string>
     <string name="fee">手数料</string>
-    <string name="confirmExit">本当にZapを終了しますか？</string>
+    <string name="confirmExit">本当にBitBananaを終了しますか？</string>
     <string name="or">又は</string>
     <string name="max_amount">最大数量</string>
     <string name="min_amount">最小数量</string>
@@ -159,7 +159,7 @@
     <string name="channel_visibility_private">プライベート</string>
     <string name="channel_visibility_public">パブリック</string>
     <string name="channel_visibility">可視性</string>
-    <string name="setup_connect_heading">Zapをどのように使用しますか？</string>
+    <string name="setup_connect_heading">BitBananaをどのように使用しますか？</string>
     <string name="setup_connect_local_description">このデバイスにウォレットを作成します。</string>
     <string name="setup_connect_local_button">ウォレット作成</string>
     <string name="setup_connect_remote_description">自ノードをリモートコントロール</string>
@@ -185,12 +185,12 @@
     <string name="guardian_copyToClipboard_lightning">データをクリップボードにコピーすると、他のアプリ(悪意のあるアプリも)がアクセスして変更できてしまいます。\n\nペースト中に改ざんされていないことを確認するには、末尾部分を比較してください。\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">クリップボードからペーストするときは、必ず最後の3〜5桁を再確認してください。 悪意のあるアプリが気付かないうちにバックグラウンドでアドレスを改ざんした可能性があります。</string>
     <string name="guardian_disableScrambledPin">スクランブルしていない場合は、指の動きを見て簡単にPINを推測できます。</string>
-    <string name="guardian_disableScreenProtection">画面記録を許可すると、Zapの使用中に悪意のあるアプリがビデオ録画したり、スクリーンショットを撮ったりする可能性があります。 ビデオ録画やスクリーンショットを撮る時のみ、無効にすることをお勧めします。</string>
+    <string name="guardian_disableScreenProtection">画面記録を許可すると、BitBananaの使用中に悪意のあるアプリがビデオ録画したり、スクリーンショットを撮ったりする可能性があります。 ビデオ録画やスクリーンショットを撮る時のみ、無効にすることをお勧めします。</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">You are about to pay %1$s%% in network fees.\n\nPossible solutions:\n- try a lightning payment instead\n- select lower fee, wait longer\n- try again later\n- transact a bigger amount\n\nDo you want to continue anyway?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
     <string name="guardian_remoteConnect">%1$sに接続してよろしいですか？\n
 ホスト名をよく確認してください。</string>
-    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
+    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While BitBanana anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
     <string name="guardian_oldLndVersion_remote">更新してください。\n\n接続しているノードは古いバージョンのLNDを使用しています。 %1$s未満のバージョンはサポートしていません。</string>
     <string name="settings_category_general">一般</string>
     <string name="settings_category_security">セキュリティ</string>
@@ -201,20 +201,20 @@
     <string name="settings_language">言語</string>
     <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">クリップボードを確認</string>
-    <string name="settings_scan_clipboard_summary">Zapで処理できるデータをクリップボードで自動的にチェックします。</string>
+    <string name="settings_scan_clipboard_summary">BitBananaで処理できるデータをクリップボードで自動的にチェックします。</string>
     <string name="settings_hapticPin">PIN触覚フィードバック</string>
     <string name="settings_systemLanguage">システム言語</string>
     <string name="settings_manageChannels">Lightningチャネル管理</string>
     <string name="settings_scramblePin">スクランブルPIN画面</string>
     <string name="settings_preventScreenRecording">画面記録防止</string>
     <string name="settings_hideTotalBalance">トータル残高非表示</string>
-    <string name="settings_hideTotalBalance_explanation">有効の場合、ホーム画面のZapロゴをタップすると残高を表示します。</string>
+    <string name="settings_hideTotalBalance_explanation">有効の場合、ホーム画面のBitBananaロゴをタップすると残高を表示します。</string>
     <string name="settings_resetSecurityWarnings">セキュリティ警告をリセット</string>
     <string name="settings_help">ヘルプが必要ですか？</string>
     <string name="settings_reportIssue">問題を報告</string>
-    <string name="settings_about">Zapについて</string>
+    <string name="settings_about">BitBananaについて</string>
     <string name="settings_advanced_settings">詳細設定</string>
-    <string name="settings_restartRequired">変更するとZapを再起動します。 続けますか？</string>
+    <string name="settings_restartRequired">変更するとBitBananaを再起動します。 続けますか？</string>
     <string name="settings_enableBiometrics">生体認証を有効</string>
     <string name="settings_changePin">PINを変更・削除</string>
     <string name="settings_addPin">PINで保護</string>
@@ -233,7 +233,7 @@
     <string name="error">エラー</string>
     <string name="error_blockExplorer_title">ブロックエクスプローラー</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"現在のブロックエクスプローラー(%1$s)は%2$sをサポートしていません。 \n設定で別のブロックエクスプローラーを選択してください。"</string>
-    <string name="error_zeroAmountPaymentRequest">数量が0の支払リクエストです。 Zapはセキュリティ上、数量 0の支払リクエストをサポートしていません。</string>
+    <string name="error_zeroAmountPaymentRequest">数量が0の支払リクエストです。 BitBananaはセキュリティ上、数量 0の支払リクエストをサポートしていません。</string>
     <string name="error_paymentRequestExpired">期限切れ支払要求</string>
     <string name="error_useTestnetRequest">TESTNETに接続しています。 TESTNETのアドレスまたは支払リクエストを使用してください。</string>
     <string name="error_useMainnetRequest">MAINNETに接続しています。 MAINNETのアドレスまたは支払リクエストを使用してください。</string>
@@ -254,7 +254,7 @@
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
@@ -333,7 +333,7 @@
     <string name="help_dialog_scanContact">次のデータが含まれるQRコードが有効：\n\n- 公開鍵\n- 公開鍵@ホスト\n- 公開鍵@ホスト:ポート</string>
     <string name="help_dialog_scanConnectionInfo">次のデータが含まれるQRコードが有効:\n\n- Lndconnect先 (lndconnect://...)\n- BtcPayサーバ接続設定 (config=...)\n- あなたのBTCPayサーバ設定ファイル</string>
     <string name="help_dialog_LightningVsOnChain">Lightning：\n\n+ 即時\n+ 低い手数料\n- 常に利用可能とは限りません。\n\n少額取引に最適\ n可能な限り使用してください。\n\n\nオンチェーン：\n\n+ 常に利用可能\n- 遅い\n- 高い手数料\n\n高額取引に適しています。\nLightningが利用できない場合に使用します。</string>
-    <string name="help_dialog_scanGeneric">ここではすべて許可されています。\nQRコードをスキャンと、Zapはデータに応じて処理を自動で決定します。</string>
+    <string name="help_dialog_scanGeneric">ここではすべて許可されています。\nQRコードをスキャンと、BitBananaはデータに応じて処理を自動で決定します。</string>
     <string name="help_dialog_private_channels">プライベートチャネルは安全という訳ではなく、ネットワークに表示されないだけです。\nノードがモバイルデバイスで実行されている場合、または頻繁にオフラインになる場合は、プライベートチャネルのみ使用してください。</string>
     <string name="help_dialog_identity">これはLightningネットワークでのあなたのIDです。\n\nアバター画像をタップするとQRコードが表示されます。\n他の人はそのコードをスキャンして連絡先に追加したり、チャネルをオープンしたり、送金したりできます。 \n\nこのアバターは一意です。\n公開鍵に基づいて自動的に生成されたものであり、変更することはできません。</string>
     <string name="delete">削除</string>
@@ -367,7 +367,7 @@
     <string name="drawer_menu_contacts">連絡先</string>
     <string name="drawer_menu_backup">バックアップ</string>
     <string name="drawer_menu_buy">Bitcoin購入</string>
-    <string name="support_contribute_description">Zapの改善に協力ください。</string>
+    <string name="support_contribute_description">BitBananaの改善に協力ください。</string>
     <string name="support_issue_description">バグを見つけましたか？ 我々に教えてください！</string>
     <string name="support_privacy_description">私たちはあなたのプライバシーを大切にします。</string>
     <string name="support_help_description">ドキュメントにアクセスしてください。</string>
@@ -406,7 +406,7 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
     <string name="advanced_channel_details_remote_channel_reserve">リモートチャネル残量</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_confirm_headline">確認してください</string>
     <string name="backup_data_confirm">確認する</string>

@@ -14,5 +14,5 @@
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_help_black_24dp"
-        app:tint="@color/lightningOrange" />
+        app:tint="@color/banana_yellow" />
 </LinearLayout>

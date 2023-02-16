@@ -59,7 +59,7 @@
     <string name="today">Tänään</string>
     <string name="yesterday">Eilen</string>
     <string name="fee">Välityspalkkio</string>
-    <string name="confirmExit">Haluatko varmasti poistua Zapista / sovelluksesta?</string>
+    <string name="confirmExit">Haluatko varmasti poistua BitBananaista / sovelluksesta?</string>
     <string name="or">tai</string>
     <string name="max_amount">Maksimi määrä:</string>
     <string name="min_amount">Pienini määrä:</string>
@@ -159,7 +159,7 @@
     <string name="channel_visibility_private">yksityinen</string>
     <string name="channel_visibility_public">julkinen</string>
     <string name="channel_visibility">Näkyvyys</string>
-    <string name="setup_connect_heading">Kuinka haluat käyttää sovellusta / ZAPpiä?</string>
+    <string name="setup_connect_heading">Kuinka haluat käyttää sovellusta / BitBananapiä?</string>
     <string name="setup_connect_local_description">Luo lompakko tällä puhelimella.</string>
     <string name="setup_connect_local_button">Luo Lompakko</string>
     <string name="setup_connect_remote_description">Etähallinnoi omaa solmua / nodea.</string>
@@ -189,7 +189,7 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Olet maksamassa siirtokuluina %1$s%%.\n\nVaihtoehtoisesti:\n- kokeile maksaa Lightning-maksuna\n- aseta matalampi siirtokulu ja odota pidempään,\n- yritä myöhemmin uudelleen\n- tai lähetä suurempi määrä\n\nHaluatko jatkaa nykyisellä siirtokululla?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
     <string name="guardian_remoteConnect">Oletko varma että haluat yhdistää \n\n%1$s\n\nVarmista palvelimen osoite huolellisesti.</string>
-    <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. Zap suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
+    <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. BitBanana suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
     <string name="guardian_oldLndVersion_remote">Ole hyvä ja päivitä sovellus.\n\nSolmu johon olet yhteydessä käyttää vanhaa LND-versiota. Versiota %1$s aikaisemmat eivät ole aktiivisesti tuettuja.</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_security">Turvallisuus</string>
@@ -200,20 +200,20 @@
     <string name="settings_language">Kieli</string>
     <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">Tarkista leikepöytä</string>
-    <string name="settings_scan_clipboard_summary">Anna Zapin automaattisesti tarkistaa leikepöytä.</string>
+    <string name="settings_scan_clipboard_summary">Anna BitBananain automaattisesti tarkistaa leikepöytä.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">Järjestelmän kieli</string>
     <string name="settings_manageChannels">Hallitsee Salamakanavia</string>
     <string name="settings_scramblePin">Sekoita PIN näyttö</string>
     <string name="settings_preventScreenRecording">Estä näytön tallennus</string>
     <string name="settings_hideTotalBalance">Piilota kokonaissaldo</string>
-    <string name="settings_hideTotalBalance_explanation">Kun aktivoitu, klikkaa Zap-logoa pääsivulla nähdäksesi saldosi.</string>
+    <string name="settings_hideTotalBalance_explanation">Kun aktivoitu, klikkaa BitBanana-logoa pääsivulla nähdäksesi saldosi.</string>
     <string name="settings_resetSecurityWarnings">Palauta alkuperäiset turvallisuusilmoitukset</string>
     <string name="settings_help">Tarvitsetko apua?</string>
     <string name="settings_reportIssue">Ilmoita ongelmasta</string>
-    <string name="settings_about">Tietoa Zapista</string>
+    <string name="settings_about">Tietoa BitBananaista</string>
     <string name="settings_advanced_settings">Edistyneet Asetukset</string>
-    <string name="settings_restartRequired">Muutoksen myötä Zap uudelleenkäynnistetään. Haluatko jatkaa?</string>
+    <string name="settings_restartRequired">Muutoksen myötä BitBanana uudelleenkäynnistetään. Haluatko jatkaa?</string>
     <string name="settings_enableBiometrics">Ota biometriset tunnisteet käyttöön</string>
     <string name="settings_changePin">Vaihda/Poista PIN</string>
     <string name="settings_addPin">Suoja PIN-koodilla</string>
@@ -232,12 +232,12 @@
     <string name="error">Virhe</string>
     <string name="error_blockExplorer_title">Lohkoselain</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Nyt käytössä oleva lohkoketjuselain (%1$s) ei tuettuja %2$s. \nMene asetuksiin ja valitse jatkaaksesi toinen lohkoketjuselain (Explorer)."</string>
-    <string name="error_zeroAmountPaymentRequest">Tämän maksupyynnön summa on nolla. Zap ei tue nolla-summan maksuja, sillä niihin liittyy turvallisuus riskejä.</string>
+    <string name="error_zeroAmountPaymentRequest">Tämän maksupyynnön summa on nolla. BitBanana ei tue nolla-summan maksuja, sillä niihin liittyy turvallisuus riskejä.</string>
     <string name="error_paymentRequestExpired">Tämä maksupyyntö on vanhentunut.</string>
     <string name="error_useTestnetRequest">Olet yhdistettynä TESTNET-verkkoon. Käytä TESTNET-osoitteita ja -maksupyyntöjä.</string>
     <string name="error_useMainnetRequest">Olet yhdistettynä MAINNET-verkkoon. Käytä MAINNET-osoitteita ja -maksupyyntöjä.</string>
     <string name="error_useRegtestRequest">Olet yhdistettynä REGTEST-verkkoon. Käytä REGTEST-osoitteita ja -maksupyyntöjä.</string>
-    <string name="error_cameraPermissionRequired">Jotta voit lukea QR-koodeja tulee sinun antaa Zap:lle kameran käyttöoikeus.</string>
+    <string name="error_cameraPermissionRequired">Jotta voit lukea QR-koodeja tulee sinun antaa BitBanana:lle kameran käyttöoikeus.</string>
     <string name="error_emptyClipboardPayment">Leikepöydällä ei ole maksutietoa.</string>
     <string name="error_emptyClipboardConnect">Leikepöydällä ei ole yhteystietoa.</string>
     <string name="error_qr_code_result_null">QR-koodi ei luettavissa, ole hyvä ja yritä uudelleen.</string>
@@ -253,7 +253,7 @@
     <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
     <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
-    <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nZap Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista Zap Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
+    <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.\n\nBitBanana Android sisältää sisäänrakennetun Tor-tuen. Mikäli käytät Orbot -sovellusta, poista BitBanana Orbotin Tor sovelluslistalta tai poista Orbot kokonaan käytöstä.</string>
     <string name="error_connection_wallet_locked">Avaathan lompakon.</string>
     <string name="error_connection_btcpay_invalid_json">BTCPay-palvelimen konfiguraatiotiedot sisältävän JSON muoto on virheellinen.</string>
     <string name="error_connection_btcpay_invalid_config">BTCPay-palvelimen konfiguraatio ei sisällä BTC GRPC -määrityksiä.</string>
@@ -373,7 +373,7 @@
     <string name="drawer_menu_contacts">Yhteystiedot</string>
     <string name="drawer_menu_backup">Varmistus</string>
     <string name="drawer_menu_buy">Osta Bitcoineja</string>
-    <string name="support_contribute_description">Auta parantamaan Zap:ia.</string>
+    <string name="support_contribute_description">Auta parantamaan BitBanana:ia.</string>
     <string name="support_issue_description">Löysitkö virheen? Välitä tieto meille!</string>
     <string name="support_privacy_description">Yksityisyytesi on meille täskeää.</string>
     <string name="support_help_description">Tutustu dokumentaatioon</string>

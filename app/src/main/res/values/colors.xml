@@ -6,10 +6,10 @@
     <color name="seaBlueGradient3">#585964</color>
     <color name="lightningBlue">#005DFC</color>
     <color name="lightningBlueGradient">#008DFD</color>
-    <color name="lightningOrange">#FD9800</color>
-    <color name="lightningOrangeGradient">#FFBD59</color>
-    <color name="superGreen">#3EE673</color>
-    <color name="superRed">#E63939</color>
+    <color name="banana_yellow">#FDBE00</color>
+    <color name="banana_yellow_gradient">#FFC864</color>
+    <color name="super_green">#3EE673</color>
+    <color name="super_red">#E63939</color>
     <color name="gray">#959595</color>
     <color name="invisibleGray">#555555</color>
     <color name="white">#FFFFFF</color>

@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="@color/superGreen"
+            android:textColor="@color/super_green"
             android:textSize="36sp"
             tools:text="Heading" />
 
@@ -54,7 +54,7 @@
         android:background="@drawable/bg_clickable_item"
         android:text="@string/ok"
         android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
+        android:textColor="@color/banana_yellow"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"

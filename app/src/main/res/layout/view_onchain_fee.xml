@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <zapsolutions.zap.customView.ClickableConstraintLayoutGroup
+    <app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup
         android:id="@+id/sendFeeOnChainAmountGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_down_24dp"
-        app:tint="@color/lightningOrange" />
+        app:tint="@color/banana_yellow" />
 
 
     <androidx.constraintlayout.widget.Group

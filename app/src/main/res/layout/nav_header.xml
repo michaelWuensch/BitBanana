@@ -6,7 +6,7 @@
     android:layout_height="176dp"
     android:background="@color/seaBlue">
 
-    <zapsolutions.zap.customView.UserAvatarView
+    <app.michaelwuensch.bitbanana.customView.UserAvatarView
         android:id="@+id/userAvatarView"
         android:layout_width="85dp"
         android:layout_height="85dp"

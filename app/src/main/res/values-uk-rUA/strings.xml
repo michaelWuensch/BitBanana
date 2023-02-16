@@ -59,7 +59,7 @@
     <string name="today">Сьогодні</string>
     <string name="yesterday">Вчора</string>
     <string name="fee">Комісія</string>
-    <string name="confirmExit">Ви дійсно хочете вийти з Zap?</string>
+    <string name="confirmExit">Ви дійсно хочете вийти з BitBanana?</string>
     <string name="or">або</string>
     <string name="max_amount">Максимальна сума:</string>
     <string name="min_amount">Мінімальна сума:</string>
@@ -159,7 +159,7 @@
     <string name="channel_visibility_private">private</string>
     <string name="channel_visibility_public">public</string>
     <string name="channel_visibility">Visibility</string>
-    <string name="setup_connect_heading">Як ви хочете використовувати ZAP?</string>
+    <string name="setup_connect_heading">Як ви хочете використовувати BitBanana?</string>
     <string name="setup_connect_local_description">Стоврити гаманець на цьому телефоні.</string>
     <string name="setup_connect_local_button">Створити гаманець</string>
     <string name="setup_connect_remote_description">Віддалене управління власним вузлом.</string>
@@ -185,11 +185,11 @@
     <string name="guardian_copyToClipboard_lightning">Якщо ви скопіюєте ці дані в свій буфер обміну, інші додатки (також шкідливі) зможуть отримати до них доступ і змінити їх.\n\nЩоб переконатися, що нічого не змінилося під час вставки, порівняйте кінець із:\n\n%1$s\n</string>
     <string name="guardian_pasteFromClipboard">Завжди двічі перевіряйте останні 3 - 5 цифр, коли вставляєте їх із буфера обміну. Шкідливий додаток міг змінити адресу у фоновому режимі, а ви не помітили цього.</string>
     <string name="guardian_disableScrambledPin">Якщо не скомпілювати, то легко вгадати ваш ПІН, просто спостерігаючи за рухами пальців.</string>
-    <string name="guardian_disableScreenProtection">Якщо ви дозволите запис екрану, шкідливе програмне забезпечення може бути здатний записувати відео або робити скріншоти під час використання Zap. Ми рекомендуємо відключити це тільки в той час, коли ви хочете записати відео або зробити скріншот.</string>
+    <string name="guardian_disableScreenProtection">Якщо ви дозволите запис екрану, шкідливе програмне забезпечення може бути здатний записувати відео або робити скріншоти під час використання BitBanana. Ми рекомендуємо відключити це тільки в той час, коли ви хочете записати відео або зробити скріншот.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Ви збираєтесь платити%1$s%% комісію за мережу.\n\nМожливі рішення:\n- спробуйте lightning платіж замість \n- виберіть меншу плату, довше зачекайте\n- спробуйте пізніше\n- перевірте більшу кількість\n\nВи бажаєте продовжити?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ви запитували суму як фіатну вартість, але ваші дані обмінного курсу старі (отримані %1$s годин тому).\nПереконайтесь, що у вас є підключення до Інтернету, або розглядайте запит безпосередньо в Bitcoin.\n\nВи все-таки хочете продовжувати?</string>
     <string name="guardian_remoteConnect">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nБудь ласка, уважно перевірте ім\'я хоста.</string>
-    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While Zap anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
+    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While BitBanana anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
     <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Загальне</string>
     <string name="settings_category_security">Безпека</string>
@@ -200,20 +200,20 @@
     <string name="settings_language">Мова</string>
     <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
-    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data Zap can handle.</string>
+    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data BitBanana can handle.</string>
     <string name="settings_hapticPin">Гаптичний зворотний зв\'язок з ПІН</string>
     <string name="settings_systemLanguage">Мова системи</string>
     <string name="settings_manageChannels">Керувати Lightning каналами</string>
     <string name="settings_scramblePin">Екран PIN-коду</string>
     <string name="settings_preventScreenRecording">Запобігання запису на екрані</string>
     <string name="settings_hideTotalBalance">Приховати загальний баланс</string>
-    <string name="settings_hideTotalBalance_explanation">Після активації натисніть логотип Zap на головному екрані, щоб виявити баланс.</string>
+    <string name="settings_hideTotalBalance_explanation">Після активації натисніть логотип BitBanana на головному екрані, щоб виявити баланс.</string>
     <string name="settings_resetSecurityWarnings">Скиньте попередження щодо безпеки</string>
     <string name="settings_help">Потрібна допомога?</string>
     <string name="settings_reportIssue">Повідомте про проблему</string>
-    <string name="settings_about">Про Zap</string>
+    <string name="settings_about">Про BitBanana</string>
     <string name="settings_advanced_settings">Розширені налаштування</string>
-    <string name="settings_restartRequired">Zap буде перезапущено, щоб внести цю зміну. Ви хочете продовжити?</string>
+    <string name="settings_restartRequired">BitBanana буде перезапущено, щоб внести цю зміну. Ви хочете продовжити?</string>
     <string name="settings_enableBiometrics">Увімкнути біометричну аутентифікацію</string>
     <string name="settings_changePin">Змінення / видалення PIN-коду</string>
     <string name="settings_addPin">Захистити пінкодом</string>
@@ -232,12 +232,12 @@
     <string name="error">Помилка</string>
     <string name="error_blockExplorer_title">Блок-провідник</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Ваш вибраний наразі блок провідників (%1$s) не підтримує%2$s. \nЗайдіть у налаштування та виберіть інший провідник блоків для продовження."</string>
-    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. Zap does not support zero amount payment requests due to security concerns associated with them.</string>
+    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. BitBanana does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Термін дії цього запиту на оплату закінчився.</string>
     <string name="error_useTestnetRequest">Ви підключені до тестової мережі. Будь ласка, використовуйте адреси тестової мережі або запити на оплату.</string>
     <string name="error_useMainnetRequest">Ви підключені до головної мережі. Будь ласка, використовуйте адреси головної мережі або запити на оплату.</string>
     <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
-    <string name="error_cameraPermissionRequired">Щоб сканувати QR-коди, ви повинні дозволити Zap використовувати камеру.</string>
+    <string name="error_cameraPermissionRequired">Щоб сканувати QR-коди, ви повинні дозволити BitBanana використовувати камеру.</string>
     <string name="error_emptyClipboardPayment">Ваш буфер обміну не містить платіжних даних.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обміну не містить даних про з\'єднання.</string>
     <string name="error_qr_code_result_null">Не вдається прочитати QR-код, спробуйте ще раз.</string>
@@ -253,7 +253,7 @@
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nZap Android now natively supports Tor. If you use Orbot, please remove Zap from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Будь ласка, розблокуйте гаманець.</string>
     <string name="error_connection_btcpay_invalid_json">Синтаксис JSON конфігурації сервера BTCPay недійсний.</string>
     <string name="error_connection_btcpay_invalid_config">Конфігурація сервера BTCPay не містить конфігурацію BTC GRPC.</string>
@@ -353,7 +353,7 @@
     <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:\n\n- рядок Lndconnect (lndconnect://...)\n- підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and Zap will automatically determine which action to take depending on the data.</string>
+    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
     <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="delete">Видалити</string>
@@ -387,7 +387,7 @@
     <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Buy Bitcoin</string>
-    <string name="support_contribute_description">Help improving Zap.</string>
+    <string name="support_contribute_description">Help improving BitBanana.</string>
     <string name="support_issue_description">Found a bug? Let us know!</string>
     <string name="support_privacy_description">We care about your privacy.</string>
     <string name="support_help_description">Visit our documentation.</string>
@@ -426,7 +426,7 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of Zap.\n\nThis backup only contains the following data:\n\n- Data to connect Zap to your running nodes\n- Contacts</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_confirm_headline">Please Confirm</string>
     <string name="backup_data_confirm">I confirm</string>

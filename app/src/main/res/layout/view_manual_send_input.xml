@@ -30,7 +30,7 @@
         android:background="@drawable/bg_clickable_item"
         android:text="@string/continue_string"
         android:textAllCaps="false"
-        android:textColor="@color/lightningOrange"
+        android:textColor="@color/banana_yellow"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

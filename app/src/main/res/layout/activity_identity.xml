@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="zapsolutions.zap.IdentityActivity">
+    tools:context="michaelwuensch.bitbanana.app.michaelwuensch.bitbanana.IdentityActivity">
 
 
     <ImageView
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <zapsolutions.zap.customView.UserAvatarView
+    <app.michaelwuensch.bitbanana.customView.UserAvatarView
         android:id="@+id/userAvatarView"
         android:layout_width="250dp"
         android:layout_height="250dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35000002" />
 
-    <zapsolutions.zap.customView.IdentitySwitchView
+    <app.michaelwuensch.bitbanana.customView.IdentitySwitchView
         android:id="@+id/identityTypeSwitcher"
         android:layout_width="250dp"
         android:layout_height="32dp"

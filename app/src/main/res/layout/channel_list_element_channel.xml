@@ -141,7 +141,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/bolt_black_filled_24dp"
-                    app:tint="@color/lightningOrange" />
+                    app:tint="@color/banana_yellow" />
 
                 <ProgressBar
                     android:id="@+id/remoteBar"

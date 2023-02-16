@@ -69,7 +69,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_baseline_arrow_down_alt_24"
-                    app:tint="@color/lightningOrange" />
+                    app:tint="@color/banana_yellow" />
 
                 <TextView
                     android:id="@+id/outChannel"

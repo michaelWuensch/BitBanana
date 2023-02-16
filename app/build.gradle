@@ -9,26 +9,26 @@ import com.android.build.OutputFile
 android {
     compileSdkVersion 31
     defaultConfig {
-        applicationId "zapsolutions.zap"
+        applicationId "app.michaelwuensch.bitbanana"
         minSdkVersion 24
         targetSdkVersion 31
         versionCode 39
         versionName "0.5.9-beta"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "zap-android-" + versionName + "(" + versionCode + ")")
+        setProperty("archivesBaseName", "bitbanana-" + versionName + "(" + versionCode + ")")
     }
     buildTypes {
         debug {
             // with the following line we can install release and debug version simultaneously
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "Zap Debug"
+            resValue "string", "app_name", "BitBanana Debug"
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            resValue "string", "app_name", "Zap"
+            resValue "string", "app_name", "BitBanana"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

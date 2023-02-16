@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<zapsolutions.zap.customView.BSDScrollableMainView xmlns:android="http://schemas.android.com/apk/res/android"
+<app.michaelwuensch.bitbanana.customView.BSDScrollableMainView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollableBottomSheet"
@@ -55,7 +55,7 @@
             android:paddingTop="10dp"
             android:singleLine="true"
             android:textAlignment="viewEnd"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@id/addressCopyIcon"
             app:layout_constraintStart_toEndOf="@id/addressLabel"
@@ -94,7 +94,7 @@
             android:paddingTop="10dp"
             android:singleLine="true"
             android:textAlignment="viewEnd"
-            android:textColor="@color/lightningOrange"
+            android:textColor="@color/banana_yellow"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@id/txIDCopyIcon"
             app:layout_constraintStart_toEndOf="@id/transactionIDLabel"
@@ -155,4 +155,4 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</zapsolutions.zap.customView.BSDScrollableMainView>
+</app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>

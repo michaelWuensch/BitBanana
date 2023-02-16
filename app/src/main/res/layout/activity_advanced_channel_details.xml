@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="zapsolutions.zap.channelManagement.AdvancedChannelDetailsActivity">
+    tools:context="michaelwuensch.bitbanana.app.michaelwuensch.bitbanana.channelManagement.AdvancedChannelDetailsActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,62 +17,62 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp">
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/capacity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/capacity" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/channelLifetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/activity" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/visibility"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/channelLifetime" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/timeLock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/visibility" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/commitFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/timeLock" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/localRoutingFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/commitFee" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/remoteRoutingFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/localRoutingFee" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/localReserve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/remoteRoutingFee" />
 
-            <zapsolutions.zap.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/remoteReserve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

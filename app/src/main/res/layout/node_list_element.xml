@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:layout_weight="0"
             app:srcCompat="@drawable/ic_remote_black_24dp"
-            app:tint="@color/lightningOrange" />
+            app:tint="@color/banana_yellow" />
 
         <TextView
             android:id="@+id/nodeTypeDescription"
@@ -80,7 +80,7 @@
             android:layout_gravity="end"
             android:layout_weight="0"
             app:srcCompat="@drawable/ic_check_circle_black_60dp"
-            app:tint="@color/lightningOrange" />
+            app:tint="@color/banana_yellow" />
 
     </LinearLayout>
 
