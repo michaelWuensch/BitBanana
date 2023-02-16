@@ -72,6 +72,8 @@
         android:layout_height="80dp"
         android:background="@color/seaBlue"
         app:itemIconTint="@color/gray"
+        app:itemPaddingBottom="18dp"
+        app:itemPaddingTop="20dp"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Caption"
         app:itemTextAppearanceActive="@style/TextAppearance.AppCompat.Caption"
         app:itemTextAppearanceInactive="@style/TextAppearance.AppCompat.Caption"
