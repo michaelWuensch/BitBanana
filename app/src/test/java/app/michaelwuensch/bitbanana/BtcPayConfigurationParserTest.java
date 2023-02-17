@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import app.michaelwuensch.bitbanana.connection.parseConnectionData.btcPay.BTCPayConfigJson;
@@ -95,7 +96,7 @@ public class BtcPayConfigurationParserTest {
 
     private BTCPayConfigJson readFromFile(String filename) throws UnsupportedEncodingException {
         InputStream inputstream = this.getClass().getClassLoader().getResourceAsStream(filename);
-        Reader reader = new InputStreamReader(inputstream, "UTF-8");
+        Reader reader = new InputStreamReader(inputstream, StandardCharsets.UTF_8);
         return new Gson().fromJson(reader, BTCPayConfigJson.class);
     }
 

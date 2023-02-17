@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
@@ -23,9 +24,9 @@ import static junit.framework.TestCase.assertTrue;
 
 public class ConnectionManagerTest {
 
-    private static String WALLET_1_ID = "e4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
-    private static String WALLET_2_ID = "a4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
-    private static String INVALID_ID = "notExistingOrInvalid";
+    private static final String WALLET_1_ID = "e4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
+    private static final String WALLET_2_ID = "a4f2fcf7-82c7-46f4-8867-50c3f8a603f4";
+    private static final String INVALID_ID = "notExistingOrInvalid";
 
     @Test
     public void givenNoConfigs_whenDoesWalletExist_thenReturnFalse() {
@@ -159,7 +160,7 @@ public class ConnectionManagerTest {
 
     private BBNodeConfigsJson readWalletConfigsJsonFromFile(String filename) throws UnsupportedEncodingException {
         InputStream inputstream = this.getClass().getClassLoader().getResourceAsStream(filename);
-        Reader reader = new InputStreamReader(inputstream, "UTF-8");
+        Reader reader = new InputStreamReader(inputstream, StandardCharsets.UTF_8);
         return new Gson().fromJson(reader, BBNodeConfigsJson.class);
     }
 

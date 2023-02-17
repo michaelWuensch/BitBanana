@@ -1,26 +1,26 @@
 package app.michaelwuensch.bitbanana.util;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+
 import org.junit.Test;
 
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
 
 public class LnurlDecoderTest {
 
     // Test vectors have been verified here: https://lnurl.bigsun.xyz/codec/
 
-    private static String LNURL_PAY = "lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwpshj0mnv4ehx6t0dc7nxdpsv5mrwe35xcckxvn9xycrvc3kxdjr2vn9x9nrsv33x9jx2e3cx5ckze3hxejkyv3exu6kgwtzxd3rqdtxvg6xyvesxymnvwrr8qk20prr";
-    private static String LNURL_PAY_WITH_URI = "lightning:lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwpshj0mnv4ehx6t0dc7nxdpsv5mrwe35xcckxvn9xycrvc3kxdjr2vn9x9nrsv33x9jx2e3cx5ckze3hxejkyv3exu6kgwtzxd3rqdtxvg6xyvesxymnvwrr8qk20prr";
-    private static String LNURL_WITHDRAW = "lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwa5hg6rywfshw0mnv4ehx6t0dc7n2wp3vg6xvdfhxsek2wfsxsuxgd3nxy6nsd3n8pjrwvrzvd3x2erxxgmrgvmyvg6rxde38qckxc3exuunxwtyx9nrwepjxa3rvvphvsvqs2dw";
-    private static String LNURL_PAY_DECODED = "https://some.domain.xyz/lnurl-pay?session=340e67f461c2e106b63d52e1f8211def851af76eb2975d9b3b05fb4b301768c8";
-    private static String LNURL_WITHDRAW_DECODED = "https://some.domain.xyz/lnurl-withdraw?session=581b4f5743e9048d63158638d70bcbedf2643db437181cb97939d1f7d27b607d";
-    private static String LNURL_TEST = "lnurl1w3jhxaqnadsez";
-    private static String INVALID_LNURL_MIXED_CASE = "lnurl1W3jhxaqnadsez";
-    private static String INVALID_LNURL_WRONG_CHECKSUM = "lnurl1w3jhxaqnadsee";
-    private static String INVALID_LNURL_WRONG_CHARACTER = "lnurl1o3jhxaqnadsez";
-    private static String INVALID_LNURL_INVALID_PREFIX = "prefix1w3jhxaqnadsez";
+    private static final String LNURL_PAY = "lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwpshj0mnv4ehx6t0dc7nxdpsv5mrwe35xcckxvn9xycrvc3kxdjr2vn9x9nrsv33x9jx2e3cx5ckze3hxejkyv3exu6kgwtzxd3rqdtxvg6xyvesxymnvwrr8qk20prr";
+    private static final String LNURL_PAY_WITH_URI = "lightning:lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwpshj0mnv4ehx6t0dc7nxdpsv5mrwe35xcckxvn9xycrvc3kxdjr2vn9x9nrsv33x9jx2e3cx5ckze3hxejkyv3exu6kgwtzxd3rqdtxvg6xyvesxymnvwrr8qk20prr";
+    private static final String LNURL_WITHDRAW = "lnurl1dp68gurn8ghj7um0d4jjuer0d4skjm3w0puh5tmvde6hympdwa5hg6rywfshw0mnv4ehx6t0dc7n2wp3vg6xvdfhxsek2wfsxsuxgd3nxy6nsd3n8pjrwvrzvd3x2erxxgmrgvmyvg6rxde38qckxc3exuunxwtyx9nrwepjxa3rvvphvsvqs2dw";
+    private static final String LNURL_PAY_DECODED = "https://some.domain.xyz/lnurl-pay?session=340e67f461c2e106b63d52e1f8211def851af76eb2975d9b3b05fb4b301768c8";
+    private static final String LNURL_WITHDRAW_DECODED = "https://some.domain.xyz/lnurl-withdraw?session=581b4f5743e9048d63158638d70bcbedf2643db437181cb97939d1f7d27b607d";
+    private static final String LNURL_TEST = "lnurl1w3jhxaqnadsez";
+    private static final String INVALID_LNURL_MIXED_CASE = "lnurl1W3jhxaqnadsez";
+    private static final String INVALID_LNURL_WRONG_CHECKSUM = "lnurl1w3jhxaqnadsee";
+    private static final String INVALID_LNURL_WRONG_CHARACTER = "lnurl1o3jhxaqnadsez";
+    private static final String INVALID_LNURL_INVALID_PREFIX = "prefix1w3jhxaqnadsez";
 
     @Test
     public void givenValidLnurl_WhenDecode_ThenReturnDecoded() throws LnurlDecoder.NoLnUrlDataException {
@@ -35,6 +35,7 @@ public class LnurlDecoderTest {
 
         try {
             String decoded = LnurlDecoder.decode(null);
+            assertNull(decoded);
         } catch (IllegalArgumentException e) {
             assert false;
         } catch (LnurlDecoder.NoLnUrlDataException e) {
