@@ -39,4 +39,34 @@ public class RemoteLndSignerService implements LndSignerService {
         return DefaultSingle.createDefault(emitter -> asyncStub.deriveSharedKey(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2CombineKeysResponse> muSig2CombineKeys(com.github.lightningnetwork.lnd.signrpc.MuSig2CombineKeysRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2CombineKeys(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2SessionResponse> muSig2CreateSession(com.github.lightningnetwork.lnd.signrpc.MuSig2SessionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2CreateSession(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2RegisterNoncesResponse> muSig2RegisterNonces(com.github.lightningnetwork.lnd.signrpc.MuSig2RegisterNoncesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2RegisterNonces(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2SignResponse> muSig2Sign(com.github.lightningnetwork.lnd.signrpc.MuSig2SignRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2Sign(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2CombineSigResponse> muSig2CombineSig(com.github.lightningnetwork.lnd.signrpc.MuSig2CombineSigRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2CombineSig(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.signrpc.MuSig2CleanupResponse> muSig2Cleanup(com.github.lightningnetwork.lnd.signrpc.MuSig2CleanupRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.muSig2Cleanup(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
 }
