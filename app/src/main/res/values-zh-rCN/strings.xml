@@ -223,8 +223,9 @@
     <string name="settings_addressType">比特币地址类型</string>
     <string name="settings_exchangeRateProvider">交易所汇率提供方</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility (P2PSH)</item>
-        <item>Native (Bech32)</item>
+        <item>Compatibility SegWit (P2PSH)</item>
+        <item>Native SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string name="settings_lnFeeLimitTitle">闪电网络路由费上限</string>

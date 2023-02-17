@@ -323,14 +323,19 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 // generate onChain request
 
                 int addressType;
-                if (PrefsUtil.getPrefs().getString("btcAddressType", "bech32").equals("bech32")) {
-                    addressType = 0;
+                String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32");
+                if (addressTypeString.equals("bech32")) {
+                    addressType = 2;
                 } else {
-                    addressType = 1;
+                    if (addressTypeString.equals("bech32m")){
+                        addressType = 5;
+                    } else {
+                        addressType = 3;
+                    }
                 }
 
                 NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
-                        .setTypeValue(addressType) // 0 = bech32 (native segwit) , 1 = Segwit compatibility address
+                        .setTypeValue(addressType) // 2 = unused bech32 (native segwit) , 3 = unused Segwit compatibility address, 5 = unused Taproot (bech32m)
                         .build();
 
                 BBLog.d(LOG_TAG, "OnChain generating...");

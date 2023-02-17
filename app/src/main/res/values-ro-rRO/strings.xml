@@ -223,8 +223,9 @@
     <string name="settings_addressType">Tip adresă bitcoin</string>
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibilitate (P2PSH)</item>
-        <item>Nativă (Bech32)</item>
+        <item>Compatibilitate SegWit (P2PSH)</item>
+        <item>Nativă SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Expirarea cererii de plată Lightning</string>
     <string name="settings_lnFeeLimitTitle">Limită taxă pentru plăți Lightning</string>

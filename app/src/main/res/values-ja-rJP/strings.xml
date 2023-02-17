@@ -224,8 +224,9 @@
     <string name="settings_addressType">Bitcoinアドレス形式</string>
     <string name="settings_exchangeRateProvider">為替レートプロバイダー</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>互換 (P2PSH)</item>
-        <item>ネイティブ (Bech32)</item>
+        <item>互換 SegWit (P2PSH)</item>
+        <item>ネイティブ SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightningリクエスト期限</string>
     <string name="settings_lnFeeLimitTitle">Lightning支払手数料制限</string>

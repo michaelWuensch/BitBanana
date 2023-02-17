@@ -264,8 +264,9 @@
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
 
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility (P2PSH)</item>
-        <item>Native (Bech32)</item>
+        <item>Compatibility SegWit (P2PSH)</item>
+        <item>Native SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
 
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>

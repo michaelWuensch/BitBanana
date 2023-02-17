@@ -223,8 +223,9 @@
     <string name="settings_addressType">Биткойн тип на адреса</string>
     <string name="settings_exchangeRateProvider">Източник на Обменния Курс</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility (P2SH)</item>
-        <item>Native (Bech32)</item>
+        <item>Compatibility SegWit (P2PSH)</item>
+        <item>Native SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Срок за Lightning заявка</string>
     <string name="settings_lnFeeLimitTitle">Лимит на Таксите за Lightning плащания</string>

@@ -223,8 +223,9 @@
     <string name="settings_addressType">Тип Bitcoin адреси</string>
     <string name="settings_exchangeRateProvider">Провайдер обмінного курсу</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Сумісність (P2PSH)</item>
-        <item>Native (Bech32)</item>
+        <item>Сумісність SegWit(P2PSH)</item>
+        <item>Native SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Термін дії Lightning запиту</string>
     <string name="settings_lnFeeLimitTitle">Ліміт Lightning платіжної комісії</string>

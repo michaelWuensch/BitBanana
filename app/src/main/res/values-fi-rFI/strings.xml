@@ -223,8 +223,9 @@
     <string name="settings_addressType">Bitcoin osoitteen tyyppi</string>
     <string name="settings_exchangeRateProvider">Vaihtokurssin tarjoaja</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Yhteensopivuus (P2PSH)</item>
-        <item>Natiivi (Bech32)</item>
+        <item>Yhteensopivuus SegWit (P2PSH)</item>
+        <item>Natiivi SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Salama-pyynnön vanhentuminen</string>
     <string name="settings_lnFeeLimitTitle">Salama-maksun palkkion rajoittaminen</string>

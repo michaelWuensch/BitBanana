@@ -229,8 +229,9 @@
     <string name="settings_addressType">Bitcoin Adresstyp</string>
     <string name="settings_exchangeRateProvider">Wechselkurs Anbieter</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Kompatibilität (P2PSH)</item>
-        <item>Nativ (Bech32)</item>
+        <item>SegWit Kompatibilität (P2PSH)</item>
+        <item>SegWit Nativ (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Verfallzeit für Lightning Anfragen</string>
     <string name="settings_lnFeeLimitTitle">Gebührenlimit für Lightning Zahlungen</string>

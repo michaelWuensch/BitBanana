@@ -223,8 +223,9 @@
     <string name="settings_addressType">Typ adresy bitcoinů</string>
     <string name="settings_exchangeRateProvider">Poskytovatel směnných kurzů</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Kompatibilita (P2PSH)</item>
-        <item>Nativní (Bech32)</item>
+        <item>Kompatibilita SegWit (P2PSH)</item>
+        <item>Nativní SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightning požadavek vyprší</string>
     <string name="settings_lnFeeLimitTitle">Limit poplatku Lightning platby</string>

@@ -22,6 +22,7 @@
     <string-array name="addressType">
         <item>p2psh</item>
         <item>bech32</item>
+        <item>bech32m</item>
     </string-array>
 
     <string-array name="blockExplorer">

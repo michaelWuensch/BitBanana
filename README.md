@@ -20,7 +20,7 @@ BitBanana forked from Zap Android. You can find more information about this on t
 - [x] Routing summary
 - [x] Contacts
 - [x] Fiat currency prices
-- [x] Support for Bech32 and P2SH addresses
+- [x] Support for SegWit & Taproot
 - [x] BTC, mBTC, bit & Satoshi units
 - [x] Available in many languages
 - [x] LNURL support (pay, withdraw & channel)

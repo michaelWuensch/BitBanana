@@ -223,8 +223,9 @@
     <string name="settings_addressType">Tipo de dirección Bitcoin</string>
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
     <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatible (P2PSH)</item>
-        <item>Nativo (Bech32)</item>
+        <item>Compatible SegWit (P2PSH)</item>
+        <item>Nativo SegWit (Bech32)</item>
+        <item>Taproot (Bech32m)</item>
     </string-array>
     <string name="settings_lnRequestExpiryTitle">Vencimiento de Solicitud Relámpago</string>
     <string name="settings_lnFeeLimitTitle">Límite de la tarifa de pago</string>
