@@ -8,12 +8,12 @@ import androidx.annotation.NonNull;
 import java.text.DateFormat;
 import java.util.Date;
 
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.forwarding.ForwardingEventSelectListener;
+import app.michaelwuensch.bitbanana.util.MonetaryUtil;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
@@ -42,7 +42,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
     public void bindForwardingEventListItem(ForwardingEventListItem forwardingEventListItem) {
 
         // Set time of day
-        setTimeOfDay(forwardingEventListItem.getTimestamp() / 1000000);
+        setTimeOfDay(forwardingEventListItem.getTimestampMS());
 
         // Set in channel name
         long inChanID = forwardingEventListItem.getForwardingEvent().getChanIdIn();
@@ -92,7 +92,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
     void setTimeOfDay(long creationDate) {
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, mContext.getResources().getConfiguration().locale);
-        String formattedTime = df.format(new Date(creationDate * 1000L));
+        String formattedTime = df.format(new Date(creationDate));
         mTimeOfDay.setText(formattedTime);
     }
 

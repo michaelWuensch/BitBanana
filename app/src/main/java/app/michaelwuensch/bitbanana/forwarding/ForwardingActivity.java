@@ -21,18 +21,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
-import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem;
-import app.michaelwuensch.bitbanana.tor.TorManager;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
+import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
+import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.MonetaryUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -164,7 +164,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         // Add the Date Lines
         for (ForwardingListItem item : forwardingEvents) {
-            DateItem dateItem = new DateItem(item.getTimestamp());
+            DateItem dateItem = new DateItem(item.getTimestampNS());
             dateLines.add(dateItem);
         }
         mForwardingItems.addAll(dateLines);

@@ -2,6 +2,8 @@ package app.michaelwuensch.bitbanana.forwarding.listItems;
 
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 
+import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
+
 public class ForwardingEventListItem extends ForwardingListItem {
 
 
@@ -9,7 +11,8 @@ public class ForwardingEventListItem extends ForwardingListItem {
 
     public ForwardingEventListItem(ForwardingEvent forwardingEvent) {
         mForwardingEvent = forwardingEvent;
-        mTimestamp = forwardingEvent.getTimestampNs();
+        mTimestampNS = forwardingEvent.getTimestampNs();
+        mTimestampMS = TimeFormatUtil.NStoMS(mTimestampNS);
     }
 
     public ForwardingEvent getForwardingEvent() {

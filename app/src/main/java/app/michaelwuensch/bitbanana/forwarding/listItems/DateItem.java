@@ -12,7 +12,7 @@ public class DateItem extends ForwardingListItem {
         // To get the date line to show up at the correct position in the sorted list, we have to set its timestamp correctly.
         // We set it to 1 nanosecond before the day ends.
         // 86400000000000 = Nanoseconds of one day (60 * 60 * 24 * 1000 * 1000 * 1000)
-        mTimestamp = (timestamp - (timestamp % 86400000000000L) + (86400000000000L - 1));
+        mTimestampNS = (timestamp - (timestamp % 86400000000000L) + (86400000000000L - 1));
     }
 
     @Override

@@ -87,4 +87,14 @@ public class TimeFormatUtil {
 
         return formattedString;
     }
+
+    /**
+     * Converts nanoseconds to milliseconds
+     *
+     * @param NS nanoseconds
+     * @return milliseconds
+     */
+    public static long NStoMS(Long NS) {
+        return NS / 1000000;
+    }
 }

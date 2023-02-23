@@ -5,7 +5,8 @@ public abstract class ForwardingListItem implements Comparable<ForwardingListIte
     public static final int TYPE_DATE = 0;
     public static final int TYPE_FORWARDING_EVENT = 1;
 
-    protected long mTimestamp;
+    protected long mTimestampNS;
+    protected long mTimestampMS;
 
     abstract public int getType();
 
@@ -13,13 +14,17 @@ public abstract class ForwardingListItem implements Comparable<ForwardingListIte
         return equals(o);
     }
 
-    public long getTimestamp() {
-        return mTimestamp;
+    public long getTimestampNS() {
+        return mTimestampNS;
+    }
+
+    public long getTimestampMS() {
+        return mTimestampMS;
     }
 
     @Override
     public int compareTo(ForwardingListItem o) {
-        return Long.compare(o.mTimestamp, this.mTimestamp);
+        return Long.compare(o.mTimestampNS, this.mTimestampNS);
     }
 
     @Override
@@ -31,11 +36,11 @@ public abstract class ForwardingListItem implements Comparable<ForwardingListIte
         if (this.getType() != that.getType()) {
             return false;
         }
-        return mTimestamp == that.mTimestamp;
+        return mTimestampNS == that.mTimestampNS;
     }
 
     @Override
     public int hashCode() {
-        return Long.valueOf(mTimestamp).hashCode();
+        return Long.valueOf(mTimestampNS).hashCode();
     }
 }
