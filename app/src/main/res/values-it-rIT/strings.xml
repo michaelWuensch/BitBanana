@@ -341,7 +341,6 @@
     <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:\n\n- Stringa di connessioneLND (lndconnect://...)\n- Connessione al server BtcPay (config=...)\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- non sempre possibile\n\nPerfetto per piccole transazioni.\nUtilizzare quando possibile.\n\n\nOn-Chain:\n\n+ sempre possibile\n- lento\n- commissioni alte\n\nBuono per grandi transazioni.\nUsalo quando Lightning non è possibile.</string>
     <string name="help_dialog_scanGeneric">Tutto è permesso qui.\nBasta scansionare un QR-Code e BitBanana determinerà automaticamente quale azione intraprendere in base ai dati.</string>
-    <string name="help_dialog_private_channels">I canali privati non sono più sicuri, semplicemente non sono visibili per la rete.\nUtilizza i canali privati solo quando il tuo nodo è in esecuzione su un dispositivo mobile o è spesso offline.</string>
     <string name="help_dialog_identity">Questa&#232; la tua identit&#224; sulla rete lightning.\n\nQuando tocchi l\' immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar &#232; unico.\n &#200; stato generato automaticamente in base alla tua chiave pubblica e non pu&#242; essere modificato.</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinominare</string>

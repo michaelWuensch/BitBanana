@@ -355,7 +355,6 @@
     <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:\n\n- рядок Lndconnect (lndconnect://...)\n- підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible for the network.\nOnly use private channels when your node is run on a mobile device or it is frequently offline.</string>
     <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>

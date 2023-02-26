@@ -204,7 +204,7 @@
     <string name="settings_currency">Zweite Einheit</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_tor">Tor</string>
-    <string name="settings_tor_summary">Anonymisiert den gesamten Web-Datenverkehr über das Tor Netzwerk. Das betrifft nur Dinge wie Anfragen für Wechselkurse oder das Öffnen von Links. Ob Tor für die Verbindung eines Knotens verwendet wird, kann für jeden Knoten separat in seinen Verbindungseinstellungen eingestellt werden.</string>
+    <string name="settings_tor_summary">Anonymisiert den gesamten Web-Datenverkehr über das Tor Netzwerk. Das betrifft nur Dinge wie Anfragen für Wechselkurse oder Interaktionen mit LNURL Services. Ob Tor für die Verbindung eines Knotens verwendet wird, kann für jeden Knoten separat in seinen Verbindungseinstellungen eingestellt werden.</string>
     <string name="settings_scan_clipboard">Zwischenablage scannen</string>
     <string name="settings_scan_clipboard_summary">Automatisch Daten in der Zwischenablage erkennen, die BitBanana verarbeiten kann.</string>
     <string name="settings_hapticPin">Haptische PIN-Eingabe</string>
@@ -353,7 +353,7 @@
     <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
-    <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn dein Knoten auf einem mobilen Gerät läuft, oder wenn er regelmäßig offline ist.</string>
+    <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.\nBenutze nur dann private Kanäle, wenn du einen Kanal zu einem Knoten aufmachst, der keine Zahlungen weiterleitet, oder wenn du selbst keine Zahlungen weiterleitest. Um Zahlungen weiterzuleiten, sollte dein Knoten eine sehr hohe Uptime haben. D.h. er sollte so gut wie immer online sein. Wenn dein Knoten auf einem mobilen Gerät läuft oder oft offline ist, solltest du private Kanäle verwenden.</string>
     <string name="help_dialog_identity">Das ist deine Identität im Lighting Netzwerk.\n\nWenn du auf den Avatar tippst, wird dir ein QR-Code angezeigt.\nAndere können diesen Code scannen und dich zu ihren Kontakten hinzufügen, Kanäle mit dir öffnen, oder dir Geld senden.\n\nDieser Avatar ist einzigartig.\nEr wurde automatisch basierend auf deinem öffentlichen Schlüssel generiert und kann nicht geändert werden.</string>
     <string name="node_name">Name der Node</string>
     <string name="delete">Löschen</string>
@@ -436,7 +436,7 @@
     <string name="advanced_channel_details_remote_channel_reserve">Rücklage (Partner)</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">Der minimale Betrag, den dein Kanalpartner im Guthaben des Kanals zurücklegen muss. Das stellt sicher, dass dein Kanalpartner immer etwas zu verlieren hat, falls er versuchen würde, dich zu betrügen.</string>
     <string name="backup_data_create_description">Dieses Backup ist für den Wechsel des Handys gedacht. Es enthält weder die Seed zur Wiederherstellung des On-Chain Guthabens, noch die Channel Backups zur Widerherstellung des Lightning Guthabens. Die Backups zur Wiederherstellung der Guthaben müssen außerhalb von BitBanana erstellt werden.\n\nDieses Backup enthält nur folgende Daten:\n\n- Verbindungsdaten, um BitBanana mit deinen laufenden Nodes zu verbinden\n- Kontakte</string>
-    <string name="backup_data_confirm_description">Ich habe meine Seed und meine Kanäle bereits gesichert und verstehe, dass dieses Backup NICHT dabei hilft Guthaben wiederherzustellen.\n\nIch verstehe, dass dieses Backup trotzdem alle nötige Information enthält, um auf mein Guthaben zuzugreifen. Ich verwende deshalb im nächsten Schritt ein sicheres Passwort.</string>
+    <string name="backup_data_confirm_description">Ich habe meine Seed und meine Kanäle bereits gesichert und verstehe, dass dieses Backup NICHT dabei hilft Guthaben wiederherzustellen.\n\nIch verstehe, dass dieses Backup trotzdem alle nötige Information enthält, um auf mein Guthaben zuzugreifen wenn der Knoten online ist. Ich verwende deshalb im nächsten Schritt ein sicheres Passwort.</string>
     <string name="backup_data_confirm_headline">Bitte bestätige</string>
     <string name="backup_data_confirm">Ich bestätige</string>
     <string name="backup_data_restore_description">Stelle deine Nodes und Kontakte wieder her.\nWenn deine Nodes nicht länger online sind, wird dieser Wiederherstellungsprozess nicht dabei helfen, wieder Zugriff auf dein Guthaben zu bekommen.</string>

@@ -335,7 +335,6 @@
     <string name="help_dialog_scanConnectionInfo">次のデータが含まれるQRコードが有効:\n\n- Lndconnect先 (lndconnect://...)\n- BtcPayサーバ接続設定 (config=...)\n- あなたのBTCPayサーバ設定ファイル</string>
     <string name="help_dialog_LightningVsOnChain">Lightning：\n\n+ 即時\n+ 低い手数料\n- 常に利用可能とは限りません。\n\n少額取引に最適\ n可能な限り使用してください。\n\n\nオンチェーン：\n\n+ 常に利用可能\n- 遅い\n- 高い手数料\n\n高額取引に適しています。\nLightningが利用できない場合に使用します。</string>
     <string name="help_dialog_scanGeneric">ここではすべて許可されています。\nQRコードをスキャンと、BitBananaはデータに応じて処理を自動で決定します。</string>
-    <string name="help_dialog_private_channels">プライベートチャネルは安全という訳ではなく、ネットワークに表示されないだけです。\nノードがモバイルデバイスで実行されている場合、または頻繁にオフラインになる場合は、プライベートチャネルのみ使用してください。</string>
     <string name="help_dialog_identity">これはLightningネットワークでのあなたのIDです。\n\nアバター画像をタップするとQRコードが表示されます。\n他の人はそのコードをスキャンして連絡先に追加したり、チャネルをオープンしたり、送金したりできます。 \n\nこのアバターは一意です。\n公開鍵に基づいて自動的に生成されたものであり、変更することはできません。</string>
     <string name="delete">削除</string>
     <string name="rename">名前変更</string>

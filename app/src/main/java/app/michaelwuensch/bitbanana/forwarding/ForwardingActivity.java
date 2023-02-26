@@ -2,6 +2,8 @@ package app.michaelwuensch.bitbanana.forwarding;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -265,5 +268,25 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
                                 BBLog.w(LOG_TAG, "Fetching forwarding event list failed." + throwable.getMessage());
                             }));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.help_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.helpButton) {
+            HelpDialogUtil.showDialog(ForwardingActivity.this, R.string.help_dialog_forwarding);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
