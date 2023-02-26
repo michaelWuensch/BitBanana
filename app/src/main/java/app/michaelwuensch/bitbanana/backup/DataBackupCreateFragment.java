@@ -104,8 +104,8 @@ public class DataBackupCreateFragment extends Fragment implements DataBackupCrea
     public void openSaveFileDialog(String title) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/bbdb");
-        intent.putExtra(Intent.EXTRA_TITLE, title + ".bbdb");
+        intent.setType("application/bbb");
+        intent.putExtra(Intent.EXTRA_TITLE, title + ".bbb");
         saveDialogResultLauncher.launch(intent);
     }
 

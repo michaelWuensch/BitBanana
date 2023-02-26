@@ -22,7 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
@@ -50,7 +53,16 @@ public class DataBackupIntroFragment extends Fragment {
         buttonRestoreBackup.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                openOpenFileDialog();
+                if (NodeConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts()) {
+                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onGuardianConfirmed() {
+                            openOpenFileDialog();
+                        }
+                    }).securityBackupOverridesExistingData();
+                } else {
+                    openOpenFileDialog();
+                }
             }
         });
 

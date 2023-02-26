@@ -33,6 +33,7 @@ public class UserGuardian {
     private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
     private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
     private static final String DIALOG_CERTIFICATE_VERIFICATION = "guardianCertificateVerification";
+    private static final String DIALOG_BACKUP_OVERRIDES_EXISTING_DATA = "guardianBackupOverridesExistingData";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -207,6 +208,18 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_CERTIFICATE_VERIFICATION;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_certificate_verification);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user before overriding the connection or contact data that already exists by restoring a backup.
+     * Although extremely unlikely in the worst case this could lead to a loss of funds if the app was the only way the user could still access his node.
+     */
+    public void securityBackupOverridesExistingData() {
+        mCurrentDialogName = DIALOG_BACKUP_OVERRIDES_EXISTING_DATA;
+        AlertDialog.Builder adb = createDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_backup_overrides_existing_data);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }
