@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.fragments;
+package app.michaelwuensch.bitbanana.settings;
 
 import android.os.Bundle;
 

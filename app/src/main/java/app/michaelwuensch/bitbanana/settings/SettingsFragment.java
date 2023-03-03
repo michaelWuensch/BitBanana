@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.fragments;
+package app.michaelwuensch.bitbanana.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.AdvancedSettingsActivity;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;

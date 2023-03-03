@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.fragments;
+package app.michaelwuensch.bitbanana.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.SettingsFeePresetsActivity;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;

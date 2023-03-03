@@ -97,17 +97,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.SettingsActivity"
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsActivity"
             android:label="@string/navigation_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.AdvancedSettingsActivity"
+            android:name="app.michaelwuensch.bitbanana.settings.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.SettingsFeePresetsActivity"
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsFeePresetsActivity"
             android:label="@string/settings_onChainFeePresets"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
