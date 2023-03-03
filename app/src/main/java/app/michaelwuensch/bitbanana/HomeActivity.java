@@ -42,8 +42,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
+import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity;
+import app.michaelwuensch.bitbanana.coinControl.UTXOsActivity;
+import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.contacts.ScanContactActivity;
+import app.michaelwuensch.bitbanana.customView.CustomViewPager;
+import app.michaelwuensch.bitbanana.customView.UserAvatarView;
+import app.michaelwuensch.bitbanana.forwarding.ForwardingActivity;
+import app.michaelwuensch.bitbanana.fragments.ChooseNodeActionBSDFragment;
+import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
+import app.michaelwuensch.bitbanana.fragments.SendBSDFragment;
+import app.michaelwuensch.bitbanana.fragments.WalletFragment;
+import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
@@ -51,7 +68,11 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.transactionHistory.TransactionHistoryFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
@@ -68,27 +89,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity;
-import app.michaelwuensch.bitbanana.customView.CustomViewPager;
-import app.michaelwuensch.bitbanana.customView.UserAvatarView;
-import app.michaelwuensch.bitbanana.fragments.ChooseNodeActionBSDFragment;
-import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
-import app.michaelwuensch.bitbanana.fragments.SendBSDFragment;
-import app.michaelwuensch.bitbanana.fragments.WalletFragment;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.forwarding.ForwardingActivity;
-import app.michaelwuensch.bitbanana.transactionHistory.TransactionHistoryFragment;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
-import app.michaelwuensch.bitbanana.coinControl.UTXOsActivity;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
@@ -720,7 +721,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlAsString));
                             startActivity(browserIntent);
                         }).setNegativeButton(R.string.no, (dialog, whichButton) -> {
-                }).show();
+                        }).show();
             }
 
             @Override
@@ -828,6 +829,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Intent intentUTXOs = new Intent(this, UTXOsActivity.class);
                 startActivity(intentUTXOs);
                 break;
+            case R.id.drawerSignVerify:
+                Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
+                startActivity(intentSignVerify);
+                break;
+            case R.id.drawerSettings:
+                Intent intentSettings = new Intent(this, SettingsActivity.class);
+                startActivity(intentSettings);
+                break;
             case R.id.drawerNodes:
                 Intent intentWallets = new Intent(this, ManageNodesActivity.class);
                 startActivity(intentWallets);
@@ -840,10 +849,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             case R.id.drawerBackup:
                 Intent intentBackup = new Intent(this, BackupActivity.class);
                 startActivity(intentBackup);
-                break;
-            case R.id.drawerSettings:
-                Intent intentSettings = new Intent(this, SettingsActivity.class);
-                startActivity(intentSettings);
                 break;
             case R.id.drawerSupport:
                 Intent intentSupport = new Intent(this, SupportActivity.class);

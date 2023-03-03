@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity">
+
+    <LinearLayout
+        android:id="@+id/forwardingHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/modeTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_rectangle_seablue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabBackground="@drawable/tab_layout"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/seaBlue">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabSign"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/sign" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabVerify"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/verify" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <app.michaelwuensch.bitbanana.customView.CustomViewPager
+            android:id="@+id/sign_verify_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
