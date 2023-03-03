@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/line"
-        android:backgroundTint="@color/seaBlueGradient"
+        android:backgroundTint="@color/sea_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -50,7 +50,7 @@
             android:id="@+id/walletNameWidthDummy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/super_red"
+            android:textColor="@color/red"
             android:textSize="18sp"
             android:visibility="invisible"
             android:maxWidth="180dp"
@@ -320,7 +320,7 @@
             android:layout_marginEnd="50dp"
             android:text="@string/error_connection_lnd_unavailable"
             android:textAlignment="center"
-            android:textColor="@color/super_red"
+            android:textColor="@color/red"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

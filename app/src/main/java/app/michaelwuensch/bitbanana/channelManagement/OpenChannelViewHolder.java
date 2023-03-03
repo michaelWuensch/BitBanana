@@ -16,7 +16,7 @@ public class OpenChannelViewHolder extends ChannelViewHolder {
     void setState(boolean isActive) {
         if (isActive) {
             mStatus.setText(R.string.channel_state_open);
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.super_green)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.green)));
             mContentView.setAlpha(1f);
         } else {
             mStatus.setText(R.string.channel_state_offline);

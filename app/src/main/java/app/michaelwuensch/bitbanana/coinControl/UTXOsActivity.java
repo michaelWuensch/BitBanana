@@ -43,7 +43,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.seaBlueGradient3));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.sea_blue_gradient));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
 
         mRecyclerView = findViewById(R.id.utxoList);

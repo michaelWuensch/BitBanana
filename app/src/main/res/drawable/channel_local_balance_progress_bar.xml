@@ -6,10 +6,10 @@
             <corners android:radius="3dip" />
             <gradient
                 android:angle="270"
-                android:centerColor="@color/seaBlueGradient3"
+                android:centerColor="@color/sea_blue_gradient"
                 android:centerY="0.75"
-                android:endColor="@color/seaBlueGradient3"
-                android:startColor="@color/seaBlueGradient3" />
+                android:endColor="@color/sea_blue_gradient"
+                android:startColor="@color/sea_blue_gradient" />
         </shape>
     </item>
 

@@ -118,14 +118,14 @@ public class VerifyView extends LinearLayout {
         mViewVerifyLayout.setVisibility(VISIBLE);
         if (valid) {
             mTVValidationInfo.setText(R.string.signature_valid);
-            mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.super_green));
+            mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
             mTVPubkeyLabel.setVisibility(VISIBLE);
             mTVPubkey.setVisibility(VISIBLE);
             mTVPubkey.setText(pubkey);
             mIVCopyPubkey.setVisibility(VISIBLE);
         } else {
             mTVValidationInfo.setText(R.string.signature_invalid);
-            mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.super_red));
+            mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
             mTVPubkeyLabel.setVisibility(GONE);
             mTVPubkey.setVisibility(GONE);
             mIVCopyPubkey.setVisibility(GONE);

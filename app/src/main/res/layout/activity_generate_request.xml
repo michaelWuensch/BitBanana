@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="3dp"
-                app:srcCompat="@color/seaBlueGradient" />
+                app:srcCompat="@color/sea_blue" />
         </LinearLayout>
 
         <ImageView
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/receive_requestFullfilled"
                 android:textAlignment="center"
-                android:textColor="@color/super_green"
+                android:textColor="@color/green"
                 android:textSize="36sp" />
 
             <ImageView

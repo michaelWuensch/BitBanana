@@ -223,7 +223,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                     }
 
                     if (currentValue > maxSendable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mSendButtonEnabled_input = false;

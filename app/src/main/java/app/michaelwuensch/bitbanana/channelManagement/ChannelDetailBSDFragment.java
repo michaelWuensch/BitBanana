@@ -171,7 +171,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         showClosingButton(!channel.getActive(), channel.getCsvDelay());
 
         if (channel.getActive()) {
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.super_green)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.green)));
         } else {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.gray)));
         }
@@ -198,7 +198,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
         setBasicInformation(waitingCloseChannel.getChannel().getRemoteNodePub(),
                 waitingCloseChannel.getChannel().getRemoteNodePub(),
-                R.color.super_red,
+                R.color.red,
                 waitingCloseChannel.getChannel().getChannelPoint());
 
         setBalances(waitingCloseChannel.getChannel().getLocalBalance(), waitingCloseChannel.getChannel().getRemoteBalance(), waitingCloseChannel.getChannel().getCapacity());
@@ -212,7 +212,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
         setBasicInformation(pendingCloseChannel.getChannel().getRemoteNodePub(),
                 pendingCloseChannel.getChannel().getRemoteNodePub(),
-                R.color.super_red,
+                R.color.red,
                 pendingCloseChannel.getChannel().getChannelPoint());
 
         setBalances(pendingCloseChannel.getChannel().getLocalBalance(), pendingCloseChannel.getChannel().getRemoteBalance(), pendingCloseChannel.getChannel().getCapacity());
@@ -226,7 +226,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
         setBasicInformation(forceClosedChannel.getChannel().getRemoteNodePub(),
                 forceClosedChannel.getChannel().getRemoteNodePub(),
-                R.color.super_red,
+                R.color.red,
                 forceClosedChannel.getChannel().getChannelPoint());
 
         showForceClosingTime(forceClosedChannel.getBlocksTilMaturity());

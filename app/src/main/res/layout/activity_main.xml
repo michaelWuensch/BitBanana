@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deepSeaBlue"
+    android:background="@color/deep_sea_blue"
     android:fitsSystemWindows="false"
     tools:context="app.michaelwuensch.bitbanana.HomeActivity"
     tools:openDrawer="start">
@@ -14,7 +14,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/deepSeaBlue"
+        android:background="@color/deep_sea_blue"
         android:clickable="true"
         tools:context="app.michaelwuensch.bitbanana.HomeActivity">
 
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="-50dp"
-            android:background="@color/deepSeaBlue"
+            android:background="@color/deep_sea_blue"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">
 

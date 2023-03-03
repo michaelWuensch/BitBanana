@@ -266,7 +266,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                             mNumpad.clearInput();
                         }
                         if (currentValue > maxReceivable) {
-                            mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                            mEtAmount.setTextColor(getResources().getColor(R.color.red));
                             String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxReceivable);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);

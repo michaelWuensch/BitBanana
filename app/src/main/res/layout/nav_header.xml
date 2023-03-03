@@ -4,7 +4,7 @@
     android:id="@+id/drawerNavHeader"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@color/seaBlue">
+    android:background="@color/sea_blue">
 
     <app.michaelwuensch.bitbanana.customView.UserAvatarView
         android:id="@+id/userAvatarView"

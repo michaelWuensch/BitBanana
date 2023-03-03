@@ -21,7 +21,6 @@ import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.IdentityActivity;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -56,7 +55,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.seaBlueGradient3));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.sea_blue_gradient));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
 
         mRecyclerView = findViewById(R.id.channelsList);

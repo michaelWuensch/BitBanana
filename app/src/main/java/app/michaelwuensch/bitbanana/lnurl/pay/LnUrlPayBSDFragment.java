@@ -187,13 +187,13 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
                     // make text red if input is too large or too small
                     if (currentValue > mMaxSendable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMaxSendable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     } else if (currentValue < mMinSendable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMinSendable);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);

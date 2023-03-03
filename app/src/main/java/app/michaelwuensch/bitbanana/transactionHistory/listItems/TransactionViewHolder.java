@@ -102,12 +102,12 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
             case 1:
                 // amount > 0
                 mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.super_green));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.green));
                 break;
             case -1:
                 // amount < 0
                 mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount).replace("-", "- "));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.super_red));
+                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.red));
                 break;
         }
     }

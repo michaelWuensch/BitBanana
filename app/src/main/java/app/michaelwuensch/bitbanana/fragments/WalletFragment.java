@@ -438,9 +438,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 // Wallet is not setup
                 mTvMode.setVisibility(View.GONE);
             }
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.super_green)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
         } else {
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.super_red)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
             mWalletConnectedLayout.setVisibility(View.GONE);
             mLoadingWalletLayout.setVisibility(View.GONE);
             mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
@@ -569,10 +569,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         mWalletNameWidthDummy.setText(walletAlias);
         if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.super_red)));
+            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
         } else {
             if (Wallet.getInstance().isConnectedToLND()) {
-                mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.super_green)));
+                mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
             }
         }
     }

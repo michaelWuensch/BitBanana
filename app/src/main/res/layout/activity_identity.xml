@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="michaelwuensch.bitbanana.app.michaelwuensch.bitbanana.IdentityActivity">
+    tools:context="app.michaelwuensch.bitbanana.IdentityActivity">
 
 
     <ImageView
@@ -76,8 +76,10 @@
         android:id="@+id/bottomButtons"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:background="@color/seaBlue"
+        android:background="@color/sea_blue"
         app:itemIconTint="@color/gray"
+        app:itemPaddingBottom="18dp"
+        app:itemPaddingTop="20dp"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Caption"
         app:itemTextAppearanceActive="@style/TextAppearance.AppCompat.Caption"
         app:itemTextAppearanceInactive="@style/TextAppearance.AppCompat.Caption"

@@ -52,10 +52,10 @@ public class BSDProgressView extends ConstraintLayout {
     public void spinningFinished(boolean success) {
         if (success) {
             mProgressResultIcon.setImageResource(R.drawable.ic_check_circle_black_60dp);
-            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.super_green)));
+            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.green)));
         } else {
             mProgressResultIcon.setImageResource(R.drawable.ic_failed_circle_black_60dp);
-            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.super_red)));
+            mProgressResultIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.red)));
         }
         mMotionLayout.setTransition(R.id.endSpinningTransition);
         mMotionLayout.transitionToEnd();

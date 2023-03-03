@@ -66,18 +66,18 @@ public class BSDResultView extends ConstraintLayout {
     public void setHeading(String text, boolean success) {
         mHeading.setText(text);
         if (success) {
-            mHeading.setTextColor(getResources().getColor(R.color.super_green));
+            mHeading.setTextColor(getResources().getColor(R.color.green));
         } else {
-            mHeading.setTextColor(getResources().getColor(R.color.super_red));
+            mHeading.setTextColor(getResources().getColor(R.color.red));
         }
     }
 
     public void setHeading(int resID, boolean success) {
         mHeading.setText(resID);
         if (success) {
-            mHeading.setTextColor(getResources().getColor(R.color.super_green));
+            mHeading.setTextColor(getResources().getColor(R.color.green));
         } else {
-            mHeading.setTextColor(getResources().getColor(R.color.super_red));
+            mHeading.setTextColor(getResources().getColor(R.color.red));
         }
     }
 

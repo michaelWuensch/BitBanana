@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/user_avatar_motion_scene"
-    tools:context="michaelwuensch.bitbanana.app.michaelwuensch.bitbanana.IdentityActivity">
+    tools:context="app.michaelwuensch.bitbanana.IdentityActivity">
 
     <ImageView
         android:id="@+id/avatarBG"

@@ -14,7 +14,7 @@ public class PendingClosingChannelViewHolder extends PendingChannelViewHolder {
 
     @Override
     int getStatusColor() {
-        return R.color.super_red;
+        return R.color.red;
     }
 
     @Override

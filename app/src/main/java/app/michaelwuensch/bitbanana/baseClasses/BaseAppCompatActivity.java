@@ -66,7 +66,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void showError(String message, int duration) {
         Snackbar msg = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.super_red));
+        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.red));
         msg.setDuration(duration);
         msg.show();
     }

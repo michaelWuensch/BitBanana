@@ -300,7 +300,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         }
         // Set missing
         for (int i = mUserInput.toString().length(); i < mPinLength; i++) {
-            mPinHints[i].setColorFilter(ContextCompat.getColor(this, R.color.invisibleGray));
+            mPinHints[i].setColorFilter(ContextCompat.getColor(this, R.color.gray_dark));
         }
         // Hide not used PIN hints
         for (int i = mPinLength; i < mPinHints.length; i++) {

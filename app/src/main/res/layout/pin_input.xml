@@ -5,7 +5,7 @@
     android:id="@+id/pinInputLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deepSeaBlue"
+    android:background="@color/deep_sea_blue"
     android:gravity="center">
 
     <LinearLayout
@@ -55,7 +55,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint2"
@@ -65,7 +65,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint3"
@@ -75,7 +75,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint4"
@@ -85,7 +85,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint5"
@@ -95,7 +95,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint6"
@@ -105,7 +105,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint7"
@@ -115,7 +115,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint8"
@@ -125,7 +125,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint9"
@@ -135,7 +135,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
 
             <ImageView
                 android:id="@+id/pinHint10"
@@ -145,7 +145,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_status_dot_black_24dp"
-                app:tint="@color/invisibleGray" />
+                app:tint="@color/gray_dark" />
         </LinearLayout>
     </LinearLayout>
 
@@ -302,7 +302,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/deepSeaBlue"
+            android:background="@color/deep_sea_blue"
             android:src="@drawable/ic_fingerprint_black_48dp"
             app:tint="@color/white" />
 
@@ -331,7 +331,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/deepSeaBlue"
+            android:background="@color/deep_sea_blue"
             android:src="@drawable/ic_backspace_black_36dp"
             app:tint="@color/white" />
 

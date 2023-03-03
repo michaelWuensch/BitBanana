@@ -22,7 +22,7 @@
         style="@android:style/Widget.Holo.ProgressBar.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/super_green"
+        android:indeterminateTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,5 +37,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_check_circle_black_60dp"
-        app:tint="@color/super_green" />
+        app:tint="@color/green" />
 </androidx.constraintlayout.motion.widget.MotionLayout>

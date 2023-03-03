@@ -291,7 +291,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     private void showError(String message, int duration) {
         Snackbar msg = Snackbar.make(getView().findViewById(R.id.coordinator), message, duration);
         View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.super_red));
+        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
         msg.show();
     }
 

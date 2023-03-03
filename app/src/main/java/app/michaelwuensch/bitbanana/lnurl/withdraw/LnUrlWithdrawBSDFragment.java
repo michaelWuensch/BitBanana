@@ -166,13 +166,13 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
 
                     // make text red if input is too large or too small
                     if (currentValue > mMaxWithdrawable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMaxWithdrawable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
                     } else if (currentValue < mMinWithdrawable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.super_red));
+                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMinWithdrawable);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);

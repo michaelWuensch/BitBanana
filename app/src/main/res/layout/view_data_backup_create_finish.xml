@@ -61,7 +61,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_failed_circle_black_60dp"
-                app:tint="@color/super_red" />
+                app:tint="@color/red" />
 
             <TextView
                 android:id="@+id/data_backup_finish_title_failed"
