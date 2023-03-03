@@ -37,6 +37,9 @@ public class PrefsUtil {
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
     public static final String NODE_INFO_CACHE = "nodeInfoCache";
+    public static final String FEE_PRESET_FAST = "feePresetFast";
+    public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
+    public static final String FEE_PRESET_SLOW = "feePresetSlow";
 
     // node config preferences references
     public static final String NODE_CONFIGS = "wallet_configs";
@@ -45,6 +48,9 @@ public class PrefsUtil {
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";
+    public static final String DEFAULT_FEE_PRESET_VALUE_FAST = "1";
+    public static final String DEFAULT_FEE_PRESET_VALUE_MEDIUM = "18";
+    public static final String DEFAULT_FEE_PRESET_VALUE_SLOW = "144";
 
 
     // Access to default shared prefs

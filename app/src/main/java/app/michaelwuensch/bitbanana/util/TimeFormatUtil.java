@@ -89,6 +89,56 @@ public class TimeFormatUtil {
     }
 
     /**
+     * Returns a nicely formatted duration for block times. Seconds are irrelevant here.
+     *
+     * @param blocks number of blocks
+     * @return
+     */
+    public static String formattedBlockDuration(long blocks, Context context) {
+
+        // duration in seconds
+        long duration = blocks * 10 * 60;
+
+        String formattedString = "";
+
+        int minutes = (int) (duration % 3600) / 60;
+        String minutesString = "";
+        if (minutes != 0)
+            minutesString = context.getResources().getQuantityString(R.plurals.duration_minute, minutes, minutes);
+        int hours = (int) (duration % 86400) / 3600;
+        String hoursString = "";
+        if (hours != 0)
+            hoursString = context.getResources().getQuantityString(R.plurals.duration_hour, hours, hours);
+        int days = (int) duration / 86400;
+        String daysString = "";
+        if (days != 0)
+            daysString = context.getResources().getQuantityString(R.plurals.duration_day, days, days);
+
+        if (duration < 86400) {
+            formattedString = hoursString + divider(hoursString, minutesString) + minutesString;
+        } else {
+            formattedString = daysString + divider(daysString, hoursString) + hoursString;
+        }
+
+        return formattedString;
+    }
+
+    /**
+     * Adds a comma separation between to strings if both exist and are not empty
+     *
+     * @param a String to the left
+     * @param b String to the right
+     * @return
+     */
+    private static String divider(String a, String b) {
+        if (a == null || b == null)
+            return "";
+        if (a.isEmpty() || b.isEmpty())
+            return "";
+        return ", ";
+    }
+
+    /**
      * Converts nanoseconds to milliseconds
      *
      * @param NS nanoseconds

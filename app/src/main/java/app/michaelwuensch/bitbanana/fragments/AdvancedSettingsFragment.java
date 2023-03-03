@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -9,12 +10,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.SettingsFeePresetsActivity;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.R;
 
 
 public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
@@ -115,6 +117,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 UserGuardian.reenableAllSecurityWarnings();
                 Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
+        // Action when clicked on "On-chainFeePresets"
+        final Preference prefOnChainFeePresets = findPreference("goToOnChainFeeSettings");
+        prefOnChainFeePresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsFeePresetsActivity.class);
+                startActivity(intent);
                 return true;
             }
         });

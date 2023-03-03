@@ -14,9 +14,10 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
 public class OnChainFeeView extends ConstraintLayout {
 
@@ -164,20 +165,8 @@ public class OnChainFeeView extends ConstraintLayout {
      * Show estimated time of settlement
      */
     private void setBlockTargetTime(int blockTarget) {
-        int minutes = blockTarget * 10;
-
-        if (minutes < 60) {
-            String quantityString = getResources().getQuantityString(R.plurals.duration_minute, minutes, minutes);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
-        } else if (minutes < 60 * 24) {
-            int hours = minutes / 60;
-            String quantityString = getResources().getQuantityString(R.plurals.duration_hour, hours, hours);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
-        } else {
-            int days = minutes / 60 / 24;
-            String quantityString = getResources().getQuantityString(R.plurals.duration_day, days, days);
-            mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, quantityString));
-        }
+        String estimatedTime = TimeFormatUtil.formattedBlockDuration((long) blockTarget, getContext());
+        mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, estimatedTime));
     }
 
     public enum OnChainFeeTier {
@@ -226,13 +215,13 @@ public class OnChainFeeView extends ConstraintLayout {
         public int getConfirmationBlockTarget() {
             switch (this) {
                 case FAST:
-                    return 1; // 10 Minutes
+                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_FAST, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST));
                 case MEDIUM:
-                    return 6 * 6; // 6 Hours
+                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_MEDIUM, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_MEDIUM));
                 case SLOW:
-                    return 6 * 24; // 24 Hours
+                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_SLOW, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_SLOW));
                 default:
-                    return 1; // 10 Minutes
+                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_FAST, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST));
             }
         }
     }

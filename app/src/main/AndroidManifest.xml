@@ -107,6 +107,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.SettingsFeePresetsActivity"
+            android:label="@string/settings_onChainFeePresets"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"

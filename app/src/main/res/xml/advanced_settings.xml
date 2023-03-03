@@ -25,6 +25,18 @@
             android:title="@string/settings_exchangeRateProvider"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="hapticPin"
+            android:title="@string/settings_hapticPin"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/onChain"
+        app:iconSpaceReserved="false">
+
         <ListPreference
             android:defaultValue="bech32"
             android:dialogTitle="@string/settings_addressType"
@@ -35,12 +47,10 @@
             android:title="@string/settings_addressType"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
+        <Preference
+            android:key="goToOnChainFeeSettings"
+            android:title="@string/settings_onChainFeePresets"
             app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
