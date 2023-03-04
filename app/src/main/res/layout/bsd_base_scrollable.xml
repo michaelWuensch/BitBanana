@@ -9,11 +9,11 @@
 
     <ImageButton
         android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="10dp"
-        android:background="?selectableItemBackgroundBorderless"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="4dp"
+        android:background="?actionBarItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_close_black_24dp"
@@ -21,11 +21,10 @@
 
     <ImageButton
         android:id="@+id/helpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="10dp"
-        android:background="?selectableItemBackgroundBorderless"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="7dp"
+        android:background="?actionBarItemBackground"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/closeButton"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,11 +34,10 @@
 
     <ImageButton
         android:id="@+id/moreButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="10dp"
-        android:background="?selectableItemBackgroundBorderless"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="7dp"
+        android:background="?actionBarItemBackground"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/helpButton"
         app:layout_constraintTop_toTopOf="parent"

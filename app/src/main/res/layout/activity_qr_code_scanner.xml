@@ -70,10 +70,10 @@
 
         <ImageButton
             android:id="@+id/scannerFlashButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="10dp"
-            android:background="?selectableItemBackgroundBorderless"
+            android:background="?actionBarItemBackground"
             android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:orientation="horizontal"
+            android:paddingHorizontal="15dp"
             android:paddingBottom="360dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -122,12 +123,12 @@
 
             <ImageView
                 android:id="@+id/scannerInstructionsHelp"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="7dp"
                 android:layout_marginTop="2dp"
-                android:background="?selectableItemBackgroundBorderless"
+                android:background="?actionBarItemBackground"
+                android:padding="10dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_help_black_24dp"
                 app:tint="@color/banana_yellow" />
