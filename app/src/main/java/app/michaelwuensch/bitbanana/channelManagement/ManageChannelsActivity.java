@@ -21,17 +21,18 @@ import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
-import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
-import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
+import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.ChannelsUpdatedSubscriptionListener {
 
@@ -218,7 +219,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        getMenuInflater().inflate(R.menu.help_menu, menu);
+        if (PrefsUtil.getShowHelpButtons())
+            getMenuInflater().inflate(R.menu.help_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(getResources().getString(R.string.search));

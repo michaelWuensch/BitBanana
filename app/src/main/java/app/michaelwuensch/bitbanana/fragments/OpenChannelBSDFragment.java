@@ -23,21 +23,22 @@ import androidx.transition.TransitionManager;
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 
 public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.ChannelOpenUpdateListener {
 
@@ -101,7 +102,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
         setAvailableFunds();
         ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
-        privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
+        if (PrefsUtil.getShowHelpButtons()) {
+            privateHelpButton.setVisibility(View.VISIBLE);
+            privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
+        } else {
+            privateHelpButton.setVisibility(View.GONE);
+        }
 
         // Input validation for the amount field.
         mEtAmount.addTextChangedListener(new TextWatcher() {

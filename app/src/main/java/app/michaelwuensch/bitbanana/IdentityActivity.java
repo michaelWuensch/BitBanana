@@ -119,7 +119,8 @@ public class IdentityActivity extends BaseAppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.help_menu, menu);
+        if (PrefsUtil.getShowHelpButtons())
+            getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
     }
 

@@ -10,6 +10,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class SignVerifyActivity extends BaseAppCompatActivity {
 
@@ -59,7 +60,8 @@ public class SignVerifyActivity extends BaseAppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.help_menu, menu);
+        if (PrefsUtil.getShowHelpButtons())
+            getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
     }
 

@@ -40,6 +40,7 @@ public class PrefsUtil {
     public static final String FEE_PRESET_FAST = "feePresetFast";
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
+    public static final String HELP_BUTTONS = "showHelpButtons";
 
     // node config preferences references
     public static final String NODE_CONFIGS = "wallet_configs";
@@ -104,6 +105,10 @@ public class PrefsUtil {
 
     public static boolean isBiometricEnabled() {
         return getPrefs().getBoolean("biometricsEnabled", true);
+    }
+
+    public static boolean getShowHelpButtons() {
+        return getPrefs().getBoolean(HELP_BUTTONS, true);
     }
 
     public static String getCurrentNodeConfig() {

@@ -29,9 +29,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.util.PermissionsUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.PermissionsUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public abstract class BaseScannerActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private static final String LOG_TAG = BaseScannerActivity.class.getSimpleName();
@@ -100,7 +101,13 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mBtnFlashlight = findViewById(R.id.scannerFlashButton);
         mBtnFlashlight.setOnClickListener(this);
         mScannerInstructionsHelp = findViewById(R.id.scannerInstructionsHelp);
-        mScannerInstructionsHelp.setOnClickListener(this);
+
+        if (PrefsUtil.getShowHelpButtons()) {
+            mScannerInstructionsHelp.setVisibility(View.VISIBLE);
+            mScannerInstructionsHelp.setOnClickListener(this);
+        } else {
+            mScannerInstructionsHelp.setVisibility(View.GONE);
+        }
 
         // if the device does not have flashlight in its camera,
         // then remove the switch flashlight button...
