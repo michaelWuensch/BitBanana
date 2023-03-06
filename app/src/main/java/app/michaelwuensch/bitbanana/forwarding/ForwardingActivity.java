@@ -47,15 +47,22 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TabLayout mTabLayoutPeriod;
+    private TabLayout mDots;
     private long mPeriod = 24 * 60 * 60; // in seconds
     private TextView mTVAmount;
     private TextView mTVUnit;
-    private View mVEarnedAmountProgress;
+    private View mVHeaderProgress;
+    private View mVHeaderSummary;
+    private TextView mTvSummaryText;
 
     private List<ForwardingListItem> mForwardingItems;
     private List<ForwardingEvent> mTempForwardingEventsList;
     private List<ForwardingEvent> mForwardingEventsList;
     private TextView mEmptyListText;
+
+    private long mEarnedMsats = 0;
+    private long mRoutedMsats = 0;
+    private boolean mIsVolume = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +70,12 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         setContentView(R.layout.activity_forwarding);
 
         mTabLayoutPeriod = findViewById(R.id.periodTabLayout);
+        mDots = findViewById(R.id.tabDots);
         mTVAmount = findViewById(R.id.amount);
         mTVUnit = findViewById(R.id.unit);
-        mVEarnedAmountProgress = findViewById(R.id.earnedFeeProgress);
+        mVHeaderProgress = findViewById(R.id.earnedFeeProgress);
+        mVHeaderSummary = findViewById(R.id.forwardingHeaderSummary);
+        mTvSummaryText = findViewById(R.id.forwardingSummaryText);
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -86,8 +96,24 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         mAdapter = new ForwardingEventItemAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        // Make dots unclickable
+        for (View v : mDots.getTouchables()) {
+            v.setEnabled(false);
+        }
+
+        mIsVolume = PrefsUtil.getPrefs().getBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, false);
+        updateSummaryTexts();
+
         // display current state of the list
         updateForwardingEventDisplayList();
+
+        mVHeaderSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsVolume = !mIsVolume;
+                updateSummaryTexts();
+            }
+        });
 
         mTabLayoutPeriod.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -155,11 +181,13 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         List<ForwardingListItem> forwardingEvents = new LinkedList<>();
         Set<ForwardingListItem> dateLines = new HashSet<>();
 
-        long earnedMsats = 0;
+        mEarnedMsats = 0;
+        mRoutedMsats = 0;
         if (mForwardingEventsList != null) {
             // Add all relevant items the forwardingEvents list
             for (ForwardingEvent forwardingEvent : mForwardingEventsList) {
-                earnedMsats += forwardingEvent.getFeeMsat();
+                mEarnedMsats += forwardingEvent.getFeeMsat();
+                mRoutedMsats += forwardingEvent.getAmtInMsat();
                 ForwardingEventListItem currItem = new ForwardingEventListItem(forwardingEvent);
                 forwardingEvents.add(currItem);
             }
@@ -191,14 +219,30 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
             setTitle(getResources().getString(R.string.activity_forwarding));
         }
 
-        // Set earned amount texts
-        mTVAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(earnedMsats / 1000));
-        mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        updateSummaryTexts();
 
         // Restore state (e.g. scroll offset)
         mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         refreshFinished();
+    }
+
+    private void updateSummaryTexts() {
+        if (mIsVolume) {
+            // Set earned amount texts
+            mTVAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mRoutedMsats / 1000));
+            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+            mTvSummaryText.setText(R.string.forwarding_volume_description);
+            mDots.selectTab(mDots.getTabAt(1));
+            PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, true).apply();
+        } else {
+            // Set earned amount texts
+            mTVAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mEarnedMsats / 1000));
+            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+            mTvSummaryText.setText(R.string.forwarding_earned_description);
+            mDots.selectTab(mDots.getTabAt(0));
+            PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, false).apply();
+        }
     }
 
     @Override
@@ -221,7 +265,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
             setTitle(getResources().getString(R.string.activity_forwarding));
             mTVAmount.setVisibility(View.GONE);
-            mVEarnedAmountProgress.setVisibility(View.VISIBLE);
+            mVHeaderProgress.setVisibility(View.VISIBLE);
             mEmptyListText.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.INVISIBLE);
             fetchForwardingHistory(10000, mPeriod);
@@ -232,7 +276,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
     private void refreshFinished() {
         mTVAmount.setVisibility(View.VISIBLE);
-        mVEarnedAmountProgress.setVisibility(View.GONE);
+        mVHeaderProgress.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
