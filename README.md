@@ -61,7 +61,7 @@ Hey! Do you like BitBanana? Awesome! We could actually really use your help!
 
 Open source isn't just writing code. BitBanana could use your help with any of the following:
 
-- [Translating](docs/TRANSLATING.md) the app
+- [Translating](docs/TRANSLATING.md) the app using Weblate
 - Finding (and reporting!) bugs
 - New feature suggestions
 - Answering questions on issues
@@ -69,6 +69,7 @@ Open source isn't just writing code. BitBanana could use your help with any of t
 - Reviewing pull requests
 - Helping to manage issue priorities
 - Fixing bugs/new features
+- Helping other users on BitBanana [discord][discord]
 
 If any of that sounds cool to you, feel free to dive in! [Open an issue][issues] or submit a pull request.
 

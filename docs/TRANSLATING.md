@@ -1,17 +1,16 @@
 ## How to translate:
 
-1. Fork the BitBanana git repo
-2. Install Android Studio
-3. Open the BitBanana project in Android Studio
-4. Open the translations editor in Android Studio (Right-click the strings.xml file, and select Open Translations Editor. )
-5. Select your language in the dropdown or add it, if it is not available yet.
-6. Translate the missing strings.
-7. Create a pull request.
-8. Celebrate yourself for supporting a free open source project! This step is MANDATORY!
+1. Go to the Bitbanana's [Weblate project][weblateproject]
+2. If you do not have a weblate account, create one. Without a weblate account you can only see but not edit the translations.
+3. Choose your language or create a new one if it does not exist yet.
+4. Start translating.
+5. Celebrate yourself for supporting a free open source project! This step is MANDATORY!
 
 
 ## When will my translation be visible in the app?
 
-Your translation will only be visible in the app after the next update will be published on Google Play Store. There is no fixed schedule when updates are happening.
+To keep the repository clean we will do one translation update right before each release. This means your translation will only be available in the next release. There is no fixed schedule when releases are happening.
 So this might take a few days or a few weeks.
 If the language is translated to 100%, we will add it to the language selection list. If not, it is only accessible if you choose "System Language" and your smartphone is set to the corresponding language.
+
+[weblateproject]: https://hosted.weblate.org/projects/bitbanana/app-strings/
