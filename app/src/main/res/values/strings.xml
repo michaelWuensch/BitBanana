@@ -107,7 +107,7 @@
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
-    <string name="activity_manage_channels">Lightning Channels</string>
+    <string name="activity_manage_channels">Channels</string>
     <string name="activity_manage_nodes">Manage Nodes</string>
     <string name="activity_advanced_settings">Advanced Settings</string>
     <string name="activity_node_details">Node Details</string>
@@ -561,5 +561,9 @@
     <string name="signature_valid">Signature is valid!</string>
     <string name="signature_invalid">Signature is invalid!</string>
     <string name="signature_pubkey">Pubkey:</string>
+
+    <string name="channel_summary_total_outbound">Total outbound</string>
+    <string name="channel_summary_total_inbound">Total inbound</string>
+    <string name="channel_summary_total_unavailable">Total offline</string>
 
 </resources>

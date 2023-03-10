@@ -101,7 +101,6 @@
     <string name="activity_receive">Primește</string>
     <string name="activity_send">Plătește</string>
     <string name="activity_connectRemoteNode">Conectează-te la un Nod</string>
-    <string name="activity_manage_channels">Lightning Channels</string>
     <string name="activity_advanced_settings">Setări avansate</string>
     <string name="activity_identity">Identity</string>
     <string name="activity_manage_contacts">Manage Contacts</string>

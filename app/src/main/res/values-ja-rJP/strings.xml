@@ -101,7 +101,7 @@
     <string name="activity_receive">受取</string>
     <string name="activity_send">支払</string>
     <string name="activity_connectRemoteNode">リモートノードに接続</string>
-    <string name="activity_manage_channels">Lightningチャネル</string>
+    <string name="activity_manage_channels">チャネル</string>
     <string name="activity_advanced_settings">詳細設定</string>
     <string name="activity_identity"> ID</string>
     <string name="activity_manage_contacts">連絡先管理</string>

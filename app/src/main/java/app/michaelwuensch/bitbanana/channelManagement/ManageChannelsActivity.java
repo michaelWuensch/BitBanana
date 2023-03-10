@@ -42,6 +42,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private RecyclerView mRecyclerView;
     private ChannelItemAdapter mAdapter;
     private TextView mEmptyListText;
+    private ChannelSummaryView mChannelSummaryView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<ChannelListItem> mChannelItems;
     private String mCurrentSearchString = "";
@@ -52,6 +53,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         setContentView(R.layout.activity_manage_channels);
 
         Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+
+        mChannelSummaryView = findViewById(R.id.channelSummary);
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -90,14 +93,21 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         List<ChannelListItem> offlineChannels = new ArrayList<>();
 
+        long outbound = 0;
+        long inbound = 0;
+        long unavailable = 0;
+
         // Add all open channel items
 
         if (Wallet.getInstance().mOpenChannelsList != null) {
             for (Channel c : Wallet.getInstance().mOpenChannelsList) {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
                 if (c.getActive()) {
+                    outbound += openChannelItem.getChannel().getLocalBalance();
+                    inbound += openChannelItem.getChannel().getRemoteBalance();
                     mChannelItems.add(openChannelItem);
                 } else {
+                    unavailable += openChannelItem.getChannel().getLocalBalance() + openChannelItem.getChannel().getRemoteBalance();
                     offlineChannels.add(openChannelItem);
                 }
             }
@@ -146,6 +156,16 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         } else {
             mEmptyListText.setVisibility(View.GONE);
         }
+
+        // Set number of channels in title
+        if (mChannelItems.size() > 0) {
+            String title = getResources().getString(R.string.activity_manage_channels) + " (" + mChannelItems.size() + ")";
+            setTitle(title);
+        } else {
+            setTitle(getResources().getString(R.string.activity_manage_channels));
+        }
+
+        mChannelSummaryView.updateBalances(outbound, inbound, unavailable);
 
         // Update the view
         if (mCurrentSearchString.isEmpty()) {

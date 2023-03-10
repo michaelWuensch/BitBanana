@@ -101,7 +101,6 @@
     <string name="activity_receive">Nhận</string>
     <string name="activity_send">Thanh toán</string>
     <string name="activity_connectRemoteNode">Nối tới nốt mạng</string>
-    <string name="activity_manage_channels">Kênh Lightning Bitcoin</string>
     <string name="activity_advanced_settings">Cài đặt nâng cao</string>
     <string name="activity_identity">Nhận dạng</string>
     <string name="activity_manage_contacts">Quản lý liên lạc</string>

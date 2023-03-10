@@ -101,7 +101,7 @@
     <string name="activity_receive">Ricevi</string>
     <string name="activity_send">Paga</string>
     <string name="activity_connectRemoteNode">Connetti a nodo remoto</string>
-    <string name="activity_manage_channels">Canali Lightning</string>
+    <string name="activity_manage_channels">Canali</string>
     <string name="activity_advanced_settings">Impostazioni Avanzate</string>
     <string name="activity_identity">Indentita</string>
     <string name="activity_manage_contacts">Gestisci Contatti</string>

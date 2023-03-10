@@ -101,7 +101,6 @@
     <string name="activity_receive">Ontvang</string>
     <string name="activity_send">Betaal</string>
     <string name="activity_connectRemoteNode">Verbind met externe node</string>
-    <string name="activity_manage_channels">Lightningkanalen</string>
     <string name="activity_advanced_settings">Geavanceerde Instellingen</string>
     <string name="activity_identity">Identiteit</string>
     <string name="activity_manage_contacts">Beheer Contacten</string>

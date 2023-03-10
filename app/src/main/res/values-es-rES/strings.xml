@@ -101,7 +101,6 @@
     <string name="activity_receive">Recibir</string>
     <string name="activity_send">Enviar</string>
     <string name="activity_connectRemoteNode">Conectar a Nodo Remoto</string>
-    <string name="activity_manage_channels">Lightning Channels</string>
     <string name="activity_advanced_settings">Configuraciones Avanzadas</string>
     <string name="activity_identity">Identity</string>
     <string name="activity_manage_contacts">Manage Contacts</string>

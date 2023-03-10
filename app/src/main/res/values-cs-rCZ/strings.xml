@@ -101,7 +101,7 @@
     <string name="activity_receive">Příjmout</string>
     <string name="activity_send">BitBananalatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
-    <string name="activity_manage_channels">Lightning kanály</string>
+    <string name="activity_manage_channels">Kanály</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
     <string name="activity_identity">Identita</string>
     <string name="activity_manage_contacts">Spravovat kontakty</string>

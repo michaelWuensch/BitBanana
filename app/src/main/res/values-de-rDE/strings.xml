@@ -102,7 +102,7 @@
     <string name="activity_receive">Empfangen</string>
     <string name="activity_send">Bezahlen</string>
     <string name="activity_connectRemoteNode">Mit Node verbinden</string>
-    <string name="activity_manage_channels">Lightning-Kanäle</string>
+    <string name="activity_manage_channels">Kanäle</string>
     <string name="activity_manage_nodes">Nodes Verwalten</string>
     <string name="activity_advanced_settings">Erweiterte Einstellungen</string>
     <string name="activity_node_details">Node Details</string>

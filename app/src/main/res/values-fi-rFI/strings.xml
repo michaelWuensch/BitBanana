@@ -101,7 +101,6 @@
     <string name="activity_receive">Vastaanota</string>
     <string name="activity_send">Maksa</string>
     <string name="activity_connectRemoteNode">Yhdistä etäsolmuun</string>
-    <string name="activity_manage_channels">Salama kanavat</string>
     <string name="activity_advanced_settings">Edistyneet asetukset</string>
     <string name="activity_identity">Identiteetti</string>
     <string name="activity_manage_contacts">Muokkaa kontakteja</string>
