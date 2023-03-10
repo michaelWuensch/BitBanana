@@ -25,6 +25,12 @@
         <item>bech32m</item>
     </string-array>
 
+    <string-array name="settings_receiveAddressDisplayValues">
+        <item>@string/settings_receiveAddressDisplayValues_0</item>
+        <item>@string/settings_receiveAddressDisplayValues_1</item>
+        <item>@string/settings_receiveAddressDisplayValues_2</item>
+    </string-array>
+
     <string-array name="blockExplorer">
         <item>BlockCypher</item>
         <item>Blockstream</item>

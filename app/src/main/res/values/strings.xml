@@ -265,11 +265,10 @@
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
 
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibility SegWit (P2PSH)</item>
-        <item>Native SegWit (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
+    <!-- Weblate does not support string arrays, therefore this workaround is used -->
+    <string name="settings_receiveAddressDisplayValues_0">Compatibility SegWit (P2PSH)</string>
+    <string name="settings_receiveAddressDisplayValues_1">Native SegWit (Bech32)</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
 
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
