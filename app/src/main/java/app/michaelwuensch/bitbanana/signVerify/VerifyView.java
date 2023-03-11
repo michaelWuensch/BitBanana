@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -95,22 +97,26 @@ public class VerifyView extends LinearLayout {
     }
 
     private void verify() {
-        String message = mEtMessageToVerify.getText().toString();
-        String signature = mEtSignatureToVerify.getText().toString();
-        if (!message.isEmpty() && !signature.isEmpty()) {
-            VerifyMessageRequest verifyMessageRequest = VerifyMessageRequest.newBuilder()
-                    .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
-                    .setSignatureBytes(ByteString.copyFrom(signature, StandardCharsets.UTF_8))
-                    .build();
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            String message = mEtMessageToVerify.getText().toString();
+            String signature = mEtSignatureToVerify.getText().toString();
+            if (!message.isEmpty() && !signature.isEmpty()) {
+                VerifyMessageRequest verifyMessageRequest = VerifyMessageRequest.newBuilder()
+                        .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
+                        .setSignatureBytes(ByteString.copyFrom(signature, StandardCharsets.UTF_8))
+                        .build();
 
-            mCompositeDisposable.add(LndConnection.getInstance().getLightningService().verifyMessage(verifyMessageRequest)
-                    .subscribe(verifyMessageResponse -> {
-                        String pubkey = verifyMessageResponse.getPubkey();
-                        boolean valid = verifyMessageResponse.getValid();
-                        BBLog.v(LOG_TAG, "Signature is valid: " + valid);
-                        BBLog.v(LOG_TAG, "PubKey of signature: " + pubkey);
-                        updateVerificationInfo(valid, pubkey);
-                    }, throwable -> BBLog.d(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace())));
+                mCompositeDisposable.add(LndConnection.getInstance().getLightningService().verifyMessage(verifyMessageRequest)
+                        .subscribe(verifyMessageResponse -> {
+                            String pubkey = verifyMessageResponse.getPubkey();
+                            boolean valid = verifyMessageResponse.getValid();
+                            BBLog.v(LOG_TAG, "Signature is valid: " + valid);
+                            BBLog.v(LOG_TAG, "PubKey of signature: " + pubkey);
+                            updateVerificationInfo(valid, pubkey);
+                        }, throwable -> BBLog.d(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace())));
+            }
+        } else {
+            Toast.makeText(getContext(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
         }
     }
 
