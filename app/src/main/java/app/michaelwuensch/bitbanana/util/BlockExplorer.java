@@ -36,7 +36,7 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
@@ -95,7 +95,7 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "BlockCypher");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
