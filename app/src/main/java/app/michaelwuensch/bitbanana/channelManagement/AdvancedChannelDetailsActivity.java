@@ -9,17 +9,18 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.math.BigDecimal;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
 
 public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
@@ -28,6 +29,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     private AdvancedChannelDetailView mDetailCapacity;
     private AdvancedChannelDetailView mDetailActivity;
     private AdvancedChannelDetailView mDetailVisibility;
+    private AdvancedChannelDetailView mDetailInitiator;
     private AdvancedChannelDetailView mDetailChannelLifetime;
     private AdvancedChannelDetailView mDetailTimeLock;
     private AdvancedChannelDetailView mDetailCommitFee;
@@ -45,6 +47,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailCapacity = findViewById(R.id.capacity);
         mDetailActivity = findViewById(R.id.activity);
         mDetailVisibility = findViewById(R.id.visibility);
+        mDetailInitiator = findViewById(R.id.initiator);
         mDetailChannelLifetime = findViewById(R.id.channelLifetime);
         mDetailTimeLock = findViewById(R.id.timeLock);
         mDetailCommitFee = findViewById(R.id.commitFee);
@@ -77,6 +80,9 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                         break;
                     case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                         //bindForceClosingChannel(channelString);
+                        break;
+                    case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                        //bindClosedChannel(channelString);
                         break;
                 }
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
@@ -125,6 +131,15 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
             visibility = getString(R.string.channel_visibility_public);
         }
         mDetailVisibility.setContent(R.string.channel_visibility, visibility, R.string.advanced_channel_details_explanation_visibility);
+
+        // initiator
+        String initiator;
+        if (channel.getInitiator()) {
+            initiator = getResources().getString(R.string.advanced_channel_details_initiator_you);
+        } else {
+            initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
+        }
+        mDetailInitiator.setContent(R.string.advanced_channel_details_initiator, initiator, R.string.advanced_channel_details_explanation_initiator);
 
         // commit fee
         String commitFee = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCommitFee());

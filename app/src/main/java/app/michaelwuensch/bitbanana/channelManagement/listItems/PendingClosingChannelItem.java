@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listItems;
 
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.protobuf.ByteString;

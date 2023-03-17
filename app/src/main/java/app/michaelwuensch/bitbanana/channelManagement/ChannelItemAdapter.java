@@ -11,6 +11,19 @@ import androidx.recyclerview.widget.SortedList;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ClosedChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.OpenChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingClosingChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingForceClosingChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingOpenChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.WaitingCloseChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.ClosedChannelViewHolder;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.OpenChannelViewHolder;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.PendingClosingChannelViewHolder;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.PendingForceClosingChannelViewHolder;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.PendingOpenChannelViewHolder;
+import app.michaelwuensch.bitbanana.channelManagement.listViewHolders.WaitingCloseChannelViewHolder;
 
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -82,6 +95,8 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return new PendingForceClosingChannelViewHolder(channelView);
             case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                 return new WaitingCloseChannelViewHolder(channelView);
+            case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                return new ClosedChannelViewHolder(channelView);
             default:
                 throw new IllegalStateException("Unknown channel type: " + viewType);
         }
@@ -122,6 +137,12 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mSortedList.get(position);
                 waitingCloseChannelHolder.bindWaitingCloseChannelItem(waitingCloseChannelItem);
                 waitingCloseChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
+                break;
+            case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                ClosedChannelViewHolder closedChannelViewHolder = (ClosedChannelViewHolder) holder;
+                ClosedChannelItem closedChannelItem = (ClosedChannelItem) mSortedList.get(position);
+                closedChannelViewHolder.bindClosedChannelItem(closedChannelItem);
+                closedChannelViewHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             default:
                 throw new IllegalStateException("Unknown channel type: " + type);

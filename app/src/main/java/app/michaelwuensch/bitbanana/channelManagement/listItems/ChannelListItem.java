@@ -1,11 +1,11 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listItems;
 
 import androidx.annotation.Nullable;
 
 import com.google.protobuf.ByteString;
 
-import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public abstract class ChannelListItem implements Comparable<ChannelListItem> {
 
@@ -40,6 +40,9 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 break;
             case TYPE_WAITING_CLOSE_CHANNEL:
                 ownPubkey = ((WaitingCloseChannelItem) this).getChannel().getChannel().getRemoteNodePub();
+                break;
+            case TYPE_CLOSED_CHANNEL:
+                ownPubkey = ((ClosedChannelItem) this).getChannel().getRemotePubkey();
         }
 
         String otherPubkey = "";
@@ -58,6 +61,9 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 break;
             case TYPE_WAITING_CLOSE_CHANNEL:
                 otherPubkey = ((WaitingCloseChannelItem) other).getChannel().getChannel().getRemoteNodePub();
+                break;
+            case TYPE_CLOSED_CHANNEL:
+                ownPubkey = ((ClosedChannelItem) other).getChannel().getRemotePubkey();
         }
 
         String ownAlias = Wallet.getInstance().getNodeAliasFromPubKey(ownPubkey, App.getAppContext()).toLowerCase();
@@ -84,6 +90,8 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getLocalBalance() == ((PendingForceClosingChannelItem) that).getChannel().getChannel().getLocalBalance();
             case TYPE_WAITING_CLOSE_CHANNEL:
                 return ((WaitingCloseChannelItem) this).getChannel().getChannel().getLocalBalance() == ((WaitingCloseChannelItem) that).getChannel().getChannel().getLocalBalance();
+            case TYPE_CLOSED_CHANNEL:
+                return ((ClosedChannelItem) this).getChannel().getSettledBalance() == ((ClosedChannelItem) that).getChannel().getSettledBalance();
         }
         return false;
     }
@@ -112,6 +120,8 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((PendingForceClosingChannelItem) that).getChannel().getChannel().getChannelPoint());
             case TYPE_WAITING_CLOSE_CHANNEL:
                 return ((WaitingCloseChannelItem) this).getChannel().getChannel().getChannelPoint().equals(((WaitingCloseChannelItem) that).getChannel().getChannel().getChannelPoint());
+            case TYPE_CLOSED_CHANNEL:
+                return ((ClosedChannelItem) this).getChannel().getChannelPoint().equals(((ClosedChannelItem) that).getChannel().getChannelPoint());
             default:
                 return false;
         }
@@ -130,6 +140,8 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 return ((PendingForceClosingChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
             case TYPE_WAITING_CLOSE_CHANNEL:
                 return ((WaitingCloseChannelItem) this).getChannel().getChannel().getChannelPoint().hashCode();
+            case TYPE_CLOSED_CHANNEL:
+                return ((ClosedChannelItem) this).getChannel().getChannelPoint().hashCode();
             default:
                 return 0;
         }

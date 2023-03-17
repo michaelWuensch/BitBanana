@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listViewHolders;
 
 import android.content.Context;
 import android.view.View;
@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.channelManagement.ChannelSelectListener;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 
 public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
@@ -67,7 +69,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(capacity));
     }
 
-    void addOnChannelSelectListener(ChannelSelectListener channelSelectListener) {
+    public void addOnChannelSelectListener(ChannelSelectListener channelSelectListener) {
         mChannelSelectListener = channelSelectListener;
     }
 

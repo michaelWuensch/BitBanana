@@ -1,8 +1,10 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listViewHolders;
 
 import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.WaitingCloseChannelItem;
 
 public class WaitingCloseChannelViewHolder extends PendingChannelViewHolder {
 
@@ -20,7 +22,7 @@ public class WaitingCloseChannelViewHolder extends PendingChannelViewHolder {
         return R.string.channel_state_waiting_close;
     }
 
-    void bindWaitingCloseChannelItem(WaitingCloseChannelItem pendingWaitingCloseChannelItem) {
+    public void bindWaitingCloseChannelItem(WaitingCloseChannelItem pendingWaitingCloseChannelItem) {
         bindPendingChannelItem(pendingWaitingCloseChannelItem.getChannel().getChannel());
 
         setOnRootViewClickListener(pendingWaitingCloseChannelItem, ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL);

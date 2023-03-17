@@ -43,10 +43,16 @@
                 app:layout_constraintTop_toBottomOf="@id/channelLifetime" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
-                android:id="@+id/timeLock"
+                android:id="@+id/initiator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/visibility" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/timeLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/initiator" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/commitFee"

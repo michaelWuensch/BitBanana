@@ -85,12 +85,50 @@
                     app:srcCompat="@drawable/ic_status_dot_black_24dp" />
 
                 <ImageView
+                    android:id="@+id/separator_close_type"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/nodeAlias"
+                    app:srcCompat="@color/gray"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/closeTypeLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/channel_close_type"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/separator_close_type"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/closeType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="@string/channel_close_type"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/separator_close_type"
+                    tools:visibility="visible" />
+
+                <ImageView
                     android:id="@+id/separator_1"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/nodeAlias"
+                    app:layout_constraintTop_toBottomOf="@id/closeTypeLabel"
                     app:srcCompat="@color/gray" />
 
                 <TextView

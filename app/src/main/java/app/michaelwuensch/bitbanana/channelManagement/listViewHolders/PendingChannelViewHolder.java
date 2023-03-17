@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listViewHolders;
 
 import android.content.res.ColorStateList;
 import android.view.View;

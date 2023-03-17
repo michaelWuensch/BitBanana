@@ -9,13 +9,17 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
@@ -23,8 +27,16 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ClosedChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.OpenChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingClosingChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingForceClosingChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingOpenChannelItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.WaitingCloseChannelItem;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
@@ -39,13 +51,16 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private static final String LOG_TAG = ManageChannelsActivity.class.getSimpleName();
 
     private static int REQUEST_CODE_OPEN_CHANNEL = 100;
-    private RecyclerView mRecyclerView;
-    private ChannelItemAdapter mAdapter;
+
     private TextView mEmptyListText;
     private ChannelSummaryView mChannelSummaryView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<ChannelListItem> mChannelItems;
+    private List<ChannelListItem> mClosedChannelItems;
     private String mCurrentSearchString = "";
+    private CustomViewPager mViewPager;
+    private ChannelsPagerAdapter mPagerAdapter;
+    private boolean isOpenChannelView = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +70,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
         mChannelSummaryView = findViewById(R.id.channelSummary);
+        mEmptyListText = findViewById(R.id.listEmpty);
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -62,24 +78,45 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.sea_blue_gradient));
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.white));
 
-        mRecyclerView = findViewById(R.id.channelsList);
-        mEmptyListText = findViewById(R.id.listEmpty);
+        // Setup view pager
+        mViewPager = findViewById(R.id.channel_list_viewpager);
+        mPagerAdapter = new ChannelsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(mViewPager, true);
 
         mChannelItems = new ArrayList<>();
+        mClosedChannelItems = new ArrayList<>();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
             startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
         });
-        mAdapter = new ChannelItemAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                isOpenChannelView = position == 0;
+                updateActivityTitle();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // This prevents the swipeRefreshLayout to not interfere on swiping
+                toggleRefreshing(state == ViewPager.SCROLL_STATE_IDLE);
+            }
+        });
+
 
         // Display the current state of channels
-        updateChannelsDisplayList();
+        updateChannelsView();
 
-        // Refetch channels from LND. This will automatically update the view when finished.
+        // Fetch channels from LND. This will automatically update the view when finished.
         // This is necessary, as we might display outdated data otherwise.
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             if (LndConnection.getInstance().isConnected()) {
@@ -88,8 +125,9 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
     }
 
-    private void updateChannelsDisplayList() {
+    private void updateChannelsView() {
         mChannelItems.clear();
+        mClosedChannelItems.clear();
 
         List<ChannelListItem> offlineChannels = new ArrayList<>();
 
@@ -105,11 +143,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                 if (c.getActive()) {
                     outbound += openChannelItem.getChannel().getLocalBalance();
                     inbound += openChannelItem.getChannel().getRemoteBalance();
-                    mChannelItems.add(openChannelItem);
                 } else {
                     unavailable += openChannelItem.getChannel().getLocalBalance() + openChannelItem.getChannel().getRemoteBalance();
-                    offlineChannels.add(openChannelItem);
                 }
+                mChannelItems.add(openChannelItem);
             }
         }
 
@@ -127,7 +164,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (Wallet.getInstance().mPendingClosedChannelsList != null) {
             for (PendingChannelsResponse.ClosedChannel c : Wallet.getInstance().mPendingClosedChannelsList) {
                 PendingClosingChannelItem pendingClosingChannelItem = new PendingClosingChannelItem(c);
-                mChannelItems.add(pendingClosingChannelItem);
+                mClosedChannelItems.add(pendingClosingChannelItem);
             }
         }
 
@@ -135,7 +172,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (Wallet.getInstance().mPendingForceClosedChannelsList != null) {
             for (PendingChannelsResponse.ForceClosedChannel c : Wallet.getInstance().mPendingForceClosedChannelsList) {
                 PendingForceClosingChannelItem pendingForceClosingChannelItem = new PendingForceClosingChannelItem(c);
-                mChannelItems.add(pendingForceClosingChannelItem);
+                mClosedChannelItems.add(pendingForceClosingChannelItem);
             }
         }
 
@@ -143,36 +180,55 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (Wallet.getInstance().mPendingWaitingCloseChannelsList != null) {
             for (PendingChannelsResponse.WaitingCloseChannel c : Wallet.getInstance().mPendingWaitingCloseChannelsList) {
                 WaitingCloseChannelItem waitingCloseChannelItem = new WaitingCloseChannelItem(c);
-                mChannelItems.add(waitingCloseChannelItem);
+                mClosedChannelItems.add(waitingCloseChannelItem);
             }
         }
 
-        // Show offline channels at the bottom
-        mChannelItems.addAll(offlineChannels);
-
-        // Show "No channels" if the list is empty
-        if (mChannelItems.size() == 0) {
-            mEmptyListText.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyListText.setVisibility(View.GONE);
+        // Add closed channel items
+        if (Wallet.getInstance().mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : Wallet.getInstance().mClosedChannelsList) {
+                ClosedChannelItem closedChannelItem = new ClosedChannelItem(c);
+                mClosedChannelItems.add(closedChannelItem);
+            }
         }
 
-        // Set number of channels in title
-        if (mChannelItems.size() > 0) {
-            String title = getResources().getString(R.string.activity_manage_channels) + " (" + mChannelItems.size() + ")";
-            setTitle(title);
-        } else {
-            setTitle(getResources().getString(R.string.activity_manage_channels));
-        }
-
+        // Update channel summary
         mChannelSummaryView.updateBalances(outbound, inbound, unavailable);
 
-        // Update the view
+        // Update items in recycler views
         if (mCurrentSearchString.isEmpty()) {
-            mAdapter.replaceAll(mChannelItems);
+            mPagerAdapter.getOpenChannelsList().replaceAllItems(mChannelItems);
+            mPagerAdapter.getClosedChannelsList().replaceAllItems(mClosedChannelItems);
         } else {
             final List<ChannelListItem> filteredChannelList = filter(mChannelItems, mCurrentSearchString);
-            mAdapter.replaceAll(filteredChannelList);
+            final List<ChannelListItem> filteredClosedChannelList = filter(mClosedChannelItems, mCurrentSearchString);
+            mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
+            mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
+        }
+
+        updateActivityTitle();
+    }
+
+    private void updateActivityTitle() {
+        // Update activity title and empty channel display.
+        if (isOpenChannelView) {
+            if (mChannelItems.size() > 0) {
+                String title = getResources().getString(R.string.activity_manage_channels) + " (" + mChannelItems.size() + ")";
+                setTitle(title);
+                mEmptyListText.setVisibility(View.GONE);
+            } else {
+                setTitle(getResources().getString(R.string.activity_manage_channels));
+                mEmptyListText.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mClosedChannelItems.size() > 0) {
+                String title = getResources().getString(R.string.activity_manage_channels_closed) + " (" + mClosedChannelItems.size() + ")";
+                setTitle(title);
+                mEmptyListText.setVisibility(View.GONE);
+            } else {
+                setTitle(getResources().getString(R.string.activity_manage_channels_closed));
+                mEmptyListText.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -222,7 +278,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onChannelsUpdated() {
-        runOnUiThread(this::updateChannelsDisplayList);
+        runOnUiThread(this::updateChannelsView);
         mSwipeRefreshLayout.setRefreshing(false);
         BBLog.d(LOG_TAG, "Channels updated!");
     }
@@ -255,8 +311,13 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             public boolean onQueryTextChange(String newText) {
                 mCurrentSearchString = newText;
                 final List<ChannelListItem> filteredChannelList = filter(mChannelItems, newText);
-                mAdapter.replaceAll(filteredChannelList);
-                mRecyclerView.scrollToPosition(0);
+                mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
+                mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
+
+                final List<ChannelListItem> filteredClosedChannelList = filter(mClosedChannelItems, newText);
+                mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
+                mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
+
                 return true;
             }
         });
@@ -292,6 +353,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                     pubkey = ((WaitingCloseChannelItem) item).getChannel().getChannel().getRemoteNodePub();
                     text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
                     break;
+                case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                    pubkey = ((ClosedChannelItem) item).getChannel().getRemotePubkey();
+                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    break;
                 default:
                     text = "";
             }
@@ -314,5 +379,49 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private class ChannelsPagerAdapter extends FragmentPagerAdapter {
+        private ChannelListFragment mOpenChannelsList;
+        private ChannelListFragment mClosedChannelsList;
+
+        public ChannelsPagerAdapter(FragmentManager fm) {
+            super(fm);
+            mOpenChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
+            mClosedChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos) {
+
+                case 0:
+                    return mOpenChannelsList;
+                case 1:
+                    return mClosedChannelsList;
+                default:
+                    return mOpenChannelsList;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        public ChannelListFragment getOpenChannelsList() {
+            return mOpenChannelsList;
+        }
+
+        public ChannelListFragment getClosedChannelsList() {
+            return mClosedChannelsList;
+        }
+    }
+
+    private void toggleRefreshing(boolean enabled) {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setEnabled(enabled);
+        }
     }
 }

@@ -108,6 +108,7 @@
     <string name="activity_send">Pay</string>
     <string name="activity_connectRemoteNode">Connect to remote node</string>
     <string name="activity_manage_channels">Channels</string>
+    <string name="activity_manage_channels_closed">Closed Channels</string>
     <string name="activity_manage_nodes">Manage Nodes</string>
     <string name="activity_advanced_settings">Advanced Settings</string>
     <string name="activity_node_details">Node Details</string>
@@ -177,6 +178,7 @@
     <string name="channel_visibility_private">private</string>
     <string name="channel_visibility_public">public</string>
     <string name="channel_visibility">Visibility</string>
+    <string name="channel_close_type">Close type</string>
 
 
     <string name="setup_connect_heading">How do you want to use BitBanana?</string>
@@ -504,6 +506,10 @@
     <string name="advanced_channel_details_lifetime">Lifetime</string>
     <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
     <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
+    <string name="advanced_channel_details_initiator">Initator</string>
+    <string name="advanced_channel_details_initiator_you">You</string>
+    <string name="advanced_channel_details_initiator_peer">Peer</string>
+    <string name="advanced_channel_details_explanation_initiator">Who opened the channel?</string>
     <string name="advanced_channel_details_commit_fee">Commit Fee</string>
     <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
     <string name="advanced_channel_details_time_lock">Time Lock</string>

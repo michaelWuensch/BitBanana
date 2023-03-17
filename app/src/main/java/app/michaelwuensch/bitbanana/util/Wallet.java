@@ -58,11 +58,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
@@ -70,6 +65,11 @@ import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsMana
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Wallet {
 
@@ -834,6 +834,19 @@ public class Wallet {
                 }
             }
 
+            for (ChannelCloseSummary c : mClosedChannelsList) {
+                boolean alreadyFetched = false;
+                for (NodeInfo i : mNodeInfos) {
+                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
+                        alreadyFetched = true;
+                        break;
+                    }
+                }
+                if (!alreadyFetched) {
+                    channelNodes.add(c.getRemotePubkey());
+                }
+            }
+
             // Delay each NodeInfo request for 100ms to not stress LND
             ArrayList<String> channelNodesList = new ArrayList<>(channelNodes);
             BBLog.d(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
@@ -935,17 +948,18 @@ public class Wallet {
     /**
      * Get the remote pubkey from a channel Id.
      * This will only work for currently opened channels. If the id does not match with any open channel, null will be returned.
+     *
      * @return remote pub key
      */
-    public String getRemotePubKeyFromChannelId(long chanId){
+    public String getRemotePubKeyFromChannelId(long chanId) {
         String remotePub = "";
-        for (Channel channel : mOpenChannelsList){
-            if (channel.getChanId() == chanId){
+        for (Channel channel : mOpenChannelsList) {
+            if (channel.getChanId() == chanId) {
                 remotePub = channel.getRemotePubkey();
                 break;
             }
         }
-        if (!remotePub.equals("")){
+        if (!remotePub.equals("")) {
             return remotePub;
         } else {
             return null;
@@ -1310,16 +1324,19 @@ public class Wallet {
                 if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8)) || i.getNode().getAlias().isEmpty()) {
                     String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
                     alias = unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)";
+                    return alias;
                 } else {
                     alias = i.getNode().getAlias();
+                    return alias;
                 }
-                break;
             }
         }
 
-        if (alias.equals("")) {
+        if (pubKey.equals("")) {
             return mContext.getResources().getString(R.string.channel_no_alias);
         } else {
+            String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
+            alias = unnamed + " (" + pubKey.substring(0, 5) + "...)";
             return alias;
         }
     }

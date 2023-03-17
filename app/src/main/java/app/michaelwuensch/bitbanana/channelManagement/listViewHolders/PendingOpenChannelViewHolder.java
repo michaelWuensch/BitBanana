@@ -1,8 +1,10 @@
-package app.michaelwuensch.bitbanana.channelManagement;
+package app.michaelwuensch.bitbanana.channelManagement.listViewHolders;
 
 import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.PendingOpenChannelItem;
 
 public class PendingOpenChannelViewHolder extends PendingChannelViewHolder {
 
@@ -20,7 +22,7 @@ public class PendingOpenChannelViewHolder extends PendingChannelViewHolder {
         return R.string.channel_state_pending_open;
     }
 
-    void bindPendingOpenChannelItem(PendingOpenChannelItem pendingOpenChannelItem) {
+    public void bindPendingOpenChannelItem(PendingOpenChannelItem pendingOpenChannelItem) {
         bindPendingChannelItem(pendingOpenChannelItem.getChannel().getChannel());
 
         setOnRootViewClickListener(pendingOpenChannelItem, ChannelListItem.TYPE_PENDING_OPEN_CHANNEL);

@@ -20,22 +20,24 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import app.michaelwuensch.bitbanana.util.BlockExplorer;
-import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.BlockExplorer;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.MonetaryUtil;
+import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.ChannelCloseUpdateListener {
 
@@ -68,6 +70,9 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
     private TextView mForceClosingTxTimeLabel;
     private TextView mForceClosingTxTimeText;
     private String mChannelPoint;
+    private TextView mTvClosingTypeLabel;
+    private TextView mTvClosingType;
+    private ImageView mIvClosingTypeSeparator;
 
 
     @Nullable
@@ -97,6 +102,9 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mCloseChannelButton = view.findViewById(R.id.channelCloseButton);
         mForceClosingTxTimeLabel = view.findViewById(R.id.closingTxTimeLabel);
         mForceClosingTxTimeText = view.findViewById(R.id.closingTxTimeText);
+        mTvClosingType = view.findViewById(R.id.closeType);
+        mTvClosingTypeLabel = view.findViewById(R.id.closeTypeLabel);
+        mIvClosingTypeSeparator = view.findViewById(R.id.separator_close_type);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -127,6 +135,8 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
                     case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                         bindForceClosingChannel(channelString);
                         break;
+                    case ChannelListItem.TYPE_CLOSED_CHANNEL:
+                        bindClosedChannel(channelString);
                 }
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
                 BBLog.e(TAG, "Failed to parse channel.", exception);
@@ -185,7 +195,6 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mBSDScrollableMainView.setMoreButtonVisibility(false);
 
         setBasicInformation(pendingOpenChannel.getChannel().getRemoteNodePub(),
-                pendingOpenChannel.getChannel().getRemoteNodePub(),
                 R.color.banana_yellow,
                 pendingOpenChannel.getChannel().getChannelPoint());
 
@@ -197,7 +206,6 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mBSDScrollableMainView.setMoreButtonVisibility(false);
 
         setBasicInformation(waitingCloseChannel.getChannel().getRemoteNodePub(),
-                waitingCloseChannel.getChannel().getRemoteNodePub(),
                 R.color.red,
                 waitingCloseChannel.getChannel().getChannelPoint());
 
@@ -211,7 +219,6 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         showClosingTransaction(pendingCloseChannel.getClosingTxid());
 
         setBasicInformation(pendingCloseChannel.getChannel().getRemoteNodePub(),
-                pendingCloseChannel.getChannel().getRemoteNodePub(),
                 R.color.red,
                 pendingCloseChannel.getChannel().getChannelPoint());
 
@@ -225,7 +232,6 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         showClosingTransaction(forceClosedChannel.getClosingTxid());
 
         setBasicInformation(forceClosedChannel.getChannel().getRemoteNodePub(),
-                forceClosedChannel.getChannel().getRemoteNodePub(),
                 R.color.red,
                 forceClosedChannel.getChannel().getChannelPoint());
 
@@ -233,13 +239,28 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         setBalances(forceClosedChannel.getChannel().getLocalBalance(), forceClosedChannel.getChannel().getRemoteBalance(), forceClosedChannel.getChannel().getCapacity());
     }
 
-    private void setBasicInformation(@NonNull String remoteNodePublicKey, @NonNull String remotePubKey, int statusDot, @NonNull String channelPoint) {
+    private void bindClosedChannel(ByteString channelString) throws InvalidProtocolBufferException {
+        ChannelCloseSummary channelCloseSummary = ChannelCloseSummary.parseFrom(channelString);
+        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mStatusDot.setVisibility(View.GONE);
+
+        showClosingTransaction(channelCloseSummary.getClosingTxHash());
+        showChannelCloseType(channelCloseSummary);
+
+        setBasicInformation(channelCloseSummary.getRemotePubkey(),
+                R.color.gray,
+                channelCloseSummary.getChannelPoint());
+
+        setBalances(channelCloseSummary.getSettledBalance(), channelCloseSummary.getCapacity() - channelCloseSummary.getSettledBalance(), channelCloseSummary.getCapacity());
+    }
+
+    private void setBasicInformation(@NonNull String remoteNodePublicKey, int statusDot, @NonNull String channelPoint) {
         if (ContactsManager.getInstance().doesContactDataExist(remoteNodePublicKey)) {
             mNodeAlias.setText(ContactsManager.getInstance().getNameByContactData(remoteNodePublicKey));
         } else {
             mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(remoteNodePublicKey, getContext()));
         }
-        mRemotePubKey.setText(remotePubKey);
+        mRemotePubKey.setText(remoteNodePublicKey);
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), statusDot)));
         mFundingTx.setText(channelPoint.substring(0, channelPoint.indexOf(':')));
     }
@@ -253,6 +274,13 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
         mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(local));
         mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(remote));
+    }
+
+    private void showChannelCloseType(ChannelCloseSummary channelCloseSummary) {
+        mTvClosingType.setVisibility(View.VISIBLE);
+        mTvClosingTypeLabel.setVisibility(View.VISIBLE);
+        mIvClosingTypeSeparator.setVisibility(View.VISIBLE);
+        mTvClosingType.setText(channelCloseSummary.getCloseType().name());
     }
 
     private void showChannelVisibility(boolean isPrivate) {

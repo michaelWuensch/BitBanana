@@ -34,17 +34,26 @@
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tabDots"
             app:layout_constraintTop_toBottomOf="@id/channelSummary">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/channelsList"
+            <app.michaelwuensch.bitbanana.customView.CustomViewPager
+                android:id="@+id/channel_list_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:clipToPadding="false"
-                android:paddingBottom="70dp" />
+                android:layout_height="match_parent" />
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabDots"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tabBackground="@drawable/tab_indicator"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="15dp"
+            app:tabRippleColor="@null" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
