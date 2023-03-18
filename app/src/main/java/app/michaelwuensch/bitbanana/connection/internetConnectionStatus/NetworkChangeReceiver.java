@@ -17,10 +17,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        BBLog.d("NetworkChangeReceiver: ", "Network status changed!");
-
-        int status = NetworkUtil.getConnectivityStatusString(context);
-
+        int status = NetworkUtil.getConnectivityStatus(context);
+        BBLog.d("NetworkChangeReceiver: ", "Network status changed to " + NetworkUtil.getConnectivityStatusString(context));
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 // The following command will find out, if we have a connection to LND

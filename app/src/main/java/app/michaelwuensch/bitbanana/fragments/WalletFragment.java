@@ -26,14 +26,17 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.ScanActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.Balances;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -41,9 +44,6 @@ import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 
 
 /**
@@ -394,6 +394,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     showBalance();
                 }
             }
+            if (key.equals(PrefsUtil.CURRENT_NODE_CONFIG)) {
+                updateSpinnerVisibility();
+            }
         }
     }
 
@@ -494,12 +497,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mTorErrorListenerRegistred = true;
         }
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-            mNodeSpinner.updateList();
-            mNodeSpinner.setVisibility(View.VISIBLE);
-        } else {
-            mNodeSpinner.setVisibility(View.GONE);
-        }
+        updateSpinnerVisibility();
 
         if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // If the App is not setup yet,
@@ -519,6 +517,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
         Wallet.getInstance().unregisterWalletLoadedListener(this);
         TorManager.getInstance().unregisterTorErrorListener(this);
+    }
+
+    public void updateSpinnerVisibility() {
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            mNodeSpinner.updateList();
+            mNodeSpinner.setVisibility(View.VISIBLE);
+        } else {
+            mNodeSpinner.setVisibility(View.GONE);
+        }
     }
 
     public void showErrorAfterNotUnlocked() {
@@ -568,7 +575,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mStatusDot.requestLayout();
 
         mWalletNameWidthDummy.setText(walletAlias);
-        if (NetworkUtil.getConnectivityStatusString(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+        if (NetworkUtil.getConnectivityStatus(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
         } else {
             if (Wallet.getInstance().isConnectedToLND()) {

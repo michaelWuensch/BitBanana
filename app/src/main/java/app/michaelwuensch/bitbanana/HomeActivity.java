@@ -48,6 +48,7 @@ import app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.coinControl.UTXOsActivity;
 import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
+import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity;
@@ -308,6 +309,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
+
+            // ToDo: This should be improved to be a permanent message instead of showing an endless spinner.
+            if (!NetworkUtil.isConnectedToInternet(HomeActivity.this)) {
+                Toast.makeText(this, R.string.error_connection_no_internet, Toast.LENGTH_LONG).show();
+            }
 
             if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor()) {
                 // After Tor is successfully started, it will automatically open the lnd connection

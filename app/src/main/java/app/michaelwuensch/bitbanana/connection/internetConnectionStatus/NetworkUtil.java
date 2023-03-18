@@ -12,7 +12,7 @@ public class NetworkUtil {
     public static final int NETWORK_STATUS_WIFI = 1;
     public static final int NETWORK_STATUS_MOBILE = 2;
 
-    public static int getConnectivityStatus(Context context) {
+    private static int getConnectivity(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -26,8 +26,8 @@ public class NetworkUtil {
         return TYPE_NOT_CONNECTED;
     }
 
-    public static int getConnectivityStatusString(Context context) {
-        int conn = NetworkUtil.getConnectivityStatus(context);
+    public static int getConnectivityStatus(Context context) {
+        int conn = NetworkUtil.getConnectivity(context);
         int status = 0;
         if (conn == NetworkUtil.TYPE_WIFI) {
             status = NETWORK_STATUS_WIFI;
@@ -39,8 +39,21 @@ public class NetworkUtil {
         return status;
     }
 
+    public static String getConnectivityStatusString(Context context) {
+        int conn = NetworkUtil.getConnectivity(context);
+        String status = "";
+        if (conn == NetworkUtil.TYPE_WIFI) {
+            status = "WIFI";
+        } else if (conn == NetworkUtil.TYPE_MOBILE) {
+            status = "MOBILE";
+        } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
+            status = "NOT CONNECTED";
+        }
+        return status;
+    }
+
     public static boolean isConnectedToInternet(Context context) {
-        int status = getConnectivityStatusString(context);
+        int status = getConnectivityStatus(context);
         return status != NetworkUtil.NETWORK_STATUS_NOT_CONNECTED;
     }
 }
