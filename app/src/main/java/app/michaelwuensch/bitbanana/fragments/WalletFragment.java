@@ -504,7 +504,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
             // If the App is not setup yet,
             // this will cause to get the status text updated. Otherwise it would be empty.
-            Wallet.getInstance().simulateFetchInfoForDemo(NetworkUtil.isConnectedToInternet(getActivity()));
+            Wallet.getInstance().simulateFetchInfoForDemo();
         }
     }
 

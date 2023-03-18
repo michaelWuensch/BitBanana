@@ -476,9 +476,9 @@ public class Wallet {
         }
     }
 
-    public void simulateFetchInfoForDemo(boolean connected) {
-        mConnectedToLND = connected;
-        broadcastInfoUpdate(connected);
+    public void simulateFetchInfoForDemo() {
+        mConnectedToLND = true;
+        broadcastInfoUpdate(true);
     }
 
     /**
