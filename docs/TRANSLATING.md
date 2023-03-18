@@ -13,4 +13,14 @@ To keep the repository clean we will do one translation update right before each
 So this might take a few days or a few weeks.
 If the language is translated to 100%, we will add it to the language selection list. If not, it is only accessible if you choose "System Language" and your smartphone is set to the corresponding language.
 
+## Current status:
+
+<a href="https://hosted.weblate.org/engage/bitbanana/">
+<img src="https://hosted.weblate.org/widgets/bitbanana/-/287x66-white.png" alt="Übersetzungsstatus" />
+</a>
+
+<a href="https://hosted.weblate.org/engage/bitbanana/">
+<img src="https://hosted.weblate.org/widgets/bitbanana/-/horizontal-auto.svg" alt="Übersetzungsstatus" />
+</a>
+
 [weblateproject]: https://hosted.weblate.org/projects/bitbanana/app-strings/

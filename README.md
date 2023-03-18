@@ -2,6 +2,10 @@
 
 ![Screenshot of BitBanana app](docs/screenshot.png)
 
+[![GitHub license](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Translated](https://hosted.weblate.org/widgets/bitbanana/-/svg-badge.svg)](https://hosted.weblate.org/engage/bitbanana/)
+[![GitHub Release](https://badgen.net/github/release/michaelWuensch/BitBanana/?color=yellow)](https://github.com/michaelWuensch/BitBanana/releases/latest)
+
 Native android lightning wallet for node operators focused on user experience and ease of use ⚡️
 
 BitBanana is not a classical wallet, it is actually a remote control for one or more of your LND Nodes. BitBanana aims to give node operators the opportunity to use their node in everyday situations with a simple and appealing user interface.
@@ -28,6 +32,7 @@ BitBanana forked from Zap Android. You can find more information about this on t
 - [x] Send funds to lightning addresses (email like addresses)
 - [x] Transaction filter
 - [x] Read NFC tags
+- [x] Sign/Verify
 - [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 
 - [x] Bitcoin only, no shitcoins!
 
