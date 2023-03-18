@@ -63,7 +63,7 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 otherPubkey = ((WaitingCloseChannelItem) other).getChannel().getChannel().getRemoteNodePub();
                 break;
             case TYPE_CLOSED_CHANNEL:
-                ownPubkey = ((ClosedChannelItem) other).getChannel().getRemotePubkey();
+                otherPubkey = ((ClosedChannelItem) other).getChannel().getRemotePubkey();
         }
 
         String ownAlias = Wallet.getInstance().getNodeAliasFromPubKey(ownPubkey, App.getAppContext()).toLowerCase();
