@@ -2,9 +2,9 @@ package app.michaelwuensch.bitbanana.transactionHistory.listItems;
 
 import android.view.View;
 
-import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 
 public class OnChainTransactionViewHolder extends TransactionViewHolder {
@@ -42,14 +42,16 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     // amount = 0
                     setAmount(amount, false);
                     setPrimaryDescription(mContext.getString(R.string.force_closed_channel));
-                    String aliasForceClose = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
+                    String pubkeyForceClose = Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
+                    String aliasForceClose = AliasManager.getInstance().getAlias(pubkeyForceClose);
                     setSecondaryDescription(aliasForceClose, true);
                     break;
                 case 1:
                     // amount > 0 (Channel closed)
                     setAmount(amount, false);
                     setPrimaryDescription(mContext.getString(R.string.closed_channel));
-                    String aliasClosed = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
+                    String pubkeyClosed = Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
+                    String aliasClosed = AliasManager.getInstance().getAlias(pubkeyClosed);
                     setSecondaryDescription(aliasClosed, true);
                     break;
                 case -1:
@@ -58,12 +60,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     // Doing it this way looks nicer than having 0 for amount and the fee in small.
                     setAmount(fee * -1, true);
                     setPrimaryDescription(mContext.getString(R.string.opened_channel));
-                    String aliasOpened;
-                    if (ContactsManager.getInstance().doesContactDataExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()))) {
-                        aliasOpened = ContactsManager.getInstance().getNameByContactData(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
-                    } else {
-                        aliasOpened = Wallet.getInstance().getNodeAliasFromChannelTransaction(onChainTransactionItem.getOnChainTransaction(), mContext);
-                    }
+                    String aliasOpened = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
                     setSecondaryDescription(aliasOpened, true);
                     break;
             }

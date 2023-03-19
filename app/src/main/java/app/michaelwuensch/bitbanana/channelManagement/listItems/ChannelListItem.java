@@ -4,8 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.google.protobuf.ByteString;
 
-import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 
 public abstract class ChannelListItem implements Comparable<ChannelListItem> {
 
@@ -66,8 +65,8 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
                 otherPubkey = ((ClosedChannelItem) other).getChannel().getRemotePubkey();
         }
 
-        String ownAlias = Wallet.getInstance().getNodeAliasFromPubKey(ownPubkey, App.getAppContext()).toLowerCase();
-        String otherAlias = Wallet.getInstance().getNodeAliasFromPubKey(otherPubkey, App.getAppContext()).toLowerCase();
+        String ownAlias = AliasManager.getInstance().getAlias(ownPubkey).toLowerCase();
+        String otherAlias = AliasManager.getInstance().getAlias(otherPubkey).toLowerCase();
 
         return ownAlias.compareTo(otherAlias);
     }

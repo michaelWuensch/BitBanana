@@ -307,6 +307,7 @@
     <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
+    <string name="error_connection_no_internet">No internet connection!</string>
     <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the nodes connection settings.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>

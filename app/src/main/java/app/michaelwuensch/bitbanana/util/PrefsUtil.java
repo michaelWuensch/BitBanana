@@ -7,6 +7,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 
 import app.michaelwuensch.bitbanana.baseClasses.App;
@@ -16,6 +17,8 @@ import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
  * This class simplifies management of preferences.
  */
 public class PrefsUtil {
+
+    private static final String LOG_TAG = PrefsUtil.class.getSimpleName();
 
     // shared preference references
     public static final String PREVENT_SCREEN_RECORDING = "preventScreenRecording";
@@ -36,7 +39,7 @@ public class PrefsUtil {
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
-    public static final String NODE_INFO_CACHE = "nodeInfoCache";
+    public static final String NODE_ALIAS_CACHE = "nodeAliasCache";
     public static final String FEE_PRESET_FAST = "feePresetFast";
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
@@ -81,6 +84,26 @@ public class PrefsUtil {
         );
 
         return sharedPreferences;
+    }
+
+    public static SharedPreferences.Editor putSerializable(String key, Serializable obj) {
+        SharedPreferences.Editor editor = editPrefs();
+        try {
+            String serialized = ObjectSerializer.serialize(obj);
+            editor.putString(key, serialized);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return editor;
+    }
+
+    public static Object getSerializable(String key, Object defaultObject) {
+        try {
+            return ObjectSerializer.deserialize(getPrefs().getString(key, null));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return defaultObject;
     }
 
     public static SharedPreferences.Editor editEncryptedPrefs() throws GeneralSecurityException, IOException {

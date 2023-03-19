@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Set;
 
 import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.transactionHistory.listItems.DateItem;
 import app.michaelwuensch.bitbanana.transactionHistory.listItems.HistoryItemViewHolder;
 import app.michaelwuensch.bitbanana.transactionHistory.listItems.HistoryListItem;
@@ -44,15 +47,13 @@ import app.michaelwuensch.bitbanana.transactionHistory.listItems.OnChainTransact
 import app.michaelwuensch.bitbanana.transactionHistory.transactionDetails.InvoiceDetailBSDFragment;
 import app.michaelwuensch.bitbanana.transactionHistory.transactionDetails.LnPaymentDetailBSDFragment;
 import app.michaelwuensch.bitbanana.transactionHistory.transactionDetails.OnChainTransactionDetailBSDFragment;
+import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -484,12 +485,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                     String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
                     String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
-                    String nodeName;
-                    if (ContactsManager.getInstance().doesContactDataExist(nodePubKey)) {
-                        nodeName = ContactsManager.getInstance().getNameByContactData(nodePubKey);
-                    } else {
-                        nodeName = Wallet.getInstance().getNodeAliasFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction(), getContext());
-                    }
+                    String nodeName = AliasManager.getInstance().getAlias(nodePubKey);
                     text = transactionAmount + nodeName;
                     break;
                 default:

@@ -41,6 +41,7 @@ import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -335,27 +336,27 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             switch (item.getType()) {
                 case ChannelListItem.TYPE_OPEN_CHANNEL:
                     pubkey = ((OpenChannelItem) item).getChannel().getRemotePubkey();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
                     pubkey = ((PendingOpenChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
                     pubkey = ((PendingClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
                     pubkey = ((PendingForceClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
                     pubkey = ((WaitingCloseChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_CLOSED_CHANNEL:
                     pubkey = ((ClosedChannelItem) item).getChannel().getRemotePubkey();
-                    text = pubkey + Wallet.getInstance().getNodeAliasFromPubKey(pubkey, ManageChannelsActivity.this);
+                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 default:
                     text = "";

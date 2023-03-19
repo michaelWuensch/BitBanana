@@ -34,11 +34,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
 
 /**
  * This SINGLETON class is used to load and save contacts.
@@ -268,14 +268,7 @@ public class ContactsManager {
         ContactsManager cm = ContactsManager.getInstance();
 
         final EditText input = viewInflated.findViewById(R.id.input);
-        if (cm.doesContactDataExist(nodePubKey)) {
-            input.setText(cm.getContactByContactData(nodePubKey).getAlias());
-        } else {
-            String nodeAlias = Wallet.getInstance().getNodeAliasFromPubKey(nodePubKey, ctx);
-            if (nodeAlias != ctx.getResources().getString(R.string.channel_no_alias)) {
-                input.setText(nodeAlias);
-            }
-        }
+        input.setText(AliasManager.getInstance().getAlias(nodePubKey));
         input.setShowSoftInputOnFocus(true);
         input.requestFocus();
 
@@ -382,7 +375,11 @@ public class ContactsManager {
             try {
                 apply();
                 BBLog.d(LOG_TAG, "Successfully updated contacts from version 0 to 1.");
-            } catch (IOException | CertificateException | NoSuchAlgorithmException | InvalidKeyException | UnrecoverableEntryException | InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException | BadPaddingException | KeyStoreException | IllegalBlockSizeException e) {
+            } catch (IOException | CertificateException | NoSuchAlgorithmException |
+                     InvalidKeyException | UnrecoverableEntryException |
+                     InvalidAlgorithmParameterException | NoSuchPaddingException |
+                     NoSuchProviderException | BadPaddingException | KeyStoreException |
+                     IllegalBlockSizeException e) {
                 e.printStackTrace();
                 mContactsJson = createEmptyContactsJson();
             }

@@ -26,13 +26,13 @@ import com.google.android.material.snackbar.Snackbar;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -241,24 +241,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {
-        String alias;
-        if (lightningNodeUri.getNickname() != null) {
-            alias = lightningNodeUri.getNickname();
-        } else if (ContactsManager.getInstance().doesContactDataExist(lightningNodeUri.getPubKey())) {
-            alias = ContactsManager.getInstance().getNameByContactData(lightningNodeUri.getPubKey());
-        } else if (!Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext()).contains(getResources().getString(R.string.channel_no_alias))) {
-            // alias found in peers
-            alias = Wallet.getInstance().getNodeAliasFromPubKey(lightningNodeUri.getPubKey(), getContext());
-        } else {
-            alias = lightningNodeUri.getHost();
-        }
-
-        if (alias == null || alias.isEmpty()) {
-            // no alias - no host
-            mTvNodeAlias.setText(lightningNodeUri.getPubKey());
-        } else {
-            mTvNodeAlias.setText(alias + " (" + lightningNodeUri.getPubKey() + ")");
-        }
+        String alias = AliasManager.getInstance().getAliasWithoutPubkey(lightningNodeUri.getPubKey());
+        alias = alias + " (" + lightningNodeUri.getPubKey() + ")";
+        mTvNodeAlias.setText(alias);
     }
 
     private void switchToProgressScreen() {

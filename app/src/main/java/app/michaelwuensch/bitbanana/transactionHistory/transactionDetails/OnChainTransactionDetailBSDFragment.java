@@ -14,16 +14,16 @@ import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 
 public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
 
@@ -156,12 +156,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
             mFeeLabel.setVisibility(View.GONE);
         }
 
-        String alias;
-        if (ContactsManager.getInstance().doesContactDataExist(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction))) {
-            alias = ContactsManager.getInstance().getNameByContactData(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
-        } else {
-            alias = Wallet.getInstance().getNodeAliasFromChannelTransaction(mTransaction, getActivity());
-        }
+        String alias = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
         mNode.setText(alias);
 
         switch (amount.compareTo(0L)) {

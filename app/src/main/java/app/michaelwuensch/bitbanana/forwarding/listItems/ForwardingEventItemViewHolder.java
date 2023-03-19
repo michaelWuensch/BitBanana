@@ -9,8 +9,8 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.forwarding.ForwardingEventSelectListener;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -51,11 +51,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
         if (inChanPubKey == null) {
             inChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
         } else {
-            if (ContactsManager.getInstance().doesContactDataExist(inChanPubKey)) {
-                inChanName = ContactsManager.getInstance().getNameByContactData(inChanPubKey);
-            } else {
-                inChanName = Wallet.getInstance().getNodeAliasFromPubKey(inChanPubKey, mContext);
-            }
+            inChanName = AliasManager.getInstance().getAlias(inChanPubKey);
         }
         mInChannel.setText(inChanName);
 
@@ -66,11 +62,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
         if (outChanPubKey == null) {
             outChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
         } else {
-            if (ContactsManager.getInstance().doesContactDataExist(outChanPubKey)) {
-                outChanName = ContactsManager.getInstance().getNameByContactData(outChanPubKey);
-            } else {
-                outChanName = Wallet.getInstance().getNodeAliasFromPubKey(outChanPubKey, mContext);
-            }
+            outChanName = AliasManager.getInstance().getAlias(outChanPubKey);
         }
         mOutChannel.setText(outChanName);
 

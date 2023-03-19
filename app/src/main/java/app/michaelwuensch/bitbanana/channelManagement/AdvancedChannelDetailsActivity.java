@@ -13,8 +13,8 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
@@ -100,11 +100,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
-        if (ContactsManager.getInstance().doesContactDataExist(channel.getRemotePubkey())) {
-            mAlias = ContactsManager.getInstance().getNameByContactData(channel.getRemotePubkey());
-        } else {
-            mAlias = Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), AdvancedChannelDetailsActivity.this);
-        }
+        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubkey());
         setTitle(mAlias);
 
         // capacity

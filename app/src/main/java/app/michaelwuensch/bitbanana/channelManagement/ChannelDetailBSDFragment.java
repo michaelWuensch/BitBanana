@@ -27,11 +27,11 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -165,11 +165,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         Channel channel = Channel.parseFrom(channelString);
         mBSDScrollableMainView.setMoreButtonVisibility(true);
-        if (ContactsManager.getInstance().doesContactDataExist(channel.getRemotePubkey())) {
-            mNodeAlias.setText(ContactsManager.getInstance().getNameByContactData(channel.getRemotePubkey()));
-        } else {
-            mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(channel.getRemotePubkey(), getContext()));
-        }
+        mNodeAlias.setText(AliasManager.getInstance().getAlias(channel.getRemotePubkey()));
         mRemotePubKey.setText(channel.getRemotePubkey());
         mFundingTx.setText(channel.getChannelPoint().substring(0, channel.getChannelPoint().indexOf(':')));
 
@@ -255,11 +251,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
     }
 
     private void setBasicInformation(@NonNull String remoteNodePublicKey, int statusDot, @NonNull String channelPoint) {
-        if (ContactsManager.getInstance().doesContactDataExist(remoteNodePublicKey)) {
-            mNodeAlias.setText(ContactsManager.getInstance().getNameByContactData(remoteNodePublicKey));
-        } else {
-            mNodeAlias.setText(Wallet.getInstance().getNodeAliasFromPubKey(remoteNodePublicKey, getContext()));
-        }
+        mNodeAlias.setText(AliasManager.getInstance().getAlias(remoteNodePublicKey));
         mRemotePubKey.setText(remoteNodePublicKey);
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), statusDot)));
         mFundingTx.setText(channelPoint.substring(0, channelPoint.indexOf(':')));

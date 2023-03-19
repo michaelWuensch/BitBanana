@@ -1,7 +1,6 @@
 package app.michaelwuensch.bitbanana.util;
 
 
-import android.content.Context;
 import android.os.Handler;
 
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
@@ -47,11 +46,9 @@ import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.UtxoLease;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -247,7 +244,6 @@ public class Wallet {
                             mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
                         }
                     }
-                    readChannelInfoFromCache();
                     broadcastLndConnectionTestResult(true, -1);
                 }, throwable -> {
 
@@ -774,77 +770,29 @@ public class Wallet {
             Set<String> channelNodes = new HashSet<>();
 
             for (Channel c : mOpenChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getRemotePubkey()))
                     channelNodes.add(c.getRemotePubkey());
-                }
             }
             for (PendingChannelsResponse.PendingOpenChannel c : mPendingOpenChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getChannel().getRemoteNodePub()))
                     channelNodes.add(c.getChannel().getRemoteNodePub());
-                }
             }
             for (PendingChannelsResponse.ClosedChannel c : mPendingClosedChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getChannel().getRemoteNodePub()))
                     channelNodes.add(c.getChannel().getRemoteNodePub());
-                }
             }
             for (PendingChannelsResponse.ForceClosedChannel c : mPendingForceClosedChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getChannel().getRemoteNodePub()))
                     channelNodes.add(c.getChannel().getRemoteNodePub());
-                }
             }
             for (PendingChannelsResponse.WaitingCloseChannel c : mPendingWaitingCloseChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getChannel().getRemoteNodePub())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getChannel().getRemoteNodePub()))
                     channelNodes.add(c.getChannel().getRemoteNodePub());
-                }
             }
 
             for (ChannelCloseSummary c : mClosedChannelsList) {
-                boolean alreadyFetched = false;
-                for (NodeInfo i : mNodeInfos) {
-                    if (i.getNode().getPubKey().equals(c.getRemotePubkey())) {
-                        alreadyFetched = true;
-                        break;
-                    }
-                }
-                if (!alreadyFetched) {
+                if (!AliasManager.getInstance().hasUpToDateAliasInfo(c.getRemotePubkey()))
                     channelNodes.add(c.getRemotePubkey());
-                }
             }
 
             // Delay each NodeInfo request for 100ms to not stress LND
@@ -890,14 +838,22 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     BBLog.v(LOG_TAG, "Fetched Node info from " + nodeInfo.getNode().getAlias());
-                    mNodeInfos.add(nodeInfo);
+                    AliasManager.getInstance().saveAlias(nodeInfo.getNode().getPubKey(), nodeInfo.getNode().getAlias());
 
                     if (lastNode) {
-                        saveChannelInfoToCache();
+                        AliasManager.getInstance().saveAliasesToCache();
                         broadcastChannelsUpdated();
                     }
                 }, throwable -> {
+                    if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
+                        // Prevents requesting nodInfo for the unavailable node to often
+                        AliasManager.getInstance().updateTimestampForAlias(pubkey);
+                    } else {
+                        // Prevents requesting nodInfo for the unavailable node to often
+                        AliasManager.getInstance().saveAlias(pubkey, pubkey);
+                    }
                     if (lastNode) {
+                        AliasManager.getInstance().saveAliasesToCache();
                         broadcastChannelsUpdated();
                     }
                     BBLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
@@ -952,18 +908,18 @@ public class Wallet {
      * @return remote pub key
      */
     public String getRemotePubKeyFromChannelId(long chanId) {
-        String remotePub = "";
         for (Channel channel : mOpenChannelsList) {
             if (channel.getChanId() == chanId) {
-                remotePub = channel.getRemotePubkey();
-                break;
+                return channel.getRemotePubkey();
             }
         }
-        if (!remotePub.equals("")) {
-            return remotePub;
-        } else {
-            return null;
+        // ToDo: Add pending channels
+        for (ChannelCloseSummary channelCloseSummary : mClosedChannelsList) {
+            if (channelCloseSummary.getChanId() == chanId)
+                return channelCloseSummary.getRemotePubkey();
         }
+
+        return null;
     }
 
 
@@ -1300,48 +1256,6 @@ public class Wallet {
     }
 
     /**
-     * This functions helps us to link on-chain channel transaction with the corresponding channel's public node alias.
-     *
-     * @return alias
-     */
-    public String getNodeAliasFromChannelTransaction(Transaction transaction, Context mContext) {
-        String pubKey = getNodePubKeyFromChannelTransaction(transaction);
-        return getNodeAliasFromPubKey(pubKey, mContext);
-    }
-
-    /**
-     * Returns the alias of the node based on the provided pubKey.
-     * If no alias is found, `Unnamed` is returned.
-     *
-     * @param pubKey   the pubKey of the node
-     * @param mContext context to get translation
-     * @return alias
-     */
-    public String getNodeAliasFromPubKey(String pubKey, Context mContext) {
-        String alias = "";
-        for (NodeInfo i : Wallet.getInstance().mNodeInfos) {
-            if (i.getNode().getPubKey().equals(pubKey)) {
-                if (i.getNode().getAlias().startsWith(i.getNode().getPubKey().substring(0, 8)) || i.getNode().getAlias().isEmpty()) {
-                    String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
-                    alias = unnamed + " (" + i.getNode().getPubKey().substring(0, 5) + "...)";
-                    return alias;
-                } else {
-                    alias = i.getNode().getAlias();
-                    return alias;
-                }
-            }
-        }
-
-        if (pubKey.equals("")) {
-            return mContext.getResources().getString(R.string.channel_no_alias);
-        } else {
-            String unnamed = mContext.getResources().getString(R.string.channel_no_alias);
-            alias = unnamed + " (" + pubKey.substring(0, 5) + "...)";
-            return alias;
-        }
-    }
-
-    /**
      * Returns if the wallet has at least one online channel.
      *
      * @return
@@ -1407,45 +1321,6 @@ public class Wallet {
             }
         }
         return tempMax;
-    }
-
-    /**
-     * Used to save channel infos to the shared preferences.
-     * The channel info is stored in a string.
-     * StandardCharsets.ISO_8859_1 is used as it preserves the bytes correctly. (UTF8 would not work)
-     * The byte length is stored in a 4 byte integer followed by the actual data.
-     * This way on reading it can be split at the correct positions.
-     */
-    public void saveChannelInfoToCache() {
-        StringBuilder cache = new StringBuilder();
-        for (NodeInfo i : mNodeInfos) {
-            byte[] nodeInfoLength = UtilFunctions.intToByteArray(i.toByteArray().length);
-            cache.append(new String(nodeInfoLength, StandardCharsets.ISO_8859_1));
-            cache.append(new String(i.toByteArray(), StandardCharsets.ISO_8859_1));
-        }
-        PrefsUtil.editPrefs().putString(PrefsUtil.NODE_INFO_CACHE, cache.toString()).apply();
-        BBLog.d(LOG_TAG, "Saved NodeInfos to cache.");
-    }
-
-    /**
-     * Loads the node info cache from shared preferences.
-     */
-    public void readChannelInfoFromCache() {
-        mNodeInfos.clear();
-        String cache = PrefsUtil.getPrefs().getString(PrefsUtil.NODE_INFO_CACHE, "");
-        byte[] cacheBytes = cache.getBytes(StandardCharsets.ISO_8859_1);
-        while (cacheBytes.length > 4) {
-            int length = UtilFunctions.intFromByteArray(Arrays.copyOfRange(cacheBytes, 0, 4));
-            try {
-                NodeInfo tempNodeInfo = NodeInfo.parseFrom(Arrays.copyOfRange(cacheBytes, 4, length + 4));
-                mNodeInfos.add(tempNodeInfo);
-            } catch (InvalidProtocolBufferException | ArrayIndexOutOfBoundsException e) {
-                e.printStackTrace();
-                BBLog.w(LOG_TAG, "Error reading NodeInfo from cache.");
-            }
-            cacheBytes = Arrays.copyOfRange(cacheBytes, length + 4, cacheBytes.length);
-        }
-        BBLog.d(LOG_TAG, "Loaded NodeInfos from cache.");
     }
 
     public boolean isSyncedToChain() {

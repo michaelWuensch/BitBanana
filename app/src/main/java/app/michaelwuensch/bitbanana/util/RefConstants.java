@@ -83,9 +83,12 @@ public class RefConstants {
 
     // URLS
     public static final String URL_HELP = "https://github.com/michaelWuensch/BitBanana/wiki";
-    public static final String URL_PRIVACY = "https://zaphq.io/privacy";
+    public static final String URL_PRIVACY = "https://github.com/michaelWuensch/BitBanana/blob/master/PRIVACY.md";
     public static final String URL_CONTRIBUTE = "https://github.com/michaelWuensch/BitBanana#Contribute";
     public static final String URL_ISSUES = "https://github.com/michaelWuensch/BitBanana/issues";
+
+    // Age in seconds for alias entries to be considered outdated.
+    public static final int ALIAS_CHACHE_AGE = 3600;
 
     // Other
     public static final String SETUP_MODE = "setupMode";

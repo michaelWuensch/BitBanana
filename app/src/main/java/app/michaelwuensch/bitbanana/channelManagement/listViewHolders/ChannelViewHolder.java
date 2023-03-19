@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.channelManagement.ChannelSelectListener;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
@@ -49,11 +48,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setName(String channelRemotePubKey) {
-        if (ContactsManager.getInstance().doesContactDataExist(channelRemotePubKey)) {
-            mRemoteName.setText(ContactsManager.getInstance().getNameByContactData(channelRemotePubKey));
-        } else {
-            mRemoteName.setText(Wallet.getInstance().getNodeAliasFromPubKey(channelRemotePubKey, mContext));
-        }
+        mRemoteName.setText(AliasManager.getInstance().getAlias(channelRemotePubKey));
     }
 
     void setBalances(long local, long remote, long capacity) {
