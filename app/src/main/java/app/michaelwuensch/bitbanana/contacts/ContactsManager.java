@@ -35,10 +35,13 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.models.NodeAliasInfo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 /**
  * This SINGLETON class is used to load and save contacts.
@@ -268,7 +271,23 @@ public class ContactsManager {
         ContactsManager cm = ContactsManager.getInstance();
 
         final EditText input = viewInflated.findViewById(R.id.input);
-        input.setText(AliasManager.getInstance().getAlias(nodePubKey));
+        if (AliasManager.getInstance().hasAliasInfo(nodePubKey))
+            input.setText(AliasManager.getInstance().getAlias(nodePubKey));
+        else {
+            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                Wallet.getInstance().fetchNodeInfoFromLND(nodePubKey, false, true, new Wallet.NodeInfoFetchedListener() {
+                    @Override
+                    public void onNodeInfoFetched(String pubkey) {
+                        if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
+                            NodeAliasInfo nodeAliasInfo = AliasManager.getInstance().getNodeAliasInfo(pubkey);
+                            if (!nodeAliasInfo.AliasEqualsPubkey()) {
+                                input.setText(nodeAliasInfo.getAlias());
+                            }
+                        }
+                    }
+                });
+            }
+        }
         input.setShowSoftInputOnFocus(true);
         input.requestFocus();
 

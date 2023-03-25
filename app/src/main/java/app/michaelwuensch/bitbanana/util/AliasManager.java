@@ -81,7 +81,7 @@ public class AliasManager {
         return mAliases.contains(new NodeAliasInfo(pubkey, ""));
     }
 
-    private NodeAliasInfo getNodeAliasInfo(String pubkey) {
+    public NodeAliasInfo getNodeAliasInfo(String pubkey) {
         for (NodeAliasInfo nodeAliasInfo : mAliases) {
             if (nodeAliasInfo.getPubKey().equals(pubkey)) {
                 return nodeAliasInfo;

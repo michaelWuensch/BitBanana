@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
@@ -16,7 +17,6 @@ import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.R;
 
 
 public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
@@ -54,7 +54,7 @@ public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
         bsdScrollableMainView.setTitle(R.string.choose_action);
 
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-            Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false);
+            Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false, true, null);
         }
 
         // Check if this node is already a contact.

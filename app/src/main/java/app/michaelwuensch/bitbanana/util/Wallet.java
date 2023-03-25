@@ -801,7 +801,7 @@ public class Wallet {
 
             compositeDisposable.add(Observable.range(0, channelNodesList.size())
                     .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                    .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer), integer == channelNodesList.size() - 1))
+                    .doOnNext(integer -> fetchNodeInfoFromLND(channelNodesList.get(integer), integer == channelNodesList.size() - 1, true, null))
                     .subscribe());
 
             if (channelNodesList.size() == 0) {
@@ -829,7 +829,7 @@ public class Wallet {
      *
      * @param pubkey
      */
-    public void fetchNodeInfoFromLND(String pubkey, boolean lastNode) {
+    public void fetchNodeInfoFromLND(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubkey)
                 .build();
@@ -843,6 +843,12 @@ public class Wallet {
                     if (lastNode) {
                         AliasManager.getInstance().saveAliasesToCache();
                         broadcastChannelsUpdated();
+                    } else {
+                        if (saveAliasToCache)
+                            AliasManager.getInstance().saveAliasesToCache();
+                    }
+                    if (listener != null) {
+                        listener.onNodeInfoFetched(nodeInfo.getNode().getPubKey());
                     }
                 }, throwable -> {
                     if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
@@ -855,6 +861,9 @@ public class Wallet {
                     if (lastNode) {
                         AliasManager.getInstance().saveAliasesToCache();
                         broadcastChannelsUpdated();
+                    } else {
+                        if (saveAliasToCache)
+                            AliasManager.getInstance().saveAliasesToCache();
                     }
                     BBLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
                 }));
@@ -1746,6 +1755,10 @@ public class Wallet {
 
     public interface ChannelsUpdatedSubscriptionListener {
         void onChannelsUpdated();
+    }
+
+    public interface NodeInfoFetchedListener {
+        void onNodeInfoFetched(String pubkey);
     }
 
     public interface ChannelOpenUpdateListener {
