@@ -32,8 +32,7 @@
     <  =  &lt;
     >  =  &gt;
 
-    -->
-<resources>
+    --><resources>
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
     <string name="lightning">Lightning</string>
@@ -462,8 +461,67 @@
     <string name="help_dialog_utxos">Diese UTXO-Liste stellt all dein On-Chain Guthaben dar. \nÄhnlich wie Münzen können unspent transaction outputs (UTXOs) nur als Ganzes ausgegeben werden. Da UTXOs jeden beliebigen Wert haben können, wirst du einfach Wechselgeld in Form von neuen UTXOs erhalten, wenn du eine Transaktion tätigst.</string>
     <string name="utxo_no_utxos">Keine UTXOs</string>
     <string name="forwarding_no_forwarding_events">Keine Weiterleitungsereignisse im ausgewählten Zeitraum</string>
-    <string name="forwarding_earned_description">Einnahmen im ausgewählten Zeitraum</string>
+    <string name="forwarding_earned_description">Im ausgewählten Zeitraum eingenommen</string>
     <string name="forwarding_closed_channel">Geschlossener Kanal</string>
     <string name="drawer_menu_category_current_node">Aktuelle Node</string>
     <string name="guardian_certificate_verification">Wenn das Zertifikat nicht verifiziert wird, kannst du Oper einer man-in-the-middle Attacke werden. Deaktiviere diese Einstellung nur, wenn du weißt, was du tust.\n\nEs wird empfohlen stattdessen das Zertifikat richtig zu verwenden.\nDas bedeutet, dass das Zertifikat deines Knotens den Hostnamen, der in dieser Verbindungseinstellung verwendet wird, beinhaltet. Füge den Hostnamen als tlsextradomain in der lnd.conf hinzu, bevor du das Zertifikat neu erstellst.</string>
+    <string name="navigation_node">Knoten</string>
+    <string name="activity_forwarding">Routing</string>
+    <string name="guardian_backup_overrides_existing_data">Einige Daten sind bereits vorhanden!
+\nBeim Wiederherstellen eines Backups werden alle folgenden Daten vor dem Wiederherstellen gelöscht:
+\n
+\n- Verbindungsdaten der Knoten
+\n- Kontakte
+\n
+\nFortfahren\?</string>
+    <string name="activity_utxos">Coins (UTXOs)</string>
+    <string name="settings_showHelpButtons">Infobuttons anzeigen</string>
+    <string name="help_dialog_forwarding">In dieser Ansicht werden alle Zahlungen angezeigt, die du für andere Teilnehmer des Lightning Netzwerks weitergeleitet hast. Außerdem kannst du sehen, wie viel Geld du für die Erbringung dieser Dienstleistung verdient hast.
+\n
+\nIm Lightning Netzwerk werden Kanäle für Zahlungen verwendet. Wenn zwei Teilnehmer einander Geld senden möchten, sie aber keinen Kanal zwischen ihnen geöffnet haben, müssen sie andere Teilnehmer im Netzwerk finden, die einen entsprechenden Kanal haben.
+\n
+\nBeispiel:
+\nAlice möchte Geld an Carol schicken, hat aber keinen Kanal mit Carol. Eine direkte Zahlung ist daher unmöglich. Wenn Alice jedoch einen Kanal zu Bob hat und Bob einen Kanal zu Carol, gibt es eine Lösung. Bob kann die Zahlung an Carol weiterleiten.
+\n
+\nZahlungen benötigen oft mehrere Weiterleitungen (Hops), um schließlich ihr Ziel zu erreichen.</string>
+    <string name="settings_mediumFee">Mittlere Transaktion</string>
+    <string name="settings_slowFee">Langsame Transaktion</string>
+    <string name="drawer_menu_coin_control">Coins (UTXOs)</string>
+    <string name="drawer_menu_routing">Routing</string>
+    <string name="drawer_menu_category_app">App</string>
+    <string name="sign_verify">Signieren/Verifizieren</string>
+    <string name="sign">Signieren</string>
+    <string name="message_to_verify">Zu überprüfende Nachricht</string>
+    <string name="generated_signature">Generierte Signatur:</string>
+    <string name="signature_valid">Signatur ist gültig!</string>
+    <string name="signature_invalid">Signatur ist ungültig!</string>
+    <string name="signature_pubkey">Pubkey:</string>
+    <string name="channel_summary_total_outbound">Ausgehend insgesamt</string>
+    <string name="channel_summary_total_unavailable">Offline insgesamt</string>
+    <plurals name="blocks">
+        <item quantity="one">%d Block</item>
+        <item quantity="other">%d Blöcke</item>
+    </plurals>
+    <string name="settings_onChainFeePresets">On-Chain Gebühren Voreinstellungen</string>
+    <string name="settings_fastFee">Schnelle Transaktion</string>
+    <string name="error_invalid_fee_preset_value">Der Wert muss größer als 0 sein.</string>
+    <string name="help_dialog_sign_verify">Indem du eine Nachricht mit deinem Knoten signierst, kannst du beweisen, dass du der Eigentümer dieses Knotens bist. Da die Signatur den öffentlichen Schlüssel des Knotens enthält, können andere eine solche signierte Nachricht überprüfen.
+\n
+\nDiese Funktion kann in verschiedenen Szenarien verwendet werden, z. B. zum Nachweis der Identität oder zum Einloggen mit deinem Knoten bei einigen Diensten.</string>
+    <string name="help_dialog_channels">Die Liste der Lightning Channels stellt dein Lightning-Guthaben dar. Lightning-Kanäle sind notwendig, um am Lightning-Netzwerk teilzunehmen, das schnelle und günstige Bitcoin-Zahlungen ermöglicht.
+\n
+\nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", müsst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", müsst du einen bestehenden Kanal schließen.
+\nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten!
+\n
+\nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von <a href="https://lightningnetwork.plus">lightningnetwork.plus</a></string>
+    <string name="forwarding_volume_description">Im ausgewählten Zeitraum weitergeleitet</string>
+    <string name="message_to_sign">Zu signierende Nachricht</string>
+    <string name="sign_message">Nachricht signieren</string>
+    <string name="signature_to_verify">Zu verifizierende Signatur</string>
+    <string name="channel_summary_total_inbound">Eingehend insgesamt</string>
+    <string name="verify">Verifizieren</string>
+    <string name="verify_message">Nachricht verifizieren</string>
+    <string name="settings_receiveAddressDisplayValues_1">Natives SegWit (Bech32)</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="settings_receiveAddressDisplayValues_0">Kompatibilität SegWit (P2PSH)</string>
 </resources>

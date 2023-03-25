@@ -32,8 +32,7 @@
     <  =  &lt;
     >  =  &gt;
 
-    -->
-<resources>
+    --><resources>
     <string name="ok">OK</string>
     <string name="cancel">Annuller</string>
     <string name="lightning">Lightning</string>
@@ -126,7 +125,7 @@
     <string name="internal">Intern</string>
     <string name="opened_channel">Kanal åbnet</string>
     <string name="closed_channel">Kanal lukket</string>
-    <string name="force_closed_channel">Kanal tvangs lukket</string>
+    <string name="force_closed_channel">Kanal tvangslukket</string>
     <string name="filter_transactions">Filtrer transaktioner</string>
     <string name="normal_payments">Normale Betalinger</string>
     <string name="expired_requests">Udløbne Anmodninger</string>
