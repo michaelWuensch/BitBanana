@@ -3,7 +3,6 @@ package app.michaelwuensch.bitbanana.setup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.HomeActivity;
@@ -11,6 +10,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -19,7 +19,6 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
@@ -79,10 +78,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     @Override
     public void onButtonHelpClick() {
         super.onButtonHelpClick();
-
-        String url = RefConstants.URL_HELP;
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(browserIntent);
+        HelpDialogUtil.showDialogWithLink(ConnectRemoteNodeActivity.this, R.string.help_dialog_connect_node_help, getResources().getString(R.string.documentation), RefConstants.URL_HELP_SETUP);
     }
 
     private void verifyDesiredConnection(String connectString) {

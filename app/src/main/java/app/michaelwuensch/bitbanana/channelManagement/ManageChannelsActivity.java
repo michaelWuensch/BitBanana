@@ -45,6 +45,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.ChannelsUpdatedSubscriptionListener {
@@ -375,7 +376,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         int id = item.getItemId();
 
         if (id == R.id.helpButton) {
-            HelpDialogUtil.showDialog(ManageChannelsActivity.this, R.string.help_dialog_channels);
+            HelpDialogUtil.showDialogWithLink(ManageChannelsActivity.this, R.string.help_dialog_channels, "LIGHTNINGNETWORk.PLUS", RefConstants.URL_LNPLUS);
             return true;
         }
 
