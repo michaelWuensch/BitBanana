@@ -124,7 +124,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
     // Library for the avatar images
-    implementation 'com.github.michaelWuensch:avathor-android-library:1.1.0'
+    implementation 'com.github.michaelWuensch:avathor-android-library:1.2.0'
 
     // Tor implementation
     implementation "io.matthewnelson.topl-android:tor-binary:0.4.6.5"
