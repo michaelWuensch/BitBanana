@@ -229,7 +229,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         handler.postDelayed(() -> {
             // We have to call this delayed, as otherwise it will still bring up the softKeyboard
             mEtAmount.requestFocus();
-        }, 200);
+        }, 600);
 
         // deactivate default keyboard for number input.
         mEtAmount.setShowSoftInputOnFocus(false);
