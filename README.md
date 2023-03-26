@@ -6,9 +6,11 @@
 [![Translated](https://hosted.weblate.org/widgets/bitbanana/-/svg-badge.svg)](https://hosted.weblate.org/engage/bitbanana/)
 [![GitHub Release](https://badgen.net/github/release/michaelWuensch/BitBanana/?color=yellow)](https://github.com/michaelWuensch/BitBanana/releases/latest)
 
-Native android lightning wallet for node operators focused on user experience and ease of use ⚡️
+⚡️ Superpowers for you and your bitcoin lightning node! Use and manage your node wherever you are. ⚡️
 
-BitBanana is not a classical wallet, it is actually a remote control for one or more of your LND Nodes. BitBanana aims to give node operators the opportunity to use their node in everyday situations with a simple and appealing user interface.
+BitBanana is a native android app for node operators focused on user experience and ease of use.
+While it is not a wallet on its own, BitBanana works like a remote control allowing you to use your node as a wallet wherever you go.  
+The app is designed with an educational approach, providing the user with guidance on every aspect of node operation.
 
 The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect BitBanana to that node.
 

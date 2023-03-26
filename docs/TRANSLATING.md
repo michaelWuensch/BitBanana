@@ -16,11 +16,11 @@ If the language is translated to 100%, we will add it to the language selection 
 ## Current status:
 
 <a href="https://hosted.weblate.org/engage/bitbanana/">
-<img src="https://hosted.weblate.org/widgets/bitbanana/-/287x66-white.png" alt="Übersetzungsstatus" />
+<img src="https://hosted.weblate.org/widgets/bitbanana/-/app-strings/multi-auto.svg" alt="Übersetzungsstatus" />
 </a>
 
 <a href="https://hosted.weblate.org/engage/bitbanana/">
-<img src="https://hosted.weblate.org/widgets/bitbanana/-/horizontal-auto.svg" alt="Übersetzungsstatus" />
+<img src="https://hosted.weblate.org/widgets/bitbanana/-/287x66-white.png" alt="Übersetzungsstatus" />
 </a>
 
 [weblateproject]: https://hosted.weblate.org/projects/bitbanana/app-strings/
