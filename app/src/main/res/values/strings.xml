@@ -509,7 +509,7 @@
     <string name="advanced_channel_details_lifetime">Lifetime</string>
     <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
     <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
-    <string name="advanced_channel_details_initiator">Initator</string>
+    <string name="advanced_channel_details_initiator">Initiator</string>
     <string name="advanced_channel_details_initiator_you">You</string>
     <string name="advanced_channel_details_initiator_peer">Peer</string>
     <string name="advanced_channel_details_explanation_initiator">Who opened the channel?</string>

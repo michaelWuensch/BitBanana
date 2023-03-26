@@ -336,15 +336,20 @@
     <string name="fee_not_available">n/A</string>
     <string name="fee_limit_title">Gebührenlimit Warnung</string>
     <string name="fee_limit_threshold">Gebührenlimit für Zahlungen über %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">Die Gebühr für diese Zahlung (%1$.1f%%) übersteigt das eingestellte Limit (%2$.0f%%).\n\nWollen Sie diese Zahlung wirklich durchführen?</string>
-    <string name="fee_limit_exceeded_payment">Die Gebühr für diese Zahlung (%1$d sats) übersteigt den Zahlungsbetrag (%2$d sats).\n\nWollen Sie diese Zahlung wirklich durchführen?</string>
+    <string name="fee_limit_exceeded">Die Gebühr für diese Zahlung (%1$.1f%%) übersteigt das eingestellte Limit (%2$.0f%%).
+\n
+\nWillst du diese Zahlung wirklich durchführen\?</string>
+    <string name="fee_limit_exceeded_payment">Die Gebühr für diese Zahlung (%1$d sats) übersteigt den Zahlungsbetrag (%2$d sats).
+\n
+\nWillst du diese Zahlung wirklich durchführen\?</string>
     <string name="unlock_wallet">Wallet entsperren</string>
     <string name="biometricPrompt_title">Biometrische Authentifizierung</string>
     <string name="biometricNotSetup">Um dieses Feature zu nutzen, musst du erst die biometrische Authentifizierung in den Android Einstellungen einrichten.</string>
     <string name="invoice_detail">Rechnungsdetails</string>
     <string name="transaction_detail">Transaktionsdetails</string>
     <string name="app_reset_title">Hinweis</string>
-    <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.\nLeider musst du die Wallet deshalb erneut einrichten.</string>
+    <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.
+\nLeider musst du deshalb den Einrichtungsprozess erneut durchlaufen.</string>
     <string name="nfc_type_not_supported">Dieser NFC Typ wird nicht unterstützt</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Bitcoin Adresse\n- Bitcoin Zahlungsanfrage\n- Lightning Zahlungsanfrage</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
@@ -513,7 +518,7 @@
 \nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", müsst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", müsst du einen bestehenden Kanal schließen.
 \nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten!
 \n
-\nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von <a href="https://lightningnetwork.plus">lightningnetwork.plus</a></string>
+\nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von lightningnetwork.plus.</string>
     <string name="forwarding_volume_description">Im ausgewählten Zeitraum weitergeleitet</string>
     <string name="message_to_sign">Zu signierende Nachricht</string>
     <string name="sign_message">Nachricht signieren</string>
@@ -524,4 +529,15 @@
     <string name="settings_receiveAddressDisplayValues_1">Natives SegWit (Bech32)</string>
     <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
     <string name="settings_receiveAddressDisplayValues_0">Kompatibilität SegWit (P2PSH)</string>
+    <string name="advanced_channel_details_initiator_you">Du</string>
+    <string name="activity_manage_channels_closed">Geschlossen</string>
+    <string name="advanced_channel_details_initiator">Initiator</string>
+    <string name="channel_close_type">Schließungsart</string>
+    <string name="advanced_channel_details_initiator_peer">Peer</string>
+    <string name="error_connection_no_internet">Keine Internetverbindung!</string>
+    <string name="advanced_channel_details_explanation_initiator">Wer hat den Kanal geöffnet\?</string>
+    <string name="documentation">Dokumentation</string>
+    <string name="help_dialog_connect_node_help">Leider sind diese QR-Codes so groß, dass einige Geräte nicht in der Lage sind, sie zu scannen. Wenn dies der Fall ist, musst du auf Copy/Paste zurückgreifen.
+\n
+\nWenn du weitere Hilfe benötigst, lies bitte unsere Setup-Dokumentation.</string>
 </resources>
