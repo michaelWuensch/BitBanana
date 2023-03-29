@@ -56,6 +56,11 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    packagingOptions {
+        // Needed for Tor library to work when packaged inside .aab
+        jniLibs.useLegacyPackaging = true
+    }
 }
 
 // Execute this manually
