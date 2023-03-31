@@ -54,7 +54,7 @@ If you discover or learn about a potential error, weakness, or threat that can c
 
 ## Non-custodial
 
-Bitbanana is fully non-custodial. When using the app there is absolutely no interaction with any team or service. We do not even know you are using our software.
+Bitbanana is fully non-custodial. When using the app there is absolutely no interaction with any BitBanana team or service. We do not even know you are using our software.
 
 ## Get Help
 
@@ -69,14 +69,15 @@ Hey! Do you like BitBanana? Awesome! We could actually really use your help!
 Open source isn't just writing code. BitBanana could use your help with any of the following:
 
 - [Translating](docs/TRANSLATING.md) the app using Weblate
+- Sharing a positive review and rating in the app store, if you are pleased with it
 - Finding (and reporting!) bugs
-- New feature suggestions
+- Suggesting new features
 - Answering questions on issues
-- Documentation improvements
+- Contributing to our documentation
 - Reviewing pull requests
 - Helping to manage issue priorities
 - Fixing bugs/new features
-- Helping other users on BitBanana [discord][discord]
+- Providing support to fellow users on BitBanana's [Discord][discord].
 
 If any of that sounds cool to you, feel free to dive in! [Open an issue][issues] or submit a pull request.
 

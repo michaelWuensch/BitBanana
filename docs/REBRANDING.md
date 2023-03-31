@@ -1,6 +1,6 @@
 # Rebranding
 
-## Why was the App rebranded?
+## Why was the Zap Android forked and rebranded?
 
 ### Clarity
 The main reason for the change was to provide clarity.
@@ -16,6 +16,8 @@ While I enjoyed working with the Zap team arround Jack Mallers, they are by now 
 ## What changed?
 
 Really not much. The whole git history is retained and the same developer is maintaining it. The fork happened at tag v0.5.9-beta.
+You can even use the Backup/Restore functionality to easily migrate from Zap Android to BitBanana while keeping your contacts and connected nodes.
+
 Here are the changes:
 
 - The Name
@@ -28,6 +30,7 @@ Here are the changes:
 
 In short:  
 BitBanana has all the features that made Zap great, plus a host of additional capabilities. It will be actively developed while Zap - at least for now - is unmaintained.
+
 
 Thanks for your interest! Now that you are familiar with the changes, have fun and 
 [explore the project][project].
