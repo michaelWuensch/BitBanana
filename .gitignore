@@ -61,5 +61,6 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-# crowdin
-crowdin.properties
+# release files
+app/debug
+app/release
