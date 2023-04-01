@@ -823,44 +823,34 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.drawerChannels:
-                Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
-                startActivity(intentChannels);
-                break;
-            case R.id.drawerRouting:
-                Intent intentRouting = new Intent(this, ForwardingActivity.class);
-                startActivity(intentRouting);
-                break;
-            case R.id.drawerUTXOs:
-                Intent intentUTXOs = new Intent(this, UTXOsActivity.class);
-                startActivity(intentUTXOs);
-                break;
-            case R.id.drawerSignVerify:
-                Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
-                startActivity(intentSignVerify);
-                break;
-            case R.id.drawerSettings:
-                Intent intentSettings = new Intent(this, SettingsActivity.class);
-                startActivity(intentSettings);
-                break;
-            case R.id.drawerNodes:
-                Intent intentWallets = new Intent(this, ManageNodesActivity.class);
-                startActivity(intentWallets);
-                break;
-            case R.id.drawerContacts:
-                Intent intentContacts = new Intent(this, ManageContactsActivity.class);
-                intentContacts.putExtra(ManageContactsActivity.EXTRA_CONTACT_ACTIVITY_MODE, ManageContactsActivity.MODE_MANAGE);
-                startActivityForResult(intentContacts, 0);
-                break;
-            case R.id.drawerBackup:
-                Intent intentBackup = new Intent(this, BackupActivity.class);
-                startActivity(intentBackup);
-                break;
-            case R.id.drawerSupport:
-                Intent intentSupport = new Intent(this, SupportActivity.class);
-                startActivity(intentSupport);
-                break;
+        if (id == R.id.drawerChannels) {
+            Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
+            startActivity(intentChannels);
+        } else if (id == R.id.drawerRouting) {
+            Intent intentRouting = new Intent(this, ForwardingActivity.class);
+            startActivity(intentRouting);
+        } else if (id == R.id.drawerUTXOs) {
+            Intent intentUTXOs = new Intent(this, UTXOsActivity.class);
+            startActivity(intentUTXOs);
+        } else if (id == R.id.drawerSignVerify) {
+            Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
+            startActivity(intentSignVerify);
+        } else if (id == R.id.drawerSettings) {
+            Intent intentSettings = new Intent(this, SettingsActivity.class);
+            startActivity(intentSettings);
+        } else if (id == R.id.drawerNodes) {
+            Intent intentWallets = new Intent(this, ManageNodesActivity.class);
+            startActivity(intentWallets);
+        } else if (id == R.id.drawerContacts) {
+            Intent intentContacts = new Intent(this, ManageContactsActivity.class);
+            intentContacts.putExtra(ManageContactsActivity.EXTRA_CONTACT_ACTIVITY_MODE, ManageContactsActivity.MODE_MANAGE);
+            startActivityForResult(intentContacts, 0);
+        } else if (id == R.id.drawerBackup) {
+            Intent intentBackup = new Intent(this, BackupActivity.class);
+            startActivity(intentBackup);
+        } else if (id == R.id.drawerSupport) {
+            Intent intentSupport = new Intent(this, SupportActivity.class);
+            startActivity(intentSupport);
         }
         return true;
     }
