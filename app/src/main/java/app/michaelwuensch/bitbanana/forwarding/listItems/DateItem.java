@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.forwarding.listItems;
 
+import java.util.TimeZone;
+
 public class DateItem extends ForwardingListItem {
 
     public long mDate; // in milliseconds
@@ -12,7 +14,8 @@ public class DateItem extends ForwardingListItem {
         // To get the date line to show up at the correct position in the sorted list, we have to set its timestamp correctly.
         // We set it to 1 nanosecond before the day ends.
         // 86400000000000 = Nanoseconds of one day (60 * 60 * 24 * 1000 * 1000 * 1000)
-        mTimestampNS = (timestamp - (timestamp % 86400000000000L) + (86400000000000L - 1));
+        TimeZone timeZone = TimeZone.getDefault();
+        mTimestampNS = (timestamp - (timeZone.getOffset(mDate) * 1000000L) - (timestamp % 86400000000000L) + (86400000000000L - 1));
     }
 
     @Override
