@@ -288,11 +288,11 @@ public class PaymentUtil {
     }
 
     public static float getRelativeSettingsFeeLimit() {
-        String lightning_feeLimit = PrefsUtil.getPrefs().getString("lightning_feeLimit", "3%");
+        String lightning_feeLimit = PrefsUtil.getPrefs().getString("lightning_feeLimit", "1%");
         String feePercent = lightning_feeLimit.replace("%", "");
         float feeMultiplier = 1f;
         if (!feePercent.equals(App.getAppContext().getResources().getString(R.string.none))) {
-            feeMultiplier = Integer.parseInt(feePercent) / 100f;
+            feeMultiplier = Float.parseFloat(feePercent) / 100f;
         }
         return feeMultiplier;
     }
