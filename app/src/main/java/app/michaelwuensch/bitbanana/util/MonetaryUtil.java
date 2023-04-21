@@ -1,6 +1,5 @@
 package app.michaelwuensch.bitbanana.util;
 
-import android.content.Context;
 import android.os.Build;
 
 import org.json.JSONException;
@@ -8,11 +7,10 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import app.michaelwuensch.bitbanana.baseClasses.App;
 
 
 /**
@@ -28,13 +26,11 @@ public class MonetaryUtil {
     private static final String LOG_TAG = MonetaryUtil.class.getSimpleName();
 
     private static MonetaryUtil mInstance;
-    private Context mContext;
-    private Currency mFirstCurrency;
-    private Currency mSecondCurrency;
+    private BBCurrency mFirstCurrency;
+    private BBCurrency mSecondCurrency;
 
 
     private MonetaryUtil() {
-        mContext = App.getAppContext();
 
         loadFirstCurrencyFromPrefs(PrefsUtil.getFirstCurrency());
 
@@ -63,7 +59,7 @@ public class MonetaryUtil {
             default:
                 // Here we go if the user has selected a fiat currency as second currency.
                 if (PrefsUtil.getPrefs().getString("fiat_" + PrefsUtil.getSecondCurrency(), "").isEmpty()) {
-                    mSecondCurrency = new Currency(PrefsUtil.getSecondCurrency(), 0, 0);
+                    mSecondCurrency = new BBCurrency(PrefsUtil.getSecondCurrency(), 0, 0);
                 } else {
                     loadSecondCurrencyFromPrefs(PrefsUtil.getSecondCurrency());
                 }
@@ -78,11 +74,11 @@ public class MonetaryUtil {
         return mInstance;
     }
 
-    public Currency getFirstCurrency() {
+    public BBCurrency getFirstCurrency() {
         return mFirstCurrency;
     }
 
-    public Currency getSecondCurrency() {
+    public BBCurrency getSecondCurrency() {
         return mSecondCurrency;
     }
 
@@ -241,23 +237,23 @@ public class MonetaryUtil {
 
                 try {
                     JSONObject selectedCurrency = new JSONObject(PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "{}"));
-                    Currency currency;
+                    BBCurrency BBCurrency;
                     if (selectedCurrency.has("symbol")) {
-                        currency = new Currency(currencyCode,
+                        BBCurrency = new BBCurrency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"),
                                 selectedCurrency.getString("symbol"));
                     } else {
-                        currency = new Currency(currencyCode,
+                        BBCurrency = new BBCurrency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"));
                     }
 
-                    mSecondCurrency = currency;
+                    mSecondCurrency = BBCurrency;
                 } catch (JSONException e) {
                     // App was probably never started before. If we can't find the fiat in the prefs,
                     // create a placeholder currency.
-                    mSecondCurrency = new Currency("USD", 0, 0);
+                    mSecondCurrency = new BBCurrency("USD", 0, 0);
                 }
         }
     }
@@ -279,7 +275,7 @@ public class MonetaryUtil {
      *
      * @return
      */
-    public Currency getPrimaryCurrency() {
+    public BBCurrency getPrimaryCurrency() {
         if (PrefsUtil.isFirstCurrencyPrimary()) {
             return mFirstCurrency;
         } else {
@@ -293,11 +289,24 @@ public class MonetaryUtil {
      *
      * @return
      */
-    public Currency getSecondaryCurrency() {
+    public BBCurrency getSecondaryCurrency() {
         if (PrefsUtil.isFirstCurrencyPrimary()) {
             return mSecondCurrency;
         } else {
             return mFirstCurrency;
+        }
+    }
+
+    /**
+     * This function will return the currency name from the given ISO4217 code (3 Letters).
+     *
+     * @return the name of the currency. Returns null if the currency code was not found.
+     */
+    public String getCurrencyNameFromCurrencyCode(String currencyCode) {
+        try {
+            return android.icu.util.Currency.getInstance(currencyCode).getDisplayName(Locale.US);
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -506,12 +515,12 @@ public class MonetaryUtil {
      * @param input
      * @return boolean
      */
-    public boolean validateCurrencyInput(String input, Currency currency) {
+    public boolean validateCurrencyInput(String input, BBCurrency BBCurrency) {
 
         int numberOfDecimals = 0;
 
         // Bitcoin
-        if (currency.isBitcoin()) {
+        if (BBCurrency.isBitcoin()) {
 
             String btcUnit = PrefsUtil.getFirstCurrency();
             switch (btcUnit) {
@@ -579,28 +588,28 @@ public class MonetaryUtil {
 
 
     private void setFirstCurrency(String currencyCode, Double rate) {
-        mFirstCurrency = new Currency(currencyCode, rate);
+        mFirstCurrency = new BBCurrency(currencyCode, rate);
     }
 
     private void setFirstCurrency(String currencyCode, Double rate, String symbol) {
-        mFirstCurrency = new Currency(currencyCode, rate, symbol);
+        mFirstCurrency = new BBCurrency(currencyCode, rate, symbol);
     }
 
 
     private void setSecondCurrency(String currencyCode, Double rate) {
-        mSecondCurrency = new Currency(currencyCode, rate);
+        mSecondCurrency = new BBCurrency(currencyCode, rate);
     }
 
     private void setSecondCurrency(String currencyCode, Double rate, String symbol) {
-        mSecondCurrency = new Currency(currencyCode, rate, symbol);
+        mSecondCurrency = new BBCurrency(currencyCode, rate, symbol);
     }
 
     public void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
-        mSecondCurrency = new Currency(currencyCode, rate, timestamp);
+        mSecondCurrency = new BBCurrency(currencyCode, rate, timestamp);
     }
 
     void setSecondCurrency(String currencyCode, Double rate, Long timestamp, String symbol) {
-        mSecondCurrency = new Currency(currencyCode, rate, timestamp, symbol);
+        mSecondCurrency = new BBCurrency(currencyCode, rate, timestamp, symbol);
     }
 
 
@@ -663,8 +672,7 @@ public class MonetaryUtil {
 
 
     private String formatAsBtcDisplayAmount(long value) {
-        Locale loc = mContext.getResources().getConfiguration().locale;
-        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(8);
         df.setMinimumIntegerDigits(1);
@@ -673,8 +681,7 @@ public class MonetaryUtil {
     }
 
     private String formatAsMbtcDisplayAmount(long value) {
-        Locale loc = mContext.getResources().getConfiguration().locale;
-        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(5);
         df.setMinimumIntegerDigits(1);
@@ -683,8 +690,7 @@ public class MonetaryUtil {
     }
 
     private String formatAsBitsDisplayAmount(long value) {
-        Locale loc = mContext.getResources().getConfiguration().locale;
-        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(2);
         df.setMinimumIntegerDigits(1);
@@ -701,8 +707,7 @@ public class MonetaryUtil {
     }
 
     private String formatAsSatoshiDisplayAmount(long value) {
-        Locale loc = mContext.getResources().getConfiguration().locale;
-        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(16);
@@ -720,8 +725,7 @@ public class MonetaryUtil {
 
 
     private String formatAsFiatDisplayAmount(double value) {
-        Locale loc = mContext.getResources().getConfiguration().locale;
-        NumberFormat nf = NumberFormat.getNumberInstance(loc);
+        NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(2);
@@ -731,15 +735,28 @@ public class MonetaryUtil {
         return result;
     }
 
+    /**
+     * Localized fiat display.
+     * This takes into account if currency symbol is before or after amount.
+     * All in all it didn't look good if no currency symbol was available. Therefore
+     * it is never used and we always show the symbol / iso4217 code after the amount.
+     */
+    private String localizedFiatAmount(long value) {
+        double fiatValue = (mSecondCurrency.getRate()) * value;
+        NumberFormat nf = NumberFormat.getCurrencyInstance(SystemUtil.getSystemLocale());
+        nf.setCurrency(Currency.getInstance(mSecondCurrency.getCode()));
+        return nf.format(fiatValue);
+    }
 
-    private DecimalFormat TextInputCurrencyFormat(final Currency currency) {
+
+    private DecimalFormat TextInputCurrencyFormat(final BBCurrency BBCurrency) {
         // We have to use the Locale.US here to ensure Double.parse works correctly later.
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
-        if (currency.isBitcoin()) {
+        if (BBCurrency.isBitcoin()) {
 
-            switch (currency.getCode()) {
+            switch (BBCurrency.getCode()) {
                 case BTC_UNIT:
                     df.setMaximumFractionDigits(8);
                     break;
