@@ -66,22 +66,23 @@ If you are having problems with BitBanana, please report the issue in [GitHub][i
 
 Hey! Do you like BitBanana? Awesome! We could actually really use your help!
 
-Open source isn't just writing code. BitBanana could use your help with any of the following:
+Open source isn't just writing code. You can help BitBanana with any of the following:
 
-- [Translating](docs/TRANSLATING.md) the app using Weblate
-- Sharing a positive review and rating in the app store, if you are pleased with it
-- Finding (and reporting!) bugs
-- Suggesting new features
-- Answering questions on issues
-- Contributing to our documentation
-- Reviewing pull requests
-- Helping to manage issue priorities
-- Fixing bugs/new features
-- Providing support to fellow users on BitBanana's [Discord][discord].
+- [Translate](docs/TRANSLATING.md) the app using Weblate
+- Share a positive review and rate the app in the app store
+- Find (and report!) bugs
+- Suggest new features
+- Answer questions on issues
+- Contribute to our documentation
+- Review pull requests
+- Help to manage issue priorities
+- Fix bugs, implement new features
+- Provide support to fellow users on BitBanana's [discord][discord].
+- Tell your friends about it and spread the word.
 
 If any of that sounds cool to you, feel free to dive in! [Open an issue][issues] or submit a pull request.
 
-If you would like to help contribute to the project, please see the [Contributing Guide](docs/CONTRIBUTING.md)
+If you would like to contribute to the project code, please see the [Contributing Guide](docs/CONTRIBUTING.md)
 
 If you want to setup a testing environment, please see the [Regtest Guide](docs/REGTEST.md)
 
