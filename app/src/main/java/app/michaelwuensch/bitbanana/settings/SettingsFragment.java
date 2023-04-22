@@ -26,17 +26,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.BuildConfig;
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.AppUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.BuildConfig;
-import app.michaelwuensch.bitbanana.R;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -122,10 +122,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                             }
                         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        ;
-                    }
-                }).show();
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ;
+                            }
+                        }).show();
 
                 return false;
             }
@@ -168,7 +168,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }
                 try {
                     new KeystoreUtil().removePinActiveKey();
-                } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+                } catch (KeyStoreException | CertificateException | IOException |
+                         NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
                 getActivity().finishAffinity();
@@ -266,7 +267,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 try {
                     fiatEntryValues[i] = currencies.getString(i);
 
-                    String currencyName = AppUtil.getInstance(getActivity()).getCurrencyNameFromCurrencyCode(currencies.getString(i));
+                    String currencyName = MonetaryUtil.getInstance().getCurrencyNameFromCurrencyCode(currencies.getString(i));
                     if (currencyName == null) {
                         currencyName = currencies.getString(i);
                     } else {

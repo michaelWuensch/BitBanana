@@ -1,6 +1,5 @@
 package app.michaelwuensch.bitbanana.util;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,13 +12,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import app.michaelwuensch.bitbanana.connection.HttpClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
 
 public class ExchangeRateUtil {
 
@@ -32,12 +29,11 @@ public class ExchangeRateUtil {
     private static final String TIMESTAMP = "timestamp";
 
     private final Set<ExchangeRateUtil.ExchangeRateListener> mExchangeRateListeners = new HashSet<>();
-    private Context mContext;
+
     private static ExchangeRateUtil mInstance;
 
 
     private ExchangeRateUtil() {
-        mContext = App.getAppContext();
     }
 
     public static ExchangeRateUtil getInstance() {
@@ -228,36 +224,6 @@ public class ExchangeRateUtil {
         return formattedRates;
     }
 
-    /**
-     * Some responses include exchange rates to other crypto currencies.
-     * This function removes them by checking if the currency code is in our fiat currency list.
-     */
-    private JSONObject removeNonFiat(JSONObject rates) {
-
-        // Load the currency list from JSON file.
-        JSONObject fiatList = null;
-        String currencies = AppUtil.getInstance(mContext).loadJSONFromResource(R.raw.currency_list);
-
-        try {
-            fiatList = new JSONObject(currencies);
-        } catch (JSONException e) {
-            BBLog.e(LOG_TAG, "Error reading currency_list JSON: " + e.getMessage());
-        }
-
-        // Remove all exchange rates that are not in the list
-        if (fiatList != null) {
-            Iterator<String> iter = rates.keys();
-            while (iter.hasNext()) {
-                String rateCode = iter.next();
-                if (!fiatList.has(rateCode)) {
-                    iter.remove();
-                }
-            }
-        }
-        return rates;
-    }
-
-
     private void applyExchangeRatesAndSaveInPreferences(JSONObject exchangeRates) {
 
         final SharedPreferences.Editor editor = PrefsUtil.editPrefs();
@@ -312,7 +278,7 @@ public class ExchangeRateUtil {
         // if this currency is included in the fetched data.
         // The user might also have changed the provider and his currency is no longer available. Also switch to default in this case.
         if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, false) || !isCurrencyAvailable(PrefsUtil.getSecondCurrency())) {
-            String currencyCode = AppUtil.getInstance(mContext).getSystemCurrencyCode();
+            String currencyCode = SystemUtil.getSystemCurrencyCode();
             if (currencyCode != null) {
                 if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").isEmpty()) {
                     final SharedPreferences.Editor editor = PrefsUtil.editPrefs();
