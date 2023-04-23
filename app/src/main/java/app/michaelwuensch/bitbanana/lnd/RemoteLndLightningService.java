@@ -320,4 +320,14 @@ public class RemoteLndLightningService implements LndLightningService {
         return DefaultObservable.createDefault(emitter -> asyncStub.subscribeCustomMessages(request, new RemoteLndStreamObserver<>(emitter)));
     }
 
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.ListAliasesResponse> listAliases(com.github.lightningnetwork.lnd.lnrpc.ListAliasesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listAliases(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.LookupHtlcResolutionResponse> lookupHtlcResolution(com.github.lightningnetwork.lnd.lnrpc.LookupHtlcResolutionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.lookupHtlcResolution(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
 }

@@ -134,4 +134,8 @@ public interface LndLightningService {
     Single<com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageResponse> sendCustomMessage(com.github.lightningnetwork.lnd.lnrpc.SendCustomMessageRequest request);
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.CustomMessage> subscribeCustomMessages(com.github.lightningnetwork.lnd.lnrpc.SubscribeCustomMessagesRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.ListAliasesResponse> listAliases(com.github.lightningnetwork.lnd.lnrpc.ListAliasesRequest request);
+
+    Single<com.github.lightningnetwork.lnd.lnrpc.LookupHtlcResolutionResponse> lookupHtlcResolution(com.github.lightningnetwork.lnd.lnrpc.LookupHtlcResolutionRequest request);
 }

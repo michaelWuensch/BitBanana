@@ -55,6 +55,26 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.RequiredReserveResponse> requiredReserve(com.github.lightningnetwork.lnd.walletrpc.RequiredReserveRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.requiredReserve(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ListAddressesResponse> listAddresses(com.github.lightningnetwork.lnd.walletrpc.ListAddressesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listAddresses(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.SignMessageWithAddrResponse> signMessageWithAddr(com.github.lightningnetwork.lnd.walletrpc.SignMessageWithAddrRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.signMessageWithAddr(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.VerifyMessageWithAddrResponse> verifyMessageWithAddr(com.github.lightningnetwork.lnd.walletrpc.VerifyMessageWithAddrRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.verifyMessageWithAddr(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.ImportAccountResponse> importAccount(com.github.lightningnetwork.lnd.walletrpc.ImportAccountRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.importAccount(request, new RemoteLndSingleObserver<>(emitter)));
     }
@@ -62,6 +82,11 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyResponse> importPublicKey(com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.importPublicKey(request, new RemoteLndSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptResponse> importTapscript(com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.importTapscript(request, new RemoteLndSingleObserver<>(emitter)));
     }
 
     @Override

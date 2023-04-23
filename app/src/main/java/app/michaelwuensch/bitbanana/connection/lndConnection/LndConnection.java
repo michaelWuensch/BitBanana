@@ -5,12 +5,14 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.lnd.LndAutopilotService;
+import app.michaelwuensch.bitbanana.lnd.LndChainKitService;
 import app.michaelwuensch.bitbanana.lnd.LndChainNotifierService;
 import app.michaelwuensch.bitbanana.lnd.LndInvoicesService;
 import app.michaelwuensch.bitbanana.lnd.LndLightningService;
+import app.michaelwuensch.bitbanana.lnd.LndPeersService;
 import app.michaelwuensch.bitbanana.lnd.LndRouterService;
 import app.michaelwuensch.bitbanana.lnd.LndSignerService;
 import app.michaelwuensch.bitbanana.lnd.LndStateService;
@@ -20,9 +22,11 @@ import app.michaelwuensch.bitbanana.lnd.LndWalletUnlockerService;
 import app.michaelwuensch.bitbanana.lnd.LndWatchtowerClientService;
 import app.michaelwuensch.bitbanana.lnd.LndWatchtowerService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndAutopilotService;
+import app.michaelwuensch.bitbanana.lnd.RemoteLndChainKitService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndChainNotifierService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndInvoicesService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndLightningService;
+import app.michaelwuensch.bitbanana.lnd.RemoteLndPeersService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndRouterService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndSignerService;
 import app.michaelwuensch.bitbanana.lnd.RemoteLndStateService;
@@ -49,9 +53,11 @@ public class LndConnection {
     private MacaroonCallCredential mMacaroon;
     private ManagedChannel mSecureChannel;
     private LndAutopilotService mLndAutopilotService;
+    private LndChainKitService mLndChainKitService;
     private LndChainNotifierService mLndChainNotifierService;
     private LndInvoicesService mLndInvoicesService;
     private LndLightningService mLndLightningService;
+    private LndPeersService mLndPeersService;
     private LndRouterService mLndRouterService;
     private LndSignerService mLndSignerService;
     private LndStateService mLndStateService;
@@ -78,6 +84,10 @@ public class LndConnection {
         return mLndAutopilotService;
     }
 
+    public LndChainKitService getChainKitService() {
+        return mLndChainKitService;
+    }
+
     public LndChainNotifierService getChainNotifierService() {
         return mLndChainNotifierService;
     }
@@ -88,6 +98,10 @@ public class LndConnection {
 
     public LndLightningService getLightningService() {
         return mLndLightningService;
+    }
+
+    public LndPeersService getPeersService() {
+        return mLndPeersService;
     }
 
     public LndRouterService getRouterService() {
@@ -158,9 +172,11 @@ public class LndConnection {
         }
 
         mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, mMacaroon);
+        mLndChainKitService = new RemoteLndChainKitService(mSecureChannel, mMacaroon);
         mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, mMacaroon);
         mLndInvoicesService = new RemoteLndInvoicesService(mSecureChannel, mMacaroon);
         mLndLightningService = new RemoteLndLightningService(mSecureChannel, mMacaroon);
+        mLndPeersService = new RemoteLndPeersService(mSecureChannel, mMacaroon);
         mLndRouterService = new RemoteLndRouterService(mSecureChannel, mMacaroon);
         mLndSignerService = new RemoteLndSignerService(mSecureChannel, mMacaroon);
         mLndStateService = new RemoteLndStateService(mSecureChannel, mMacaroon);
