@@ -188,7 +188,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     private void bindPendingOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.PendingOpenChannel pendingOpenChannel = PendingChannelsResponse.PendingOpenChannel.parseFrom(channelString);
-        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
 
         setBasicInformation(pendingOpenChannel.getChannel().getRemoteNodePub(),
                 R.color.banana_yellow,
@@ -199,7 +199,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     private void bindWaitingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.WaitingCloseChannel waitingCloseChannel = PendingChannelsResponse.WaitingCloseChannel.parseFrom(channelString);
-        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
 
         setBasicInformation(waitingCloseChannel.getChannel().getRemoteNodePub(),
                 R.color.red,
@@ -210,7 +210,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     private void bindPendingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.ClosedChannel pendingCloseChannel = PendingChannelsResponse.ClosedChannel.parseFrom(channelString);
-        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
 
         showClosingTransaction(pendingCloseChannel.getClosingTxid());
 
@@ -223,7 +223,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     private void bindForceClosingChannel(ByteString channelString) throws InvalidProtocolBufferException {
         PendingChannelsResponse.ForceClosedChannel forceClosedChannel = PendingChannelsResponse.ForceClosedChannel.parseFrom(channelString);
-        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
 
         showClosingTransaction(forceClosedChannel.getClosingTxid());
 
@@ -237,7 +237,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     private void bindClosedChannel(ByteString channelString) throws InvalidProtocolBufferException {
         ChannelCloseSummary channelCloseSummary = ChannelCloseSummary.parseFrom(channelString);
-        mBSDScrollableMainView.setMoreButtonVisibility(false);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
         mStatusDot.setVisibility(View.GONE);
 
         showClosingTransaction(channelCloseSummary.getClosingTxHash());
@@ -272,7 +272,18 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mTvClosingType.setVisibility(View.VISIBLE);
         mTvClosingTypeLabel.setVisibility(View.VISIBLE);
         mIvClosingTypeSeparator.setVisibility(View.VISIBLE);
-        mTvClosingType.setText(channelCloseSummary.getCloseType().name());
+        // close type
+        String closeTypeLabel = "";
+        if (channelCloseSummary.getCloseType() == ChannelCloseSummary.ClosureType.COOPERATIVE_CLOSE) {
+            closeTypeLabel = getResources().getString(R.string.channel_close_type_coop);
+        } else if (channelCloseSummary.getCloseType() == ChannelCloseSummary.ClosureType.LOCAL_FORCE_CLOSE || channelCloseSummary.getCloseType() == ChannelCloseSummary.ClosureType.REMOTE_FORCE_CLOSE) {
+            closeTypeLabel = getResources().getString(R.string.channel_close_type_force_close);
+        } else if (channelCloseSummary.getCloseType() == ChannelCloseSummary.ClosureType.BREACH_CLOSE) {
+            closeTypeLabel = getResources().getString(R.string.channel_close_type_breach);
+        } else {
+            closeTypeLabel = channelCloseSummary.getCloseType().toString();
+        }
+        mTvClosingType.setText(closeTypeLabel);
     }
 
     private void showChannelVisibility(boolean isPrivate) {
