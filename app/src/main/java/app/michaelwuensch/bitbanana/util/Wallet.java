@@ -1287,6 +1287,22 @@ public class Wallet {
     }
 
     /**
+     * Returns the block height of a channel opening transaction.
+     * This only works if we are the initator of the channel as LND will not store the transaction otherwhise.
+     *
+     * @param channelPoint channel point as string
+     * @return block height. -1 if not available.
+     */
+    public int getChannelOpenBlockHeight(String channelPoint) {
+        String txId = channelPoint.split(":")[0];
+        for (Transaction tx : mOnChainTransactionList) {
+            if (tx.getTxHash().equals(txId))
+                return tx.getBlockHeight();
+        }
+        return -1;
+    }
+
+    /**
      * Get the maximum amount that can be received over Lightning Channels.
      *
      * @return amount in satoshis
