@@ -96,13 +96,4 @@
         <item>3%</item>
     </string-array>
 
-    <string-array name="lnFeeLimitDisplayValues">
-        <item>@string/none</item>
-        <item>0.1% (1000 ppm)</item>
-        <item>0.3% (3000 ppm)</item>
-        <item>0.5% (5000 ppm)</item>
-        <item>1% (10000 ppm)</item>
-        <item>3% (30000 ppm)</item>
-    </string-array>
-
 </resources>

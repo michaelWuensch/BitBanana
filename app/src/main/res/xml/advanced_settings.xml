@@ -72,7 +72,7 @@
 
         <ListPreference
             android:defaultValue="1%"
-            android:entries="@array/lnFeeLimitDisplayValues"
+            android:entries="@array/lnFeeLimit"
             android:entryValues="@array/lnFeeLimit"
             android:key="lightning_feeLimit"
             android:summary="%s"
