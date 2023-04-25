@@ -171,7 +171,7 @@
     <string name="channel_close_error">Channel close error</string>
     <string name="channel_close_confirmation">Do you really want to close the channel with:\n\n%s\n</string>
     <string name="channel_close_force_confirmation">Do you really want to force close the channel with:\n\n%1$s\n\nYour funds will be locked up for %2$s.</string>
-    <string name="channel_close_time">Closing Time Delay</string>
+    <string name="channel_close_time">Time until closure</string>
     <string name="channel_open">Open Channel</string>
     <string name="channel_open_success">Channel opening successfully initiated</string>
     <string name="channel_open_error">Channel open error</string>
@@ -180,6 +180,10 @@
     <string name="channel_visibility_public">public</string>
     <string name="channel_visibility">Visibility</string>
     <string name="channel_close_type">Close type</string>
+
+    <string name="channel_close_type_coop">Cooperative</string>
+    <string name="channel_close_type_force_close">Force Close</string>
+    <string name="channel_close_type_breach">Breach</string>
 
 
     <string name="setup_connect_heading">How do you want to use BitBanana?</string>
@@ -513,6 +517,9 @@
     <string name="advanced_channel_details_initiator_you">You</string>
     <string name="advanced_channel_details_initiator_peer">Peer</string>
     <string name="advanced_channel_details_explanation_initiator">Who opened the channel?</string>
+    <string name="advanced_channel_details_close_initiator">Close Initiator</string>
+    <string name="advanced_channel_details_explanation_close_initiator">Who closed the channel?</string>
+    <string name="advanced_channel_details_explanation_close_type">Channels can be closed in different ways. The optimal way is a cooperative close. If one party decides to close the channel without the cooperation of the other party, a so called \"force close\" happens. A force close will normally result in higher fees and the close initiator will have to wait quite some time until he can access his funds. If one party attempts to cheat and gets caught, we have a breach close.</string>
     <string name="advanced_channel_details_commit_fee">Commit Fee</string>
     <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
     <string name="advanced_channel_details_time_lock">Time Lock</string>

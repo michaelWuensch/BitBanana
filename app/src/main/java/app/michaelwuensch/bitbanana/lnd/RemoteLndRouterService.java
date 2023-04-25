@@ -26,6 +26,11 @@ public class RemoteLndRouterService implements LndRouterService {
     }
 
     @Override
+    public Observable<com.github.lightningnetwork.lnd.lnrpc.Payment> trackPayments(com.github.lightningnetwork.lnd.routerrpc.TrackPaymentsRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.trackPayments(request, new RemoteLndStreamObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.routerrpc.RouteFeeResponse> estimateRouteFee(com.github.lightningnetwork.lnd.routerrpc.RouteFeeRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.estimateRouteFee(request, new RemoteLndSingleObserver<>(emitter)));
     }

@@ -20,9 +20,19 @@ public interface LndWalletKitService {
 
     Single<com.github.lightningnetwork.lnd.walletrpc.ListAccountsResponse> listAccounts(com.github.lightningnetwork.lnd.walletrpc.ListAccountsRequest request);
 
+    Single<com.github.lightningnetwork.lnd.walletrpc.RequiredReserveResponse> requiredReserve(com.github.lightningnetwork.lnd.walletrpc.RequiredReserveRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.ListAddressesResponse> listAddresses(com.github.lightningnetwork.lnd.walletrpc.ListAddressesRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.SignMessageWithAddrResponse> signMessageWithAddr(com.github.lightningnetwork.lnd.walletrpc.SignMessageWithAddrRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.VerifyMessageWithAddrResponse> verifyMessageWithAddr(com.github.lightningnetwork.lnd.walletrpc.VerifyMessageWithAddrRequest request);
+
     Single<com.github.lightningnetwork.lnd.walletrpc.ImportAccountResponse> importAccount(com.github.lightningnetwork.lnd.walletrpc.ImportAccountRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyResponse> importPublicKey(com.github.lightningnetwork.lnd.walletrpc.ImportPublicKeyRequest request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptResponse> importTapscript(com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.PublishResponse> publishTransaction(com.github.lightningnetwork.lnd.walletrpc.Transaction request);
 

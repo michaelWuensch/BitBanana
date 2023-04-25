@@ -25,6 +25,7 @@ Here are the changes:
 - Slight color adjustments
 - Community management. BitBanana now has its own [discord][discord] channel.
 - Translations are now done with weblate
+- The "beta" status is ended and the app can now be normally rated an reviewed in the app store
 - Lots of new features in intial release (Taproot, Channel summary, closed channels, sign/verify, ... )
 - Over time more differences will occur as BitBanana is actively maintained and will receive new features.
 

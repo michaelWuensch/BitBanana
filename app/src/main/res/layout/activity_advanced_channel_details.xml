@@ -21,68 +21,105 @@
                 android:id="@+id/capacity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/capacity" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/capacity"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/channelLifetime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/activity" />
+                app:layout_constraintTop_toBottomOf="@id/activity"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/visibility"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/channelLifetime" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/channelLifetime"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/initiator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/visibility" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/visibility"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/closeInitiator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/initiator"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/closeType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/closeInitiator"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/timeLock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/initiator" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/closeType"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/commitFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/timeLock" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/timeLock"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/localRoutingFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/commitFee" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/commitFee"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/remoteRoutingFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/localRoutingFee" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/localRoutingFee"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/localReserve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/remoteRoutingFee" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/remoteRoutingFee"
+                tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/remoteReserve"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/localReserve" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/localReserve"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

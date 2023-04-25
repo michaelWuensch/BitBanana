@@ -9,6 +9,8 @@ public interface LndRouterService {
 
     Observable<com.github.lightningnetwork.lnd.lnrpc.Payment> trackPaymentV2(com.github.lightningnetwork.lnd.routerrpc.TrackPaymentRequest request);
 
+    Observable<com.github.lightningnetwork.lnd.lnrpc.Payment> trackPayments(com.github.lightningnetwork.lnd.routerrpc.TrackPaymentsRequest request);
+
     Single<com.github.lightningnetwork.lnd.routerrpc.RouteFeeResponse> estimateRouteFee(com.github.lightningnetwork.lnd.routerrpc.RouteFeeRequest request);
 
     Single<com.github.lightningnetwork.lnd.routerrpc.SendToRouteResponse> sendToRoute(com.github.lightningnetwork.lnd.routerrpc.SendToRouteRequest request);
