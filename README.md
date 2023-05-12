@@ -68,9 +68,11 @@ Hey! Do you like BitBanana? Awesome! We could actually really use your help!
 
 Open source isn't just writing code. You can help BitBanana with any of the following:
 
-- [Translate](docs/TRANSLATING.md) the app using Weblate
+- Drop a star on github
 - Share a positive review and rate the app in the app store
-- Find (and report!) bugs
+- Tell your friends about it
+- [Translate](docs/TRANSLATING.md) the app using Weblate
+- Find and report bugs, [Open an issue][issues]
 - Suggest new features
 - Answer questions on issues
 - Contribute to our documentation
@@ -78,9 +80,6 @@ Open source isn't just writing code. You can help BitBanana with any of the foll
 - Help to manage issue priorities
 - Fix bugs, implement new features
 - Provide support to fellow users on BitBanana's [discord][discord].
-- Tell your friends about it and spread the word.
-
-If any of that sounds cool to you, feel free to dive in! [Open an issue][issues] or submit a pull request.
 
 If you would like to contribute to the project code, please see the [Contributing Guide](docs/CONTRIBUTING.md)
 
