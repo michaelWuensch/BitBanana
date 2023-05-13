@@ -19,6 +19,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
@@ -34,6 +35,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.PreviousOutPoint;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
@@ -1237,6 +1239,13 @@ public class Wallet {
                 String[] parts = c.getChannel().getChannelPoint().split(":");
                 if (transaction.getTxHash().equals(parts[0])) {
                     return c.getChannel().getRemoteNodePub();
+                } else if (transaction.getLabel().toLowerCase().contains("sweep")) {
+                    // force closes are marked with a "sweep" label in lnd
+                    List<PreviousOutPoint> previousOutPoints = transaction.getPreviousOutpointsList();
+                    for (PreviousOutPoint op : previousOutPoints) {
+                        if (op.getOutpoint().split(":")[0].equals(c.getClosingTxid()))
+                            return c.getChannel().getRemoteNodePub();
+                    }
                 }
             }
         }
@@ -1257,6 +1266,13 @@ public class Wallet {
                 String[] parts = c.getChannelPoint().split(":");
                 if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
                     return c.getRemotePubkey();
+                } else if (transaction.getLabel().toLowerCase().contains("sweep")) {
+                    // force closes are marked with a "sweep" label in lnd
+                    List<PreviousOutPoint> previousOutPoints = transaction.getPreviousOutpointsList();
+                    for (PreviousOutPoint op : previousOutPoints) {
+                        if (op.getOutpoint().split(":")[0].equals(c.getClosingTxHash()))
+                            return c.getRemotePubkey();
+                    }
                 }
             }
         }
