@@ -120,6 +120,14 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailActivity.setContent(R.string.advanced_channel_details_activity, activity, R.string.advanced_channel_details_explanation_activity);
         mDetailActivity.setVisibility(View.VISIBLE);
 
+        // channel lifetime
+        int openHeight = UtilFunctions.getBlockHeightFromChanID(channel.getChanId());
+        int currentHeight = Wallet.getInstance().getSyncedBlockHeight();
+        int ageInBlocks = currentHeight - openHeight;
+        String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
+        mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime, duration, R.string.advanced_channel_details_explanation_lifetime);
+        mDetailChannelLifetime.setVisibility(View.VISIBLE);
+
         // visibility
         String visibility;
         if (channel.getPrivate()) {
@@ -249,19 +257,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
-        // ToDo: Find out how we can get openHeight if we are not channel initiator.
-        /*
-        if (channel.getOpenInitiator() == Initiator.INITIATOR_LOCAL) {
-            int openHeight = Wallet.getInstance().getChannelOpenBlockHeight(channel.getChannelPoint());
-            BBLog.e(LOG_TAG, "open height: " + openHeight);
-            int closeHeight = channel.getCloseHeight();
-            int ageInBlocks = closeHeight - openHeight;
-            String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
-            mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime, duration, R.string.advanced_channel_details_explanation_lifetime);
-        } else {
-            mDetailChannelLifetime.setVisibility(View.GONE);
-        }
-         */
+        int openHeight = UtilFunctions.getBlockHeightFromChanID(channel.getChanId());
+        int closeHeight = channel.getCloseHeight();
+        int ageInBlocks = closeHeight - openHeight;
+        String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
+        mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime_closed, duration, R.string.advanced_channel_details_explanation_lifetime_closed);
+        mDetailChannelLifetime.setVisibility(View.VISIBLE);
 
         // initiator
         String initiator;

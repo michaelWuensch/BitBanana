@@ -171,4 +171,11 @@ public class UtilFunctions {
                 (byte) (value >> 8),
                 (byte) value};
     }
+
+    public static int getBlockHeightFromChanID(long chanID) {
+        byte[] chanIDBytes = longToBytes(chanID);
+        // first 3 bytes are the block height
+        byte[] blockheightBytes = {0x00, chanIDBytes[0], chanIDBytes[1], chanIDBytes[2]};
+        return intFromByteArray(blockheightBytes);
+    }
 }

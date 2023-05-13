@@ -114,6 +114,7 @@ public class Wallet {
     private long mChannelBalanceLimbo = 0;
     private String mIdentityPubKey;
     private LightningNodeUri[] mNodeUris;
+    private int mSyncedBlockHeight;
     private boolean mConnectedToLND = false;
     private boolean mInfoFetched = false;
     private boolean mBalancesFetched = false;
@@ -155,6 +156,7 @@ public class Wallet {
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
 
+        mSyncedBlockHeight = 0;
         mConnectedToLND = false;
         mOnChainTransactionList = null;
         mInvoiceList = null;
@@ -228,6 +230,7 @@ public class Wallet {
                     BBLog.d(LOG_TAG, "LND is reachable.");
                     // Save the received data.
                     mSyncedToChain = infoResponse.getSyncedToChain();
+                    mSyncedBlockHeight = infoResponse.getBlockHeight();
 
                     for (int i = 0; i < infoResponse.getChainsCount(); i++) {
                         if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
@@ -446,6 +449,7 @@ public class Wallet {
                         mSyncedToChain = infoResponse.getSyncedToChain();
                         mLNDVersionString = infoResponse.getVersion();
                         mIdentityPubKey = infoResponse.getIdentityPubkey();
+                        mSyncedBlockHeight = infoResponse.getBlockHeight();
 
                         for (int i = 0; i < infoResponse.getChainsCount(); i++) {
                             if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
@@ -1366,6 +1370,10 @@ public class Wallet {
 
     public boolean isSyncedToChain() {
         return mSyncedToChain;
+    }
+
+    public int getSyncedBlockHeight() {
+        return mSyncedBlockHeight;
     }
 
     public Network getNetwork() {
