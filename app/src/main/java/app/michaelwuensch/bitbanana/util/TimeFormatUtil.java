@@ -109,15 +109,21 @@ public class TimeFormatUtil {
         String hoursString = "";
         if (hours != 0)
             hoursString = context.getResources().getQuantityString(R.plurals.duration_hour, hours, hours);
-        int days = (int) duration / 86400;
+        int days = (int) (duration % 31536000) / 86400;
         String daysString = "";
         if (days != 0)
             daysString = context.getResources().getQuantityString(R.plurals.duration_day, days, days);
+        int years = (int) duration / 31536000;
+        String yearsString = "";
+        if (years != 0)
+            yearsString = context.getResources().getQuantityString(R.plurals.duration_year, years, years);
 
         if (duration < 86400) {
             formattedString = hoursString + divider(hoursString, minutesString) + minutesString;
-        } else {
+        } else if (duration < 31536000){
             formattedString = daysString + divider(daysString, hoursString) + hoursString;
+        } else {
+            formattedString = yearsString + divider(yearsString, daysString) + daysString;
         }
 
         return formattedString;
