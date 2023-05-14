@@ -71,7 +71,7 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
-            android:defaultValue="3%"
+            android:defaultValue="1%"
             android:entries="@array/lnFeeLimit"
             android:entryValues="@array/lnFeeLimit"
             android:key="lightning_feeLimit"

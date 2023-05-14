@@ -89,10 +89,11 @@
 
     <string-array name="lnFeeLimit">
         <item>@string/none</item>
+        <item>0.1%</item>
+        <item>0.3%</item>
+        <item>0.5%</item>
         <item>1%</item>
         <item>3%</item>
-        <item>5%</item>
-        <item>10%</item>
     </string-array>
 
 </resources>
