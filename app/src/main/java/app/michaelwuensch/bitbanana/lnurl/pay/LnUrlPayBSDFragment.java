@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.lnurl.pay;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -452,6 +453,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 mHandler.postDelayed(() -> executeSuccessAction(successAction, payment), 300);
             }
 
+            @SuppressLint("StringFormatInvalid")
             @Override
             public void onError(String error, PaymentFailureReason reason, int duration) {
                 String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
@@ -462,7 +464,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
                             break;
                         case FAILURE_REASON_NO_ROUTE:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route);
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
                             break;
                         case FAILURE_REASON_INSUFFICIENT_BALANCE:
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
