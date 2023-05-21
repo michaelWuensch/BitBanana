@@ -45,13 +45,14 @@ BitBanana forked from Zap Android. You can find more information about this on t
 
 **Security & Privacy**
 - [x] 100% Self-custodial
+- [x] 100% open source code with [reproducible](docs/REPRODUCE.md) releases
 - [x] ZERO data collection
 - [x] Tor support
 - [x] PIN protected access
 - [x] Scrambled PIN by default
+- [x] User guardian system (BitBanana warns you when you are about to perform a potentially dangerous or privacy leaking action)
 - [x] Protection against screen recording
 - [x] Hide total balance
-- [x] User guardian system (BitBanana warns you when you are about to perform a potentially dangerous or privacy leaking action)
 
 
 ## Security
@@ -89,7 +90,16 @@ If you would like to contribute to the project code, please see the [Contributin
 
 If you want to setup a testing environment, please see the [Regtest Guide](docs/REGTEST.md)
 
-And if you want to build the app yourself take a look at the [Installation Guide](docs/INSTALL.md)
+## Build
+
+If you want to build the app yourself take a look at the [Installation Guide](docs/INSTALL.md)
+
+## Verify/Reproduce
+
+BitBanana is reproducible.  
+You want to verify that the app distributed in the app store is actually built from the source available here on github?  
+See these [reproduce](docs/REPRODUCE.md) instructions.
+
 
 ## Maintainers
 - [Michael Wünsch](https://github.com/michaelWuensch)
