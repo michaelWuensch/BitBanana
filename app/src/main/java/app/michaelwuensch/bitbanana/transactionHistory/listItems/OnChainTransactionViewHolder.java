@@ -37,6 +37,9 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
             setIcon(TransactionIcon.INTERNAL);
             setFee(fee, false);
 
+            // Internal transactions are a mess in LND. Some transaction values are not populated, sometimes value and fee is switched.
+            // There are transactions for force closes that never get confirmations and get deleted on restarting LND ...
+
             switch (amount.compareTo(0L)) {
                 case 0:
                     // amount = 0
@@ -55,13 +58,21 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setSecondaryDescription(aliasClosed, true);
                     break;
                 case -1:
-                    // amount < 0 (Channel opened)
-                    // Here we use the fee for the amount, as this is what we actually have to pay.
-                    // Doing it this way looks nicer than having 0 for amount and the fee in small.
-                    setAmount(fee * -1, true);
-                    setPrimaryDescription(mContext.getString(R.string.opened_channel));
-                    String aliasOpened = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
-                    setSecondaryDescription(aliasOpened, true);
+                    if (onChainTransactionItem.getOnChainTransaction().getLabel().toLowerCase().contains("sweep")) {
+                        // in some rare cases for sweep transactions the value is actually the fee payed for the sweep.
+                        setAmount(amount, true);
+                        setPrimaryDescription(mContext.getString(R.string.closed_channel));
+                        String aliasClose = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                        setSecondaryDescription(aliasClose, true);
+                    } else {
+                        // amount < 0 (Channel opened)
+                        // Here we use the fee for the amount, as this is what we actually have to pay.
+                        // Doing it this way looks nicer than having 0 for amount and the fee in small.
+                        setAmount(fee * -1, true);
+                        setPrimaryDescription(mContext.getString(R.string.opened_channel));
+                        String aliasOpened = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                        setSecondaryDescription(aliasOpened, true);
+                    }
                     break;
             }
         } else {
