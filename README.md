@@ -17,44 +17,50 @@ The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run 
 BitBanana forked from Zap Android. You can find more information about this on the [Rebranding](docs/REBRANDING.md) page.
 
 ## Features
-- [x] 100% free, only bitcoin network fees apply. BitBanana does not earn a single sat and has no plans to monetize in the future.
+**General**
+- [x] Connect to remote lightning nodes (Only LND supported right now)
+- [x] Available in many languages
+- [x] Explanations and help across the app
+- [x] And of course, BitBanana is Bitcoin only!
 
-**Wallet/Lightning**
-- [x] Connect to remote Lnd nodes
+**Node Management**
+
+- [x] Use your node as a lightning wallet wherever you are
 - [x] Manage multiple nodes
 - [x] Channel Management
 - [x] Routing summary
-- [x] Contacts
+
+**Wallet**
+- [x] 100% free. The only fees you pay are to the bitcoin network. BitBanana won't charge you a single sat.
+- [x] Contacts (with [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor))
+- [x] Send funds to lightning addresses (email like addresses)
+- [x] Send funds without an invoice (keysend)
+- [x] NFC support
+- [x] Transaction filters
+- [x] BTC, mBTC, bit & Satoshi units
 - [x] Fiat currency prices
 - [x] Support for SegWit & Taproot
-- [x] BTC, mBTC, bit & Satoshi units
-- [x] Available in many languages
-- [x] LNURL support (pay, withdraw & channel)
-- [x] Send funds without an invoice (keysend)
-- [x] Send funds to lightning addresses (email like addresses)
-- [x] Transaction filter
-- [x] Read NFC tags
 - [x] Sign/Verify
-- [x] [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor) 
-- [x] Bitcoin only, no shitcoins!
+- [x] LNURL support (pay, withdraw & channel)
 
 **Security & Privacy**
-- [x] 100% Non-custodial
+- [x] 100% Self-custodial
+- [x] ZERO data collection
 - [x] Tor support
 - [x] PIN protected access
 - [x] Scrambled PIN by default
 - [x] Protection against screen recording
-- [x] Option to hide total balance
-- [x] User guardian system (BitBanana warns users when they are about to perform potentially dangerous or privacy leaking actions)
+- [x] Hide total balance
+- [x] User guardian system (BitBanana warns you when you are about to perform a potentially dangerous or privacy leaking action)
 
 
 ## Security
 
 If you discover or learn about a potential error, weakness, or threat that can compromise the security of BitBanana, we ask you to keep it confidential and [submit your concern directly to the BitBanana developer](mailto:bitbananasecurity@proton.me?subject=[GitHub]%20BitBanana%20Security).
 
-## Non-custodial
+## Self-custodial
 
-Bitbanana is fully non-custodial. When using the app there is absolutely no interaction with any BitBanana team or service. We do not even know you are using our software.
+BitBanana is fully self-custodial. When using the app there is absolutely no interaction with any BitBanana team or service. We do not even know you are using our app.
 
 ## Get Help
 
@@ -74,12 +80,10 @@ Open source isn't just writing code. You can help BitBanana with any of the foll
 - [Translate](docs/TRANSLATING.md) the app using Weblate
 - Find and report bugs, [Open an issue][issues]
 - Suggest new features
-- Answer questions on issues
+- Provide support to fellow users on BitBanana's [discord][discord]
 - Contribute to our documentation
 - Review pull requests
-- Help to manage issue priorities
 - Fix bugs, implement new features
-- Provide support to fellow users on BitBanana's [discord][discord].
 
 If you would like to contribute to the project code, please see the [Contributing Guide](docs/CONTRIBUTING.md)
 
