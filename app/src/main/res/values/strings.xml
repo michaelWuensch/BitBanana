@@ -462,6 +462,7 @@
     <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
     <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="lnurl_pay_comment_hint">Add a comment here</string>
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>

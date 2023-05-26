@@ -15,6 +15,9 @@ import app.michaelwuensch.bitbanana.util.UtilFunctions;
  * <p>
  * Please refer to step 3 in the following reference:
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
+ * <p>
+ * For the comment implementation refer to:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/12.md
  */
 public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 
@@ -26,6 +29,7 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
     public static final String METADATA_EMAIL = "text/email";
 
     private String metadata;
+    private int commentAllowed = 0;
 
     /**
      * In milliSatoshis
@@ -73,5 +77,13 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 
     public String getMetadataHash() {
         return UtilFunctions.sha256Hash(metadata);
+    }
+
+    public boolean isCommentAllowed() {
+        return commentAllowed != 0;
+    }
+
+    public int getCommentMaxLength() {
+        return commentAllowed;
     }
 }
