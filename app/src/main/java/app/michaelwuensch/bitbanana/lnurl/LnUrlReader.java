@@ -13,19 +13,20 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
+import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
-import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UriUtil;
+import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * This class examines a string if it is a valid lnurl.
@@ -38,93 +39,113 @@ import app.michaelwuensch.bitbanana.util.BBLog;
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/07.md
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/17.md
  */
 
 public class LnUrlReader {
     private static final String LOG_TAG = LnUrlReader.class.getSimpleName();
 
     public static void readLnUrl(Context ctx, String data, OnLnUrlReadListener listener) {
-        try {
-            // Extract fallback LNURL from URL if one is present
+        if (UriUtil.isLNURLUri(data)) {
+            // We have a lud-17 lnurl that is not bech32 encoded.
             // Please refer to the following specification:
-            // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
-            URL url = new URL(data);
-            String query = url.getQuery();
-            if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
-                data = UtilFunctions.getQueryParam(url, "lightning");
-                if (data == null) {
-                    data = UtilFunctions.getQueryParam(url, "LIGHTNING");
-                }
+            // https://github.com/fiatjaf/lnurl-rfc/blob/luds/17.md
+            String lnurl;
+            if (data.toLowerCase().contains(".onion")) {
+                lnurl = "http://" + UriUtil.removeURI(data);
+            } else {
+                lnurl = "https://" + UriUtil.removeURI(data);
             }
-        } catch (MalformedURLException ignored) {
-        }
-
-        try {
-            // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
-            String decodedLnUrl = LnurlDecoder.decode(data);
-            BBLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
-            URL decodedUrl = null;
+            initialRequest(ctx, lnurl, listener);
+        } else {
             try {
-                decodedUrl = new URL(decodedLnUrl);
-                String query = decodedUrl.getQuery();
-                // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
+                // Extract fallback LNURL from URL if one is present
                 // Please refer to the following specification:
-                // https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
-                if (query != null && query.contains("tag=login")) {
-                    String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
-                    if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
-                        listener.onValidLnUrlAuth(decodedUrl);
-                    } else {
-                        listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
+                URL url = new URL(data);
+                String query = url.getQuery();
+                if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
+                    data = UtilFunctions.getQueryParam(url, "lightning");
+                    if (data == null) {
+                        data = UtilFunctions.getQueryParam(url, "LIGHTNING");
                     }
-                    return;
                 }
-            } catch (MalformedURLException e) {
-                listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
+            } catch (MalformedURLException ignored) {
             }
 
-            BBLog.v(LOG_TAG, "LNURL: Requesting data...");
-
-            Request lnurlRequest = new Request.Builder()
-                    .url(decodedLnUrl)
-                    .build();
-
-            HttpClient.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    URL url = null;
-                    try {
-                        url = new URL(decodedLnUrl);
-                        String host = url.getHost();
-                        listener.onError(ctx.getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
-                    } catch (MalformedURLException error) {
-                        String host = ctx.getString(R.string.host);
-                        listener.onError(ctx.getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
-                        error.printStackTrace();
+            try {
+                // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
+                String decodedLnUrl = LnurlDecoder.decode(data);
+                BBLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
+                URL decodedUrl = null;
+                try {
+                    decodedUrl = new URL(decodedLnUrl);
+                    String query = decodedUrl.getQuery();
+                    // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
+                    // Please refer to the following specification:
+                    // https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
+                    if (query != null && query.contains("tag=login")) {
+                        String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
+                        if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
+                            listener.onValidLnUrlAuth(decodedUrl);
+                        } else {
+                            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                        }
+                        return;
                     }
+                } catch (MalformedURLException e) {
+                    listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
                 }
 
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    URL url = null;
-                    try {
-                        url = new URL(decodedLnUrl);
-                        String host = url.getHost();
-                        interpretLnUrlReadResponse(response.body().string(), listener, ctx, host);
-                    } catch (MalformedURLException error) {
-                        listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
-                        error.printStackTrace();
-                    }
+                initialRequest(ctx, decodedLnUrl, listener);
 
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            BBLog.e(LOG_TAG, "LNURL is invalid. Decoding failed.");
-            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
-        } catch (LnurlDecoder.NoLnUrlDataException e) {
-            listener.onNoLnUrlData();
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                BBLog.e(LOG_TAG, "LNURL is invalid. Decoding failed.");
+                listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+            } catch (LnurlDecoder.NoLnUrlDataException e) {
+                listener.onNoLnUrlData();
+            }
         }
+    }
+
+
+    private static void initialRequest(Context ctx, String lnurl, OnLnUrlReadListener listener) {
+        BBLog.v(LOG_TAG, "LNURL: Requesting data...");
+
+        Request lnurlRequest = new Request.Builder()
+                .url(lnurl)
+                .build();
+
+        HttpClient.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                URL url = null;
+                try {
+                    url = new URL(lnurl);
+                    String host = url.getHost();
+                    listener.onError(ctx.getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
+                } catch (MalformedURLException error) {
+                    String host = ctx.getString(R.string.host);
+                    listener.onError(ctx.getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
+                    error.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                URL url = null;
+                try {
+                    url = new URL(lnurl);
+                    String host = url.getHost();
+                    interpretLnUrlReadResponse(response.body().string(), listener, ctx, host);
+                } catch (MalformedURLException error) {
+                    listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                    error.printStackTrace();
+                }
+            }
+        });
     }
 
     private static void interpretLnUrlReadResponse(@NonNull String response, OnLnUrlReadListener listener, Context ctx, String host) {
@@ -173,7 +194,6 @@ public class LnUrlReader {
         }
     }
 
-
     public interface OnLnUrlReadListener {
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
@@ -190,5 +210,4 @@ public class LnUrlReader {
 
         void onNoLnUrlData();
     }
-
 }
