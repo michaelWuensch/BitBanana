@@ -9,6 +9,11 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.lightning.LightningParser;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -17,15 +22,13 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
 
 public class BitcoinStringAnalyzer {
 
     public static boolean isLnUrl(String inputString) {
+        if (UriUtil.isLNURLUri(inputString)) {
+            return true;
+        }
         try {
             URL url = new URL(inputString);
             String query = url.getQuery();

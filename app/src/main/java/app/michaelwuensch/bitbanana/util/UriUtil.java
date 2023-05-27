@@ -9,6 +9,9 @@ public class UriUtil {
     public static final String URI_PREFIX_LIGHTNING = "lightning:";
     public static final String URI_PREFIX_BITCOIN = "bitcoin:";
     public static final String URI_PREFIX_LNDCONNECT = "lndconnect://";
+    public static final String URI_PREFIX_LNURLC = "lnurlc://";
+    public static final String URI_PREFIX_LNURLP = "lnurlp://";
+    public static final String URI_PREFIX_LNURLW = "lnurlw://";
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -26,24 +29,32 @@ public class UriUtil {
         return URI_PREFIX_BITCOIN + data;
     }
 
-    public static String generateLndConnctUri(@NonNull String data) {
-        if (isLNDConnectUri(data)) {
-            return data;
-        }
-
-        return URI_PREFIX_LNDCONNECT + data;
-    }
-
-    public static boolean isLightningUri(@NonNull String data) {
+    public static boolean isLightningUri(String data) {
         return hasPrefix(URI_PREFIX_LIGHTNING, data);
     }
 
-    public static boolean isBitcoinUri(@NonNull String data) {
+    public static boolean isBitcoinUri(String data) {
         return hasPrefix(URI_PREFIX_BITCOIN, data);
     }
 
-    public static boolean isLNDConnectUri(@NonNull String data) {
+    public static boolean isLNDConnectUri(String data) {
         return hasPrefix(URI_PREFIX_LNDCONNECT, data);
+    }
+
+    public static boolean isLNURLUri(String data) {
+        return hasPrefix(URI_PREFIX_LNURLC, data) || hasPrefix(URI_PREFIX_LNURLP, data) || hasPrefix(URI_PREFIX_LNURLW, data);
+    }
+
+    public static boolean isLNURLCUri(String data) {
+        return hasPrefix(URI_PREFIX_LNURLC, data);
+    }
+
+    public static boolean isLNURLPUri(String data) {
+        return hasPrefix(URI_PREFIX_LNURLP, data);
+    }
+
+    public static boolean isLNURLWUri(String data) {
+        return hasPrefix(URI_PREFIX_LNURLW, data);
     }
 
     public static String removeURI(@NonNull String data) {
@@ -53,12 +64,22 @@ public class UriUtil {
             return data.substring(URI_PREFIX_BITCOIN.length());
         } else if (isLNDConnectUri(data)) {
             return data.substring(URI_PREFIX_LNDCONNECT.length());
+        } else if (isLNURLCUri(data)) {
+            return data.substring((URI_PREFIX_LNURLC).length());
+        } else if (isLNURLPUri(data)) {
+            return data.substring((URI_PREFIX_LNURLP).length());
+        } else if (isLNURLWUri(data)) {
+            return data.substring((URI_PREFIX_LNURLW).length());
         } else {
             return data;
         }
     }
 
-    private static boolean hasPrefix(@NonNull String prefix, @NonNull String data) {
+    private static boolean hasPrefix(String prefix, String data) {
+        if (data == null)
+            return false;
+        if (prefix == null)
+            return false;
         if (data.isEmpty() || data.length() < prefix.length()) {
             return false;
         }
