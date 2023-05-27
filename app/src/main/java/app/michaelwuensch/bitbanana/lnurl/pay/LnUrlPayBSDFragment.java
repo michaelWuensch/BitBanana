@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.TypedValue;
@@ -48,11 +49,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
@@ -62,13 +58,18 @@ import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class LnUrlPayBSDFragment extends BaseBSDFragment {
@@ -82,6 +83,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private View mSendInputsView;
     private EditText mEtAmount;
     private EditText mEtDescription;
+    private EditText mEtComment;
     private TextView mTvUnit;
     private View mDescriptionView;
     private NumpadView mNumpad;
@@ -142,6 +144,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
         mSendInputsView = view.findViewById(R.id.sendInputsView);
         mEtAmount = view.findViewById(R.id.sendAmount);
+        mEtComment = view.findViewById(R.id.inputComment);
         mTvUnit = view.findViewById(R.id.unit);
         mEtDescription = view.findViewById(R.id.sendDescription);
         mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
@@ -162,6 +165,13 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
         // set unit to current primary unit
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+
+        // Handle comment field
+        if (mPaymentData.isCommentAllowed()) {
+            mEtComment.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mPaymentData.getCommentMaxLength())});
+        } else {
+            mEtComment.setVisibility(View.GONE);
+        }
 
         // Input validation for the amount field.
         mEtAmount.addTextChangedListener(new TextWatcher() {
@@ -298,6 +308,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
                         .setAmount(mFinalChosenAmount * 1000)
+                        .setComment(mEtComment.getText().toString())
                         .build();
 
                 BBLog.v(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());

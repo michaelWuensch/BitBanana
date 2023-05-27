@@ -193,7 +193,6 @@
                         android:id="@+id/sendDescription"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
-                        android:layout_marginEnd="15dp"
                         android:background="@color/transparent"
                         android:ems="10"
                         android:enabled="false"
@@ -208,6 +207,23 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <EditText
+                    android:id="@+id/inputComment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_text_input"
+                    android:ems="10"
+                    android:enabled="true"
+                    android:hint="@string/lnurl_pay_comment_hint"
+                    android:inputType="textMultiLine"
+                    android:maxHeight="100dp"
+                    android:maxLines="5"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sendDescriptionTopLayout" />
+                />
+
                 <app.michaelwuensch.bitbanana.customView.NumpadView
                     android:id="@+id/numpadView"
                     android:layout_width="match_parent"
@@ -217,7 +233,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendDescriptionTopLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/inputComment" />
 
                 <Button
                     android:id="@+id/sendButton"

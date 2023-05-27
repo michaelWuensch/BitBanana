@@ -11,17 +11,22 @@ import app.michaelwuensch.bitbanana.util.UtilFunctions;
  * <p>
  * Please refer to step 5 in the following reference:
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
+ * <p>
+ * For the comment implementation refer to:
+ * https://github.com/fiatjaf/lnurl-rfc/blob/luds/12.md
  */
 public class LnUrlSecondPayRequest {
 
     private String mCallback;
     private long mAmount;
     private String[] mFromNodes;
+    private String mComment;
 
-    private LnUrlSecondPayRequest(String callback, long amount, String[] fromNodes) {
+    private LnUrlSecondPayRequest(String callback, long amount, String[] fromNodes, String comment) {
         mCallback = callback;
         mAmount = amount;
         mFromNodes = fromNodes;
+        mComment = comment;
     }
 
     public String getCallback() {
@@ -36,10 +41,14 @@ public class LnUrlSecondPayRequest {
         return mFromNodes;
     }
 
+    public String getComment() {
+        return mComment;
+    }
+
     public String requestAsString() {
         String paramStart = mCallback.contains("?") ? "&" : "?";
         if (mFromNodes == null) {
-            return mCallback + paramStart + "amount=" + mAmount + "&nonce=" + generateNonce();
+            return mCallback + paramStart + "amount=" + mAmount + appendComment() + "&nonce=" + generateNonce();
         } else {
             String fromNodesString = "";
             for (int i = 0; i < mFromNodes.length; i++) {
@@ -49,7 +58,7 @@ public class LnUrlSecondPayRequest {
                     fromNodesString = fromNodesString + mFromNodes[i] + ",";
                 }
             }
-            return mCallback + paramStart + "amount=" + mAmount + "&nonce=" + generateNonce() + "&fromnodes=" + fromNodesString;
+            return mCallback + paramStart + "amount=" + mAmount + appendComment() + "&nonce=" + generateNonce() + "&fromnodes=" + fromNodesString;
         }
     }
 
@@ -58,6 +67,7 @@ public class LnUrlSecondPayRequest {
         private String mCallback;
         private Long mAmount;
         private String[] mFromNodes;
+        private String mComment;
 
         public Builder setCallback(@NonNull String callback) {
             this.mCallback = callback;
@@ -77,8 +87,14 @@ public class LnUrlSecondPayRequest {
             return this;
         }
 
+        public Builder setComment(String comment) {
+            this.mComment = comment;
+
+            return this;
+        }
+
         public LnUrlSecondPayRequest build() {
-            return new LnUrlSecondPayRequest(mCallback, mAmount, mFromNodes);
+            return new LnUrlSecondPayRequest(mCallback, mAmount, mFromNodes, mComment);
         }
     }
 
@@ -86,5 +102,11 @@ public class LnUrlSecondPayRequest {
         byte[] b = new byte[8];
         new Random().nextBytes(b);
         return UtilFunctions.bytesToHex(b);
+    }
+
+    private String appendComment() {
+        if (mComment == null || mComment.isEmpty())
+            return "";
+        return "&comment=" + getComment();
     }
 }
