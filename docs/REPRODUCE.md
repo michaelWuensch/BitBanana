@@ -5,10 +5,7 @@
 If an application available on the app store cannot be reproduced by using the given source code, it poses a significant security threat. In such cases, the developer could potentially add hidden code and vulnerabilities that may allow them to gain unauthorized access to sensitive user data or even steal their funds.
 
 
-## Instructions
-
-
-### Verify Github release
+## Verify Github release
 Download or clone the source code from github.  
 To verify the release files distributed with github releases, first build the APK:
 ```
@@ -33,7 +30,7 @@ $ diff --brief --recursive built/ official/
 
 If this command lists any files, this means that some of the files are not identical which in turn means the build cannot be verified. If it does not list any differences, the build is verified!
 
-### Verify Play Store release
+## Verify Play Store release
 Verifying a Play Store release unfortunatelly got more complicated since Google enforces usage of Android App Bundles (AAB).  
 To verify the release files distributed on Play Store, first build the AAB:
 ```
