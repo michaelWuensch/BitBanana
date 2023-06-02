@@ -384,12 +384,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     }
 
 
-    private class ChannelsPagerAdapter extends FragmentPagerAdapter {
+    public class ChannelsPagerAdapter extends FragmentPagerAdapter {
         private ChannelListFragment mOpenChannelsList;
         private ChannelListFragment mClosedChannelsList;
 
         public ChannelsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             mOpenChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
             mClosedChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
         }
