@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 
 import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
+import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpRequestedPayerData;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 /**
@@ -30,6 +31,7 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 
     private String metadata;
     private int commentAllowed = 0;
+    private LnUrlpRequestedPayerData payerData;
 
     /**
      * In milliSatoshis
@@ -85,5 +87,13 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
 
     public int getCommentMaxLength() {
         return commentAllowed;
+    }
+
+    public boolean requestsPayerData() {
+        return payerData != null;
+    }
+
+    public LnUrlpRequestedPayerData getRequestedPayerData() {
+        return payerData;
     }
 }
