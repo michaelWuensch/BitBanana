@@ -235,6 +235,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/inputComment" />
 
+                <app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView
+                    android:id="@+id/payerDataView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
+
                 <Button
                     android:id="@+id/sendButton"
                     android:layout_width="match_parent"
@@ -249,7 +258,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
+                    app:layout_constraintTop_toBottomOf="@id/payerDataView" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

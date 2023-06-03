@@ -246,6 +246,7 @@
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data BitBanana can handle.</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">System Language</string>
+    <string name="settings_payer_data">Payment identification</string>
 
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_scramblePin">Scramble PIN Screen</string>
@@ -428,6 +429,8 @@
     <string name="help_dialog_forwarding">This view shows all the payments that you forwarded for other participants of the lightning network. Moreover you can see the funds you earned for providing that service.\n\nIn the lightning network channels are used for payments. When two participants want to send funds to each other but they do not have a channel open between them, they will have to find other participants in the network that have.\n\nExample:\nAlice wants to send funds to Carol, but does not have a channel with Carol. A direct payment is therefore impossible. But if Alice has a channel to Bob and Bob has a channel to Carol there is a solution. Bob can forward the payment to Carol.\n\nPayments often use multiple forwardings (hops) to finally reach their destination.</string>
     <string name="help_dialog_channels">The list of lightning channels represents your lightning funds. Lightning channels are necessary to participate in the lightning network that allows instant and cheap bitcoin payments.\n\nTo \"convert\" on-chain funds to lightning funds you have to open a channel. To \"convert\" lightning funds back to on-chain funds, you have to close an existing channel.\nBoth operation, opening and closing channels, are achieved by an on-chain transaction that costs fees. Therefore, try to keep channels open for as long as possible!\n\nAn easy way to get started with opening channels is to use lightningnetwork.plus.</string>
     <string name="help_dialog_connect_node_help">Unfortunately these QR-Codes are so big that some devices are not able to scan them. If this is the case for you will have to fall back to copy/paste.\n\nIf you need further help, please refer to our setup documentation.</string>
+    <string name="help_dialog_payer_data_settings">Some payees support or even require that you send additional information about yourself to them. For convenience, you can set default values here, so you do not have to enter this information every time. This data is only stored locally on the phone.\n\nPlease note that even with defaults set you will still be able to modify the data when doing a payment. You will also still be able to choose which data is sent at all.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.) </string>
+    <string name="help_dialog_payer_data_payment">This payee supports or even requires that you send additional information about yourself to him.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.)\n\nIf a checkmark cannot be unchecked then this data is marked as mandatory by the service. If you don\'t want to send that data you\'ll have to cancel the payment.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -464,6 +467,13 @@
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="lnurl_pay_comment_hint">Add a comment here</string>
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
+    <string name="lnurl_payer_data_name">Name</string>
+    <string name="lnurl_payer_data_identifier">Lightning Address</string>
+    <string name="lnurl_payer_data_identifier_explanation">A lightning address is like an email address, but for Bitcoin!</string>
+    <string name="lnurl_payer_data_email">Email</string>
+    <string name="lnurl_payer_data_not_supported">This payment requires an authentication type that is not yet supported by BitBanana.</string>
+    <string name="lnurl_payer_data_description">Information for payee</string>
+    <string name="lnurl_payer_data_choose">Choose which data to send:</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
 

@@ -1,7 +1,5 @@
 package app.michaelwuensch.bitbanana.lnurl.pay.payerData;
 
-import androidx.annotation.NonNull;
-
 import com.google.common.net.UrlEscapers;
 import com.google.gson.Gson;
 
@@ -32,6 +30,14 @@ public class LnUrlpPayerData implements Serializable {
         return UrlEscapers.urlFormParameterEscaper().escape(payerDataJson);
     }
 
+    public String getAsJsonString() {
+        return new Gson().toJson(this);
+    }
+
+    public boolean isEmpty() {
+        return new Gson().toJson(this).equals("{}");
+    }
+
     public static class Builder {
         private String mName;
         private String mPubkey;
@@ -39,27 +45,27 @@ public class LnUrlpPayerData implements Serializable {
         private String mEmail;
         private LnUrlpAuthData mAuthData;
 
-        public LnUrlpPayerData.Builder setName(@NonNull String name) {
+        public LnUrlpPayerData.Builder setName(String name) {
             this.mName = name;
             return this;
         }
 
-        public LnUrlpPayerData.Builder setPubkey(@NonNull String pubkey) {
+        public LnUrlpPayerData.Builder setPubkey(String pubkey) {
             this.mPubkey = pubkey;
             return this;
         }
 
-        public LnUrlpPayerData.Builder setIdentifier(@NonNull String identifier) {
+        public LnUrlpPayerData.Builder setIdentifier(String identifier) {
             this.mIdentifier = identifier;
             return this;
         }
 
-        public LnUrlpPayerData.Builder setEmail(@NonNull String email) {
+        public LnUrlpPayerData.Builder setEmail(String email) {
             this.mEmail = email;
             return this;
         }
 
-        public LnUrlpPayerData.Builder setAuthData(@NonNull LnUrlpAuthData authData) {
+        public LnUrlpPayerData.Builder setAuthData(LnUrlpAuthData authData) {
             this.mAuthData = authData;
             return this;
         }

@@ -81,6 +81,10 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
         return UtilFunctions.sha256Hash(metadata);
     }
 
+    public String getMetadata() {
+        return metadata;
+    }
+
     public boolean isCommentAllowed() {
         return commentAllowed != 0;
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen"
+    android:title="@string/navigation_settings">
+
+    <EditTextPreference
+        android:defaultValue=""
+        android:key="payerDataName"
+        android:title="@string/lnurl_payer_data_name"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:defaultValue=""
+        android:dialogMessage="@string/lnurl_payer_data_identifier_explanation"
+        android:key="payerDataIdentifier"
+        android:title="@string/lnurl_payer_data_identifier"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:defaultValue=""
+        android:key="payerDataEmail"
+        android:title="@string/lnurl_payer_data_email"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+</PreferenceScreen>
