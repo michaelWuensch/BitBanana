@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Random;
 
+import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 /**
@@ -19,14 +20,14 @@ public class LnUrlSecondPayRequest {
 
     private String mCallback;
     private long mAmount;
-    private String[] mFromNodes;
     private String mComment;
+    private LnUrlpPayerData mPayerData;
 
-    private LnUrlSecondPayRequest(String callback, long amount, String[] fromNodes, String comment) {
+    private LnUrlSecondPayRequest(String callback, long amount, String comment, LnUrlpPayerData payerData) {
         mCallback = callback;
         mAmount = amount;
-        mFromNodes = fromNodes;
         mComment = comment;
+        mPayerData = payerData;
     }
 
     public String getCallback() {
@@ -37,67 +38,48 @@ public class LnUrlSecondPayRequest {
         return mAmount;
     }
 
-    public String[] getFromNodes() {
-        return mFromNodes;
-    }
-
     public String getComment() {
         return mComment;
     }
 
     public String requestAsString() {
         String paramStart = mCallback.contains("?") ? "&" : "?";
-        if (mFromNodes == null) {
-            return mCallback + paramStart + "amount=" + mAmount + appendComment() + "&nonce=" + generateNonce();
-        } else {
-            String fromNodesString = "";
-            for (int i = 0; i < mFromNodes.length; i++) {
-                if (i == mFromNodes.length - 1) {
-                    fromNodesString = fromNodesString + mFromNodes[i];
-                } else {
-                    fromNodesString = fromNodesString + mFromNodes[i] + ",";
-                }
-            }
-            return mCallback + paramStart + "amount=" + mAmount + appendComment() + "&nonce=" + generateNonce() + "&fromnodes=" + fromNodesString;
-        }
+        return mCallback + paramStart + "amount=" + mAmount + appendComment() + appendPayerData() + "&nonce=" + generateNonce();
     }
 
 
     public static class Builder {
         private String mCallback;
         private Long mAmount;
-        private String[] mFromNodes;
         private String mComment;
+        private LnUrlpPayerData mPayerData;
 
         public Builder setCallback(@NonNull String callback) {
             this.mCallback = callback;
-
             return this;
         }
 
         public Builder setAmount(@NonNull Long amount) {
             this.mAmount = amount;
-
-            return this;
-        }
-
-        public Builder setFromNodes(String[] fromNodes) {
-            this.mFromNodes = fromNodes;
-
             return this;
         }
 
         public Builder setComment(String comment) {
             this.mComment = comment;
+            return this;
+        }
 
+        public Builder setPayerData(LnUrlpPayerData payerData) {
+            this.mPayerData = payerData;
             return this;
         }
 
         public LnUrlSecondPayRequest build() {
-            return new LnUrlSecondPayRequest(mCallback, mAmount, mFromNodes, mComment);
+            return new LnUrlSecondPayRequest(mCallback, mAmount, mComment, mPayerData);
         }
     }
 
+    // The nonce prevents request caching on the server. It is actually no longer part of the spec but we keep it for now.
     private String generateNonce() {
         byte[] b = new byte[8];
         new Random().nextBytes(b);
@@ -108,5 +90,12 @@ public class LnUrlSecondPayRequest {
         if (mComment == null || mComment.isEmpty())
             return "";
         return "&comment=" + getComment();
+    }
+
+    private String appendPayerData() {
+        if (mPayerData == null) {
+            return "";
+        }
+        return "&payerdata=" + mPayerData.getUrlEncodedPayerData();
     }
 }
