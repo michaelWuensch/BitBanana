@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.contacts;
 
+import static app.michaelwuensch.bitbanana.ScanActivity.EXTRA_GENERIC_SCAN_DATA;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,14 +20,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-
-import static app.michaelwuensch.bitbanana.ScanActivity.EXTRA_GENERIC_SCAN_DATA;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ManageContactsActivity extends BaseAppCompatActivity implements ContactSelectListener {
 
@@ -113,7 +115,6 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     }
 
     private void updateContactDisplayList() {
-
         mContactItems.clear();
         ContactsManager contactsManager = ContactsManager.getInstance();
         mContactItems.addAll(contactsManager.getAllContacts());
@@ -126,6 +127,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         }
 
         mAdapter.replaceAll(mContactItems);
+        BBLog.v(LOG_TAG, "Contacts list updated!");
     }
 
     @Override
@@ -134,24 +136,43 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
 
         if (requestCode == REQUEST_CODE_ADD_CONTACT && resultCode == RESULT_OK) {
             if (data != null) {
-                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
-
                 ContactsManager cm = ContactsManager.getInstance();
-                if (cm.doesContactDataExist(nodeUri.getPubKey())) {
-                    Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                if (nodeUri != null) {
+                    if (cm.doesContactDataExist(nodeUri.getPubKey())) {
+                        Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                    } else {
+                        cm.showContactNameInputDialog(this, null, nodeUri.getPubKey(), Contact.ContactType.NODEPUBKEY, new ContactsManager.OnNameConfirmedListener() {
+                            @Override
+                            public void onNameAccepted() {
+                                mAdapter.add(cm.getContactByContactData(nodeUri.getPubKey()));
+                                mEmptyListText.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onCancelled() {
+
+                            }
+                        });
+                    }
                 } else {
-                    cm.showContactNameInputDialog(this, nodeUri.getPubKey(), new ContactsManager.OnNameConfirmedListener() {
-                        @Override
-                        public void onNameAccepted() {
-                            mAdapter.add(cm.getContactByContactData(nodeUri.getPubKey()));
-                            mEmptyListText.setVisibility(View.GONE);
-                        }
+                    LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                    if (cm.doesContactDataExist(lnAddress.toString())) {
+                        Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                    } else {
+                        cm.showContactNameInputDialog(this, lnAddress.getUsername(), lnAddress.toString(), Contact.ContactType.LNADDRESS, new ContactsManager.OnNameConfirmedListener() {
+                            @Override
+                            public void onNameAccepted() {
+                                mAdapter.add(cm.getContactByContactData(lnAddress.toString()));
+                                mEmptyListText.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onCancelled() {
+                            @Override
+                            public void onCancelled() {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -159,8 +180,10 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         if (requestCode == REQUEST_CODE_CONTACT_ACTION) {
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                 Intent intent = new Intent();
                 intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, nodeUri);
+                intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, lnAddress);
                 setResult(resultCode, intent);
                 finish();
             }
@@ -179,7 +202,13 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                     goToContactDetails(contact);
                 } else {
                     Intent intent = new Intent();
-                    intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, contact.getAsNodeUri());
+                    switch (contact.getContactType()) {
+                        case NODEPUBKEY:
+                            intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, contact.getAsNodeUri());
+                            break;
+                        case LNADDRESS:
+                            intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, contact.getLightningAddress());
+                    }
                     setResult(ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY, intent);
                     finish();
                 }

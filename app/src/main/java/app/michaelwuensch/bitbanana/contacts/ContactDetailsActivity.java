@@ -14,13 +14,13 @@ import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.UserAvatarView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.R;
 
 public class ContactDetailsActivity extends BaseAppCompatActivity {
 
@@ -30,7 +30,9 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
     private String mDataToEncode;
     private Button mBtnContactName;
     private UserAvatarView mUserAvatarView;
-    private TextView mTvPublicKey;
+    private View mContactsDetailsView;
+    private TextView mTVContactType;
+    private TextView mTvDetailedData;
     private Contact mContact;
     private BottomNavigationView mBottomButtons;
 
@@ -48,13 +50,26 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
         mUserAvatarView = findViewById(R.id.userAvatarView);
         mBtnContactName = findViewById(R.id.contactNameButton);
         mBottomButtons = findViewById(R.id.bottomButtons);
-        mTvPublicKey = findViewById(R.id.publicKey);
+        mTvDetailedData = findViewById(R.id.detailedData);
+        mTVContactType = findViewById(R.id.contactType);
+        mContactsDetailsView = findViewById(R.id.contactDetailsView);
 
+        switch (mContact.getContactType()) {
+            case NODEPUBKEY:
+                mUserAvatarView.setupWithNodeUri(new LightningNodeUri.Builder().setPubKey(mContact.getContactData()).build(), true);
+                mTVContactType.setText(getApplicationContext().getString(R.string.contact_type_ln_node));
+                break;
+            case LNADDRESS:
+                mBottomButtons.getMenu().clear(); //clear old inflated items.
+                mBottomButtons.inflateMenu(R.menu.contact_details_menu_bottom_ln_address);
+                mUserAvatarView.setupWithLNAddress(mContact.getLightningAddress(), true);
+                mTVContactType.setText(getApplicationContext().getString(R.string.contact_type_ln_address));
+                break;
+        }
 
         mDataToEncode = mContact.getContactData();
-        mUserAvatarView.setupWithNodeUri(new LightningNodeUri.Builder().setPubKey(mContact.getContactData()).build(), true);
         mBtnContactName.setText(mContact.getAlias());
-        mTvPublicKey.setText(mContact.getContactData());
+        mTvDetailedData.setText(mContact.getContactData());
 
         // Action when clicked on contact name
         mBtnContactName.setOnClickListener(new OnSingleClickListener() {
@@ -67,13 +82,13 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
         mUserAvatarView.setOnStateChangedListener(new UserAvatarView.OnStateChangedListener() {
             @Override
             public void onReveal() {
-                mTvPublicKey.setVisibility(View.VISIBLE);
+                mContactsDetailsView.setVisibility(View.VISIBLE);
                 mBtnContactName.setVisibility(View.GONE);
             }
 
             @Override
             public void onHide() {
-                mTvPublicKey.setVisibility(View.GONE);
+                mContactsDetailsView.setVisibility(View.GONE);
                 mBtnContactName.setVisibility(View.VISIBLE);
             }
         });
@@ -93,15 +108,29 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
                         startActivity(Intent.createChooser(shareIntent, title));
                         break;
                     case R.id.action_copy:
-                        // Ask user to confirm risks about clipboard manipulation
-                        new UserGuardian(ContactDetailsActivity.this, () -> {
-                            // Copy data to clipboard
-                            ClipBoardUtil.copyToClipboard(getApplicationContext(), "NodePubKey", mDataToEncode);
-                        }).securityCopyToClipboard(mDataToEncode, UserGuardian.CLIPBOARD_DATA_TYPE_NODE_URI);
+                        switch (mContact.getContactType()) {
+                            case NODEPUBKEY:
+                                // Ask user to confirm risks about clipboard manipulation
+                                new UserGuardian(ContactDetailsActivity.this, () -> {
+                                    // Copy data to clipboard
+                                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "NodePubKey", mDataToEncode);
+                                }).securityCopyToClipboard(mDataToEncode, UserGuardian.CLIPBOARD_DATA_TYPE_NODE_URI);
+                                break;
+                            case LNADDRESS:
+                                ClipBoardUtil.copyToClipboard(getApplicationContext(), "Lightning Address", mDataToEncode);
+                                break;
+                        }
                         break;
                     case R.id.action_send_money:
                         Intent intent = new Intent();
-                        intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, mContact.getAsNodeUri());
+                        switch (mContact.getContactType()) {
+                            case NODEPUBKEY:
+                                intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, mContact.getAsNodeUri());
+                                break;
+                            case LNADDRESS:
+                                intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, mContact.getLightningAddress());
+                                break;
+                        }
                         setResult(RESPONSE_CODE_SEND_MONEY, intent);
                         finish();
                         break;
@@ -120,7 +149,7 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
 
     private void rename() {
         ContactsManager cm = ContactsManager.getInstance();
-        cm.showContactNameInputDialog(ContactDetailsActivity.this, mContact.getContactData(), new ContactsManager.OnNameConfirmedListener() {
+        cm.showContactNameInputDialog(ContactDetailsActivity.this, mContact.getAlias(), mContact.getContactData(), mContact.getContactType(), new ContactsManager.OnNameConfirmedListener() {
             @Override
             public void onNameAccepted() {
                 mContact = cm.getContactByContactData(mContact.getContactData());

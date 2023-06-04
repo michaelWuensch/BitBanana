@@ -257,11 +257,12 @@ public class ContactsManager {
      * If the nodePubKey is not yet in your contacts confirming this dialog will create it and call apply() afterwards.
      * If the nodePubKey is already in your contacts, confirming this dialog will rename it and call apply() afterwards.
      *
-     * @param ctx        Context
-     * @param nodePubKey pubKey of the contact
-     * @param listener   used to get a callback when name input finished. Can be null.
+     * @param ctx         Context
+     * @param prefill     The value that will already be in the text input field. If this is null it will try to autofill it.
+     * @param contactData Data of the contact
+     * @param listener    used to get a callback when name input finished. Can be null.
      */
-    public void showContactNameInputDialog(Context ctx, @NonNull String nodePubKey, @Nullable OnNameConfirmedListener listener) {
+    public void showContactNameInputDialog(Context ctx, String prefill, @NonNull String contactData, Contact.ContactType contactType, @Nullable OnNameConfirmedListener listener) {
         InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder adb = new AlertDialog.Builder(ctx);
         adb.setTitle(R.string.contact_name);
@@ -271,21 +272,27 @@ public class ContactsManager {
         ContactsManager cm = ContactsManager.getInstance();
 
         final EditText input = viewInflated.findViewById(R.id.input);
-        if (AliasManager.getInstance().hasAliasInfo(nodePubKey))
-            input.setText(AliasManager.getInstance().getAlias(nodePubKey));
-        else {
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-                Wallet.getInstance().fetchNodeInfoFromLND(nodePubKey, false, true, new Wallet.NodeInfoFetchedListener() {
-                    @Override
-                    public void onNodeInfoFetched(String pubkey) {
-                        if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
-                            NodeAliasInfo nodeAliasInfo = AliasManager.getInstance().getNodeAliasInfo(pubkey);
-                            if (!nodeAliasInfo.AliasEqualsPubkey()) {
-                                input.setText(nodeAliasInfo.getAlias());
+        if (prefill != null) {
+            input.setText(prefill);
+        } else {
+            if (contactType == Contact.ContactType.NODEPUBKEY) {
+                if (AliasManager.getInstance().hasAliasInfo(contactData))
+                    input.setText(AliasManager.getInstance().getAlias(contactData));
+                else {
+                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                        Wallet.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet.NodeInfoFetchedListener() {
+                            @Override
+                            public void onNodeInfoFetched(String pubkey) {
+                                if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
+                                    NodeAliasInfo nodeAliasInfo = AliasManager.getInstance().getNodeAliasInfo(pubkey);
+                                    if (!nodeAliasInfo.AliasEqualsPubkey()) {
+                                        input.setText(nodeAliasInfo.getAlias());
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
-                });
+                }
             }
         }
         input.setShowSoftInputOnFocus(true);
@@ -322,10 +329,10 @@ public class ContactsManager {
                 if (input.getText().toString().trim().isEmpty()) {
                     Toast.makeText(ctx, R.string.error_empty_node_name, Toast.LENGTH_LONG).show();
                 } else {
-                    if (cm.doesContactDataExist(nodePubKey)) {
-                        cm.renameContact(cm.getContactByContactData(nodePubKey), input.getText().toString());
+                    if (cm.doesContactDataExist(contactData)) {
+                        cm.renameContact(cm.getContactByContactData(contactData), input.getText().toString());
                     } else {
-                        cm.addContact(Contact.ContactType.NODEPUBKEY, nodePubKey, input.getText().toString());
+                        cm.addContact(contactType, contactData, input.getText().toString());
                     }
                     try {
                         cm.apply();

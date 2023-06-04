@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
@@ -68,7 +69,7 @@ public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
         // Action when clicked on "Add Contact" Button
         btnAddContact.setOnClickListener(v -> {
             ContactsManager cm1 = ContactsManager.getInstance();
-            cm1.showContactNameInputDialog(getActivity(), mNodeUri.getPubKey(), new ContactsManager.OnNameConfirmedListener() {
+            cm1.showContactNameInputDialog(getActivity(), null, mNodeUri.getPubKey(), Contact.ContactType.NODEPUBKEY, new ContactsManager.OnNameConfirmedListener() {
                 @Override
                 public void onNameAccepted() {
                     Intent intent = new Intent(getActivity(), ContactDetailsActivity.class);

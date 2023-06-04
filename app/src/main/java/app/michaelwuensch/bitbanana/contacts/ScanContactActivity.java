@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -14,6 +15,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 public class ScanContactActivity extends BaseScannerActivity {
 
     public static final String EXTRA_NODE_URI = "EXTRA_NODE_URI";
+    public static final String EXTRA_LN_ADDRESS = "EXTRA_LN_ADDRESS";
     private static final String LOG_TAG = ScanContactActivity.class.getSimpleName();
 
     @Override
@@ -54,8 +56,13 @@ public class ScanContactActivity extends BaseScannerActivity {
         LightningNodeUri nodeUri = LightningParser.parseNodeUri(rawData);
 
         if (nodeUri == null) {
-            showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
-            return false;
+            LNAddress lnAddress = new LNAddress(rawData);
+            if (lnAddress.isValid()) {
+                return finishWithLNAddress(lnAddress);
+            } else {
+                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                return false;
+            }
         } else {
             return finishWithNode(nodeUri);
         }
@@ -69,5 +76,11 @@ public class ScanContactActivity extends BaseScannerActivity {
         return true;
     }
 
-
+    private boolean finishWithLNAddress(LNAddress lnAddress) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_LN_ADDRESS, lnAddress);
+        setResult(RESULT_OK, intent);
+        finish();
+        return true;
+    }
 }

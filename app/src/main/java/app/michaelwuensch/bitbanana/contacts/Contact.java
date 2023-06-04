@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.UUID;
 
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 
@@ -44,6 +45,10 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     public LightningNodeUri getAsNodeUri() {
         return LightningParser.parseNodeUri(contactData);
+    }
+
+    public LNAddress getLightningAddress() {
+        return new LNAddress(this.contactData);
     }
 
 
