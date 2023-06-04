@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/payerDataCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/payerDataDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxWidth="120dp"
+        android:maxLength="13"
+        android:paddingStart="10dp"
+        android:paddingEnd="15dp"
+        android:singleLine="true"
+        android:textSize="18sp"
+        tools:text="LN Address" />
+
+    <EditText
+        android:id="@+id/payerDataInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_text_input_seablue_gradient"
+        android:enabled="false"
+        android:gravity="center_vertical"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:scrollbars="vertical" />
+</LinearLayout>

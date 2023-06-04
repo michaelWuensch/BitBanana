@@ -33,7 +33,6 @@ import androidx.transition.TransitionManager;
 import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
-import com.github.lightningnetwork.lnd.lnrpc.SendRequest;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.gson.Gson;
 
@@ -57,6 +56,8 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
+import app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -64,6 +65,7 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import okhttp3.Call;
@@ -90,6 +92,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private Button mBtnSend;
     private TextView mTvSuccessActionText;
     private TextView mTvPayee;
+    private PayerDataView mPayerDataView;
 
     private long mFixedAmount;
     private boolean mAmountValid = true;
@@ -103,6 +106,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
     private Handler mHandler;
     private LnUrlPayResponse mPaymentData;
+    private LnUrlpPayerData mPayerData;
 
     public static LnUrlPayBSDFragment createLnUrlPayDialog(LnUrlPayResponse response) {
         Bundle bundle = new Bundle();
@@ -152,6 +156,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mNumpad = view.findViewById(R.id.numpadView);
         mBtnSend = view.findViewById(R.id.sendButton);
         mTvSuccessActionText = view.findViewById(R.id.successActionText);
+        mPayerDataView = view.findViewById(R.id.payerDataView);
 
         mBSDScrollableMainView.setTitle(R.string.pay);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -171,6 +176,16 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             mEtComment.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mPaymentData.getCommentMaxLength())});
         } else {
             mEtComment.setVisibility(View.GONE);
+        }
+
+        // Handle payer data view
+        if (mPaymentData.requestsPayerData()) {
+            mPayerDataView.setupView(mPaymentData.getRequestedPayerData(), getActivity());
+            mPayerDataView.setVisibility(View.VISIBLE);
+            if (mPaymentData.getRequestedPayerData().isAuthMandatory()) {
+                // We do not support that yet
+                switchToFailedScreen(getContext().getString(R.string.lnurl_payer_data_not_supported));
+            }
         }
 
         // Input validation for the amount field.
@@ -304,14 +319,27 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     mFinalChosenAmount = mFixedAmount;
                 }
 
+                // Gather Payer Data
+                if (mPaymentData.requestsPayerData()) {
+                    mPayerData = mPayerDataView.getData();
+                    if (mPayerData.isEmpty()) {
+                        BBLog.v(LOG_TAG, "Payer identification data was empty.");
+                        mPayerData = null;
+                    }
+                } else {
+                    mPayerData = null;
+                }
+
                 // Create send request
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
                         .setAmount(mFinalChosenAmount * 1000)
                         .setComment(mEtComment.getText().toString())
+                        .setPayerData(mPayerData)
                         .build();
 
-                BBLog.v(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());
+                BBLog.d(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());
+
 
                 okhttp3.Request lnUrlRequest = new Request.Builder()
                         .url(lnUrlSecondPayRequest.requestAsString())
@@ -423,6 +451,13 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     .subscribe(payReq -> {
                         BBLog.v(LOG_TAG, payReq.toString());
 
+                        String metadataHash;
+                        if (mPayerData == null) {
+                            metadataHash = mPaymentData.getMetadataHash();
+                        } else {
+                            metadataHash = UtilFunctions.sha256Hash(mPaymentData.getMetadata() + mPayerData.getAsJsonString());
+                        }
+
                         if (payReq.getTimestamp() + payReq.getExpiry() < System.currentTimeMillis() / 1000) {
                             // Show error: payment request expired.
                             BBLog.e(LOG_TAG, "LNURL: Payment request expired.");
@@ -434,15 +469,12 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         } else if (payReq.getNumSatoshis() != mFinalChosenAmount) {
                             BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (!payReq.getDescriptionHash().equals(mPaymentData.getMetadataHash())) {
+                        } else if (!payReq.getDescriptionHash().equals(metadataHash)) {
                             BBLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
                             switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                         } else {
-                            SendRequest sendRequest = SendRequest.newBuilder()
-                                    .setPaymentRequest(lnUrlPaySecondResponse.getPaymentRequest())
-                                    .build();
                             SendPaymentRequest sendPaymentRequest = PaymentUtil.prepareMultiPathPayment(payReq, lnUrlPaySecondResponse.getPaymentRequest());
-
+                            BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
                             sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
                         }
                     }, throwable -> {

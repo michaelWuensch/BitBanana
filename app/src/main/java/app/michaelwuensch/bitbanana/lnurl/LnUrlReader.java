@@ -173,7 +173,6 @@ public class LnUrlReader {
                     listener.onValidLnUrlWithdraw(lnUrlWithdrawResponse);
                 } else if (lnUrlResponse.isPayRequest()) {
                     BBLog.d(LOG_TAG, "LNURL: valid pay request data received...");
-                    BBLog.w(LOG_TAG, response);
                     LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(response, LnUrlPayResponse.class);
                     listener.onValidLnUrlPay(lnUrlPayResponse);
                 } else if (lnUrlResponse.isChannelRequest()) {

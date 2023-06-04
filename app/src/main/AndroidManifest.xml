@@ -115,6 +115,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsPayerDataActivity"
+            android:label="@string/settings_payer_data"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"
