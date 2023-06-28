@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.UUID;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
@@ -88,6 +89,17 @@ public class Contact implements Comparable<Contact>, Serializable {
                 return valueOf(enumAsString);
             } catch (Exception ex) {
                 return NODEPUBKEY;
+            }
+        }
+
+        public int getTitle() {
+            switch (this) {
+                case NODEPUBKEY:
+                    return R.string.node;
+                case LNADDRESS:
+                    return R.string.ln_address;
+                default:
+                    return R.string.node;
             }
         }
     }

@@ -136,6 +136,9 @@ dependencies {
     // Library for the avatar images
     implementation 'com.github.michaelWuensch:avathor-android-library:1.2.0'
 
+    // Expandable floating action button menus
+    implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
+
     // Tor implementation
     implementation "io.matthewnelson.topl-android:tor-binary:0.4.6.5"
     implementation "io.matthewnelson.topl-android:topl-service:2.1.2"

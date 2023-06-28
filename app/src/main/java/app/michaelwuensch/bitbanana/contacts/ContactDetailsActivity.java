@@ -63,7 +63,7 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
                 mBottomButtons.getMenu().clear(); //clear old inflated items.
                 mBottomButtons.inflateMenu(R.menu.contact_details_menu_bottom_ln_address);
                 mUserAvatarView.setupWithLNAddress(mContact.getLightningAddress(), true);
-                mTVContactType.setText(getApplicationContext().getString(R.string.contact_type_ln_address));
+                mTVContactType.setText(getApplicationContext().getString(R.string.ln_address));
                 break;
         }
 

@@ -143,6 +143,12 @@
             android:label="@string/add_contact"
             android:screenOrientation="portrait" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.contacts.ManualAddContactActivity"
+            android:label="@string/add_contact"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.contacts.ManageContactsActivity"
             android:label="@string/activity_manage_contacts"
             android:screenOrientation="portrait"

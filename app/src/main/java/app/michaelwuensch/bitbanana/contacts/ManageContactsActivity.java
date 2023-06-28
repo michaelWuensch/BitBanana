@@ -43,6 +43,9 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     private ContactItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mFab;
+    private View mVEFab;
+    private View mVEFabOptionManually;
+    private View mVEFabOptionScan;
     private View mContactsHeaderLayout;
     private ManualSendInputView mManualInput;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -57,7 +60,9 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_contacts);
 
-        mFab = findViewById(R.id.fab);
+        mVEFab = findViewById(R.id.expandable_fab_layout);
+        mVEFabOptionManually = findViewById(R.id.efabManualOption);
+        mVEFabOptionScan = findViewById(R.id.efabScanOption);
         mContactsHeaderLayout = findViewById(R.id.contactsHeaderLayout);
         mManualInput = findViewById(R.id.manualInput);
 
@@ -79,7 +84,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                 break;
             case MODE_OPEN_CHANNEL:
                 setTitle(R.string.activity_manage_contacts_open_channel_mode);
-                mFab.setVisibility(View.GONE);
+                mVEFab.setVisibility(View.GONE);
                 break;
         }
 
@@ -98,12 +103,21 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mRecyclerView.setAdapter(mAdapter);
 
 
-        mFab.setOnClickListener(new View.OnClickListener() {
+        mVEFabOptionScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add a new contact
+                // Add a new contact by scanning
                 Intent intent = new Intent(ManageContactsActivity.this, ScanContactActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD_CONTACT);
+            }
+        });
+
+        mVEFabOptionManually.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Add a new contact manually
+                Intent intent = new Intent(ManageContactsActivity.this, ManualAddContactActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -273,7 +287,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     }
 
     private void setupSendMode() {
-        mFab.setVisibility(View.GONE);
+        mVEFab.setVisibility(View.GONE);
         mContactsHeaderLayout.setVisibility(View.VISIBLE);
         mManualInput.setVisibility(View.VISIBLE);
         mManualInput.setupView(mCompositeDisposable);

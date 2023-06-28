@@ -91,6 +91,7 @@
     <string name="withdraw">Withdraw</string>
     <string name="unknown">Unknown</string>
     <string name="scan">Scan</string>
+    <string name="manually">Manually</string>
     <string name="settings">Settings</string>
     <string name="support">Support</string>
     <string name="contribute">Contribute</string>
@@ -104,6 +105,7 @@
     <string name="notConnected">Not connected</string>
     <string name="save">Save</string>
     <string name="documentation">Documentation</string>
+    <string name="pubkey">Pubkey</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -322,7 +324,8 @@
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the nodes connection settings might also solve your problem.</string>
     <string name="error_wrong_password">Wrong password</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="error_channel_open_node_setup">You first have to connect to a node before opening a channel.</string>
     <string name="error_connect_peer">Could not establish connection to peer node.</string>
     <string name="error_connect_peer_refused">Connection has been refused by peer.</string>
@@ -352,6 +355,7 @@
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
     <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <string name="error_invalid_fee_preset_value">The value has to be bigger than 0.</string>
+    <string name="error_invalid_ln_address_format">Invalid format for Lightning Address. A Lightning Address looks like an email address.\n\nusername@domain</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -512,13 +516,13 @@
     <string name="choose_action">Choose action</string>
     <string name="add_contact">Add contact</string>
     <string name="send_money">Send money</string>
-    <string name="contact_name">Contact name</string>
+    <string name="contact_name">Contact Name</string>
     <string name="contact_already_exists">This contact already exists!</string>
     <string name="no_contacts">No contacts</string>
-    <string name="contact_type">Contact Type:</string>
-    <string name="data">Data:</string>
+    <string name="contact_type">Contact Type</string>
+    <string name="data">Data</string>
     <string name="contact_type_ln_node">Lightning Node</string>
-    <string name="contact_type_ln_address">Lightning Address</string>
+    <string name="ln_address">Lightning Address</string>
 
     <string name="manual_send_input_hint">Address or payment data</string>
 
