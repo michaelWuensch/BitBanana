@@ -52,6 +52,9 @@ public class Contact implements Comparable<Contact>, Serializable {
         return new LNAddress(this.contactData);
     }
 
+    // Used for item adapter
+    public String getContent () {return this.alias + this.contactData;}
+
 
     @Override
     public int compareTo(Contact contact) {
