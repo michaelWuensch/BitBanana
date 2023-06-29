@@ -27,7 +27,7 @@ public class ContactItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public boolean areContentsTheSame(Contact oldContact, Contact newContact) {
-            return oldContact.getAlias().equals(newContact.getContactData());
+            return oldContact.getContent().equals(newContact.getContent());
         }
 
         @Override
@@ -96,20 +96,16 @@ public class ContactItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void replaceAll(List<Contact> contacts) {
-        mSortedList.beginBatchedUpdates();
-        for (int i = mSortedList.size() - 1; i >= 0; i--) {
-            final Contact contact = mSortedList.get(i);
-            if (!contacts.contains(contact)) {
-                mSortedList.remove(contact);
-            }
-        }
-        mSortedList.addAll(contacts);
-        mSortedList.endBatchedUpdates();
+        mSortedList.replaceAll(contacts);
     }
 
     // Return the size of your sorted list (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mSortedList.size();
+    }
+
+    public Contact getItemAtPosition(int position) {
+        return mSortedList.get(position);
     }
 }

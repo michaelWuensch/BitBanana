@@ -9,17 +9,16 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
+import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
-import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.BBLog;
 
 /**
  * Please refer to the following specification
@@ -31,23 +30,13 @@ public class StaticInternetIdentifier {
     public static final String ARGS_KEY = "staticInternetIdentifier";
     private static final String LOG_TAG = StaticInternetIdentifier.class.getSimpleName();
 
-    public static String IdentifierToRequest(String address) {
-        String[] parts = address.split("@");
-        String username = parts[0];
-        String domain = parts[1];
-        if (address.toLowerCase().endsWith(".onion")) {
-            return "http://" + domain + "/.well-known/lnurlp/" + username;
-        } else {
-            return "https://" + domain + "/.well-known/lnurlp/" + username;
-        }
-    }
-
     public static void checkIfValidStaticInternetIdentifier(Context ctx, String address, OnStaticIdentifierChecked listener) {
-        if (!validateFormat(address)) {
+        LNAddress lnAddress = new LNAddress(address);
+        if (!lnAddress.isValid()) {
             listener.onNoStaticInternetIdentifierData();
             return;
         }
-        String requestUrl = IdentifierToRequest(address);
+        String requestUrl = IdentifierToRequest(lnAddress);
 
         okhttp3.Request lightningAddressRequest = new okhttp3.Request.Builder()
                 .url(requestUrl)
@@ -93,19 +82,12 @@ public class StaticInternetIdentifier {
         });
     }
 
-    private static boolean validateFormat(String address) {
-        /* Simplified regex checking the following:
-            - the string has no white spaces
-            - username is a lowercase alphanumeric (including "." and "_") string of at least one character
-            - username is followed by exactly one "@"
-            - domain name has at leas one "."
-            - domain name uses only alphanumeric character (including "-")
-        */
-        String regexPattern = "^[a-z0-9_.]+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]+$";
-        Pattern pattern = Pattern.compile(regexPattern);
-        Matcher matcher = pattern.matcher(address);
-
-        return matcher.matches();
+    private static String IdentifierToRequest(LNAddress lnAddress) {
+        if (lnAddress.isTor()) {
+            return "http://" + lnAddress.getDomain() + "/.well-known/lnurlp/" + lnAddress.getUsername();
+        } else {
+            return "https://" + lnAddress.getDomain() + "/.well-known/lnurlp/" + lnAddress.getUsername();
+        }
     }
 
     public interface OnStaticIdentifierChecked {

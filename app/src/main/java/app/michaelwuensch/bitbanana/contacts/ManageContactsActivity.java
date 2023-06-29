@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.contacts;
 
+import static app.michaelwuensch.bitbanana.ScanActivity.EXTRA_GENERIC_SCAN_DATA;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,14 +20,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-
-import static app.michaelwuensch.bitbanana.ScanActivity.EXTRA_GENERIC_SCAN_DATA;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ManageContactsActivity extends BaseAppCompatActivity implements ContactSelectListener {
 
@@ -41,6 +43,9 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     private ContactItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mFab;
+    private View mVEFab;
+    private View mVEFabOptionManually;
+    private View mVEFabOptionScan;
     private View mContactsHeaderLayout;
     private ManualSendInputView mManualInput;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
@@ -55,7 +60,9 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_contacts);
 
-        mFab = findViewById(R.id.fab);
+        mVEFab = findViewById(R.id.expandable_fab_layout);
+        mVEFabOptionManually = findViewById(R.id.efabManualOption);
+        mVEFabOptionScan = findViewById(R.id.efabScanOption);
         mContactsHeaderLayout = findViewById(R.id.contactsHeaderLayout);
         mManualInput = findViewById(R.id.manualInput);
 
@@ -77,7 +84,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                 break;
             case MODE_OPEN_CHANNEL:
                 setTitle(R.string.activity_manage_contacts_open_channel_mode);
-                mFab.setVisibility(View.GONE);
+                mVEFab.setVisibility(View.GONE);
                 break;
         }
 
@@ -96,12 +103,21 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mRecyclerView.setAdapter(mAdapter);
 
 
-        mFab.setOnClickListener(new View.OnClickListener() {
+        mVEFabOptionScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add a new contact
+                // Add a new contact by scanning
                 Intent intent = new Intent(ManageContactsActivity.this, ScanContactActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD_CONTACT);
+            }
+        });
+
+        mVEFabOptionManually.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Add a new contact manually
+                Intent intent = new Intent(ManageContactsActivity.this, ManualAddContactActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -113,7 +129,6 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     }
 
     private void updateContactDisplayList() {
-
         mContactItems.clear();
         ContactsManager contactsManager = ContactsManager.getInstance();
         mContactItems.addAll(contactsManager.getAllContacts());
@@ -126,6 +141,19 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         }
 
         mAdapter.replaceAll(mContactItems);
+
+        // The following is needed for the names to change after renaming.
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            String correctName = mAdapter.getItemAtPosition(i).getAlias();
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForAdapterPosition(i);
+            if (viewHolder != null) {
+                String displayedName = ((ContactItemViewHolder) viewHolder).getName();
+                if (!correctName.equals(displayedName)) {
+                    mAdapter.notifyItemChanged(i);
+                }
+            }
+        }
+        BBLog.v(LOG_TAG, "Contacts list updated!");
     }
 
     @Override
@@ -134,24 +162,43 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
 
         if (requestCode == REQUEST_CODE_ADD_CONTACT && resultCode == RESULT_OK) {
             if (data != null) {
-                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
-
                 ContactsManager cm = ContactsManager.getInstance();
-                if (cm.doesContactDataExist(nodeUri.getPubKey())) {
-                    Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                if (nodeUri != null) {
+                    if (cm.doesContactDataExist(nodeUri.getPubKey())) {
+                        Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                    } else {
+                        cm.showContactNameInputDialog(this, null, nodeUri.getPubKey(), Contact.ContactType.NODEPUBKEY, new ContactsManager.OnNameConfirmedListener() {
+                            @Override
+                            public void onNameAccepted() {
+                                mAdapter.add(cm.getContactByContactData(nodeUri.getPubKey()));
+                                mEmptyListText.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onCancelled() {
+
+                            }
+                        });
+                    }
                 } else {
-                    cm.showContactNameInputDialog(this, nodeUri.getPubKey(), new ContactsManager.OnNameConfirmedListener() {
-                        @Override
-                        public void onNameAccepted() {
-                            mAdapter.add(cm.getContactByContactData(nodeUri.getPubKey()));
-                            mEmptyListText.setVisibility(View.GONE);
-                        }
+                    LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                    if (cm.doesContactDataExist(lnAddress.toString())) {
+                        Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                    } else {
+                        cm.showContactNameInputDialog(this, lnAddress.getUsername(), lnAddress.toString(), Contact.ContactType.LNADDRESS, new ContactsManager.OnNameConfirmedListener() {
+                            @Override
+                            public void onNameAccepted() {
+                                mAdapter.add(cm.getContactByContactData(lnAddress.toString()));
+                                mEmptyListText.setVisibility(View.GONE);
+                            }
 
-                        @Override
-                        public void onCancelled() {
+                            @Override
+                            public void onCancelled() {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -159,8 +206,10 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         if (requestCode == REQUEST_CODE_CONTACT_ACTION) {
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                 Intent intent = new Intent();
                 intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, nodeUri);
+                intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, lnAddress);
                 setResult(resultCode, intent);
                 finish();
             }
@@ -179,7 +228,13 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                     goToContactDetails(contact);
                 } else {
                     Intent intent = new Intent();
-                    intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, contact.getAsNodeUri());
+                    switch (contact.getContactType()) {
+                        case NODEPUBKEY:
+                            intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, contact.getAsNodeUri());
+                            break;
+                        case LNADDRESS:
+                            intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, contact.getLightningAddress());
+                    }
                     setResult(ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY, intent);
                     finish();
                 }
@@ -244,7 +299,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     }
 
     private void setupSendMode() {
-        mFab.setVisibility(View.GONE);
+        mVEFab.setVisibility(View.GONE);
         mContactsHeaderLayout.setVisibility(View.VISIBLE);
         mManualInput.setVisibility(View.VISIBLE);
         mManualInput.setupView(mCompositeDisposable);

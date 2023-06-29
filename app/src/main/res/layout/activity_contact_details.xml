@@ -52,18 +52,55 @@
         app:layout_constraintTop_toBottomOf="@+id/userAvatarView"
         tools:text="Contact Name" />
 
-    <TextView
-        android:id="@+id/publicKey"
+    <LinearLayout
+        android:id="@+id/contactDetailsView"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/gray"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userAvatarView"
-        tools:text="02f6725f9c1c40333b67faea92fd211c183050f28df32cac3f9d69685fe9665432"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contact_type"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/contactType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Lightning Node" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/data"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/detailedData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="02f6725f9c1c40333b67faea92fd211c183050f28df32cac3f9d69685fe9665432" />
+    </LinearLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

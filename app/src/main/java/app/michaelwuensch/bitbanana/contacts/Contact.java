@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.UUID;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 
@@ -46,6 +48,13 @@ public class Contact implements Comparable<Contact>, Serializable {
         return LightningParser.parseNodeUri(contactData);
     }
 
+    public LNAddress getLightningAddress() {
+        return new LNAddress(this.contactData);
+    }
+
+    // Used for item adapter
+    public String getContent () {return this.alias + this.contactData.toLowerCase();}
+
 
     @Override
     public int compareTo(Contact contact) {
@@ -62,7 +71,7 @@ public class Contact implements Comparable<Contact>, Serializable {
             return false;
         }
         Contact contact = (Contact) obj;
-        return contact.getContactData().equals(this.getContactData());
+        return contact.getContactData().equalsIgnoreCase(this.getContactData());
     }
 
     @Override
@@ -83,6 +92,17 @@ public class Contact implements Comparable<Contact>, Serializable {
                 return valueOf(enumAsString);
             } catch (Exception ex) {
                 return NODEPUBKEY;
+            }
+        }
+
+        public int getTitle() {
+            switch (this) {
+                case NODEPUBKEY:
+                    return R.string.node;
+                case LNADDRESS:
+                    return R.string.ln_address;
+                default:
+                    return R.string.node;
             }
         }
     }

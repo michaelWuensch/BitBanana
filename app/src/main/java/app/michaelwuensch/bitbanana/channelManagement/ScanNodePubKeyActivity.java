@@ -7,6 +7,10 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import java.net.URL;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
+import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
@@ -16,10 +20,6 @@ import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 
 public class ScanNodePubKeyActivity extends BaseScannerActivity implements LightningNodeRecyclerAdapter.LightningNodeSelectedListener {
 
@@ -70,17 +70,17 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
         BitcoinStringAnalyzer.analyze(ScanNodePubKeyActivity.this, mCompositeDisposable, rawData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
             public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
@@ -90,32 +90,32 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
 
             @Override
             public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidLnUrlAuth(URL url) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
@@ -125,17 +125,17 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity implements Light
 
             @Override
             public void onValidURL(String url) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onError(String error, int duration) {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
             public void onNoReadableData() {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
         });
 

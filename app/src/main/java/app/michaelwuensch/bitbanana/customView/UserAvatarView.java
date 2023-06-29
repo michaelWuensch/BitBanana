@@ -16,6 +16,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.android.QRCode;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 
 public class UserAvatarView extends ConstraintLayout {
@@ -26,6 +27,8 @@ public class UserAvatarView extends ConstraintLayout {
     private OnStateChangedListener mListener;
     private int mCurrentUriId = 0;
     private boolean mIsQRCodeIncluded;
+
+    private LNAddress mLnAddress;
 
     public UserAvatarView(Context context) {
         super(context);
@@ -52,6 +55,17 @@ public class UserAvatarView extends ConstraintLayout {
         showAvatar();
     }
 
+    public void setupWithLNAddress(LNAddress lnAddress, boolean includeQRCode) {
+        reset();
+        mLnAddress = lnAddress;
+        mIsQRCodeIncluded = includeQRCode;
+        if (mIsQRCodeIncluded) {
+            setupSwitchListeners();
+        }
+        showAvatar();
+        showIdentity(mLnAddress);
+    }
+
     public void setupWithNodeUri(LightningNodeUri nodeUri, boolean includeQRCode) {
         LightningNodeUri[] tempNodeUris = new LightningNodeUri[1];
         tempNodeUris[0] = nodeUri;
@@ -64,33 +78,38 @@ public class UserAvatarView extends ConstraintLayout {
         mNodeUris = nodeUris;
         mIsQRCodeIncluded = includeQRCode;
 
-
         if (mIsQRCodeIncluded) {
-            mIvQRCode.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showAvatar();
-                    ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToStart();
-                    if (mListener != null) {
-                        mListener.onHide();
-                    }
-                }
-            });
-
-            mIvUserAvatar.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showQRCode();
-                    ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToEnd();
-                    if (mListener != null) {
-                        mListener.onReveal();
-                    }
-                }
-            });
+            setupSwitchListeners();
         }
 
         showAvatar();
         showIdentity(true);
+    }
+
+    private void setupSwitchListeners() {
+
+        mIvQRCode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAvatar();
+                ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToStart();
+                if (mListener != null) {
+                    mListener.onHide();
+                }
+            }
+        });
+
+        mIvUserAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showQRCode();
+                ((MotionLayout) findViewById(R.id.userAvatarMotionLayout)).transitionToEnd();
+                if (mListener != null) {
+                    mListener.onReveal();
+                }
+            }
+        });
+
     }
 
     public void showIdentity(boolean tor) {
@@ -107,6 +126,20 @@ public class UserAvatarView extends ConstraintLayout {
             }
             showIdentity(0);
         }
+    }
+
+    private void showIdentity(LNAddress lnAddress) {
+        if (mIsQRCodeIncluded) {
+            // Generate "QR-Code"
+            Bitmap bmpQRCode = QRCode
+                    .from(lnAddress.toString())
+                    .withSize(750, 750)
+                    .withErrorCorrection(ErrorCorrectionLevel.L)
+                    .bitmap();
+            mIvQRCode.setImageBitmap(bmpQRCode);
+        }
+        // Load user Avatar
+        mIvUserAvatar.setImageBitmap(AvathorFactory.getAvathor(getContext(), lnAddress.toString()));
     }
 
     private void showIdentity(int id) {

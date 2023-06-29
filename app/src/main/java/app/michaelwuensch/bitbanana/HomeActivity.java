@@ -61,6 +61,7 @@ import app.michaelwuensch.bitbanana.fragments.ChooseNodeActionBSDFragment;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.fragments.SendBSDFragment;
 import app.michaelwuensch.bitbanana.fragments.WalletFragment;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -770,8 +771,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             case ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY:
                 if (data != null) {
                     LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
-                    SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
-                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    if (nodeUri != null) {
+                        SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
+                        sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    } else {
+                        LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                        analyzeString(lnAddress.toString());
+                    }
                     if (mDrawer.isDrawerOpen(GravityCompat.START)) {
                         mDrawer.closeDrawer(GravityCompat.START);
                     }
