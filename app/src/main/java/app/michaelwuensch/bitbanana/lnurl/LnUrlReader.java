@@ -50,6 +50,10 @@ public class LnUrlReader {
             // We have a lud-17 lnurl that is not bech32 encoded.
             // Please refer to the following specification:
             // https://github.com/fiatjaf/lnurl-rfc/blob/luds/17.md
+            if (UriUtil.removeURI(data).isEmpty()) {
+                listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                return;
+            }
             String lnurl;
             if (data.toLowerCase().contains(".onion")) {
                 lnurl = "http://" + UriUtil.removeURI(data);
@@ -112,12 +116,11 @@ public class LnUrlReader {
 
 
     private static void initialRequest(Context ctx, String lnurl, OnLnUrlReadListener listener) {
-        BBLog.v(LOG_TAG, "LNURL: Requesting data...");
-
         Request lnurlRequest = new Request.Builder()
                 .url(lnurl)
                 .build();
 
+        BBLog.v(LOG_TAG, "LNURL: Requesting data...");
         HttpClient.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

@@ -12,6 +12,7 @@ import java.net.URL;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
@@ -45,8 +46,21 @@ public class BitcoinStringAnalyzer {
         return false;
     }
 
+    private static String prepareData(String input) {
+        String result = input.trim();
+        // Before handling normal lnurls, check if there is a lnurl of form lnurlp://lightningAddress
+        if (UriUtil.isLNURLPUri(result)) {
+            LNAddress lnAddress = new LNAddress(UriUtil.removeURI(result));
+            if (lnAddress.isValid()) {
+                return UriUtil.removeURI(result);
+            }
+        }
+        return result;
+    }
+
     public static void analyze(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        checkIfLnUrl(ctx, compositeDisposable, inputString.trim(), listener);
+        String data = prepareData(inputString);
+        checkIfLnUrl(ctx, compositeDisposable, data, listener);
     }
 
     private static void checkIfLnUrl(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
