@@ -53,7 +53,7 @@ public class Contact implements Comparable<Contact>, Serializable {
     }
 
     // Used for item adapter
-    public String getContent () {return this.alias + this.contactData;}
+    public String getContent () {return this.alias + this.contactData.toLowerCase();}
 
 
     @Override
@@ -71,7 +71,7 @@ public class Contact implements Comparable<Contact>, Serializable {
             return false;
         }
         Contact contact = (Contact) obj;
-        return contact.getContactData().equals(this.getContactData());
+        return contact.getContactData().equalsIgnoreCase(this.getContactData());
     }
 
     @Override

@@ -142,7 +142,7 @@ public class ContactsManager {
     public boolean doesContactDataExist(@NonNull String contactData) {
         List<Contact> contactList = getAllContacts();
         for (Contact contact : contactList) {
-            if (contact.getContactData().equals(contactData)) {
+            if (contact.getContactData().equalsIgnoreCase(contactData)) {
                 return true;
             }
         }

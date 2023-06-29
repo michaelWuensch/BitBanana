@@ -104,4 +104,8 @@ public class ContactItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return mSortedList.size();
     }
+
+    public Contact getItemAtPosition(int position) {
+        return mSortedList.get(position);
+    }
 }

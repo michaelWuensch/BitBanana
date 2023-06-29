@@ -230,6 +230,8 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mButtonHelp.setVisibility(View.VISIBLE);
     }
 
+    protected void setPasteButtonVisibility (boolean visible) {mButtonPaste.setVisibility(visible ? View.VISIBLE : View.GONE);}
+
     protected void setScannerRect(int length) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         int rectLength = (int) metrics.scaledDensity * length;

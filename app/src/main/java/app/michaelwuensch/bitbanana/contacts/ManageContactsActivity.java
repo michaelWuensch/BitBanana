@@ -141,6 +141,18 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         }
 
         mAdapter.replaceAll(mContactItems);
+
+        // The following is needed for the names to change after renaming.
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            String correctName = mAdapter.getItemAtPosition(i).getAlias();
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForAdapterPosition(i);
+            if (viewHolder != null) {
+                String displayedName = ((ContactItemViewHolder) viewHolder).getName();
+                if (!correctName.equals(displayedName)) {
+                    mAdapter.notifyItemChanged(i);
+                }
+            }
+        }
         BBLog.v(LOG_TAG, "Contacts list updated!");
     }
 

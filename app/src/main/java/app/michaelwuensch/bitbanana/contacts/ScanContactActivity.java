@@ -21,6 +21,7 @@ public class ScanContactActivity extends BaseScannerActivity {
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
+        setPasteButtonVisibility(false);
     }
 
     @Override

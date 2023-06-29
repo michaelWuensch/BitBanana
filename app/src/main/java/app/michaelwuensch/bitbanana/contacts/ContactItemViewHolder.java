@@ -63,4 +63,6 @@ public class ContactItemViewHolder extends RecyclerView.ViewHolder {
     void addOnContactSelectListener(ContactSelectListener contactSelectListener) {
         mContactSelectListener = contactSelectListener;
     }
+
+    public String getName() {return mContactName.getText().toString();}
 }
