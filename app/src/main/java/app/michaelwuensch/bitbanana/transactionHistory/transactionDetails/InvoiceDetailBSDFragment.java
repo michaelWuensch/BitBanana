@@ -14,23 +14,21 @@ import androidx.annotation.Nullable;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
-import net.glxn.qrgen.android.QRCode;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.UriUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.MonetaryUtil;
+import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
+import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
+import app.michaelwuensch.bitbanana.util.UriUtil;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
@@ -145,11 +143,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
         String lightningUri = UriUtil.generateLightningUri(invoice.getPaymentRequest());
         // Generate "QR-Code"
-        Bitmap bmpQRCode = QRCode
-                .from(lightningUri)
-                .withSize(500, 500)
-                .withErrorCorrection(ErrorCorrectionLevel.L)
-                .bitmap();
+        Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(lightningUri, 500);
         mQRCodeView.setImageBitmap(bmpQRCode);
         mQRCodeView.setOnClickListener(view ->
                 ClipBoardUtil.copyToClipboard(getContext(), "Invoice", lightningUri)

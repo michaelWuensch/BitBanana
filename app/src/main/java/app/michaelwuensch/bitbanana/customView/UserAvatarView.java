@@ -10,14 +10,13 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
-import net.glxn.qrgen.android.QRCode;
+import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AvathorUtil;
+import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 
 public class UserAvatarView extends ConstraintLayout {
 
@@ -131,11 +130,7 @@ public class UserAvatarView extends ConstraintLayout {
     private void showIdentity(LNAddress lnAddress) {
         if (mIsQRCodeIncluded) {
             // Generate "QR-Code"
-            Bitmap bmpQRCode = QRCode
-                    .from(lnAddress.toString())
-                    .withSize(750, 750)
-                    .withErrorCorrection(ErrorCorrectionLevel.L)
-                    .bitmap();
+            Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(lnAddress.toString(), 750);
             mIvQRCode.setImageBitmap(bmpQRCode);
         }
         // Load user Avatar
@@ -149,11 +144,7 @@ public class UserAvatarView extends ConstraintLayout {
             if (mNodeUris[mCurrentUriId] != null) {
                 if (mIsQRCodeIncluded) {
                     // Generate "QR-Code"
-                    Bitmap bmpQRCode = QRCode
-                            .from(mNodeUris[mCurrentUriId].getAsString())
-                            .withSize(750, 750)
-                            .withErrorCorrection(ErrorCorrectionLevel.L)
-                            .bitmap();
+                    Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(mNodeUris[mCurrentUriId].getAsString(), 750);
                     mIvQRCode.setImageBitmap(bmpQRCode);
                 }
 

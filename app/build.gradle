@@ -125,7 +125,7 @@ dependencies {
     implementation('com.journeyapps:zxing-android-embedded:4.3.0')
 
     // QR-Code generator:
-    implementation 'com.github.kenglxn.QRGen:android:3.0.1'
+    implementation 'com.github.alexzhirkevich:custom-qr-generator:1.6.2'
 
     // Library to restart app
     implementation 'com.jakewharton:process-phoenix:2.1.2'

@@ -15,19 +15,16 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import net.glxn.qrgen.android.QRCode;
-
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 
 
 public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet.InvoiceSubscriptionListener {
@@ -101,11 +98,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
 
         // Generate "QR-Code"
-        Bitmap bmpQRCode = QRCode
-                .from(mDataToEncodeInQRCode)
-                .withSize(750, 750)
-                .withErrorCorrection(ErrorCorrectionLevel.L)
-                .bitmap();
+        Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(mDataToEncodeInQRCode, 750);
         ImageView ivQRCode = findViewById(R.id.requestQRCode);
         ivQRCode.setImageBitmap(bmpQRCode);
 
