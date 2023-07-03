@@ -75,8 +75,9 @@ Hey! Do you like BitBanana? Awesome! We could actually really use your help!
 
 Open source isn't just writing code. You can help BitBanana with any of the following:
 
+- [Donate](https://bitbanana.app/donate)
 - Drop a star on github
-- Share a positive review and rate the app in the app store
+- Share a positive review and rate the app in the [app store](https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana)
 - Tell your friends about it
 - [Translate](docs/TRANSLATING.md) the app using Weblate
 - Find and report bugs, [Open an issue][issues]

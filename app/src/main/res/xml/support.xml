@@ -25,6 +25,12 @@
         app:iconSpaceReserved="false" />
 
     <Preference
+        android:key="donate"
+        android:summary="@string/support_donate_description"
+        android:title="@string/support_donate"
+        app:iconSpaceReserved="false" />
+
+    <Preference
         android:key="privacy"
         android:summary="@string/support_privacy_description"
         android:title="@string/privacy"

@@ -84,8 +84,9 @@ public class RefConstants {
     // URLS
     public static final String URL_HELP = "https://github.com/michaelWuensch/BitBanana/wiki";
     public static final String URL_HELP_SETUP = "https://github.com/michaelWuensch/BitBanana/wiki/Setup";
-    public static final String URL_PRIVACY = "https://github.com/michaelWuensch/BitBanana/blob/master/PRIVACY.md";
-    public static final String URL_CONTRIBUTE = "https://github.com/michaelWuensch/BitBanana#Contribute";
+    public static final String URL_PRIVACY = "https://bitbanana.app/privacy";
+    public static final String URL_CONTRIBUTE = "https://bitbanana.app/contribute";
+    public static final String URL_DONATE = "https://bitbanana.app/donate";
     public static final String URL_ISSUES = "https://github.com/michaelWuensch/BitBanana/issues";
     public static final String URL_LNPLUS = "https://lightningnetwork.plus";
 

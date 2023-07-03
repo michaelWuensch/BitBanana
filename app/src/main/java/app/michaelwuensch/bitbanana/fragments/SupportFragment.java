@@ -4,24 +4,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
 
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.licenses.LicensesActivity;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 
 
 public class SupportFragment extends PreferenceFragmentCompat {
 
     private static final String LOG_TAG = SupportFragment.class.getSimpleName();
-
-    private SwitchPreference mSwHideTotalBalance;
-    private ListPreference mListCurrency;
-    private Preference mPinPref;
-    private ListPreference mListLanguage;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -65,7 +58,19 @@ public class SupportFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "contribute"
+        // Action when clicked on "donate"
+        final Preference prefDonate = findPreference("donate");
+        prefDonate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                String url = RefConstants.URL_DONATE;
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "privacy"
         final Preference prefPrivacy = findPreference("privacy");
         prefPrivacy.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
