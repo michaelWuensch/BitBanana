@@ -10,7 +10,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import net.glxn.qrgen.android.QRCode;
@@ -18,6 +17,7 @@ import net.glxn.qrgen.android.QRCode;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.AvathorUtil;
 
 public class UserAvatarView extends ConstraintLayout {
 
@@ -139,7 +139,7 @@ public class UserAvatarView extends ConstraintLayout {
             mIvQRCode.setImageBitmap(bmpQRCode);
         }
         // Load user Avatar
-        mIvUserAvatar.setImageBitmap(AvathorFactory.getAvathor(getContext(), lnAddress.toString()));
+        mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), lnAddress.toString()));
     }
 
     private void showIdentity(int id) {
@@ -158,7 +158,7 @@ public class UserAvatarView extends ConstraintLayout {
                 }
 
                 // Load user Avatar
-                mIvUserAvatar.setImageBitmap(AvathorFactory.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
+                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
             }
         }
     }

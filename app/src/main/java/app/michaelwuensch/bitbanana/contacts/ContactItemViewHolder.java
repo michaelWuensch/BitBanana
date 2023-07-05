@@ -1,16 +1,16 @@
 package app.michaelwuensch.bitbanana.contacts;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
-
-import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.AvathorUtil;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class ContactItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -34,7 +34,9 @@ public class ContactItemViewHolder extends RecyclerView.ViewHolder {
     public void bindContactItem(Contact contact) {
 
         // Set User Avatar
-        mUserAvatar.setImageBitmap(AvathorFactory.getAvathor(mContext, contact.getContactData()));
+        Bitmap avatar = AvathorUtil.getAvathorWithCache(mContext, contact.getContactData(), 150);
+        mUserAvatar.setImageBitmap(avatar);
+
 
         // Set Contact Name
         mContactName.setText(contact.getAlias());
@@ -64,5 +66,7 @@ public class ContactItemViewHolder extends RecyclerView.ViewHolder {
         mContactSelectListener = contactSelectListener;
     }
 
-    public String getName() {return mContactName.getText().toString();}
+    public String getName() {
+        return mContactName.getText().toString();
+    }
 }
