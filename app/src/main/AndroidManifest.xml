@@ -56,6 +56,9 @@
                 <data android:scheme="bitcoin" />
                 <data android:scheme="lightning" />
                 <data android:scheme="lndconnect" />
+                <data android:scheme="lnurlc" />
+                <data android:scheme="lnurlp" />
+                <data android:scheme="lnurlw" />
             </intent-filter>
         </activity>
         <activity
