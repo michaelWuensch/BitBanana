@@ -21,7 +21,7 @@ public class AvathorUtil {
         if (avatar != null) {
             BBLog.v(LOG_TAG, "Avatar loaded from memory cache");
         } else {
-            BBLog.w(LOG_TAG, "Avatar image memory cache created");
+            BBLog.v(LOG_TAG, "Avatar image memory cache created");
             avatar = AvathorFactory.getAvathor(context, input);
             if (cacheWidth > 0) {
                 avatar = Bitmap.createScaledBitmap(avatar, cacheWidth, cacheWidth, true);

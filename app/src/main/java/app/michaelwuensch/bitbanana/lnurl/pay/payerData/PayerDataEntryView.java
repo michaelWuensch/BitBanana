@@ -87,4 +87,8 @@ public class PayerDataEntryView extends LinearLayout {
     public boolean isChecked() {
         return mPayerDataCheckbox.isChecked();
     }
+
+    public EditText getEditText() {
+        return mPayerDataInput;
+    }
 }

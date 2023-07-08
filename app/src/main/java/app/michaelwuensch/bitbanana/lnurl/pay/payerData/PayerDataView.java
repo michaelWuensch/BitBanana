@@ -1,13 +1,13 @@
 package app.michaelwuensch.bitbanana.lnurl.pay.payerData;
 
 import android.content.Context;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.settings.SettingsPayerDataActivity;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -63,6 +63,9 @@ public class PayerDataView extends LinearLayout {
         mPayerDataIdentifier.setMandatory(requestedPayerData.isIdentifierMandatory());
         mPayerDataEmail.setMandatory(requestedPayerData.isEmailMandatory());
         mPayerDataPubkey.setMandatory(requestedPayerData.isPubkeyMandatory());
+
+        mPayerDataIdentifier.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        mPayerDataEmail.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
         mPayerDataName.setDescription(getContext().getString(R.string.lnurl_payer_data_name));
         mPayerDataIdentifier.setDescription("LN Address");

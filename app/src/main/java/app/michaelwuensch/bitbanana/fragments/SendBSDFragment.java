@@ -305,7 +305,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
                     mEtAmount.requestFocus();
-                }, 200);
+                }, 600);
 
             }
 

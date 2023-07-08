@@ -295,7 +295,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 // We have to call this delayed, as otherwise it will still bring up the softKeyboard
                 mEtAmount.requestFocus();
                 mEtAmount.setSelection(mEtAmount.getText().length());
-            }, 200);
+            }, 600);
         }
 
 
