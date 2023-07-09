@@ -6,15 +6,20 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import app.michaelwuensch.bitbanana.util.UriUtil;
+
 public class LNAddress implements Serializable {
     private String mUsername;
     private String mDomain;
     private final boolean mIsValid;
 
     public LNAddress(String address) {
-        mIsValid = validateFormat(address);
+        String lnAddress = address;
+        if (UriUtil.isLightningUri(address) || UriUtil.isLNURLPUri(address))
+            lnAddress = UriUtil.removeURI(lnAddress);
+        mIsValid = validateFormat(lnAddress);
         if (isValid()) {
-            String[] parts = address.split("@");
+            String[] parts = lnAddress.split("@");
             mUsername = parts[0];
             mDomain = parts[1];
         }
