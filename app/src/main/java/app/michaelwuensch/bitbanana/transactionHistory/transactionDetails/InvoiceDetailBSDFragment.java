@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.protobuf.ByteString;
@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -44,7 +44,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
     private TextView mDate;
     private TextView mExpiryLabel;
     private TextView mExpiry;
-    private ImageView mQRCodeView;
+    private ImageFilterView mQRCodeView;
 
     @Nullable
     @Override

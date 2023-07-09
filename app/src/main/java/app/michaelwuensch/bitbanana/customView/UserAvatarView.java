@@ -10,13 +10,11 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
-
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.util.AvathorUtil;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
+import app.michaelwuensch.bitbanana.util.AvathorUtil;
 
 public class UserAvatarView extends ConstraintLayout {
 

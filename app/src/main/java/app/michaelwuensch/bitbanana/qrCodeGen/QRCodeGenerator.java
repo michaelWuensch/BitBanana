@@ -24,7 +24,6 @@ import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorPixelSha
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorShapes;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
@@ -32,29 +31,29 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
 public class QRCodeGenerator {
 
     // drawables had bad performance in animations. Bitmaps see to work fine.
-    public static Bitmap bitmapFromText(String text, int size) {
-        return drawableToBitmap(drawableFromText(text), size);
+    public static Bitmap bitmapFromText(String data, int size) {
+        return drawableToBitmap(drawableFromText(data), size);
     }
 
-    public static Drawable drawableFromText(String text) {
-        QrData qrData = new QrData.Text(text);
-        return QrCodeDrawableKt.QrCodeDrawable(qrData, getQrVectorOptions(), StandardCharsets.UTF_8);
+    public static Drawable drawableFromText(String data) {
+        QrData qrData = new QrData.Text(data);
+        return QrCodeDrawableKt.QrCodeDrawable(qrData, getQrVectorOptions(data), StandardCharsets.UTF_8);
     }
 
-    private static QrVectorOptions getQrVectorOptions() {
-        // ToDo: If we go for fancier QR-Codes, we might have to expose a setting to chose QR Codes styles for compatibility reasons. For now we go with QR-Code close to original.
-        return getCompatibilityQrVectorOptions();
+    private static QrVectorOptions getQrVectorOptions(String data) {
+        // The design QR-Code does not look good for high density codes.
+        // Therefore, depending on how much data is encoded we fall back to a more standard qr code
+        if (data.length() < 140)
+            return getDesignQrVectorOptions(data);
+        else
+            return getCompatibilityQrVectorOptions();
     }
 
-    private static QrVectorOptions getDesignQrVectorOptions() {
+    private static QrVectorOptions getDesignQrVectorOptions(String data) {
         QrVectorOptions options = getDefaultOptionsBuilder()
                 .setShapes(
                         new QrVectorShapes(
-                                new RandomSizedQRPixelShape(Arrays.asList(
-                                        new QrVectorPixelShape.Circle(0.65f),
-                                        new QrVectorPixelShape.Circle(0.75f),
-                                        new QrVectorPixelShape.Circle(0.85f)
-                                )),
+                                new QrVectorPixelShape.Rect(0.75f),
                                 new QrVectorPixelShape.RoundCorners(.5f),
                                 new QrVectorBallShape.RoundCorners(.15f, true, true, true, true),
                                 new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true),
@@ -63,12 +62,13 @@ public class QRCodeGenerator {
                 )
                 .setColors(
                         new QrVectorColors(
-                                new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue)),
+                                new QRRandomPixelColor(data, ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue), ContextCompat.getColor(App.getAppContext(), R.color.banana_yellow), 0.02f, 5),
                                 new QrVectorColor.Solid(Color(0xffffffff)),
                                 new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue)),
                                 new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue))
                         )
                 )
+                .setErrorCorrectionLevel(QrErrorCorrectionLevel.Medium)
                 .build();
 
 
@@ -79,7 +79,7 @@ public class QRCodeGenerator {
         QrVectorOptions options = getDefaultOptionsBuilder()
                 .setShapes(
                         new QrVectorShapes(
-                                new QrVectorPixelShape.RoundCorners(.35f),
+                                new QrVectorPixelShape.RoundCorners(.0f),
                                 new QrVectorPixelShape.RoundCorners(.35f),
                                 new QrVectorBallShape.RoundCorners(.15f, true, true, true, true),
                                 new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true),
