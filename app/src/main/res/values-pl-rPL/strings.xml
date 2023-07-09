@@ -32,8 +32,7 @@
     <  =  &lt;
     >  =  &gt;
 
-    -->
-<resources>
+    --><resources>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="lightning">Lightning</string>
@@ -448,4 +447,10 @@
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
+    <string name="activity_manage_channels_closed">Zamknięte kanały</string>
+    <string name="documentation">Dokumentacja</string>
+    <string name="activity_manage_channels">Kanały</string>
+    <string name="activity_manage_nodes">Zarządzaj węzłami</string>
+    <string name="activity_node_details">Szczegóły węzłów</string>
+    <string name="save">Zapisz</string>
 </resources>

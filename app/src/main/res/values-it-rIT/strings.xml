@@ -32,8 +32,7 @@
     <  =  &lt;
     >  =  &gt;
 
-    -->
-<resources>
+    --><resources>
     <string name="ok">OK</string>
     <string name="cancel">ANNULLA</string>
     <string name="lightning">Lightning</string>
@@ -78,7 +77,7 @@
     <string name="scan_qr_code">Scansiona QR-Code</string>
     <string name="node">Nodo</string>
     <string name="funds_available">Disponibile: %s</string>
-    <string name="amount_invalid">L\'importo non &#232; valido.</string>
+    <string name="amount_invalid">L\'importo non è valido.</string>
     <string name="success">Successo</string>
     <string name="suggested_peers">Peer Suggeriti</string>
     <string name="none">Nessuna</string>
@@ -252,7 +251,7 @@
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
     <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Impossibile raggiungere l &#96; host .\n\nControlla che hai connessione.</string>
+    <string name="error_connection_network_unreachable">Impossibile raggiungere l ` host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
     <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
@@ -269,18 +268,18 @@
     <string name="error_channel_open_pending_max">Il numero di canali in sospeso supera il massimo.</string>
     <string name="error_channel_open_timeout">Impossibile aprire il canale entro la scadenza.</string>
     <string name="error_channel_open">Impossibile aprire il canale con il nodo connesso: %s</string>
-    <string name="error_get_peers">Impossibile recuperare l &#96; elenco dei peer.</string>
+    <string name="error_get_peers">Impossibile recuperare l ` elenco dei peer.</string>
     <string name="error_get_peers_timeout">Non è stato possibile recuperare i peer entro la scadenza.</string>
     <string name="error_channel_close_offline">Il Peer è offline. È consentita solo la chiusura forzata.</string>
     <string name="error_channel_close_timeout">Impossibile chiudere il canale entro la scadenza.</string>
     <string name="error_channel_close">Impossibile chiudere il canale: %s</string>
-    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L\' app si chiuder&#224; ora.\nPuoi reinstallare l\' app e utilizzare il processo di ripristino per riottenere l\'accesso ai tuoi fondi.</string>
+    <string name="error_pin_deactivation_attempt">Sembra che qualcuno abbia cercato di disattivare il tuo PIN. L\' app si chiuderà ora.\nPuoi reinstallare l\' app e utilizzare il processo di ripristino per riottenere l\'accesso ai tuoi fondi.</string>
     <string name="error_empty_node_name">Un nome vuoto non è consentito.</string>
     <string name="error_invalid_bitcoin_request">Richiesta bitcoin non valida.</string>
     <string name="error_payment_invalid_details">I dettagli del pagamento non corrispondono ai dettagli specificati dalla fattura che stai tentando di pagare.</string>
     <string name="error_payment_timeout">Tempo scaduto. Impossibile trovare un percorso.</string>
-    <string name="error_payment_no_route">Impossibile trovare un percorso per il pagamento desiderato. L &#96; apertura di nuovi canali Lightning potrebbe risolvere il problema..</string>
-    <string name="error_payment_insufficient_balance">L\' importo da pagare &#232; maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
+    <string name="error_payment_no_route">Impossibile trovare un percorso per il pagamento desiderato. L ` apertura di nuovi canali Lightning potrebbe risolvere il problema..</string>
+    <string name="error_payment_insufficient_balance">L\' importo da pagare è maggiore di quello che puoi inviare tramite il lightning con i tuoi attuali canali aperti.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Assicurati che il destinatario abbia abilitato la funzione keyend.</string>
     <string name="error_only_payment_data_allowed">Qui sono consentiti solo i dati di pagamento.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
@@ -326,7 +325,7 @@
     <string name="fee_limit_title">Avviso sui limiti di commissione</string>
     <string name="fee_limit_threshold">Limite di commissione per i pagamenti di cui sopra %1$d sats: %2$s</string>
     <string name="fee_limit_exceeded">La commissione per questo pagamento (%1$.1f%%) supera il limite specificato nelle impostazioni (%2$.0f%%).\n\nVuoi davvero pagare questa fattura?</string>
-    <string name="fee_limit_exceeded_payment">La commissione per questo pagamento (%1$d sats) sar&#224; superiore all\' importo del pagamento (%2$d sats).\n\nVuoi davvero pagare questa fattura?</string>
+    <string name="fee_limit_exceeded_payment">La commissione per questo pagamento (%1$d sats) sarà superiore all\' importo del pagamento (%2$d sats).\n\nVuoi davvero pagare questa fattura?</string>
     <string name="unlock_wallet">Sblocca Wallet</string>
     <string name="biometricPrompt_title">Autenticazione Biometrica</string>
     <string name="biometricNotSetup">Per utilizzare questa funzione, devi configurare l\'autenticazione biometrica nelle impostazioni del tuo sistema Android.</string>
@@ -341,7 +340,7 @@
     <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:\n\n- Stringa di connessioneLND (lndconnect://...)\n- Connessione al server BtcPay (config=...)\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- non sempre possibile\n\nPerfetto per piccole transazioni.\nUtilizzare quando possibile.\n\n\nOn-Chain:\n\n+ sempre possibile\n- lento\n- commissioni alte\n\nBuono per grandi transazioni.\nUsalo quando Lightning non è possibile.</string>
     <string name="help_dialog_scanGeneric">Tutto è permesso qui.\nBasta scansionare un QR-Code e BitBanana determinerà automaticamente quale azione intraprendere in base ai dati.</string>
-    <string name="help_dialog_identity">Questa&#232; la tua identit&#224; sulla rete lightning.\n\nQuando tocchi l\' immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar &#232; unico.\n &#200; stato generato automaticamente in base alla tua chiave pubblica e non pu&#242; essere modificato.</string>
+    <string name="help_dialog_identity">Questaè la tua identità sulla rete lightning.\n\nQuando tocchi l\' immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar è unico.\n È stato generato automaticamente in base alla tua chiave pubblica e non può essere modificato.</string>
     <string name="delete">Elimina</string>
     <string name="rename">Rinominare</string>
     <string name="change_data">Modifica dati</string>
@@ -354,21 +353,21 @@
     <string name="lnurl_withdraw_success">Ritiro\nriuscito</string>
     <string name="lnurl_withdraw_fail">Ritiro\nfallito</string>
     <string name="lnurl_decoding_no_lnurl_data">I dati non contengono un LNURL valido.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">Importo del prelievo &#233; maggiore di quello che puoi ricevere su un lightning con i tuoi attuali canali aperti.</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">Importo del prelievo é maggiore di quello che puoi ricevere su un lightning con i tuoi attuali canali aperti.</string>
     <string name="lnurl_unsupported_type">Tipo di LNURL non supportato</string>
     <string name="lnurl_service_not_responding">%s non sta rispondendo</string>
     <string name="lnurl_service">Servizi</string>
     <string name="lnurl_service_provided_invalid_data">Il Servizio con cui stai interagendo ha fornito dati non validi.</string>
     <string name="lnurl_channel_opening_question">Vuoi veramente aprire un canale con:</string>
     <string name="lnurl_channel_pending_hint">Il canale si sta aprendo. Questo potrebbe richiedere del tempo.\nPuoi controllare lo stato dei canali nella panoramica dei tuoi canali.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">L &#96; importo da pagare &#232; maggiore di quello che puoi inviare tramite lightning  con i tuoi attuali canali aperti.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">L ` importo da pagare è maggiore di quello che puoi inviare tramite lightning  con i tuoi attuali canali aperti.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s ha inviato una richiesta di pagamento non valida.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Il tuo pagamento è andato a buon fine, ma il segreto che hai ricevuto non può essere decifrato.</string>
-    <string name="lnurl_pay_save_url">IMPORTANT:\nL &#232; URL &#233; stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verr&#224; pi&#249; mostrata.</string>
-    <string name="lnurl_pay_save_secret">IMPORTANT:\nIl codice &#233; stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verr&#224; pi&#249; mostrata.</string>
+    <string name="lnurl_pay_save_url">IMPORTANT:\nL è URL é stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verrà più mostrata.</string>
+    <string name="lnurl_pay_save_secret">IMPORTANT:\nIl codice é stato copiato negli appunti. Per favore salvalo se ne hai bisogno in seguito. Questa finestra di dialogo non verrà più mostrata.</string>
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
     <string name="string_analyzer_unrecognized_data">Dati non riconosciuti.</string>
-    <string name="rest_port">REST (port 8080) non &#233; supportata.\n\nVuoi cambiare la porta in 10009 (gRPC)?</string>
+    <string name="rest_port">REST (port 8080) non é supportata.\n\nVuoi cambiare la porta in 10009 (gRPC)?</string>
     <string name="drawer_menu_channels">Canali</string>
     <string name="drawer_menu_contacts">Contatti</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -387,7 +386,7 @@
     <string name="clipboard_scan_node_pubkey">Gli appunti contengono una chiave pubblica del nodo. Vuoi aprire un canale?</string>
     <string name="third_party_licenses">Licenze di terze parti</string>
     <string name="licenses">Licenze</string>
-    <string name="choose_action">Scegli un &#96; azione</string>
+    <string name="choose_action">Scegli un ` azione</string>
     <string name="add_contact">Aggiungi contatto</string>
     <string name="send_money">Manda soldi</string>
     <string name="contact_name">Nome del contatto</string>
@@ -435,4 +434,19 @@
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
+    <string name="activity_node_details">Dettagli Nodo</string>
+    <string name="save">Salva</string>
+    <string name="demo_setupNodeFirst">Prima devi connetterti a un nodo.</string>
+    <string name="documentation">Documentazione</string>
+    <string name="channel_close_type">Tipo chiusura</string>
+    <string name="demo_setupNodeFirstAvatar">Prima devi connetterti a un nodo, prima puoi vedere le informazioni del tuo nodo e il tuo avatar.</string>
+    <string name="activity_manage_channels_closed">Canali chiusi</string>
+    <string name="activity_manage_nodes">Gestisci Nodi</string>
+    <string name="activity_utxos">Monete (UTXOs)</string>
+    <string name="guardian_certificate_verification">Se la verifica del certificato è disabilitata, sei vulnerabile ad un attacco man-in-the-middle. Fallo solo se sai quello che stai facendo.
+\nSi consiglia di impostare correttamente il certificato.
+\nCiò significa che il certificato dal tuo nodo deve includere il nome host che stai usando in questa impostazione di connessione. Aggiungi il nome host a tlsextradomain in lnd.conf prima di ricreare il certificato.</string>
+    <string name="settings_tor_summary">Anonimizza tutto il traffico web utilizzando la rete Tor. Ciò influisce solo su cose come il recupero dei tassi di cambio o l\\\'apertura di link. L/\\\'utilizzo di Tor per connettersi a un nodo può essere impostato per ogni nodo singolarmente nelle sue impostazioni di connessione.</string>
+    <string name="navigation_node">Nodo</string>
+    <string name="guardian_zero_amount_invoice">Questa invoice non specifica un importo. Sebbene molto improbabile, le invoice senza un importo specifico possono essere sfruttate e il destinatario riceverà meno di quanto previsto in questo caso. Se possibile, utilizza una invoice con un importo specifico.</string>
 </resources>

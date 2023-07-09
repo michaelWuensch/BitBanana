@@ -32,8 +32,7 @@
     <  =  &lt;
     >  =  &gt;
 
-    -->
-<resources>
+    --><resources>
     <string name="ok">OK</string>
     <string name="cancel">Zrušit</string>
     <string name="lightning">Lightning</string>
@@ -65,7 +64,7 @@
     <string name="min_amount">Minimální částka:</string>
     <string name="retry">Zkusit znovu</string>
     <string name="loading">Načítání</string>
-    <string name="pay">BitBananalatit</string>
+    <string name="pay">Zaplatit</string>
     <string name="date">Datum</string>
     <string name="expiry">Expiruje</string>
     <string name="expired">Expirováno</string>
@@ -89,7 +88,7 @@
     <string name="scan">Skenovat</string>
     <string name="settings">Nastavení</string>
     <string name="support">Podpora</string>
-    <string name="contribute">Přispět</string>
+    <string name="contribute">Přiložit ruku k dílu</string>
     <string name="privacy">Soukromí</string>
     <string name="payee">Příjemce</string>
     <string name="open">Otevřít</string>
@@ -99,7 +98,7 @@
     <string name="send">Odeslat</string>
     <string name="notConnected">Nepřipojeno</string>
     <string name="activity_receive">Příjmout</string>
-    <string name="activity_send">BitBananalatit</string>
+    <string name="activity_send">Zaplatit</string>
     <string name="activity_connectRemoteNode">Připojit se ke vzdálenému uzlu</string>
     <string name="activity_manage_channels">Kanály</string>
     <string name="activity_advanced_settings">Pokročilé nastavení</string>
@@ -151,7 +150,7 @@
     <string name="channel_close_error">Chyba uzavření kanálu</string>
     <string name="channel_close_confirmation">Opravdu chcete kanál uzavřít pomocí:\n\n%s\n</string>
     <string name="channel_close_force_confirmation">Opravdu chcete vynutit uzavření kanálu pomocí:\n\n%1$s\n\nVaše prostředky budou uzamčeny na%2$s.</string>
-    <string name="channel_close_time">Časové zpoždění uzavření</string>
+    <string name="channel_close_time">Čas do uzavření</string>
     <string name="channel_open">Otevřít kanál</string>
     <string name="channel_open_success">Otevření kanálu bylo úspěšně zahájeno</string>
     <string name="channel_open_error">Chyba otevření kanálu</string>
@@ -186,7 +185,15 @@
     <string name="guardian_pasteFromClipboard">Při vkládání ze schránky vždy zkontrolujte poslední 3 až 5 číslic. Škodlivá aplikace mohla změnit adresu na pozadí, aniž byste si toho všimli.</string>
     <string name="guardian_disableScrambledPin">Pokud není zamíchán, je snadné uhádnout svůj PIN pouhým sledováním pohybů prstu.</string>
     <string name="guardian_disableScreenProtection">Pokud povolíte nahrávání obrazovky, může být škodlivý software schopen nahrávat video nebo pořizovat snímky obrazovky, když používáte BitBanana. Doporučujeme deaktivovat pouze v případě, že chcete nahrát video nebo pořídit snímek obrazovky.</string>
-    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Chystáte se BitBananalatit %1$s%% v síťových poplatcích.\n\nMožná řešení:\n- zkuste místo toho Lightning platbu\n- vyberte nižší poplatek, počkejte déle\n- zkuste znovu později\n- převeďte větší množství\n\nChcete přesto pokračovat?</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Chystáte se zaplatit %1$s%% v síťových poplatcích.
+\n
+\nMožná řešení:
+\n- zkuste místo toho Lightning platbu
+\n- vyberte nižší poplatek, počkejte déle
+\n- zkuste znovu později
+\n- převeďte větší množství
+\n
+\nChcete přesto pokračovat\?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Částku jste požadovali jako hodnotu fiat, ale vaše data směnného kurzu jsou stará (načtena před%1$s hodinami).\nUjistěte se, že máte připojení k internetu nebo zvažte žádost přímo v bitcoinech.\n\nChcete přesto pokračovat?</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_externalLink">V prohlížeči se chystáte otevřít odkaz s citlivými údaji. Zatímco BitBanana anonymizuje veškerý váš provoz pomocí sítě Tor, váš prohlížeč tak nečiní. Pokud chcete zachovat soukromí těchto údajů, použijte k otevření odkazu prohlížeč Tor.</string>
@@ -260,7 +267,11 @@
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
     <string name="error_connection_internal_server">Uzel je dosažitelný, ale vrací interní chybu. Tato chyba může být způsobena použitím nesprávného portu.</string>
     <string name="error_wrong_password">Špatné heslo</string>
-    <string name="error_lightning_uri_invalid">Neplatný formát.\nPoužijte jednu z následujících možností:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
+    <string name="error_lightning_uri_invalid">Neplatný formát.
+\nPoužijte jednu z následujících možností:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="error_connect_peer">Nelze navázat spojení s rovnocenným uzlem.</string>
     <string name="error_connect_peer_refused">Spojení bylo peerem odmítnuto.</string>
     <string name="error_connect_peer_self">Nelze navázat spojení se sebou samým.</string>
@@ -277,9 +288,9 @@
     <string name="error_pin_deactivation_attempt">Vypadá to, že se někdo pokusil deaktivovat váš kód PIN. Aplikace se nyní zavře.\nMůžete aplikaci znovu nainstalovat a pomocí procesu obnovy získat zpět přístup ke svým prostředkům.</string>
     <string name="error_empty_node_name">Prázdné jméno není povoleno.</string>
     <string name="error_invalid_bitcoin_request">Neplatný bitcoin požadavek.</string>
-    <string name="error_payment_invalid_details">Platební údaje se neshodovaly s údaji uvedenými na faktuře, kterou se pokoušíte BitBananalatit.</string>
+    <string name="error_payment_invalid_details">Platební údaje se neshodovaly s údaji uvedenými na faktuře, kterou se pokoušíte zaplatit.</string>
     <string name="error_payment_timeout">Čas vypršel. Nebyla nalezena žádná cesta.</string>
-    <string name="error_payment_no_route">Pro požadovanou platbu nebyla nalezena žádná trasa. Problém může vyřešit otevření nových lightning kanálů.</string>
+    <string name="error_payment_no_route">Nebyla nalezena cesta, která by odpovídala vašemu limitu %1$.1f%% pro poplatky. Problém může vyřešit otevření nových lightning kanálů nebo zvýšení limitu pro poplatky.</string>
     <string name="error_payment_insufficient_balance">Částka k BitBananalacení je větší než to, co můžete poslat přes lightning se svými současnými otevřenými kanály.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Ujistěte se, že příjemce povolil funkci keyend.</string>
     <string name="error_only_payment_data_allowed">Zde jsou povoleny pouze údaje o platbě.</string>
@@ -339,7 +350,9 @@
     <string name="fee_not_available">n/A</string>
     <string name="fee_limit_title">Upozornění na limit poplatků</string>
     <string name="fee_limit_threshold">Limit poplatků za platby nad%1$d satoshi: %2$s</string>
-    <string name="fee_limit_exceeded">Poplatek za tuto platbu (%1$.1f%%) přesahuje limit stanovený v nastavení (%2$.0f%%).\n\nChcete tuto fakturu skutečně platit?</string>
+    <string name="fee_limit_exceeded">Poplatek za tuto platbu (%1$.1f%%) přesahuje limit stanovený v nastavení (%2$.1f%%).
+\n
+\nChcete tuto fakturu skutečně platit\?</string>
     <string name="fee_limit_exceeded_payment">Poplatek za tuto platbu (%1$d sats) bude vyšší než částka platby (%2$d sats).\n\nChcete tuto fakturu skutečně platit?</string>
     <string name="unlock_wallet">Odemknout peněženku</string>
     <string name="biometricPrompt_title">Biometrická autentizace</string>
@@ -351,7 +364,12 @@
     <string name="nfc_type_not_supported">Nepodporovaný typ NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-kódy obsahující následující informace jsou platné: \n\n- Bitcoinová adresa\n- Žádost o bitcoin platbu\n- Žádost o lightning platbu</string>
     <string name="help_dialog_scanNodePublicKey">Platí QR-kódy obsahující následující:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-kódy obsahující následující informace jsou platné: \n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">QR-kódy obsahující následující informace jsou platné:
+\n
+\n- Lightning adresa
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a BitBanana automaticky určí, která akce bude provedena v závislosti na datech.</string>
@@ -375,7 +393,7 @@
     <string name="lnurl_service_provided_invalid_data">Služba, se kterou komunikujete, poskytuje neplatná data.</string>
     <string name="lnurl_channel_opening_question">Opravdu chcete otevřít kanál s:</string>
     <string name="lnurl_channel_pending_hint">Kanál se otevírá. Může to chvíli trvat.\nStav kanálů můžete zkontrolovat ve vašem přehledu kanálů.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">Částka, kterou chcete BitBananalatit, je větší než částka, kterou můžete odeslat přes lightning pomocí aktuálně otevřených kanálů.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Částka, kterou chcete zaplatit, je větší než částka, kterou můžete odeslat přes lightning pomocí aktuálně otevřených kanálů.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s odeslal neplatnou žádost o platbu.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Vaše platba byla úspěšná, ale tajemství, které jste obdrželi, nebylo možné dešifrovat.</string>
     <string name="lnurl_pay_save_url">DŮLEŽITÉ: \nURL byla zkopírována do vaší schránky. Uložte ji, pokud ji budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
@@ -405,13 +423,13 @@
     <string name="add_contact">Přidat kontakt</string>
     <string name="send_money">Poslat peníze</string>
     <string name="contact_name">Jméno kontaktu</string>
-    <string name="contact_already_exists">Tato osoba již je ve vašich kontaktech!</string>
+    <string name="contact_already_exists">Tento kontakt už existuje!</string>
     <string name="no_contacts">Žádné kontakty</string>
     <string name="manual_send_input_hint">Adresa nebo platební údaje</string>
     <string name="advanced_channel_details_explanation_capacity">Celková částka finančních prostředků držených v tomto kanálu. Vzhledem k některým omezením (např. poplatek za závazek nebo místní rezerva kanálu) nelze utratit všechny prostředky.</string>
     <string name="advanced_channel_details_activity">Aktivita</string>
     <string name="advanced_channel_details_explanation_activity">Celkové procento odeslaných a přijatých prostředků dělené celkovou kapacitou kanálu. Kanál s aktivitou vyšší než 100\% znamená, že kanálem prošlo více prostředků, než kolik jich může pojmout. Tato metrika má ukázat, jak je daný kanál efektivní.</string>
-    <string name="advanced_channel_details_lifetime">Životnost</string>
+    <string name="advanced_channel_details_lifetime">Stáří</string>
     <string name="advanced_channel_details_explanation_lifetime">Toto ukazuje, jak dlouho již tento kanál existuje.</string>
     <string name="advanced_channel_details_explanation_visibility">Kanál může být veřejný nebo soukromý. Soukromé kanály nejsou bezpečnější, pouze nejsou viditelné v síti.</string>
     <string name="advanced_channel_details_commit_fee">Poplatek za závazek</string>
@@ -449,4 +467,100 @@
     <string name="backup_data_version_too_old">Záloha byla vytvořena pomocí novější verze. Před importem zálohy aplikaci aktualizujte.</string>
     <string name="backup_data_invalid_file_chosen">Toto není platný zálohovací soubor. Vyberte prosím soubor, který byl vytvořen pomocí této aplikace.</string>
     <string name="dialog_open_url">Údaje odkazují na webovou stránku. Chcete otevřít následující webovou stránku?\n\n%1$s</string>
+    <string name="error_connection_tor_unreachable">Připojení přes Tor selhalo.
+\nZapněte Tor v nastavení připojení uzlu.</string>
+    <string name="sign">Podepsat</string>
+    <string name="message_to_verify">Zpráva k ověření</string>
+    <string name="support_donate">Přispět</string>
+    <string name="support_donate_description">Podpořte vývojáře.</string>
+    <string name="ln_address">Lightning adresa</string>
+    <string name="advanced_channel_details_lifetime_closed">Životnost</string>
+    <string name="advanced_channel_details_initiator_you">Vy</string>
+    <string name="advanced_channel_details_explanation_close_initiator">Kdo zavřel tento kanál\?</string>
+    <string name="forwarding_earned_description">Vyděláno v daném období</string>
+    <string name="verify">Ověřit</string>
+    <string name="message_to_sign">Zpráva k podpisu</string>
+    <string name="sign_message">Podepsat zprávu</string>
+    <string name="verify_certificate">Ověřovat certifikát</string>
+    <string name="open_node">Vybrat tento uzel</string>
+    <string name="channel_close_type">Typ uzavření</string>
+    <string name="drawer_menu_category_current_node">Vybraný uzel</string>
+    <string name="drawer_menu_coin_control">Mince (UTXOs)</string>
+    <string name="no_nodes">Žádné uzly</string>
+    <string name="activity_manage_channels_closed">Zavřené kanály</string>
+    <string name="activity_manage_nodes">Spravovat uzly</string>
+    <string name="settings_showHelpButtons">Zobrazovat tlačítka nápovědy</string>
+    <string name="node_added">Data pro připojení k uzlu byla přidána.</string>
+    <string name="advanced_channel_details_initiator_peer">Vzdálený uzel</string>
+    <string name="generated_signature">Vygenerovaný podpis:</string>
+    <string name="documentation">Dokumentace</string>
+    <string name="activity_utxos">Mince (UTXOs)</string>
+    <string name="activity_forwarding">Směrování</string>
+    <string name="error_invalid_fee_preset_value">Hodnota muži být větší než 0.</string>
+    <plurals name="blocks">
+        <item quantity="one">%d Blok</item>
+        <item quantity="few">%d Bloky</item>
+        <item quantity="other">%d Bloků</item>
+    </plurals>
+    <string name="drawer_menu_nodes">Uzly</string>
+    <string name="forwarding_closed_channel">Uzavřený kanál</string>
+    <string name="demo_setupNodeFirstAvatar">Než uvidíte informace o svém uzlu a svůj avatar, musíte se připojit k uzlu.</string>
+    <string name="demo_setupNodeFirst">Nejdříve se musíte připojit k uzlu.</string>
+    <string name="error_connection_internal_server_clearnet">Uzel je dostupný, ale vrací interní chybu. Tato chyba může být způsobená nesprávným portem. Vypnutí Toru v nastavení připojení uzlu také může problém vyřešit.</string>
+    <string name="error_channel_open_node_setup">Než budete moct otevřít kanál, musíte se nejdřív připojit k uzlu.</string>
+    <string name="error_node_not_yet_ready">Váš uzel není zatím plně synchronizován. Zkuste to později.</string>
+    <string name="contact_type_ln_node">Lightning uzel</string>
+    <string name="data">Data</string>
+    <string name="advanced_channel_details_explanation_lifetime_closed">Ukazuje dobu po kterou byl kanál aktivní.</string>
+    <string name="advanced_channel_details_initiator">Iniciátor</string>
+    <string name="advanced_channel_details_explanation_initiator">Kdo otevřel tento kanál\?</string>
+    <string name="advanced_channel_details_close_initiator">Iniciátor uzavření</string>
+    <string name="utxo_no_utxos">Žádná UTXOs</string>
+    <string name="advanced_channel_details_explanation_close_type">Kanály lze zavřít několika způsoby. V ideálním případě protistrany spolupracují (cooperative close). Pokud jedna strana nekomunikuje s druhou, je potřeba vynucené uzavření (force close). To má za následky vyšší poplatky a nucenou prodlevu, než bude iniciátor disponovat s jeho prostředky. Pokud je jedna strana chycena při pokusu o podvod nastane \"breach close\".</string>
+    <string name="forwarding_no_forwarding_events">V daném období nebyly přeposlány žádné platby</string>
+    <string name="forwarding_volume_description">Přeposláno ve vybraném období</string>
+    <string name="sign_verify">Podepsat/Ověřit</string>
+    <string name="settings_fastFee">Rychlá transakce</string>
+    <string name="settings_mediumFee">Středně rychlá transakce</string>
+    <string name="settings_receiveAddressDisplayValues_0">SegWit kompatibilní (P2PSH)</string>
+    <string name="settings_onChainFeePresets">Výchozí on-chain poplatky</string>
+    <string name="settings_slowFee">Pomalá transakce</string>
+    <string name="lnurl_pay_comment_for_payee">Komentář pro příjemce</string>
+    <string name="channel_close_type_coop">Kooperativní</string>
+    <string name="channel_close_type_force_close">Vynucené uzavření</string>
+    <string name="error_connection_no_internet">Internetové připojení není k dispozici!</string>
+    <string name="manually">Ručně</string>
+    <string name="save">Uložit</string>
+    <string name="pubkey">Pubkey</string>
+    <string name="activity_node_details">Detaily uzlu</string>
+    <string name="navigation_node">Uzel</string>
+    <string name="settings_payer_data">Identifikace platby</string>
+    <string name="settings_receiveAddressDisplayValues_1">SegWit nativní (Bech32)</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="error_invalid_data_to_create_channel">Neplatný formát.
+\nPoužijte prosím jedno z následujících:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port
+\n- LNURL-Channel</string>
+    <string name="error_invalid_ln_address_format">Neplatný formát Lightning adresy. Měla by vypadat běžná emailová adresa.
+\n
+\nuzivatel@domena</string>
+    <string name="help_dialog_private_channels">Privátní kanály nejsou více bezpečné, pouze nejsou viditelné pro zbytek sítě.
+\nPoužívejte je pouze když otevíráte kanál k uzlu, který nepřeposílá platby nebo když je nepřeposílá váš uzel.
+\nPro přeposílání plateb musí být váš uzel často online. Pokud je váš uzel na mobilním zařízení nebo je často offline, neměl(a) byste přeposílat platby a použijte privátní kanály.</string>
+    <string name="node_name">Jméno uzlu</string>
+    <string name="confirm_node_deletion">Opravdu chcete smazat připojení k tomuto uzlu\?</string>
+    <string name="node_already_exists">Tento uzel už existuje.
+\nPokud chcete upravit jeho data o připojení jdete na stránku detailu uzlu.</string>
+    <string name="useTor">Použít Tor</string>
+    <string name="lnurl_payer_data_name">Jméno</string>
+    <string name="lnurl_payer_data_identifier">Lightning adresa</string>
+    <string name="lnurl_payer_data_identifier_explanation">Lightning adresa je jako emailová adresa ale pro Bitcoin!</string>
+    <string name="lnurl_payer_data_email">Email</string>
+    <string name="lnurl_payer_data_not_supported">Tato platba vyžaduje druh autentizace, který BitBanana zatím nepodporuje.</string>
+    <string name="lnurl_payer_data_description">Informace pro příjemce</string>
+    <string name="lnurl_payer_data_choose">Vyberte, která data se mají odeslat:</string>
+    <string name="drawer_menu_routing">Přeposílání</string>
+    <string name="drawer_menu_category_app">Aplikace</string>
 </resources>
