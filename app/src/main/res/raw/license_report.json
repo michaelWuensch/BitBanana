@@ -51,6 +51,23 @@
     "dependency": "androidx.activity:activity-ktx:1.6.0"
   },
   {
+    "project": "alexzhirkevich/custom-qr-generator",
+    "description": "Android library for creating QR codes with logo, custom shapes, colors, background image. Powered by ZXing",
+    "version": "separate_painting-SNAPSHOT",
+    "developers": [
+      "Alexander Zhirkevich"
+    ],
+    "url": "https://github.com/alexzhirkevich/custom-qr-generator",
+    "year": "2022",
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "https://api.github.com/licenses/mit"
+      }
+    ],
+    "dependency": "com.github.alexzhirkevich:custom-qr-generator:separate_painting-SNAPSHOT"
+  },
+  {
     "project": "Android App Startup Runtime",
     "description": "Android App Startup Runtime",
     "version": "1.1.1",
@@ -967,16 +984,6 @@
     "dependency": "org.codehaus.mojo:animal-sniffer-annotations:1.21"
   },
   {
-    "project": "avathor-android-library",
-    "description": null,
-    "version": "1.1.0",
-    "developers": [],
-    "url": null,
-    "year": null,
-    "licenses": [],
-    "dependency": "com.github.michaelWuensch:avathor-android-library:1.1.0"
-  },
-  {
     "project": "Biometric",
     "description": "The Biometric library is a static library that you can add to your Android application. It invokes BiometricPrompt on devices running P and greater, and on older devices will show a compat dialog. Compatible on devices running API 14 or later.",
     "version": "1.1.0",
@@ -1048,7 +1055,7 @@
   {
     "project": "error-prone annotations",
     "description": null,
-    "version": "2.15.0",
+    "version": "2.18.0",
     "developers": [],
     "url": null,
     "year": null,
@@ -1058,7 +1065,24 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.errorprone:error_prone_annotations:2.15.0"
+    "dependency": "com.google.errorprone:error_prone_annotations:2.18.0"
+  },
+  {
+    "project": "ExpandableFab",
+    "description": "A highly customizable Android widget that displays the available actions of a UI via an expandable set of floating action buttons - with optional labels and fluid animations.",
+    "version": "1.2.1",
+    "developers": [
+      "Kelvin Abumere"
+    ],
+    "url": "https://github.com/nambicompany/expandable-fab",
+    "year": null,
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "https://github.com/nambicompany/expandable-fab/blob/master/LICENSE.txt"
+      }
+    ],
+    "dependency": "com.nambimobile.widgets:expandable-fab:1.2.1"
   },
   {
     "project": "Experimental annotation",
@@ -1206,7 +1230,7 @@
   {
     "project": "io.grpc:grpc-api",
     "description": "gRPC: API",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1218,12 +1242,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-api:1.51.1"
+    "dependency": "io.grpc:grpc-api:1.54.0"
   },
   {
     "project": "io.grpc:grpc-context",
     "description": "gRPC: Context",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1235,12 +1259,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-context:1.51.1"
+    "dependency": "io.grpc:grpc-context:1.54.0"
   },
   {
     "project": "io.grpc:grpc-core",
     "description": "gRPC: Core",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1252,12 +1276,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-core:1.51.1"
+    "dependency": "io.grpc:grpc-core:1.54.0"
   },
   {
     "project": "io.grpc:grpc-okhttp",
     "description": "gRPC: OkHttp",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1269,12 +1293,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-okhttp:1.51.1"
+    "dependency": "io.grpc:grpc-okhttp:1.54.0"
   },
   {
     "project": "io.grpc:grpc-protobuf-lite",
     "description": "gRPC: Protobuf Lite",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1286,12 +1310,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-protobuf-lite:1.51.1"
+    "dependency": "io.grpc:grpc-protobuf-lite:1.54.0"
   },
   {
     "project": "io.grpc:grpc-stub",
     "description": "gRPC: Stub",
-    "version": "1.51.1",
+    "version": "1.54.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1303,7 +1327,7 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-stub:1.51.1"
+    "dependency": "io.grpc:grpc-stub:1.54.0"
   },
   {
     "project": "J2ObjC Annotations",
@@ -1360,7 +1384,7 @@
   {
     "project": "Kotlin Stdlib",
     "description": "Kotlin Standard Library for JVM",
-    "version": "1.7.10",
+    "version": "1.8.0",
     "developers": [
       "Kotlin Team"
     ],
@@ -1372,12 +1396,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
   },
   {
     "project": "Kotlin Stdlib Common",
     "description": "Kotlin Common Standard Library",
-    "version": "1.7.10",
+    "version": "1.8.0",
     "developers": [
       "Kotlin Team"
     ],
@@ -1389,12 +1413,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0"
   },
   {
     "project": "Kotlin Stdlib Jdk7",
     "description": "Kotlin Standard Library JDK 7 extension",
-    "version": "1.6.0",
+    "version": "1.8.0",
     "developers": [
       "Kotlin Team"
     ],
@@ -1406,12 +1430,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0"
   },
   {
     "project": "Kotlin Stdlib Jdk8",
     "description": "Kotlin Standard Library JDK 8 extension",
-    "version": "1.6.0",
+    "version": "1.8.0",
     "developers": [
       "Kotlin Team"
     ],
@@ -1423,12 +1447,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
   },
   {
     "project": "kotlinx-coroutines-android",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.6.1",
+    "version": "1.6.4",
     "developers": [
       "JetBrains Team"
     ],
@@ -1440,12 +1464,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
   },
   {
     "project": "kotlinx-coroutines-core",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.6.1",
+    "version": "1.6.4",
     "developers": [
       "JetBrains Team"
     ],
@@ -1457,7 +1481,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4"
   },
   {
     "project": "LiveData Core Kotlin Extensions",
@@ -1492,6 +1516,23 @@
       }
     ],
     "dependency": "com.google.android.material:material:1.8.0"
+  },
+  {
+    "project": "michaelWuensch/avathor-android-library",
+    "description": "Avatar images for the bitcoin lightning network.Implementation of the Avathor specification for android.",
+    "version": "1.2.0",
+    "developers": [
+      "Michael Wünsch"
+    ],
+    "url": "https://github.com/michaelWuensch/avathor-android-library",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "https://api.github.com/licenses/mit"
+      }
+    ],
+    "dependency": "com.github.michaelWuensch:avathor-android-library:1.2.0"
   },
   {
     "project": "okhttp",
@@ -1575,40 +1616,6 @@
       }
     ],
     "dependency": "com.google.protobuf:protobuf-javalite:3.21.7"
-  },
-  {
-    "project": "QRGen-android",
-    "description": "a simple QRCode generation api for java built on top ZXING",
-    "version": "3.0.1",
-    "developers": [
-      "Ken Gullaksen"
-    ],
-    "url": "http://glxn.net/2012/03/10/qrgen-a-small-wrapper-on-top-of-zxing-for-generating-qrcodes-in-java",
-    "year": "2012",
-    "licenses": [
-      {
-        "license": "Apache License v2",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-      }
-    ],
-    "dependency": "com.github.kenglxn.QRGen:android:3.0.1"
-  },
-  {
-    "project": "QRGen-core",
-    "description": "a simple QRCode generation api for java built on top ZXING",
-    "version": "3.0.1",
-    "developers": [
-      "Ken Gullaksen"
-    ],
-    "url": "http://kenglxn.github.io/QRGen/",
-    "year": "2012",
-    "licenses": [
-      {
-        "license": "Apache License v2",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-      }
-    ],
-    "dependency": "com.github.kenglxn.QRGen:core:3.0.1"
   },
   {
     "project": "reactive-streams",
