@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.customView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,6 +14,9 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import java.net.URL;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
@@ -20,9 +24,6 @@ import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 
 public class ManualSendInputView extends ConstraintLayout {
 
@@ -159,13 +160,19 @@ public class ManualSendInputView extends ConstraintLayout {
 
     private void errorReadingData(String error, int duration) {
         mListener.onError(error, duration);
-        mBtnContinue.setVisibility(VISIBLE);
-        mSpinner.setVisibility(INVISIBLE);
+        resetContinueButton();
     }
 
     private void invalidInput() {
         mListener.onError(getContext().getString(R.string.error_only_payment_data_allowed), RefConstants.ERROR_DURATION_MEDIUM);
-        mBtnContinue.setVisibility(VISIBLE);
-        mSpinner.setVisibility(INVISIBLE);
+        resetContinueButton();
+    }
+
+    private void resetContinueButton() {
+        // This has to be executed on the main tread. If not it will crash if it is a callback from a http request.
+        ((Activity) getContext()).runOnUiThread(() -> {
+            mBtnContinue.setVisibility(VISIBLE);
+            mSpinner.setVisibility(INVISIBLE);
+        });
     }
 }
