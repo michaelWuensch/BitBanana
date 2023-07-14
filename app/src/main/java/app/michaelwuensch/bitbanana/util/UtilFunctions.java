@@ -127,7 +127,7 @@ public class UtilFunctions {
     }
 
     public static boolean isHex(String input) {
-        return input.matches("^[0-9a-fA-F]+$");
+        return input.matches("^[0-9a-f]+$|^[0-9A-F]+$");
     }
 
     public static double roundDouble(double value, int places) {

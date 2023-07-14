@@ -1,6 +1,6 @@
 package app.michaelwuensch.bitbanana.qrCodeGen;
 
-import static com.github.alexzhirkevich.customqrgenerator.style.QrColorKt.Color;
+import static com.github.alexzhirkevich.customqrgenerator.style.ColorUtillsKt.Color;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,11 +10,15 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.github.alexzhirkevich.customqrgenerator.HighlightingType;
 import com.github.alexzhirkevich.customqrgenerator.QrData;
 import com.github.alexzhirkevich.customqrgenerator.QrErrorCorrectionLevel;
+import com.github.alexzhirkevich.customqrgenerator.QrHighlighting;
+import com.github.alexzhirkevich.customqrgenerator.QrHighlightingKt;
 import com.github.alexzhirkevich.customqrgenerator.style.BitmapScale;
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawableKt;
 import com.github.alexzhirkevich.customqrgenerator.vector.QrVectorOptions;
+import com.github.alexzhirkevich.customqrgenerator.vector.style.QVectorShapeUtilsKt;
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorBackground;
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorBallShape;
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorColor;
@@ -27,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 public class QRCodeGenerator {
 
@@ -36,6 +41,10 @@ public class QRCodeGenerator {
     }
 
     public static Drawable drawableFromText(String data) {
+        if (UtilFunctions.isHex(data)) {
+            // If we have a hex string, uppercase it so Alphanumeric encoding is used instead of binary, which produces smaller codes
+            data = data.toUpperCase();
+        }
         QrData qrData = new QrData.Text(data);
         return QrCodeDrawableKt.QrCodeDrawable(qrData, getQrVectorOptions(data), StandardCharsets.UTF_8);
     }
@@ -50,13 +59,13 @@ public class QRCodeGenerator {
     }
 
     private static QrVectorOptions getDesignQrVectorOptions(String data) {
-        QrVectorOptions options = getDefaultOptionsBuilder()
+        QrVectorOptions.Builder optionsBuilder = getDefaultOptionsBuilder()
                 .setShapes(
                         new QrVectorShapes(
-                                new QrVectorPixelShape.Rect(0.75f),
-                                new QrVectorPixelShape.RoundCorners(.5f),
+                                new QrVectorPixelShape.Rect(.75f),
+                                new QrVectorPixelShape.Rect(.75f),
                                 new QrVectorBallShape.RoundCorners(.15f, true, true, true, true),
-                                new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true),
+                                new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true, 7),
                                 true
                         )
                 )
@@ -68,11 +77,35 @@ public class QRCodeGenerator {
                                 new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue))
                         )
                 )
-                .setErrorCorrectionLevel(QrErrorCorrectionLevel.Medium)
-                .build();
+                .setAnchorsHighlighting(new QrHighlighting(
+                        new HighlightingType.Styled(),
+                        new HighlightingType.Styled(
+                                QrHighlightingKt.QrVersionEyeShape(
+                                        new QrVectorFrameShape.AsPixelShape(new QrVectorPixelShape.Rect(.75f), 5),
+                                        QVectorShapeUtilsKt.asBallShape(new QrVectorPixelShape.Rect(.75f))),
+                                new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue)),
+                                new QrVectorPixelShape.Rect(.0f),
+                                new QrVectorColor.Solid(Color(0x00ffffff))),
+                        new HighlightingType.Styled(new QrVectorPixelShape.Rect(.75f), new QrVectorColor.Solid(Color(0xffffffff)), new QrVectorPixelShape.Rect(.75f), new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue))),
+                        1.0f
+                ));
 
 
-        return options;
+        if (data.length() > 60) {
+            optionsBuilder.setErrorCorrectionLevel(QrErrorCorrectionLevel.Low);
+        } else {
+            optionsBuilder.setErrorCorrectionLevel(QrErrorCorrectionLevel.Medium);
+        }
+
+        new HighlightingType.Styled(new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true, 7), new QrVectorColor.Solid(Color(0xffffffff)), new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true, 7), new QrVectorColor.Solid(ContextCompat.getColor(App.getAppContext(), R.color.deep_sea_blue)));
+        QrHighlightingKt.QrVersionEyeShape(
+                new QrVectorFrameShape.AsPixelShape(
+                        new QrVectorPixelShape.Rect(.75f), 5
+                ),
+                QVectorShapeUtilsKt.asBallShape(new QrVectorPixelShape.Rect(.75f))
+        );
+
+        return optionsBuilder.build();
     }
 
     private static QrVectorOptions getCompatibilityQrVectorOptions() {
@@ -82,7 +115,7 @@ public class QRCodeGenerator {
                                 new QrVectorPixelShape.RoundCorners(.0f),
                                 new QrVectorPixelShape.RoundCorners(.35f),
                                 new QrVectorBallShape.RoundCorners(.15f, true, true, true, true),
-                                new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true),
+                                new QrVectorFrameShape.RoundCorners(.15f, 1f, true, true, true, true, 7),
                                 true
                         )
                 )

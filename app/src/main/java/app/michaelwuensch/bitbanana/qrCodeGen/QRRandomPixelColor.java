@@ -2,6 +2,9 @@ package app.michaelwuensch.bitbanana.qrCodeGen;
 
 import android.graphics.Paint;
 
+import androidx.annotation.NonNull;
+
+import com.github.alexzhirkevich.customqrgenerator.style.Neighbors;
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrPaintMode;
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorColor;
 
@@ -30,7 +33,7 @@ public class QRRandomPixelColor implements QrVectorColor {
     }
 
     @Override
-    public void paint(Paint paint, float width, float height) {
+    public void paint(Paint paint, float width, float height, @NonNull Neighbors neighbors) {
         paint.setColor(getColor());
     }
 

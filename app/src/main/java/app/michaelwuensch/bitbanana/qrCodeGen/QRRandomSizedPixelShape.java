@@ -20,7 +20,7 @@ public class QRRandomSizedPixelShape implements QrVectorPixelShape {
 
     @NonNull
     @Override
-    public Path shape(@NonNull Path path, float size, @NonNull Neighbors neighbors) {
-        return from.get((int) (Math.random() * from.size())).shape(path, size, neighbors);
+    public void shape(@NonNull Path path, float size, @NonNull Neighbors neighbors) {
+        from.get((int) (Math.random() * from.size())).shape(path, size, neighbors);
     }
 }
