@@ -98,6 +98,11 @@
             android:key="resetAll"
             android:title="Reset APP"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="goToTests"
+            android:title="Automated Tests"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>

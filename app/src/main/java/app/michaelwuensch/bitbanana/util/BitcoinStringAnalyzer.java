@@ -59,6 +59,10 @@ public class BitcoinStringAnalyzer {
     }
 
     public static void analyze(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
+        if (inputString == null) {
+            listener.onNoReadableData();
+            return;
+        }
         String data = prepareData(inputString);
         checkIfLnUrl(ctx, compositeDisposable, data, listener);
     }

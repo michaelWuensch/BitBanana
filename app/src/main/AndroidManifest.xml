@@ -197,6 +197,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity"
+            android:label="Live Tests"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"

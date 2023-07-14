@@ -29,6 +29,7 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.AppUtil;
@@ -200,6 +201,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), AdvancedSettingsActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        // Action when clicked on "advanced settings"
+        final Preference prefLiveTests= findPreference("goToTests");
+        prefLiveTests.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), LiveTestingActivity.class);
                 startActivity(intent);
                 return true;
             }
