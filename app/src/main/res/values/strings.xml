@@ -480,8 +480,7 @@
     <string name="lnurl_payer_data_choose">Choose which data to send:</string>
 
     <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
-
-    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
+    <string name="rest_port">REST is not supported.\n\nDo you want to try connecting via gRPC?</string>
 
     <string name="drawer_menu_nodes">Nodes</string>
     <string name="drawer_menu_channels">Channels</string>
