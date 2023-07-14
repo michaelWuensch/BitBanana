@@ -12,9 +12,14 @@ BitBanana is a native android app for node operators focused on user experience 
 While it is not a wallet on its own, BitBanana works like a remote control allowing you to use your node as a wallet wherever you go.  
 The app is designed with an educational approach, providing the user with guidance on every aspect of node operation.
 
-The easiest way to get started is using [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect BitBanana to that node.
-
 BitBanana forked from Zap Android. You can find more information about this on the [Rebranding](docs/REBRANDING.md) page.
+
+## Getting started
+
+The easiest way to get started is using [Start9](https://start9.com/) or [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect BitBanana to that node.
+There are of course a lot more possible ways to run a node, so please refer to the [setup](https://github.com/michaelWuensch/BitBanana/wiki/Setup) section in the Wiki if you need help to get started.
+
+
 
 ## Features
 **General**
