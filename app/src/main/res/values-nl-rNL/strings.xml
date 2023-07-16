@@ -1,49 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    -->
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="ok">OK</string>
     <string name="cancel">Annuleer</string>
-    <string name="lightning">Lightning</string>
-    <string name="onChain">On-Chain</string>
     <string name="share">Deel</string>
     <string name="copy">Kopieer</string>
     <string name="paste">Plak</string>
-    <string name="details">Details</string>
     <string name="amount">Bedrag</string>
-    <string name="memo">Memo</string>
     <string name="shareDialogTitle">Kies App</string>
     <string name="yes">Ja</string>
     <string name="no">Nee</string>
@@ -53,7 +14,6 @@
     <string name="next">Volgende</string>
     <string name="coming_soon">Binnenkort beschikbaar...</string>
     <string name="needHelp">Hulp nodig?</string>
-    <string name="offline">offline</string>
     <string name="sent">Verzonden</string>
     <string name="received">Ontvangen</string>
     <string name="today">Vandaag</string>
@@ -75,8 +35,6 @@
     <string name="channel">Kanaal</string>
     <string name="event">Gebeurtenis</string>
     <string name="channel_event">Kanaalgebeurtenis</string>
-    <string name="scan_qr_code">Scan QR-Code</string>
-    <string name="node">Node</string>
     <string name="funds_available">Beschikbaar: %s</string>
     <string name="amount_invalid">Het bedrag is ongeldig.</string>
     <string name="success">Gelukt</string>
@@ -86,16 +44,12 @@
     <string name="continue_string">Doorgaan</string>
     <string name="withdraw">Opnemen</string>
     <string name="unknown">Onbekend</string>
-    <string name="scan">Scan</string>
     <string name="settings">Instellingen</string>
     <string name="support">Ondersteuning</string>
     <string name="contribute">Bijdragen</string>
-    <string name="privacy">Privacy</string>
     <string name="payee">Ontvanger</string>
-    <string name="open">Open</string>
     <string name="search">Zoeken</string>
     <string name="confirmations">Bevestigingen</string>
-    <string name="maximum_abbreviation">max</string>
     <string name="send">Verzend</string>
     <string name="notConnected">Geen verbinding</string>
     <string name="activity_receive">Ontvang</string>
@@ -108,7 +62,6 @@
     <string name="activity_manage_contacts_open_channel_mode">Open kanaal met…</string>
     <string name="activity_contact_details">Contactdetails</string>
     <string name="activity_manual_setup">Verbindingsgegevens</string>
-    <string name="activity_backup">Backup</string>
     <string name="navigation_history">Geschiedenis</string>
     <string name="navigation_settings">Instellingen</string>
     <string name="pin_create">Stel PIN in</string>
@@ -136,8 +89,6 @@
     <string name="channel_no_alias">Naamloos</string>
     <string name="channel_remote_public_key">Externe Public Key</string>
     <string name="channel_funding_transaction">Financieringstransactie</string>
-    <string name="channel_state_open">open</string>
-    <string name="channel_state_offline">offline</string>
     <string name="channel_state_pending_open">In afwachting van openen</string>
     <string name="channel_state_pending_closing">In afwachting van sluiten</string>
     <string name="channel_state_pending_force_closing">In afwachting van gedwongen sluiten</string>
@@ -197,7 +148,6 @@
     <string name="settings_btcUnit">Bitcoineenheid</string>
     <string name="settings_currency">Fiateenheid</string>
     <string name="settings_language">Taal</string>
-    <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">Klembord controleren</string>
     <string name="settings_scan_clipboard_summary">Automatisch het klembord controleren op data die BitBanana kan gebruiken.</string>
     <string name="settings_hapticPin">Haptische PIN-feedback</string>
@@ -221,16 +171,10 @@
     <string name="settings_blockExplorer_tor_toast">Tor Browser voor Android is vereist.</string>
     <string name="settings_addressType">Bitcoinadrestype</string>
     <string name="settings_exchangeRateProvider">Wisselkoersprovider</string>
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibiliteit SegWit (P2PSH)</item>
-        <item>Native SegWit (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
     <string name="settings_lnRequestExpiryTitle">Lightningverzoek Verlooptijd</string>
     <string name="settings_lnFeeLimitTitle">Lightningbetaling Vergoedingslimiet</string>
     <string name="settings_lnPrivateChannelHints">Routehints voor privékanalen opnemen in betalingsverzoeken</string>
     <string name="error">Foutmelding</string>
-    <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Je hebt de (%1$s) blockexplorer geselecteerd, die geen %2$s ondersteunt. \nGa naar de instellingen en kies een andere blockexplorer om door te gaan."</string>
     <string name="error_zeroAmountPaymentRequest">Dit is een betalingsverzoek met een nulbedrag. BitBanana ondersteunt geen betalingsverzoeken met een nulbedrag omwille van mogelijke beveiligingsproblemen.</string>
     <string name="error_paymentRequestExpired">Dit betalingsverzoek is verlopen.</string>
@@ -345,9 +289,7 @@
     <string name="rename">Hernoem</string>
     <string name="change_data">Verander data</string>
     <string name="connectionData">Verbindingsdata</string>
-    <string name="host">Host</string>
     <string name="port">Poort</string>
-    <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificaat</string>
     <string name="spinner_manage_nodes">Beheer…</string>
     <string name="lnurl_withdraw_success">Opname\nsuccesvol</string>
@@ -356,7 +298,6 @@
     <string name="lnurl_withdraw_insufficient_channel_balance">Het opnamebedrag is groter dan wat u via Lightning kunt ontvangen met je huidige open kanalen.</string>
     <string name="lnurl_unsupported_type">Niet-ondersteund LNURL-type</string>
     <string name="lnurl_service_not_responding">%s reageert niet</string>
-    <string name="lnurl_service">Service</string>
     <string name="lnurl_service_provided_invalid_data">De service waarmee je communiceert, heeft ongeldige gegevens verstrekt.</string>
     <string name="lnurl_channel_opening_question">Wil je echt een kanaal openen met:</string>
     <string name="lnurl_channel_pending_hint">Het kanaal is aan het openen. Dit duurt misschien even.\nJe kunt het kanaalstatus bekijken in je kanaaloverzicht.</string>
@@ -370,13 +311,11 @@
     <string name="rest_port">REST (port 8080) is niet ondersteund.\n\nWil je de port veranderen naar 10009 (gRPC)?</string>
     <string name="drawer_menu_channels">Kanalen</string>
     <string name="drawer_menu_contacts">Contacten</string>
-    <string name="drawer_menu_backup">Backup</string>
     <string name="drawer_menu_buy">Koop bitcoin</string>
     <string name="support_contribute_description">Help BitBanana verbeteren.</string>
     <string name="support_issue_description">Bug gevonden? Laat het ons weten!</string>
     <string name="support_privacy_description">We geven om je privacy.</string>
     <string name="support_help_description">Bekijk onze documentatie.</string>
-    <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Publiek</string>
     <string name="identity_tap_on_avatar">Tik op je avatar om je identiteit te onthullen!</string>
     <string name="regtest_blockexplorer_unavailable">Blockexplorers zijn niet beschikbaar in REGTEST-modus.</string>
@@ -411,27 +350,4 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">Het minimumbedrag dat deze node moet reserveren in dit kanaal. Je kunt dit bedrag niet besteden. Dit zorgt ervoor dat je altijd iets te verliezen hebt als je je kanaalpartner zou proberen te bedriegen.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Kanaal Reserve</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">Het minimumbedrag dat de andere node moet reserveren in dit kanaal. Dit zorgt ervoor dat de andere node altijd iets te verliezen heeft indien die zou proberen jou te bedriegen.</string>
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
-    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
-    <string name="backup_data_confirm_headline">Please Confirm</string>
-    <string name="backup_data_confirm">I confirm</string>
-    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
-    <string name="backup_data_create_headline">Backup</string>
-    <string name="backup_data_restore_headline">Restore</string>
-    <string name="backup_data_password_enter">Enter your password</string>
-    <string name="backup_data_password_confirm">Confirm your password</string>
-    <string name="backup_data_password_empty">The password must have at least 8 characters.</string>
-    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
-    <string name="backup_data_creation_process">Creating backup</string>
-    <string name="backup_data_restore_process">Restoring backup</string>
-    <string name="backup_data_create_success">Backup created</string>
-    <string name="backup_data_restore_success">Backup restored</string>
-    <string name="backup_data_create_failed">Backup failed</string>
-    <string name="backup_data_restore_failed_title">Restoring failed</string>
-    <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
-    <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
-    <string name="backup_data_no_data">No data to backup.</string>
-    <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
-    <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
-    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 </resources>

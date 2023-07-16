@@ -1,43 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    -->
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="ok">OK</string>
     <string name="cancel">Peruuta</string>
     <string name="lightning">Salama</string>
-    <string name="onChain">On-Chain</string>
     <string name="share">Jaa</string>
     <string name="copy">Kopioi</string>
     <string name="paste">Liitä</string>
@@ -80,8 +44,6 @@
     <string name="funds_available">Käytettävissä:%s</string>
     <string name="amount_invalid">Määrä on väärin.</string>
     <string name="success">Onnistui</string>
-    <string name="suggested_peers">Suggested Peers</string>
-    <string name="none">None</string>
     <string name="install">Asenna</string>
     <string name="continue_string">Jatka</string>
     <string name="withdraw">Kotiuta</string>
@@ -91,7 +53,6 @@
     <string name="support">Tuki</string>
     <string name="contribute">Osallistu</string>
     <string name="privacy">Yksityisyys</string>
-    <string name="payee">Payee</string>
     <string name="open">Avaa</string>
     <string name="search">Etsi</string>
     <string name="confirmations">Varmistukset</string>
@@ -197,10 +158,8 @@
     <string name="settings_btcUnit">Bitcoin Yksikkö</string>
     <string name="settings_currency">Vaihtoehtoinen Yksikkö</string>
     <string name="settings_language">Kieli</string>
-    <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">Tarkista leikepöytä</string>
     <string name="settings_scan_clipboard_summary">Anna BitBananain automaattisesti tarkistaa leikepöytä.</string>
-    <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">Järjestelmän kieli</string>
     <string name="settings_manageChannels">Hallitsee Salamakanavia</string>
     <string name="settings_scramblePin">Sekoita PIN näyttö</string>
@@ -221,11 +180,6 @@
     <string name="settings_blockExplorer_tor_toast">Tor-selain Androidille vaaditaan.</string>
     <string name="settings_addressType">Bitcoin osoitteen tyyppi</string>
     <string name="settings_exchangeRateProvider">Vaihtokurssin tarjoaja</string>
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>Yhteensopivuus SegWit (P2PSH)</item>
-        <item>Natiivi SegWit (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
     <string name="settings_lnRequestExpiryTitle">Salama-pyynnön vanhentuminen</string>
     <string name="settings_lnFeeLimitTitle">Salama-maksun palkkion rajoittaminen</string>
     <string name="settings_lnPrivateChannelHints">Sisällytä reititysvinkit yksityisiä kanavia käyttäviin laskuihin</string>
@@ -376,7 +330,6 @@
     <string name="support_issue_description">Löysitkö virheen? Välitä tieto meille!</string>
     <string name="support_privacy_description">Yksityisyytesi on meille täskeää.</string>
     <string name="support_help_description">Tutustu dokumentaatioon</string>
-    <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Julkinen</string>
     <string name="identity_tap_on_avatar">Napauta hahmoa nähdäksesi identiteettisi tiedot.</string>
     <string name="regtest_blockexplorer_unavailable">Lohkoketjuselaimet eivät ole käytettävissä REGTEST-tilassa.</string>
@@ -433,5 +386,4 @@
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
     <string name="backup_data_invalid_file_chosen">Tämä ei ole toimiva varmuuskopio. Valitsethan tiedoston joka oli luotu tässä sovelluksella?</string>
-    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
-</resources>
+    </resources>

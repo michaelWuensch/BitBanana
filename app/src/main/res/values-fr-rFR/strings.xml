@@ -1,42 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    -->
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
-    <string name="lightning">Lightning</string>
     <string name="onChain">On-chain</string>
     <string name="share">Partager</string>
     <string name="copy">Copier</string>
@@ -66,7 +30,6 @@
     <string name="retry">Réessayer</string>
     <string name="loading">Chargement</string>
     <string name="pay">Payer</string>
-    <string name="date">Date</string>
     <string name="expiry">Expiration</string>
     <string name="expired">Expiré</string>
     <string name="remaining">restantes</string>
@@ -94,8 +57,6 @@
     <string name="payee">Receveur</string>
     <string name="open">Ouvrir</string>
     <string name="search">Recherche</string>
-    <string name="confirmations">Confirmations</string>
-    <string name="maximum_abbreviation">max</string>
     <string name="send">Envoyer</string>
     <string name="notConnected">Non connecté</string>
     <string name="activity_receive">Recevoir</string>
@@ -157,7 +118,6 @@
     <string name="channel_open_error">Erreur d\'ouverture du canal</string>
     <string name="private_channel">Canal privé</string>
     <string name="channel_visibility_private">privé</string>
-    <string name="channel_visibility_public">public</string>
     <string name="channel_visibility">Visibilité</string>
     <string name="setup_connect_heading">Comment souaithez-vous utiliser BitBanana?</string>
     <string name="setup_connect_local_description">Créer un portefeuille sur ce téléphone.</string>
@@ -179,7 +139,6 @@
     <string name="receive_noIncomeBalance">Pour recevoir des fonds sur le réseau Lightning, vous devez détenir des fonds distants sur un canal.\n\nPour cela, vous devez dépenser des fonds en premier lieu.\n\nDans la partie de gestion des canaux, vous pouvez voir combien vous pouvez envoyer et recevoir sur le réseau Lightning.</string>
     <string name="receive_requestFullfilled">Demande\npayée</string>
     <string name="guardian_doNotShowAgain">Ne plus m\'avertir.</string>
-    <string name="guardian_Title">Attention</string>
     <string name="guardian_reset">Les mises en gardes de sécurité ont été réactivées.</string>
     <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">Si vous copiez ces données dans votre presse-papier, d\'autres applications (potentiellement malicieuses) seront capables d\'y accéder et de les modifier.\n\nPour s\'assurer que les données sont exactes, vérifiez que la chaîne commence par :\n\n%1$s\n</string>
     <string name="guardian_copyToClipboard_lightning">Si vous copiez ces données dans votre presse-papier, d\'autres applications (potentiellement malicieuses) seront capables d\'y accéder et de les modifier.\n\nPour s\'assurer que les données sont exactes, vérifiez que la chaîne finit par :\n\n%1$s\n</string>
@@ -198,7 +157,6 @@
     <string name="settings_btcUnit">Unité du Bitcoin</string>
     <string name="settings_currency">Unité secondaire</string>
     <string name="settings_language">Langue</string>
-    <string name="settings_tor">Tor</string>
     <string name="settings_scan_clipboard">Vérifier le presse-papiers</string>
     <string name="settings_scan_clipboard_summary">Vérifiez automatiquement le presse-papiers pour les données que BitBanana peut gérer.</string>
     <string name="settings_hapticPin">Retour tactile du code PIN</string>
@@ -222,11 +180,6 @@
     <string name="settings_blockExplorer_tor_toast">Tor Browser pour Android est requis.</string>
     <string name="settings_addressType">Type d’adresse Bitcoin</string>
     <string name="settings_exchangeRateProvider">Fournisseur pour le taux de change</string>
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>Compatibilité SegWit (P2PSH)</item>
-        <item>Native SegWit (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
     <string name="settings_lnRequestExpiryTitle">Expiration des demandes de paiement Lightning</string>
     <string name="settings_lnFeeLimitTitle">Limite de frais des paiements</string>
     <string name="settings_lnPrivateChannelHints">Inclure des conseils d\'itinéraire pour les canaux privés avec les factures</string>
@@ -323,7 +276,6 @@
     <string name="fee_tier_fast_description">Transaction rapide</string>
     <string name="fee_estimated_duration">Temps estimé : %1$s</string>
     <string name="fee_not_available">indisponible</string>
-    <string name="fee_limit_title">Attention</string>
     <string name="fee_limit_threshold">Limite de frais pour les paiements supérieurs à %1$d sats: %2$s</string>
     <string name="fee_limit_exceeded">Les frais de ce paiement (%1$.1f%%) dépassent la limite spécifiée dans les réglages (%2$.0f%%).\n\nSouhaitez-vous vraiment payer cette demande?</string>
     <string name="fee_limit_exceeded_payment">Les frais (%1$d sats) seront plus élevés que le montant du paiement (%2$d sats).\n\nSouhaitez-vous vraiment payer cette demande?</string>
@@ -332,7 +284,6 @@
     <string name="biometricNotSetup">Pour utiliser cette fonctionnalité, vous devez activer l\'authentification biométrique dans vos paramètres Android.</string>
     <string name="invoice_detail">Détails de la demande</string>
     <string name="transaction_detail">Détails de la transaction</string>
-    <string name="app_reset_title">Attention</string>
     <string name="app_reset_message">L\'application du être réinitialisée suite à une modification structurelle lors de la dernière mise à jour.\nHélas, vous allez devoir recommencer la phase de configuration.</string>
     <string name="nfc_type_not_supported">Type de NFC non pris en charge</string>
     <string name="help_dialog_scanPaymentRequest">Les QR-Codes contenant les éléments suivants sont valides :\n\n- Adresse Bitcoin\n- Demande de paiement Bitcoin\n- Demande de paiement Lightning</string>
@@ -347,8 +298,6 @@
     <string name="change_data">Modifier les données</string>
     <string name="connectionData">Détails de connexion</string>
     <string name="host">Hôte</string>
-    <string name="port">Port</string>
-    <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificat</string>
     <string name="spinner_manage_nodes">Gérer…</string>
     <string name="lnurl_withdraw_success">Retrait \n effectué</string>
@@ -357,7 +306,6 @@
     <string name="lnurl_withdraw_insufficient_channel_balance">Le montant du retrait est supérieur à ce que vous pouvez recevoir sur Lightning avec vos canaux ouverts actuellement.</string>
     <string name="lnurl_unsupported_type">Type de LNURL non pris en charge</string>
     <string name="lnurl_service_not_responding">%s ne répond pas</string>
-    <string name="lnurl_service">Service</string>
     <string name="lnurl_service_provided_invalid_data">Le service avec lequel vous interagissez a fourni des données invalides.</string>
     <string name="lnurl_channel_opening_question">Voulez-vous vraiment ouvrir un canal avec :</string>
     <string name="lnurl_channel_pending_hint">Le canal est en cours d\'ouverture. Cela peut prendre un certain temps.\nVous pouvez vérifier l\'état du canal dans l\'onglet canaux.</string>
@@ -370,15 +318,12 @@
     <string name="string_analyzer_unrecognized_data">Données non reconnues.</string>
     <string name="rest_port">REST (port 8080) n\'est pas pris en charge.\n\nVoulez-vous changer le port en 10009 (gRPC) ?</string>
     <string name="drawer_menu_channels">Canaux</string>
-    <string name="drawer_menu_contacts">Contacts</string>
     <string name="drawer_menu_backup">Sauvegarde</string>
     <string name="drawer_menu_buy">Acheter du Bitcoin</string>
     <string name="support_contribute_description">Aider à améliorer BitBanana.</string>
     <string name="support_issue_description">Vous avez trouvé un bug ? Faites le nous savoir!</string>
     <string name="support_privacy_description">Nous nous soucions de votre vie privée.</string>
     <string name="support_help_description">Visitez notre documentation.</string>
-    <string name="identity_switch_tor">Tor</string>
-    <string name="identity_switch_public">Public</string>
     <string name="identity_tap_on_avatar">Appuyez sur votre avatar pour révéler votre identité !</string>
     <string name="regtest_blockexplorer_unavailable">Les explorateurs de blocs ne sont pas disponibles en mode REGTEST.</string>
     <string name="clipboard_error_heading">Les données du presse-papiers ont été trouvées, mais elles ne sont pas valides :</string>
@@ -434,5 +379,4 @@
     <string name="backup_data_no_data">Aucune donnée à sauvegarder.</string>
     <string name="backup_data_version_too_old">La sauvegarde a été faite avec une version plus récente. Veuillez mettre à jour l\'application avant d\'importer la sauvegarde.</string>
     <string name="backup_data_invalid_file_chosen">Ce n\'est pas un fichier de sauvegarde valide. Veuillez choisir un fichier qui a été créé avec cette application.</string>
-    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
-</resources>
+    </resources>

@@ -1,38 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    --><resources>
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
     <string name="ok">Ok</string>
     <string name="cancel">Abbrechen</string>
     <string name="lightning">Lightning</string>
@@ -232,11 +199,6 @@
     <string name="settings_blockExplorer_tor_toast">Tor Browser für Android wird benötigt.</string>
     <string name="settings_addressType">Bitcoin Adresstyp</string>
     <string name="settings_exchangeRateProvider">Wechselkurs Anbieter</string>
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>SegWit Kompatibilität (P2PSH)</item>
-        <item>SegWit Nativ (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
     <string name="settings_lnRequestExpiryTitle">Verfallzeit für Lightning Anfragen</string>
     <string name="settings_lnFeeLimitTitle">Gebührenlimit für Lightning Zahlungen</string>
     <string name="settings_lnPrivateChannelHints">Route Hints für private Kanäle in Rechnungen aufnehmen</string>
@@ -409,8 +371,9 @@
     <string name="lnurl_pay_save_secret">WICHTIG:\nDer Code wurde in die Zwischenablage kopiert. Bitte speicher ihn ab, falls du ihn später nochmal brauchst. Dieses Fenster wird nicht nocheinmal angezeigt.</string>
     <string name="lnurl_invalid_response">Der Dienst hat mit einer ungültigen Antwort geantwortet.</string>
     <string name="string_analyzer_unrecognized_data">Unbekannte Daten.</string>
-    <string name="rest_port">REST (Port 8080) wird nicht unterstützt.\n\nMöchtest du den Port auf 10009 (gRPC) ändern?</string>
-    <string name="drawer_menu_nodes">Nodes</string>
+    <string name="rest_port">REST wird nicht unterstützt.
+\n
+\nMöchtest du es mit gRPC versuchen\?</string>
     <string name="drawer_menu_channels">Kanäle</string>
     <string name="drawer_menu_contacts">Kontakte</string>
     <string name="drawer_menu_backup">Backup</string>
@@ -600,4 +563,5 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- LNURL-Channel</string>
+    <string name="description">Beschreibung</string>
 </resources>

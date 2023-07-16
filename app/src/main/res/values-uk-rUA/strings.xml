@@ -1,43 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    -->
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="ok">Гаразд</string>
     <string name="cancel">Скасувати</string>
-    <string name="lightning">Lightning</string>
-    <string name="onChain">On-Chain</string>
     <string name="share">Поділитись</string>
     <string name="copy">Копіювати</string>
     <string name="paste">Вставити</string>
@@ -89,26 +53,11 @@
     <string name="scan">Просканувати</string>
     <string name="settings">Налаштування</string>
     <string name="support">Підтримка</string>
-    <string name="contribute">Contribute</string>
-    <string name="privacy">Privacy</string>
-    <string name="payee">Payee</string>
-    <string name="open">Open</string>
-    <string name="search">Search</string>
-    <string name="confirmations">Confirmations</string>
-    <string name="maximum_abbreviation">max</string>
-    <string name="send">Send</string>
-    <string name="notConnected">Not connected</string>
     <string name="activity_receive">Отримати</string>
     <string name="activity_send">Сплатити</string>
     <string name="activity_connectRemoteNode">Підключитися до віддаленого вузла</string>
     <string name="activity_advanced_settings">Розширені налаштування</string>
     <string name="activity_identity">Identity</string>
-    <string name="activity_manage_contacts">Manage Contacts</string>
-    <string name="activity_manage_contacts_send_mode">Send to…</string>
-    <string name="activity_manage_contacts_open_channel_mode">Open channel with…</string>
-    <string name="activity_contact_details">Contact Details</string>
-    <string name="activity_manual_setup">Connection Data</string>
-    <string name="activity_backup">Backup</string>
     <string name="navigation_history">Історія</string>
     <string name="navigation_settings">Налаштування</string>
     <string name="pin_create">Створити пінкод</string>
@@ -119,7 +68,6 @@
     <string name="pin_confirm_new">Підтвердьте новий пінкод</string>
     <string name="pin_entered_wrong">Невірний пінкод</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Зачекайте %1$s секунд.</string>
-    <string name="pin_changed">PIN changed!</string>
     <string name="requested_payment">Запитані(-е)</string>
     <string name="request_expired">Термін дії закінчився</string>
     <string name="internal">Внутрішній</string>
@@ -154,10 +102,6 @@
     <string name="channel_open">Відкрити канал</string>
     <string name="channel_open_success">Відкриття каналу успішно розпочато</string>
     <string name="channel_open_error">Помилка відкриття каналу</string>
-    <string name="private_channel">Private channel</string>
-    <string name="channel_visibility_private">private</string>
-    <string name="channel_visibility_public">public</string>
-    <string name="channel_visibility">Visibility</string>
     <string name="setup_connect_heading">Як ви хочете використовувати BitBanana?</string>
     <string name="setup_connect_local_description">Стоврити гаманець на цьому телефоні.</string>
     <string name="setup_connect_local_button">Створити гаманець</string>
@@ -169,7 +113,6 @@
     <string name="send_sendPayment">Надіслати оплату</string>
     <string name="send_success">Оплата\nуспішно</string>
     <string name="send_fail">Оплата\nне вдалося виконати</string>
-    <string name="send_SendOnChainInstead">Send On-Chain</string>
     <string name="receive_generateRequest">Створити запит</string>
     <string name="receive_generateRequest_failed">Запит на створення не вдалося виконати</string>
     <string name="receive_lightning_request">Lightning запит</string>
@@ -188,8 +131,6 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Ви збираєтесь платити%1$s%% комісію за мережу.\n\nМожливі рішення:\n- спробуйте lightning платіж замість \n- виберіть меншу плату, довше зачекайте\n- спробуйте пізніше\n- перевірте більшу кількість\n\nВи бажаєте продовжити?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ви запитували суму як фіатну вартість, але ваші дані обмінного курсу старі (отримані %1$s годин тому).\nПереконайтесь, що у вас є підключення до Інтернету, або розглядайте запит безпосередньо в Bitcoin.\n\nВи все-таки хочете продовжувати?</string>
     <string name="guardian_remoteConnect">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nБудь ласка, уважно перевірте ім\'я хоста.</string>
-    <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While BitBanana anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
     <string name="settings_category_general">Загальне</string>
     <string name="settings_category_security">Безпека</string>
     <string name="settings_category_help">Допомога</string>
@@ -197,9 +138,6 @@
     <string name="settings_btcUnit">Біткоїнова одиниця</string>
     <string name="settings_currency">Вторинна одиниця</string>
     <string name="settings_language">Мова</string>
-    <string name="settings_tor">Tor</string>
-    <string name="settings_scan_clipboard">Check clipboard</string>
-    <string name="settings_scan_clipboard_summary">Automatically check clipboard for data BitBanana can handle.</string>
     <string name="settings_hapticPin">Гаптичний зворотний зв\'язок з ПІН</string>
     <string name="settings_systemLanguage">Мова системи</string>
     <string name="settings_manageChannels">Керувати Lightning каналами</string>
@@ -221,22 +159,14 @@
     <string name="settings_blockExplorer_tor_toast">Потрібен Tor Browser для Android.</string>
     <string name="settings_addressType">Тип Bitcoin адреси</string>
     <string name="settings_exchangeRateProvider">Провайдер обмінного курсу</string>
-    <string-array name="settings_receiveAddressDisplayValues">
-        <item>Сумісність SegWit(P2PSH)</item>
-        <item>Native SegWit (Bech32)</item>
-        <item>Taproot (Bech32m)</item>
-    </string-array>
     <string name="settings_lnRequestExpiryTitle">Термін дії Lightning запиту</string>
     <string name="settings_lnFeeLimitTitle">Ліміт Lightning платіжної комісії</string>
-    <string name="settings_lnPrivateChannelHints">Include route hints for private channels in invoices</string>
     <string name="error">Помилка</string>
     <string name="error_blockExplorer_title">Блок-провідник</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Ваш вибраний наразі блок провідників (%1$s) не підтримує%2$s. \nЗайдіть у налаштування та виберіть інший провідник блоків для продовження."</string>
-    <string name="error_zeroAmountPaymentRequest">This is a zero amount payment request. BitBanana does not support zero amount payment requests due to security concerns associated with them.</string>
     <string name="error_paymentRequestExpired">Термін дії цього запиту на оплату закінчився.</string>
     <string name="error_useTestnetRequest">Ви підключені до тестової мережі. Будь ласка, використовуйте адреси тестової мережі або запити на оплату.</string>
     <string name="error_useMainnetRequest">Ви підключені до головної мережі. Будь ласка, використовуйте адреси головної мережі або запити на оплату.</string>
-    <string name="error_useRegtestRequest">You are connected to REGTEST network. Please use REGTEST addresses or payment requests.</string>
     <string name="error_cameraPermissionRequired">Щоб сканувати QR-коди, ви повинні дозволити BitBanana використовувати камеру.</string>
     <string name="error_emptyClipboardPayment">Ваш буфер обміну не містить платіжних даних.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обміну не містить даних про з\'єднання.</string>
@@ -250,16 +180,10 @@
     <string name="error_connection_invalid_host_or_port">Наданий хост або порт недійсні.</string>
     <string name="error_connection_invalid_macaroon2">Доступ заборонено!\n\nМакарун недійсний.</string>
     <string name="error_connection_server_unreachable">Час вийшов.\nСервер не відповідає.\n\n- Будь ласка, переконайтеся, що у вас хороше інтернет-з\'єднання\n\n- Переконайтесь, що сервер працює і все ще має такий IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
-    <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
-    <string name="error_connection_unknown">Connection failed.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Будь ласка, розблокуйте гаманець.</string>
     <string name="error_connection_btcpay_invalid_json">Синтаксис JSON конфігурації сервера BTCPay недійсний.</string>
     <string name="error_connection_btcpay_invalid_config">Конфігурація сервера BTCPay не містить конфігурацію BTC GRPC.</string>
-    <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_wrong_password">Невірний пароль</string>
-    <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer">Не вдалося встановити з\'єднання з рівнем вузла.</string>
     <string name="error_connect_peer_refused">Взаємозв’язок відмовлено одноранговим.</string>
     <string name="error_connect_peer_self">Неможливо встановити зв’язок із собою.</string>
@@ -275,23 +199,6 @@
     <string name="error_channel_close">Не вдалося закрити канал: %s</string>
     <string name="error_pin_deactivation_attempt">Схоже, хтось намагався деактивувати ваш PIN-код. Зараз додаток закриється.\nВи можете перевстановити додаток і скористатися процедурою відновлення, щоб відновити доступ до своїх коштів.</string>
     <string name="error_empty_node_name">Порожнє ім’я заборонено.</string>
-    <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
-    <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
-    <string name="error_payment_timeout">Timeout. No route could be found.</string>
-    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
-    <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
-    <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
-    <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
-    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
-    <string name="error_tor_exchange_rate">Exchange rate could not be fetched. The service you are using seems to block request coming from the Tor network. Try switching the exchange rate provider in the advanced settings.</string>
-    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">The response from %1$s could not be read.</string>
-    <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
-    <plurals name="duration_second">
-        <item quantity="one">%d Second</item>
-        <item quantity="few">%d Seconds</item>
-        <item quantity="many">%d Seconds</item>
-        <item quantity="other">%d Seconds</item>
-    </plurals>
     <plurals name="duration_minute">
         <item quantity="one">%d хвилина</item>
         <item quantity="few">%d хвилин</item>
@@ -349,103 +256,20 @@
     <string name="app_reset_message">Додаток було скинуто, оскільки останнє оновлення включало деякі структурні зміни.\nНа жаль, вам доведеться повторно пройти процес налаштування.</string>
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
-    <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:\n\n- рядок Lndconnect (lndconnect://...)\n- підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_identity">This is your identity on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with your or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
     <string name="change_data">Змінити дані</string>
     <string name="connectionData">Дані підключення</string>
     <string name="host">Хост</string>
     <string name="port">Порт</string>
-    <string name="macaroon">Macaroon</string>
     <string name="certificate">Сертифікат</string>
     <string name="spinner_manage_nodes">Управління...</string>
     <string name="lnurl_withdraw_success">Вивести\nуспішно</string>
     <string name="lnurl_withdraw_fail">Вилучити\nнеуспішно</string>
-    <string name="lnurl_decoding_no_lnurl_data">The data does not contain a valid LNURL.</string>
-    <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
-    <string name="lnurl_unsupported_type">Unsupported LNURL type</string>
     <string name="lnurl_service_not_responding">%s не відповідає</string>
     <string name="lnurl_service">Підтримка</string>
-    <string name="lnurl_service_provided_invalid_data">The Service you are interacting with provided invalid data.</string>
-    <string name="lnurl_channel_opening_question">Do you really want to open a channel with:</string>
-    <string name="lnurl_channel_pending_hint">The channel is opening. This may take a while.\nYou can check the channels state in your channels overview.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
-    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s sent an invalid payment request.</string>
-    <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
-    <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
-    <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
-    <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
-    <string name="string_analyzer_unrecognized_data">Unrecognized data.</string>
-    <string name="rest_port">REST (port 8080) is not supported.\n\nDo you want to change the port to 10009 (gRPC)?</string>
     <string name="drawer_menu_channels">Канали</string>
-    <string name="drawer_menu_contacts">Contacts</string>
-    <string name="drawer_menu_backup">Backup</string>
-    <string name="drawer_menu_buy">Buy Bitcoin</string>
-    <string name="support_contribute_description">Help improving BitBanana.</string>
-    <string name="support_issue_description">Found a bug? Let us know!</string>
-    <string name="support_privacy_description">We care about your privacy.</string>
-    <string name="support_help_description">Visit our documentation.</string>
-    <string name="identity_switch_tor">Tor</string>
-    <string name="identity_switch_public">Public</string>
-    <string name="identity_tap_on_avatar">Tap on your Avatar to reveal your identity!</string>
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
-    <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
-    <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
-    <string name="clipboard_scan_lnurl">Your clipboard contains LNURL data. Do you want to use it?</string>
-    <string name="clipboard_scan_node_pubkey">Your clipboard contains a node public key. Do you want to open a channel?</string>
-    <string name="third_party_licenses">Third-party licenses</string>
-    <string name="licenses">Licenses</string>
-    <string name="choose_action">Choose action</string>
-    <string name="add_contact">Add contact</string>
-    <string name="send_money">Send money</string>
-    <string name="contact_name">Contact name</string>
-    <string name="contact_already_exists">This person is already in your contacts!</string>
-    <string name="no_contacts">No contacts</string>
-    <string name="manual_send_input_hint">Address or payment data</string>
-    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
-    <string name="advanced_channel_details_activity">Activity</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100\% means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
-    <string name="advanced_channel_details_lifetime">Lifetime</string>
-    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
-    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
-    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
-    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
-    <string name="advanced_channel_details_time_lock">Time Lock</string>
-    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
-    <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
-    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
-    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds. I therefore will use a secure password in the next step.</string>
-    <string name="backup_data_confirm_headline">Please Confirm</string>
-    <string name="backup_data_confirm">I confirm</string>
-    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
-    <string name="backup_data_create_headline">Backup</string>
-    <string name="backup_data_restore_headline">Restore</string>
-    <string name="backup_data_password_enter">Enter your password</string>
-    <string name="backup_data_password_confirm">Confirm your password</string>
-    <string name="backup_data_password_empty">The password must have at least 8 characters.</string>
-    <string name="backup_data_password_mismatch">The passwords are not identical.</string>
-    <string name="backup_data_creation_process">Creating backup</string>
-    <string name="backup_data_restore_process">Restoring backup</string>
-    <string name="backup_data_create_success">Backup created</string>
-    <string name="backup_data_restore_success">Backup restored</string>
-    <string name="backup_data_create_failed">Backup failed</string>
-    <string name="backup_data_restore_failed_title">Restoring failed</string>
-    <string name="backup_data_restore_failed_description">Most likely you entered an invalid password.</string>
-    <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
-    <string name="backup_data_no_data">No data to backup.</string>
-    <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
-    <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
-    <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
 </resources>

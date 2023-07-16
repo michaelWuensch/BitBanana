@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="yesterday">I går</string>
     <string name="fee">Gebyr</string>
@@ -15,11 +15,9 @@
     <string name="retry">Prøv igjen</string>
     <string name="pay">Betal</string>
     <string name="remaining">gjenstår</string>
-    <string name="node">Node</string>
     <string name="amount_invalid">Beløpet er ugyldig.</string>
     <string name="success">Vellykket</string>
     <string name="none">Ingen</string>
-    <string name="ok">OK</string>
     <string name="cancel">Avbryt</string>
     <string name="details">Detaljer</string>
     <string name="amount">Beløp</string>
@@ -43,7 +41,6 @@
     <string name="funds_available">Tilgjengelig: %s</string>
     <string name="date">Dato</string>
     <string name="install">Installer</string>
-    <string name="lightning">Lightning</string>
     <string name="onChain">I blokk-kjeden</string>
     <string name="transactionID">Overførings-ID</string>
     <string name="event">Begivenhet</string>
@@ -60,7 +57,6 @@
     <string name="search">Søk</string>
     <string name="confirmations">Bekreftelser</string>
     <string name="maximum_abbreviation">maks.</string>
-    <string name="send">Send</string>
     <string name="notConnected">Ikke tilkoblet</string>
     <string name="save">Lagre</string>
     <string name="activity_receive">Motta</string>
@@ -69,7 +65,6 @@
     <string name="activity_manage_nodes">Håndter noder</string>
     <string name="activity_advanced_settings">Avanserte innstillinger</string>
     <string name="activity_node_details">Nodedetaljer</string>
-    <string name="activity_identity">Node</string>
     <string name="activity_manage_contacts">Håndter kontakter</string>
     <string name="activity_manage_contacts_send_mode">Send til …</string>
     <string name="activity_manage_contacts_open_channel_mode">Åpne kanal med …</string>
@@ -130,7 +125,6 @@
     <string name="useTor">Bruk Tor</string>
     <string name="spinner_manage_nodes">Håndter …</string>
     <string name="certificate">Sertifikat</string>
-    <string name="port">Port</string>
     <string name="host">Vert</string>
     <string name="connectionData">Tilkoblingsdata</string>
     <string name="lnurl_channel_opening_question">Vil du virkelig åpne en kanal med:</string>
@@ -156,7 +150,6 @@
     <string name="sign_verify">Signer/bekreft</string>
     <string name="forwarding_closed_channel">Lukket kanal</string>
     <string name="force_closed_channel">Kanal tvangslukket</string>
-    <string name="navigation_node">Node</string>
     <string name="pin_create">Opprett PIN</string>
     <string name="activity_manual_setup">Tilkoblingsdata</string>
     <string name="activity_backup">Sikkerhetskopi</string>
@@ -170,7 +163,6 @@
     <string name="support_issue_description">Funnet en feil. La oss få vite om det.</string>
     <string name="no_nodes">Ingen noder</string>
     <string name="identity_switch_public">Offentlig</string>
-    <string name="identity_switch_tor">Tor</string>
     <string name="string_analyzer_unrecognized_data">Ugjenkjent data.</string>
     <string name="lnurl_service">Tjeneste</string>
     <string name="nfc_type_not_supported">Ustøttet NFC-type</string>

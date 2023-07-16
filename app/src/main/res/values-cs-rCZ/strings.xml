@@ -1,39 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- //////////////// Notice for translators ////////////////////
-
-    First of all, thanks for taking the time to translate this wallet!
-
-
-    Here are a few tips to help you while translating:
-
-    Parameters:
-    Some strings have parameters, which allows them to show different content.
-    Parameters look like this:   %1$s  ,  %2$d  ,  ...
-    Every string with parameters has an explanation as comment in the string tag.
-    With this information you should be able to move the parameter to the correct place in your
-    translated string.
-
-
-    New line:
-    \n is used to make a new line.
-    Avoid putting a space before and after \n as this will lead to a space at the end and the
-    beginning of a line.
-    Correct example:  This is my first line.\nAnd this is my second.
-
-
-    Special Characters:
-    Escape every '  or  " you want to have in your text with a backslash.
-    Correct example:  I want to emphasize \"this\" and \'this\' word.
-
-    Escape every % with %
-    Correct example:   5 is 10%% of 50
-
-    &  =  &amp;
-    <  =  &lt;
-    >  =  &gt;
-
-    --><resources>
-    <string name="ok">OK</string>
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
     <string name="cancel">Zrušit</string>
     <string name="lightning">Lightning</string>
     <string name="onChain">On-Chain</string>
@@ -467,7 +433,7 @@
     <string name="backup_data_version_too_old">Záloha byla vytvořena pomocí novější verze. Před importem zálohy aplikaci aktualizujte.</string>
     <string name="backup_data_invalid_file_chosen">Toto není platný zálohovací soubor. Vyberte prosím soubor, který byl vytvořen pomocí této aplikace.</string>
     <string name="dialog_open_url">Údaje odkazují na webovou stránku. Chcete otevřít následující webovou stránku?\n\n%1$s</string>
-    <string name="error_connection_tor_unreachable">Připojení přes Tor selhalo.
+    <string name="error_connection_tor_unreachable">Spojení přes Tor selhalo.
 \nZapněte Tor v nastavení připojení uzlu.</string>
     <string name="sign">Podepsat</string>
     <string name="message_to_verify">Zpráva k ověření</string>
@@ -563,4 +529,64 @@
     <string name="lnurl_payer_data_choose">Vyberte, která data se mají odeslat:</string>
     <string name="drawer_menu_routing">Přeposílání</string>
     <string name="drawer_menu_category_app">Aplikace</string>
+    <string name="signature_valid">Podpis je platný!</string>
+    <string name="contact_type">Typ kontaktu</string>
+    <string name="signature_to_verify">Podpis k ověření</string>
+    <string name="channel_summary_total_unavailable">Celkem offline</string>
+    <string name="signature_invalid">Podpis je neplatný!</string>
+    <string name="help_dialog_utxos">Tento seznam UTXOs představuje vaše on-chain prostředky.
+\nPodobně jako mince, UTXOs (neutracené transakční výstupy) mohou být utraceny pouze celé. Pokud reálně utratíte méně, než je velikost UTXO, vrátí se vám drobné jako nové UTXO.</string>
+    <string name="guardian_zero_amount_invoice">Tato faktura neobsahuje částku. Ačkoliv je to nepravděpodobné, faktury bez částky mohou být zneužité a příjemce obdrží méně než kolik očekává. Pokud je to možné, použijte fakturu se specifikovanou částkou.</string>
+    <string name="guardian_backup_overrides_existing_data">Některá data už existují!
+\nObnova ze zálohy smaže všechna následující data:
+\n
+\n- Připojení k uzlům
+\n- Kontakty
+\n
+\nChcete pokračovat\?</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">S hostitelem %1$s se nelze spojit. Pokud je váš uzel nově dostupný pod jinou adresou, aktualizujte ji v nastavení uzlu.</string>
+    <string name="channel_summary_total_inbound">Celkem příchozích</string>
+    <string name="channel_summary_total_outbound">Celkem odchozích</string>
+    <string name="verify_message">Ověřit zprávu</string>
+    <string name="guardian_certificate_verification">Pokud vypnete ověřování certifikátu, budete zranitelní vůči útoku typu man-in-the-middle. Ověřování vypněte pouze, když víte, co děláte.
+\n
+\nMísto toho je doporučeno mít správně nastavený certifikát.
+\nTo znamená, že by certifikát z vašeho uzlu měl obsahovat hostname, přes který se k němu připojujete. Přidejte tento hostname do tlsextradomain v lnd.conf před znovuvytvořením certifikátu.</string>
+    <string name="error_connection_host_verification_failed">Hostname ověření selhalo.
+\n
+\nHostname použitý pro připojení k uzlu neodpovídá tomu v certifikátu.
+\n
+\nBuď můžete ověřování certifikátu v nastavení uzlu vypnout nebo budete muset certifikát znovu vytvořit. Před tím se ujistěte, že je váš hostname uvedený jako tlsextradomain v lnd.conf.</string>
+    <string name="help_dialog_payer_data_payment">Někteří příjemci podporují nebo přímo vyžadují dodatečné informace o vás.
+\n
+\nZda použijete skutečná nebo smyšlená data je vaše zodpovědnost. Zpravidla doporučujeme posílat skutečná data pouze, je-li to nezbytně nutné (např. pokud vám má přijít zásilka poštou, atd).
+\n
+\nPokud zaškrtnutí nejde zrušit, znamená to, že jsou tato data příjemcem vyžadována. Pokud je nechcete zaslat, budete muset zrušit celou platbu.</string>
+    <string name="help_dialog_payer_data_settings">Někteří příjemci podporují nebo přímo vyžadují dodatečné informace o vás. Pro zjednodušení zde můžete nastavit výchozí hodnoty, které se pak použijí pro každou další platbu. Tato data jsou uložena lokálně ve vašem telefonu.
+\n
+\nI s výchozími hodnotami je budete moct před každou platbou změnit nebo se rozhodnout, co přesně se odešle.
+\n
+\nZda použijete skutečná nebo smyšlená data je vaše zodpovědnost. Zpravidla doporučujeme posílat skutečná data pouze, je-li to nezbytně nutné. (např. pokud vám má přijít zásilka poštou, atd)</string>
+    <string name="help_dialog_channels">Seznam kanálů představuje vaše lightning prostředky. Lightning kanály jsou potřeba pro fungování celé sítě a umožňují instantní a levné bitcoinové platby.
+\n
+\nPro převedení on-chain prostředků na lightning prostředky je potřeba otevřít kanál. Pro převedení lightning prostředků zpět na on-chain je potřeba existující kanál zavřít.
+\nObě tyto operace, otevření a zavření kanálu, jsou dosaženy on-chain transakcí, která stojí poplatek. Proto se vyplatí nechat kanály otevřené co nejdéle.
+\n
+\nJednoduchý způsob, jak začít s otevíráním kanálů, je web lightningnetwork.plus.</string>
+    <string name="help_dialog_forwarding">Tento seznam zobrazuje všechny platby, které váš uzel přeposlal pro ostatní účastníky sítě. Navíc zobrazuje váš zisk, kterého jste za provozování této služby dosáhl(a).
+\n
+\nV lightning síti se kanály používají pro směrování plateb. Pokud chce plátce zaplatit někomu, ke komu nemá otevřený kanál, musí k tomu využít jiného účastníka sítě, který k němu kanál otevřený má.
+\n
+\nNapříklad:
+\nAlice chce zaplatit Carol, ale nemá s ní otevřený kanál. Nicméně Alice má kanál k Bobovi a Bob má kanál ke Carol. Bob může platbu přeposlat od Alice směrem ke Carol.
+\n
+\nPlatby mohou být často přeposlány několikrát (každé přeposlání se nazývá \"hop\"), než dorazí do cíle.</string>
+    <string name="clipboard_scan_connect">Schránka obsahuje údaje pro připojení k uzlu. Chcete jej přidat\?</string>
+    <string name="settings_tor_summary">Anonymizuje veškerý webový provoz pomocí sítě Tor. Toto nastavení ovlivní pouze stahování směnných kurzů nebo volání LNURL služeb. Použití sítě Tor může být zapnuto pro každý uzel zvlášť v jeho nastavení.</string>
+    <string name="help_dialog_sign_verify">Podepsáním zprávy vaším uzlem můžete dokázat, že jste jeho majitelem. Jelikož podpis obsahuje veřejný klíč uzlu, můžou ostatní takto podepsanou zprávu ověřit.
+\n
+\nTato funkce může být použita například při ověřování identity nebo pro přihlášení do některých služeb.</string>
+    <string name="help_dialog_connect_node_help">Bohužel jsou tyto QR kódy tak velké, že je některá zařízení nejsou schopná naskenovat. Pokud se vám to stane, budete jej muset ručně zkopírovat.
+\n
+\nPokud potřebujete pomoct, zkuste naši dokumentaci.</string>
 </resources>
