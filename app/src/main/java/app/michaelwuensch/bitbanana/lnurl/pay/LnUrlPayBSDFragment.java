@@ -54,6 +54,7 @@ import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
@@ -84,7 +85,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private View mSendInputsView;
     private EditText mEtAmount;
-    private EditText mEtDescription;
     private EditText mEtComment;
     private TextView mTvUnit;
     private View mDescriptionView;
@@ -103,6 +103,8 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private boolean mValueModifiedSinceSwitch;
     private long mTempCurrentSatoshiValue;
     private long mFinalChosenAmount;
+
+    private ExpandableTextView mDescription;
 
     private Handler mHandler;
     private LnUrlPayResponse mPaymentData;
@@ -150,7 +152,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mEtAmount = view.findViewById(R.id.sendAmount);
         mEtComment = view.findViewById(R.id.inputComment);
         mTvUnit = view.findViewById(R.id.unit);
-        mEtDescription = view.findViewById(R.id.sendDescription);
+        mDescription = view.findViewById(R.id.expandableDescription);
         mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
         mTvPayee = view.findViewById(R.id.sendPayee);
         mNumpad = view.findViewById(R.id.numpadView);
@@ -269,11 +271,14 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             mTvPayee.setText(R.string.unknown);
         }
 
-        if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT) == null) {
-            mDescriptionView.setVisibility(View.GONE);
+        // Description. If we have a long description we show only that.
+        if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_LONG_DESCRIPTION) != null) {
+            mDescription.setContent(R.string.description, mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_LONG_DESCRIPTION));
+
+        } else if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT) != null) {
+            mDescription.setContent(R.string.description, mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT));
         } else {
-            mDescriptionView.setVisibility(View.VISIBLE);
-            mEtDescription.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT));
+            mDescriptionView.setVisibility(View.GONE);
         }
 
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {

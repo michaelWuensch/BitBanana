@@ -28,6 +28,7 @@ public class LnUrlPayResponse extends LnUrlResponse implements Serializable {
     public static final String METADATA_IMAGE_JPEG = "image/jpeg;base64";
     public static final String METADATA_IDENTIFIER = "text/identifier";
     public static final String METADATA_EMAIL = "text/email";
+    public static final String METADATA_LONG_DESCRIPTION = "text/long-desc";
 
     private String metadata;
     private int commentAllowed = 0;

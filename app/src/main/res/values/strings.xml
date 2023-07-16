@@ -106,6 +106,7 @@
     <string name="save">Save</string>
     <string name="documentation">Documentation</string>
     <string name="pubkey">Pubkey</string>
+    <string name="description">Description</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
