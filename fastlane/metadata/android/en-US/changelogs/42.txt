@@ -1,0 +1,13 @@
+Initial release of BitBanana.
+Changes compared to Zap Android are:
+
+- Added Sign/Verify
+- Added Taproot support
+- Added Channel Summary
+- Added Closed Channels to channel view
+- Added initiator information to advanced channel details
+- Added possibility to show routed volume on routing view
+- Made on-chain fee presets adjustable
+- Improved and added explanations across the app
+- Added option to hide explanations for a cleaner UI
+- Bug Fixes

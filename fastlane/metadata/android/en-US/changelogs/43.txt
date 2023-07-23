@@ -1,0 +1,3 @@
+- Added currency symbols
+- Fixed date lines on forwarding view not respecting time zones
+- Fixed fallback LNURL not working in some cases

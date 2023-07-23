@@ -1,0 +1,5 @@
+- Added advanced channel details for closed & pending channels
+- Added channel age to advanced channel details
+- Display node aliases for force close events in transaction history
+- Improved lightning fee limit settings
+- Releases are now reproducible!

@@ -1,0 +1,6 @@
+- Added support for long descriptions on LNURL-Pay
+- Improved QR-Code robustness & size
+- Updated tor geoip data
+- Improved error messages
+- Bug fixes
+- Updated translations

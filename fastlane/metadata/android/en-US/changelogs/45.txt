@@ -1,0 +1,9 @@
+- Added support for lightning address contacts
+- Improved contact list performance
+- Added support for comment and payer data for LNURL-Pay (lud-12, lud-18)
+- Added support for new LNURL schemes (lud-17)
+- New design for QR codes
+- Added scrollbars to all list views
+- Updated translations
+- Added donation link
+- Bug fixes

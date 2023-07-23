@@ -1,0 +1,22 @@
+⚡️ Superpowers for you and your bitcoin lightning node! Use and manage your node wherever you are. ⚡️
+
+BitBanana is a native android app for node operators focused on user experience and ease of use.
+While it is not a wallet on its own, BitBanana works like a remote control allowing you to use your node as a wallet wherever you go.
+The app is designed with an educational approach, providing the user with guidance on every aspect of node operation.
+
+BitBanana is open source and fully self-custodial which means you are in full control or your funds.
+
+Features:
+- Manage multiple nodes
+- On-chain transactions and lightning payments
+- Channel management
+- Routing summary
+- Contacts
+- Sign/Verify
+- NFC support
+- Tor support
+- 100% open source
+... and many other features to explore!
+
+The source code can be found at:
+https://github.com/michaelWuensch/BitBanana

@@ -1,0 +1,1 @@
+- Fixed a bug that caused lightning:lnaddress links to no longer work
