@@ -475,7 +475,7 @@
     <string name="regtest_blockexplorer_unavailable">Exploradores de blocos não estão disponíveis no modo REGTEST.</string>
     <string name="contact_already_exists">Este contato já existe!</string>
     <string name="no_contacts">Nenhum contato</string>
-    <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como taxa ou reserva local do canal) nem todos os fundos são gastáveis.</string>
+    <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como a commit fee ou reserva local do canal) nem todos os fundos são gastáveis.</string>
     <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Reserva do Canal Remoto</string>
     <string name="backup_data_restore_description">Restaure seus nós conectados e contatos.
@@ -636,4 +636,19 @@
     <string name="lnurl_payer_data_choose">Escolha que dados enviar:</string>
     <string name="lnurl_payer_data_description">Informação ao beneficiário</string>
     <string name="lnurl_withdraw_insufficient_channel_balance">A quantia de saque é maior que o que você pode receber usando Lightning com seus canais atualmente abertos.</string>
+    <string name="fee_not_available">N/A</string>
+    <string name="host">Host</string>
+    <string name="backup_data_create_headline">Backup</string>
+    <string name="settings_tor">Tor</string>
+    <string name="drawer_menu_category_app">App</string>
+    <string name="activity_backup">Backup</string>
+    <string name="macaroon">Macaroon</string>
+    <string name="drawer_menu_backup">Backup</string>
+    <string name="identity_switch_tor">Tor</string>
+    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
+    <string name="channel_summary_total_unavailable">Total off-line</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="ok">OK</string>
+    <string name="signature_pubkey">Pubkey:</string>
+    <string name="pubkey">Pubkey</string>
 </resources>
