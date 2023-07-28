@@ -33,6 +33,7 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.viewpager.widget.ViewPager;
 
 import com.github.lightningnetwork.lnd.lnrpc.PayReq;
+import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.net.MalformedURLException;
@@ -160,6 +161,16 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 } else {
                     Toast.makeText(HomeActivity.this, R.string.demo_setupNodeFirstAvatar, Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        mDrawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                NavigationMenuView navigationMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
+                // Blends in the scrollbar on menu open.
+                navigationMenuView.setScrollBarDefaultDelayBeforeFade(1500);
+                navigationMenuView.scrollBy(0, 0);
             }
         });
         TextView appVersion = findViewById(R.id.appVersion);

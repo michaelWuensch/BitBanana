@@ -9,6 +9,7 @@
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
         <item name="android:textColorSecondary">@color/gray</item>
         <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
 
         <item name="android:dialogTheme">@style/BBDialog</item>
         <item name="android:alertDialogTheme">@style/BBDialog</item>
@@ -24,6 +25,7 @@
         <item name="android:colorBackground">@color/deep_sea_blue</item>
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
         <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
 
         <item name="android:dialogTheme">@style/BBDialog</item>
         <item name="android:alertDialogTheme">@style/BBDialog</item>
@@ -66,6 +68,7 @@
         <item name="colorAccent">@color/banana_yellow</item>
         <item name="android:windowBackground">@drawable/transparent_dialog_background</item>
         <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
     </style>
 
 
@@ -85,6 +88,7 @@
         <item name="colorAccent">@color/banana_yellow</item>
         <item name="android:backgroundDimAmount">0.7</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
     </style>
 
     <style name="BBBottomSheetDialogTheme" parent="BaseBBBottomSheetDialog" />
