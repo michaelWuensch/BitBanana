@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">ОК</string>
     <string name="cancel">Отказ</string>
@@ -249,7 +249,9 @@
     <string name="fee_not_available">N/A</string>
     <string name="fee_limit_title">Предупреждение за Таксата</string>
     <string name="fee_limit_threshold">Лимит на таксите за плащания над %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">Таксата за това плащане (%1$.1f%%) надвишава лимита, зададен в настройките (%2$.0f%%).\n\nНаистина ли искате да платите тази фактура?</string>
+    <string name="fee_limit_exceeded">Таксата за това плащане (%1$.1f%%) надвишава лимита, зададен в настройките (%2$.1f%%).
+\n
+\nНаистина ли искате да платите тази фактура\?</string>
     <string name="fee_limit_exceeded_payment">Таксата за това плащане (%1$d sats) ще бъде по-висока от самата сумата за плащане (%2$d sats).\n\nНаистина ли искате да платите тази фактура?</string>
     <string name="unlock_wallet">Отключете портфейла</string>
     <string name="biometricPrompt_title">Биометрична автентикация</string>
