@@ -5,12 +5,6 @@ apply plugin: 'com.google.protobuf' // Needed for gRPC
 
 import com.android.build.OutputFile
 
-// NB: Android Studio can't find the imports; this does not affect the
-// actual build since Gradle can find them just fine.
-import com.android.tools.profgen.ArtProfileKt
-import com.android.tools.profgen.ArtProfileSerializer
-import com.android.tools.profgen.DexFile
-
 android {
     compileSdkVersion 33
     defaultConfig {
@@ -173,26 +167,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-}
-
-// This part is there to ensure reproducibility. It should no longer be needed when AGP is updated to 8.1 or newer.
-project.afterEvaluate {
-    tasks.compileReleaseArtProfile.doLast {
-        outputs.files.each { file ->
-            if (file.toString().endsWith(".profm")) {
-                println("Sorting ${file} ...")
-                def version = ArtProfileSerializer.valueOf("METADATA_0_0_2")
-                def profile = ArtProfileKt.ArtProfile(file)
-                def keys = new ArrayList(profile.profileData.keySet())
-                def sortedData = new LinkedHashMap()
-                Collections.sort keys, new DexFile.Companion()
-                keys.each { key -> sortedData[key] = profile.profileData[key] }
-                new FileOutputStream(file).with {
-                    write(version.magicBytes$profgen)
-                    write(version.versionBytes$profgen)
-                    version.write$profgen(it, sortedData, "")
-                }
-            }
-        }
-    }
 }
