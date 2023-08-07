@@ -53,7 +53,7 @@
   {
     "project": "alexzhirkevich/custom-qr-generator",
     "description": "Android library for creating QR codes with logo, custom shapes, colors, background image. Powered by ZXing",
-    "version": "separate_painting-SNAPSHOT",
+    "version": "2.0.0-alpha01",
     "developers": [
       "Alexander Zhirkevich"
     ],
@@ -65,7 +65,7 @@
         "license_url": "https://api.github.com/licenses/mit"
       }
     ],
-    "dependency": "com.github.alexzhirkevich:custom-qr-generator:separate_painting-SNAPSHOT"
+    "dependency": "com.github.alexzhirkevich:custom-qr-generator:2.0.0-alpha01"
   },
   {
     "project": "Android App Startup Runtime",
@@ -971,17 +971,17 @@
   {
     "project": "Animal Sniffer Annotations",
     "description": null,
-    "version": "1.21",
+    "version": "1.23",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [
       {
         "license": "MIT license",
-        "license_url": "http://www.opensource.org/licenses/mit-license.php"
+        "license_url": "https://spdx.org/licenses/MIT.txt"
       }
     ],
-    "dependency": "org.codehaus.mojo:animal-sniffer-annotations:1.21"
+    "dependency": "org.codehaus.mojo:animal-sniffer-annotations:1.23"
   },
   {
     "project": "Biometric",
@@ -1003,12 +1003,12 @@
   {
     "project": "Checker Qual",
     "description": "checker-qual contains annotations (type qualifiers) that a programmer\nwrites to specify Java code for type-checking by the Checker Framework.",
-    "version": "3.12.0",
+    "version": "3.33.0",
     "developers": [
       "Michael Ernst",
       "Suzanne Millstein"
     ],
-    "url": "https://checkerframework.org",
+    "url": "https://checkerframework.org/",
     "year": null,
     "licenses": [
       {
@@ -1016,7 +1016,7 @@
         "license_url": "http://opensource.org/licenses/MIT"
       }
     ],
-    "dependency": "org.checkerframework:checker-qual:3.12.0"
+    "dependency": "org.checkerframework:checker-qual:3.33.0"
   },
   {
     "project": "Collections Kotlin Extensions",
@@ -1153,7 +1153,7 @@
   {
     "project": "Gson",
     "description": null,
-    "version": "2.9.0",
+    "version": "2.10.1",
     "developers": [],
     "url": null,
     "year": null,
@@ -1163,7 +1163,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.code.gson:gson:2.9.0"
+    "dependency": "com.google.code.gson:gson:2.10.1"
   },
   {
     "project": "Guava InternalFutureFailureAccess and InternalFutures",
@@ -1198,7 +1198,7 @@
   {
     "project": "Guava: Google Core Libraries for Java",
     "description": "Guava is a suite of core and expanded libraries that include\n    utility classes, Google\u0027s collections, I/O classes, and\n    much more.",
-    "version": "31.1-android",
+    "version": "32.0.1-android",
     "developers": [],
     "url": "https://github.com/google/guava",
     "year": null,
@@ -1208,7 +1208,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.guava:guava:31.1-android"
+    "dependency": "com.google.guava:guava:32.0.1-android"
   },
   {
     "project": "IntelliJ IDEA Annotations",
@@ -1230,7 +1230,7 @@
   {
     "project": "io.grpc:grpc-api",
     "description": "gRPC: API",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1242,12 +1242,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-api:1.54.0"
+    "dependency": "io.grpc:grpc-api:1.57.1"
   },
   {
     "project": "io.grpc:grpc-context",
     "description": "gRPC: Context",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1259,12 +1259,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-context:1.54.0"
+    "dependency": "io.grpc:grpc-context:1.57.1"
   },
   {
     "project": "io.grpc:grpc-core",
     "description": "gRPC: Core",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1276,12 +1276,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-core:1.54.0"
+    "dependency": "io.grpc:grpc-core:1.57.1"
   },
   {
     "project": "io.grpc:grpc-okhttp",
     "description": "gRPC: OkHttp",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1293,12 +1293,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-okhttp:1.54.0"
+    "dependency": "io.grpc:grpc-okhttp:1.57.1"
   },
   {
     "project": "io.grpc:grpc-protobuf-lite",
     "description": "gRPC: Protobuf Lite",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1310,12 +1310,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-protobuf-lite:1.54.0"
+    "dependency": "io.grpc:grpc-protobuf-lite:1.57.1"
   },
   {
     "project": "io.grpc:grpc-stub",
     "description": "gRPC: Stub",
-    "version": "1.54.0",
+    "version": "1.57.1",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1327,22 +1327,22 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-stub:1.54.0"
+    "dependency": "io.grpc:grpc-stub:1.57.1"
   },
   {
     "project": "J2ObjC Annotations",
     "description": "A set of annotations that provide additional information to the J2ObjC\n    translator to modify the result of translation.",
-    "version": "1.3",
+    "version": "2.8",
     "developers": [],
     "url": "https://github.com/google/j2objc/",
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
+        "license": "Apache License, Version 2.0",
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.j2objc:j2objc-annotations:1.3"
+    "dependency": "com.google.j2objc:j2objc-annotations:2.8"
   },
   {
     "project": "Jetpack WindowManager Library",
@@ -1571,7 +1571,7 @@
   {
     "project": "perfmark:perfmark-api",
     "description": "PerfMark API",
-    "version": "0.25.0",
+    "version": "0.26.0",
     "developers": [
       "Carl Mastrangelo"
     ],
@@ -1583,7 +1583,7 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.perfmark:perfmark-api:0.25.0"
+    "dependency": "io.perfmark:perfmark-api:0.26.0"
   },
   {
     "project": "Process Phoenix",
@@ -1605,7 +1605,7 @@
   {
     "project": "Protocol Buffers [Lite]",
     "description": "Lite version of Protocol Buffers library. This version is optimized for code size, but does\n    not guarantee API/ABI stability.",
-    "version": "3.21.7",
+    "version": "3.22.3",
     "developers": [],
     "url": null,
     "year": null,
@@ -1615,7 +1615,7 @@
         "license_url": "https://opensource.org/licenses/BSD-3-Clause"
       }
     ],
-    "dependency": "com.google.protobuf:protobuf-javalite:3.21.7"
+    "dependency": "com.google.protobuf:protobuf-javalite:3.22.3"
   },
   {
     "project": "reactive-streams",
