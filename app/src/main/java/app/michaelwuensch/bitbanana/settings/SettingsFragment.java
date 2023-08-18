@@ -111,6 +111,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 SharedPreferences.Editor editor = PrefsUtil.editPrefs();
+                                if (newValue.toString().contains("-")) {
+                                    String[] parts = newValue.toString().split("-");
+                                    editor.putString(PrefsUtil.LANGUAGE_CODE, parts[0]);
+                                    editor.putString(PrefsUtil.LANGUAGE_COUNTRY_CODE, parts[1]);
+                                } else {
+                                    editor.putString(PrefsUtil.LANGUAGE_CODE, newValue.toString());
+                                    editor.putString(PrefsUtil.LANGUAGE_COUNTRY_CODE, "");
+                                }
                                 editor.putString(PrefsUtil.LANGUAGE, newValue.toString());
 
                                 // We have to use commit here, apply would not finish before the app is restarted.
@@ -207,7 +215,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         // Action when clicked on "advanced settings"
-        final Preference prefLiveTests= findPreference("goToTests");
+        final Preference prefLiveTests = findPreference("goToTests");
         prefLiveTests.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

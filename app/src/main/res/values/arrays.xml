@@ -55,8 +55,8 @@
         <item>fr</item>
         <item>de</item>
         <item>it</item>
-        <item>ro</item>
-        <item>es</item>
+        <item>pt-BR</item>
+        <item>pt-PT</item>
         <item>uk</item>
     </string-array>
 
@@ -70,8 +70,8 @@
         <item>French</item>
         <item>German</item>
         <item>Italian</item>
-        <item>Romanian</item>
-        <item>Spanish</item>
+        <item>Portuguese (Brazil)</item>
+        <item>Portuguese (Portugal)</item>
         <item>Ukrainian</item>
     </string-array>
 

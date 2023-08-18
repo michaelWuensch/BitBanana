@@ -12,6 +12,7 @@
 To keep the repository clean we will do one translation update right before each release. This means your translation will only be available in the next release. There is no fixed schedule when releases are happening.
 So this might take a few days or a few weeks.
 If the language is translated to 100%, we will add it to the language selection list. If not, it is only accessible if you choose "System Language" and your smartphone is set to the corresponding language.
+If a language later drops below 50% it will be removed from the language selection list again.
 
 ## Current status:
 
