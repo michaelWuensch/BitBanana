@@ -1,0 +1,6 @@
+- Build changes to support first F-Droid release
+- Increased touch area for all scrollbars
+- Changing the language no longer needs an app restart
+- Added full portuguese translation thanks to the awesome community
+- Added support for region specific languages (e.g. Portuguese (Brazil) & Portugues (Portugal))
+- Additionally exposed language picking to Androids per app language settings (Android 13+)
