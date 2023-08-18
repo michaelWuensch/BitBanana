@@ -1,6 +1,5 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
-import android.content.Context;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,17 +10,10 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import app.michaelwuensch.bitbanana.util.LocaleUtil;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
-    @Override
-    protected void attachBaseContext(Context ctx) {
-        // Set the correct locale
-        super.attachBaseContext(LocaleUtil.setLocale(ctx));
-        applyOverrideConfiguration(ctx.getResources().getConfiguration());
-    }
 
     @Override
     protected void onResume() {

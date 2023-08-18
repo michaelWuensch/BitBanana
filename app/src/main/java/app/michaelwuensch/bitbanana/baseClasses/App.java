@@ -1,10 +1,8 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.app.Application;
-import android.content.Context;
 
 import app.michaelwuensch.bitbanana.tor.TorSetup;
-import app.michaelwuensch.bitbanana.util.LocaleUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
@@ -39,12 +37,6 @@ public class App extends Application {
 
         // Prepare the Tor Service
         TorSetup.generateTorServiceControllerBuilder(this).build();
-    }
-
-    @Override
-    protected void attachBaseContext(Context ctx) {
-        // Set the correct locale
-        super.attachBaseContext(LocaleUtil.setLocale(ctx));
     }
 
     public String getUriSchemeData() {

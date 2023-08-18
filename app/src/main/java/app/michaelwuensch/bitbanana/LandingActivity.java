@@ -2,26 +2,28 @@ package app.michaelwuensch.bitbanana;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.List;
+import java.util.Arrays;
 
+import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UriUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
 
 public class LandingActivity extends BaseAppCompatActivity {
 
@@ -30,6 +32,9 @@ public class LandingActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Keep in app language picker in sync with system per app language setting.
+        updateLanguageSetting();
 
         // Save data when App was started with a task.
 
@@ -59,8 +64,8 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                if (ver == 19) {
-                    updateNodeSettings();
+                if (ver < 22) {
+                    migrateLanguageSetting();
                     enterWallet();
                 } else {
                     resetApp();
@@ -128,18 +133,31 @@ public class LandingActivity extends BaseAppCompatActivity {
         startActivity(connectIntent);
     }
 
-    private void updateNodeSettings() {
-        List<BBNodeConfig> nodeConfigs = NodeConfigsManager.getInstance().getAllNodeConfigs(false);
-        for (BBNodeConfig nodeConfig : nodeConfigs) {
-            // Adds the defaults to the newly introduced node properties.
-            NodeConfigsManager.getInstance().updateNodeConfig(nodeConfig.getId(), nodeConfig.getAlias(), BaseNodeConfig.NODE_IMPLEMENTATION_LND, nodeConfig.getType(), nodeConfig.getHost(), nodeConfig.getPort(), nodeConfig.getCert(), nodeConfig.getMacaroon(), nodeConfig.isTorHostAddress(), !nodeConfig.isTorHostAddress());
-            try {
-                NodeConfigsManager.getInstance().apply();
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void migrateLanguageSetting() {
+        String currentPrefsValue = PrefsUtil.getPrefs().getString(PrefsUtil.LANGUAGE, "system");
+        if (currentPrefsValue.equals("system")) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList());
+        } else {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(currentPrefsValue));
+        }
+    }
+
+    private void updateLanguageSetting() {
+        if (AppCompatDelegate.getApplicationLocales().get(0) != null) {
+            // This will make sure that the Language setting is in sync with the per app language settings.
+            SharedPreferences.Editor editor = PrefsUtil.editPrefs();
+            String languageTag = AppCompatDelegate.getApplicationLocales().get(0).toLanguageTag();
+            String[] languageValues = getResources().getStringArray(R.array.languageValues);
+            boolean valid = Arrays.asList(languageValues).contains(languageTag);
+
+            if (languageTag.contains("-") && !valid) {
+                // The system picker set the locale to a country specific locale that is not supported. We remove the country information.
+                String[] parts = languageTag.split("-");
+                languageTag = parts[0];
             }
+
+            editor.putString(PrefsUtil.LANGUAGE, languageTag);
+            editor.commit();
         }
     }
 }

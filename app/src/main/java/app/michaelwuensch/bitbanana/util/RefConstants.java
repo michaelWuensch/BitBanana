@@ -15,9 +15,10 @@ public class RefConstants {
     18: Wallet name based WalletConfigs -> UUID based WalletConfigs (0.3.0-beta)
     19: Androidx.security implementation (0.4.0-beta)
     20: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
-    21: Rebranding to BitBanana
+    21: Rebranding to BitBanana (0.6.0
+    22: Changed language selection (0.6.6)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 21;
+    public static final int CURRENT_SETTINGS_VERSION = 22;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 

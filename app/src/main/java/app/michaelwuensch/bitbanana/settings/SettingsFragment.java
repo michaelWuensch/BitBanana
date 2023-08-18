@@ -3,10 +3,11 @@ package app.michaelwuensch.bitbanana.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -104,39 +105,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         createLanguagesList();
         mListLanguage.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(R.string.settings_restartRequired)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                SharedPreferences.Editor editor = PrefsUtil.editPrefs();
-                                if (newValue.toString().contains("-")) {
-                                    String[] parts = newValue.toString().split("-");
-                                    editor.putString(PrefsUtil.LANGUAGE_CODE, parts[0]);
-                                    editor.putString(PrefsUtil.LANGUAGE_COUNTRY_CODE, parts[1]);
-                                } else {
-                                    editor.putString(PrefsUtil.LANGUAGE_CODE, newValue.toString());
-                                    editor.putString(PrefsUtil.LANGUAGE_COUNTRY_CODE, "");
-                                }
-                                editor.putString(PrefsUtil.LANGUAGE, newValue.toString());
-
-                                // We have to use commit here, apply would not finish before the app is restarted.
-                                editor.commit();
-
-                                // FinishAffinity is needed here, otherwise the home activity still exist when restarting leading to lnd connection issues.
-                                getActivity().finishAffinity();
-
-                                AppUtil.getInstance(getActivity()).restartApp();
-
-                            }
-                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                ;
-                            }
-                        }).show();
-
-                return false;
+                if (newValue.toString().equals("system")) {
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList());
+                } else {
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(newValue.toString()));
+                }
+                return true;
             }
         });
 
