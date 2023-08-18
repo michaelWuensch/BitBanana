@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">Aceitar</string>
     <string name="cancel">Cancelar</string>
@@ -59,4 +59,644 @@
     <string name="channel_close_success">Fecho de canal iniciado com sucesso</string>
     <string name="channel_close_force">Forçar fecho canal</string>
     <string name="channel_close_error">Erro no fecho de canal</string>
+    <string name="settings_payer_data">Identificação de pagamento</string>
+    <string name="settings_reportIssue">Informar um problema</string>
+    <string name="settings_about">Sobre BitBanana</string>
+    <string name="settings_advanced_settings">Configurações avançadas</string>
+    <string name="error_connection_network_unreachable">Não foi possível chegar ao host.
+\n
+\nPor favor certifique-se que tem uma conexão de internet.</string>
+    <string name="error_connection_wallet_locked">Desbloqueie a carteira.</string>
+    <string name="error_channel_open_pending_max">Quantidade de canais pendentes excedeu o máximo.</string>
+    <string name="error_get_peers_timeout">Os pares não puderam ser obtidos dentro do prazo.</string>
+    <string name="help_dialog_scanPaymentRequest">Códigos QR contendo o seguinte são válidos:
+\n
+\n- Endereço Bitcoin
+\n- Solicitação de Pagamento Bitcoin
+\n- Solicitação de Pagamento Lightning</string>
+    <string name="help_dialog_scanContact">Códigos QR contendo o seguinte são válidos:
+\n
+\n- Endereço Lightning
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="rename">Renomear</string>
+    <string name="open_node">Selecionar este nó</string>
+    <string name="third_party_licenses">Licenças de terceiros</string>
+    <string name="advanced_channel_details_explanation_close_initiator">Quem fechou o canal\?</string>
+    <string name="signature_valid">Assinatura é válida!</string>
+    <string name="error_lightning_uri_invalid">Formato inválido.
+\nPor favor use algum dos seguintes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="support_donate">Doar</string>
+    <string name="support_donate_description">Apoie os programadores.</string>
+    <string name="clipboard_scan_node_pubkey">A sua área de transferência contém uma chave pública de nó. Deseja abrir um canal\?</string>
+    <string name="clipboard_scan_connect">A sua área de transferência contém dados de conexão. Deseja adicionar um novo nó\?</string>
+    <string name="licenses">Licenças</string>
+    <string name="advanced_channel_details_lifetime_closed">Vida</string>
+    <string name="advanced_channel_details_explanation_lifetime">Isto mostra há quanto tempo este canal já existe.</string>
+    <string name="advanced_channel_details_explanation_lifetime_closed">Isto mostra a duração em que este canal foi ativo.</string>
+    <string name="advanced_channel_details_initiator_you">Você</string>
+    <string name="advanced_channel_details_close_initiator">Fechar Iniciador</string>
+    <string name="advanced_channel_details_explanation_commit_fee">A quantia a ser paga em taxas ao fechar o canal. Isto pode mudar com o tempo já que as taxas são sujeitas às taxas de transação da camada base do Bitcoin.</string>
+    <string name="advanced_channel_details_explanation_time_lock">No caso de um fechamento não cooperativo (forçado) deste canal, o bloqueio de tempo é o número de blocos que terá de esperar antes de poder aceder os seus fundos novamente.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Taxa do Roteamento Remoto</string>
+    <string name="advanced_channel_details_local_channel_reserve">Reserva do Canal Local</string>
+    <string name="backup_data_confirm">Confirmo</string>
+    <string name="backup_data_create_headline">Backup</string>
+    <string name="backup_data_open_backupfile_error">Não foi possível abrir o ficheiro selecionado.</string>
+    <string name="backup_data_version_too_old">O backup foi feito com uma versão mais recente. Por favor atualize o app antes de importar o backup.</string>
+    <string name="forwarding_no_forwarding_events">Sem eventos de encaminhamento no período selecionado</string>
+    <string name="dialog_open_url">Os dados ligam a uma página web. Deseja abrir a seguinte página web\?
+\n
+\n%1$s</string>
+    <string name="forwarding_earned_description">Ganho no período selecionado</string>
+    <string name="message_to_sign">Mensagem a assinar</string>
+    <string name="sign_verify">Assinar/Verificar</string>
+    <string name="sign">Assinar</string>
+    <string name="verify">Verificar</string>
+    <string name="signature_invalid">Assinatura é inválida!</string>
+    <string name="signature_pubkey">Pubkey:</string>
+    <string name="generated_signature">Assinatura gerada:</string>
+    <string name="signature_to_verify">Assinatura a verificar</string>
+    <string name="channel_summary_total_outbound">Total enviado</string>
+    <string name="channel_summary_total_inbound">Total recebido</string>
+    <string name="description">Descrição</string>
+    <string name="activity_manage_nodes">Gerir Nós</string>
+    <string name="channel_close_type_force_close">Fechamento Forçado</string>
+    <string name="channel_close_type_breach">Vazamento</string>
+    <string name="settings_tor_summary">Anonimizar todo o tráfego web usando a rede Tor. Isto afeta apenas coisas como a obtenção de taxas de câmbio ou a interação com serviços LNURL. O uso ou não uso do Tor para conexão de um nó pode ser definido individualmente para cada nó nas configurações de conexão dele.</string>
+    <string name="settings_resetSecurityWarnings">Reiniciar Avisos de Segurança</string>
+    <string name="settings_showHelpButtons">Mostrar botões de informação</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="settings_onChainFeePresets">Predefinições de taxa on-chain</string>
+    <string name="settings_fastFee">Transação Rápida</string>
+    <string name="settings_slowFee">Transação Lenta</string>
+    <string name="error_blockExplorer_title">Explorador de Blocos</string>
+    <string name="error_emptyClipboardConnect">A sua área de transferência não contém nenhum dado de conexão.</string>
+    <string name="error_connection_invalid_macaroon2">Access denied!
+\n
+\nO macaroon é inválido.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) não pode ser resolvido. Por favor atualize as configurações da conexão de nós se o seu nó está agora sob um endereço ou nome de host diferente.</string>
+    <string name="error_connection_no_internet">Sem conexão de internet!</string>
+    <string name="error_connection_tor_unreachable">Conexão Tor falhou.
+\n Por favor ative o Tor nas configurações da conexão de nós.</string>
+    <string name="error_invalid_data_to_create_channel">Formato inválido.
+\nPor favor use algum dos seguintes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port
+\n- LNURL-Channel</string>
+    <string name="error_invalid_ln_address_format">Formato inválido para endereço Lightning. Um endereço Lightning se parece com um endereço de e-mail.
+\n
+\nnomedeusuario@dominio</string>
+    <string name="fee_limit_threshold">Limite de taxa para pagamentos acima de %1$d sats: %2$s</string>
+    <string name="invoice_detail">Detalhes da cobrança</string>
+    <string name="useTor">Usar Tor</string>
+    <string name="verify_certificate">Verificação de Certificado</string>
+    <string name="lnurl_payer_data_name">Nome</string>
+    <string name="lnurl_payer_data_identifier">Endereço Lightning</string>
+    <string name="lnurl_payer_data_identifier_explanation">Um endereço Lightning é como um endereço de e-mail, mas para Bitcoin!</string>
+    <string name="lnurl_payer_data_email">E-mail</string>
+    <string name="lnurl_payer_data_not_supported">Este pagamento requer um tipo de autenticação que não é ainda suportado pelo BitBanana.</string>
+    <string name="lnurl_payer_data_description">Informação ao beneficiário</string>
+    <string name="drawer_menu_contacts">Contatos</string>
+    <string name="drawer_menu_category_current_node">Nó Atual</string>
+    <string name="drawer_menu_category_app">App</string>
+    <string name="contact_type">Tipo de Contato</string>
+    <string name="data">Dados</string>
+    <string name="forwarding_volume_description">Roteado no período selecionado</string>
+    <string name="forwarding_closed_channel">Canal fechado</string>
+    <string name="message_to_verify">Mensagem a verificar</string>
+    <string name="pin_enter">Digitar PIN</string>
+    <string name="expired_requests">Solicitações expiradas</string>
+    <string name="no_transactions">Sem transações</string>
+    <string name="channel_local_balance">O seu balanço</string>
+    <string name="channel_remote_balance">Balanço remoto</string>
+    <string name="channel_close_force_confirmation">Tem certeza de que deseja forçar o fechamento desse canal com:
+\n
+\n%1$s
+\n
+\nOs seus fundos serão bloqueados por %2$s.</string>
+    <string name="guardian_copyToClipboard_lightning">Se copiar esses dados para a área de transferencia, outras apps (incluindo alguns maliciosos) poderão acedé-los e modificá-los.
+\n
+\nPara ter certeza que nada tenha sido alterado, compare o final com:
+\n
+\n%1$s
+\n</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Está prestes a pagar %1$s%% em taxas de rede.
+\n
+\nSoluções possíveis:
+\n- tente um canal de lighting
+\n- seleccione uma taxa menor, espere mais
+\n- tente de novo mais tarde
+\n- transacionar uma quantidade maior
+\n
+\nDeseja continuar mesmo assim\?</string>
+    <string name="settings_category_general">Geral</string>
+    <string name="settings_category_security">Segurança</string>
+    <string name="error_connection_btcpay_invalid_config">A configuração do servidor BTCPay não contém uma configuração BTC GRPC.</string>
+    <string name="error_connect_peer_refused">A conexão foi recusada pelo par.</string>
+    <string name="error_channel_open">Não pôde abrir canal com o nó conectado: %s</string>
+    <string name="error_channel_close">Não pôde fechar o canal: %s</string>
+    <string name="error_invalid_bitcoin_request">Solicitação Bitcoin inválida.</string>
+    <string name="error_payment_timeout">Tempo esgotado. Nenhuma rota pôde ser encontrada.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">A resposta de %1$s não pôde ser lida.</string>
+    <string name="fee_tier_slow_description">Transação Lenta</string>
+    <string name="fee_tier_medium_description">Transação Média</string>
+    <string name="fee_tier_fast_description">Transação Rápida</string>
+    <string name="unlock_wallet">Desbloquear Carteira</string>
+    <string name="biometricPrompt_title">Autenticação Biométrica</string>
+    <string name="help_dialog_scanNodePublicKey">Códigos QR contendo o seguinte são válidos:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port
+\n- LNURL-Channel</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos:
+\n
+\n- Cadeia Lndconnect (lndconnect://...)
+\n- Conexão de servidor BtcPay (config=...)
+\n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:
+\n
+\n+ instantâneo
+\n+ taxas baixas
+\n- nem sempre possível
+\n
+\nPerfeito para transações pequenas.
+\nUse sempre que possível
+\n
+\n
+\nOn-Chain:
+\n
+\n+ sempre possível
+\n- mais lento
+\n- taxas mais altas
+\n
+\nBom para transações grandes.
+\nUse quando o Lightning não estiver disponível.</string>
+    <string name="help_dialog_scanGeneric">Tudo é permitido aqui.
+\nApenas escaneie um código QR e o BitBanana irá automaticamente determinar que ação tomar dependendo dos dados.</string>
+    <string name="lnurl_withdraw_success">Saque
+\nbem-sucedido</string>
+    <string name="lnurl_withdraw_fail">Saque
+\nfalhou</string>
+    <string name="lnurl_withdraw_insufficient_channel_balance">A quantia de saque é maior que o que pode receber usando Lightning com os seus canais atualmente abertos.</string>
+    <string name="lnurl_channel_pending_hint">O canal está a abrir. Isso pode levar um tempo.
+\nPode verificar o estado dos canais no seu resumo de canais.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">A quantia a pagar é maior do que o que pode enviar usando Lightning com os seus canais atualmente abertos.</string>
+    <string name="rest_port">REST não é suportado.
+\n
+\nDeseja tentar se conectar usando gRPC\?</string>
+    <string name="drawer_menu_backup">Backup</string>
+    <string name="support_issue_description">Encontrou o bug\? Informe-nos!</string>
+    <string name="support_privacy_description">Importamo-nos com a sua privacidade.</string>
+    <string name="lnurl_pay_save_secret">IMPORTANTE:
+\nO código foi copiado para sua área de transferência. Por favor, grave-o, se precisar dele mais tarde. Este diálogo não será exibido novamente.</string>
+    <string name="choose_action">Escolha a ação</string>
+    <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como a commit fee ou reserva local do canal) nem todos os fundos são gastáveis.</string>
+    <string name="backup_data_confirm_description">Já fiz backup da minha seed e os meus canais e entendo que este backup NÃO ajuda a recuperar os meus fundos.
+\n
+\nEntendo que este backup ainda contém todas as informações necessárias para aceder os meus fundos se o nó estiver atualmente online. Eu, portanto, usarei uma palavra-passe segura no próximo passo.</string>
+    <string name="backup_data_restore_headline">Restaurar</string>
+    <string name="backup_data_restore_failed_title">Restauração falhou</string>
+    <string name="backup_data_restore_failed_description">O mais provável é que inseriu uma palavra-passe inválida.</string>
+    <string name="backup_data_invalid_file_chosen">Este não é um ficheiro de backup válido. Por favor escolha um ficheiro que foi criado com este app.</string>
+    <plurals name="duration_minute">
+        <item quantity="one">%d Minuto</item>
+        <item quantity="many">%d Minutos</item>
+        <item quantity="other">%d Minutos</item>
+    </plurals>
+    <string name="no_nodes">Nenhum nó</string>
+    <string name="transaction_detail">Detalhes da Transação</string>
+    <string name="advanced_channel_details_activity">Atividade</string>
+    <plurals name="blocks">
+        <item quantity="one">%d Bloco</item>
+        <item quantity="many">%d Blocos</item>
+        <item quantity="other">%d Blocos</item>
+    </plurals>
+    <string name="error_cameraPermissionRequired">Para escanear códigos QR terá de permitir que o BitBanana use a câmara.</string>
+    <string name="settings_category_help">Ajuda</string>
+    <string name="error_connection_internal_server">O nó é alcançável mas retorna um erro interno. Este erro talvez seja causado pelo uso de uma porta errada.</string>
+    <string name="backup_data_create_failed">Backup falhou</string>
+    <string name="channel_summary_total_unavailable">Total off-line</string>
+    <string name="channel_no_alias">Sem nome</string>
+    <string name="settings_tor">Tor</string>
+    <string name="connectionData">Dados de conexão</string>
+    <string name="lnurl_pay_success_secret_decrypt_error">O seu pagamento foi bem-sucedido, mas o segredo que recebeu não pôde ser decodificado.</string>
+    <string name="send_SendOnChainInstead">Enviar On-Chain</string>
+    <string name="receive_generateRequest">Cobrar</string>
+    <string name="error">Erro</string>
+    <string name="send_money">Enviar dinheiro</string>
+    <string name="settings_help">Precisa de Ajuda\?</string>
+    <string name="channel_close_type">Fechar tipo</string>
+    <string name="fee_not_available">N/A</string>
+    <string name="advanced_channel_details_lifetime">Idade</string>
+    <string name="advanced_channel_details_commit_fee">Commit Fee</string>
+    <string name="settings_hapticPin">Feedback Tátil de PIN</string>
+    <plurals name="duration_year">
+        <item quantity="one">%d Ano</item>
+        <item quantity="many">%d Anos</item>
+        <item quantity="other">%d Anos</item>
+    </plurals>
+    <string name="error_connect_peer_timeout">Não foi possível conectar ao par dentro do prazo.</string>
+    <string name="drawer_menu_nodes">Nós</string>
+    <string name="drawer_menu_buy">Comprar Bitcoin</string>
+    <string name="contact_name">Nome do Contato</string>
+    <string name="contribute">Contribuir</string>
+    <string name="save">Gravar</string>
+    <string name="activity_send">Pagar</string>
+    <string name="receive_requestFullfilled">Cobrança
+\npaga</string>
+    <string name="guardian_doNotShowAgain">Não mostrar novamente.</string>
+    <string name="guardian_Title">Atenção</string>
+    <string name="identity_switch_public">Público</string>
+    <string name="open">Abrir</string>
+    <string name="drawer_menu_channels">Canais</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s enviou uma solicitação de pagamento inválida.</string>
+    <string name="advanced_channel_details_explanation_initiator">Quem abriu o canal\?</string>
+    <string name="app_reset_title">Por favor note</string>
+    <string name="unknown">Desconhecido</string>
+    <string name="support_contribute_description">Ajude a melhorar o BitBanana.</string>
+    <string name="change_data">Mudar dados</string>
+    <string name="receive_lightning_request">Cobrança via rede Lightning</string>
+    <string name="settings_systemLanguage">Idioma do sistema</string>
+    <string name="settings_lnFeeLimitTitle">Limite de Taxa de Pagamento Lightning</string>
+    <string name="lightning">Lightning</string>
+    <string name="activity_manage_channels_closed">Canais Fechados</string>
+    <string name="channel_state_open">aberto</string>
+    <string name="settings_btcUnit">Unidade de Bitcoin</string>
+    <string name="scan">Ler</string>
+    <string name="activity_manage_contacts">Gerir Contatos</string>
+    <string name="activity_manage_contacts_send_mode">Enviar a…</string>
+    <string name="channel_capacity">Capacidade</string>
+    <string name="channel_funding_transaction">Transação de abertura</string>
+    <string name="guardian_zero_amount_invoice">A cobrança não especifica uma quantia. Apesar de muito improvável, cobranças sem uma quantia especificada podem ser abusadas e o recipiente receberá menos que o esperado neste caso. Se possível, use uma cobrança com uma quantia especificada.</string>
+    <string name="settings_currency">Segunda Unidade</string>
+    <string name="settings_preventScreenRecording">Impedir gravação de ecrã</string>
+    <string name="string_analyzer_unrecognized_data">Dados não reconhecidos.</string>
+    <string name="drawer_menu_coin_control">Moedas (UTXOs)</string>
+    <string name="support_help_description">Visite a nossa documentação.</string>
+    <string name="confirmations">Confirmações</string>
+    <string name="payee">Beneficiário</string>
+    <string name="maximum_abbreviation">máx.</string>
+    <string name="pin_enter_old">Digite PIN antigo</string>
+    <string name="documentation">Documentação</string>
+    <string name="pin_changed">PIN alterado!</string>
+    <string name="advanced_channel_details_initiator">Iniciador</string>
+    <string name="activity_manage_channels">Canais</string>
+    <string name="send_sendPayment">Enviar pagamento</string>
+    <string name="activity_receive">Receber</string>
+    <string name="lnurl_pay_save_url">IMPORTANTE:
+\nA URL foi copiada para sua área de transferência. Por favor, grave-a, se precisar dela mais tarde. Este diálogo não será exibido novamente.</string>
+    <string name="privacy">Privacidade</string>
+    <string name="search">Procurar</string>
+    <string name="pin_confirm">Confirmar PIN</string>
+    <string name="settings_enableBiometrics">Ativar autenticação biométrica</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Reserva do Canal Remoto</string>
+    <string name="send">Enviar</string>
+    <string name="support">Suporte</string>
+    <string name="activity_connectRemoteNode">Conectar ao nó remoto</string>
+    <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
+    <string name="withdraw">Resgatar</string>
+    <string name="drawer_menu_routing">Roteamento</string>
+    <string name="regtest_blockexplorer_unavailable">Exploradores de blocos não estão disponíveis no modo REGTEST.</string>
+    <string name="confirm_node_deletion">Deseja realmente deletar esta conexão de nó\?</string>
+    <string name="date">Data</string>
+    <string name="activity_advanced_settings">Configurações Avançadas</string>
+    <string name="activity_node_details">Detalhes dos Nós</string>
+    <string name="activity_contact_details">Detalhes do Contato</string>
+    <string name="activity_manual_setup">Dados de Conexão</string>
+    <string name="activity_backup">Backup</string>
+    <string name="activity_utxos">Moedas (UTXOs)</string>
+    <string name="pin_enter_new">Digite PIN novo</string>
+    <string name="pin_confirm_new">Confirmar novo PIN</string>
+    <string name="pin_entered_wrong">PIN errado</string>
+    <string name="internal">Interno</string>
+    <string name="opened_channel">Canal aberto</string>
+    <string name="closed_channel">Canal fechado</string>
+    <string name="channel_close_confirmation">Tem certeza de que deseja fechar esse canal com:
+\n
+\n%s
+\n</string>
+    <string name="channel_open_error">Erro de abertura de canal</string>
+    <string name="setup_connect_heading">Como deseja usar a BitBanana\?</string>
+    <string name="setup_connect_local_description">Criar uma carteira neste aparelho.</string>
+    <string name="setup_connect_local_button">Criar carteira</string>
+    <string name="setup_connect_remote_description">Controle o seu nó remotamente.</string>
+    <string name="setup_connect_remote_button">Conectar ao Nó Remoto</string>
+    <string name="demo_setupNodeBtn">Configurar carteira</string>
+    <string name="demo_setupNodeFirst">Primeiro tem de se conectar a um nó.</string>
+    <string name="send_lightningPayment">Enviar pagamento pela rede Lightning</string>
+    <string name="send_onChainPayment">Enviar pagamento pela rede Bitcoin</string>
+    <string name="guardian_remoteConnect">Tem certeza que deseja se conectar a
+\n
+\n%1$s
+\n
+\nPor favor verifique o nome do host cuidadosamente.</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem!
+\nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar:
+\n
+\n- Dados de Conexão de Nós
+\n- Contatos
+\n
+\nContinuar\?</string>
+    <string name="settings_addPin">Proteger com PIN</string>
+    <string name="settings_removePin">Remover PIN</string>
+    <string name="settings_blockExplorer">Explorador de Blocos</string>
+    <string name="error_connection_invalid_host_or_port">O host ou a porta fornecida é inválida.</string>
+    <string name="error_wrong_password">Palavra-passe incorreta</string>
+    <string name="error_connect_peer_no_host">Não é possível conectar ao nó sem endereço IP ou host.</string>
+    <string name="error_get_peers">Não foi possível obter a lista de pares.</string>
+    <plurals name="duration_day">
+        <item quantity="one">%d Dia</item>
+        <item quantity="many">%d Dias</item>
+        <item quantity="other">%d Dias</item>
+    </plurals>
+    <string name="fee_tier_medium_title">Médio</string>
+    <string name="fee_tier_fast_title">Rápido</string>
+    <string name="node_name">Nome do Nó</string>
+    <string name="delete">Deletar</string>
+    <string name="host">Host</string>
+    <string name="clipboard_error_heading">Dados da área de transferência encontrados, mas são inválidos:</string>
+    <string name="advanced_channel_details_time_lock">Bloqueio de Tempo</string>
+    <string name="advanced_channel_details_local_routing_fee">Taxa do Roteamento Local</string>
+    <string name="backup_data_confirm_headline">Por Favor Confirme</string>
+    <string name="backup_data_password_empty">A palavra-passe precisar ter ao menos 8 caracteres.</string>
+    <string name="backup_data_password_mismatch">As palavras-passe não correspondem.</string>
+    <string name="backup_data_creation_process">A criar backup</string>
+    <string name="backup_data_no_data">Nenhum dado para fazer backup.</string>
+    <string name="utxo_no_utxos">Sem UTXOs</string>
+    <string name="settings_receiveAddressDisplayValues_1">SegWit Nativo (Bech32)</string>
+    <string name="settings_mediumFee">Transação Média</string>
+    <string name="verify_message">Verificar mensagem</string>
+    <string name="settings">Configurações</string>
+    <string name="notConnected">Não conectado</string>
+    <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Espere %1$s segundos.</string>
+    <string name="private_channel">Canal privado</string>
+    <string name="channel_visibility_private">privado</string>
+    <string name="channel_visibility_public">público</string>
+    <string name="channel_visibility">Visibilidade</string>
+    <string name="demo_setupNodeFirstAvatar">Primeiro tem de se conectar a um nó antes de poder ver informações do seu nó e do seu avatar.</string>
+    <string name="send_success">Pagamento
+\nbem sucedido</string>
+    <string name="send_fail">Pagamento
+\nfalhou</string>
+    <string name="channel_remote_public_key">Chave pública remota</string>
+    <string name="channel_close_time">Tempo até o fechamento</string>
+    <string name="receive_generateRequest_failed">Geração de cobrança falhou.</string>
+    <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, precisa primeiro abrir canais.</string>
+    <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela rede Lightning, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.
+\n
+\nPara conseguir isso, precisa gastar algo na rede Lightning primeiro.
+\n
+\nNa área de gerir canais, pode sempre ver o quanto é capaz de enviar ou receber pela rede Lightning.</string>
+    <string name="channel_open">Abrir canal</string>
+    <string name="guardian_reset">Todos os avisos de segurança são ativados novamente.</string>
+    <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">Se copiar esses dados para a área de transferência, outros apps (inclusive maliciosos) poderão acessá-lo e modificá-lo.
+\n
+\nPara ter certeza que nada foi alterado, confira o começo quando for colar com:
+\n
+\n%1$s
+\n</string>
+    <string name="channel_open_success">Abertura de canal iniciada com sucesso</string>
+    <string name="guardian_disableScreenProtection">Se permitir a gravação no ecrã, um software mal-intencionado poderá gravar um vídeo ou fazer capturas de ecrã enquanto usar o BitBanana. Recomendamos desativar isso apenas enquanto deseja gravar um vídeo ou tirar uma captura de ecrã.</string>
+    <string name="guardian_pasteFromClipboard">Sempre verifique os últimos 3 a 5 dígitos ao colar da área de transferência. Uma app mal-intencionada pode ter alterada o endereço em segundo plano sem se perceber.</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Solicitou uma quantia como valor de decreto, mas os seus dados de taxa de câmbio são antigos (recuperados há %1$s horas).
+\nCertifique-se que tem uma conexão à internet ou considere solicitar diretamente em Bitcoin.
+\n
+\nDeseja continuar mesmo assim\?</string>
+    <string name="guardian_disableScrambledPin">Se não estiver misturado, é fácil adivinhar o seu PIN apenas observando os movimentos dos seus dedos.</string>
+    <string name="guardian_oldLndVersion_remote">Por favor atualize.
+\n
+\nO nó ao qual está conectado executa uma versão antiga do LND. Versões abaixo de %1$s já não são suportadas ativamente.</string>
+    <string name="guardian_externalLink">Está prestes a abrir uma ligação com dados sensíveis no seu navegador. Embora o BitBanana anonimize os seus dados com a rede Tor, o seu navegador não. Se deseja manter este dados privados use um navegador Tor para abrir a ligação.</string>
+    <string name="guardian_certificate_verification">Se a verificação de certificado for desativada, estará vulnerável a um ataque man-in-the-middle. Faça isso apenas se souber o que faz.
+\n
+\nÉ recomendado, ao invés disso, corrigir a configuração do certificado.
+\nIsto significa que o certificado do seu nó tem de ter o nome de host que usa nesta configuração de conexão incluso. Adicione o nome de host a tlsextradomain em lnd.conf antes de recriar o certificado.</string>
+    <string name="settings_category_advanced">Avançado</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_restartRequired">O BitBanana será reiniciado para fazer essa alteração. Quer continuar\?</string>
+    <string name="settings_scan_clipboard">Verificar área de transferência</string>
+    <string name="settings_scan_clipboard_summary">Automaticamente verificar a área de transferência por dados com os quais o BitBanana pode lidar.</string>
+    <string name="settings_manageChannels">Gerir canais Lightning</string>
+    <string name="settings_scramblePin">Misturar números do PIN</string>
+    <string name="settings_hideTotalBalance">Ocultar saldo total</string>
+    <string name="settings_changePin">Alterar/Remover PIN</string>
+    <string name="settings_blockExplorer_tor_toast">O navegador Tor para Android é necessário.</string>
+    <string name="settings_addressType">Tipo de Endereço Bitcoin</string>
+    <string name="settings_hideTotalBalance_explanation">Quando ativo, toque a logo do BitBanana no ecrã inicial para revelar o seu balanço.</string>
+    <string name="settings_exchangeRateProvider">Provedora de Taxas de Câmbio</string>
+    <string name="settings_receiveAddressDisplayValues_0">SegWit de Compatibilidade (P2PSH)</string>
+    <string name="settings_lnRequestExpiryTitle">Expiração da Solicitação Lightning</string>
+    <string name="settings_lnPrivateChannelHints">Incluir dicas de rota para canais privados em cobranças</string>
+    <string name="error_paymentRequestExpired">Esta cobrança de pagamento expirou.</string>
+    <string name="error_useTestnetRequest">Está conectado a TESTNET. Por favor use as solicitações de pagamento ou endereços TESTNET.</string>
+    <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">O seu explorador de blocos atualmente selecionado (%1$s) não suporta %2$s.
+\nPor favor vá às configurações e escolha outro explorador de blocos para continuar.</string>
+    <string name="error_zeroAmountPaymentRequest">Esta é uma solicitação de pagamento de quantia zero. BitBanana não suporta solicitações de pagamento de quantia zero devido aos riscos de segurança associados a elas.</string>
+    <string name="error_useMainnetRequest">Está conectado a MAINNET. Por favor use as solicitações de pagamento ou endereços MAINNET.</string>
+    <string name="error_useRegtestRequest">Está conectado a uma rede REGTEST. Por favor use as solicitações de pagamento ou endereços REGTEST.</string>
+    <string name="error_emptyClipboardPayment">A sua área de transferência não contém nenhum dado de pagamento.</string>
+    <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
+    <string name="error_connection_unsupported_format">Unsupported connection format.
+\nPor favor, use um dos seguintes formatos:
+\n
+\n- Cadeia Lndconnect (lndconnect://...)
+\n- Conexão de BtcPay Server (config=...)
+\n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
+    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida.
+\nCertifique-se de usar o seguinte formato:
+\n
+\nlndconnect://<ip>:<port>\?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</port></ip></string>
+    <string name="error_connection_no_macaroon">As suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
+    <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
+    <string name="error_connection_server_unreachable">Tempo esgotado.
+\nO servidor não responde.
+\n
+\n- Certifique-se de ter uma boa conexão com a internet
+\n
+\n - Verifique se o servidor está em execução e ainda possui o seguinte IP:
+\n
+\n%1$s</string>
+    <string name="error_connection_host_verification_failed">Verificação de nome de host falhou.
+\n
+\nO nome de host da sua conexão não corresponde ao nome de host do certificado.
+\n
+\n Terá de desativar a verificação de certificado nas configurações da conexão de nós ou terá de recriar o seu certificado. Certifique-se que o nome de host é adicionado a lnd.conf como tlsextradomain antes de recriá-lo.</string>
+    <string name="error_connection_lnd_unavailable">Não foi possível conectar ao LND.
+\n
+\n- certifique-se que o daemon LND executa no seu servidor.
+\n
+\n- certifique-se que o seu encaminhamento de porta está ativo. (Porta: %1$s)</string>
+    <string name="error_connection_unknown">Conexão falhou.</string>
+    <string name="error_connection_btcpay_invalid_json">A sintaxe JSON da configuração do servidor BTCPay é inválida.</string>
+    <string name="error_connection_tor_bootstrapping">Tor foi incapaz de realizar bootstrap.
+\n
+\nBitBanana Android agora suporta nativamente o Tor. Se utiliza o Orbot, por favor remova o BitBanana da lista ativa de Tor do Orbot ou desative o Orbot completamente.</string>
+    <string name="error_connection_internal_server_clearnet">O nó é alcançável mas retorna um erro interno. Este erro talvez seja causado pelo uso de uma porta errada. Como tenta conectar a um nó na clearnet, desativar o Tor nas configurações da conexão de nós pode resolver o seu problema.</string>
+    <string name="error_channel_open_node_setup">Tem de se conectar a um nó antes de abrir um canal.</string>
+    <string name="error_channel_open_timeout">Canal não pôde ser aberto dentro do prazo.</string>
+    <string name="error_channel_close_offline">O par está offline. Apenas o fechamento forçado é permitido.</string>
+    <string name="error_connect_peer">Não foi possível estabelecer uma conexão ao nó do par.</string>
+    <string name="error_channel_close_timeout">Canal não pôde ser fechado dentro do prazo.</string>
+    <string name="error_connect_peer_self">Não é possível conectar a si mesmo.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar o seu PIN. O app fechará agora.
+\nPode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_tor_exchange_rate">Taxa de câmbio não pôde ser obtida. O serviço que usa parece bloquear solicitações vindas da rede Tor. Tente mudar o provedor de taxa de câmbio nas configurações avançadas.</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Segundo</item>
+        <item quantity="many">%d Segundos</item>
+        <item quantity="other">%d Segundos</item>
+    </plurals>
+    <string name="error_empty_node_name">Um nome vazio não é permitido.</string>
+    <string name="error_payment_invalid_details">Os detalhes de pagamento não correspondem aos detalhes especificados na cobrança que tenta pagar.</string>
+    <string name="error_payment_no_route">Nenhuma rota foi encontrada que respeite o seu limite de taxa de %1$.1f%%. Aumentar o seu limite de taxa nas configurações ou abrir novos canais pode resolver o problema.</string>
+    <string name="error_payment_insufficient_balance">A quantidade a pagar é maior que o que pode enviar usando Lightning com os seus canais atualmente abertos.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Por favor certifique-se que o recipiente tenha ativado a função keysend.</string>
+    <string name="error_only_payment_data_allowed">Apenas dados de pagamento são permitidos aqui.</string>
+    <string name="error_node_not_yet_ready">O seu nó ainda não está totalmente sincronizado. Por favor tente novamente mais tarde.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s parece estar bloqueando solicitações vindas da rede Tor. Pode tentar desativar o Tor nas configurações ou contatar o serviço e pedir-lhes para atualizarem as suas regras do CloudFlare.</string>
+    <plurals name="duration_hour">
+        <item quantity="one">%d Hora</item>
+        <item quantity="many">%d Horas</item>
+        <item quantity="other">%d Horas</item>
+    </plurals>
+    <plurals name="duration_week">
+        <item quantity="one">%d Semana</item>
+        <item quantity="many">%d Semanas</item>
+        <item quantity="other">%d Semanas</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d Mês</item>
+        <item quantity="many">%d Meses</item>
+        <item quantity="other">%d Meses</item>
+    </plurals>
+    <string name="fee_estimated_duration">Entrega Estimada: %1$s</string>
+    <string name="fee_limit_title">Alerta de Limite de Taxa</string>
+    <string name="fee_limit_exceeded">A taxa para este pagamento (%1$.1f%%) excede o limite especificado nas configurações (%2$.1f%%).
+\n
+\nDeseja realmente pagar esta cobrança\?</string>
+    <string name="fee_limit_exceeded_payment">A taxa para este pagamento (%1$d sats) será maior que a quantia do pagamento (%2$d sats).
+\n
+\nDeseja realmente pagar esta cobrança\?</string>
+    <string name="biometricNotSetup">Para usar esta ferramenta, tem de configurar a autenticação biométrica nas configurações do seu sistema Android.</string>
+    <string name="app_reset_message">O app foi reiniciado já que a última atualização introduziu mudanças estruturais.
+\nInfelizmente terá de passar pelo processo de configuração novamente.</string>
+    <string name="nfc_type_not_supported">Tipo NFC não suportado</string>
+    <string name="help_dialog_private_channels">Canais privados não são mais seguros, apenas não estão visíveis na rede.
+\nApenas use canais privados se abrir um canal a um nó que não roteie pagamentos ou quando não roteia os seus pagamentos.
+\nPara rotear pagamentos o seu nó deve ter um uptime muito alto. Se executa o seu nó num aparelho móvel ou um aparelho que frequentemente fica offline, não deve rotear pagamentos e deve se manter nos canais privados.</string>
+    <string name="help_dialog_identity">Este é o seu nó na rede Lightning.
+\n
+\nQuando tocar na sua imagem de avatar irá revelar um código QR.
+\nOutros podem escanear este código e adicioná-lo aos contatos deles, abrir canais consigo ou enviar dinheiro a si.
+\n
+\nEste avatar é único.
+\nEle foi gerado automaticamente baseado na sua chave pública e não pode ser alterado.</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain.
+\nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor simplesmente irá receber troco em forma de outra UTXO ao enviar transações.</string>
+    <string name="help_dialog_sign_verify">Ao assinar uma mensagem com o seu nó, prova que é o dono deste nó. Como a assinatura contém a chave pública do nó, outros podem verificar esta mensagem assinada.
+\n
+\nEsta ferramenta pode ser usada em diferentes cenários como provando a identidade ou para fazer login com o seu nó em alguns serviços.</string>
+    <string name="help_dialog_channels">A lista de canais Lightning representa os seus fundos Lightning. Canais Lightning são necessários para participar na rede Lightning que permite pagamentos Bitcoin instantâneos e baratos.
+\n
+\nPara \"converter\" fundos on-chain para fundos Lightning precisa abrir um canal. Para \"converter\" fundos Lightning de volta em fundos on-chain, precisa fechar um canal existente.
+\nAmbas as operações, abrir e fechar canais, são realizadas com uma transação on-chain que custam taxas. Portanto, tente manter os canais abertos pelo maior tempo possível!
+\n
+\nUma maneira fácil de começar a abrir canais é usando lightningnetwork.plus.</string>
+    <string name="help_dialog_connect_node_help">Infelizmente estes códigos QR são tão grandes que alguns aparelhos não conseguem os escanear. Se este for o caso para si, terá de copiar e colar.
+\n
+\nSe precisa de mais ajuda, por favor confira a nossa documentação de configuração.</string>
+    <string name="help_dialog_payer_data_settings">Alguns beneficiários suportam ou até requerem que envie informações adicionais sobre você. Para a sua conveniência, pode definir os valores padrão aqui, para que não tenha que inserir esta informação sempre. Estes dados são gravados apenas localmente no telefone.
+\n
+\nPor favor note que mesmo com os padrões definidos ainda poderá modificar os dados ao fazer um pagamento. Também poderá definir que dados são enviados.
+\n
+\nÉ responsável por decidir usar dados reais ou falsos. Como regra geral, recomendamos enviar dados reais apenas se for necessário por algum motivo. (ex.: quando for receber um código pelo correio etc.)</string>
+    <string name="help_dialog_payer_data_payment">Este beneficiário suporta ou até requer que o envie dados adicionais sobre você.
+\n
+\nÉ responsável por decidir usar dados reais ou falsos. Como regra geral, recomendamos enviar dados reais apenas se for necessário por algum motivo. (ex.: quando for receber um código pelo correio etc.)
+\n
+\nSe uma caixa de seleção não puder ser desmarcada então este dado é marcado como obrigatório pelo beneficiário. Se não quiser enviar este dado, terá de cancelar o pagamento.</string>
+    <string name="node_added">Dados de conexão de nó foram adicionados.</string>
+    <string name="node_already_exists">O nó já existe.
+\nSe deseja atualizar os seus dados de conexão, por favor vá à página de detalhes do nó.</string>
+    <string name="lnurl_decoding_no_lnurl_data">Os dados não contêm um LNURL válido.</string>
+    <string name="lnurl_unsupported_type">Tipo LNURL não suportado</string>
+    <string name="lnurl_service_not_responding">%s não responde</string>
+    <string name="lnurl_service">Serviço</string>
+    <string name="lnurl_service_provided_invalid_data">O serviço com o qual está a interagir proveu dados inválidos.</string>
+    <string name="lnurl_channel_opening_question">Realmente quer abrir um canal com:</string>
+    <string name="lnurl_invalid_response">O serviço respondeu com uma resposta inválida.</string>
+    <string name="lnurl_payer_data_choose">Escolha que dados enviar:</string>
+    <string name="identity_switch_tor">Tor</string>
+    <string name="identity_tap_on_avatar">Toque no seu avatar para revelar as suas informações de nó!</string>
+    <string name="clipboard_scan_payment">A sua área de transferência contém informações de pagamento. Deseja iniciar um pagamento\?</string>
+    <string name="clipboard_scan_lnurl">A sua área de transferência contém dados LNURL. Deseja usá-los\?</string>
+    <string name="add_contact">Adicionar contato</string>
+    <string name="contact_already_exists">Este contato já existe!</string>
+    <string name="no_contacts">Nenhum contato</string>
+    <string name="contact_type_ln_node">Nó Lightning</string>
+    <string name="ln_address">Endereço Lightning</string>
+    <string name="manual_send_input_hint">Dados de endereço ou de pagamento</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">As taxas que receberá ao encaminhar uma transação neste canal. A taxa total que receberá é a soma da taxa base (em msat) e a quantia da taxa.
+\nA taxa base é o que recebe para cada encaminhamento, não importa qual seja a quantia da transação.
+\nA quantia recebida pela taxa depende da quantia da transação.</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">As taxas que o outro nó receberá quanto ele encaminha uma transação neste canal. Isto se aplica apenas a encaminhamento de transações. Não terá de pagar nada se usar este canal para as suas transações.</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">A quantia mínima que este nó é obrigado a reservar neste balanço de canal. Não poderá gastar esta quantia. Isto garante que sempre terá algo a perder se tentar trapacear o seu parceiro do canal.</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">A quantia mínima que o outro nó é obrigado a reservar neste balanço de canal. Isto garante que o outro nó sempre terá algo a perder se ele tentar te trapacear.</string>
+    <string name="advanced_channel_details_explanation_activity">A percentagem total de fundos enviados e recebidos dividida pela capacidade total do canal. Um canal com atividade acima de 100 significa que mais fundos viajaram pelo canal do que ele pode manter. Esta métrica é projetada para mostrar quão efetivo um determinado canal é.</string>
+    <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
+    <string name="advanced_channel_details_initiator_peer">Par</string>
+    <string name="advanced_channel_details_explanation_close_type">Canais podem ser fechados em diferentes formas. A forma ideal é um fechamento cooperativo. Se um lado decidir fechar um canal sem a cooperação do outro, um chamado \"fechamento forçado\" ocorre. Um fechamento forçado normalmente resulta em maiores taxas e o iniciador do fechamento terá de esperar um tempo até poder aceder os seus fundos. Se um lado tentar trapacear e for pego, temos um fechamento vazado.</string>
+    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar os seus fundos, nem o backup do canal para reaver as seus fundos Lightning. Os backups para reaver os seus fundos têm de ser feitos fora do BitBanana.
+\n
+\nEste backup contém apenas os seguintes dados:
+\n
+\n- Dados para conectar o BitBanana aos seus nós funcionais
+\n- Contatos</string>
+    <string name="backup_data_restore_description">Restaure os seus nós conectados e contatos.
+\nSe os seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a poder reaceder os seus fundos.</string>
+    <string name="backup_data_password_enter">Insira a sua palavra-passe</string>
+    <string name="backup_data_password_confirm">Confirme a sua palavra-passe</string>
+    <string name="backup_data_restore_process">A restaurar backup</string>
+    <string name="backup_data_create_success">Backup criado</string>
+    <string name="backup_data_restore_success">Backup restaurado</string>
+    <string name="sign_message">Assinar mensagem</string>
+    <string name="lnurl_pay_comment_for_payee">Comentário ao beneficiário</string>
+    <string name="channel_close_type_coop">Cooperativo</string>
+    <string name="manually">Manualmente</string>
+    <string name="pubkey">Pubkey</string>
+    <string name="activity_manage_contacts_open_channel_mode">Abrir canal com…</string>
+    <string name="activity_forwarding">Roteamento</string>
+    <string name="navigation_node">Nó</string>
+    <string name="navigation_history">Histórico</string>
+    <string name="navigation_settings">Configurações</string>
+    <string name="pin_create">Criar PIN</string>
+    <string name="requested_payment">Solicitado</string>
+    <string name="request_expired">Expirado</string>
+    <string name="force_closed_channel">Canal fechado forçadamente</string>
+    <string name="filter_transactions">Filtrar transações</string>
+    <string name="normal_payments">Pagamento normal</string>
+    <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
+    <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
+    <string name="error_lnd_connection_failed">Conexão a LND falhou, por favor tente novamente.</string>
+    <string name="error_invalid_fee_preset_value">O valor tem de ser maior que 0.</string>
+    <string name="fee_tier_slow_title">Lento</string>
+    <string name="help_dialog_forwarding">Esta visão mostra todos os pagamentos que encaminhou a outros participantes da rede Lightning. Além disso, pode ver os fundos que ganhou provendo este serviço.
+\n
+\nNuma rede Lightning canais são usados para pagamentos. Quando dois participantes querem enviar fundos um ao outro mas não têm um canal aberto entre eles, eles terão de encontrar outros participantes na rede que tenham.
+\n
+\nExemplo:
+\nAlice quer enviar fundos a Carol, mas ela não tem um canal com Carol. Um pagamento direto é, portanto, impossível. Mas se Alice tem um canal com Bob e Bob tem um canal com Carol há uma solução. Bob pode encaminhar o pagamento a Carol.
+\n
+\nPagamentos muitas vezes usam vários encaminhamentos para finalmente chegarem ao seu destino.</string>
+    <string name="port">Porta</string>
+    <string name="macaroon">Macaroon</string>
+    <string name="certificate">Certificado</string>
+    <string name="spinner_manage_nodes">Gerir…</string>
 </resources>
