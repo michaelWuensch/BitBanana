@@ -25,11 +25,6 @@ public class ScanContactActivity extends BaseScannerActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onButtonPasteClick() {
         super.onButtonPasteClick();
 

@@ -55,7 +55,6 @@ public class ContactItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // Construct the adapter with a data list
     public ContactItemAdapter(ContactSelectListener contactSelectListener) {
-        ;
         mContactSelectListener = contactSelectListener;
     }
 
