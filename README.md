@@ -19,7 +19,14 @@ BitBanana forked from Zap Android. You can find more information about this on t
 The easiest way to get started is using [Start9](https://start9.com/) or [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect BitBanana to that node.
 There are of course a lot more possible ways to run a node, so please refer to the [setup](https://github.com/michaelWuensch/BitBanana/wiki/Setup) section in the Wiki if you need help to get started.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/app.michaelwuensch.bitbanana/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana)
 
+Or download the latest APK from the [Releases Section](https://github.com/michaelWuensch/BitBanana/releases/latest).
 
 ## Features
 **General**
