@@ -12,18 +12,18 @@ import app.michaelwuensch.bitbanana.R;
 
 public class HelpDialogUtil {
 
-    public static void showDialog(Context context, int StringResource) {
+    public static void showDialog(Context context, String message) {
+        getBaseDialog(context)
+                .setMessage(message)
+                .show();
         LayoutInflater adbInflater = LayoutInflater.from(context);
         View titleView = adbInflater.inflate(R.layout.help_dialog_title, null);
+    }
 
-        AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setCustomTitle(titleView)
+    public static void showDialog(Context context, int StringResource) {
+        getBaseDialog(context)
                 .setMessage(StringResource)
-                .setCancelable(true)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                }).show();
+                .show();
 
         /* This would be nice from a user experience perspective, but it actually allows translators to inject malicious links. :(
         // Make <a href=".."></a> links clickable in message
@@ -33,17 +33,8 @@ public class HelpDialogUtil {
     }
 
     public static void showDialogWithLink(Context context, int StringResource, String linkButtonText, String url) {
-        LayoutInflater adbInflater = LayoutInflater.from(context);
-        View titleView = adbInflater.inflate(R.layout.help_dialog_title, null);
-
-        AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setCustomTitle(titleView)
+        getBaseDialog(context)
                 .setMessage(StringResource)
-                .setCancelable(true)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                    }
-                })
                 .setNeutralButton(linkButtonText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -51,6 +42,18 @@ public class HelpDialogUtil {
                     }
                 }).show();
     }
+
+    private static AlertDialog.Builder getBaseDialog(Context context) {
+        LayoutInflater adbInflater = LayoutInflater.from(context);
+        View titleView = adbInflater.inflate(R.layout.help_dialog_title, null);
+
+        AlertDialog.Builder adb = new AlertDialog.Builder(context)
+                .setCustomTitle(titleView)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                });
+        return adb;
+    }
 }
-
-

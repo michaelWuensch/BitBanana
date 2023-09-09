@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BBInputFieldView">
+        <attr name="inputLabel" format="string" />
+        <attr name="inputLabelDetails" format="string" />
+        <attr name="showHelpButton" format="boolean" />
+        <attr name="defaultInputValue" format="string" />
+        <attr name="helpButtonText" format="string" />
+    </declare-styleable>
+</resources>

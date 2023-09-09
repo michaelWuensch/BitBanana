@@ -215,6 +215,12 @@
             android:label="Live Tests"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity"
+            android:label="@string/activity_routing_policy"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"
