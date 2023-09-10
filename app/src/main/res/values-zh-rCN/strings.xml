@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
@@ -107,7 +107,7 @@
     <string name="error_connect_peer_timeout">连接超时.</string>
     <string name="error_channel_open_pending_max">等待中的通道数量过多.</string>
     <string name="error_channel_close">无法关闭通道:%s</string>
-    <string name="error_payment_no_route">No route could be found for the desired payment. Opening new lightning channels might solve the problem.</string>
+    <string name="error_payment_no_route">No route was found that respects your fee limit of %1$.1f%%. Increasing your fee limit in the settings or opening new channels might solve the problem.</string>
     <plurals name="duration_minute">
         <item quantity="other">%d分</item>
     </plurals>
