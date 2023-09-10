@@ -12,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -80,6 +81,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
@@ -98,7 +100,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.LndConnectionTestListener,
-        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener {
+        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener, FeatureManager.FeatureChangedListener {
 
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
@@ -312,6 +314,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
+        FeatureManager.registerFeatureChangedListener(this);
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
         openWallet();
@@ -388,6 +391,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mWalletLoadedListener = false;
         Wallet.getInstance().unregisterInfoListener(this);
         mInfoChangeListenerRegistered = false;
+        FeatureManager.unregisterFeatureChangedListener(this);
 
         mHandler.removeCallbacksAndMessages(null);
 
@@ -880,6 +884,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
+        updateDrawerNavigationMenuVisibilities();
     }
 
     public void resetDrawerNavigationMenu() {
@@ -890,6 +895,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);
+        updateDrawerNavigationMenuVisibilities();
+    }
+
+    public void updateDrawerNavigationMenuVisibilities() {
+        Menu drawerMenu = mNavigationView.getMenu();
+        drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isCoinControlEnabled());
+        drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingEnabled());
+        drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
     }
 
     public TransactionHistoryFragment getHistoryFragment() {
@@ -918,6 +931,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
             });
         }
+    }
+
+    @Override
+    public void onFeatureChanged() {
+        updateDrawerNavigationMenuVisibilities();
     }
 
 

@@ -16,13 +16,13 @@ import com.google.protobuf.ByteString;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.UtxoSubscriptionListener {
 
@@ -111,7 +111,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (PrefsUtil.getShowHelpButtons())
+        if (FeatureManager.isHelpButtonsEnabled())
             getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
     }

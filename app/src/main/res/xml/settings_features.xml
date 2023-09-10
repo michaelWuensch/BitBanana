@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureHelpButtons"
+        android:summary="@string/settings_featureHelpButtons_summary"
+        android:title="@string/settings_showHelpButtons"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureRoutingSummary"
+        android:summary="@string/settings_featureRoutingSummary_summary"
+        android:title="@string/settings_featureRoutingSummary"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureEditRoutingPolicies"
+        android:summary="@string/settings_featureEditRoutingPolicies_summary"
+        android:title="@string/settings_featureEditRoutingPolicies"
+        app:iconSpaceReserved="false" />
+
+    <!--
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureCoinControl"
+        android:summary="@string/settings_featureCoinControl_summary"
+        android:title="@string/settings_featureCoinControl"
+        app:iconSpaceReserved="false" />
+        -->
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureSignVerify"
+        android:summary="@string/settings_featureSignVerify_summary"
+        android:title="@string/sign_verify"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

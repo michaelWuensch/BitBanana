@@ -5,6 +5,12 @@
         android:title="@string/settings_category_general"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:key="goToFeaturesSettings"
+            android:summary="@string/settings_features_summary"
+            android:title="@string/settings_features"
+            app:iconSpaceReserved="false" />
+
         <ListPreference
             android:defaultValue="Blockstream"
             android:dialogTitle="@string/settings_blockExplorer"
@@ -23,12 +29,6 @@
             android:key="exchangeRateProvider"
             android:summary="%s"
             android:title="@string/settings_exchangeRateProvider"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="showHelpButtons"
-            android:title="@string/settings_showHelpButtons"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference

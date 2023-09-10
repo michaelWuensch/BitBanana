@@ -31,8 +31,8 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.PermissionsUtil;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public abstract class BaseScannerActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private static final String LOG_TAG = BaseScannerActivity.class.getSimpleName();
@@ -102,7 +102,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mBtnFlashlight.setOnClickListener(this);
         mScannerInstructionsHelp = findViewById(R.id.scannerInstructionsHelp);
 
-        if (PrefsUtil.getShowHelpButtons()) {
+        if (FeatureManager.isHelpButtonsEnabled()) {
             mScannerInstructionsHelp.setVisibility(View.VISIBLE);
             mScannerInstructionsHelp.setOnClickListener(this);
         } else {
@@ -230,7 +230,9 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mButtonHelp.setVisibility(View.VISIBLE);
     }
 
-    protected void setPasteButtonVisibility (boolean visible) {mButtonPaste.setVisibility(visible ? View.VISIBLE : View.GONE);}
+    protected void setPasteButtonVisibility(boolean visible) {
+        mButtonPaste.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
     protected void setScannerRect(int length) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();

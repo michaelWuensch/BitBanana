@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 
 public class BBInputFieldView extends LinearLayout {
@@ -85,7 +86,11 @@ public class BBInputFieldView extends LinearLayout {
     }
 
     public void setShowHelpButton(boolean showHelpButton) {
-        mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : INVISIBLE);
+        if (FeatureManager.isHelpButtonsEnabled()) {
+            mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : INVISIBLE);
+        } else {
+            mIbtnHelp.setVisibility(INVISIBLE);
+        }
     }
 
     public void setValue(String value) {
