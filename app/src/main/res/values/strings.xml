@@ -107,6 +107,7 @@
     <string name="documentation">Documentation</string>
     <string name="pubkey">Pubkey</string>
     <string name="description">Description</string>
+    <string name="percent">Percent</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -125,6 +126,7 @@
     <string name="activity_backup">Backup</string>
     <string name="activity_utxos">Coins (UTXOs)</string>
     <string name="activity_forwarding">Routing</string>
+    <string name="activity_routing_policy">Routing Policy</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -357,6 +359,8 @@
     <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <string name="error_invalid_fee_preset_value">The value has to be bigger than 0.</string>
     <string name="error_invalid_ln_address_format">Invalid format for Lightning Address. A Lightning Address looks like an email address.\n\nusername@domain</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Routing Policies updated but for %1$d of your channels the new rules could not be applied.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Fee rate to high. A maximum of %1$.2f%% is allowed.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -436,6 +440,11 @@
     <string name="help_dialog_connect_node_help">Unfortunately these QR-Codes are so big that some devices are not able to scan them. If this is the case for you will have to fall back to copy/paste.\n\nIf you need further help, please refer to our setup documentation.</string>
     <string name="help_dialog_payer_data_settings">Some payees support or even require you to send them additional information about yourself. For convenience, you can set default values here, so you do not have to enter this information every time. This data is only stored locally on the phone.\n\nPlease note that even with defaults set you will still be able to modify the data when doing a payment. You will also still be able to choose which data is sent at all.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.) </string>
     <string name="help_dialog_payer_data_payment">This payee supports or even requires you to send him additional information about yourself.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.)\n\nIf a checkmark cannot be unchecked then this data is marked as mandatory by the payee. If you don\'t want to send that data you\'ll have to cancel the payment.</string>
+    <string name="help_dialog_base_fee">Regardless of the transaction\'s value, you\'ll receive a set base fee for every transaction you forward through the channel. Your total received fee is the sum of this base fee and the fee rate.</string>
+    <string name="help_dialog_fee_rate">The fee rate is a fee that scales with the value of the transaction you forward through the channel. Your total received fee is the sum of this fee rate and the base fee.</string>
+    <string name="help_dialog_timelock_delta">In a payment route, each intermediate step defines a specific time window within which it must successfully process the transaction. Otherwise, it will be considered failed due to expiration. In case of payment failures or uncooperative behavior, this time window is crucial because it allows participants at that step to take necessary actions, such as cooperatively reversing the transaction (unwinding the HTLC) or uncooperatively settling it on the blockchain.\n\nA higher value in this context enhances your channel\'s resilience against temporary node failures. However, it could potentially reduce the attractiveness of your channel for routing because, in the worst-case scenario, payments might experience prolonged delays. Additionally, in rare cases of stuck payments, your own funds allocated for the forwarding event will be locked up for the duration of this time window.\n\n144 blocks is about one day.</string>
+    <string name="help_dialog_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
+    <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -603,5 +612,14 @@
     <string name="channel_summary_total_outbound">Total outbound</string>
     <string name="channel_summary_total_inbound">Total inbound</string>
     <string name="channel_summary_total_unavailable">Total offline</string>
+
+    <string name="fee_base">Base Fee</string>
+    <string name="fee_rate">Fee Rate</string>
+    <string name="timelock_delta">Timelock Delta</string>
+    <string name="htlc_min">Min HTLC</string>
+    <string name="htlc_max">Max HTLC</string>
+    <string name="submit_routing_policy">Update Routing Policy</string>
+    <string name="routing_policy_applies_for_all_channels">Attention! If submitted, these settings will be applied to all of your channels!</string>
+    <string name="routing_policy_update_success">Routing policy successfully updated.</string>
 
 </resources>
