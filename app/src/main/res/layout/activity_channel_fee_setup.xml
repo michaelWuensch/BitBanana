@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/baseFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:defaultInputValue="0"
+                app:helpButtonText="@string/help_dialog_base_fee"
+                app:inputLabel="@string/fee_base"
+                app:inputLabelDetails="(msats)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/feeRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:defaultInputValue="0.0021"
+                app:helpButtonText="@string/help_dialog_fee_rate"
+                app:inputLabel="@string/fee_rate"
+                app:inputLabelDetails="(percent)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/timelockDelta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:defaultInputValue="40"
+                app:helpButtonText="@string/help_dialog_timelock_delta"
+                app:inputLabel="@string/timelock_delta"
+                app:inputLabelDetails="(blocks)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/htlcMin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:helpButtonText="@string/help_dialog_minHTLC"
+                app:inputLabel="@string/htlc_min"
+                app:inputLabelDetails="(msats)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/htlcMax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:helpButtonText="@string/help_dialog_maxHTLC"
+                app:inputLabel="@string/htlc_max"
+                app:inputLabelDetails="(sats)"
+                app:showHelpButton="true" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/allChannelsWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/routing_policy_applies_for_all_channels"
+                android:textColor="@color/red" />
+
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_clickable_item"
+                android:text="@string/submit_routing_policy"
+                android:textAllCaps="false"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/certificateEditText" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

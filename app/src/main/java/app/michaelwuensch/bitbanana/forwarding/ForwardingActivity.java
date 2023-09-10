@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.forwarding;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
@@ -318,6 +320,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
         if (PrefsUtil.getShowHelpButtons())
             getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
@@ -330,6 +333,12 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         if (id == R.id.helpButton) {
             HelpDialogUtil.showDialog(ForwardingActivity.this, R.string.help_dialog_forwarding);
+            return true;
+        }
+
+        if (id == R.id.settingsButton) {
+            Intent intentUpdateRoutingPolicy = new Intent(this, UpdateRoutingPolicyActivity.class);
+            startActivity(intentUpdateRoutingPolicy);
             return true;
         }
 
