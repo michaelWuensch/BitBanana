@@ -257,7 +257,6 @@
                         android:maxHeight="100dp"
                         android:maxLines="5"
                         android:textSize="16sp" />
-                    />
                 </LinearLayout>
 
                 <app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView
