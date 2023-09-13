@@ -86,11 +86,13 @@ public class BBInputFieldView extends LinearLayout {
     }
 
     public void setShowHelpButton(boolean showHelpButton) {
-        if (FeatureManager.isHelpButtonsEnabled()) {
-            mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : INVISIBLE);
-        } else {
-            mIbtnHelp.setVisibility(INVISIBLE);
+        if (!isInEditMode()) {
+            if (!FeatureManager.isHelpButtonsEnabled()) {
+                mIbtnHelp.setVisibility(INVISIBLE);
+                return;
+            }
         }
+        mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : INVISIBLE);
     }
 
     public void setValue(String value) {
