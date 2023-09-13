@@ -13,7 +13,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 
 public class BSDScrollableMainView extends ConstraintLayout {
     private NestedScrollView mContentView;
@@ -88,7 +88,7 @@ public class BSDScrollableMainView extends ConstraintLayout {
     }
 
     public void setHelpButtonVisibility(boolean visible) {
-        if (PrefsUtil.getShowHelpButtons())
+        if (FeatureManager.isHelpButtonsEnabled())
             mHelpButton.setVisibility(visible ? VISIBLE : GONE);
         else
             mHelpButton.setVisibility(GONE);

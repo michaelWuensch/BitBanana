@@ -34,6 +34,7 @@ import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -320,8 +321,9 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings_menu, menu);
-        if (PrefsUtil.getShowHelpButtons())
+        if (FeatureManager.isEditRoutingPoliciesEnabled())
+            getMenuInflater().inflate(R.menu.settings_menu, menu);
+        if (FeatureManager.isHelpButtonsEnabled())
             getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
     }

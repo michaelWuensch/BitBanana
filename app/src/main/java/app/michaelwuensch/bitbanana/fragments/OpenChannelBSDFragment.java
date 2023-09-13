@@ -34,10 +34,10 @@ import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.ChannelOpenUpdateListener {
@@ -102,7 +102,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
         setAvailableFunds();
         ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
-        if (PrefsUtil.getShowHelpButtons()) {
+        if (FeatureManager.isHelpButtonsEnabled()) {
             privateHelpButton.setVisibility(View.VISIBLE);
             privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
         } else {

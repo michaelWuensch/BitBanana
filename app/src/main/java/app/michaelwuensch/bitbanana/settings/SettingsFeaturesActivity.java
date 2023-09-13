@@ -11,7 +11,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 
 
-public class SettingsPayerDataActivity extends BaseAppCompatActivity {
+public class SettingsFeaturesActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class SettingsPayerDataActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_settings);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.mainContent, new SettingsPayerDataFragment())
+                .replace(R.id.mainContent, new SettingsFeaturesFragment())
                 .commit();
     }
 
@@ -37,10 +37,17 @@ public class SettingsPayerDataActivity extends BaseAppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.helpButton) {
-            HelpDialogUtil.showDialog(SettingsPayerDataActivity.this, R.string.help_dialog_payer_data_settings);
+            HelpDialogUtil.showDialog(SettingsFeaturesActivity.this, R.string.help_dialog_settings_features);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        // Notify all listeners that feature settings have changed.
+        FeatureManager.broadcastFeatureChange();
+        super.onStop();
     }
 }

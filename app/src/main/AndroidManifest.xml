@@ -135,6 +135,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsFeaturesActivity"
+            android:label="@string/settings_features"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"

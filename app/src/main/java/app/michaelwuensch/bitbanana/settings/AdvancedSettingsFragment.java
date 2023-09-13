@@ -131,6 +131,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        // Action when clicked on "Features"
+        final Preference prefFeaturesPresets = findPreference("goToFeaturesSettings");
+        prefFeaturesPresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsFeaturesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
     }
 
     private void setFeeSummary(Preference preference, String value) {

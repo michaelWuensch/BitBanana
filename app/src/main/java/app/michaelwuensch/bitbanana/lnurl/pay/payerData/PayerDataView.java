@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -47,6 +48,7 @@ public class PayerDataView extends LinearLayout {
 
         //HelpButton
         mHelpButton = findViewById(R.id.helpButton);
+        mHelpButton.setVisibility(FeatureManager.isHelpButtonsEnabled() ? VISIBLE : GONE);
         mHelpButton.setOnClickListener(view1 -> {
             HelpDialogUtil.showDialog(mActivity, R.string.help_dialog_payer_data_payment);
         });
