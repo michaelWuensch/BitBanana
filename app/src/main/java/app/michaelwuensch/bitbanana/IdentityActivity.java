@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
@@ -119,7 +120,7 @@ public class IdentityActivity extends BaseAppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (PrefsUtil.getShowHelpButtons())
+        if (FeatureManager.isHelpButtonsEnabled())
             getMenuInflater().inflate(R.menu.help_menu, menu);
         return true;
     }

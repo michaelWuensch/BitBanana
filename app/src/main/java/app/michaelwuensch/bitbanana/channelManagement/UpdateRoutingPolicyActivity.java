@@ -13,6 +13,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -73,68 +74,73 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Validate input
-                if (mFeeRate.getData() != null) {
-                    if (Double.valueOf(mFeeRate.getData()) > 25.0) {
-                        showError(getResources().getString(R.string.error_routing_policy_fee_rate_too_high, 25.0), RefConstants.ERROR_DURATION_MEDIUM);
-                        return;
-                    }
-                }
-
-                if (LndConnection.getInstance().getLightningService() != null) {
-
-                    PolicyUpdateRequest.Builder chanPolicyUpdateRequestBuilder = PolicyUpdateRequest.newBuilder()
-                            .setGlobal(mGlobal);
-
-                    // BaseFee if specified, will be set to 0 on lnd if not set
-                    if (mBaseFee.getData() != null) {
-                        chanPolicyUpdateRequestBuilder
-                                .setBaseFeeMsat(Integer.valueOf(mBaseFee.getData()) * 1000);
-                    }
-
-                    // Fee Rate if specified, will be set to 0 on lnd if not set
+                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                    // Validate input
                     if (mFeeRate.getData() != null) {
-                        chanPolicyUpdateRequestBuilder
-                                .setFeeRatePpm((int) (Double.valueOf(mFeeRate.getData()) * 10000));
+                        if (Double.valueOf(mFeeRate.getData()) > 25.0) {
+                            showError(getResources().getString(R.string.error_routing_policy_fee_rate_too_high, 25.0), RefConstants.ERROR_DURATION_MEDIUM);
+                            return;
+                        }
                     }
 
-                    // Timelock delta if specified, will be set to 0 on lnd if not set
-                    if (mTimelock.getData() != null) {
-                        chanPolicyUpdateRequestBuilder
-                                .setTimeLockDelta(Integer.valueOf(mTimelock.getData()));
-                    }
+                    if (LndConnection.getInstance().getLightningService() != null) {
 
-                    // MinHTLC if specified
-                    if (mMinHTLC.getData() != null) {
-                        chanPolicyUpdateRequestBuilder
-                                .setMinHtlcMsat(Integer.valueOf(mMinHTLC.getData()))
-                                .setMinHtlcMsatSpecified(true);
-                    }
+                        PolicyUpdateRequest.Builder chanPolicyUpdateRequestBuilder = PolicyUpdateRequest.newBuilder()
+                                .setGlobal(mGlobal);
 
-                    // MaxHTLC if specified
-                    if (mMaxHTLC.getData() != null) {
-                        chanPolicyUpdateRequestBuilder
-                                .setMaxHtlcMsat(Integer.valueOf(mMaxHTLC.getData()) * 1000);
-                    }
+                        // BaseFee if specified, will be set to 0 on lnd if not set
+                        if (mBaseFee.getData() != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setBaseFeeMsat(Integer.valueOf(mBaseFee.getData()) * 1000);
+                        }
 
-                    mCompositeDisposable.add(LndConnection.getInstance().getLightningService().updateChannelPolicy(chanPolicyUpdateRequestBuilder.build())
-                            .subscribe(policyUpdateResponse -> {
-                                if (policyUpdateResponse.getFailedUpdatesCount() > 0) {
-                                    for (FailedUpdate failedUpdate : policyUpdateResponse.getFailedUpdatesList()) {
-                                        BBLog.w(LOG_TAG, "Exception in updating chan policy for " + failedUpdate.getOutpoint().getTxidStr() + ": " + failedUpdate.getUpdateError());
-                                        if (!mGlobal)
-                                            showError(failedUpdate.getUpdateError(), RefConstants.ERROR_DURATION_MEDIUM);
+                        // Fee Rate if specified, will be set to 0 on lnd if not set
+                        if (mFeeRate.getData() != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setFeeRatePpm((int) (Double.valueOf(mFeeRate.getData()) * 10000));
+                        }
+
+                        // Timelock delta if specified, will be set to 0 on lnd if not set
+                        if (mTimelock.getData() != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setTimeLockDelta(Integer.valueOf(mTimelock.getData()));
+                        }
+
+                        // MinHTLC if specified
+                        if (mMinHTLC.getData() != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setMinHtlcMsat(Integer.valueOf(mMinHTLC.getData()))
+                                    .setMinHtlcMsatSpecified(true);
+                        }
+
+                        // MaxHTLC if specified
+                        if (mMaxHTLC.getData() != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setMaxHtlcMsat(Integer.valueOf(mMaxHTLC.getData()) * 1000);
+                        }
+
+                        mCompositeDisposable.add(LndConnection.getInstance().getLightningService().updateChannelPolicy(chanPolicyUpdateRequestBuilder.build())
+                                .subscribe(policyUpdateResponse -> {
+                                    if (policyUpdateResponse.getFailedUpdatesCount() > 0) {
+                                        for (FailedUpdate failedUpdate : policyUpdateResponse.getFailedUpdatesList()) {
+                                            BBLog.w(LOG_TAG, "Exception in updating chan policy for " + failedUpdate.getOutpoint().getTxidStr() + ": " + failedUpdate.getUpdateError());
+                                            if (!mGlobal)
+                                                showError(failedUpdate.getUpdateError(), RefConstants.ERROR_DURATION_MEDIUM);
+                                        }
+                                        if (mGlobal) {
+                                            showError(getResources().getString(R.string.error_routing_policy_only_partially_updated, policyUpdateResponse.getFailedUpdatesCount()), RefConstants.ERROR_DURATION_LONG);
+                                        }
+                                    } else {
+                                        Toast.makeText(UpdateRoutingPolicyActivity.this, R.string.routing_policy_update_success, Toast.LENGTH_SHORT).show();
                                     }
-                                    if (mGlobal) {
-                                        showError(getResources().getString(R.string.error_routing_policy_only_partially_updated, policyUpdateResponse.getFailedUpdatesCount()), RefConstants.ERROR_DURATION_LONG);
-                                    }
-                                } else {
-                                    Toast.makeText(UpdateRoutingPolicyActivity.this, R.string.routing_policy_update_success, Toast.LENGTH_SHORT).show();
-                                }
-                            }, throwable -> {
-                                BBLog.w(LOG_TAG, "Exception in updating chan policy: " + throwable.getMessage());
-                                showError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
-                            }));
+                                }, throwable -> {
+                                    BBLog.w(LOG_TAG, "Exception in updating chan policy: " + throwable.getMessage());
+                                    showError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
+                                }));
+                    }
+                } else {
+                    // The wallet is not setup. Show setup wallet message.
+                    Toast.makeText(UpdateRoutingPolicyActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_LONG).show();
                 }
             }
         });

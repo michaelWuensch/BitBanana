@@ -42,7 +42,6 @@ public class PrefsUtil {
     public static final String FEE_PRESET_FAST = "feePresetFast";
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
-    public static final String HELP_BUTTONS = "showHelpButtons";
     public static final String ROUTING_SUMMARY_VOLUME = "routingSummaryMode";
 
     // node config preferences references
@@ -128,10 +127,6 @@ public class PrefsUtil {
 
     public static boolean isBiometricEnabled() {
         return getPrefs().getBoolean("biometricsEnabled", true);
-    }
-
-    public static boolean getShowHelpButtons() {
-        return getPrefs().getBoolean(HELP_BUTTONS, true);
     }
 
     public static String getCurrentNodeConfig() {
