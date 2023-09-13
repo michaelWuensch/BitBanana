@@ -43,8 +43,8 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
@@ -297,7 +297,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        if (PrefsUtil.getShowHelpButtons())
+        if (FeatureManager.isHelpButtonsEnabled())
             getMenuInflater().inflate(R.menu.help_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         SearchView searchView = (SearchView) menuItem.getActionView();

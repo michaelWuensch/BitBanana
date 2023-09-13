@@ -270,11 +270,22 @@
     <string name="settings_addPin">Protect with PIN</string>
     <string name="settings_removePin">Remove PIN</string>
 
-
+    <string name="settings_features">Features</string>
+    <string name="settings_features_summary">Personalize the app to your needs by toggling features on or off.</string>
     <string name="settings_blockExplorer">Block Explorer</string>
     <string name="settings_blockExplorer_tor_toast">Tor Browser for Android is required.</string>
     <string name="settings_addressType">Bitcoin Address Type</string>
+
     <string name="settings_showHelpButtons">Show info buttons</string>
+    <string name="settings_featureHelpButtons_summary">The handy ? buttons across the app help new users with detailed explanations.</string>
+    <string name="settings_featureRoutingSummary">Routing Summary</string>
+    <string name="settings_featureRoutingSummary_summary">Provides access to all routing events along with a routing summary.</string>
+    <string name="settings_featureEditRoutingPolicies">Edit Routing Policies</string>
+    <string name="settings_featureEditRoutingPolicies_summary">Enables the manual configuration of routing fees and other routing policies.</string>
+    <string name="settings_featureContacts_summary">Make sending money a breeze with a neatly organized contact list.</string>
+    <string name="settings_featureCoinControl">Coin Control</string>
+    <string name="settings_featureCoinControl_summary">Advanced management of on-chain funds. Provides a list of all UTXOs and allows to select specific ones when sending funds. Coin selection is automated if disabled.</string>
+    <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
 
@@ -445,6 +456,7 @@
     <string name="help_dialog_timelock_delta">In a payment route, each intermediate step defines a specific time window within which it must successfully process the transaction. Otherwise, it will be considered failed due to expiration. In case of payment failures or uncooperative behavior, this time window is crucial because it allows participants at that step to take necessary actions, such as cooperatively reversing the transaction (unwinding the HTLC) or uncooperatively settling it on the blockchain.\n\nA higher value in this context enhances your channel\'s resilience against temporary node failures. However, it could potentially reduce the attractiveness of your channel for routing because, in the worst-case scenario, payments might experience prolonged delays. Additionally, in rare cases of stuck payments, your own funds allocated for the forwarding event will be locked up for the duration of this time window.\n\n144 blocks is about one day.</string>
     <string name="help_dialog_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
+    <string name="help_dialog_settings_features">BitBanana\'s commitment to also serving experts means offering a rich set of features. However, we recognize that not everyone may require all of these functionalities. With our customizable settings, you have the flexibility to hide any features that are not relevant to your needs, ensuring a tailored experience.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>

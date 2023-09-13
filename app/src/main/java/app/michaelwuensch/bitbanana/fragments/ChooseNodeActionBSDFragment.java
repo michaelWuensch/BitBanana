@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
 
@@ -58,9 +59,16 @@ public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
             Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false, true, null);
         }
 
-        // Check if this node is already a contact.
-        ContactsManager cm = ContactsManager.getInstance();
-        if (cm.doesContactDataExist(mNodeUri.getPubKey())) {
+        // Check if add contact needs to be shown
+        if (FeatureManager.isContactsEnabled()) {
+            // Check if this node is already a contact.
+            ContactsManager cm = ContactsManager.getInstance();
+            if (cm.doesContactDataExist(mNodeUri.getPubKey())) {
+                // hide add contact button
+                btnAddContact.setVisibility(View.GONE);
+                firstOrLine.setVisibility(View.GONE);
+            }
+        } else {
             // hide add contact button
             btnAddContact.setVisibility(View.GONE);
             firstOrLine.setVisibility(View.GONE);

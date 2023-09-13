@@ -27,6 +27,7 @@ import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ManageContactsActivity extends BaseAppCompatActivity implements ContactSelectListener {
@@ -65,6 +66,8 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mVEFabOptionScan = findViewById(R.id.efabScanOption);
         mContactsHeaderLayout = findViewById(R.id.contactsHeaderLayout);
         mManualInput = findViewById(R.id.manualInput);
+        mRecyclerView = findViewById(R.id.contactsList);
+        mEmptyListText = findViewById(R.id.listEmpty);
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
@@ -87,10 +90,6 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                 mVEFab.setVisibility(View.GONE);
                 break;
         }
-
-        mRecyclerView = findViewById(R.id.contactsList);
-        mEmptyListText = findViewById(R.id.listEmpty);
-
 
         mContactItems = new ArrayList<>();
 
@@ -130,30 +129,32 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
 
     private void updateContactDisplayList() {
         mContactItems.clear();
-        ContactsManager contactsManager = ContactsManager.getInstance();
-        mContactItems.addAll(contactsManager.getAllContacts());
+        if (FeatureManager.isContactsEnabled()) {
+            ContactsManager contactsManager = ContactsManager.getInstance();
+            mContactItems.addAll(contactsManager.getAllContacts());
 
-        // Show "No wallets" if the list is empty
-        if (mContactItems.size() == 0) {
-            mEmptyListText.setVisibility(View.VISIBLE);
-        } else {
-            mEmptyListText.setVisibility(View.GONE);
-        }
+            // Show "No wallets" if the list is empty
+            if (mContactItems.size() == 0) {
+                mEmptyListText.setVisibility(View.VISIBLE);
+            } else {
+                mEmptyListText.setVisibility(View.GONE);
+            }
 
-        mAdapter.replaceAll(mContactItems);
+            mAdapter.replaceAll(mContactItems);
 
-        // The following is needed for the names to change after renaming.
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            String correctName = mAdapter.getItemAtPosition(i).getAlias();
-            RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForAdapterPosition(i);
-            if (viewHolder != null) {
-                String displayedName = ((ContactItemViewHolder) viewHolder).getName();
-                if (!correctName.equals(displayedName)) {
-                    mAdapter.notifyItemChanged(i);
+            // The following is needed for the names to change after renaming.
+            for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                String correctName = mAdapter.getItemAtPosition(i).getAlias();
+                RecyclerView.ViewHolder viewHolder = mRecyclerView.findViewHolderForAdapterPosition(i);
+                if (viewHolder != null) {
+                    String displayedName = ((ContactItemViewHolder) viewHolder).getName();
+                    if (!correctName.equals(displayedName)) {
+                        mAdapter.notifyItemChanged(i);
+                    }
                 }
             }
+            BBLog.v(LOG_TAG, "Contacts list updated!");
         }
-        BBLog.v(LOG_TAG, "Contacts list updated!");
     }
 
     @Override
@@ -303,6 +304,13 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mContactsHeaderLayout.setVisibility(View.VISIBLE);
         mManualInput.setVisibility(View.VISIBLE);
         mManualInput.setupView(mCompositeDisposable);
+
+        if (!FeatureManager.isContactsEnabled()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyListText.setVisibility(View.GONE);
+            mContactsHeaderLayout.setVisibility(View.GONE);
+        }
+
         mManualInput.setOnResultListener(new ManualSendInputView.OnResultListener() {
             @Override
             public void onValid(String data) {
