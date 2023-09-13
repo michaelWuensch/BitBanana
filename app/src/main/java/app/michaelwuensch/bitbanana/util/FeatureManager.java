@@ -33,6 +33,11 @@ public class FeatureManager {
         return settingEnabled;
     }
 
+    public static boolean isContactsEnabled() {
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureContacts", true);
+        return settingEnabled;
+    }
+
     public static boolean isSignVerifyEnabled() {
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled;
