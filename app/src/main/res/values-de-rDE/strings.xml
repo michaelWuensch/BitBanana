@@ -399,7 +399,7 @@
     <string name="contact_name">Name des Kontakts</string>
     <string name="contact_already_exists">Diese Kontakt existiert bereits!</string>
     <string name="no_contacts">Keine Kontakte</string>
-    <string name="manual_send_input_hint">Addresse oder Zahlungsdaten</string>
+    <string name="manual_send_input_hint">Adresse oder Zahlungsdaten</string>
     <string name="advanced_channel_details_explanation_capacity">Das gesamte Guthaben in diesem Kanal. Durch manche Einschränkungen (wie z.B. Schließungsgebühr oder Rücklage) kannst du nicht alles ausgeben.</string>
     <string name="advanced_channel_details_activity">Aktivität</string>
     <string name="advanced_channel_details_explanation_activity">Die Gesamtsumme aus gesendeten und erhaltenen Beträgen im Verhältnis zur Kapazität des Kanals. Eine Aktivität von über 100\% bedeutet, dass mehr Guthaben durch den Kanal geflossen ist, als er halten kann. Dieser Messwert ist dafür gemacht, die Effektivität eines Kanals zu bewerten.</string>
@@ -412,7 +412,7 @@
     <string name="advanced_channel_details_explanation_time_lock">Im Falle einer unkooperativen Kanalschließung (force close), sagt die Blockierungsdauer, wie viele Blöcke du warten musst, bevor du wieder auf dein Kanalguthaben zugreifen kannst.</string>
     <string name="advanced_channel_details_local_routing_fee">Weiterleitungsvergütung</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr (in msat) und der Gebührenrate zusammen.\nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr (Partner)</string>
+    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Die Gebühren, die dein Kanalpartner erhält, wenn er eine Transaktion weiterleitet. Diese Gebühr fällt nur bei Transaktionsweiterleitungen an. Du musst nichts bezahlen, wenn du diesen Kanal für deine ausgehenden Transaktionen verwendest.</string>
     <string name="advanced_channel_details_local_channel_reserve">Rücklage (du)</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Der minimale Betrag, den du im Guthaben des Kanals zurücklegen musst. Du kannst diesen Betrag nicht ausgeben. Das stellt sicher, dass du immer etwas zu verlieren hast, falls du versuchen würdest, deinen Kanalpartner zu betrügen.</string>
