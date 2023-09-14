@@ -7,14 +7,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.lightningnetwork.lnd.lnrpc.Channel;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
+import com.github.lightningnetwork.lnd.lnrpc.RoutingPolicy;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
+import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -22,6 +28,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = UpdateRoutingPolicyActivity.class.getSimpleName();
+    public static final String EXTRA_ROUTING_POLICY = "extraRoutingPolicy";
 
     private BBInputFieldView mBaseFee;
     private BBInputFieldView mFeeRate;
@@ -31,6 +38,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     private TextView mAllChannelsWarning;
     private Button mBtnSubmit;
     private boolean mGlobal;
+    private ChannelPoint mChannelPoint;
 
 
     private CompositeDisposable mCompositeDisposable;
@@ -42,6 +50,8 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_channel_fee_setup);
 
         mCompositeDisposable = new CompositeDisposable();
+
+        mGlobal = true;
 
         // reference views
         mBaseFee = findViewById(R.id.baseFee);
@@ -59,13 +69,33 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         mMinHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
         mMaxHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
 
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey(ChannelDetailBSDFragment.ARGS_CHANNEL)) {
+                ByteString channelString = (ByteString) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL);
+                try {
+                    Channel channel = Channel.parseFrom(channelString);
+                    ByteString policyString = (ByteString) extras.getSerializable(EXTRA_ROUTING_POLICY);
+                    RoutingPolicy routingPolicy = RoutingPolicy.parseFrom(policyString);
+                    setDefaultValues(routingPolicy);
+                    String[] channelPointString = channel.getChannelPoint().split(":");
+                    mChannelPoint = ChannelPoint.newBuilder()
+                            .setFundingTxidStr(channelPointString[0])
+                            .setOutputIndex(Integer.valueOf(channelPointString[1]))
+                            .build();
+                    mGlobal = false;
+                } catch (InvalidProtocolBufferException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
         // replace translated descriptions
         mFeeRate.setDescriptionDetail("(" + getResources().getString(R.string.percent) + ")");
         String timelockDetailDescription = "(" + getResources().getQuantityString(R.plurals.blocks, 1000).replace("%d ", "") + ")";
         mTimelock.setDescriptionDetail(timelockDetailDescription);
 
-        // ToDo: set global to false if the settings should only be applied to a single channel
-        mGlobal = true;
         if (!mGlobal) {
             mAllChannelsWarning.setVisibility(View.GONE);
         }
@@ -88,10 +118,15 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
                         PolicyUpdateRequest.Builder chanPolicyUpdateRequestBuilder = PolicyUpdateRequest.newBuilder()
                                 .setGlobal(mGlobal);
 
+                        if (mChannelPoint != null) {
+                            chanPolicyUpdateRequestBuilder
+                                    .setChanPoint(mChannelPoint);
+                        }
+
                         // BaseFee if specified, will be set to 0 on lnd if not set
                         if (mBaseFee.getData() != null) {
                             chanPolicyUpdateRequestBuilder
-                                    .setBaseFeeMsat(Integer.valueOf(mBaseFee.getData()) * 1000);
+                                    .setBaseFeeMsat(Integer.valueOf(mBaseFee.getData()));
                         }
 
                         // Fee Rate if specified, will be set to 0 on lnd if not set
@@ -150,5 +185,13 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     protected void onDestroy() {
         mCompositeDisposable.dispose();
         super.onDestroy();
+    }
+
+    private void setDefaultValues(RoutingPolicy policy) {
+        mBaseFee.setValue(String.valueOf(policy.getFeeBaseMsat()));
+        mFeeRate.setValue(String.valueOf(policy.getFeeRateMilliMsat() / 10000d));
+        mTimelock.setValue(String.valueOf(policy.getTimeLockDelta()));
+        mMinHTLC.setValue(String.valueOf(policy.getMinHtlc()));
+        mMaxHTLC.setValue(String.valueOf(policy.getMaxHtlcMsat() / 1000));
     }
 }

@@ -108,6 +108,8 @@
     <string name="pubkey">Pubkey</string>
     <string name="description">Description</string>
     <string name="percent">Percent</string>
+    <string name="you">You</string>
+    <string name="peer">Peer</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -453,7 +455,6 @@
     <string name="help_dialog_payer_data_payment">This payee supports or even requires you to send him additional information about yourself.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.)\n\nIf a checkmark cannot be unchecked then this data is marked as mandatory by the payee. If you don\'t want to send that data you\'ll have to cancel the payment.</string>
     <string name="help_dialog_base_fee">Regardless of the transaction\'s value, you\'ll receive a set base fee for every transaction you forward through the channel. Your total received fee is the sum of this base fee and the fee rate.</string>
     <string name="help_dialog_fee_rate">The fee rate is a fee that scales with the value of the transaction you forward through the channel. Your total received fee is the sum of this fee rate and the base fee.</string>
-    <string name="help_dialog_timelock_delta">In a payment route, each intermediate step defines a specific time window within which it must successfully process the transaction. Otherwise, it will be considered failed due to expiration. In case of payment failures or uncooperative behavior, this time window is crucial because it allows participants at that step to take necessary actions, such as cooperatively reversing the transaction (unwinding the HTLC) or uncooperatively settling it on the blockchain.\n\nA higher value in this context enhances your channel\'s resilience against temporary node failures. However, it could potentially reduce the attractiveness of your channel for routing because, in the worst-case scenario, payments might experience prolonged delays. Additionally, in rare cases of stuck payments, your own funds allocated for the forwarding event will be locked up for the duration of this time window.\n\n144 blocks is about one day.</string>
     <string name="help_dialog_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_settings_features">BitBanana\'s commitment to also serving experts means offering a rich set of features. However, we recognize that not everyone may require all of these functionalities. With our customizable settings, you have the flexibility to hide any features that are not relevant to your needs, ensuring a tailored experience.</string>
@@ -557,6 +558,7 @@
     <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
     <string name="advanced_channel_details_explanation_lifetime_closed">This shows the duration for which this channel has been active.</string>
     <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
+
     <string name="advanced_channel_details_initiator">Initiator</string>
     <string name="advanced_channel_details_initiator_you">You</string>
     <string name="advanced_channel_details_initiator_peer">Peer</string>
@@ -569,13 +571,17 @@
     <string name="advanced_channel_details_time_lock">Time Lock</string>
     <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
     <string name="advanced_channel_details_local_routing_fee">Local Routing Fee</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee (in msat) and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
     <string name="advanced_channel_details_remote_routing_fee">Remote Routing Fee</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
     <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">The smallest value your peer is willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">The maximum value your peer is willing to forward on this channel in a single transaction.</string>
 
     <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
@@ -633,5 +639,9 @@
     <string name="submit_routing_policy">Update Routing Policy</string>
     <string name="routing_policy_applies_for_all_channels">Attention! If submitted, these settings will be applied to all of your channels!</string>
     <string name="routing_policy_update_success">Routing policy successfully updated.</string>
+
+    <string name="channel_commitment_type">Commitment Type</string>
+    <string name="explanation_channel_commitment_type">Each party has a commitment transaction that only they can broadcast to the blockchain to claim their share of bitcoins. Different types of commitment transactions result in channels having different properties.</string>
+    <string name="explanation_timelock_delta">In a payment route, each intermediate step defines a specific time window (in blocks) within which it must successfully process the transaction. Otherwise, it will be considered failed due to expiration. In case of payment failures or uncooperative behavior, this time window is crucial because it allows participants at that step to take necessary actions, such as cooperatively reversing the transaction (unwinding the HTLC) or uncooperatively settling it on the blockchain.\n\nA higher value in this context enhances the channel\'s resilience against temporary node failures. However, it could potentially reduce the attractiveness of the channel for routing because, in the worst-case scenario, payments might experience prolonged delays. Additionally, in rare cases of stuck payments, the funds of the channel participants allocated to that forwarding event will be locked up for the duration of this time window.\n\n144 blocks is about one day.</string>
 
 </resources>

@@ -12,17 +12,28 @@
         android:scrollbars="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp">
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/settings_category_general"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
                 android:id="@+id/capacity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
+                app:explanation="@string/advanced_channel_details_explanation_capacity"
+                app:label="@string/channel_capacity"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -30,7 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/capacity"
+                app:explanation="@string/advanced_channel_details_explanation_activity"
+                app:label="@string/advanced_channel_details_activity"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -38,7 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/activity"
+                app:explanation="@string/advanced_channel_details_explanation_lifetime"
+                app:label="@string/advanced_channel_details_lifetime"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -46,7 +59,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/channelLifetime"
+                app:explanation="@string/advanced_channel_details_explanation_visibility"
+                app:label="@string/channel_visibility"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/commitmentType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/explanation_channel_commitment_type"
+                app:label="@string/channel_commitment_type"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -54,7 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/visibility"
+                app:explanation="@string/advanced_channel_details_explanation_initiator"
+                app:label="@string/advanced_channel_details_initiator"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -62,7 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/initiator"
+                app:explanation="@string/advanced_channel_details_explanation_close_initiator"
+                app:label="@string/advanced_channel_details_close_initiator"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -70,7 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/closeInitiator"
+                app:explanation="@string/advanced_channel_details_explanation_close_type"
+                app:label="@string/channel_close_type"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -78,7 +104,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/closeType"
+                app:explanation="@string/advanced_channel_details_explanation_time_lock"
+                app:label="@string/advanced_channel_details_time_lock"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -86,23 +113,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/timeLock"
-                tools:visibility="visible" />
-
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
-                android:id="@+id/localRoutingFee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/commitFee"
-                tools:visibility="visible" />
-
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
-                android:id="@+id/remoteRoutingFee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/localRoutingFee"
+                app:explanation="@string/advanced_channel_details_explanation_commit_fee"
+                app:label="@string/advanced_channel_details_commit_fee"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -110,7 +122,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/remoteRoutingFee"
+                app:explanation="@string/advanced_channel_details_explanation_local_channel_reserve"
+                app:label="@string/advanced_channel_details_local_channel_reserve"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
@@ -118,10 +131,107 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/localReserve"
+                app:explanation="@string/advanced_channel_details_explanation_remote_channel_reserve"
+                app:hasLine="false"
+                app:label="@string/advanced_channel_details_remote_channel_reserve"
                 tools:visibility="visible" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/localRoutingPolicyHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/activity_routing_policy"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/localRoutingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_local_routing_fee"
+                app:label="@string/advanced_channel_details_local_routing_fee"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/localTimelockDelta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/explanation_timelock_delta"
+                app:label="@string/timelock_delta"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/localMinHtlc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_local_minHTLC"
+                app:label="@string/htlc_min"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/localMaxHtlc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_local_maxHTLC"
+                app:hasLine="false"
+                app:label="@string/htlc_max"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/remoteRoutingPolicyHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/activity_routing_policy"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/remoteRoutingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_remote_routing_fee"
+                app:label="@string/advanced_channel_details_remote_routing_fee"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/remoteTimelockDelta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/explanation_timelock_delta"
+                app:label="@string/timelock_delta"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/remoteMinHtlc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_remote_minHTLC"
+                app:label="@string/htlc_min"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+                android:id="@+id/remoteMaxHtlc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_remote_maxHTLC"
+                app:hasLine="false"
+                app:label="@string/htlc_max"
+                tools:visibility="visible" />
+
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

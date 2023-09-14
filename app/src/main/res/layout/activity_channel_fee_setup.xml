@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 app:defaultInputValue="40"
-                app:helpButtonText="@string/help_dialog_timelock_delta"
+                app:helpButtonText="@string/explanation_timelock_delta"
                 app:inputLabel="@string/timelock_delta"
                 app:inputLabelDetails="(blocks)"
                 app:showHelpButton="true" />

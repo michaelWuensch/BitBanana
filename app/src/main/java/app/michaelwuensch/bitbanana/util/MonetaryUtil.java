@@ -298,6 +298,25 @@ public class MonetaryUtil {
     }
 
     /**
+     * This function ensures that if we have an msat value that is not a multiple of 1000 it will display as msat,
+     * while it will display in the chosen currency if it is a multiple of 1000
+     *
+     * @param msats
+     * @return
+     */
+    public String getDisplayStringFromMsats(long msats) {
+        if (getPrimaryCurrency().isBitcoin()) {
+            if (msats % 1000 == 0)
+                return getPrimaryDisplayAmountAndUnit(msats / 1000);
+            else
+                return msats + " msat";
+        } else {
+            long sats = msats / 1000;
+            return getPrimaryDisplayAmountAndUnit(sats);
+        }
+    }
+
+    /**
      * This function will return the currency name from the given ISO4217 code (3 Letters).
      *
      * @return the name of the currency. Returns null if the currency code was not found.
