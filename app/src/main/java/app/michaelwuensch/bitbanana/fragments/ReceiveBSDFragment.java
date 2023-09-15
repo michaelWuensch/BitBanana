@@ -26,19 +26,19 @@ import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 
 
 public class ReceiveBSDFragment extends BaseBSDFragment {
@@ -323,11 +323,11 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 // generate onChain request
 
                 int addressType;
-                String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32");
+                String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
                 if (addressTypeString.equals("bech32")) {
                     addressType = 2;
                 } else {
-                    if (addressTypeString.equals("bech32m")){
+                    if (addressTypeString.equals("bech32m")) {
                         addressType = 5;
                     } else {
                         addressType = 3;
