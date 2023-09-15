@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,32 +20,34 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
     private TextView mTvDetailValue;
     private TextView mTvDetailExplanation;
     private ImageView mExpandArrowImage;
+    private ImageView mLine;
     private View mVBasicDetails;
     private ClickableConstraintLayoutGroup mGroupExpandedContent;
 
 
     public AdvancedChannelDetailView(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public AdvancedChannelDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
     public AdvancedChannelDetailView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
+    private void init(Context context, AttributeSet attrs) {
         View view = inflate(getContext(), R.layout.view_advanced_channel_detail, this);
 
         mTvDetailLabel = view.findViewById(R.id.detailLabel);
         mTvDetailValue = view.findViewById(R.id.detailValue);
         mTvDetailExplanation = view.findViewById(R.id.detailExplanation);
         mExpandArrowImage = view.findViewById(R.id.feeArrowUnitImage);
+        mLine = view.findViewById(R.id.line);
 
         mVBasicDetails = view.findViewById(R.id.basicDetails);
         mGroupExpandedContent = view.findViewById(R.id.expandedContent);
@@ -64,6 +67,27 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
                 toggleExpandState(isExpanded);
             }
         });
+
+        // Apply attributes from XML
+        if (attrs != null) {
+            // Obtain the custom attribute value from the XML attributes
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AdvancedChannelDetailView);
+            String attrLabel = a.getString(R.styleable.AdvancedChannelDetailView_label);
+            String attrValue = a.getString(R.styleable.AdvancedChannelDetailView_value);
+            String attrExplanation = a.getString(R.styleable.AdvancedChannelDetailView_explanation);
+            boolean attrHasLine = a.getBoolean(R.styleable.AdvancedChannelDetailView_hasLine, true);
+
+            if (attrLabel != null)
+                setLabel(attrLabel);
+            if (attrValue != null)
+                setValue(attrValue);
+            if (attrExplanation != null)
+                setExplanation(attrExplanation);
+            setLineVisibility(attrHasLine);
+
+            // Don't forget to recycle the TypedArray
+            a.recycle();
+        }
     }
 
     public void setContent(int label, String value, int explanation) {
@@ -72,8 +96,20 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
         mTvDetailExplanation.setText(getContext().getResources().getString(explanation));
     }
 
+    public void setLabel(String value) {
+        mTvDetailLabel.setText(value);
+    }
+
     public void setValue(String value) {
         mTvDetailValue.setText(value);
+    }
+
+    public void setExplanation(String value) {
+        mTvDetailExplanation.setText(value);
+    }
+
+    public void setLineVisibility(boolean isVisible) {
+        mLine.setVisibility(isVisible ? VISIBLE : INVISIBLE);
     }
 
     /**
