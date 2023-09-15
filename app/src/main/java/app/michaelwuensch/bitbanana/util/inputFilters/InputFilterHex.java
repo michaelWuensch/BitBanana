@@ -8,13 +8,25 @@ import java.util.regex.Pattern;
 
 public class InputFilterHex implements InputFilter {
     private boolean mOutputCaps;
+    private boolean mIsNodePubkeyFilter;
 
-    public InputFilterHex(boolean outputCaps) {
+    public InputFilterHex(boolean outputCaps, boolean isNodePubkeyFilter) {
         mOutputCaps = outputCaps;
+        mIsNodePubkeyFilter = isNodePubkeyFilter;
     }
 
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+        if (mIsNodePubkeyFilter) {
+            // This makes sure pasting a full node identifier with host and port still works, it will just remove the host and port part.
+            for (int i = start; i < end; i++) {
+                if (source.charAt(i) == '@') {
+                    end = i;
+                    break;
+                }
+            }
+        }
 
         Pattern pattern = Pattern.compile("^\\p{XDigit}+$");
 

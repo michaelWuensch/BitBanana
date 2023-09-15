@@ -147,7 +147,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
     private void updateInputFilters() {
         switch (mType) {
             case NODEPUBKEY:
-                mEtData.setFilters(new InputFilter[]{new InputFilterHex(false)});
+                mEtData.setFilters(new InputFilter[]{new InputFilterHex(false, true)});
                 mEtData.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 break;
             case LNADDRESS:

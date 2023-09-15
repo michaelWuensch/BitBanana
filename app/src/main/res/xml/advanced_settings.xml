@@ -44,7 +44,7 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="bech32"
+            android:defaultValue="bech32m"
             android:dialogTitle="@string/settings_addressType"
             android:entries="@array/settings_receiveAddressDisplayValues"
             android:entryValues="@array/addressType"
