@@ -1,13 +1,19 @@
 package app.michaelwuensch.bitbanana.channelManagement;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
+import com.github.lightningnetwork.lnd.lnrpc.ChannelEdge;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.RoutingPolicy;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -18,8 +24,11 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
+import app.michaelwuensch.bitbanana.forwarding.ForwardingActivity;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
@@ -34,15 +43,29 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     private AdvancedChannelDetailView mDetailActivity;
     private AdvancedChannelDetailView mDetailChannelLifetime;
     private AdvancedChannelDetailView mDetailVisibility;
+    private AdvancedChannelDetailView mDetailCommitmentType;
     private AdvancedChannelDetailView mDetailInitiator;
     private AdvancedChannelDetailView mDetailCloseInitiator;
     private AdvancedChannelDetailView mDetailCloseType;
     private AdvancedChannelDetailView mDetailTimeLock;
     private AdvancedChannelDetailView mDetailCommitFee;
-    private AdvancedChannelDetailView mDetailLocalRoutingFee;
-    private AdvancedChannelDetailView mDetailRemoteRoutingFee;
     private AdvancedChannelDetailView mDetailLocalReserve;
     private AdvancedChannelDetailView mDetailRemoteReserve;
+    private AdvancedChannelDetailView mDetailLocalRoutingFee;
+    private AdvancedChannelDetailView mDetailLocalTimelockDelta;
+    private AdvancedChannelDetailView mDetailLocalMinHTLC;
+    private AdvancedChannelDetailView mDetailLocalMaxHTLC;
+    private AdvancedChannelDetailView mDetailRemoteRoutingFee;
+    private AdvancedChannelDetailView mDetailRemoteTimelockDelta;
+    private AdvancedChannelDetailView mDetailRemoteMinHTLC;
+    private AdvancedChannelDetailView mDetailRemoteMaxHTLC;
+    private TextView mTvLocalRoutingPolicyHeading;
+    private TextView mTvRemoteRoutingPolicyHeading;
+    private int mChannelType;
+    private long mChanId;
+    private RoutingPolicy mLocalRoutingPolicy;
+
+
     private CompositeDisposable mCompositeDisposable;
 
     @Override
@@ -54,25 +77,34 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailActivity = findViewById(R.id.activity);
         mDetailChannelLifetime = findViewById(R.id.channelLifetime);
         mDetailVisibility = findViewById(R.id.visibility);
+        mDetailCommitmentType = findViewById(R.id.commitmentType);
         mDetailInitiator = findViewById(R.id.initiator);
         mDetailCloseInitiator = findViewById(R.id.closeInitiator);
         mDetailCloseType = findViewById(R.id.closeType);
         mDetailTimeLock = findViewById(R.id.timeLock);
         mDetailCommitFee = findViewById(R.id.commitFee);
-        mDetailLocalRoutingFee = findViewById(R.id.localRoutingFee);
-        mDetailRemoteRoutingFee = findViewById(R.id.remoteRoutingFee);
         mDetailLocalReserve = findViewById(R.id.localReserve);
         mDetailRemoteReserve = findViewById(R.id.remoteReserve);
+        mDetailLocalRoutingFee = findViewById(R.id.localRoutingFee);
+        mDetailLocalTimelockDelta = findViewById(R.id.localTimelockDelta);
+        mDetailLocalMinHTLC = findViewById(R.id.localMinHtlc);
+        mDetailLocalMaxHTLC = findViewById(R.id.localMaxHtlc);
+        mDetailRemoteRoutingFee = findViewById(R.id.remoteRoutingFee);
+        mDetailRemoteTimelockDelta = findViewById(R.id.remoteTimelockDelta);
+        mDetailRemoteMinHTLC = findViewById(R.id.remoteMinHtlc);
+        mDetailRemoteMaxHTLC = findViewById(R.id.remoteMaxHtlc);
+        mTvLocalRoutingPolicyHeading = findViewById(R.id.localRoutingPolicyHeading);
+        mTvRemoteRoutingPolicyHeading = findViewById(R.id.remoteRoutingPolicyHeading);
 
         mCompositeDisposable = new CompositeDisposable();
 
         if (getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
             ByteString channelString = (ByteString) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL);
-            int type = extras.getInt(ChannelDetailBSDFragment.ARGS_TYPE);
+            mChannelType = extras.getInt(ChannelDetailBSDFragment.ARGS_TYPE);
 
             try {
-                switch (type) {
+                switch (mChannelType) {
                     case ChannelListItem.TYPE_OPEN_CHANNEL:
                         bindOpenChannel(channelString);
                         break;
@@ -100,9 +132,40 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mChannelType == ChannelListItem.TYPE_OPEN_CHANNEL)
+            fetchChannelInfo(mChanId);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mCompositeDisposable.dispose();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (FeatureManager.isEditRoutingPoliciesEnabled() && mChannelType == ChannelListItem.TYPE_OPEN_CHANNEL)
+            getMenuInflater().inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.settingsButton) {
+            Intent intentUpdateRoutingPolicy = new Intent(this, UpdateRoutingPolicyActivity.class);
+            if (getIntent().getExtras() != null)
+                intentUpdateRoutingPolicy.putExtras(getIntent().getExtras());
+            intentUpdateRoutingPolicy.putExtra(UpdateRoutingPolicyActivity.EXTRA_ROUTING_POLICY, mLocalRoutingPolicy.toByteString());
+            startActivity(intentUpdateRoutingPolicy);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
@@ -112,12 +175,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // capacity
         String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setContent(R.string.channel_capacity, capacity, R.string.advanced_channel_details_explanation_capacity);
+        mDetailCapacity.setValue(capacity);
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // activity
         String activity = UtilFunctions.roundDouble(((double) (channel.getTotalSatoshisSent() + channel.getTotalSatoshisReceived()) / channel.getCapacity() * 100), 2) + "%";
-        mDetailActivity.setContent(R.string.advanced_channel_details_activity, activity, R.string.advanced_channel_details_explanation_activity);
+        mDetailActivity.setValue(activity);
         mDetailActivity.setVisibility(View.VISIBLE);
 
         // channel lifetime
@@ -125,7 +188,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         int currentHeight = Wallet.getInstance().getSyncedBlockHeight();
         int ageInBlocks = currentHeight - openHeight;
         String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
-        mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime, duration, R.string.advanced_channel_details_explanation_lifetime);
+        mDetailChannelLifetime.setValue(duration);
         mDetailChannelLifetime.setVisibility(View.VISIBLE);
 
         // visibility
@@ -135,8 +198,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             visibility = getString(R.string.channel_visibility_public);
         }
-        mDetailVisibility.setContent(R.string.channel_visibility, visibility, R.string.advanced_channel_details_explanation_visibility);
+        mDetailVisibility.setValue(visibility);
         mDetailVisibility.setVisibility(View.VISIBLE);
+
+        // commitment type
+        mDetailCommitmentType.setValue(channel.getCommitmentType().name());
+        mDetailCommitmentType.setVisibility(View.VISIBLE);
 
         // initiator
         String initiator;
@@ -145,39 +212,74 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
         }
-        mDetailInitiator.setContent(R.string.advanced_channel_details_initiator, initiator, R.string.advanced_channel_details_explanation_initiator);
+        mDetailInitiator.setValue(initiator);
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // commit fee
         String commitFee = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCommitFee());
-        mDetailCommitFee.setContent(R.string.advanced_channel_details_commit_fee, commitFee, R.string.advanced_channel_details_explanation_commit_fee);
+        mDetailCommitFee.setValue(commitFee);
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // time lock
         long timeLockInSeconds = channel.getLocalConstraints().getCsvDelay() * 10 * 60;
-        String timeLock = String.valueOf(channel.getLocalConstraints().getCsvDelay()) + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
-        mDetailTimeLock.setContent(R.string.advanced_channel_details_time_lock, timeLock, R.string.advanced_channel_details_explanation_time_lock);
+        String timeLock = channel.getLocalConstraints().getCsvDelay() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+        mDetailTimeLock.setValue(timeLock);
         mDetailTimeLock.setVisibility(View.VISIBLE);
-
-        // local fee
-        mDetailLocalRoutingFee.setContent(R.string.advanced_channel_details_local_routing_fee, "- msat\n - %", R.string.advanced_channel_details_explanation_local_routing_fee);
-        mDetailLocalRoutingFee.setVisibility(View.VISIBLE);
-
-        // remote fee
-        mDetailRemoteRoutingFee.setContent(R.string.advanced_channel_details_remote_routing_fee, "- msat\n - %", R.string.advanced_channel_details_explanation_remote_routing_fee);
-        mDetailRemoteRoutingFee.setVisibility(View.VISIBLE);
 
         // local reserve amount
         String localReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getLocalConstraints().getChanReserveSat());
-        mDetailLocalReserve.setContent(R.string.advanced_channel_details_local_channel_reserve, localReserve, R.string.advanced_channel_details_explanation_local_channel_reserve);
+        mDetailLocalReserve.setValue(localReserve);
         mDetailLocalReserve.setVisibility(View.VISIBLE);
 
         // remote reserve amount
         String remoteReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getRemoteConstraints().getChanReserveSat());
-        mDetailRemoteReserve.setContent(R.string.advanced_channel_details_remote_channel_reserve, remoteReserve, R.string.advanced_channel_details_explanation_remote_channel_reserve);
+        mDetailRemoteReserve.setValue(remoteReserve);
         mDetailRemoteReserve.setVisibility(View.VISIBLE);
 
-        fetchChannelInfo(channel.getChanId());
+        // local routing policy heading
+        String localRoutingPolicyHeading = getString(R.string.activity_routing_policy) + " (" + getString(R.string.you) + ")";
+        mTvLocalRoutingPolicyHeading.setText(localRoutingPolicyHeading);
+
+        // local fee
+        mDetailLocalRoutingFee.setValue("- msat\n - %");
+        mDetailLocalRoutingFee.setVisibility(View.VISIBLE);
+
+        // local time lock delta
+        mDetailLocalTimelockDelta.setVisibility(View.VISIBLE);
+
+        // local min HTLC
+        String localMinHtlc = " msat";
+        mDetailLocalMinHTLC.setValue(localMinHtlc);
+        mDetailLocalMinHTLC.setVisibility(View.VISIBLE);
+
+        // local max HTLC
+        String localMaxHtlc = " msat";
+        mDetailLocalMaxHTLC.setValue(localMaxHtlc);
+        mDetailLocalMaxHTLC.setVisibility(View.VISIBLE);
+
+        // remote routing policy heading
+        String remoteRoutingPolicyHeading = getString(R.string.activity_routing_policy) + " (" + getString(R.string.peer) + ")";
+        mTvRemoteRoutingPolicyHeading.setText(remoteRoutingPolicyHeading);
+
+        // remote fee
+        mDetailRemoteRoutingFee.setValue("- msat\n - %");
+        mDetailRemoteRoutingFee.setVisibility(View.VISIBLE);
+
+        // remote time lock delta
+        mDetailRemoteTimelockDelta.setVisibility(View.VISIBLE);
+
+        // remote min HTLC
+        String remoteMinHtlc = " msat";
+        mDetailRemoteMinHTLC.setValue(remoteMinHtlc);
+        mDetailRemoteMinHTLC.setVisibility(View.VISIBLE);
+
+        // remote max HTLC
+        String remoteMaxHtlc = " msat";
+        mDetailRemoteMaxHTLC.setValue(remoteMaxHtlc);
+        mDetailRemoteMaxHTLC.setVisibility(View.VISIBLE);
+
+        mChanId = channel.getChanId();
+        fetchChannelInfo(mChanId);
     }
 
     private void bindPendingOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
@@ -192,22 +294,22 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             visibility = getString(R.string.channel_visibility_public);
         }
-        mDetailVisibility.setContent(R.string.channel_visibility, visibility, R.string.advanced_channel_details_explanation_visibility);
+        mDetailVisibility.setValue(visibility);
         mDetailVisibility.setVisibility(View.VISIBLE);
 
         // commit fee
         String commitFee = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCommitFee());
-        mDetailCommitFee.setContent(R.string.advanced_channel_details_commit_fee, commitFee, R.string.advanced_channel_details_explanation_commit_fee);
+        mDetailCommitFee.setValue(commitFee);
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // local reserve amount
         String localReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getChannel().getLocalChanReserveSat());
-        mDetailLocalReserve.setContent(R.string.advanced_channel_details_local_channel_reserve, localReserve, R.string.advanced_channel_details_explanation_local_channel_reserve);
+        mDetailLocalReserve.setValue(localReserve);
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // remote reserve amount
         String remoteReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getChannel().getRemoteChanReserveSat());
-        mDetailRemoteReserve.setContent(R.string.advanced_channel_details_remote_channel_reserve, remoteReserve, R.string.advanced_channel_details_explanation_remote_channel_reserve);
+        mDetailRemoteReserve.setValue(remoteReserve);
         mDetailCommitFee.setVisibility(View.VISIBLE);
     }
 
@@ -232,8 +334,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // capacity
         String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setContent(R.string.channel_capacity, capacity, R.string.advanced_channel_details_explanation_capacity);
+        mDetailCapacity.setValue(capacity);
         mDetailCapacity.setVisibility(View.VISIBLE);
+
+        // commitment type
+        mDetailCommitmentType.setValue(channel.getCommitmentType().name());
+        mDetailCommitmentType.setVisibility(View.VISIBLE);
 
         // initiator
         String initiator;
@@ -242,8 +348,11 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
         }
-        mDetailInitiator.setContent(R.string.advanced_channel_details_initiator, initiator, R.string.advanced_channel_details_explanation_initiator);
+        mDetailInitiator.setValue(initiator);
         mDetailInitiator.setVisibility(View.VISIBLE);
+
+        mTvLocalRoutingPolicyHeading.setVisibility(View.GONE);
+        mTvRemoteRoutingPolicyHeading.setVisibility(View.GONE);
     }
 
     private void bindClosedChannel(ByteString channelString) throws InvalidProtocolBufferException {
@@ -253,7 +362,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // capacity
         String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setContent(R.string.channel_capacity, capacity, R.string.advanced_channel_details_explanation_capacity);
+        mDetailCapacity.setValue(capacity);
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
@@ -271,7 +380,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
         }
-        mDetailInitiator.setContent(R.string.advanced_channel_details_initiator, initiator, R.string.advanced_channel_details_explanation_initiator);
+        mDetailInitiator.setValue(initiator);
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // close initiator
@@ -281,7 +390,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             closeInitiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
         }
-        mDetailCloseInitiator.setContent(R.string.advanced_channel_details_close_initiator, closeInitiator, R.string.advanced_channel_details_explanation_close_initiator);
+        mDetailCloseInitiator.setValue(closeInitiator);
         mDetailCloseInitiator.setVisibility(View.VISIBLE);
 
         // close type
@@ -295,8 +404,11 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         } else {
             closeTypeLabel = channel.getCloseType().name();
         }
-        mDetailCloseType.setContent(R.string.channel_close_type, closeTypeLabel, R.string.advanced_channel_details_explanation_close_type);
+        mDetailCloseType.setValue(closeTypeLabel);
         mDetailCloseType.setVisibility(View.VISIBLE);
+
+        mTvLocalRoutingPolicyHeading.setVisibility(View.GONE);
+        mTvRemoteRoutingPolicyHeading.setVisibility(View.GONE);
     }
 
     public void fetchChannelInfo(long chanID) {
@@ -304,30 +416,40 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         if (LndConnection.getInstance().getLightningService() != null) {
             mCompositeDisposable.add(LndConnection.getInstance().getLightningService().getChanInfo(ChanInfoRequest.newBuilder().setChanId(chanID).build())
                     .subscribe(chanInfoResponse -> {
+                        RoutingPolicy localPolicy;
+                        RoutingPolicy remotePolicy;
                         if (chanInfoResponse.getNode1Pub().equals(Wallet.getInstance().getNodeUris()[0].getPubKey())) {
-                            // Our node is Node1
-                            if (chanInfoResponse.hasNode1Policy()) {
-                                BigDecimal localFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode1Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String localFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n+ " + localFeeRate.toPlainString() + " %";
-                                mDetailLocalRoutingFee.setValue(localFee);
-                            }
-                            if (chanInfoResponse.hasNode2Policy()) {
-                                BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode2Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String remoteFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n+ " + remoteFeeRate.toPlainString() + " %";
-                                mDetailRemoteRoutingFee.setValue(remoteFee);
-                            }
+                            localPolicy = chanInfoResponse.getNode1Policy();
+                            remotePolicy = chanInfoResponse.getNode2Policy();
                         } else {
-                            // Our node is Node2
-                            if (chanInfoResponse.hasNode1Policy()) {
-                                BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode1Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String remoteFee = chanInfoResponse.getNode1Policy().getFeeBaseMsat() + " msat\n+ " + remoteFeeRate.toPlainString() + " %";
-                                mDetailRemoteRoutingFee.setValue(remoteFee);
-                            }
-                            if (chanInfoResponse.hasNode2Policy()) {
-                                BigDecimal localFeeRate = BigDecimal.valueOf((double) (chanInfoResponse.getNode2Policy().getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                                String localFee = chanInfoResponse.getNode2Policy().getFeeBaseMsat() + " msat\n+ " + localFeeRate.toPlainString() + " %";
-                                mDetailLocalRoutingFee.setValue(localFee);
-                            }
+                            localPolicy = chanInfoResponse.getNode2Policy();
+                            remotePolicy = chanInfoResponse.getNode1Policy();
+                        }
+                        mLocalRoutingPolicy = localPolicy;
+                        if (chanInfoResponse.hasNode1Policy()) {
+                            BigDecimal localFeeRate = BigDecimal.valueOf((double) (localPolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
+                            String localFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getFeeBaseMsat()) + "\n+ " + localFeeRate.toPlainString() + " %";
+                            mDetailLocalRoutingFee.setValue(localFee);
+                            String localMinHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getMinHtlc());
+                            String localMaxHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getMaxHtlcMsat());
+                            mDetailLocalMinHTLC.setValue(localMinHtlc);
+                            mDetailLocalMaxHTLC.setValue(localMaxHtlc);
+                            long timeLockInSeconds = localPolicy.getTimeLockDelta() * 10 * 60;
+                            String timeLock = localPolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+                            mDetailLocalTimelockDelta.setValue(timeLock);
+
+                        }
+                        if (chanInfoResponse.hasNode2Policy()) {
+                            BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (remotePolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
+                            String remoteFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getFeeBaseMsat()) + "\n+ " + remoteFeeRate.toPlainString() + " %";
+                            mDetailRemoteRoutingFee.setValue(remoteFee);
+                            String remoteMinHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getMinHtlc());
+                            String remoteMaxHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getMaxHtlcMsat());
+                            mDetailRemoteMinHTLC.setValue(remoteMinHtlc);
+                            mDetailRemoteMaxHTLC.setValue(remoteMaxHtlc);
+                            long timeLockInSeconds = remotePolicy.getTimeLockDelta() * 10 * 60;
+                            String timeLock = remotePolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+                            mDetailRemoteTimelockDelta.setValue(timeLock);
                         }
                     }, throwable -> {
                         BBLog.w(LOG_TAG, "Exception in fetch chanInfo task: " + throwable.getMessage());

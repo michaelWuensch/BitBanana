@@ -21,7 +21,7 @@
             android:maxWidth="200dp"
             android:maxLength="50"
             android:textAlignment="viewStart"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,7 @@
             android:background="#00000000"
             android:maxLength="150"
             android:textAlignment="textEnd"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
             app:layout_constraintStart_toEndOf="@id/detailLabel"
@@ -78,6 +78,7 @@
         tools:text="Here the detail is explained in detail" />
 
     <ImageView
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
