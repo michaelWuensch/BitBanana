@@ -40,10 +40,12 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Use your node as a lightning wallet wherever you are
 - [x] Manage multiple nodes
 - [x] Channel Management
+- [x] Manage routing fees
 - [x] Routing summary
 
 **Wallet**
 - [x] 100% free. The only fees you pay are to the bitcoin network. BitBanana won't charge you a single sat.
+- [x] Send & receive on-chain and off-chain
 - [x] Contacts (with [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor))
 - [x] Send funds to lightning addresses (email like addresses)
 - [x] Send funds without an invoice (keysend)
