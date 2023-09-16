@@ -565,4 +565,6 @@
 \n- LNURL-Channel</string>
     <string name="description">Beschreibung</string>
     <string name="drawer_menu_nodes">Knoten</string>
+    <string name="settings_features">Funktionen</string>
+    <string name="percent">Prozent</string>
 </resources>
