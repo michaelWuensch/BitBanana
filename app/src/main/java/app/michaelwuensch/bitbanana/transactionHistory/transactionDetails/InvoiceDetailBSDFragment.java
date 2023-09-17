@@ -21,11 +21,11 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -37,7 +37,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private TextView mAmountLabel;
-    private TextView mAmount;
+    private AmountView mAmount;
     private TextView mMemoLabel;
     private TextView mMemo;
     private TextView mDateLabel;
@@ -139,7 +139,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
     private void bindOpenInvoice(Invoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
 
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
+        mAmount.setAmount(invoice.getValue());
 
         String lightningUri = UriUtil.generateLightningUri(invoice.getPaymentRequest());
         // Generate "QR-Code"
@@ -167,13 +167,13 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
         mExpiryLabel.setVisibility(View.GONE);
         mExpiry.setVisibility(View.GONE);
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getAmtPaidSat()));
+        mAmount.setAmount(invoice.getAmtPaidSat());
         mQRCodeView.setVisibility(View.GONE);
     }
 
     private void bindExpiredInvoice(Invoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(invoice.getValue()));
+        mAmount.setAmount(invoice.getValue());
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
     }

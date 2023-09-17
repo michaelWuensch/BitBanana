@@ -89,23 +89,22 @@
             android:layout_weight="0.4"
             android:orientation="vertical">
 
-            <TextView
+            <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/earnedFeeAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textAlignment="textEnd"
-                android:textSize="16sp"
-                tools:text="+ 157 sat" />
+                app:textSize="16sp" />
 
-            <TextView
+            <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/forwardingAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textAlignment="textEnd"
-                android:textSize="10sp"
-                tools:text="0 sat" />
+                app:textSize="10sp" />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

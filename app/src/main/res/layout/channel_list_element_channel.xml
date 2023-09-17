@@ -160,14 +160,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <app.michaelwuensch.bitbanana.customView.AmountView
                     android:id="@+id/localBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="2500 sat" />
+                    app:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/capacity"
@@ -182,14 +181,14 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Capacity" />
 
-                <TextView
+                <app.michaelwuensch.bitbanana.customView.AmountView
                     android:id="@+id/remoteBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="1000 sat" />
+                    app:textSize="12sp" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
