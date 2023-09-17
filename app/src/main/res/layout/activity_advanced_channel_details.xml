@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_capacity"
+                app:isAmountDetail="true"
                 app:label="@string/channel_capacity"
                 tools:visibility="visible" />
 
@@ -114,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_commit_fee"
+                app:isAmountDetail="true"
                 app:label="@string/advanced_channel_details_commit_fee"
                 tools:visibility="visible" />
 
@@ -123,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_local_channel_reserve"
+                app:isAmountDetail="true"
                 app:label="@string/advanced_channel_details_local_channel_reserve"
                 tools:visibility="visible" />
 
@@ -133,6 +136,7 @@
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_remote_channel_reserve"
                 app:hasLine="false"
+                app:isAmountDetail="true"
                 app:label="@string/advanced_channel_details_remote_channel_reserve"
                 tools:visibility="visible" />
 

@@ -7,21 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class AdvancedChannelDetailView extends ConstraintLayout {
 
     private TextView mTvDetailLabel;
     private TextView mTvDetailValue;
+    private AmountView mDetailAmountValue;
     private TextView mTvDetailExplanation;
     private ImageView mExpandArrowImage;
     private ImageView mLine;
     private View mVBasicDetails;
+    private ViewSwitcher mVsDetailsValueSwitcher;
     private ClickableConstraintLayoutGroup mGroupExpandedContent;
 
 
@@ -45,8 +48,10 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
 
         mTvDetailLabel = view.findViewById(R.id.detailLabel);
         mTvDetailValue = view.findViewById(R.id.detailValue);
+        mDetailAmountValue = view.findViewById(R.id.detailAmountValue);
         mTvDetailExplanation = view.findViewById(R.id.detailExplanation);
         mExpandArrowImage = view.findViewById(R.id.feeArrowUnitImage);
+        mVsDetailsValueSwitcher = view.findViewById(R.id.valueSwitcher);
         mLine = view.findViewById(R.id.line);
 
         mVBasicDetails = view.findViewById(R.id.basicDetails);
@@ -76,6 +81,7 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
             String attrValue = a.getString(R.styleable.AdvancedChannelDetailView_value);
             String attrExplanation = a.getString(R.styleable.AdvancedChannelDetailView_explanation);
             boolean attrHasLine = a.getBoolean(R.styleable.AdvancedChannelDetailView_hasLine, true);
+            boolean mIsAmountDetail = a.getBoolean(R.styleable.AdvancedChannelDetailView_isAmountDetail, false);
 
             if (attrLabel != null)
                 setLabel(attrLabel);
@@ -84,6 +90,8 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
             if (attrExplanation != null)
                 setExplanation(attrExplanation);
             setLineVisibility(attrHasLine);
+            if (mIsAmountDetail)
+                mVsDetailsValueSwitcher.showNext();
 
             // Don't forget to recycle the TypedArray
             a.recycle();
@@ -102,6 +110,10 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
 
     public void setValue(String value) {
         mTvDetailValue.setText(value);
+    }
+
+    public void setAmountValue(long value) {
+        mDetailAmountValue.setAmount(value);
     }
 
     public void setExplanation(String value) {

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelEdge;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.RoutingPolicy;
@@ -24,11 +23,9 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
-import app.michaelwuensch.bitbanana.forwarding.ForwardingActivity;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
-import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
@@ -174,8 +171,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setValue(capacity);
+        mDetailCapacity.setAmountValue(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // activity
@@ -216,8 +212,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // commit fee
-        String commitFee = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCommitFee());
-        mDetailCommitFee.setValue(commitFee);
+        mDetailCommitFee.setAmountValue(channel.getCommitFee());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // time lock
@@ -227,13 +222,11 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailTimeLock.setVisibility(View.VISIBLE);
 
         // local reserve amount
-        String localReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getLocalConstraints().getChanReserveSat());
-        mDetailLocalReserve.setValue(localReserve);
+        mDetailLocalReserve.setAmountValue(channel.getLocalConstraints().getChanReserveSat());
         mDetailLocalReserve.setVisibility(View.VISIBLE);
 
         // remote reserve amount
-        String remoteReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getRemoteConstraints().getChanReserveSat());
-        mDetailRemoteReserve.setValue(remoteReserve);
+        mDetailRemoteReserve.setAmountValue(channel.getRemoteConstraints().getChanReserveSat());
         mDetailRemoteReserve.setVisibility(View.VISIBLE);
 
         // local routing policy heading
@@ -298,18 +291,15 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailVisibility.setVisibility(View.VISIBLE);
 
         // commit fee
-        String commitFee = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCommitFee());
-        mDetailCommitFee.setValue(commitFee);
+        mDetailCommitFee.setAmountValue(channel.getCommitFee());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // local reserve amount
-        String localReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getChannel().getLocalChanReserveSat());
-        mDetailLocalReserve.setValue(localReserve);
+        mDetailLocalReserve.setAmountValue(channel.getChannel().getLocalChanReserveSat());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // remote reserve amount
-        String remoteReserve = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getChannel().getRemoteChanReserveSat());
-        mDetailRemoteReserve.setValue(remoteReserve);
+        mDetailRemoteReserve.setAmountValue(channel.getChannel().getRemoteChanReserveSat());
         mDetailCommitFee.setVisibility(View.VISIBLE);
     }
 
@@ -333,8 +323,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setValue(capacity);
+        mDetailCapacity.setAmountValue(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // commitment type
@@ -361,8 +350,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        String capacity = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(channel.getCapacity());
-        mDetailCapacity.setValue(capacity);
+        mDetailCapacity.setAmountValue(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
