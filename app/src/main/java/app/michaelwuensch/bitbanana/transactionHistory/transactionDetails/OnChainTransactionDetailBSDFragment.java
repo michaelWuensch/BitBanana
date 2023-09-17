@@ -16,12 +16,12 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
@@ -37,9 +37,9 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
     private TextView mEventLabel;
     private TextView mEvent;
     private TextView mAmountLabel;
-    private TextView mAmount;
+    private SimpleAmountView mAmount;
     private TextView mFeeLabel;
-    private TextView mFee;
+    private SimpleAmountView mFee;
     private TextView mDateLabel;
     private TextView mDate;
     private TextView mTransactionIDLabel;
@@ -150,7 +150,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mAmountLabel.setVisibility(View.GONE);
 
         if (mTransaction.getTotalFees() > 0) {
-            mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getTotalFees()));
+            mFee.setAmount(mTransaction.getTotalFees());
         } else {
             mFee.setVisibility(View.GONE);
             mFeeLabel.setVisibility(View.GONE);
@@ -181,14 +181,14 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mNodeLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
         mEventLabel.setVisibility(View.GONE);
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getAmount()).replace("-", ""));
+        mAmount.setAmount(Math.abs(mTransaction.getAmount()));
 
         Long amount = mTransaction.getAmount();
 
         switch (amount.compareTo(0L)) {
             case 0:
                 // amount = 0 (should actually not happen)
-                mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getTotalFees()));
+                mFee.setAmount(mTransaction.getTotalFees());
                 break;
             case 1:
                 // amount > 0 (received on-chain)
@@ -197,7 +197,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 break;
             case -1:
                 // amount < 0 (sent on-chain)
-                mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mTransaction.getTotalFees()));
+                mFee.setAmount(mTransaction.getTotalFees());
                 break;
         }
     }

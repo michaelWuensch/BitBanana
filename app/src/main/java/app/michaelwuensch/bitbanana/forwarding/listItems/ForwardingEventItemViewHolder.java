@@ -9,9 +9,9 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 import app.michaelwuensch.bitbanana.forwarding.ForwardingEventSelectListener;
 import app.michaelwuensch.bitbanana.util.AliasManager;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
@@ -22,8 +22,8 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
     private TextView mTimeOfDay;
     private TextView mInChannel;
     private TextView mOutChannel;
-    private TextView mEarnedFee;
-    private TextView mForwardingAmount;
+    private SimpleAmountView mEarnedFee;
+    private SimpleAmountView mForwardingAmount;
     private View mRootView;
     private ForwardingEventSelectListener mForwardingEventSelectListener;
 
@@ -68,11 +68,10 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
 
         // Set earned fee amount
-        mEarnedFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(forwardingEventListItem.getForwardingEvent().getFee()));
+        mEarnedFee.setAmount(forwardingEventListItem.getForwardingEvent().getFee());
 
         // Set forwarded amount
-        mForwardingAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(forwardingEventListItem.getForwardingEvent().getAmtIn()
-        ));
+        mForwardingAmount.setAmount(forwardingEventListItem.getForwardingEvent().getAmtIn());
 
         // Set on click listener
         setOnRootViewClickListener(forwardingEventListItem);

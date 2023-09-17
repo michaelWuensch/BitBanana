@@ -23,18 +23,15 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Amount:" />
 
-        <TextView
+        <app.michaelwuensch.bitbanana.customView.SimpleAmountView
             android:id="@+id/amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/amountLabel"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="10 sat" />
+            app:textSize="15sp" />
 
         <TextView
             android:id="@+id/memoLabel"
@@ -69,18 +66,15 @@
             app:layout_constraintTop_toBottomOf="@+id/memo"
             tools:text="Fee:" />
 
-        <TextView
+        <app.michaelwuensch.bitbanana.customView.SimpleAmountView
             android:id="@+id/fee"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
-            android:textAlignment="viewEnd"
-            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/dateLabel"
             app:layout_constraintTop_toBottomOf="@+id/memo"
-            tools:text="1 sat" />
+            app:textSize="15sp" />
 
         <TextView
             android:id="@+id/dateLabel"

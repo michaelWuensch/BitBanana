@@ -10,18 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import app.michaelwuensch.bitbanana.util.BlockExplorer;
-import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.BlockExplorer;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 
 public class UTXODetailBSDFragment extends BaseBSDFragment {
 
@@ -30,9 +29,8 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private Utxo mUTXO;
-    private Transaction mTransaction;
     private TextView mAmountLabel;
-    private TextView mAmount;
+    private SimpleAmountView mAmount;
     private TextView mTransactionIDLabel;
     private TextView mTransactionID;
     private ImageView mTransactionIDCopyButton;
@@ -92,7 +90,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
         String confirmationsLabel = getString(R.string.confirmations) + ":";
         mConfirmationsLabel.setText(confirmationsLabel);
 
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mUTXO.getAmountSat()));
+        mAmount.setAmount(mUTXO.getAmountSat());
 
         mAddress.setText(mUTXO.getAddress());
         mTransactionID.setText(mUTXO.getOutpoint().getTxidStr());

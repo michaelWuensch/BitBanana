@@ -4,16 +4,15 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 
 public class ChannelSummaryView extends LinearLayout {
 
-    private TextView mTVTotalOutbound;
-    private TextView mTVTotalIntbound;
-    private TextView mTVTotalUnavailable;
+    private SimpleAmountView mTVTotalOutbound;
+    private SimpleAmountView mTVTotalIntbound;
+    private SimpleAmountView mTVTotalUnavailable;
 
     public ChannelSummaryView(Context context) {
         super(context);
@@ -39,8 +38,8 @@ public class ChannelSummaryView extends LinearLayout {
     }
 
     public void updateBalances(long outbound, long inbound, long unavailable) {
-        mTVTotalOutbound.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(outbound));
-        mTVTotalIntbound.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(inbound));
-        mTVTotalUnavailable.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(unavailable));
+        mTVTotalOutbound.setAmount(outbound);
+        mTVTotalIntbound.setAmount(inbound);
+        mTVTotalUnavailable.setAmount(unavailable);
     }
 }

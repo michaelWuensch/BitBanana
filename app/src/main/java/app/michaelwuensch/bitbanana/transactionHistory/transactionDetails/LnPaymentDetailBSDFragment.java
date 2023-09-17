@@ -17,15 +17,15 @@ import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
 public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
@@ -37,11 +37,11 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private TextView mPayee;
     private ImageView mPayeeCopyIcon;
     private TextView mAmountLabel;
-    private TextView mAmount;
+    private SimpleAmountView mAmount;
     private TextView mMemoLabel;
     private TextView mMemo;
     private TextView mFeeLabel;
-    private TextView mFee;
+    private SimpleAmountView mFee;
     private TextView mDateLabel;
     private TextView mDate;
     private TextView mPreimageLabel;
@@ -108,8 +108,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
         mPayee.setText(ContactsManager.getInstance().getNameByContactData(payee));
         mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
-        mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getValue()));
-        mFee.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(payment.getFee()));
+        mAmount.setAmount(payment.getValue());
+        mFee.setAmount(payment.getFee());
         mPreimage.setText(payment.getPaymentPreimage());
         mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreationDate(), getActivity()));
