@@ -652,13 +652,11 @@
     <string name="signature_pubkey">Pubkey:</string>
     <string name="pubkey">Pubkey</string>
     <string name="settings_featureCoinControl_summary">Gerenciamento avançado de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos. A seleção de moeda é automatizada se estiver desativada.</string>
-    <string name="settings_featureEditRoutingPolicies_summary">Ativa a configuração manual de taxas de roteamento e outras políticas de roteamento.</string>
     <string name="settings_featureHelpButtons_summary">Os úteis botões \? ao redor do app ajudam novos usuários com explicações detalhadas.</string>
     <string name="htlc_max">Máx. HTLC</string>
     <string name="peer">Par</string>
     <string name="fee_base">Taxa Base</string>
     <string name="advanced_channel_details_explanation_local_maxHTLC">O valor máximo que você está disposto a encaminhar neste canal em uma única transação.</string>
-    <string name="settings_featureEditRoutingPolicies">Editar Políticas de Roteamento</string>
     <string name="settings_featureRoutingSummary_summary">Provê acesso a todos os eventos de roteamento junto com um resumo de roteamento.</string>
     <string name="activity_routing_policy">Política de Roteamento</string>
     <string name="settings_featureSignVerify_summary">Permite assinar e verificar mensagens com seu nó.</string>
