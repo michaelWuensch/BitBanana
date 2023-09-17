@@ -282,8 +282,6 @@
     <string name="settings_featureHelpButtons_summary">The handy ? buttons across the app help new users with detailed explanations.</string>
     <string name="settings_featureRoutingSummary">Routing Summary</string>
     <string name="settings_featureRoutingSummary_summary">Provides access to all routing events along with a routing summary.</string>
-    <string name="settings_featureEditRoutingPolicies">Edit Routing Policies</string>
-    <string name="settings_featureEditRoutingPolicies_summary">Enables the manual configuration of routing fees and other routing policies.</string>
     <string name="settings_featureContacts_summary">Make sending money a breeze with a neatly organized contact list.</string>
     <string name="settings_featureCoinControl">Coin Control</string>
     <string name="settings_featureCoinControl_summary">Advanced management of on-chain funds. Provides a list of all UTXOs and allows to select specific ones when sending funds. Coin selection is automated if disabled.</string>

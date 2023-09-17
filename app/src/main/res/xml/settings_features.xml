@@ -20,18 +20,10 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="featureEditRoutingPolicies"
-        android:summary="@string/settings_featureEditRoutingPolicies_summary"
-        android:title="@string/settings_featureEditRoutingPolicies"
-        app:iconSpaceReserved="false" />
-
-    <SwitchPreference
-        android:defaultValue="true"
         android:key="featureContacts"
         android:summary="@string/settings_featureContacts_summary"
         android:title="@string/drawer_menu_contacts"
         app:iconSpaceReserved="false" />
-
     <!--
     <SwitchPreference
         android:defaultValue="true"
