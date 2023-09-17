@@ -24,8 +24,7 @@ public class FeatureManager {
     }
 
     public static boolean isEditRoutingPoliciesEnabled() {
-        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureEditRoutingPolicies", true);
-        return settingEnabled;
+        return true;
     }
 
     public static boolean isCoinControlEnabled() {
