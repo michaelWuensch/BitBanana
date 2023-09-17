@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.channelManagement.ChannelSelectListener;
 import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -25,8 +26,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     Context mContext;
     private ChannelSelectListener mChannelSelectListener;
     private TextView mRemoteName;
-    private TextView mLocalBalance;
-    private TextView mRemoteBalance;
+    private AmountView mLocalBalance;
+    private AmountView mRemoteBalance;
     private TextView mCapacity;
     private ProgressBar mLocalBar;
     private ProgressBar mRemoteBar;
@@ -58,8 +59,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mLocalBar.setProgress((int) (localBarValue * 100f));
         mRemoteBar.setProgress((int) (remoteBarValue * 100f));
 
-        mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(local));
-        mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(remote));
+        mLocalBalance.setAmount(local);
+        mRemoteBalance.setAmount(remote);
 
         mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(capacity));
     }

@@ -7,16 +7,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
     private static final String LOG_TAG = UTXOItemViewHolder.class.getSimpleName();
 
     private TextView mUTXOAddress;
-    private TextView mUTXOAmount;
+    private AmountView mUTXOAmount;
     private View mRootView;
     private UTXOSelectListener mUTXOSelectListener;
     private Context mContext;
@@ -38,7 +38,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
         // Set utxo amount
 
-        mUTXOAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(utxoListItem.getUtxo().getAmountSat()));
+        mUTXOAmount.setAmount(utxoListItem.getUtxo().getAmountSat());
 
         // Set on click listener
         setOnRootViewClickListener(utxoListItem);

@@ -50,15 +50,15 @@
                             android:paddingEnd="5dp"
                             android:visibility="gone" />
 
-
-                        <TextView
+                        <app.michaelwuensch.bitbanana.customView.AmountView
                             android:id="@+id/amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textSize="30sp"
                             android:visibility="visible"
-                            tools:text="0" />
+                            app:isWithoutUnit="true"
+                            app:textSize="30sp" />
+
                     </LinearLayout>
 
                     <TextView

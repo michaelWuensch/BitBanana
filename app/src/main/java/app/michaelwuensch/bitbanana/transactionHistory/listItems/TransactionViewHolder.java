@@ -11,10 +11,10 @@ import androidx.core.content.ContextCompat;
 import java.text.DateFormat;
 import java.util.Date;
 
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.transactionHistory.TransactionSelectListener;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class TransactionViewHolder extends HistoryItemViewHolder {
 
@@ -26,8 +26,8 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
     private TextView mTimeOfDay;
     private TextView mPrimaryDescription;
     private TextView mSecondaryDescription;
-    private TextView mAmount;
-    private TextView mTransactionFee;
+    private AmountView mAmount;
+    private AmountView mTransactionFee;
 
     TransactionViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -41,9 +41,6 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         mRootView = itemView.findViewById(R.id.transactionRootView);
         mContentView = itemView.findViewById(R.id.transactionContent);
         mContext = itemView.getContext();
-
-        mAmount.setOnClickListener(v -> MonetaryUtil.getInstance().switchCurrencies());
-        mTransactionFee.setOnClickListener(v -> MonetaryUtil.getInstance().switchCurrencies());
     }
 
     void setTimeOfDay(long creationDate) {
@@ -84,41 +81,29 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         if (fixedValue) {
             setAmount(amount, visible, true);
         } else {
-            mAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+            mAmount.setIsUndefinedValue(true);
+            mAmount.setUndefinedValue();
         }
     }
 
     private void setAmount(Long amount, boolean visible, boolean pending) {
         mAmount.setVisibility(visible ? View.VISIBLE : View.GONE);
 
-        // compare the amount with 0
-        int result = amount.compareTo(0L);
-        switch (result) {
-            case 0:
-                // amount = 0
-                mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.white));
-                break;
-            case 1:
-                // amount > 0
-                mAmount.setText("+ " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.green));
-                break;
-            case -1:
-                // amount < 0
-                mAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount).replace("-", "- "));
-                mAmount.setTextColor(ContextCompat.getColor(mContext, pending ? R.color.gray : R.color.red));
-                break;
+        if (pending) {
+            mAmount.setStyleBasedOnValue(false);
+            mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
+        } else {
+            mAmount.setStyleBasedOnValue(true);
         }
+        mAmount.setAmount(amount);
     }
 
     void setFee(long amount, boolean visible) {
         mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
 
-        String feeText = mContext.getResources().getString(R.string.fee)
-                + ": " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(amount);
-
-        mTransactionFee.setText(feeText);
+        String feeText = mContext.getResources().getString(R.string.fee) + ": ";
+        mTransactionFee.setLabelText(feeText);
+        mTransactionFee.setAmount(amount);
     }
 
     void setPrimaryDescription(String description) {

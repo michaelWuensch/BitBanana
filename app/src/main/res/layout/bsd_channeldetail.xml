@@ -220,25 +220,23 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline_50"
                     app:layout_constraintTop_toBottomOf="@+id/remoteBalanceTitle" />
 
-                <TextView
+                <app.michaelwuensch.bitbanana.customView.AmountView
                     android:id="@+id/localBalance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/balanceBarLocal"
-                    tools:text="2500 sat" />
+                    app:textSize="12sp" />
 
-                <TextView
+                <app.michaelwuensch.bitbanana.customView.AmountView
                     android:id="@+id/remoteBalance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/balanceBarRemote"
-                    tools:text="1000 sat" />
+                    app:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/separator_3"

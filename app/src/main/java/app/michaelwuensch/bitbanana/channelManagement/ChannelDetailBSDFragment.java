@@ -30,12 +30,12 @@ import app.michaelwuensch.bitbanana.channelManagement.listItems.ChannelListItem;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
 
@@ -55,8 +55,8 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
     private TextView mRemotePubKey;
     private ProgressBar mBalanceBarLocal;
     private ProgressBar mBalanceBarRemote;
-    private TextView mLocalBalance;
-    private TextView mRemoteBalance;
+    private AmountView mLocalBalance;
+    private AmountView mRemoteBalance;
     private TextView mChannelVisibilityLabel;
     private TextView mChannelVisibility;
     private ImageView mChannelVisibilitySeparatorLine;
@@ -264,8 +264,8 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mBalanceBarLocal.setProgress((int) (localBarValue * 100f));
         mBalanceBarRemote.setProgress((int) (remoteBarValue * 100f));
 
-        mLocalBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(local));
-        mRemoteBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(remote));
+        mLocalBalance.setAmount(local);
+        mRemoteBalance.setAmount(remote);
     }
 
     private void showChannelCloseType(ChannelCloseSummary channelCloseSummary) {

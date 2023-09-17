@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="AmountView">
+        <attr name="isMsatAmount" format="boolean" />
+        <attr name="switchesValueOnClick" format="boolean" />
+        <attr name="styleBasedOnValue" format="boolean" />
+        <attr name="isWithoutUnit" format="boolean" />
+        <attr name="showLabel" format="boolean" />
+        <attr name="setLabelText" format="string" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
+
     <declare-styleable name="BBInputFieldView">
         <attr name="inputLabel" format="string" />
         <attr name="inputLabelDetails" format="string" />
@@ -13,5 +24,7 @@
         <attr name="value" format="string" />
         <attr name="explanation" format="string" />
         <attr name="hasLine" format="boolean" />
+        <attr name="isAmountDetail" format="boolean" />
+        <attr name="msatAmount" format="boolean" />
     </declare-styleable>
 </resources>
