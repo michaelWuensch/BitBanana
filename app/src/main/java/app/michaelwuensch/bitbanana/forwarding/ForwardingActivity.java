@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.forwarding;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
 import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
@@ -41,7 +43,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener {
+public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = ForwardingActivity.class.getSimpleName();
 
@@ -52,7 +54,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private TabLayout mTabLayoutPeriod;
     private TabLayout mDots;
     private long mPeriod = 24 * 60 * 60; // in seconds
-    private TextView mTVAmount;
+    private SimpleAmountView mTVAmount;
     private TextView mTVUnit;
     private View mVHeaderProgress;
     private View mVHeaderSummary;
@@ -103,6 +105,8 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         for (View v : mDots.getTouchables()) {
             v.setEnabled(false);
         }
+
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
         mIsVolume = PrefsUtil.getPrefs().getBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, false);
         updateSummaryTexts();
@@ -233,14 +237,14 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private void updateSummaryTexts() {
         if (mIsVolume) {
             // Set earned amount texts
-            mTVAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(mRoutedMsats / 1000));
+            mTVAmount.setAmount(mRoutedMsats / 1000);
             mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             mTvSummaryText.setText(R.string.forwarding_volume_description);
             mDots.selectTab(mDots.getTabAt(1));
             PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, true).apply();
         } else {
             // Set earned amount texts
-            mTVAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(mEarnedMsats / 1000));
+            mTVAmount.setAmount(mEarnedMsats / 1000);
             mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             mTvSummaryText.setText(R.string.forwarding_earned_description);
             mDots.selectTab(mDots.getTabAt(0));
@@ -257,6 +261,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -345,5 +350,12 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("firstCurrencyIsPrimary")) {
+            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        }
     }
 }
