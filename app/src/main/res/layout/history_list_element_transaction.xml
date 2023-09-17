@@ -87,23 +87,22 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <app.michaelwuensch.bitbanana.customView.SimpleAmountView
                 android:id="@+id/transactionAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:textAlignment="textEnd"
-                android:textSize="16sp"
-                tools:text="+ 157 sat" />
+                app:styleBasedOnValue="true"
+                app:textSize="16sp" />
 
-            <TextView
+            <app.michaelwuensch.bitbanana.customView.SimpleAmountView
                 android:id="@+id/transactionFeeAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:textAlignment="textEnd"
-                android:textSize="10sp"
-                tools:text="Fee: 0 sat" />
+                app:showLabel="true"
+                app:textSize="10sp" />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

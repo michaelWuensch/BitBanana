@@ -3,7 +3,6 @@ package app.michaelwuensch.bitbanana.transactionHistory;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -58,7 +57,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getSimpleName();
 
@@ -151,7 +150,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         Wallet.getInstance().registerHistoryListener(this);
         Wallet.getInstance().registerInvoiceSubscriptionListener(this);
         Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
-        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
 
         // use a linear layout manager
@@ -380,7 +378,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         Wallet.getInstance().unregisterHistoryListener(this);
         Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
         Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
-        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -505,15 +502,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         filteredItemList.addAll(dateLines);
 
         return filteredItemList;
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key != null) {
-            if (key.equals("firstCurrencyIsPrimary")) {
-                redrawHistoryList();
-            }
-        }
     }
 
     @Override
