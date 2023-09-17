@@ -9,7 +9,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.forwarding.ForwardingEventSelectListener;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -22,8 +22,8 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
     private TextView mTimeOfDay;
     private TextView mInChannel;
     private TextView mOutChannel;
-    private SimpleAmountView mEarnedFee;
-    private SimpleAmountView mForwardingAmount;
+    private AmountView mEarnedFee;
+    private AmountView mForwardingAmount;
     private View mRootView;
     private ForwardingEventSelectListener mForwardingEventSelectListener;
 

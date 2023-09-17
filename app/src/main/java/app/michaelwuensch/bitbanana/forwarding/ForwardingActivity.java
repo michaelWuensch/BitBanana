@@ -30,7 +30,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
@@ -54,7 +54,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private TabLayout mTabLayoutPeriod;
     private TabLayout mDots;
     private long mPeriod = 24 * 60 * 60; // in seconds
-    private SimpleAmountView mTVAmount;
+    private AmountView mTVAmount;
     private TextView mTVUnit;
     private View mVHeaderProgress;
     private View mVHeaderSummary;

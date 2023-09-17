@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -37,7 +37,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private TextView mAmountLabel;
-    private SimpleAmountView mAmount;
+    private AmountView mAmount;
     private TextView mMemoLabel;
     private TextView mMemo;
     private TextView mDateLabel;

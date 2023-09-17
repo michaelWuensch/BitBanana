@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
@@ -16,7 +16,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
     private static final String LOG_TAG = UTXOItemViewHolder.class.getSimpleName();
 
     private TextView mUTXOAddress;
-    private SimpleAmountView mUTXOAmount;
+    private AmountView mUTXOAmount;
     private View mRootView;
     private UTXOSelectListener mUTXOSelectListener;
     private Context mContext;

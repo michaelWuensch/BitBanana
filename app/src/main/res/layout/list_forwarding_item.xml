@@ -89,7 +89,7 @@
             android:layout_weight="0.4"
             android:orientation="vertical">
 
-            <app.michaelwuensch.bitbanana.customView.SimpleAmountView
+            <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/earnedFeeAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 android:textAlignment="textEnd"
                 app:textSize="16sp" />
 
-            <app.michaelwuensch.bitbanana.customView.SimpleAmountView
+            <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/forwardingAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

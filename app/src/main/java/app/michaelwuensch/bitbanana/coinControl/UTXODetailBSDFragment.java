@@ -16,7 +16,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
@@ -30,7 +30,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
     private BSDScrollableMainView mBSDScrollableMainView;
     private Utxo mUTXO;
     private TextView mAmountLabel;
-    private SimpleAmountView mAmount;
+    private AmountView mAmount;
     private TextView mTransactionIDLabel;
     private TextView mTransactionID;
     private ImageView mTransactionIDCopyButton;

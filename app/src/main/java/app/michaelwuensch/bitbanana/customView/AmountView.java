@@ -16,7 +16,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
-public class SimpleAmountView extends LinearLayout implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AmountView extends LinearLayout implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private TextView mTvLabel;
     private TextView mTvAmount;
@@ -29,23 +29,23 @@ public class SimpleAmountView extends LinearLayout implements SharedPreferences.
     private Context mContext;
 
 
-    public SimpleAmountView(Context context) {
+    public AmountView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public SimpleAmountView(Context context, AttributeSet attrs) {
+    public AmountView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public SimpleAmountView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AmountView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        View view = inflate(getContext(), R.layout.view_simple_amount, this);
+        View view = inflate(getContext(), R.layout.view_amount, this);
 
         mContext = context;
         mTvLabel = view.findViewById(R.id.amountLabel);
@@ -57,14 +57,14 @@ public class SimpleAmountView extends LinearLayout implements SharedPreferences.
         // Apply attributes from XML
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SimpleAmountView);
-            mIsMsatAmount = a.getBoolean(R.styleable.SimpleAmountView_isMsatAmount, false);
-            mSwitchesValueOnClick = a.getBoolean(R.styleable.SimpleAmountView_switchesValueOnClick, true);
-            mStyleBasedOnValue = a.getBoolean(R.styleable.SimpleAmountView_styleBasedOnValue, false);
-            mIsWithoutUnit = a.getBoolean(R.styleable.SimpleAmountView_isWithoutUnit, false);
-            boolean attrShowLabel = a.getBoolean(R.styleable.SimpleAmountView_showLabel, false);
-            int attrTextSize = a.getDimensionPixelSize(R.styleable.SimpleAmountView_textSize, 0);
-            ColorStateList attrTextColor = a.getColorStateList(R.styleable.SimpleAmountView_textColor);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AmountView);
+            mIsMsatAmount = a.getBoolean(R.styleable.AmountView_isMsatAmount, false);
+            mSwitchesValueOnClick = a.getBoolean(R.styleable.AmountView_switchesValueOnClick, true);
+            mStyleBasedOnValue = a.getBoolean(R.styleable.AmountView_styleBasedOnValue, false);
+            mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
+            boolean attrShowLabel = a.getBoolean(R.styleable.AmountView_showLabel, false);
+            int attrTextSize = a.getDimensionPixelSize(R.styleable.AmountView_textSize, 0);
+            ColorStateList attrTextColor = a.getColorStateList(R.styleable.AmountView_textColor);
 
             if (attrTextColor != null)
                 setTextColor(attrTextColor);

@@ -12,7 +12,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.transactionHistory.TransactionSelectListener;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
@@ -26,8 +26,8 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
     private TextView mTimeOfDay;
     private TextView mPrimaryDescription;
     private TextView mSecondaryDescription;
-    private SimpleAmountView mAmount;
-    private SimpleAmountView mTransactionFee;
+    private AmountView mAmount;
+    private AmountView mTransactionFee;
 
     TransactionViewHolder(@NonNull View itemView) {
         super(itemView);

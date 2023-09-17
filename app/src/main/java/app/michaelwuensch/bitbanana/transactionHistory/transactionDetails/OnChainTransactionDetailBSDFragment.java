@@ -16,7 +16,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -37,9 +37,9 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
     private TextView mEventLabel;
     private TextView mEvent;
     private TextView mAmountLabel;
-    private SimpleAmountView mAmount;
+    private AmountView mAmount;
     private TextView mFeeLabel;
-    private SimpleAmountView mFee;
+    private AmountView mFee;
     private TextView mDateLabel;
     private TextView mDate;
     private TextView mTransactionIDLabel;

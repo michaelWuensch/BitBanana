@@ -6,13 +6,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.customView.SimpleAmountView;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 
 public class ChannelSummaryView extends LinearLayout {
 
-    private SimpleAmountView mTVTotalOutbound;
-    private SimpleAmountView mTVTotalIntbound;
-    private SimpleAmountView mTVTotalUnavailable;
+    private AmountView mTVTotalOutbound;
+    private AmountView mTVTotalIntbound;
+    private AmountView mTVTotalUnavailable;
 
     public ChannelSummaryView(Context context) {
         super(context);

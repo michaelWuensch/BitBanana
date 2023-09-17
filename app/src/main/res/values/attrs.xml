@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SimpleAmountView">
+    <declare-styleable name="AmountView">
         <attr name="isMsatAmount" format="boolean" />
         <attr name="switchesValueOnClick" format="boolean" />
         <attr name="styleBasedOnValue" format="boolean" />
