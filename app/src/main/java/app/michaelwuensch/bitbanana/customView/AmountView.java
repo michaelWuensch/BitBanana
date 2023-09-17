@@ -104,6 +104,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             setAmountMsat(value);
         else
             setAmountSat(value);
+
         Long valueLong = value;
         if (mStyleBasedOnValue) {
             int result = valueLong.compareTo(0L);
@@ -134,7 +135,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     }
 
     private void setAmountMsat(long value) {
-
+        mTvAmount.setText(MonetaryUtil.getInstance().getDisplayStringFromMsats(value));
     }
 
     public void setTextColor(ColorStateList colorStateList) {
@@ -163,5 +164,9 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
 
     public void setUndefinedValue() {
         mTvAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+    }
+
+    public void setIsMsatAmount(boolean isMsatAmount) {
+        mIsMsatAmount = isMsatAmount;
     }
 }

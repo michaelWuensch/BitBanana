@@ -25,5 +25,6 @@
         <attr name="explanation" format="string" />
         <attr name="hasLine" format="boolean" />
         <attr name="isAmountDetail" format="boolean" />
+        <attr name="msatAmount" format="boolean" />
     </declare-styleable>
 </resources>

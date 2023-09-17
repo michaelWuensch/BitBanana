@@ -82,6 +82,7 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
             String attrExplanation = a.getString(R.styleable.AdvancedChannelDetailView_explanation);
             boolean attrHasLine = a.getBoolean(R.styleable.AdvancedChannelDetailView_hasLine, true);
             boolean mIsAmountDetail = a.getBoolean(R.styleable.AdvancedChannelDetailView_isAmountDetail, false);
+            boolean attrIsMsatAmount = a.getBoolean(R.styleable.AdvancedChannelDetailView_msatAmount, false);
 
             if (attrLabel != null)
                 setLabel(attrLabel);
@@ -92,6 +93,7 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
             setLineVisibility(attrHasLine);
             if (mIsAmountDetail)
                 mVsDetailsValueSwitcher.showNext();
+            mDetailAmountValue.setIsMsatAmount(attrIsMsatAmount);
 
             // Don't forget to recycle the TypedArray
             a.recycle();
