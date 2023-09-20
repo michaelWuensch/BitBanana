@@ -31,10 +31,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
@@ -43,10 +39,14 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
@@ -379,11 +379,16 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     private void validateSecondResponse(@NonNull String withdrawResponse) {
         LnUrlWithdrawResponse lnUrlWithdrawResponse = new Gson().fromJson(withdrawResponse, LnUrlWithdrawResponse.class);
 
-        if (lnUrlWithdrawResponse.getStatus().equals("OK")) {
-            switchToSuccessScreen();
+        if (lnUrlWithdrawResponse.getStatus() != null) {
+            if (lnUrlWithdrawResponse.getStatus().equals("OK")) {
+                switchToSuccessScreen();
+            } else {
+                BBLog.d(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
+                switchToFailedScreen(lnUrlWithdrawResponse.getReason());
+            }
         } else {
-            BBLog.d(LOG_TAG, "LNURL: Failed to withdraw. " + lnUrlWithdrawResponse.getReason());
-            switchToFailedScreen(lnUrlWithdrawResponse.getReason());
+            BBLog.d(LOG_TAG, "LNURL: Failed to withdraw. " + withdrawResponse);
+            switchToFailedScreen(withdrawResponse);
         }
     }
 
