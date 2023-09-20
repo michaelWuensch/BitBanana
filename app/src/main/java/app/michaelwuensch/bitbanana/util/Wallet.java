@@ -19,7 +19,6 @@ import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
@@ -923,15 +922,19 @@ public class Wallet {
      * @return remote pub key
      */
     public String getRemotePubKeyFromChannelId(long chanId) {
-        for (Channel channel : mOpenChannelsList) {
-            if (channel.getChanId() == chanId) {
-                return channel.getRemotePubkey();
+        if (mOpenChannelsList != null) {
+            for (Channel channel : mOpenChannelsList) {
+                if (channel.getChanId() == chanId) {
+                    return channel.getRemotePubkey();
+                }
             }
         }
         // ToDo: Add pending channels
-        for (ChannelCloseSummary channelCloseSummary : mClosedChannelsList) {
-            if (channelCloseSummary.getChanId() == chanId)
-                return channelCloseSummary.getRemotePubkey();
+        if (mClosedChannelsList != null) {
+            for (ChannelCloseSummary channelCloseSummary : mClosedChannelsList) {
+                if (channelCloseSummary.getChanId() == chanId)
+                    return channelCloseSummary.getRemotePubkey();
+            }
         }
 
         return null;
