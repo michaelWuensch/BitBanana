@@ -390,8 +390,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         public ChannelsPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            mOpenChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
-            mClosedChannelsList = new ChannelListFragment(ManageChannelsActivity.this);
+            mOpenChannelsList = new ChannelListFragment();
+            mOpenChannelsList.setChannelSelectListener(ManageChannelsActivity.this);
+            mClosedChannelsList = new ChannelListFragment();
+            mClosedChannelsList .setChannelSelectListener(ManageChannelsActivity.this);
         }
 
         @Override
