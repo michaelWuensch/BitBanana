@@ -23,6 +23,10 @@ public class BBInputFieldView extends LinearLayout {
     private ImageButton mIbtnHelp;
     private String mHelpStringResource;
 
+    private int mMinLines = 1;
+    private int mMaxLines = 1;
+    private int mMaxLinesFocused = 1;
+
 
     public BBInputFieldView(Context context) {
         super(context);
@@ -54,6 +58,18 @@ public class BBInputFieldView extends LinearLayout {
             }
         });
 
+        mEtInput.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (mMaxLinesFocused > mMaxLines) {
+                    if (b)
+                        setLineCount(mMinLines, mMaxLinesFocused);
+                    else
+                        setLineCount(mMinLines, mMaxLines);
+                }
+            }
+        });
+
         // Apply attributes from XML
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
@@ -63,6 +79,9 @@ public class BBInputFieldView extends LinearLayout {
             boolean attrShowHelpButton = a.getBoolean(R.styleable.BBInputFieldView_showHelpButton, false);
             mHelpStringResource = a.getString(R.styleable.BBInputFieldView_helpButtonText);
             String attrDefaultValue = a.getString(R.styleable.BBInputFieldView_defaultInputValue);
+            mMinLines = a.getInt(R.styleable.BBInputFieldView_minLines, 1);
+            mMaxLines = a.getInt(R.styleable.BBInputFieldView_maxLines, 1);
+            mMaxLinesFocused = a.getInt(R.styleable.BBInputFieldView_maxLinesFocused, 1);
 
             if (attrLabel != null)
                 setDescription(attrLabel);
@@ -71,6 +90,8 @@ public class BBInputFieldView extends LinearLayout {
             setShowHelpButton(attrShowHelpButton);
             if (attrDefaultValue != null)
                 setValue(attrDefaultValue);
+            if ((mMinLines > 1 || mMaxLines > 1) && mMaxLines >= mMinLines)
+                setLineCount(mMinLines, mMaxLines);
 
             // Don't forget to recycle the TypedArray
             a.recycle();

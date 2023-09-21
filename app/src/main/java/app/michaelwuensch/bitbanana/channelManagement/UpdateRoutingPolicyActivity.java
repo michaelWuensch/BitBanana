@@ -20,7 +20,6 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -47,7 +46,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_channel_fee_setup);
+        setContentView(R.layout.activity_update_routing_policy);
 
         mCompositeDisposable = new CompositeDisposable();
 

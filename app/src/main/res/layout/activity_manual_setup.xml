@@ -12,148 +12,65 @@
         android:scrollbars="vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/deep_sea_blue"
+            android:orientation="vertical"
             android:padding="15dp">
 
-
-            <TextView
-                android:id="@+id/hostLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/host"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/hostEditText"
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputHost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:inputLabel="@string/host"
+                app:inputLabelDetails=""
+                app:maxLines="2" />
 
-                android:layout_marginTop="5dp"
-                android:background="@drawable/border_text_input"
-                android:maxLines="2"
-                android:scrollbars="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hostLabel" />
-
-            <TextView
-                android:id="@+id/portLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/port"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hostEditText" />
-
-            <EditText
-                android:id="@+id/portEditText"
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputPort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/border_text_input"
-                android:inputType="number"
-                android:maxLines="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/portLabel" />
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/port"
+                app:inputLabelDetails="" />
 
-            <TextView
-                android:id="@+id/macaroonLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/macaroon"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/portEditText" />
-
-            <TextView
-                android:id="@+id/macaroonLabelDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="2dp"
-                android:text="(Hex)"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/macaroonLabel"
-                app:layout_constraintStart_toEndOf="@id/macaroonLabel"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:id="@+id/macaroonEditText"
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputMacaroon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/border_text_input"
-                android:gravity="top"
-                android:maxLines="3"
-                android:minLines="3"
-                android:scrollbars="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/macaroonLabel" />
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/macaroon"
+                app:inputLabelDetails="(Hex)"
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
 
-            <TextView
-                android:id="@+id/certificateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/certificate"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/macaroonEditText" />
-
-            <TextView
-                android:id="@+id/certificateLabelDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="2dp"
-                android:text="(Base64URL)"
-                android:textColor="@color/gray"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@id/certificateLabel"
-                app:layout_constraintStart_toEndOf="@id/certificateLabel"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:id="@+id/certificateEditText"
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputCertificate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="40dp"
-                android:background="@drawable/border_text_input"
-                android:gravity="top"
-                android:maxLines="3"
-                android:minLines="3"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/certificateLabel" />
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/certificate"
+                app:inputLabelDetails="(Base64URL)"
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/torSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/useTor"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/certificateEditText" />
+                android:text="@string/useTor" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/verifyCertSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/verify_certificate"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/torSwitch" />
+                android:text="@string/verify_certificate" />
 
             <Button
                 android:id="@+id/saveButton"
@@ -165,12 +82,9 @@
                 android:text="@string/save"
                 android:textAllCaps="false"
                 android:textColor="@color/banana_yellow"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/verifyCertSwitch" />
+                android:textSize="16sp" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

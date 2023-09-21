@@ -37,6 +37,10 @@ public class FeatureManager {
         return settingEnabled;
     }
 
+    public static boolean isChannelManagementEnabled() {
+        return true;
+    }
+
     public static boolean isSignVerifyEnabled() {
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled;

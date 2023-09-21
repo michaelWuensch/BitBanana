@@ -900,9 +900,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void updateDrawerNavigationMenuVisibilities() {
         Menu drawerMenu = mNavigationView.getMenu();
-        drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isCoinControlEnabled());
+        drawerMenu.findItem(R.id.drawerChannels).setVisible(FeatureManager.isChannelManagementEnabled());
         drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingEnabled());
+        drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isCoinControlEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
+        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isCoinControlEnabled() || FeatureManager.isRoutingEnabled() || FeatureManager.isSignVerifyEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
     }
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="msatAmount" format="boolean" />
+
     <declare-styleable name="AmountView">
-        <attr name="isMsatAmount" format="boolean" />
+        <attr name="msatAmount" />
         <attr name="switchesValueOnClick" format="boolean" />
         <attr name="styleBasedOnValue" format="boolean" />
         <attr name="isWithoutUnit" format="boolean" />
@@ -17,6 +19,9 @@
         <attr name="showHelpButton" format="boolean" />
         <attr name="defaultInputValue" format="string" />
         <attr name="helpButtonText" format="string" />
+        <attr name="minLines" format="integer" />
+        <attr name="maxLines" format="integer" />
+        <attr name="maxLinesFocused" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="AdvancedChannelDetailView">
@@ -25,6 +30,6 @@
         <attr name="explanation" format="string" />
         <attr name="hasLine" format="boolean" />
         <attr name="isAmountDetail" format="boolean" />
-        <attr name="msatAmount" format="boolean" />
+        <attr name="msatAmount" />
     </declare-styleable>
 </resources>

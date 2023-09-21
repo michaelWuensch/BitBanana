@@ -58,7 +58,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AmountView);
-            mIsMsatAmount = a.getBoolean(R.styleable.AmountView_isMsatAmount, false);
+            mIsMsatAmount = a.getBoolean(R.styleable.AmountView_msatAmount, false);
             mSwitchesValueOnClick = a.getBoolean(R.styleable.AmountView_switchesValueOnClick, true);
             mStyleBasedOnValue = a.getBoolean(R.styleable.AmountView_styleBasedOnValue, false);
             mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
