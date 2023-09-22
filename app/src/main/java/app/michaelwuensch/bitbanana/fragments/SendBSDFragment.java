@@ -36,22 +36,22 @@ import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 
 
 public class SendBSDFragment extends BaseBSDFragment {
@@ -90,6 +90,8 @@ public class SendBSDFragment extends BaseBSDFragment {
     double mCalculatedFeePercent;
     private String mKeysendPubkey;
     private boolean mIsKeysend;
+    private long mSendAmountSat;
+    private boolean mBlockOnInputChanged;
 
     public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
@@ -202,7 +204,6 @@ public class SendBSDFragment extends BaseBSDFragment {
                     // make text red if input is too large
                     long maxSendable;
                     if (mOnChain) {
-
                         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
@@ -216,23 +217,16 @@ public class SendBSDFragment extends BaseBSDFragment {
                         }
                     }
 
-                    long currentValue = 0L;
-                    try {
-                        currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                    } catch (NumberFormatException e) {
-                        mNumpad.clearInput();
-                    }
-
-                    if (currentValue > maxSendable) {
+                    if (mSendAmountSat > maxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mSendButtonEnabled_input = false;
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
                         mSendButtonEnabled_input = true;
                     }
-                    if (currentValue == 0 && mFixedAmount == 0L) {
+                    if (mSendAmountSat == 0 && mFixedAmount == 0L) {
                         mSendButtonEnabled_input = false;
                     }
                     updateSendButtonState();
@@ -256,12 +250,15 @@ public class SendBSDFragment extends BaseBSDFragment {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
 
+                if (mBlockOnInputChanged)
+                    return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
 
                 // calculate fees
                 if (mAmountValid) {
+                    mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
                     calculateFee();
                 } else {
                     setFeeFailure();
@@ -275,9 +272,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             mOnChainFeeView.initialSetup();
 
             mOnChainFeeView.setVisibility(View.VISIBLE);
-            mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> {
-                calculateFee();
-            });
+            mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_on_chain);
             mResultView.setTypeIcon(R.drawable.ic_onchain_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
@@ -292,7 +287,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             if (mFixedAmount != 0L) {
                 // A specific amount was requested. We are not allowed to change the amount.
-                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
                 mEtAmount.setEnabled(false);
@@ -301,12 +296,12 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mNumpad.setVisibility(View.VISIBLE);
                 mSendButtonEnabled_input = false;
                 updateSendButtonState();
+                setFeeFailure();
 
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
                     mEtAmount.requestFocus();
                 }, 600);
-
             }
 
             // Action when clicked on "Send payment"
@@ -321,12 +316,12 @@ public class SendBSDFragment extends BaseBSDFragment {
                     if (mFixedAmount != 0L) {
                         sendAmount = mFixedAmount;
                     } else {
-                        sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
+                        sendAmount = mSendAmountSat;
                     }
 
                     if (sendAmount != 0L) {
 
-                        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(sendAmount));
+                        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(sendAmount));
 
                         switchToSendProgressScreen();
 
@@ -396,7 +391,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             } else {
                 // A specific amount was requested. We are not allowed to change the amount
                 mFixedAmount = mLnPaymentRequest.getNumSatoshis();
-                mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
             }
@@ -411,7 +406,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                         long paymentAmount;
                         if (mIsKeysend) {
-                            paymentAmount = getAmountFromInput();
+                            paymentAmount = mSendAmountSat;
                         } else {
                             paymentAmount = mLnPaymentRequest.getNumSatoshis();
                         }
@@ -447,18 +442,15 @@ public class SendBSDFragment extends BaseBSDFragment {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mEtAmount.getText().toString().equals(".")) {
-                    mEtAmount.setText("");
-                }
+                mBlockOnInputChanged = true;
+                MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
-                    MonetaryUtil.getInstance().switchCurrencies();
-                    mEtAmount.setText(convertedAmount);
+                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mSendAmountSat));
                 } else {
-                    MonetaryUtil.getInstance().switchCurrencies();
-                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+                mBlockOnInputChanged = false;
             }
         });
 
@@ -500,14 +492,14 @@ public class SendBSDFragment extends BaseBSDFragment {
         switchToSendProgressScreen();
 
         if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()))));
+            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mSendAmountSat));
         } else {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mLnPaymentRequest.getNumSatoshis()));
+            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mLnPaymentRequest.getNumSatoshis()));
         }
 
         if (mIsKeysend) {
 
-            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, getAmountFromInput());
+            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat);
 
             PaymentUtil.sendPayment(keysendSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
                 @Override
@@ -616,7 +608,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         }
     }
 
-    private void sendToRouteFallback(){
+    private void sendToRouteFallback() {
         // This fallback will be used if the sendToRoute command returns incorrect payment details.
         // There seems to be a bug for some users where this occurs, but we were not able to reproduce this yet.
         // So for now we use a fallback to a working method.
@@ -698,21 +690,17 @@ public class SendBSDFragment extends BaseBSDFragment {
                 if (mFixedAmount != 0L) {
                     sendAmount = mFixedAmount;
                 } else {
-                    try {
-                        sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                    } catch (NumberFormatException e) {
-
-                    }
+                    sendAmount = mSendAmountSat;
                 }
 
                 estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
             } else {
                 if (mIsKeysend) {
-                    long sendAmount = getAmountFromInput();
+                    long sendAmount = mSendAmountSat;
                     SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mKeysendPubkey, sendAmount, null, null, null);
                     sendPaymentProbe(probeRequest);
                 } else if (mLnPaymentRequest.getNumSatoshis() == 0) {
-                    long sendAmount = getAmountFromInput();
+                    long sendAmount = mSendAmountSat;
                     SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList(), mLnPaymentRequest.getFeaturesMap());
                     sendPaymentProbe(probeRequest);
                 } else {
@@ -741,14 +729,16 @@ public class SendBSDFragment extends BaseBSDFragment {
     /**
      * Show the calculated fee
      */
-    private void setCalculatedFeeAmount(String amount) {
+    private void setCalculatedFeeAmountOnChain(long sats) {
         mSendButtonEnabled_feeCalculate = true;
         updateSendButtonState();
-        if (mOnChain) {
-            mOnChainFeeView.onFeeSuccess(amount);
-        } else {
-            mLightningFeeView.setAmount(amount);
-        }
+        mOnChainFeeView.onFeeSuccess(sats);
+    }
+
+    private void setCalculatedFeeAmountLightning(long sats, String percentString, boolean showMax) {
+        mSendButtonEnabled_feeCalculate = true;
+        updateSendButtonState();
+        mLightningFeeView.setAmountSat(sats, percentString, showMax);
     }
 
     /**
@@ -786,7 +776,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 .build();
 
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
+                .subscribe(estimateFeeResponse -> setCalculatedFeeAmountOnChain(estimateFeeResponse.getFeeSat()),
                         throwable -> {
                             BBLog.w(LOG_TAG, "Exception in fee estimation request task.");
                             BBLog.w(LOG_TAG, throwable.getMessage());
@@ -803,10 +793,8 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mRoute = route;
                 mCalculatedFee = fee;
                 mCalculatedFeePercent = (fee / (double) paymentAmountSat);
-                String feePercentageString = " (" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
-                String feeString = MonetaryUtil.getInstance().getPrimaryDisplayAmount(fee) + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                feeString = feeString + feePercentageString;
-                setCalculatedFeeAmount(feeString);
+                String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
+                setCalculatedFeeAmountLightning(mCalculatedFee, feePercentageString, false);
             }
 
             @Override
@@ -814,11 +802,9 @@ public class SendBSDFragment extends BaseBSDFragment {
                 // Display fee according to max UserSetting
                 mCalculatedFee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
                 mCalculatedFeePercent = PaymentUtil.calculateRelativeFeeLimit(paymentAmountSat);
-                String feePercentageString = " (" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
+                String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
                 long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
-                String feeString = MonetaryUtil.getInstance().getPrimaryDisplayAmount(fee) + " " + MonetaryUtil.getInstance().getPrimaryDisplayUnit();
-                feeString = getString(R.string.maximum_abbreviation) + " " + feeString + feePercentageString;
-                setCalculatedFeeAmount(feeString);
+                setCalculatedFeeAmountLightning(fee, feePercentageString, true);
             }
 
             @Override
@@ -828,15 +814,5 @@ public class SendBSDFragment extends BaseBSDFragment {
                 setFeeFailure();
             }
         });
-    }
-
-    private long getAmountFromInput() {
-        long sendAmount = 0L;
-        try {
-            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-        } catch (NumberFormatException e) {
-
-        }
-        return sendAmount;
     }
 }

@@ -10,10 +10,10 @@
         app:iconSpaceReserved="false">
 
         <ListPreference
-            android:defaultValue="sat"
+            android:defaultValue="ccSAT"
             android:dialogTitle="@string/settings_btcUnit"
             android:entries="@array/btcUnitDisplayValues"
-            android:entryValues="@array/btcUnit"
+            android:entryValues="@array/btcCurrencyCodes"
             android:key="firstCurrency"
             android:summary="%s"
             android:title="@string/settings_btcUnit"

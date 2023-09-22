@@ -12,7 +12,9 @@ import app.michaelwuensch.bitbanana.R;
 
 public class LightningFeeView extends ConstraintLayout {
 
-    private TextView mTvSendFeeAmount;
+    private AmountView mTvSendFeeAmount;
+    private TextView mTvSendFeeAmountPercent;
+    private View mVFeeAmountLayout;
     private ProgressBar mPbCalculateFee;
 
     public LightningFeeView(Context context) {
@@ -33,26 +35,37 @@ public class LightningFeeView extends ConstraintLayout {
     private void init() {
         View view = inflate(getContext(), R.layout.view_lightning_fee, this);
         mTvSendFeeAmount = view.findViewById(R.id.sendFeeLightningAmount);
+        mTvSendFeeAmountPercent = view.findViewById(R.id.sendFeeLightningAmountPercent);
         mPbCalculateFee = view.findViewById(R.id.sendFeeLightningProgressBar);
+        mVFeeAmountLayout = view.findViewById(R.id.sendFeeLightningAmountLayout);
     }
 
     /**
      * Show progress bar while calculating fee
      */
     public void onCalculating() {
-        mTvSendFeeAmount.setText(null);
+        mTvSendFeeAmount.overrideWithText(null);
+        mTvSendFeeAmountPercent.setText(null);
         mPbCalculateFee.setVisibility(View.VISIBLE);
-        mTvSendFeeAmount.setVisibility(View.GONE);
+        mVFeeAmountLayout.setVisibility(View.GONE);
     }
 
-    public void setAmount(String amount) {
-        mTvSendFeeAmount.setText(amount);
-        mTvSendFeeAmount.setVisibility(View.VISIBLE);
+    public void setAmountSat(long sats, String percentString, boolean showMax) {
+        mTvSendFeeAmount.setAmountSat(sats);
+        mTvSendFeeAmountPercent.setText(percentString);
+        mVFeeAmountLayout.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
+        if (showMax) {
+            mTvSendFeeAmount.setLabelVisibility(true);
+            mTvSendFeeAmount.setLabelText(getResources().getString(R.string.maximum_abbreviation) + " ");
+        } else {
+            mTvSendFeeAmount.setLabelVisibility(false);
+        }
     }
 
     public void onFeeFailure() {
-        mTvSendFeeAmount.setText(R.string.fee_not_available);
+        mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
+        mTvSendFeeAmountPercent.setText(null);
         mTvSendFeeAmount.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
     }

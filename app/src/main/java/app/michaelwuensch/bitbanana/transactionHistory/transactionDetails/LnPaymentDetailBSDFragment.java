@@ -108,8 +108,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
         mPayee.setText(ContactsManager.getInstance().getNameByContactData(payee));
         mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
-        mAmount.setAmount(payment.getValue());
-        mFee.setAmount(payment.getFee());
+        mAmount.setAmountSat(payment.getValue());
+        mFee.setAmountSat(payment.getFee());
         mPreimage.setText(payment.getPaymentPreimage());
         mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreationDate(), getActivity()));

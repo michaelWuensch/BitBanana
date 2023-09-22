@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -28,19 +29,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sendFeeLightningLabel" />
 
-    <TextView
-        android:id="@+id/sendFeeLightningAmount"
+    <LinearLayout
+        android:id="@+id/sendFeeLightningAmountLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:ems="10"
-        android:maxLength="50"
-        android:textAlignment="textEnd"
-        android:textSize="20sp"
+        android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/sendFeeLightningLabel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <app.michaelwuensch.bitbanana.customView.AmountView
+            android:id="@+id/sendFeeLightningAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:ems="10"
+            android:gravity="end"
+            android:maxLength="50"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:switchesValueOnClick="false"
+            app:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/sendFeeLightningAmountPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="50"
+            android:paddingStart="6dp"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            tools:text="(5,7%)" />
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/sendFeeLightningLineBottom"

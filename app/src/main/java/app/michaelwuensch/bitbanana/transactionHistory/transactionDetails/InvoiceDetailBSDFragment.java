@@ -139,7 +139,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
     private void bindOpenInvoice(Invoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
 
-        mAmount.setAmount(invoice.getValue());
+        mAmount.setAmountSat(invoice.getValue());
 
         String lightningUri = UriUtil.generateLightningUri(invoice.getPaymentRequest());
         // Generate "QR-Code"
@@ -167,13 +167,13 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
         mExpiryLabel.setVisibility(View.GONE);
         mExpiry.setVisibility(View.GONE);
-        mAmount.setAmount(invoice.getAmtPaidSat());
+        mAmount.setAmountSat(invoice.getAmtPaidSat());
         mQRCodeView.setVisibility(View.GONE);
     }
 
     private void bindExpiredInvoice(Invoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
-        mAmount.setAmount(invoice.getValue());
+        mAmount.setAmountSat(invoice.getValue());
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
     }

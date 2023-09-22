@@ -86,6 +86,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private View mSendInputsView;
     private EditText mEtAmount;
     private EditText mEtComment;
+    private View mVCommentLayout;
     private TextView mTvUnit;
     private View mDescriptionView;
     private NumpadView mNumpad;
@@ -99,9 +100,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private long mMinSendable;
     private long mMaxSendable;
     private String mServiceURLString;
-    private boolean mCurrencyJustSwitched;
-    private boolean mValueModifiedSinceSwitch;
-    private long mTempCurrentSatoshiValue;
     private long mFinalChosenAmount;
 
     private ExpandableTextView mDescription;
@@ -109,6 +107,8 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private Handler mHandler;
     private LnUrlPayResponse mPaymentData;
     private LnUrlpPayerData mPayerData;
+    private long mSendAmountSat;
+    private boolean mBlockOnInputChanged;
 
     public static LnUrlPayBSDFragment createLnUrlPayDialog(LnUrlPayResponse response) {
         Bundle bundle = new Bundle();
@@ -151,6 +151,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mSendInputsView = view.findViewById(R.id.sendInputsView);
         mEtAmount = view.findViewById(R.id.sendAmount);
         mEtComment = view.findViewById(R.id.inputComment);
+        mVCommentLayout = view.findViewById(R.id.inputCommentLayout);
         mTvUnit = view.findViewById(R.id.unit);
         mDescription = view.findViewById(R.id.expandableDescription);
         mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
@@ -177,7 +178,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         if (mPaymentData.isCommentAllowed()) {
             mEtComment.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mPaymentData.getCommentMaxLength())});
         } else {
-            mEtComment.setVisibility(View.GONE);
+            mVCommentLayout.setVisibility(View.GONE);
         }
 
         // Handle payer data view
@@ -202,7 +203,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     return;
                 }
 
-                if (!mEtAmount.getText().toString().equals(".") && !mCurrencyJustSwitched) {
+                if (!mEtAmount.getText().toString().equals(".")) {
 
                     if (mFixedAmount != 0L) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
@@ -210,19 +211,17 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
                         return;
                     }
-                    mValueModifiedSinceSwitch = true;
-                    long currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
 
                     // make text red if input is too large or too small
-                    if (currentValue > mMaxSendable) {
+                    if (mSendAmountSat > mMaxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMaxSendable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMaxSendable);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (currentValue < mMinSendable) {
+                    } else if (mSendAmountSat < mMinSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mMinSendable);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMinSendable);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
@@ -231,12 +230,11 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         mBtnSend.setEnabled(true);
                         mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
                     }
-                    if (currentValue == 0) {
+                    if (mSendAmountSat == 0) {
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     }
                 }
-                mCurrencyJustSwitched = false;
             }
 
             @Override
@@ -256,8 +254,14 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
 
+                if (mBlockOnInputChanged)
+                    return;
+
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                if (mAmountValid) {
+                    mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                }
             }
         });
 
@@ -284,17 +288,17 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
             // A specific amount was requested. We are not allowed to change the amount.
             mFixedAmount = mPaymentData.getMaxSendable() / 1000;
-            mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
             mEtAmount.setEnabled(false);
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
             mNumpad.setVisibility(View.VISIBLE);
-            mTempCurrentSatoshiValue = mMinSendable;
-            mCurrencyJustSwitched = true;
-            mValueModifiedSinceSwitch = false;
-            mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mMinSendable));
+            mSendAmountSat = mMinSendable;
+            mBlockOnInputChanged = true;
+            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mMinSendable));
+            mBlockOnInputChanged = false;
 
             mHandler.postDelayed(() -> {
                 // We have to call this delayed, as otherwise it will still bring up the softKeyboard
@@ -315,11 +319,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 BBLog.v(LOG_TAG, "Lnurl pay initiated...");
 
                 if (mFixedAmount == 0L) {
-                    if (!mValueModifiedSinceSwitch) {
-                        mFinalChosenAmount = mTempCurrentSatoshiValue;
-                    } else {
-                        mFinalChosenAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                    }
+                    mFinalChosenAmount = mSendAmountSat;
                 } else {
                     mFinalChosenAmount = mFixedAmount;
                 }
@@ -393,32 +393,16 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrencyJustSwitched = true;
-
-                if (MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin()) {
-                    mTempCurrentSatoshiValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                }
-
-                if (mEtAmount.getText().toString().equals(".")) {
-                    mEtAmount.setText("");
-                }
+                mBlockOnInputChanged = true;
+                MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    String convertedAmount;
-                    if (!mValueModifiedSinceSwitch) {
-                        convertedAmount = MonetaryUtil.getInstance().convertSatoshiToSecondary(mTempCurrentSatoshiValue);
-                    } else {
-                        convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
-                    }
-                    mValueModifiedSinceSwitch = false;
-                    MonetaryUtil.getInstance().switchCurrencies();
-                    mEtAmount.setText(convertedAmount);
+                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mSendAmountSat));
                 } else {
-                    mValueModifiedSinceSwitch = false;
-                    MonetaryUtil.getInstance().switchCurrencies();
-                    mEtAmount.setText(MonetaryUtil.getInstance().convertSatoshiToPrimary(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mEtAmount.setSelection(mEtAmount.getText().length());
+                mBlockOnInputChanged = false;
             }
         });
 
@@ -535,7 +519,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
     private void executeSuccessAction(LnUrlPaySuccessAction successAction, Payment payment) {
 
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(mFinalChosenAmount));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mFinalChosenAmount));
 
         if (successAction == null) {
             BBLog.d(LOG_TAG, "No Success action.");

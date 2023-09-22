@@ -25,18 +25,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <app.michaelwuensch.bitbanana.customView.AmountView
         android:id="@+id/sendFeeOnChainAmount"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#00000000"
+        android:gravity="end"
         android:maxLength="50"
-        android:text="@string/fee_not_available"
-        android:textAlignment="textEnd"
-        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/feeArrowUnitImage"
-        app:layout_constraintStart_toEndOf="@id/sendFeeOnChainLabel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:switchesValueOnClick="false"
+        app:textSize="20sp" />
 
     <ProgressBar
         android:id="@+id/sendFeeOnChainProgressBar"

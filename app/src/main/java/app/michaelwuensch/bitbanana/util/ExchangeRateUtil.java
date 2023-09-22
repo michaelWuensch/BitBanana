@@ -164,7 +164,7 @@ public class ExchangeRateUtil {
             try {
                 JSONObject ReceivedCurrency = response.getJSONObject(fiatCode);
                 JSONObject currentCurrency = new JSONObject();
-                currentCurrency.put(RATE, ReceivedCurrency.getDouble("15m") / 1e8);
+                currentCurrency.put(RATE, ReceivedCurrency.getDouble("15m") / 1e11);
                 currentCurrency.put(SYMBOL, ReceivedCurrency.getString("symbol"));
                 currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                 formattedRates.put(fiatCode, currentCurrency);
@@ -210,7 +210,7 @@ public class ExchangeRateUtil {
 
                 try {
                     JSONObject currentCurrency = new JSONObject();
-                    currentCurrency.put(RATE, responseRates.getDouble(rateCode) / 1e8);
+                    currentCurrency.put(RATE, responseRates.getDouble(rateCode) / 1e11);
                     currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                     formattedRates.put(rateCode, currentCurrency);
                 } catch (JSONException e) {
@@ -243,7 +243,7 @@ public class ExchangeRateUtil {
                 editor.putString("fiat_" + rateCode, tempRate.toString());
 
                 // Update the current fiat currency of the Monetary util
-                if (rateCode.equals(PrefsUtil.getSecondCurrency())) {
+                if (rateCode.equals(PrefsUtil.getSecondCurrencyCode())) {
                     if (tempRate.has(SYMBOL)) {
                         MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP), tempRate.getString(SYMBOL));
                     } else {
@@ -277,7 +277,7 @@ public class ExchangeRateUtil {
         // currency to correct currency according to the systems locale. Only do this,
         // if this currency is included in the fetched data.
         // The user might also have changed the provider and his currency is no longer available. Also switch to default in this case.
-        if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, false) || !isCurrencyAvailable(PrefsUtil.getSecondCurrency())) {
+        if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, false) || !isCurrencyAvailable(PrefsUtil.getSecondCurrencyCode())) {
             String currencyCode = SystemUtil.getSystemCurrencyCode();
             if (currencyCode != null) {
                 if (!PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "").isEmpty()) {

@@ -150,7 +150,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mAmountLabel.setVisibility(View.GONE);
 
         if (mTransaction.getTotalFees() > 0) {
-            mFee.setAmount(mTransaction.getTotalFees());
+            mFee.setAmountSat(mTransaction.getTotalFees());
         } else {
             mFee.setVisibility(View.GONE);
             mFeeLabel.setVisibility(View.GONE);
@@ -181,14 +181,14 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mNodeLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
         mEventLabel.setVisibility(View.GONE);
-        mAmount.setAmount(Math.abs(mTransaction.getAmount()));
+        mAmount.setAmountSat(Math.abs(mTransaction.getAmount()));
 
         Long amount = mTransaction.getAmount();
 
         switch (amount.compareTo(0L)) {
             case 0:
                 // amount = 0 (should actually not happen)
-                mFee.setAmount(mTransaction.getTotalFees());
+                mFee.setAmountSat(mTransaction.getTotalFees());
                 break;
             case 1:
                 // amount > 0 (received on-chain)
@@ -197,7 +197,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 break;
             case -1:
                 // amount < 0 (sent on-chain)
-                mFee.setAmount(mTransaction.getTotalFees());
+                mFee.setAmountSat(mTransaction.getTotalFees());
                 break;
         }
     }

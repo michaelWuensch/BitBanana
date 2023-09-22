@@ -264,8 +264,8 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mBalanceBarLocal.setProgress((int) (localBarValue * 100f));
         mBalanceBarRemote.setProgress((int) (remoteBarValue * 100f));
 
-        mLocalBalance.setAmount(local);
-        mRemoteBalance.setAmount(remote);
+        mLocalBalance.setAmountSat(local);
+        mRemoteBalance.setAmountSat(remote);
     }
 
     private void showChannelCloseType(ChannelCloseSummary channelCloseSummary) {

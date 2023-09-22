@@ -58,7 +58,6 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AmountView);
-            mIsMsatAmount = a.getBoolean(R.styleable.AmountView_msatAmount, false);
             mSwitchesValueOnClick = a.getBoolean(R.styleable.AmountView_switchesValueOnClick, true);
             mStyleBasedOnValue = a.getBoolean(R.styleable.AmountView_styleBasedOnValue, false);
             mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
@@ -76,14 +75,14 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             // Don't forget to recycle the TypedArray
             a.recycle();
         }
-
-        mTvAmount.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSwitchesValueOnClick)
+        if (mSwitchesValueOnClick) {
+            mTvAmount.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     MonetaryUtil.getInstance().switchCurrencies();
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
@@ -91,22 +90,40 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         if (key != null) {
             if (key.equals("firstCurrencyIsPrimary")) {
                 if (mIsUndefinedValue)
-                    setUndefinedValue();
+                    return;
+                if (mIsMsatAmount)
+                    setAmountMsat(mValue);
                 else
-                    setAmount(mValue);
+                    setAmountSat(mValue);
             }
         }
     }
 
-    public void setAmount(long value) {
+    public void setAmountSat(long value) {
         mValue = value;
-        if (mIsMsatAmount)
-            setAmountMsat(value);
+        mIsMsatAmount = false;
+        mIsUndefinedValue = false;
+        if (mIsWithoutUnit)
+            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(value));
         else
-            setAmountSat(value);
+            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(value));
+        styleBasedOnValue(value);
+    }
 
-        Long valueLong = value;
+    public void setAmountMsat(long value) {
+        mValue = value;
+        mIsMsatAmount = true;
+        mIsUndefinedValue = false;
+        if (mIsWithoutUnit)
+            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(value));
+        else
+            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(value));
+        styleBasedOnValue(value);
+    }
+
+    private void styleBasedOnValue(long value) {
         if (mStyleBasedOnValue) {
+            Long valueLong = value;
             int result = valueLong.compareTo(0L);
             switch (result) {
                 case 0:
@@ -125,17 +142,6 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
                     break;
             }
         }
-    }
-
-    private void setAmountSat(long value) {
-        if (mIsWithoutUnit)
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(value));
-        else
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(value));
-    }
-
-    private void setAmountMsat(long value) {
-        mTvAmount.setText(MonetaryUtil.getInstance().getDisplayStringFromMsats(value));
     }
 
     public void setTextColor(ColorStateList colorStateList) {
@@ -158,15 +164,22 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mTvLabel.setText(text);
     }
 
-    public void setIsUndefinedValue(boolean isUndefinedValue) {
-        mIsUndefinedValue = isUndefinedValue;
-    }
-
     public void setUndefinedValue() {
+        mIsUndefinedValue = true;
         mTvAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
     }
 
     public void setIsMsatAmount(boolean isMsatAmount) {
         mIsMsatAmount = isMsatAmount;
+    }
+
+    public void overrideWithText(String text) {
+        mTvAmount.setText(text);
+        mIsUndefinedValue = true;
+    }
+
+    public void overrideWithText(int text) {
+        mTvAmount.setText(getResources().getText(text));
+        mIsUndefinedValue = true;
     }
 }

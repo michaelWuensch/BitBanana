@@ -42,7 +42,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         setIcon(TransactionIcon.LIGHTNING);
         setTimeOfDay(lnPaymentItem.mCreationDate);
         setAmount(lnPaymentItem.getPayment().getValueSat() * -1, true);
-        setFee(lnPaymentItem.getPayment().getFee(), true);
+        setFeeSat(lnPaymentItem.getPayment().getFeeSat(), true);
 
         if (lnPaymentItem.getMemo() == null || lnPaymentItem.getMemo().isEmpty()) {
             setSecondaryDescription("", false);
