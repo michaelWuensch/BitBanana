@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/drawer_menu_category_current_node">
+    <item
+        android:id="@+id/drawerNodeSection"
+        android:title="@string/drawer_menu_category_current_node">
         <menu>
             <group>
                 <item

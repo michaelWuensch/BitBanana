@@ -94,9 +94,7 @@
                 android:text="@string/submit_routing_policy"
                 android:textAllCaps="false"
                 android:textColor="@color/banana_yellow"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/certificateEditText" />
+                android:textSize="16sp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

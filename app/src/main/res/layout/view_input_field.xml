@@ -54,5 +54,6 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/border_text_input"
         android:gravity="top"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:scrollbars="vertical" />
 </LinearLayout>

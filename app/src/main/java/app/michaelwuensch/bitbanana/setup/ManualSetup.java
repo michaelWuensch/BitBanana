@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -17,9 +16,10 @@ import app.michaelwuensch.bitbanana.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -34,10 +34,10 @@ public class ManualSetup extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = ManualSetup.class.getSimpleName();
 
-    private EditText mEtHost;
-    private EditText mEtPort;
-    private EditText mEtMacaroon;
-    private EditText mEtCertificate;
+    private BBInputFieldView mEtHost;
+    private BBInputFieldView mEtPort;
+    private BBInputFieldView mEtMacaroon;
+    private BBInputFieldView mEtCertificate;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
     private Button mBtnSave;
@@ -57,10 +57,10 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         setContentView(R.layout.activity_manual_setup);
 
-        mEtHost = findViewById(R.id.hostEditText);
-        mEtPort = findViewById(R.id.portEditText);
-        mEtMacaroon = findViewById(R.id.macaroonEditText);
-        mEtCertificate = findViewById(R.id.certificateEditText);
+        mEtHost = findViewById(R.id.inputHost);
+        mEtPort = findViewById(R.id.inputPort);
+        mEtMacaroon = findViewById(R.id.inputMacaroon);
+        mEtCertificate = findViewById(R.id.inputCertificate);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
         mBtnSave = findViewById(R.id.saveButton);
@@ -68,9 +68,9 @@ public class ManualSetup extends BaseAppCompatActivity {
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
             BBNodeConfig BBNodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
-            mEtHost.setText(BBNodeConfig.getHost());
-            mEtPort.setText(String.valueOf(BBNodeConfig.getPort()));
-            mEtMacaroon.setText(BBNodeConfig.getMacaroon());
+            mEtHost.setValue(BBNodeConfig.getHost());
+            mEtPort.setValue(String.valueOf(BBNodeConfig.getPort()));
+            mEtMacaroon.setValue(BBNodeConfig.getMacaroon());
             mSwTor.setChecked(BBNodeConfig.getUseTor());
             if (BBNodeConfig.getUseTor()) {
                 mSwVerify.setChecked(false);
@@ -79,7 +79,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                 mSwVerify.setChecked(BBNodeConfig.getVerifyCertificate());
             }
             if (BBNodeConfig.getCert() != null && !BBNodeConfig.getCert().isEmpty()) {
-                mEtCertificate.setText(BBNodeConfig.getCert());
+                mEtCertificate.setValue(BBNodeConfig.getCert());
             }
         }
 
@@ -115,32 +115,32 @@ public class ManualSetup extends BaseAppCompatActivity {
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mEtHost.getText().toString().isEmpty()) {
+                if (mEtHost.getData().isEmpty()) {
                     showError("Host must not be empty!", RefConstants.ERROR_DURATION_SHORT);
                     return;
                 }
-                if (mEtPort.getText().toString().isEmpty()) {
+                if (mEtPort.getData().isEmpty()) {
                     showError("Port must not be empty!", RefConstants.ERROR_DURATION_SHORT);
                     return;
                 }
-                if (mEtMacaroon.getText().toString().isEmpty()) {
+                if (mEtMacaroon.getData().isEmpty()) {
                     showError("Macaroon must not be empty!", RefConstants.ERROR_DURATION_SHORT);
                     return;
                 }
-                if (!UtilFunctions.isHex(mEtMacaroon.getText().toString())) {
+                if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
                     showError("Macaroon must be provided in hex format!", RefConstants.ERROR_DURATION_SHORT);
                     return;
                 }
 
                 // everything is ok
                 LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setHost(mEtHost.getText().toString());
-                lndConnectConfig.setPort(Integer.parseInt(mEtPort.getText().toString()));
-                lndConnectConfig.setMacaroon(mEtMacaroon.getText().toString());
+                lndConnectConfig.setHost(mEtHost.getData());
+                lndConnectConfig.setPort(Integer.parseInt(mEtPort.getData()));
+                lndConnectConfig.setMacaroon(mEtMacaroon.getData());
                 lndConnectConfig.setUseTor(mSwTor.isChecked());
                 lndConnectConfig.setVerifyCertificate(mSwVerify.isChecked());
-                if (!mEtCertificate.getText().toString().isEmpty()) {
-                    lndConnectConfig.setCert(mEtCertificate.getText().toString());
+                if (!mEtCertificate.getData().isEmpty()) {
+                    lndConnectConfig.setCert(mEtCertificate.getData());
                 }
                 connect(lndConnectConfig);
             }
