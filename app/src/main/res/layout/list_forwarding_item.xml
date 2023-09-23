@@ -45,7 +45,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="0.55"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textAlignment="textEnd"
-                app:textSize="16sp" />
+                app:textSize="14sp" />
 
             <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/forwardingAmount"

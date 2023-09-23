@@ -68,7 +68,8 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
 
         // Set earned fee amount
-        mEarnedFee.setAmountSat(forwardingEventListItem.getForwardingEvent().getFee());
+        mEarnedFee.setStyleBasedOnValue(true);
+        mEarnedFee.setAmountMsat(forwardingEventListItem.getForwardingEvent().getFeeMsat());
 
         // Set forwarded amount
         mForwardingAmount.setAmountSat(forwardingEventListItem.getForwardingEvent().getAmtIn());
