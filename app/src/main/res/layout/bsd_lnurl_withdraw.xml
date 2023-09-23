@@ -82,7 +82,7 @@
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:textAlignment="textEnd"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     app:layout_constraintEnd_toStartOf="@+id/unitLayout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -167,33 +167,13 @@
                     app:layout_constraintTop_toBottomOf="@id/withdrawSourceLabel"
                     app:srcCompat="@color/gray" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/withdrawDescriptionTopLayout"
+                <app.michaelwuensch.bitbanana.customView.ExpandableTextView
+                    android:id="@+id/withdrawDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line3">
-
-                    <EditText
-                        android:id="@+id/withdrawDescription"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:background="@color/transparent"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:hint="@string/memo"
-                        android:inputType="text"
-                        android:maxLength="50"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@id/line3" />
 
                 <app.michaelwuensch.bitbanana.customView.NumpadView
                     android:id="@+id/numpadView"
@@ -204,13 +184,13 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/withdrawDescriptionTopLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/withdrawDescription" />
 
                 <Button
                     android:id="@+id/withdrawButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/bg_clickable_item"
                     android:text="@string/withdraw"

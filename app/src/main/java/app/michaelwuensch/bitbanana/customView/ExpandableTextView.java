@@ -87,7 +87,10 @@ public class ExpandableTextView extends ConstraintLayout {
         mTvTextPreview.post(new Runnable() {
             @Override
             public void run() {
-                boolean isEllipsize = !((mTvTextPreview.getLayout().getText().toString()).equalsIgnoreCase(explanation));
+                boolean isEllipsize = true;
+                if (mTvTextPreview.getLayout() != null) {
+                    isEllipsize = !((mTvTextPreview.getLayout().getText().toString()).equalsIgnoreCase(explanation));
+                }
                 isExpandable = isEllipsize;
                 mExpandArrowImage.setVisibility(isEllipsize ? View.VISIBLE : View.GONE);
             }
