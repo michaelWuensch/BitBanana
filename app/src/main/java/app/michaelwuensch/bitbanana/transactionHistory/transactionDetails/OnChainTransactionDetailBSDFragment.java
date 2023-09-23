@@ -192,11 +192,13 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 break;
             case 1:
                 // amount > 0 (received on-chain)
+                mAmount.setAmountSat(Math.abs(mTransaction.getAmount()));
                 mFee.setVisibility(View.GONE);
                 mFeeLabel.setVisibility(View.GONE);
                 break;
             case -1:
                 // amount < 0 (sent on-chain)
+                mAmount.setAmountSat(Math.abs(mTransaction.getAmount() + mTransaction.getTotalFees()));
                 mFee.setAmountSat(mTransaction.getTotalFees());
                 break;
         }
