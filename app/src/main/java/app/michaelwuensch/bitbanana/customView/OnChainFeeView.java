@@ -21,7 +21,7 @@ import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
 public class OnChainFeeView extends ConstraintLayout {
 
-    private TextView mTvSendFeeAmount;
+    private AmountView mTvSendFeeAmount;
     private ProgressBar mPbCalculateFee;
     private TextView mTvSendFeeSpeed;
     private TabLayout mTabLayoutSendFeeSpeed;
@@ -114,7 +114,7 @@ public class OnChainFeeView extends ConstraintLayout {
      * Show progress bar while calculating fee
      */
     public void onCalculating() {
-        mTvSendFeeAmount.setText(null);
+        mTvSendFeeAmount.overrideWithText(null);
         mPbCalculateFee.setVisibility(View.VISIBLE);
         mTvSendFeeAmount.setVisibility(View.INVISIBLE);
     }
@@ -140,14 +140,14 @@ public class OnChainFeeView extends ConstraintLayout {
         mFeeTierChangedListener = feeTierChangedListener;
     }
 
-    public void onFeeSuccess(String amount) {
-        mTvSendFeeAmount.setText(amount);
+    public void onFeeSuccess(long sats) {
+        mTvSendFeeAmount.setAmountSat(sats);
         mTvSendFeeAmount.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
     }
 
     public void onFeeFailure() {
-        mTvSendFeeAmount.setText(R.string.fee_not_available);
+        mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
         mTvSendFeeAmount.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
     }

@@ -62,9 +62,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private TextView mTvNoIncomingBalance;
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
-    private String mValueBeforeUnitSwitch;
-    private boolean mUseValueBeforeUnitSwitch = true;
     private boolean mAmountValid = true;
+    private long mReceiveAmountSats;
+    private boolean mBlockOnInputChanged;
 
     @Nullable
     @Override
@@ -211,25 +211,11 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         llUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mEtAmount.getText().toString().equals(".")) {
-                    mEtAmount.setText("");
-                }
-
-                if (!mUseValueBeforeUnitSwitch) {
-                    mValueBeforeUnitSwitch = mEtAmount.getText().toString();
-                }
-
-                String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
+                mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
-                if (mUseValueBeforeUnitSwitch) {
-                    mEtAmount.setText(mValueBeforeUnitSwitch);
-                    mUseValueBeforeUnitSwitch = false;
-                } else {
-                    mEtAmount.setText(convertedAmount);
-                    mUseValueBeforeUnitSwitch = true;
-                }
+                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mReceiveAmountSats));
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-
+                mBlockOnInputChanged = false;
             }
         });
 
@@ -249,29 +235,21 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 if (mOnChain) {
                     // always make it white, we have no limit for on-chain
                     mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                    mUseValueBeforeUnitSwitch = false;
                 } else {
                     long maxReceivable;
-                    mUseValueBeforeUnitSwitch = false;
                     if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                         maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
                     }
                     if (!mEtAmount.getText().toString().equals(".")) {
-                        long currentValue = 0L;
-                        try {
-                            currentValue = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                        } catch (NumberFormatException e) {
-                            mNumpad.clearInput();
-                        }
-                        if (currentValue > maxReceivable) {
+                        if (mReceiveAmountSats > maxReceivable) {
                             mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxReceivable);
+                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxReceivable);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                        } else if (currentValue == 0) {
+                        } else if (mReceiveAmountSats == 0) {
                             // Disable 0 sat ln invoices
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
@@ -301,8 +279,14 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
                 }
 
+                if (mBlockOnInputChanged)
+                    return;
+
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                if (mAmountValid) {
+                    mReceiveAmountSats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                }
             }
         });
 
@@ -341,13 +325,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 BBLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
                         .subscribe(newAddressResponse -> {
-                            String value;
-                            if (mUseValueBeforeUnitSwitch) {
-                                value = MonetaryUtil.getInstance().convertSecondaryToBitcoin(mValueBeforeUnitSwitch);
-                            } else {
-                                value = MonetaryUtil.getInstance().convertPrimaryToBitcoin(mEtAmount.getText().toString());
-                            }
-
+                            String value = MonetaryUtil.getInstance().satsToBitcoinString(mReceiveAmountSats);
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("address", newAddressResponse.getAddress());
@@ -363,15 +341,8 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             } else {
                 // generate lightning request
 
-                long value;
-                if (mUseValueBeforeUnitSwitch) {
-                    value = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
-                } else {
-                    value = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                }
-
                 Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(value)
+                        .setValue(mReceiveAmountSats)
                         .setMemo(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
                         .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))

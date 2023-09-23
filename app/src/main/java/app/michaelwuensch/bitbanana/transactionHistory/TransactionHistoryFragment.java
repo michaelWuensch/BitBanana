@@ -463,12 +463,12 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
             switch (item.getType()) {
                 case HistoryListItem.TYPE_LN_INVOICE:
                     String invoiceMemo = ((LnInvoiceItem) item).getInvoice().getMemo();
-                    String invoiceAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnInvoiceItem) item).getInvoice().getValue());
+                    String invoiceAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((LnInvoiceItem) item).getInvoice().getValue());
                     text = invoiceMemo + invoiceAmount;
                     break;
                 case HistoryListItem.TYPE_LN_PAYMENT:
                     String paymentMemo = ((LnPaymentItem) item).getMemo();
-                    String paymentAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((LnPaymentItem) item).getPayment().getValueSat());
+                    String paymentAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((LnPaymentItem) item).getPayment().getValueSat());
 
                     Hop lastHop = ((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHops(((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
                     String payeePubKey = lastHop.getPubKey();
@@ -479,7 +479,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                     text = paymentMemo + paymentAmount + payeeName;
                     break;
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
-                    String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmount(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
+                    String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
                     String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName = AliasManager.getInstance().getAlias(nodePubKey);

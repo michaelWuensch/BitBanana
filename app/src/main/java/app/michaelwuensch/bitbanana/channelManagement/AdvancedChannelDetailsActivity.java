@@ -154,11 +154,13 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.settingsButton) {
-            Intent intentUpdateRoutingPolicy = new Intent(this, UpdateRoutingPolicyActivity.class);
-            if (getIntent().getExtras() != null)
-                intentUpdateRoutingPolicy.putExtras(getIntent().getExtras());
-            intentUpdateRoutingPolicy.putExtra(UpdateRoutingPolicyActivity.EXTRA_ROUTING_POLICY, mLocalRoutingPolicy.toByteString());
-            startActivity(intentUpdateRoutingPolicy);
+            if (mLocalRoutingPolicy != null) {
+                Intent intentUpdateRoutingPolicy = new Intent(this, UpdateRoutingPolicyActivity.class);
+                if (getIntent().getExtras() != null)
+                    intentUpdateRoutingPolicy.putExtras(getIntent().getExtras());
+                intentUpdateRoutingPolicy.putExtra(UpdateRoutingPolicyActivity.EXTRA_ROUTING_POLICY, mLocalRoutingPolicy.toByteString());
+                startActivity(intentUpdateRoutingPolicy);
+            }
             return true;
         }
 
@@ -171,7 +173,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValue(channel.getCapacity());
+        mDetailCapacity.setAmountValueSat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // activity
@@ -212,7 +214,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // commit fee
-        mDetailCommitFee.setAmountValue(channel.getCommitFee());
+        mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // time lock
@@ -222,11 +224,11 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailTimeLock.setVisibility(View.VISIBLE);
 
         // local reserve amount
-        mDetailLocalReserve.setAmountValue(channel.getLocalConstraints().getChanReserveSat());
+        mDetailLocalReserve.setAmountValueSat(channel.getLocalConstraints().getChanReserveSat());
         mDetailLocalReserve.setVisibility(View.VISIBLE);
 
         // remote reserve amount
-        mDetailRemoteReserve.setAmountValue(channel.getRemoteConstraints().getChanReserveSat());
+        mDetailRemoteReserve.setAmountValueSat(channel.getRemoteConstraints().getChanReserveSat());
         mDetailRemoteReserve.setVisibility(View.VISIBLE);
 
         // local routing policy heading
@@ -241,13 +243,9 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailLocalTimelockDelta.setVisibility(View.VISIBLE);
 
         // local min HTLC
-        String localMinHtlc = " msat";
-        mDetailLocalMinHTLC.setValue(localMinHtlc);
         mDetailLocalMinHTLC.setVisibility(View.VISIBLE);
 
         // local max HTLC
-        String localMaxHtlc = " msat";
-        mDetailLocalMaxHTLC.setValue(localMaxHtlc);
         mDetailLocalMaxHTLC.setVisibility(View.VISIBLE);
 
         // remote routing policy heading
@@ -262,13 +260,9 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailRemoteTimelockDelta.setVisibility(View.VISIBLE);
 
         // remote min HTLC
-        String remoteMinHtlc = " msat";
-        mDetailRemoteMinHTLC.setValue(remoteMinHtlc);
         mDetailRemoteMinHTLC.setVisibility(View.VISIBLE);
 
         // remote max HTLC
-        String remoteMaxHtlc = " msat";
-        mDetailRemoteMaxHTLC.setValue(remoteMaxHtlc);
         mDetailRemoteMaxHTLC.setVisibility(View.VISIBLE);
 
         mChanId = channel.getChanId();
@@ -291,15 +285,15 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailVisibility.setVisibility(View.VISIBLE);
 
         // commit fee
-        mDetailCommitFee.setAmountValue(channel.getCommitFee());
+        mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // local reserve amount
-        mDetailLocalReserve.setAmountValue(channel.getChannel().getLocalChanReserveSat());
+        mDetailLocalReserve.setAmountValueSat(channel.getChannel().getLocalChanReserveSat());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 
         // remote reserve amount
-        mDetailRemoteReserve.setAmountValue(channel.getChannel().getRemoteChanReserveSat());
+        mDetailRemoteReserve.setAmountValueSat(channel.getChannel().getRemoteChanReserveSat());
         mDetailCommitFee.setVisibility(View.VISIBLE);
     }
 
@@ -323,7 +317,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValue(channel.getCapacity());
+        mDetailCapacity.setAmountValueSat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // commitment type
@@ -350,7 +344,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValue(channel.getCapacity());
+        mDetailCapacity.setAmountValueSat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
@@ -418,10 +412,8 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                             BigDecimal localFeeRate = BigDecimal.valueOf((double) (localPolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
                             String localFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getFeeBaseMsat()) + "\n+ " + localFeeRate.toPlainString() + " %";
                             mDetailLocalRoutingFee.setValue(localFee);
-                            String localMinHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getMinHtlc());
-                            String localMaxHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getMaxHtlcMsat());
-                            mDetailLocalMinHTLC.setValue(localMinHtlc);
-                            mDetailLocalMaxHTLC.setValue(localMaxHtlc);
+                            mDetailLocalMinHTLC.setAmountValueMsat(localPolicy.getMinHtlc());
+                            mDetailLocalMaxHTLC.setAmountValueMsat(localPolicy.getMaxHtlcMsat());
                             long timeLockInSeconds = localPolicy.getTimeLockDelta() * 10 * 60;
                             String timeLock = localPolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
                             mDetailLocalTimelockDelta.setValue(timeLock);
@@ -431,10 +423,8 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                             BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (remotePolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
                             String remoteFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getFeeBaseMsat()) + "\n+ " + remoteFeeRate.toPlainString() + " %";
                             mDetailRemoteRoutingFee.setValue(remoteFee);
-                            String remoteMinHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getMinHtlc());
-                            String remoteMaxHtlc = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getMaxHtlcMsat());
-                            mDetailRemoteMinHTLC.setValue(remoteMinHtlc);
-                            mDetailRemoteMaxHTLC.setValue(remoteMaxHtlc);
+                            mDetailRemoteMinHTLC.setAmountValueMsat(remotePolicy.getMinHtlc());
+                            mDetailRemoteMaxHTLC.setAmountValueMsat(remotePolicy.getMaxHtlcMsat());
                             long timeLockInSeconds = remotePolicy.getTimeLockDelta() * 10 * 60;
                             String timeLock = remotePolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
                             mDetailRemoteTimelockDelta.setValue(timeLock);

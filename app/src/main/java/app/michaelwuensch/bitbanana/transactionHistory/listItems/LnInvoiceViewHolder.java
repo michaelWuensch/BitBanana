@@ -20,7 +20,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
         // Standard state. This prevents list entries to get mixed states because of recycling of the ViewHolder.
         setDisplayMode(true);
 
-        setFee(0, false);
+        setFeeSat(0, false);
         setTimeOfDay(lnInvoiceItem.mCreationDate);
 
         // Set description

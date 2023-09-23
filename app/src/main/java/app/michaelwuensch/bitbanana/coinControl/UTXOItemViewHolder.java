@@ -38,7 +38,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
         // Set utxo amount
 
-        mUTXOAmount.setAmount(utxoListItem.getUtxo().getAmountSat());
+        mUTXOAmount.setAmountSat(utxoListItem.getUtxo().getAmountSat());
 
         // Set on click listener
         setOnRootViewClickListener(utxoListItem);

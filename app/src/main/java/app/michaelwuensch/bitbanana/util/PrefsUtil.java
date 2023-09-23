@@ -142,11 +142,11 @@ public class PrefsUtil {
         }
     }
 
-    public static String getFirstCurrency() {
-        return getPrefs().getString(FIRST_CURRENCY, MonetaryUtil.SATOSHI_UNIT);
+    public static String getFirstCurrencyCode() {
+        return getPrefs().getString(FIRST_CURRENCY, BBCurrency.CURRENCY_CODE_SATOSHI);
     }
 
-    public static String getSecondCurrency() {
+    public static String getSecondCurrencyCode() {
         return getPrefs().getString(SECOND_CURRENCY, "USD");
     }
 

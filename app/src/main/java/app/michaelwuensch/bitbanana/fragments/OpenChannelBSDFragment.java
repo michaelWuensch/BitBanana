@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -56,12 +57,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     private boolean mAmountValid = false;
     private Button mOpenChannelButton;
     private TextView mTvNodeAlias;
-    private TextView mTvOnChainFunds;
+    private AmountView mTvOnChainFunds;
     private LightningNodeUri mLightningNodeUri;
-    private String mValueBeforeUnitSwitch;
     private OnChainFeeView mOnChainFeeView;
     private CheckBox mPrivateCheckbox;
-    private boolean mUseValueBeforeUnitSwitch = true;
+    private long mValueChannelCapacitySats;
+    private boolean mBlockOnInputChanged;
 
     @Nullable
     @Override
@@ -89,9 +90,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         mNumpad.bindEditText(mEtAmount);
 
         mOnChainFeeView.initialSetup();
-        mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> {
-            calculateFee();
-        });
+        setFeeFailure();
+        mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
 
         Wallet.getInstance().registerChannelOpenUpdateListener(this);
 
@@ -125,18 +125,20 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                 if (!mAmountValid) {
                     mNumpad.removeOneDigit();
                 }
-
-                mUseValueBeforeUnitSwitch = false;
             }
 
             @Override
             public void onTextChanged(CharSequence arg0, int start, int before,
                                       int count) {
+                if (mBlockOnInputChanged)
+                    return;
+
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), MonetaryUtil.getInstance().getPrimaryCurrency());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
 
                 // calculate fees
                 if (mAmountValid) {
+                    mValueChannelCapacitySats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(mEtAmount.getText().toString());
                     calculateFee();
                 } else {
                     setFeeFailure();
@@ -147,28 +149,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         // Action when clicked on receive unit
         LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
         llUnit.setOnClickListener(v -> {
-            if (mEtAmount.getText().toString().equals(".")) {
-                mEtAmount.setText("");
-            }
-
-            if (!mUseValueBeforeUnitSwitch) {
-                mValueBeforeUnitSwitch = mEtAmount.getText().toString();
-            }
-
-            String convertedAmount = MonetaryUtil.getInstance().convertPrimaryToSecondaryCurrency(mEtAmount.getText().toString());
+            mBlockOnInputChanged = true;
             MonetaryUtil.getInstance().switchCurrencies();
-
-            if (mUseValueBeforeUnitSwitch) {
-                mEtAmount.setText(mValueBeforeUnitSwitch);
-                mUseValueBeforeUnitSwitch = false;
-            } else {
-                mEtAmount.setText(convertedAmount);
-                mUseValueBeforeUnitSwitch = true;
-            }
-
+            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mValueChannelCapacitySats));
             mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-
             setAvailableFunds();
+            mBlockOnInputChanged = false;
         });
 
         mNumpad.setVisibility(View.VISIBLE);
@@ -182,13 +168,6 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     return;
                 }
 
-                long userInputAmount;
-                if (mUseValueBeforeUnitSwitch) {
-                    userInputAmount = Long.parseLong(MonetaryUtil.getInstance().convertSecondaryToSatoshi(mValueBeforeUnitSwitch));
-                } else {
-                    userInputAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-                }
-
                 // values from LND
                 long minSendAmount = 20000;
                 long maxSendAmount = 17666215;
@@ -200,16 +179,16 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                         maxSendAmount = onChainAvailable;
                     }
 
-                    if (userInputAmount < minSendAmount) {
+                    if (mValueChannelCapacitySats < minSendAmount) {
                         // amount is to small
-                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(minSendAmount);
+                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(minSendAmount);
                         showError(message, Snackbar.LENGTH_LONG);
                         return;
                     }
 
-                    if (userInputAmount > maxSendAmount) {
+                    if (mValueChannelCapacitySats > maxSendAmount) {
                         // amount is to big
-                        String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(maxSendAmount);
+                        String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendAmount);
                         showError(message, Snackbar.LENGTH_LONG);
                         return;
                     }
@@ -221,7 +200,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                 }
 
                 switchToProgressScreen();
-                Wallet.getInstance().openChannel(mLightningNodeUri, userInputAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                Wallet.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
             }
         });
 
@@ -275,8 +254,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     private void setAvailableFunds() {
         long available = Wallet.getInstance().getBalances().onChainConfirmed();
-        String availableFundsOnChain = MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(available);
-        mTvOnChainFunds.setText(getString(R.string.funds_available, availableFundsOnChain));
+        String availableFundsOnChain = MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(available);
+        mTvOnChainFunds.overrideWithText(getString(R.string.funds_available, availableFundsOnChain));
     }
 
     private void showError(String message, int duration) {
@@ -335,12 +314,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     private void calculateFee() {
         setCalculatingFee();
-        long sendAmount = 0L;
-        try {
-            sendAmount = Long.parseLong(MonetaryUtil.getInstance().convertPrimaryToSatoshi(mEtAmount.getText().toString()));
-        } catch (NumberFormatException ignored) {
-        }
-        estimateOnChainFee(sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+        estimateOnChainFee(mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
     }
 
     /**
@@ -353,8 +327,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     /**
      * Show the calculated fee
      */
-    private void setCalculatedFeeAmount(String amount) {
-        mOnChainFeeView.onFeeSuccess(amount);
+    private void setCalculatedFeeAmount(long sats) {
+        mOnChainFeeView.onFeeSuccess(sats);
     }
 
     /**
@@ -391,7 +365,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     .build();
 
             getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                    .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(estimateFeeResponse.getFeeSat())),
+                    .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(estimateFeeResponse.getFeeSat()),
                             throwable -> {
                                 BBLog.w(TAG, "Exception in fee estimation request task.");
                                 BBLog.w(TAG, throwable.getMessage());

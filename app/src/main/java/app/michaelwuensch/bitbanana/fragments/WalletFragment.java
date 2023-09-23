@@ -217,10 +217,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                String balances = "On-Chain confirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().onChainConfirmed())
-                        + "\nOn-Chain unconfirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().onChainUnconfirmed())
-                        + "\nChannel balance: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().channelBalance())
-                        + "\nChannel pending: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(Wallet.getInstance().getBalances().channelBalancePending());
+                String balances = "On-Chain confirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainConfirmed())
+                        + "\nOn-Chain unconfirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainUnconfirmed())
+                        + "\nChannel balance: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().channelBalance())
+                        + "\nChannel pending: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().channelBalancePending());
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                         .setMessage(balances)
                         .setCancelable(true)
@@ -370,9 +370,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     balances = Wallet.getInstance().getDemoBalances();
                 }
 
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmount(balances.total()));
+                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(balances.total()));
                 mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmount(balances.total()));
+                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromSats(balances.total()));
                 mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
                 BBLog.v(LOG_TAG, "Total balance display updated");

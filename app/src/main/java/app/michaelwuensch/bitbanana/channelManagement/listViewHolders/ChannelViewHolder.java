@@ -59,10 +59,10 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mLocalBar.setProgress((int) (localBarValue * 100f));
         mRemoteBar.setProgress((int) (remoteBarValue * 100f));
 
-        mLocalBalance.setAmount(local);
-        mRemoteBalance.setAmount(remote);
+        mLocalBalance.setAmountSat(local);
+        mRemoteBalance.setAmountSat(remote);
 
-        mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountAndUnit(capacity));
+        mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(capacity));
     }
 
     public void addOnChannelSelectListener(ChannelSelectListener channelSelectListener) {

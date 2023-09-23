@@ -63,7 +63,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         listBtcUnit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MonetaryUtil.getInstance().loadFirstCurrencyFromPrefs(String.valueOf(newValue));
+                MonetaryUtil.getInstance().loadFirstCurrency(String.valueOf(newValue));
                 // Calling switch currency twice will update all currency labels across the app
                 // while keeping the same currency as primary
                 MonetaryUtil.getInstance().switchCurrencies();
@@ -257,7 +257,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void createSecondCurrencyList() {
 
-        CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcUnit);
+        CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcCurrencyCodes);
         CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitDisplayValues);
         CharSequence[] fiatEntryValues = null;
         CharSequence[] fiatEntryDisplayValue = null;
@@ -308,7 +308,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        mListCurrency.setValue(PrefsUtil.getSecondCurrency());
+        mListCurrency.setValue(PrefsUtil.getSecondCurrencyCode());
         mListCurrency.setSummary("%s");
         createSecondCurrencyList();
         pinOptionText();

@@ -81,7 +81,6 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         if (fixedValue) {
             setAmount(amount, visible, true);
         } else {
-            mAmount.setIsUndefinedValue(true);
             mAmount.setUndefinedValue();
         }
     }
@@ -95,15 +94,23 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         } else {
             mAmount.setStyleBasedOnValue(true);
         }
-        mAmount.setAmount(amount);
+        mAmount.setAmountSat(amount);
     }
 
-    void setFee(long amount, boolean visible) {
+    void setFeeSat(long amount, boolean visible) {
         mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
 
         String feeText = mContext.getResources().getString(R.string.fee) + ": ";
         mTransactionFee.setLabelText(feeText);
-        mTransactionFee.setAmount(amount);
+        mTransactionFee.setAmountSat(amount);
+    }
+
+    void setFeeMSat(long amount, boolean visible) {
+        mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        String feeText = mContext.getResources().getString(R.string.fee) + ": ";
+        mTransactionFee.setLabelText(feeText);
+        mTransactionFee.setAmountMsat(amount);
     }
 
     void setPrimaryDescription(String description) {

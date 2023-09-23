@@ -5,11 +5,11 @@
         <item>EUR</item>
     </string-array>
 
-    <string-array name="btcUnit">
-        <item>BTC</item>
-        <item>mBTC</item>
-        <item>bit</item>
-        <item>sat</item>
+    <string-array name="btcCurrencyCodes">
+        <item>ccBTC</item>
+        <item>ccMBTC</item>
+        <item>ccBIT</item>
+        <item>ccSAT</item>
     </string-array>
 
     <string-array name="btcUnitDisplayValues">

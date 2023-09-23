@@ -237,14 +237,14 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private void updateSummaryTexts() {
         if (mIsVolume) {
             // Set earned amount texts
-            mTVAmount.setAmount(mRoutedMsats / 1000);
+            mTVAmount.setAmountSat(mRoutedMsats / 1000);
             mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             mTvSummaryText.setText(R.string.forwarding_volume_description);
             mDots.selectTab(mDots.getTabAt(1));
             PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, true).apply();
         } else {
             // Set earned amount texts
-            mTVAmount.setAmount(mEarnedMsats / 1000);
+            mTVAmount.setAmountSat(mEarnedMsats / 1000);
             mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             mTvSummaryText.setText(R.string.forwarding_earned_description);
             mDots.selectTab(mDots.getTabAt(0));

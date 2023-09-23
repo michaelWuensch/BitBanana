@@ -90,7 +90,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
         String confirmationsLabel = getString(R.string.confirmations) + ":";
         mConfirmationsLabel.setText(confirmationsLabel);
 
-        mAmount.setAmount(mUTXO.getAmountSat());
+        mAmount.setAmountSat(mUTXO.getAmountSat());
 
         mAddress.setText(mUTXO.getAddress());
         mTransactionID.setText(mUTXO.getOutpoint().getTxidStr());

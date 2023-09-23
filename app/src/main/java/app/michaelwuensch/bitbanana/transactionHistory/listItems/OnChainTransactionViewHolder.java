@@ -35,7 +35,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         if (Wallet.getInstance().isTransactionInternal(onChainTransactionItem.getOnChainTransaction())) {
 
             setIcon(TransactionIcon.INTERNAL);
-            setFee(fee, false);
+            setFeeSat(fee, false);
 
             // Internal transactions are a mess in LND. Some transaction values are not populated, sometimes value and fee is switched.
             // There are transactions for force closes that never get confirmations and get deleted on restarting LND ...
@@ -84,17 +84,17 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
             switch (amount.compareTo(0L)) {
                 case 0:
                     // amount = 0 (should actually not happen)
-                    setFee(fee, false);
+                    setFeeSat(fee, false);
                     setPrimaryDescription(mContext.getString(R.string.internal));
                     break;
                 case 1:
                     // amount > 0 (received on-chain)
-                    setFee(fee, false);
+                    setFeeSat(fee, false);
                     setPrimaryDescription(mContext.getString(R.string.received));
                     break;
                 case -1:
                     // amount < 0 (sent on-chain)
-                    setFee(fee, true);
+                    setFeeSat(fee, true);
                     setPrimaryDescription(mContext.getString(R.string.sent));
                     break;
             }

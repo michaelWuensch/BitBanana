@@ -140,16 +140,16 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:srcCompat="@color/gray" />
 
-                        <TextView
+                        <app.michaelwuensch.bitbanana.customView.AmountView
                             android:id="@+id/onChainFunds"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            tools:text="Available: 21,000,000 sats" />
+                            app:switchesValueOnClick="false"
+                            app:textSize="12sp" />
 
                         <LinearLayout
                             android:id="@+id/sendUnitLayout"
