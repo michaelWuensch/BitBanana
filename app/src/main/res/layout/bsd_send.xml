@@ -217,38 +217,15 @@
 
                 </RelativeLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/sendMemoTopLayout"
+                <app.michaelwuensch.bitbanana.customView.ExpandableTextView
+                    android:id="@+id/sendMemo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="30dp"
-                    android:paddingTop="0dp"
                     android:paddingEnd="30dp"
-                    android:paddingBottom="0dp"
-                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendFeeTopLayout">
-
-                    <EditText
-                        android:id="@+id/sendMemo"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="15dp"
-                        android:background="#00000000"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:hint="@string/memo"
-                        android:inputType="text"
-                        android:maxLength="50"
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@id/sendFeeTopLayout" />
 
                 <app.michaelwuensch.bitbanana.customView.NumpadView
                     android:id="@+id/numpadView"
@@ -259,17 +236,17 @@
                     android:layout_marginEnd="25dp"
                     android:layout_marginBottom="15dp"
                     android:visibility="gone"
-                    tools:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendMemoTopLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/sendMemo"
+                    tools:visibility="visible" />
 
                 <Button
                     android:id="@+id/sendButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/bg_clickable_item"

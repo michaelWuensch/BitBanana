@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -59,9 +59,8 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private View mWithdrawInputs;
     private EditText mEtAmount;
-    private EditText mEtDescription;
+    private ExpandableTextView mExtvDescription;
     private TextView mTvUnit;
-    private View mDescriptionView;
     private NumpadView mNumpad;
     private Button mBtnWithdraw;
     private TextView mTvWithdrawSource;
@@ -118,8 +117,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         mWithdrawInputs = view.findViewById(R.id.withdrawInputsView);
         mEtAmount = view.findViewById(R.id.withdrawAmount);
         mTvUnit = view.findViewById(R.id.unit);
-        mEtDescription = view.findViewById(R.id.withdrawDescription);
-        mDescriptionView = view.findViewById(R.id.withdrawDescriptionTopLayout);
+        mExtvDescription = view.findViewById(R.id.withdrawDescription);
         mTvWithdrawSource = view.findViewById(R.id.withdrawSource);
 
         mNumpad = view.findViewById(R.id.numpadView);
@@ -198,13 +196,6 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 if (mBlockOnInputChanged)
                     return;
 
-                if (arg0.length() == 0) {
-                    // No entered text so will show hint
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                } else {
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-                }
-
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
                 if (mAmountValid) {
@@ -219,11 +210,11 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
             mTvWithdrawSource.setText(R.string.unknown);
         }
 
-        if (mWithdrawData.getDefaultDescription() == null) {
-            mDescriptionView.setVisibility(View.GONE);
+        if (mWithdrawData.getDefaultDescription() == null || mWithdrawData.getDefaultDescription().isEmpty()) {
+            mExtvDescription.setVisibility(View.GONE);
         } else {
-            mDescriptionView.setVisibility(View.VISIBLE);
-            mEtDescription.setText(mWithdrawData.getDefaultDescription());
+            mExtvDescription.setVisibility(View.VISIBLE);
+            mExtvDescription.setContent(R.string.description, mWithdrawData.getDefaultDescription());
         }
 
         if (mWithdrawData.getMinWithdrawable() == mWithdrawData.getMaxWithdrawable()) {

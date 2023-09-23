@@ -43,6 +43,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
@@ -64,9 +65,8 @@ public class SendBSDFragment extends BaseBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private ConstraintLayout mInputLayout;
     private EditText mEtAmount;
-    private EditText mEtMemo;
+    private ExpandableTextView mExtvMemo;
     private TextView mTvUnit;
-    private View mMemoView;
     private OnChainFeeView mOnChainFeeView;
     private LightningFeeView mLightningFeeView;
     private NumpadView mNumpad;
@@ -165,8 +165,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         mInputLayout = view.findViewById(R.id.inputLayout);
         mEtAmount = view.findViewById(R.id.sendAmount);
         mTvUnit = view.findViewById(R.id.sendUnit);
-        mEtMemo = view.findViewById(R.id.sendMemo);
-        mMemoView = view.findViewById(R.id.sendMemoTopLayout);
+        mExtvMemo = view.findViewById(R.id.sendMemo);
         mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
         mLightningFeeView = view.findViewById(R.id.sendFeeLightningLayout);
         mNumpad = view.findViewById(R.id.numpadView);
@@ -279,10 +278,10 @@ public class SendBSDFragment extends BaseBSDFragment {
             mBSDScrollableMainView.setTitle(R.string.send_onChainPayment);
 
             if (mMemo == null) {
-                mMemoView.setVisibility(View.GONE);
+                mExtvMemo.setVisibility(View.GONE);
             } else {
-                mMemoView.setVisibility(View.VISIBLE);
-                mEtMemo.setText(mMemo);
+                mExtvMemo.setVisibility(View.VISIBLE);
+                mExtvMemo.setContent(R.string.memo, mMemo);
             }
 
             if (mFixedAmount != 0L) {
@@ -372,10 +371,10 @@ public class SendBSDFragment extends BaseBSDFragment {
             }
 
             if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
-                mMemoView.setVisibility(View.GONE);
+                mExtvMemo.setVisibility(View.GONE);
             } else {
-                mMemoView.setVisibility(View.VISIBLE);
-                mEtMemo.setText(mLnPaymentRequest.getDescription());
+                mExtvMemo.setVisibility(View.VISIBLE);
+                mExtvMemo.setContent(R.string.memo, mLnPaymentRequest.getDescription());
             }
 
             if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
