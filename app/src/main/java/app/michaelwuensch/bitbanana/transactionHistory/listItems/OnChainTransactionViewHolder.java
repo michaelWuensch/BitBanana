@@ -78,7 +78,6 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         } else {
             // It is a normal transaction
             setIcon(TransactionIcon.ONCHAIN);
-            setAmount(amount, true);
             setSecondaryDescription("", false);
 
             switch (amount.compareTo(0L)) {
@@ -89,11 +88,13 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     break;
                 case 1:
                     // amount > 0 (received on-chain)
+                    setAmount(amount, true);
                     setFeeSat(fee, false);
                     setPrimaryDescription(mContext.getString(R.string.received));
                     break;
                 case -1:
                     // amount < 0 (sent on-chain)
+                    setAmount(amount + fee, true);
                     setFeeSat(fee, true);
                     setPrimaryDescription(mContext.getString(R.string.sent));
                     break;
