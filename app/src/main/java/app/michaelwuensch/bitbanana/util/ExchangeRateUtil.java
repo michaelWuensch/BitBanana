@@ -164,7 +164,7 @@ public class ExchangeRateUtil {
             try {
                 JSONObject ReceivedCurrency = response.getJSONObject(fiatCode);
                 JSONObject currentCurrency = new JSONObject();
-                currentCurrency.put(RATE, ReceivedCurrency.getDouble("15m") / 1e11);
+                currentCurrency.put(RATE, ReceivedCurrency.getDouble("15m") * BBCurrency.RATE_BTC);
                 currentCurrency.put(SYMBOL, ReceivedCurrency.getString("symbol"));
                 currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                 formattedRates.put(fiatCode, currentCurrency);
@@ -210,7 +210,7 @@ public class ExchangeRateUtil {
 
                 try {
                     JSONObject currentCurrency = new JSONObject();
-                    currentCurrency.put(RATE, responseRates.getDouble(rateCode) / 1e11);
+                    currentCurrency.put(RATE, responseRates.getDouble(rateCode) * BBCurrency.RATE_BTC);
                     currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                     formattedRates.put(rateCode, currentCurrency);
                 } catch (JSONException e) {
@@ -269,7 +269,6 @@ public class ExchangeRateUtil {
         editor.commit();
         setDefaultCurrency();
         broadcastExchangeRateUpdate();
-        BBLog.v(LOG_TAG, "Exchange rate is: " + MonetaryUtil.getInstance().getSecondCurrency().getRate() * 1E8);
     }
 
     private void setDefaultCurrency() {
@@ -292,6 +291,8 @@ public class ExchangeRateUtil {
     }
 
     private boolean isCurrencyAvailable(String currency) {
+        if (BBCurrency.isBitcoinCurrencyCode(currency))
+            return true;
         try {
             JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, PrefsUtil.DEFAULT_FIAT_CURRENCIES));
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");

@@ -66,9 +66,11 @@ public class LandingActivity extends BaseAppCompatActivity {
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
                 if (ver < 22) {
                     migrateLanguageSetting();
+                    migrateCurrencySettings();
                     enterWallet();
                 } else {
-                    resetApp();
+                    migrateCurrencySettings();
+                    enterWallet();
                 }
             } else {
                 enterWallet();
@@ -140,6 +142,50 @@ public class LandingActivity extends BaseAppCompatActivity {
         } else {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(currentPrefsValue));
         }
+    }
+
+    private void migrateCurrencySettings() {
+        String oldFirstCurrencyCode = PrefsUtil.getPrefs().getString(PrefsUtil.FIRST_CURRENCY, "");
+        String oldSecondCurrencyCode = PrefsUtil.getPrefs().getString(PrefsUtil.SECOND_CURRENCY, "");
+
+        String newFirstCurrencyCode;
+        switch (oldFirstCurrencyCode) {
+            case "BTC":
+                newFirstCurrencyCode = "ccBTC";
+                break;
+            case "mBTC":
+                newFirstCurrencyCode = "ccMBTC";
+                break;
+            case "bit":
+                newFirstCurrencyCode = "ccBIT";
+                break;
+            default:
+                newFirstCurrencyCode = "ccSAT";
+        }
+
+        String newSecondCurrencyCode;
+        switch (oldSecondCurrencyCode) {
+            case "BTC":
+                newSecondCurrencyCode = "ccBTC";
+                break;
+            case "mBTC":
+                newSecondCurrencyCode = "ccMBTC";
+                break;
+            case "bit":
+                newSecondCurrencyCode = "ccBIT";
+                break;
+            case "sat":
+                newSecondCurrencyCode = "ccSAT";
+                break;
+            default:
+                newSecondCurrencyCode = oldSecondCurrencyCode;
+        }
+
+        PrefsUtil.editPrefs()
+                .putString(PrefsUtil.FIRST_CURRENCY, newFirstCurrencyCode)
+                .putString(PrefsUtil.SECOND_CURRENCY, newSecondCurrencyCode)
+                .remove(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)
+                .commit();
     }
 
     private void updateLanguageSetting() {

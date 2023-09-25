@@ -17,8 +17,9 @@ public class RefConstants {
     20: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
     21: Rebranding to BitBanana (0.6.0
     22: Changed language selection (0.6.6)
+    23: Changed currency codes (0.6.7)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 22;
+    public static final int CURRENT_SETTINGS_VERSION = 23;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 

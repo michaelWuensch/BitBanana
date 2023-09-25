@@ -206,7 +206,7 @@ public class BBCurrency {
 
             // If we have a fraction, then always show all fraction digits for bits and sats
             if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))) {
-                if (getCode().equals(CURRENCY_CODE_BIT) || getCode().equals(CURRENCY_CODE_SATOSHI)) {
+                if (getCode().equals(CURRENCY_CODE_BIT)) {
                     df.setMinimumFractionDigits(getMaxFractionsDigits());
                 }
             }
@@ -310,5 +310,9 @@ public class BBCurrency {
 
     public boolean isBitcoin() {
         return mIsBitcoin;
+    }
+
+    public static boolean isBitcoinCurrencyCode(String currencyCode) {
+        return (currencyCode.equals(CURRENCY_CODE_BTC) || currencyCode.equals(CURRENCY_CODE_MBTC) || currencyCode.equals(CURRENCY_CODE_BIT) || currencyCode.equals(CURRENCY_CODE_SATOSHI));
     }
 }
