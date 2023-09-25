@@ -694,4 +694,5 @@
 \nMantenha este campo vazio se não deseja mudar o valor atualmente definido.</string>
     <string name="submit_routing_policy">Atualizar Política de Roteamento</string>
     <string name="settings_featureContacts_summary">Faça o envio de dinheiro ser uma moleza com uma lista de contatos bem organizada.</string>
+    <string name="error_no_permission_to_read_file">Acesso Negado: incapaz de ler o arquivo. Recomendamos movê-lo para uma localização diferente, como a pasta \"Downloads\", e acessá-lo por lá.</string>
 </resources>
