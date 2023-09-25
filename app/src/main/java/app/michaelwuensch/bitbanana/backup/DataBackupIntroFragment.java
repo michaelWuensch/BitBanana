@@ -89,6 +89,10 @@ public class DataBackupIntroFragment extends Fragment {
                         e.printStackTrace();
                         Toast.makeText(getContext(), R.string.backup_data_open_backupfile_error, Toast.LENGTH_LONG).show();
                         getActivity().finish();
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), R.string.error_no_permission_to_read_file, Toast.LENGTH_LONG).show();
+                        getActivity().finish();
                     }
                 }
             });

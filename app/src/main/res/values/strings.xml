@@ -372,6 +372,7 @@
     <string name="error_invalid_ln_address_format">Invalid format for Lightning Address. A Lightning Address looks like an email address.\n\nusername@domain</string>
     <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Routing Policies updated but for %1$d of your channels the new rules could not be applied.</string>
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Fee rate to high. A maximum of %1$.2f%% is allowed.</string>
+    <string name="error_no_permission_to_read_file">Access Denied: Unable to read the file. We recommend moving it to a different location, such as the \"Downloads\" folder, and accessing it from there.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
