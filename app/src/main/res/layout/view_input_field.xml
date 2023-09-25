@@ -31,7 +31,7 @@
             android:textSize="12sp"
             tools:ignore="HardcodedText" />
 
-        <Space
+        <android.widget.Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />

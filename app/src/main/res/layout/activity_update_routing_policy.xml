@@ -72,7 +72,7 @@
                 app:inputLabelDetails="(sats)"
                 app:showHelpButton="true" />
 
-            <Space
+            <android.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
