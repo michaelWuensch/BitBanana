@@ -640,14 +640,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                     new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
                                         @Override
                                         public void onGuardianConfirmed() {
-                                            String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
+                                            String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
                                             String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
                                             SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
                                             sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                                         }
                                     }).securityZeroAmountInvoice();
                                 } else {
-                                    String amountString = MonetaryUtil.getInstance().convertSatoshiToBitcoin(String.valueOf(amount));
+                                    String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
                                     String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
                                     SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
                                     sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
