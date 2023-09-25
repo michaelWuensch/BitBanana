@@ -50,7 +50,7 @@
     <string name="none">Kein Limit</string>
     <string name="install">Installieren</string>
     <string name="continue_string">Weiter</string>
-    <string name="withdraw">Abhebung</string>
+    <string name="withdraw">Abheben</string>
     <string name="unknown">Unbekannt</string>
     <string name="scan">Scannen</string>
     <string name="settings">Einstellungen</string>
@@ -411,7 +411,9 @@
     <string name="advanced_channel_details_time_lock">Blockierungsdauer</string>
     <string name="advanced_channel_details_explanation_time_lock">Im Falle einer unkooperativen Kanalschließung (force close), sagt die Blockierungsdauer, wie viele Blöcke du warten musst, bevor du wieder auf dein Kanalguthaben zugreifen kannst.</string>
     <string name="advanced_channel_details_local_routing_fee">Weiterleitungsvergütung</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr (in msat) und der Gebührenrate zusammen.\nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr und der Gebührenrate zusammen.
+\nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.
+\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
     <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Die Gebühren, die dein Kanalpartner erhält, wenn er eine Transaktion weiterleitet. Diese Gebühr fällt nur bei Transaktionsweiterleitungen an. Du musst nichts bezahlen, wenn du diesen Kanal für deine ausgehenden Transaktionen verwendest.</string>
     <string name="advanced_channel_details_local_channel_reserve">Rücklage (du)</string>
@@ -567,4 +569,46 @@
     <string name="drawer_menu_nodes">Knoten</string>
     <string name="settings_features">Funktionen</string>
     <string name="percent">Prozent</string>
+    <string name="settings_featureCoinControl_summary">Erweiterte Verwaltung von On-Chain-Vorgängen. Bietet eine Liste aller UTXOs und ermöglicht die Auswahl bestimmter UTXOs beim Senden. Die UTXO-Auswahl erfolgt automatisch, wenn dieses feature deaktiviert ist.</string>
+    <string name="settings_featureHelpButtons_summary">Die praktischen \? Knöpfe in der gesamten App helfen neuen Benutzern mit detaillierten Erklärungen.</string>
+    <string name="htlc_max">Max HTLC</string>
+    <string name="peer">Peer</string>
+    <string name="fee_base">Grundgebühr</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">Der höchste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="settings_featureRoutingSummary_summary">Ermöglicht den Zugriff auf alle Routing-Ereignisse zusammen mit einer Routing-Zusammenfassung.</string>
+    <string name="activity_routing_policy">Routing-Richtlinien</string>
+    <string name="settings_featureSignVerify_summary">Ermöglicht das Signieren und Überprüfen von Nachrichten mit deinem Knoten.</string>
+    <string name="explanation_channel_commitment_type">Jede Partei hat eine Commitment-Transaktion, die nur sie an die Blockchain senden kann, um ihren Anteil an Bitcoins einzufordern. Verschiedene Arten von Commitment-Transaktionen führen zu Kanälen mit unterschiedlichen Eigenschaften.</string>
+    <string name="settings_featureCoinControl">Coin Control</string>
+    <string name="routing_policy_applies_for_all_channels">Achtung! Wenn du diese Einstellungen abschickst, werden sie auf alle deine Kanäle angewendet!</string>
+    <string name="help_dialog_base_fee">Unabhängig vom Wert der Transaktion erhältst du für jede Transaktion, die du über den Kanal weiterleitest, eine bestimmte Grundgebühr. Die von dir erhaltene Gesamtgebühr ist die Summe aus dieser Grundgebühr und dem Gebührensatz.</string>
+    <string name="routing_policy_update_success">Routing-Richtlinie erfolgreich aktualisiert.</string>
+    <string name="settings_featureRoutingSummary">Routing-Zusammenfassung</string>
+    <string name="channel_commitment_type">Commitment-Typ</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Die Routing-Richtlinien wurden aktualisiert, aber für %1$d deiner Kanäle konnten die neuen Regeln nicht angewendet werden.</string>
+    <string name="help_dialog_fee_rate">Der Gebührensatz ist eine Gebühr, die sich nach dem Wert der Transaktion richtet, die du über den Kanal weiterleitest. Die von dir insgesamt erhaltene Gebühr ist die Summe aus diesem Gebührensatz und der Grundgebühr.</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">Der niedrigste Wert, den dein Peer bereit ist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">Der höchste Wert, den dein Peer bereit ist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="htlc_min">Min HTLC</string>
+    <string name="help_dialog_minHTLC">Der niedrigste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.
+\n
+\nLass dieses Feld leer, wenn du den aktuell eingestellten Wert nicht ändern willst.</string>
+    <string name="fee_rate">Gebührensatz</string>
+    <string name="error_no_permission_to_read_file">Zugriff verweigert: Die Datei kann nicht gelesen werden. Wir empfehlen, die Datei an einen anderen Ort zu verschieben, z. B. in den Ordner \"Downloads\", und von dort aus auf sie zuzugreifen.</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">Der niedrigste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="you">Du</string>
+    <string name="help_dialog_settings_features">BitBananas Anspruch, auch Experten zu bedienen, bedeutet, dass wir eine Vielzahl von Funktionen anbieten. Wir sind uns jedoch bewusst, dass nicht jeder all diese Funktionen benötigt. Mit unseren anpassbaren Einstellungen hast du die Flexibilität, alle Funktionen auszublenden, die für deine Bedürfnisse nicht relevant sind, um eine maßgeschneidertes und einfache Bedienung zu gewährleisten.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Gebührensatz zu hoch. Erlaubt sind maximal %1$.2f%%.</string>
+    <string name="explanation_timelock_delta">In einer Zahlungsroute legt jeder Zwischenschritt ein bestimmtes Zeitfenster (in Blöcken) fest, innerhalb dessen er die Transaktion erfolgreich abwickeln muss. Andernfalls gilt die Transaktion als gescheitert, weil sie abgelaufen ist. Im Falle von Zahlungsfehlern oder unkooperativem Verhalten ist dieses Zeitfenster von entscheidender Bedeutung, da es den Teilnehmern dieses Schrittes die Möglichkeit gibt, die erforderlichen Maßnahmen zu ergreifen, z. B. die Transaktion kooperativ rückgängig zu machen (Rückabwicklung des HTLC) oder sie unkooperativ auf der Blockchain abzuwickeln.
+\n
+\nEin höherer Wert erhöht in diesem Zusammenhang die Widerstandsfähigkeit des Kanals gegenüber vorübergehenden Knotenausfällen. Er könnte jedoch die Attraktivität des Kanals für die Weiterleitung verringern, da es im schlimmsten Fall zu längeren Verzögerungen bei den Zahlungen kommen kann. In den seltenen Fällen, in denen Zahlungen stecken bleiben, werden außerdem die Mittel der Kanalteilnehmer, die für dieses Weiterleitungsereignis vorgesehen sind, für die Dauer dieses Zeitfensters blockiert.
+\n
+\n144 Blöcke entsprechen etwa einem Tag.</string>
+    <string name="settings_features_summary">Passe die App an deine Bedürfnisse an, indem du Funktionen ein- oder ausschältst.</string>
+    <string name="timelock_delta">Timelock Delta</string>
+    <string name="help_dialog_maxHTLC">Der höchste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.
+\n
+\nLass dieses Feld leer, wenn du den aktuell eingestellten Wert nicht ändern willst.</string>
+    <string name="submit_routing_policy">Routing-Richtlinie aktualisieren</string>
+    <string name="settings_featureContacts_summary">Mit einer übersichtlichen Kontaktliste wird das Versenden von Geld zum Kinderspiel.</string>
 </resources>
