@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndInvoicesService implements LndInvoicesService {
 
-    private final InvoicesGrpc.InvoicesStub asyncStub;
+    private InvoicesGrpc.InvoicesStub asyncStub;
 
     public RemoteLndInvoicesService(Channel channel, CallCredentials callCredentials) {
         asyncStub = InvoicesGrpc.newStub(channel).withCallCredentials(callCredentials);

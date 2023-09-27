@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndStateService implements LndStateService {
 
-    private final StateGrpc.StateStub asyncStub;
+    private StateGrpc.StateStub asyncStub;
 
     public RemoteLndStateService(Channel channel, CallCredentials callCredentials) {
         asyncStub = StateGrpc.newStub(channel).withCallCredentials(callCredentials);

@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndRouterService implements LndRouterService {
 
-    private final RouterGrpc.RouterStub asyncStub;
+    private RouterGrpc.RouterStub asyncStub;
 
     public RemoteLndRouterService(Channel channel, CallCredentials callCredentials) {
         asyncStub = RouterGrpc.newStub(channel).withCallCredentials(callCredentials);

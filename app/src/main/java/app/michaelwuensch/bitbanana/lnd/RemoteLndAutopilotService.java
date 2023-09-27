@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndAutopilotService implements LndAutopilotService {
 
-    private final AutopilotGrpc.AutopilotStub asyncStub;
+    private AutopilotGrpc.AutopilotStub asyncStub;
 
     public RemoteLndAutopilotService(Channel channel, CallCredentials callCredentials) {
         asyncStub = AutopilotGrpc.newStub(channel).withCallCredentials(callCredentials);

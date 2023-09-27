@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndPeersService implements LndPeersService {
 
-    private final PeersGrpc.PeersStub asyncStub;
+    private PeersGrpc.PeersStub asyncStub;
 
     public RemoteLndPeersService(Channel channel, CallCredentials callCredentials) {
         asyncStub = PeersGrpc.newStub(channel).withCallCredentials(callCredentials);

@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndVersionerService implements LndVersionerService {
 
-    private final VersionerGrpc.VersionerStub asyncStub;
+    private VersionerGrpc.VersionerStub asyncStub;
 
     public RemoteLndVersionerService(Channel channel, CallCredentials callCredentials) {
         asyncStub = VersionerGrpc.newStub(channel).withCallCredentials(callCredentials);

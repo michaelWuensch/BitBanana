@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndLightningService implements LndLightningService {
 
-    private final LightningGrpc.LightningStub asyncStub;
+    private LightningGrpc.LightningStub asyncStub;
 
     public RemoteLndLightningService(Channel channel, CallCredentials callCredentials) {
         asyncStub = LightningGrpc.newStub(channel).withCallCredentials(callCredentials);

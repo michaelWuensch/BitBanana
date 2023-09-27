@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndChainKitService implements LndChainKitService {
 
-    private final ChainKitGrpc.ChainKitStub asyncStub;
+    private ChainKitGrpc.ChainKitStub asyncStub;
 
     public RemoteLndChainKitService(Channel channel, CallCredentials callCredentials) {
         asyncStub = ChainKitGrpc.newStub(channel).withCallCredentials(callCredentials);

@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RemoteLndWalletKitService implements LndWalletKitService {
 
-    private final WalletKitGrpc.WalletKitStub asyncStub;
+    private WalletKitGrpc.WalletKitStub asyncStub;
 
     public RemoteLndWalletKitService(Channel channel, CallCredentials callCredentials) {
         asyncStub = WalletKitGrpc.newStub(channel).withCallCredentials(callCredentials);
