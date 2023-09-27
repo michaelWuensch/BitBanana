@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">ANNULLA</string>
     <string name="share">Condividi</string>
@@ -280,7 +280,24 @@
     <string name="help_dialog_scanNodePublicKey">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanContact">QR-Codes contenenti quanto segue sono validi:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:\n\n- Stringa di connessioneLND (lndconnect://...)\n- Connessione al server BtcPay (config=...)\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
-    <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ \n+ commissioni basse\\n- non sempre possibile\n\nPerfetto per piccole transazioni.\nUtilizzare quando possibile.\n\n\nOn-Chain:\n\n+ sempre possibile\n- lento\n- commissioni alte\n\nBuono per grandi transazioni.\nUsalo quando Lightning non è possibile.</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:
+\n
+\n+ immediato
+\n+ commissioni basse
+\n- non sempre possibile
+\n
+\nPerfetto per piccole transazioni.
+\nUtilizzare quando possibile.
+\n
+\n
+\nOn-Chain:
+\n
+\n+ sempre possibile
+\n- lento
+\n- commissioni alte
+\n
+\nBuono per grandi transazioni.
+\nUsalo quando Lightning non è possibile.</string>
     <string name="help_dialog_scanGeneric">Tutto è permesso qui.\nBasta scansionare un QR-Code e BitBanana determinerà automaticamente quale azione intraprendere in base ai dati.</string>
     <string name="help_dialog_identity">Questaè la tua identità sulla rete lightning.\n\nQuando tocchi l\' immagine del tuo avatar, rivelerai un QR-Code.\nAltri possono scansionare quel codice e aggiungerti ai loro contatti, aprire canali con il tuo o inviarti denaro.\n\nQuesto avatar è unico.\n È stato generato automaticamente in base alla tua chiave pubblica e non può essere modificato.</string>
     <string name="delete">Elimina</string>

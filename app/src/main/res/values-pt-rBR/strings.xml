@@ -390,7 +390,7 @@
     <string name="contact_type_ln_node">Nó Lightning</string>
     <string name="ln_address">Endereço Lightning</string>
     <string name="advanced_channel_details_close_initiator">Fechar Iniciador</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">As taxas que você receberá ao encaminhar uma transação neste canal. A taxa total que você receberá é a soma da taxa base (em msat) e a quantia da taxa.
+    <string name="advanced_channel_details_explanation_local_routing_fee">As taxas que você receberá ao encaminhar uma transação neste canal. A taxa total que você receberá é a soma da taxa base e a quantia da taxa.
 \nA taxa base é o que você recebe para cada encaminhamento, não importa qual seja a quantia da transação.
 \nA quantia recebida pela taxa depende da quantia da transação.</string>
     <string name="forwarding_no_forwarding_events">Sem eventos de encaminhamento no período selecionado</string>
@@ -651,4 +651,48 @@
     <string name="ok">OK</string>
     <string name="signature_pubkey">Pubkey:</string>
     <string name="pubkey">Pubkey</string>
+    <string name="settings_featureCoinControl_summary">Gerenciamento avançado de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos. A seleção de moeda é automatizada se estiver desativada.</string>
+    <string name="settings_featureHelpButtons_summary">Os úteis botões \? ao redor do app ajudam novos usuários com explicações detalhadas.</string>
+    <string name="htlc_max">Máx. HTLC</string>
+    <string name="peer">Par</string>
+    <string name="fee_base">Taxa Base</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">O valor máximo que você está disposto a encaminhar neste canal em uma única transação.</string>
+    <string name="settings_featureRoutingSummary_summary">Provê acesso a todos os eventos de roteamento junto com um resumo de roteamento.</string>
+    <string name="activity_routing_policy">Política de Roteamento</string>
+    <string name="settings_featureSignVerify_summary">Permite assinar e verificar mensagens com seu nó.</string>
+    <string name="explanation_channel_commitment_type">Cada parceiro tem uma transação de compromisso que apenas ele pode enviar à blockchain para obter sua cota de bitcoins. Diferentes tipos de transações de compromisso resultam em canais tendo diferentes propriedades.</string>
+    <string name="settings_featureCoinControl">Controle de Moeda</string>
+    <string name="routing_policy_applies_for_all_channels">Atenção! Se enviados, estes ajustes serão aplicados a todos os seus canais!</string>
+    <string name="help_dialog_base_fee">Independentemente do valor da transação, você receberá uma taxa base para cada transação que você encaminhar pelo canal. Sua taxa total é a soma desta taxa base e a taxa de cobrança.</string>
+    <string name="routing_policy_update_success">Política de roteamento atualizada com sucesso.</string>
+    <string name="settings_featureRoutingSummary">Resumo de Roteamento</string>
+    <string name="channel_commitment_type">Tipo de Compromisso</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Políticas de Roteamento atualizadas, mas para %1$d de seus canais as novas regras não puderam ser atualizadas.</string>
+    <string name="help_dialog_fee_rate">A taxa de cobrança é uma taxa que escala conforme o valor da transação que você encaminhar pelo canal. Sua taxa total é a soma desta taxa de cobrança e a taxa base.</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">O menor valor que seu par está disposto a encaminhar neste canal em uma única transação.</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">O maior valor que seu par está disposto a encaminhar neste canal em uma única transação.</string>
+    <string name="htlc_min">Mín. HTLC</string>
+    <string name="help_dialog_minHTLC">O menor valor que você está disposto a encaminhar neste canal em uma única transação.
+\n
+\nMantenha este campo vazio se não deseja mudar o valor atualmente definido.</string>
+    <string name="fee_rate">Taxa de Cobrança</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">O menor valor que você está disposto a encaminhar neste canal em uma única transação.</string>
+    <string name="settings_features">Funções</string>
+    <string name="percent">Porcentagem</string>
+    <string name="you">Você</string>
+    <string name="help_dialog_settings_features">O compromisso do BitBanana com também servir a experts significa oferecer um rico conjunto de funções. Porém, reconhecemos que nem todos podem necessitar de todas estas funcionalidades. Com os ajustes personalizáveis, você tem a flexibilidade para esconder quaisquer funções que não sejam relevantes para as suas necessidades, garantindo uma experiência adaptada.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Taxa de cobrança muito alta. O máximo permitido é %1$.2f%%.</string>
+    <string name="explanation_timelock_delta">Em uma rota de pagamento, cada passo intermediário define uma janela de tempo específica (em blocos) dentro da qual irá processar a transação com sucesso. Senão, será considerada como falha por ter expirado. Em caso de falhas de pagamento ou comportamento não cooperativo, esta janela de tempo é crucial, pois permite que participantes naquela etapa consigam tomar as ações necessárias, como reverter cooperativamente a transação (rebobinando o HTLC) ou resolvendo de forma não cooperativa na blockchain.
+\n
+\nUm valor maior neste contexto aumenta a resiliência do canal contra falhas de nó temporárias. Porém, pode potencialmente reduzir a atratividade do canal para roteamento pois, no pior cenário, pagamentos podem ter demoras prolongadas. Além disso, em casos raros de pagamentos presos, os fundos dos participantes do canal alocados para aquele evento de encaminhamento serão travados durante a duração desta janela de tempo.
+\n
+\n144 blocos é cerca de um dia.</string>
+    <string name="settings_features_summary">Personalize o app para as suas necessidades ao ativar ou desativar as funções.</string>
+    <string name="timelock_delta">Diferença de Bloqueio Temporal</string>
+    <string name="help_dialog_maxHTLC">O valor máximo que você está disposto a encaminhar neste canal em uma única transação.
+\n
+\nMantenha este campo vazio se não deseja mudar o valor atualmente definido.</string>
+    <string name="submit_routing_policy">Atualizar Política de Roteamento</string>
+    <string name="settings_featureContacts_summary">Faça o envio de dinheiro ser uma moleza com uma lista de contatos bem organizada.</string>
+    <string name="error_no_permission_to_read_file">Acesso Negado: incapaz de ler o arquivo. Recomendamos movê-lo para uma localização diferente, como a pasta \"Downloads\", e acessá-lo por lá.</string>
 </resources>

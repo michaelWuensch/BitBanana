@@ -50,7 +50,7 @@
     <string name="none">Kein Limit</string>
     <string name="install">Installieren</string>
     <string name="continue_string">Weiter</string>
-    <string name="withdraw">Abhebung</string>
+    <string name="withdraw">Abheben</string>
     <string name="unknown">Unbekannt</string>
     <string name="scan">Scannen</string>
     <string name="settings">Einstellungen</string>
@@ -399,7 +399,7 @@
     <string name="contact_name">Name des Kontakts</string>
     <string name="contact_already_exists">Diese Kontakt existiert bereits!</string>
     <string name="no_contacts">Keine Kontakte</string>
-    <string name="manual_send_input_hint">Addresse oder Zahlungsdaten</string>
+    <string name="manual_send_input_hint">Adresse oder Zahlungsdaten</string>
     <string name="advanced_channel_details_explanation_capacity">Das gesamte Guthaben in diesem Kanal. Durch manche Einschränkungen (wie z.B. Schließungsgebühr oder Rücklage) kannst du nicht alles ausgeben.</string>
     <string name="advanced_channel_details_activity">Aktivität</string>
     <string name="advanced_channel_details_explanation_activity">Die Gesamtsumme aus gesendeten und erhaltenen Beträgen im Verhältnis zur Kapazität des Kanals. Eine Aktivität von über 100\% bedeutet, dass mehr Guthaben durch den Kanal geflossen ist, als er halten kann. Dieser Messwert ist dafür gemacht, die Effektivität eines Kanals zu bewerten.</string>
@@ -411,8 +411,10 @@
     <string name="advanced_channel_details_time_lock">Blockierungsdauer</string>
     <string name="advanced_channel_details_explanation_time_lock">Im Falle einer unkooperativen Kanalschließung (force close), sagt die Blockierungsdauer, wie viele Blöcke du warten musst, bevor du wieder auf dein Kanalguthaben zugreifen kannst.</string>
     <string name="advanced_channel_details_local_routing_fee">Weiterleitungsvergütung</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr (in msat) und der Gebührenrate zusammen.\nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr (Partner)</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr und der Gebührenrate zusammen.
+\nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.
+\nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
+    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Die Gebühren, die dein Kanalpartner erhält, wenn er eine Transaktion weiterleitet. Diese Gebühr fällt nur bei Transaktionsweiterleitungen an. Du musst nichts bezahlen, wenn du diesen Kanal für deine ausgehenden Transaktionen verwendest.</string>
     <string name="advanced_channel_details_local_channel_reserve">Rücklage (du)</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Der minimale Betrag, den du im Guthaben des Kanals zurücklegen musst. Du kannst diesen Betrag nicht ausgeben. Das stellt sicher, dass du immer etwas zu verlieren hast, falls du versuchen würdest, deinen Kanalpartner zu betrügen.</string>
@@ -522,9 +524,9 @@
     <string name="advanced_channel_details_explanation_lifetime_closed">Hier wird angezeigt, wie lange dieser Kanal aktiv war.</string>
     <string name="advanced_channel_details_explanation_close_initiator">Wer hat den Kanal geschlossen\?</string>
     <string name="advanced_channel_details_close_initiator">Initiator der Schließung</string>
-    <string name="advanced_channel_details_lifetime_closed">Lebenslang</string>
+    <string name="advanced_channel_details_lifetime_closed">Lebensdauer</string>
     <string name="channel_close_type_coop">Kooperativ</string>
-    <string name="channel_close_type_force_close">Schließen erzwingen</string>
+    <string name="channel_close_type_force_close">Zwangsschließung</string>
     <string name="advanced_channel_details_explanation_close_type">Kanäle können auf unterschiedliche Weise geschlossen werden. Der optimale Weg ist eine kooperative Schließung. Wenn eine Partei beschließt, den Kanal ohne die Mitarbeit der anderen Partei zu schließen, kommt es zu einer sogenannten „Zwangsschließung“. Eine Zwangsschließung führt in der Regel zu höheren Gebühren, und der Initiator der Schließung muss einige Zeit warten, bis er auf sein Geld zugreifen kann. Wenn eine Partei versucht zu betrügen und dabei erwischt wird, kommt es zu einer Vertragsbruchschließung.</string>
     <string name="channel_close_type_breach">Vertragsbruch</string>
     <string name="lnurl_payer_data_name">Name</string>
@@ -535,15 +537,15 @@
     <string name="lnurl_payer_data_description">Informationen für den Zahlungsempfänger</string>
     <string name="help_dialog_payer_data_payment">Dieser Zahlungsempfänger unterstützt oder verlangt sogar, dass du ihm zusätzliche Informationen über dich selbst übermittelst.
 \n
-\nDie Entscheidung, ob du echte oder gefälschte Daten verwendest, liegt bei dir. Als Faustregel raten wir, nur dann echte Daten zu übermitteln, wenn dies aus irgendeinem Grund notwendig ist. (z. B. wenn du einen Code per Email erhalten sollst, usw.)
+\nDie Entscheidung, ob du echte oder erfundene Daten verwendest, liegt bei dir. Als Faustregel raten wir, nur dann echte Daten zu übermitteln, wenn dies aus irgendeinem Grund notwendig ist. (z. B. wenn du einen Code per Email erhalten sollst, usw.)
 \n
 \nWenn ein Häkchen nicht entfernt werden kann, sind diese Daten vom Empfänger als obligatorisch gekennzeichnet. Willst du diese Daten nicht übermitteln, musst du die Zahlung abbrechen.</string>
     <string name="settings_payer_data">Identifizierung von Zahlungen</string>
-    <string name="help_dialog_payer_data_settings">Einige Zahlungsempfänger unterstützen oder verlangen sogar, dass du ihnen zusätzliche Informationen über dich selbst übermittelst. Der Einfachheit halber kannst du hier Standardwerte einstellen, so dass du diese Informationen nicht jedes Mal eingeben musst. Diese Daten werden nur lokal auf dem Telefon gespeichert.
+    <string name="help_dialog_payer_data_settings">Einige Zahlungsempfänger unterstützen oder verlangen sogar, dass du ihnen zusätzliche Informationen über dich selbst übermittelst. Der Einfachheit halber kannst du hier Standardwerte einstellen, sodass du diese Informationen nicht jedes Mal eingeben musst. Diese Daten werden nur lokal auf dem Telefon gespeichert.
 \n
 \nBitte beachte, dass du die Daten trotz Standardwerten bei jeder Zahlung noch ändern kannst. Du kannst auch immer wählen, welche Daten überhaupt gesendet werden sollen.
 \n
-\nEs liegt in deiner Verantwortung zu entscheiden, ob du echte oder gefälschte Daten verwenden möchtest. Als Faustregel raten wir, nur dann echte Daten zu senden, wenn dies aus irgendeinem Grund notwendig ist. (z.B. wenn du einen Code per Email erhalten sollst, usw.)</string>
+\nEs liegt in deiner Verantwortung zu entscheiden, ob du echte oder erfundene Daten verwenden möchtest. Als Faustregel raten wir, nur dann echte Daten zu senden, wenn dies aus irgendeinem Grund notwendig ist. (z.B. wenn du einen Code per Email erhalten sollst, usw.)</string>
     <string name="lnurl_payer_data_identifier_explanation">Eine Lightning-Adresse ist wie eine E-Mail-Adresse, aber für Bitcoin!</string>
     <string name="support_donate">Spenden</string>
     <string name="support_donate_description">Unterstütze die Entwickler.</string>
@@ -565,4 +567,48 @@
 \n- LNURL-Channel</string>
     <string name="description">Beschreibung</string>
     <string name="drawer_menu_nodes">Knoten</string>
+    <string name="settings_features">Funktionen</string>
+    <string name="percent">Prozent</string>
+    <string name="settings_featureCoinControl_summary">Erweiterte Verwaltung von On-Chain-Vorgängen. Bietet eine Liste aller UTXOs und ermöglicht die Auswahl bestimmter UTXOs beim Senden. Die UTXO-Auswahl erfolgt automatisch, wenn dieses feature deaktiviert ist.</string>
+    <string name="settings_featureHelpButtons_summary">Die praktischen \? Knöpfe in der gesamten App helfen neuen Benutzern mit detaillierten Erklärungen.</string>
+    <string name="htlc_max">Max HTLC</string>
+    <string name="peer">Peer</string>
+    <string name="fee_base">Grundgebühr</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">Der höchste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="settings_featureRoutingSummary_summary">Ermöglicht den Zugriff auf alle Routing-Ereignisse zusammen mit einer Routing-Zusammenfassung.</string>
+    <string name="activity_routing_policy">Routing-Richtlinien</string>
+    <string name="settings_featureSignVerify_summary">Ermöglicht das Signieren und Überprüfen von Nachrichten mit deinem Knoten.</string>
+    <string name="explanation_channel_commitment_type">Jede Partei hat eine Commitment-Transaktion, die nur sie an die Blockchain senden kann, um ihren Anteil an Bitcoins einzufordern. Verschiedene Arten von Commitment-Transaktionen führen zu Kanälen mit unterschiedlichen Eigenschaften.</string>
+    <string name="settings_featureCoinControl">Coin Control</string>
+    <string name="routing_policy_applies_for_all_channels">Achtung! Wenn du diese Einstellungen abschickst, werden sie auf alle deine Kanäle angewendet!</string>
+    <string name="help_dialog_base_fee">Unabhängig vom Wert der Transaktion erhältst du für jede Transaktion, die du über den Kanal weiterleitest, eine bestimmte Grundgebühr. Die von dir erhaltene Gesamtgebühr ist die Summe aus dieser Grundgebühr und dem Gebührensatz.</string>
+    <string name="routing_policy_update_success">Routing-Richtlinie erfolgreich aktualisiert.</string>
+    <string name="settings_featureRoutingSummary">Routing-Zusammenfassung</string>
+    <string name="channel_commitment_type">Commitment-Typ</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Die Routing-Richtlinien wurden aktualisiert, aber für %1$d deiner Kanäle konnten die neuen Regeln nicht angewendet werden.</string>
+    <string name="help_dialog_fee_rate">Der Gebührensatz ist eine Gebühr, die sich nach dem Wert der Transaktion richtet, die du über den Kanal weiterleitest. Die von dir insgesamt erhaltene Gebühr ist die Summe aus diesem Gebührensatz und der Grundgebühr.</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">Der niedrigste Wert, den dein Peer bereit ist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">Der höchste Wert, den dein Peer bereit ist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="htlc_min">Min HTLC</string>
+    <string name="help_dialog_minHTLC">Der niedrigste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.
+\n
+\nLass dieses Feld leer, wenn du den aktuell eingestellten Wert nicht ändern willst.</string>
+    <string name="fee_rate">Gebührensatz</string>
+    <string name="error_no_permission_to_read_file">Zugriff verweigert: Die Datei kann nicht gelesen werden. Wir empfehlen, die Datei an einen anderen Ort zu verschieben, z. B. in den Ordner \"Downloads\", und von dort aus auf sie zuzugreifen.</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">Der niedrigste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.</string>
+    <string name="you">Du</string>
+    <string name="help_dialog_settings_features">BitBananas Anspruch, auch Experten zu bedienen, bedeutet, dass wir eine Vielzahl von Funktionen anbieten. Wir sind uns jedoch bewusst, dass nicht jeder all diese Funktionen benötigt. Mit unseren anpassbaren Einstellungen hast du die Flexibilität, alle Funktionen auszublenden, die für deine Bedürfnisse nicht relevant sind, um eine maßgeschneidertes und einfache Bedienung zu gewährleisten.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Gebührensatz zu hoch. Erlaubt sind maximal %1$.2f%%.</string>
+    <string name="explanation_timelock_delta">In einer Zahlungsroute legt jeder Zwischenschritt ein bestimmtes Zeitfenster (in Blöcken) fest, innerhalb dessen er die Transaktion erfolgreich abwickeln muss. Andernfalls gilt die Transaktion als gescheitert, weil sie abgelaufen ist. Im Falle von Zahlungsfehlern oder unkooperativem Verhalten ist dieses Zeitfenster von entscheidender Bedeutung, da es den Teilnehmern dieses Schrittes die Möglichkeit gibt, die erforderlichen Maßnahmen zu ergreifen, z. B. die Transaktion kooperativ rückgängig zu machen (Rückabwicklung des HTLC) oder sie unkooperativ auf der Blockchain abzuwickeln.
+\n
+\nEin höherer Wert erhöht in diesem Zusammenhang die Widerstandsfähigkeit des Kanals gegenüber vorübergehenden Knotenausfällen. Er könnte jedoch die Attraktivität des Kanals für die Weiterleitung verringern, da es im schlimmsten Fall zu längeren Verzögerungen bei den Zahlungen kommen kann. In den seltenen Fällen, in denen Zahlungen stecken bleiben, werden außerdem die Mittel der Kanalteilnehmer, die für dieses Weiterleitungsereignis vorgesehen sind, für die Dauer dieses Zeitfensters blockiert.
+\n
+\n144 Blöcke entsprechen etwa einem Tag.</string>
+    <string name="settings_features_summary">Passe die App an deine Bedürfnisse an, indem du Funktionen ein- oder ausschältst.</string>
+    <string name="timelock_delta">Timelock Delta</string>
+    <string name="help_dialog_maxHTLC">Der höchste Wert, den du bereit bist, auf diesem Kanal in einer einzigen Transaktion weiterzuleiten.
+\n
+\nLass dieses Feld leer, wenn du den aktuell eingestellten Wert nicht ändern willst.</string>
+    <string name="submit_routing_policy">Routing-Richtlinie aktualisieren</string>
+    <string name="settings_featureContacts_summary">Mit einer übersichtlichen Kontaktliste wird das Versenden von Geld zum Kinderspiel.</string>
 </resources>
