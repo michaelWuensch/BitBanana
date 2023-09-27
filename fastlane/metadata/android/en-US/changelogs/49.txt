@@ -1,0 +1,8 @@
+- Added channel fee management
+- Reworked and improved channel details
+- Improved UI simplicity with customizable feature toggles accessible via the "Advanced Settings"
+- Receive addresses are now Taproot by default
+- Switch currencies on all amount views
+- Numerous subtle UX enhancements
+- Translation updates
+- Bug fixes
