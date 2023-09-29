@@ -53,23 +53,22 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             Button buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
             EditText pw1 = backupView.findViewById(R.id.pw1_input);
             EditText pw2 = backupView.findViewById(R.id.pw2_input);
+            TextView pw2Title = backupView.findViewById(R.id.pw2_title);
+            pw2Title.setVisibility(View.GONE);
+            pw2.setVisibility(View.GONE);
 
             pw1.requestFocus();
 
             buttonCreate.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    if (pw1.getText().toString().equals(pw2.getText().toString())) {
-                        if (pw1.getText().toString().length() > 7) {
-                            String password = pw1.getText().toString();
-                            pw1.setText("");
-                            pw2.setText("");
-                            mBackupAction.onRestoreBackupPasswordEntered(password);
-                        } else {
-                            Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
-                        }
+                    if (pw1.getText().toString().length() > 7) {
+                        String password = pw1.getText().toString();
+                        pw1.setText("");
+                        pw2.setText("");
+                        mBackupAction.onRestoreBackupPasswordEntered(password);
                     } else {
-                        Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_mismatch), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
