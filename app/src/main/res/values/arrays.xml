@@ -19,6 +19,18 @@
         <item>(sat) Satoshis</item>
     </string-array>
 
+    <string-array name="hideBalanceType">
+        <item>off</item>
+        <item>total</item>
+        <item>all</item>
+    </string-array>
+
+    <string-array name="hideBalanceTypeDisplayValues">
+        <item>@string/off</item>
+        <item>@string/settings_hideBalanceType_total</item>
+        <item>@string/settings_hideBalanceType_all</item>
+    </string-array>
+
     <string-array name="addressType">
         <item>p2psh</item>
         <item>bech32</item>

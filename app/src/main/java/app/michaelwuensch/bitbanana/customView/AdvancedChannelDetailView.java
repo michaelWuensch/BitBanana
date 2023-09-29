@@ -128,6 +128,10 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
         mLine.setVisibility(isVisible ? VISIBLE : INVISIBLE);
     }
 
+    public void setCanBlur(boolean canBlur) {
+        mDetailAmountValue.setCanBlur(canBlur);
+    }
+
     /**
      * Show or hide expanded content
      */

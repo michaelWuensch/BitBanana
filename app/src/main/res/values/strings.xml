@@ -81,7 +81,6 @@
     <string name="channel_event">Channel Event</string>
     <string name="scan_qr_code">Scan QR-Code</string>
     <string name="node">Node</string>
-    <string name="funds_available">Available: %s</string>
     <string name="amount_invalid">The amount is invalid.</string>
     <string name="success">Success</string>
     <string name="suggested_peers">Suggested Peers</string>
@@ -110,6 +109,9 @@
     <string name="percent">Percent</string>
     <string name="you">You</string>
     <string name="peer">Peer</string>
+    <string name="off">Off</string>
+    <string name="available">Available</string>
+    <string name="note">Note</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -258,8 +260,8 @@
     <string name="settings_manageChannels">Manage Lightning Channels</string>
     <string name="settings_scramblePin">Scramble PIN Screen</string>
     <string name="settings_preventScreenRecording">Prevent Screen Recording</string>
-    <string name="settings_hideTotalBalance">Hide total balance</string>
-    <string name="settings_hideTotalBalance_explanation">When activated, tap the BitBanana logo on the home screen to reveal your balance.</string>
+    <string name="settings_hideTotalBalance_explanation">The total balance is hidden now. Tap the BitBanana logo on the home screen to reveal it.</string>
+    <string name="settings_hideAllBalances_explanation">All balances are blurred now, and the total balance is hidden behind the BitBanana logo. Simply tap any blurred field or the BitBanana logo to temporarily reveal your balance.</string>
     <string name="settings_resetSecurityWarnings">Reset Security Warnings</string>
     <string name="settings_help">Need Help?</string>
     <string name="settings_reportIssue">Report an Issue</string>
@@ -267,6 +269,9 @@
     <string name="settings_advanced_settings">Advanced Settings</string>
     <string name="settings_restartRequired">BitBanana will be restarted to make this change. Do you want to continue?</string>
     <string name="settings_enableBiometrics">Enable biometric authentication</string>
+    <string name="settings_hideBalance">Hide balance</string>
+    <string name="settings_hideBalanceType_total">Only total balance</string>
+    <string name="settings_hideBalanceType_all">All balances</string>
 
     <string name="settings_changePin">Change/Remove PIN</string>
     <string name="settings_addPin">Protect with PIN</string>
@@ -432,7 +437,6 @@
 
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>
-    <string name="app_reset_title">Please note</string>
     <string name="app_reset_message">The app has been reset as the last update included some structural changes.\nUnfortunately you will have to go through the setup process again.</string>
 
     <string name="nfc_type_not_supported">Unsupported NFC type</string>

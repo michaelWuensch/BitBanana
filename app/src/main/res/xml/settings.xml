@@ -63,10 +63,14 @@
             android:title="@string/settings_addPin"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="hideTotalBalance"
-            android:title="@string/settings_hideTotalBalance"
+        <ListPreference
+            android:defaultValue="off"
+            android:dialogTitle="@string/settings_hideBalance"
+            android:entries="@array/hideBalanceTypeDisplayValues"
+            android:entryValues="@array/hideBalanceType"
+            android:key="hideBalanceType"
+            android:summary="%s"
+            android:title="@string/settings_hideBalance"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference

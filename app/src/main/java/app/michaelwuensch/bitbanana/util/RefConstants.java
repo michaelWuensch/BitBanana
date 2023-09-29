@@ -18,8 +18,9 @@ public class RefConstants {
     21: Rebranding to BitBanana (0.6.0
     22: Changed language selection (0.6.6)
     23: Changed currency codes (0.6.7)
+    24: Changed balanceHide options (0.6.8)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 23;
+    public static final int CURRENT_SETTINGS_VERSION = 24;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 

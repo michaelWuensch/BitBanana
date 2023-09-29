@@ -82,6 +82,7 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
             setAmount(amount, visible, true);
         } else {
             mAmount.setUndefinedValue();
+            mAmount.setTextColor(ContextCompat.getColor(mContext, R.color.gray));
         }
     }
 

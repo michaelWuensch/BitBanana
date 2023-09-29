@@ -49,6 +49,7 @@
             android:maxLength="50"
             android:textAlignment="textEnd"
             android:textSize="20sp"
+            app:canBlur="false"
             app:switchesValueOnClick="false"
             app:textSize="20sp" />
 
