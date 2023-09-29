@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">Гаразд</string>
     <string name="cancel">Скасувати</string>
@@ -41,7 +41,6 @@
     <string name="channel_event">Подія каналу</string>
     <string name="scan_qr_code">Сканувати QR код</string>
     <string name="node">Вузел</string>
-    <string name="funds_available">Доступно: %s</string>
     <string name="amount_invalid">Неправильна кількість.</string>
     <string name="success">Успішно</string>
     <string name="suggested_peers">Рекомендовані вузли кешування</string>
@@ -143,7 +142,6 @@
     <string name="settings_manageChannels">Керувати Lightning каналами</string>
     <string name="settings_scramblePin">Екран PIN-коду</string>
     <string name="settings_preventScreenRecording">Запобігання запису на екрані</string>
-    <string name="settings_hideTotalBalance">Приховати загальний баланс</string>
     <string name="settings_hideTotalBalance_explanation">Після активації натисніть логотип BitBanana на головному екрані, щоб виявити баланс.</string>
     <string name="settings_resetSecurityWarnings">Скиньте попередження щодо безпеки</string>
     <string name="settings_help">Потрібна допомога?</string>
@@ -252,7 +250,6 @@
     <string name="biometricNotSetup">Щоб скористатися цією функцією, вам потрібно встановити біометричну автентифікацію в налаштуваннях системи Android.</string>
     <string name="invoice_detail">Деталі фактури</string>
     <string name="transaction_detail">Деталі транзакції</string>
-    <string name="app_reset_title">Майте на увазі</string>
     <string name="app_reset_message">Додаток було скинуто, оскільки останнє оновлення включало деякі структурні зміни.\nНа жаль, вам доведеться повторно пройти процес налаштування.</string>
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">ОК</string>
     <string name="cancel">ОТМЕНА</string>
@@ -40,7 +40,6 @@
     <string name="channel_event">Событие Канала</string>
     <string name="scan_qr_code">Отсканировать QR код</string>
     <string name="node">Нода</string>
-    <string name="funds_available">Доступно: %s</string>
     <string name="amount_invalid">Неправильное количество.</string>
     <string name="success">Успешно</string>
     <string name="suggested_peers">Рекомендовані вузли кешування</string>

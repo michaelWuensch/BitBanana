@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Annuleer</string>
     <string name="share">Deel</string>
@@ -35,7 +35,6 @@
     <string name="channel">Kanaal</string>
     <string name="event">Gebeurtenis</string>
     <string name="channel_event">Kanaalgebeurtenis</string>
-    <string name="funds_available">Beschikbaar: %s</string>
     <string name="amount_invalid">Het bedrag is ongeldig.</string>
     <string name="success">Gelukt</string>
     <string name="suggested_peers">Voorgestelde Peers</string>
@@ -155,7 +154,6 @@
     <string name="settings_manageChannels">Lightningkanalen beheren</string>
     <string name="settings_scramblePin">PIN-scherm husselen</string>
     <string name="settings_preventScreenRecording">Schermopnames voorkomen</string>
-    <string name="settings_hideTotalBalance">Totale saldo verbergen</string>
     <string name="settings_hideTotalBalance_explanation">Wanneer geactivateerd, tik op het BitBanana logo op het thuisscherm om je totale saldo te onthullen.</string>
     <string name="settings_resetSecurityWarnings">Beveiligingswaarschuwing resetten</string>
     <string name="settings_help">Hulp nodig?</string>
@@ -275,7 +273,6 @@
     <string name="biometricNotSetup">Om deze functie te kunnen gebruiken, moet je biometrische authenticatie hebben ingesteld in je Android-systeeminstellingen.</string>
     <string name="invoice_detail">Betalingsverzoek Detail</string>
     <string name="transaction_detail">Detail Transactie</string>
-    <string name="app_reset_title">Houd rekening met</string>
     <string name="app_reset_message">De app is gereset omdat er in de laatste update enkele structurele veranderingen zaten.\nHelaas zal je het instellingsproces opnieuw moeten doorlopen.</string>
     <string name="nfc_type_not_supported">Niet ondersteund NFC-type</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes die het volgende bevatten zijn geldig:\n\n- Bitcoinadres\n- Bitcoin Betalingsverzoek\n- Lightning Betalingsverzoek</string>

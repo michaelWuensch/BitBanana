@@ -41,7 +41,6 @@
     <string name="channel_event">Evento do canal</string>
     <string name="scan_qr_code">Ler código QR</string>
     <string name="node">Nó</string>
-    <string name="funds_available">Disponível: %s</string>
     <string name="amount_invalid">O valor é inválido.</string>
     <string name="success">Sucesso</string>
     <string name="suggested_peers">Pares sugeridos</string>
@@ -147,7 +146,6 @@
     <string name="settings_manageChannels">Gerenciar canais Lightning</string>
     <string name="settings_scramblePin">Misturar números do PIN</string>
     <string name="settings_preventScreenRecording">Impedir gravação de tela</string>
-    <string name="settings_hideTotalBalance">Ocultar saldo total</string>
     <string name="settings_help">Precisa de Ajuda\?</string>
     <string name="settings_reportIssue">Informar um problema</string>
     <string name="settings_about">Sobre BitBanana</string>
@@ -507,7 +505,6 @@
     <string name="signature_valid">Assinatura é válida!</string>
     <string name="support_privacy_description">Nós nos importamos com sua privacidade.</string>
     <string name="advanced_channel_details_local_channel_reserve">Reserva do Canal Local</string>
-    <string name="app_reset_title">Por favor note</string>
     <string name="node_added">Dados de conexão de nó foram adicionados.</string>
     <string name="error_connect_peer_timeout">Não foi possível conectar ao par dentro do prazo.</string>
     <plurals name="duration_hour">

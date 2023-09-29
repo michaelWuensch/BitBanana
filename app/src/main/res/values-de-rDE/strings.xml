@@ -43,7 +43,6 @@
     <string name="channel_event">Kanalereignis</string>
     <string name="scan_qr_code">QR-Code scannen</string>
     <string name="node">Knoten</string>
-    <string name="funds_available">Verfügbar: %s</string>
     <string name="amount_invalid">Der Betrag ist ungültig.</string>
     <string name="success">Erfolg</string>
     <string name="suggested_peers">Vorgeschlagene Peers</string>
@@ -183,7 +182,6 @@
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
-    <string name="settings_hideTotalBalance">Gesamtguthaben verstecken</string>
     <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das BitBanana Logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
     <string name="settings_help">Du brauchst Hilfe?</string>
@@ -318,7 +316,6 @@
     <string name="biometricNotSetup">Um dieses Feature zu nutzen, musst du erst die biometrische Authentifizierung in den Android Einstellungen einrichten.</string>
     <string name="invoice_detail">Rechnungsdetails</string>
     <string name="transaction_detail">Transaktionsdetails</string>
-    <string name="app_reset_title">Hinweis</string>
     <string name="app_reset_message">Die App wurde zurückgesetzt, da die letzte Aktualisierung strukturelle Änderungen vorgenommen hat.
 \nLeider musst du deshalb den Einrichtungsprozess erneut durchlaufen.</string>
     <string name="nfc_type_not_supported">Dieser NFC Typ wird nicht unterstützt</string>

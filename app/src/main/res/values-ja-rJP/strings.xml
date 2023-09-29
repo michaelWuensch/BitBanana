@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">キャンセル</string>
     <string name="onChain">オンチェーン</string>
@@ -161,7 +161,6 @@
     <string name="settings_manageChannels">Lightningチャネル管理</string>
     <string name="settings_scramblePin">スクランブルPIN画面</string>
     <string name="settings_preventScreenRecording">画面記録防止</string>
-    <string name="settings_hideTotalBalance">トータル残高非表示</string>
     <string name="settings_hideTotalBalance_explanation">有効の場合、ホーム画面のBitBananaロゴをタップすると残高を表示します。</string>
     <string name="settings_resetSecurityWarnings">セキュリティ警告をリセット</string>
     <string name="settings_help">ヘルプが必要ですか？</string>
@@ -239,7 +238,6 @@
     <string name="biometricNotSetup">この機能を使用するには、Androidのシステム設定で生体認証の設定する必要があります。</string>
     <string name="invoice_detail">インボイス詳細</string>
     <string name="transaction_detail">トランザクション詳細</string>
-    <string name="app_reset_title">注意</string>
     <string name="app_reset_message">アップデートに構造変更が含まれていたため設定がリセットされました。\n再度設定する必要があります。</string>
     <string name="nfc_type_not_supported">サポートされていないNFC Type</string>
     <string name="help_dialog_scanPaymentRequest">次のデータが含まれるQRコードが有効：\n\n- Bitcoinアドレス\n- Bitcoin支払リクエスト\n- Lightning支払リクエスト</string>

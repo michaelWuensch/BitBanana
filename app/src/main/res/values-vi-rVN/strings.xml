@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">Ok</string>
     <string name="cancel">Hủy</string>
@@ -41,7 +41,6 @@
     <string name="channel_event">Sự kiện kênh</string>
     <string name="scan_qr_code">Quét mã QR</string>
     <string name="node">Nốt mạng</string>
-    <string name="funds_available">Sẵn sàng: %s</string>
     <string name="amount_invalid">Số lượng không sẵn có.</string>
     <string name="success">Thành công</string>
     <string name="suggested_peers">Các kết nối đã yêu cầu</string>

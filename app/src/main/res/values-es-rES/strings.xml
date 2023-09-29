@@ -40,7 +40,6 @@
     <string name="channel_event">Evento de canal</string>
     <string name="scan_qr_code">Escanear código QR</string>
     <string name="node">Nodo</string>
-    <string name="funds_available">Disponible: %s</string>
     <string name="amount_invalid">La cantidad no es válida.</string>
     <string name="success">Éxito</string>
     <string name="suggested_peers">Nodos Sugeridos</string>
@@ -135,7 +134,6 @@
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
     <string name="settings_scramblePin">Mezclar Pantalla de PIN</string>
     <string name="settings_preventScreenRecording">Prevenir la Grabación de la Pantalla</string>
-    <string name="settings_hideTotalBalance">Esconder el balance total</string>
     <string name="settings_hideTotalBalance_explanation">Cuando activado, un toque al logo de BitBanana revelará su balance.</string>
     <string name="settings_resetSecurityWarnings">Restablecer las Advertencias de Seguridad</string>
     <string name="settings_help">Necesita Ayuda?</string>
@@ -225,7 +223,6 @@
     <string name="biometricNotSetup">Para poder acceder a esta función debes configurar la autenticación biométrica en la configuración de su sistema Android.</string>
     <string name="invoice_detail">Detalle de factura</string>
     <string name="transaction_detail">Detalles de la Transacción</string>
-    <string name="app_reset_title">Tenga en cuenta</string>
     <string name="app_reset_message">La aplicación se ha restablecido ya que la última actualización incluyó algunos cambios estructurales.\nDesafortunadamente tendrá que realizar el proceso de configuración inicial nuevamente.</string>
     <string name="settings_featureCoinControl_summary">Gestión avanzada de los fondos en la cadena. Proporciona una lista de todos los UTXOs y permite seleccionar los específicos al enviar los fondos. La selección de las monedas se automatiza si se desactiva.</string>
     <string name="channel_visibility_public">público</string>

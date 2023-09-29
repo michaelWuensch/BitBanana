@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="yesterday">I går</string>
     <string name="fee">Gebyr</string>
@@ -38,7 +38,6 @@
     <string name="no">Nei</string>
     <string name="received">Mottatt</string>
     <string name="channel">Kanal</string>
-    <string name="funds_available">Tilgjengelig: %s</string>
     <string name="date">Dato</string>
     <string name="install">Installer</string>
     <string name="onChain">I blokk-kjeden</string>
