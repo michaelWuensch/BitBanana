@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.BlurMaskFilter;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -27,6 +29,11 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     private boolean mIsUndefinedValue = false;
     private long mValue = 0;
     private Context mContext;
+    private boolean mIsTemporaryRevealed;
+    private CountDownTimer mCountDownTimer;
+    private boolean mCanBlur;
+    private boolean mIsBlurred = false;
+    private String mAmountText;
 
 
     public AmountView(Context context) {
@@ -62,6 +69,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             mStyleBasedOnValue = a.getBoolean(R.styleable.AmountView_styleBasedOnValue, false);
             mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
             boolean attrShowLabel = a.getBoolean(R.styleable.AmountView_showLabel, false);
+            mCanBlur = a.getBoolean(R.styleable.AmountView_canBlur, true);
             int attrTextSize = a.getDimensionPixelSize(R.styleable.AmountView_textSize, 0);
             ColorStateList attrTextColor = a.getColorStateList(R.styleable.AmountView_textColor);
 
@@ -75,11 +83,33 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             // Don't forget to recycle the TypedArray
             a.recycle();
         }
-        if (mSwitchesValueOnClick) {
+
+        if (mSwitchesValueOnClick || isBlurActivated()) {
             mTvAmount.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MonetaryUtil.getInstance().switchCurrencies();
+                    if (mCountDownTimer != null) {
+                        mCountDownTimer.cancel();
+                        mCountDownTimer.start();
+                    }
+                    if (!mIsTemporaryRevealed && isBlurActivated() && mCanBlur) {
+                        removeBlur(true);
+                        mCountDownTimer = new CountDownTimer(3000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                applyBlur();
+                                mCountDownTimer = null;
+                            }
+                        }.start();
+                    } else {
+                        if (mSwitchesValueOnClick) {
+                            MonetaryUtil.getInstance().switchCurrencies();
+                        }
+                    }
                 }
             });
         }
@@ -89,12 +119,21 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key != null) {
             if (key.equals("firstCurrencyIsPrimary")) {
-                if (mIsUndefinedValue)
+                if (mIsUndefinedValue) {
+                    setUndefinedValue();
                     return;
-                if (mIsMsatAmount)
+                }
+                if (mIsMsatAmount) {
                     setAmountMsat(mValue);
-                else
+                } else {
                     setAmountSat(mValue);
+                }
+            }
+            if (key.equals(PrefsUtil.BALANCE_HIDE_TYPE)) {
+                if (isBlurActivated())
+                    applyBlur();
+                else
+                    removeBlur(false);
             }
         }
     }
@@ -104,10 +143,13 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mIsMsatAmount = false;
         mIsUndefinedValue = false;
         if (mIsWithoutUnit)
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(value));
+            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(value);
         else
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(value));
+            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(value);
+        updateAmountText();
         styleBasedOnValue(value);
+        if (!mIsTemporaryRevealed)
+            applyBlur();
     }
 
     public void setAmountMsat(long value) {
@@ -115,10 +157,13 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mIsMsatAmount = true;
         mIsUndefinedValue = false;
         if (mIsWithoutUnit)
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(value));
+            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(value);
         else
-            mTvAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(value));
+            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(value);
+        updateAmountText();
         styleBasedOnValue(value);
+        if (!mIsTemporaryRevealed)
+            applyBlur();
     }
 
     private void styleBasedOnValue(long value) {
@@ -132,15 +177,16 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
                     break;
                 case 1:
                     // amount > 0
-                    mTvAmount.setText("+ " + mTvAmount.getText().toString());
+                    mAmountText = ("+ " + mAmountText);
                     setTextColor(ContextCompat.getColor(mContext, R.color.green));
                     break;
                 case -1:
                     // amount < 0
-                    mTvAmount.setText(mTvAmount.getText().toString().replace("-", "- "));
+                    mAmountText = (mAmountText.replace("-", "- "));
                     setTextColor(ContextCompat.getColor(mContext, R.color.red));
                     break;
             }
+            updateAmountText();
         }
     }
 
@@ -166,11 +212,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
 
     public void setUndefinedValue() {
         mIsUndefinedValue = true;
-        mTvAmount.setText("+ ? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-    }
-
-    public void setIsMsatAmount(boolean isMsatAmount) {
-        mIsMsatAmount = isMsatAmount;
+        mTvAmount.setText("? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
     }
 
     public void overrideWithText(String text) {
@@ -181,5 +223,43 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     public void overrideWithText(int text) {
         mTvAmount.setText(getResources().getText(text));
         mIsUndefinedValue = true;
+    }
+
+    public void setCanBlur(boolean canBlur) {
+        mCanBlur = canBlur;
+    }
+
+    private void applyBlur() {
+        if (mCanBlur && isBlurActivated() && !mIsUndefinedValue) {
+            if (!mIsBlurred) {
+                float radius = mTvAmount.getTextSize() / 2;
+                BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+                mTvAmount.getPaint().setMaskFilter(filter);
+                mIsTemporaryRevealed = false;
+                mIsBlurred = true;
+                updateAmountText();
+            }
+        }
+    }
+
+    private void removeBlur(boolean temporary) {
+        if (mIsBlurred) {
+            mTvAmount.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            mTvAmount.getPaint().setMaskFilter(null);
+            mIsTemporaryRevealed = temporary;
+            mIsBlurred = false;
+            updateAmountText();
+        }
+    }
+
+    private void updateAmountText() {
+        if (mIsBlurred)
+            mTvAmount.setText(" " + mAmountText + " "); //hacky fix to prevent ugly clipping
+        else
+            mTvAmount.setText(mAmountText);
+    }
+
+    private boolean isBlurActivated() {
+        return PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("all");
     }
 }

@@ -67,9 +67,14 @@ public class LandingActivity extends BaseAppCompatActivity {
                 if (ver < 22) {
                     migrateLanguageSetting();
                     migrateCurrencySettings();
+                    migrateHideBalanceOptions();
+                    enterWallet();
+                } else if (ver < 23) {
+                    migrateCurrencySettings();
+                    migrateHideBalanceOptions();
                     enterWallet();
                 } else {
-                    migrateCurrencySettings();
+                    migrateHideBalanceOptions();
                     enterWallet();
                 }
             } else {
@@ -92,7 +97,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             }
 
             new AlertDialog.Builder(LandingActivity.this)
-                    .setTitle(R.string.app_reset_title)
+                    .setTitle(R.string.note)
                     .setMessage(R.string.app_reset_message)
                     .setCancelable(true)
                     .setOnCancelListener(dialogInterface -> enterWallet())
@@ -186,6 +191,11 @@ public class LandingActivity extends BaseAppCompatActivity {
                 .putString(PrefsUtil.SECOND_CURRENCY, newSecondCurrencyCode)
                 .remove(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)
                 .commit();
+    }
+
+    private void migrateHideBalanceOptions() {
+        if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false))
+            PrefsUtil.editPrefs().putString(PrefsUtil.BALANCE_HIDE_TYPE, "total").commit();
     }
 
     private void updateLanguageSetting() {

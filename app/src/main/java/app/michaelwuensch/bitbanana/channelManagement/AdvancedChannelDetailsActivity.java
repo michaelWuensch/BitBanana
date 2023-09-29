@@ -214,6 +214,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // commit fee
+        mDetailCommitFee.setCanBlur(false);
         mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
         mDetailCommitFee.setVisibility(View.VISIBLE);
 

@@ -204,7 +204,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
+                if (PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
                     MonetaryUtil.getInstance().switchCurrencies();
                 } else {
                     mBalanceFadeOutAnimation.reset();
@@ -387,11 +387,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             if (key.equals("firstCurrencyIsPrimary")) {
                 updateTotalBalanceDisplay();
             }
-            if (key.equals("hideTotalBalance")) {
-                if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
-                    hideBalance();
-                } else {
+            if (key.equals(PrefsUtil.BALANCE_HIDE_TYPE)) {
+                if (PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
                     showBalance();
+                } else {
+                    hideBalance();
                 }
             }
             if (key.equals(PrefsUtil.CURRENT_NODE_CONFIG)) {

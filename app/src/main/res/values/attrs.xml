@@ -5,6 +5,7 @@
         <attr name="styleBasedOnValue" format="boolean" />
         <attr name="isWithoutUnit" format="boolean" />
         <attr name="showLabel" format="boolean" />
+        <attr name="canBlur" format="boolean" />
         <attr name="setLabelText" format="string" />
         <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />

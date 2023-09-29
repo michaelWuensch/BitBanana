@@ -254,8 +254,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     private void setAvailableFunds() {
         long available = Wallet.getInstance().getBalances().onChainConfirmed();
-        String availableFundsOnChain = MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(available);
-        mTvOnChainFunds.overrideWithText(getString(R.string.funds_available, availableFundsOnChain));
+        mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
+        mTvOnChainFunds.setLabelVisibility(true);
+        mTvOnChainFunds.setAmountSat(available);
     }
 
     private void showError(String message, int duration) {

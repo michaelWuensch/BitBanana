@@ -43,6 +43,7 @@ public class PrefsUtil {
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
     public static final String ROUTING_SUMMARY_VOLUME = "routingSummaryMode";
+    public static final String BALANCE_HIDE_TYPE = "hideBalanceType";
 
     // node config preferences references
     public static final String NODE_CONFIGS = "wallet_configs";

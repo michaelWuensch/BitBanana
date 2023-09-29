@@ -45,7 +45,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
-    private SwitchPreference mSwHideTotalBalance;
     private SwitchPreference mSwTor;
     private ListPreference mListCurrency;
     private Preference mPinPref;
@@ -199,16 +198,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-
-        // On hide balance option
-        mSwHideTotalBalance = findPreference("hideTotalBalance");
-        mSwHideTotalBalance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        // On hide balance option changed
+        ListPreference listPrefHideBalance = findPreference("hideBalanceType");
+        listPrefHideBalance.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!mSwHideTotalBalance.isChecked()) {
+                if (newValue.toString().equals("total")) {
                     new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.settings_hideTotalBalance)
+                            .setTitle(R.string.note)
                             .setMessage(R.string.settings_hideTotalBalance_explanation)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }).show();
+                    return true;
+                } else if (newValue.toString().equals("all")) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.note)
+                            .setMessage(R.string.settings_hideAllBalances_explanation)
                             .setCancelable(true)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
