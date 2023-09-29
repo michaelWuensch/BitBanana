@@ -314,4 +314,35 @@
     <string name="settings_showHelpButtons">Mostrar los botones de la información</string>
     <string name="settings_featureContacts_summary">Envía dinero fácilmente con una lista de contactos perfectamente organizada.</string>
     <string name="contribute">Contribuir</string>
+    <string name="settings_lnPrivateChannelHints">Incluir sugerencias para la ruta para los canales privados en las facturas</string>
+    <string name="settings_featureSignVerify_summary">Permite firmar y verificar los mensajes con tu nodo.</string>
+    <string name="settings_receiveAddressDisplayValues_0">Compatibilidad con SegWit (P2PSH)</string>
+    <string name="settings_exchangeRateProvider">Proveedor del cambio</string>
+    <string name="error_connection_network_unreachable">No se puede acceder al host.
+\n
+\nPor favor, asegúrate de que dispones de conexión a Internet.</string>
+    <string name="settings_receiveAddressDisplayValues_1">SegWit nativo (Bech32)</string>
+    <string name="error_connection_no_internet">¡No hay conexión a Internet!</string>
+    <string name="settings_onChainFeePresets">Ajustes preestablecidos para las tarifas en cadena</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">El host (%1$s) no puede resolverse. Actualiza la configuración de la conexión de tu nodo si ahora se puede acceder a él con una dirección o un nombre para el host diferentes.</string>
+    <string name="error_connection_tor_unreachable">La conexión Tor ha fallado.
+\n Por favor, activa Tor en los ajustes de la conexión de los nodos.</string>
+    <string name="settings_slowFee">Transacción lenta</string>
+    <string name="error_useRegtestRequest">Estás conectado a la red REGTEST. Utiliza las direcciones REGTEST o las solicitudes de pago.</string>
+    <string name="error">Fallo</string>
+    <string name="settings_fastFee">Transacción rápida</string>
+    <string name="settings_mediumFee">Transacción media</string>
+    <string name="error_connection_host_verification_failed">Error al verificar el nombre del host.
+\n
+\nEl nombre del host de tu conexión no coincide con el nombre del host proporcionado en el certificado.
+\n
+\n Tienes que desactivar la verificación de los certificados en la configuración de la conexión de los nodos o tienes que volver a crear tu certificado. Asegúrate de que el nombre del host se añade a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
+    <string name="error_connection_unknown">La conexión ha fallado.</string>
+    <string name="error_connection_lnd_unavailable">No se puede conectar a LND.
+\n
+\n- Asegúrate de que daemon LND se está ejecutando en tu servidor.
+\n
+\n- Asegúrate de que el reenvío de puertos está activo. (Puerto: %1$s)</string>
+    <string name="error_zeroAmountPaymentRequest">Esto es un pago con importe cero. BitBanana no admite pagos con importe cero por motivos de seguridad.</string>
 </resources>
