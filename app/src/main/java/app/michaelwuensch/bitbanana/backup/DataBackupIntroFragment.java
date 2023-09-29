@@ -22,9 +22,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
@@ -87,12 +89,10 @@ public class DataBackupIntroFragment extends Fragment {
                         ((BackupActivity) getActivity()).changeFragment(DataBackupRestoreFragment.newInstance(encryptedBackupBytes, validFile, backupVersion));
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), R.string.backup_data_open_backupfile_error, Toast.LENGTH_LONG).show();
-                        getActivity().finish();
+                        ((BaseAppCompatActivity) getActivity()).showError(getResources().getString(R.string.backup_data_open_backupfile_error), RefConstants.ERROR_DURATION_MEDIUM);
                     } catch (RuntimeException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), R.string.error_no_permission_to_read_file, Toast.LENGTH_LONG).show();
-                        getActivity().finish();
+                        ((BaseAppCompatActivity) getActivity()).showError(getResources().getString(R.string.error_no_permission_to_read_file), RefConstants.ERROR_DURATION_LONG);
                     }
                 }
             });
