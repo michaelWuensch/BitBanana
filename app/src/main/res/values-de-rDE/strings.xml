@@ -608,4 +608,7 @@
 \nLass dieses Feld leer, wenn du den aktuell eingestellten Wert nicht ändern willst.</string>
     <string name="submit_routing_policy">Routing-Richtlinie aktualisieren</string>
     <string name="settings_featureContacts_summary">Mit einer übersichtlichen Kontaktliste wird das Versenden von Geld zum Kinderspiel.</string>
+    <string name="off">Aus</string>
+    <string name="available">Verfügbar</string>
+    <string name="note">Hinweis</string>
 </resources>
