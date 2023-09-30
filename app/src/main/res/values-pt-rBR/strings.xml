@@ -585,7 +585,7 @@
     <string name="maximum_abbreviation">máx.</string>
     <string name="send">Enviar</string>
     <string name="send_SendOnChainInstead">Enviar On-Chain</string>
-    <string name="settings_hideTotalBalance_explanation">Quando ativo, toque a logo do BitBanana na tela inicial para revelar seu balanço.</string>
+    <string name="settings_hideTotalBalance_explanation">O balanço total está oculto agora. Toque a logo BitBanana na tela inicial para revelá-lo.</string>
     <plurals name="blocks">
         <item quantity="one">%d Bloco</item>
         <item quantity="many">%d Blocos</item>
@@ -692,4 +692,11 @@
     <string name="submit_routing_policy">Atualizar Política de Roteamento</string>
     <string name="settings_featureContacts_summary">Faça o envio de dinheiro ser uma moleza com uma lista de contatos bem organizada.</string>
     <string name="error_no_permission_to_read_file">Acesso Negado: incapaz de ler o arquivo. Recomendamos movê-lo para uma localização diferente, como a pasta \"Downloads\", e acessá-lo por lá.</string>
+    <string name="settings_hideAllBalances_explanation">Todos os balanços estão borrados agora e o balanço total está escondido atrás da logo BitBanana. Apenas toque qualquer campo borrado ou a logo BitBanana para revelar temporariamente seu balanço.</string>
+    <string name="settings_hideBalanceType_total">Apenas o balanço total</string>
+    <string name="off">Inativo</string>
+    <string name="settings_hideBalance">Esconder balanço</string>
+    <string name="available">Disponível</string>
+    <string name="settings_hideBalanceType_all">Todos os balanços</string>
+    <string name="note">Nota</string>
 </resources>
