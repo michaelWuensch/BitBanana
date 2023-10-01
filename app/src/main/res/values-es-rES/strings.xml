@@ -134,7 +134,7 @@
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
     <string name="settings_scramblePin">Mezclar Pantalla de PIN</string>
     <string name="settings_preventScreenRecording">Prevenir la Grabación de la Pantalla</string>
-    <string name="settings_hideTotalBalance_explanation">Cuando activado, un toque al logo de BitBanana revelará su balance.</string>
+    <string name="settings_hideTotalBalance_explanation">Ahora el saldo total está oculto. Toca el logo de BitBanana en la pantalla de inicio para revelarlo.</string>
     <string name="settings_resetSecurityWarnings">Restablecer las Advertencias de Seguridad</string>
     <string name="settings_help">Necesita Ayuda?</string>
     <string name="settings_reportIssue">Reportar un Problema</string>
@@ -342,4 +342,35 @@
 \n
 \n- Asegúrate de que el reenvío de puertos está activo. (Puerto: %1$s)</string>
     <string name="error_zeroAmountPaymentRequest">Esto es un pago con importe cero. BitBanana no admite pagos con importe cero por motivos de seguridad.</string>
+    <string name="settings_hideAllBalances_explanation">Ahora todos los saldos están difuminados y el saldo total se oculta tras el logotipo de BitBanana. Simplemente toca en cualquier campo difuminado o el logo de BitBanana para revelar temporalmente tu saldo.</string>
+    <string name="settings_hideBalanceType_total">Únicamente el saldo total</string>
+    <string name="error_connection_internal_server_clearnet">El nodo es accesible pero devuelve un error interno. Este error puede ser causado por el uso de un puerto incorrecto. Como está intentando conectarse a un Nodo en clearnet, desactivar Tor en la configuración de la conexión de los nodos también podría resolver el problema.</string>
+    <string name="error_payment_invalid_details">Los pagos no coinciden con los datos especificados en la factura que estás intentando pagar.</string>
+    <string name="error_connection_internal_server">El nodo es accesible pero devuelve un error interno. Este error puede deberse al uso de un puerto incorrecto.</string>
+    <string name="error_payment_no_route">No se ha encontrado ninguna ruta que respete tu límite de %1$.1f%%. Aumentar el límite de las tarifas en los ajustes o abrir nuevos canales podría resolver el problema.</string>
+    <string name="off">Apagado</string>
+    <string name="error_payment_timeout">Se acabó el tiempo. No se pudo encontrar ninguna ruta.</string>
+    <string name="error_invalid_data_to_create_channel">Formato no válido.
+\nPor favor, utiliza uno de los siguientes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:puerto
+\n- Canal LNURL</string>
+    <string name="error_channel_open_node_setup">Primero hay que conectarse a un nodo antes de abrir un canal.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora.
+\nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
+    <string name="error_invalid_bitcoin_request">Petición de bitcoin inválida.</string>
+    <string name="settings_hideBalance">Ocultar el saldo</string>
+    <string name="error_lightning_uri_invalid">Formato no válido.
+\nPor favor, utiliza uno de los siguientes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:puerto</string>
+    <string name="error_connection_tor_bootstrapping">Tor no podía arrancar.
+\n
+\nBitBanana Android ahora soporta Tor de forma nativa. Si usa Orbot, por favor elimina BitBanana de la lista de activados de Tor de Orbot o apaga Orbot completamente.</string>
+    <string name="error_empty_node_name">No se admite un nombre vacío.</string>
+    <string name="available">Disponible</string>
+    <string name="settings_hideBalanceType_all">Todos los saldos</string>
+    <string name="note">Nota</string>
 </resources>
