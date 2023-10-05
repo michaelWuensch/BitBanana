@@ -15,7 +15,7 @@ import app.michaelwuensch.bitbanana.R;
 public class BlockExplorer {
 
     private String mUrl;
-    private boolean misNetworkSupported;
+    private boolean mIsNetworkSupported;
     private Context mContext;
 
 
@@ -36,11 +36,11 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Mempool.space");
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
-        misNetworkSupported = true;
+        mIsNetworkSupported = true;
 
         switch (explorer) {
             case "BlockCypher":
@@ -55,16 +55,16 @@ public class BlockExplorer {
                 networkID = isMainnet ? "" : "testnet/";
                 mUrl = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "tx/" + transactionID;
                 break;
-            case "Smartbit":
-                networkID = isMainnet ? "www" : "testnet";
-                mUrl = "https://" + networkID + ".smartbit.com.au/tx/" + transactionID;
+            case "Mempool.space":
+                mIsNetworkSupported = isMainnet;
+                mUrl = "https://mempool.space/tx/" + transactionID;
                 break;
             case "Blockchain Reader (Yogh)":
-                misNetworkSupported = isMainnet;
-                mUrl = "http://srv1.yogh.io/#tx:id:" + transactionID;
+                mIsNetworkSupported = isMainnet;
+                mUrl = "https://yogh.io/#tx:id:" + transactionID;
                 break;
             case "OXT":
-                misNetworkSupported = isMainnet;
+                mIsNetworkSupported = isMainnet;
                 mUrl = "https://oxt.me/transaction/" + transactionID;
                 break;
         }
@@ -95,11 +95,11 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
+        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Mempool.space");
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
-        misNetworkSupported = true;
+        mIsNetworkSupported = true;
 
         switch (explorer) {
             case "BlockCypher":
@@ -114,16 +114,16 @@ public class BlockExplorer {
                 networkID = isMainnet ? "" : "testnet/";
                 mUrl = "http://explorerzydxu5ecjrkwceayqybizmpjjznk5izmitf2modhcusuqlid.onion/" + networkID + "address/" + address;
                 break;
-            case "Smartbit":
-                networkID = isMainnet ? "www" : "testnet";
-                mUrl = "https://" + networkID + ".smartbit.com.au/address/" + address;
+            case "Mempool.space":
+                mIsNetworkSupported = isMainnet;
+                mUrl = "https://mempool.space/address/" + address;
                 break;
             case "Blockchain Reader (Yogh)":
-                misNetworkSupported = isMainnet;
-                mUrl = "http://srv1.yogh.io/#addr:id:" + address;
+                mIsNetworkSupported = isMainnet;
+                mUrl = "https://yogh.io/#addr:id:" + address;
                 break;
             case "OXT":
-                misNetworkSupported = isMainnet;
+                mIsNetworkSupported = isMainnet;
                 mUrl = "https://oxt.me/address/" + address;
                 break;
         }
@@ -149,7 +149,7 @@ public class BlockExplorer {
     }
 
     private void startBlockExplorer() {
-        if (misNetworkSupported) {
+        if (mIsNetworkSupported) {
             // Call the url
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
             mContext.startActivity(browserIntent);

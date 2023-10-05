@@ -12,7 +12,7 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
-            android:defaultValue="Blockstream"
+            android:defaultValue="Mempool.space"
             android:dialogTitle="@string/settings_blockExplorer"
             android:entries="@array/blockExplorer"
             android:entryValues="@array/blockExplorer"
