@@ -373,4 +373,18 @@
     <string name="available">Disponible</string>
     <string name="settings_hideBalanceType_all">Todos los saldos</string>
     <string name="note">Nota</string>
+    <string name="error_lnd_connection_failed">Error en la conexión con LND, inténtelo de nuevo.</string>
+    <string name="error_invalid_ln_address_format">Formato no válido para Dirección Lightning. Una dirección Lightning se parece a una dirección de correo electrónico.
+\n
+\nnombredeusuario@dominio</string>
+    <string name="error_invalid_fee_preset_value">El valor tiene que ser mayor que 0.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">No se ha podido leer la respuesta de %1$s.</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Se han actualizado las políticas de enrutamiento, pero no se han podido aplicar las nuevas reglas a %1$d de sus canales.</string>
+    <string name="error_payment_insufficient_balance">La cantidad a pagar es superior a la que puedes enviar por lightning con tus actuales canales abiertos.</string>
+    <string name="error_tor_exchange_rate">No se ha podido obtener el tipo de cambio. El servicio que está utilizando parece bloquear las peticiones procedentes de la red Tor. Intenta cambiar el proveedor de tipos de cambio en la configuración avanzada.</string>
+    <string name="error_only_payment_data_allowed">Aquí se admiten únicamente datos de pago.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Por favor asegúrate de que el destinatario ha activado la función de envío de llaves.</string>
+    <string name="error_node_not_yet_ready">Tu nodo aún no ha sincronizado completamente. Por favor inténtalo de nuevo más tarde.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s parece bloquear peticiones procedentes de la red Tor. Puedes intentar desactivar Tor en la configuración o contactar con el servicio y solicitar que actualicen sus reglas de cloudflare.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Tasa de comisión demasiado alta. Se permite un máximo de %1$.2f%%.</string>
 </resources>
