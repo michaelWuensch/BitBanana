@@ -140,6 +140,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomBlockExplorerActivity"
+            android:label="@string/settings_custom_block_explorer"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"

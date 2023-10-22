@@ -64,9 +64,10 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Tor support
 - [x] PIN protected access
 - [x] Scrambled PIN by default
+- [x] Hide balances
 - [x] User guardian system (BitBanana warns you when you are about to perform a potentially dangerous or privacy leaking action)
+- [x] Support for custom (self-hosted) block explorers
 - [x] Protection against screen recording
-- [x] Hide total balance
 
 
 ## Security

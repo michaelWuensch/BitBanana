@@ -44,6 +44,8 @@ public class PrefsUtil {
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
     public static final String ROUTING_SUMMARY_VOLUME = "routingSummaryMode";
     public static final String BALANCE_HIDE_TYPE = "hideBalanceType";
+    public static final String BLOCK_EXPLORER = "blockExplorer";
+    public static final String CUSTOM_BLOCK_EXPLORER_HOST = "customBlockExplorerHost";
 
     // node config preferences references
     public static final String NODE_CONFIGS = "wallet_configs";
@@ -153,5 +155,21 @@ public class PrefsUtil {
 
     public static boolean isTorEnabled() {
         return getPrefs().getBoolean("isTorEnabled", true);
+    }
+
+    public static String getBlockExplorer() {
+        return getPrefs().getString(BLOCK_EXPLORER, "Mempool.space");
+    }
+
+    public static String getCustomBlockExplorerHost() {
+        return getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
+    }
+
+    public static String getCustomBlockExplorerAddressSuffix() {
+        return getPrefs().getString("customBlockExplorerAddressSuffix", "/address/");
+    }
+
+    public static String getCustomBlockExplorerTransactionSuffix() {
+        return getPrefs().getString("customBlockExplorerTransactionSuffix", "/tx/");
     }
 }
