@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -26,6 +27,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private ListPreference mListBlockExplorer;
     private ListPreference mListLnExpiry;
     private ListPreference mListFeeLimit;
+    private Preference mPrefCustomBlockExplorer;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -33,13 +35,24 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.advanced_settings, rootKey);
 
         // On change block explorer option
-        mListBlockExplorer = findPreference("blockExplorer");
+        mListBlockExplorer = findPreference(PrefsUtil.BLOCK_EXPLORER);
         mListBlockExplorer.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
                     Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
                 }
+                updateCustomExplorerOptions(newValue.toString().equalsIgnoreCase("Custom"));
+                return true;
+            }
+        });
+
+        mPrefCustomBlockExplorer = findPreference("goToCustomBlockExplorerSettings");
+        mPrefCustomBlockExplorer.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsCustomBlockExplorerActivity.class);
+                startActivity(intent);
                 return true;
             }
         });
@@ -142,6 +155,13 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
     }
 
     private void setFeeSummary(Preference preference, String value) {
@@ -163,5 +183,10 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         lnExpiryDisplayEntries[8] = getActivity().getResources().getQuantityString(R.plurals.duration_year, 1, 1);
 
         mListLnExpiry.setEntries(lnExpiryDisplayEntries);
+    }
+
+    private void updateCustomExplorerOptions(boolean customEnabled) {
+        mPrefCustomBlockExplorer.setVisible(customEnabled);
+        mPrefCustomBlockExplorer.setSummary(PrefsUtil.getCustomBlockExplorerHost());
     }
 }

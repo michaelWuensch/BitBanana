@@ -1,0 +1,28 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        android:defaultValue="https://mempool.space"
+        android:dialogMessage="@string/settings_customBlockExplorer_host_description"
+        android:key="customBlockExplorerHost"
+        android:title="@string/host"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:defaultValue="/address/"
+        android:dialogMessage="@string/settings_customBlockExplorer_address_suffix_description"
+        android:key="customBlockExplorerAddressSuffix"
+        android:title="@string/settings_customBlockExplorer_address_suffix"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        android:defaultValue="/tx/"
+        android:dialogMessage="@string/settings_customBlockExplorer_transaction_suffix_description"
+        android:key="customBlockExplorerTransactionSuffix"
+        android:title="@string/settings_customBlockExplorer_transaction_suffix"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

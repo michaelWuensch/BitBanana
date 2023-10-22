@@ -1,10 +1,12 @@
 package app.michaelwuensch.bitbanana.util;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
 
 import app.michaelwuensch.bitbanana.R;
 
@@ -36,7 +38,7 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Mempool.space");
+        String explorer = PrefsUtil.getBlockExplorer();
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
@@ -67,9 +69,12 @@ public class BlockExplorer {
                 mIsNetworkSupported = isMainnet;
                 mUrl = "https://oxt.me/transaction/" + transactionID;
                 break;
+            case "Custom":
+                mUrl = PrefsUtil.getCustomBlockExplorerHost() + PrefsUtil.getCustomBlockExplorerTransactionSuffix() + transactionID;
+                break;
         }
 
-        if (PrefsUtil.isTorEnabled()) {
+        if (PrefsUtil.isTorEnabled() && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             // Ask user to confirm risking privacy issues
             new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
         } else {
@@ -95,7 +100,7 @@ public class BlockExplorer {
         }
 
         mContext = ctx;
-        String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Mempool.space");
+        String explorer = PrefsUtil.getBlockExplorer();
         boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
         String networkID = "";
         mUrl = "";
@@ -126,9 +131,12 @@ public class BlockExplorer {
                 mIsNetworkSupported = isMainnet;
                 mUrl = "https://oxt.me/address/" + address;
                 break;
+            case "Custom":
+                mUrl = PrefsUtil.getCustomBlockExplorerHost() + PrefsUtil.getCustomBlockExplorerAddressSuffix() + address;
+                break;
         }
 
-        if (PrefsUtil.isTorEnabled()) {
+        if (PrefsUtil.isTorEnabled() && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             // Ask user to confirm risking privacy issues
             new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
         } else {
@@ -149,14 +157,23 @@ public class BlockExplorer {
     }
 
     private void startBlockExplorer() {
-        if (mIsNetworkSupported) {
+        if (PrefsUtil.getBlockExplorer().equals("Custom")) {
             // Call the url
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
-            mContext.startActivity(browserIntent);
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+                mContext.startActivity(browserIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(mContext, R.string.error_block_explorer_setup_invalid, Toast.LENGTH_SHORT).show();
+            }
         } else {
-            String explorer = PrefsUtil.getPrefs().getString("blockExplorer", "Blockstream");
-            boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
-            unsupportedNetwork(explorer, isMainnet ? "mainnet" : "testnet", mContext);
+            if (mIsNetworkSupported) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+                mContext.startActivity(browserIntent);
+            } else {
+                String explorer = PrefsUtil.getBlockExplorer();
+                boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
+                unsupportedNetwork(explorer, isMainnet ? "mainnet" : "testnet", mContext);
+            }
         }
     }
 }

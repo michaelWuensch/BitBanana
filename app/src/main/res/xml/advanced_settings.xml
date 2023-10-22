@@ -14,11 +14,16 @@
         <ListPreference
             android:defaultValue="Mempool.space"
             android:dialogTitle="@string/settings_blockExplorer"
-            android:entries="@array/blockExplorer"
+            android:entries="@array/blockExplorerDisplayValues"
             android:entryValues="@array/blockExplorer"
             android:key="blockExplorer"
             android:summary="%s"
             android:title="@string/settings_blockExplorer"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="goToCustomBlockExplorerSettings"
+            android:title="Custom Block Explorer"
             app:iconSpaceReserved="false" />
 
         <ListPreference
