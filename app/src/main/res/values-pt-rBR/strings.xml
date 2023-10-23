@@ -699,4 +699,14 @@
     <string name="available">Disponível</string>
     <string name="settings_hideBalanceType_all">Todos os balanços</string>
     <string name="note">Nota</string>
+    <string name="settings_custom">Personalizado…</string>
+    <string name="error_block_explorer_setup_invalid">Configuração do explorador de blocos inválida.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix_description">Ao buscar uma transação no explorador, o link a ser invocado será assim:
+\nHost + Sufixo de Transação + ID de Transação.</string>
+    <string name="settings_custom_block_explorer">Explorador de Blocos Personalizado</string>
+    <string name="settings_customBlockExplorer_address_suffix">Sufixo do Endereço</string>
+    <string name="settings_customBlockExplorer_address_suffix_description">Ao buscar um endereço no explorador, o link a ser invocado será assim:
+\nHost + Sufixo do Endereço + Endereço.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix">Sufixo de Transação</string>
+    <string name="settings_customBlockExplorer_host_description">Por favor insira o endereço de host para seu explorador personalizado. Quando você mesmo hospeda o seu explorador de blocos, sua privacidade é totalmente mantida.</string>
 </resources>
