@@ -168,7 +168,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Hide balance if the setting was chosen
-        if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
+        if (!PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
             hideBalance();
         }
 
@@ -247,7 +247,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 MonetaryUtil.getInstance().switchCurrencies();
 
                 // also cancel fade out if hideTotalBalance option is active
-                if (PrefsUtil.getPrefs().getBoolean("hideTotalBalance", false)) {
+                if (!PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
                     mBalanceFadeOutAnimation.reset();
                     mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
                     mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);

@@ -155,6 +155,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        // Action when clicked on "On-chainFeePresets"
+        final Preference prefOnDecoyAppSettings = findPreference("goToDecoyAppSettings");
+        prefOnDecoyAppSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsDecoyAppsActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
     }
 

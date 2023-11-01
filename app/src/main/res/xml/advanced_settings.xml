@@ -99,6 +99,12 @@
         android:title="@string/settings_category_security"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:key="goToDecoyAppSettings"
+            android:summary="@string/settings_stealth_mode_summary"
+            android:title="@string/settings_stealth_mode"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:defaultValue="true"
             android:key="biometricsEnabled"
