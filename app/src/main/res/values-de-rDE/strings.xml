@@ -182,7 +182,7 @@
     <string name="settings_manageChannels">Lightning-Kanäle verwalten</string>
     <string name="settings_scramblePin">PIN-Eingabe durchmischen</string>
     <string name="settings_preventScreenRecording">Bildschirmaufnahmen blockieren</string>
-    <string name="settings_hideTotalBalance_explanation">Wenn diese Funktion aktiv ist, kannst du auf das BitBanana Logo auf dem Homescreen tippen, um dein Guthaben anzuzeigen.</string>
+    <string name="settings_hideTotalBalance_explanation">Das Gesamtguthaben ist jetzt ausgeblendet. Tippe auf das BitBanana-Logo auf dem Startbildschirm, um es einzublenden.</string>
     <string name="settings_resetSecurityWarnings">Sicherheitswarnungen zurücksetzen</string>
     <string name="settings_help">Du brauchst Hilfe?</string>
     <string name="settings_reportIssue">Feedback senden</string>
@@ -611,4 +611,29 @@
     <string name="off">Aus</string>
     <string name="available">Verfügbar</string>
     <string name="note">Hinweis</string>
+    <string name="settings_custom">Benutzerdefiniert …</string>
+    <string name="error_block_explorer_setup_invalid">Block-Explorer Setup ungültig.</string>
+    <string name="stealth_mode_disable">Stealth-Modus deaktivieren:</string>
+    <string name="settings_customBlockExplorer_transaction_suffix_description">Bei der Abfrage einer Transaktion im Explorer wird der aufzurufende Link wie folgt lauten:
+\nHost + Suffix für Transaktionen + Transaktions-ID.</string>
+    <string name="settings_hideAllBalances_explanation">Alle Beträge sind jetzt unscharf, und das Gesamtguthaben ist hinter dem BitBanana-Logo versteckt. Tippe einfach auf ein unscharfes Feld oder das BitBanana-Logo, um die Beträge vorübergehend einzublenden.</string>
+    <string name="settings_hideBalanceType_total">Nur Gesamtguthaben</string>
+    <string name="settings_custom_block_explorer">Benutzerdefinierter Block-Explorer</string>
+    <string name="stealth_mode_description_calc">BitBanana sieht jetzt aus wie ein Taschenrechner!</string>
+    <string name="stealth_mode_enable_instruction">App schließen</string>
+    <string name="help_dialog_stealth_mode">Nutze den Stealth-Modus, um dein Telefon vor schnellen physischen Durchsuchungen zu schützen, indem du die Illusion erzeugst, dass BitBanana nicht auf deinem Gerät vorhanden ist. Dies wird erreicht, indem das Symbol und der Name deiner App ersetzt werden und eine Täuschungs-App gestartet wird. Beachte jedoch, dass das Symbol und der Name der App nicht in der App-Liste in deinen Systemeinstellungen geändert werden.
+\n
+\nEs ist keine perfekte Lösung, aber sie hilft, die Anwesenheit deiner Bitcoin-Software weniger offensichtlich zu machen.</string>
+    <string name="settings_stealth_mode">Stealth-Modus</string>
+    <string name="settings_stealth_mode_summary">Aktiviere den Stealth-Modus zum Schutz vor physischen Durchsuchungen deines Geräts</string>
+    <string name="stealth_mode_enable">Stealth-Modus aktivieren:</string>
+    <string name="settings_hideBalance">Beträge verstecken</string>
+    <string name="settings_customBlockExplorer_address_suffix">Suffix für Adressen</string>
+    <string name="settings_customBlockExplorer_address_suffix_description">Bei der Abfrage einer Adresse im Explorer wird der aufzurufende Link wie folgt aussehen:
+\nHost + Suffix für Adressen + Adresse.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix">Suffix für Transaktionen</string>
+    <string name="settings_hideBalanceType_all">Alle Beträge</string>
+    <string name="stealth_mode_disable_instruction_calc">Führe eine Berechnung durch, die 21 ergibt</string>
+    <string name="settings_customBlockExplorer_host_description">Bitte gib die Host-Adresse für deinen benutzerdefinierten Explorer an. Wenn du den Block-Explorer selbst hostest, bleibt deine Privatsphäre vollständig gewahrt.</string>
+    <string name="settings_on_off">An / Aus</string>
 </resources>
