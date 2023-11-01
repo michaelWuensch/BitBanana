@@ -709,4 +709,15 @@
 \nHost + Sufixo do Endereço + Endereço.</string>
     <string name="settings_customBlockExplorer_transaction_suffix">Sufixo de Transação</string>
     <string name="settings_customBlockExplorer_host_description">Por favor insira o endereço de host para seu explorador personalizado. Quando você mesmo hospeda o seu explorador de blocos, sua privacidade é totalmente mantida.</string>
+    <string name="stealth_mode_disable">Desativar o modo furtivo:</string>
+    <string name="stealth_mode_description_calc">BitBanana agora se parece com uma calculadora!</string>
+    <string name="stealth_mode_enable_instruction">Fechar o app</string>
+    <string name="help_dialog_stealth_mode">Utilize o modo furtivo para defender seu telefone contra revistas físicas, criando a ilusão que o BitBanana não está presente em seu dispositivo. Isto é feito substituindo o ícone do seu app e abrindo um app de disfarce. No entanto, note que o ícone do app e o nome não serão alterados na lista de apps nas configurações do seu sistema.
+\n
+\nNão é uma solução perfeita, mas ajuda a fazer a presença do seu software BitBanana menos óbvia.</string>
+    <string name="settings_stealth_mode">Modo Furtivo</string>
+    <string name="settings_stealth_mode_summary">Ative o modo furtivo para proteger contra revistas físicas do seu dispositivo</string>
+    <string name="stealth_mode_enable">Ativar modo furtivo:</string>
+    <string name="stealth_mode_disable_instruction_calc">Faça um cálculo que resulte em 21</string>
+    <string name="settings_on_off">Ligado / Desligado</string>
 </resources>
