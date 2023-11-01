@@ -1,0 +1,6 @@
+- Stealth mode (hide app on device)
+- Hide all balances
+- Support for custom (self-hosted) Block Explorers
+- Updated Block Explorer list
+- Small UX improvements
+- Translation updates
