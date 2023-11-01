@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/calc_bg"
+    tools:context=".decoyApps.CalcActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="133dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.093"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/calcTvResult"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:paddingEnd="5dp"
+            android:text=""
+            android:textAlignment="textEnd"
+            android:textColor="@color/calc_result_text"
+            android:textSize="19sp"
+            tools:ignore="RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/calcEtInput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:text=""
+            android:textAlignment="textEnd"
+            android:textColor="@color/calc_input_text"
+            android:textCursorDrawable="@null"
+            android:textSize="55sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout4"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:layout_editor_absoluteX="44dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnSqrt"
+            style="@style/CalcInvisibleButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="√"
+            android:textSize="26sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnPi"
+            style="@style/CalcInvisibleButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="𝝅"
+            android:textSize="26sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnLeftBracket"
+            style="@style/CalcInvisibleButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="("
+            android:textSize="26sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnRightBracket"
+            style="@style/CalcInvisibleButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=")"
+            android:textSize="26sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout4"
+        app:layout_constraintVertical_bias="0.181"
+        tools:layout_editor_absoluteX="0dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnAC"
+            style="@style/CalcACButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="AC"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnPower"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="xʸ"
+            android:textAllCaps="false"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnPercent"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="%"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnDivide"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="÷"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout2"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout5"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintVertical_bias="0.026"
+        tools:layout_editor_absoluteX="0dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnSeven"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="7"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnEight"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="8"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnNine"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="9"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnMult"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="×"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout5"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_marginTop="8dp"
+
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout6"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout2"
+        tools:layout_editor_absoluteX="0dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnFour"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="4"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnFive"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="5"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnSix"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="6"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnMinus"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="-"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout6"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearlayout7"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout5"
+        tools:layout_editor_absoluteX="0dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnOne"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="1"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnTwo"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="2"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnThree"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="3"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnPlus"
+            style="@style/CalcOPButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="+"
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout7"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout6"
+        app:layout_constraintVertical_bias="0.062"
+        tools:layout_editor_absoluteX="0dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnZero"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="0"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnPoint"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="."
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnBackspace"
+            style="@style/CalcNumberButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="\u232b"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/calcBtnEqual"
+            style="@style/CalcEqualButton"
+            android:layout_width="20dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:stateListAnimator="@null"
+            android:text="="
+            android:textSize="32sp"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.2" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

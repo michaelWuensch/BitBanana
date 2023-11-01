@@ -314,6 +314,9 @@
     <string name="settings_mediumFee">Medium Transaction</string>
     <string name="settings_slowFee">Slow Transaction</string>
 
+    <string name="settings_stealth_mode">Stealth Mode</string>
+    <string name="settings_stealth_mode_summary">Enable stealth mode to protect against physical searches of your device</string>
+    <string name="settings_on_off">On / Off</string>
 
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
@@ -469,6 +472,7 @@
     <string name="help_dialog_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_settings_features">BitBanana\'s commitment to also serving experts means offering a rich set of features. However, we recognize that not everyone may require all of these functionalities. With our customizable settings, you have the flexibility to hide any features that are not relevant to your needs, ensuring a tailored experience.</string>
+    <string name="help_dialog_stealth_mode">Utilize stealth mode to defend your phone against quick physical searches, creating the illusion that BitBanana isn\'t present on your device. This is achieved by replacing your app\'s icon and name and launching a decoy app. However, note that the app\'s icon and name won\'t be changed in the app list in your system settings.\n\nIt is not a perfect solution, but it helps to make the presence of your Bitcoin software less obvious.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -654,5 +658,11 @@
     <string name="channel_commitment_type">Commitment Type</string>
     <string name="explanation_channel_commitment_type">Each party has a commitment transaction that only they can broadcast to the blockchain to claim their share of bitcoins. Different types of commitment transactions result in channels having different properties.</string>
     <string name="explanation_timelock_delta">In a payment route, each intermediate step defines a specific time window (in blocks) within which it must successfully process the transaction. Otherwise, it will be considered failed due to expiration. In case of payment failures or uncooperative behavior, this time window is crucial because it allows participants at that step to take necessary actions, such as cooperatively reversing the transaction (unwinding the HTLC) or uncooperatively settling it on the blockchain.\n\nA higher value in this context enhances the channel\'s resilience against temporary node failures. However, it could potentially reduce the attractiveness of the channel for routing because, in the worst-case scenario, payments might experience prolonged delays. Additionally, in rare cases of stuck payments, the funds of the channel participants allocated to that forwarding event will be locked up for the duration of this time window.\n\n144 blocks is about one day.</string>
+
+    <string name="stealth_mode_description_calc">BitBanana now looks like a calculator!</string>
+    <string name="stealth_mode_enable">Enable stealth mode:</string>
+    <string name="stealth_mode_enable_instruction">Close the app</string>
+    <string name="stealth_mode_disable">Disable stealth mode:</string>
+    <string name="stealth_mode_disable_instruction_calc">Perform a calculation that results in 21</string>
 
 </resources>

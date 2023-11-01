@@ -32,18 +32,25 @@
                 android:value="true" />
         </service>
 
+        <activity-alias
+            android:name=".LauncherActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:targetActivity="app.michaelwuensch.bitbanana.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
-            android:name="app.michaelwuensch.bitbanana.LandingActivity"
+            android:name="app.michaelwuensch.bitbanana.LauncherActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -73,6 +80,26 @@
                 <data android:scheme="lnurlw" />
             </intent-filter>
         </activity>
+
+        <activity-alias
+            android:name=".decoyApps.CalcActivity"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_calc"
+            android:label="Calculator"
+            android:roundIcon="@mipmap/ic_launcher_calc_round"
+            android:targetActivity=".decoyApps.CalcActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name="app.michaelwuensch.bitbanana.LandingActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name="app.michaelwuensch.bitbanana.HomeActivity"
             android:label="@string/app_name"
@@ -137,6 +164,11 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsFeaturesActivity"
             android:label="@string/settings_features"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsDecoyAppsActivity"
+            android:label="@string/settings_stealth_mode"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
@@ -230,6 +262,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".decoyApps.CalcActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"
