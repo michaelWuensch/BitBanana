@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="stealthModeActive"
+        android:title="@string/settings_on_off"
+        app:iconSpaceReserved="false" />
+
+    <app.michaelwuensch.bitbanana.customView.PrefDecoyApp
+        android:key="decoyAppExplanation"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

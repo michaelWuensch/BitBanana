@@ -102,4 +102,32 @@
         <item name="android:textSize">@dimen/numpad_button_text_size</item>
         <item name="android:typeface">sans</item>
     </style>
+
+
+    <!-- Decoy app: Calculator -->
+    <style name="CalcACButton">
+        <item name="android:textColor">@color/calc_botton_texts</item>
+        <item name="android:background">@drawable/calc_ac_button</item>
+    </style>
+
+    <style name="CalcOPButton">
+        <item name="android:textColor">@color/calc_botton_texts</item>
+        <item name="android:background">@drawable/calc_calc_button</item>
+    </style>
+
+    <style name="CalcEqualButton">
+        <item name="android:textColor">@color/calc_botton_texts</item>
+        <item name="android:background">@drawable/calc_equal_button</item>
+    </style>
+
+    <style name="CalcNumberButton">
+        <item name="android:textColor">@color/calc_botton_texts</item>
+        <item name="android:background">@drawable/calc_number_button</item>
+    </style>
+
+    <style name="CalcInvisibleButtons" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/calc_botton_texts</item>
+        <item name="android:background">@drawable/calc_invisible_button</item>
+    </style>
+
 </resources>

@@ -14,4 +14,21 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+
+
+    <!-- Decoy app: Calculator -->
+    <color name="calc_botton_texts">@color/white</color>
+    <color name="calc_result_text">#A0A0A0</color>
+    <color name="calc_input_text">@color/white</color>
+    <color name="calc_bg">@color/deep_sea_blue</color>
+    <color name="calc_button_number">#2B303F</color>
+    <color name="calc_button_number_pressed">#545964</color>
+    <color name="calc_button_operation">#3C5280</color>
+    <color name="calc_button_operation_pressed">#54627F</color>
+    <color name="calc_button_equal">@color/blue_gradient</color>
+    <color name="calc_button_equal_pressed">#3FAAFF</color>
+    <color name="calc_button_ac">#C54D4D</color>
+    <color name="calc_button_ac_pressed">#C77676</color>
+    <color name="calc_button_invisible_pressed">#2B303F</color>
+
 </resources>

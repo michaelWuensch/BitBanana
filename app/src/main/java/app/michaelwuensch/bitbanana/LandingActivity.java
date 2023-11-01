@@ -3,8 +3,6 @@ package app.michaelwuensch.bitbanana;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -18,8 +16,6 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -36,24 +32,8 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Keep in app language picker in sync with system per app language setting.
         updateLanguageSetting();
 
-        // Save data when App was started with a task.
-
         // BitBanana was started from an URI link.
-        Intent intent = getIntent();
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            Uri uri = intent.getData();
-            App.getAppContext().setUriSchemeData(uri.toString());
-            BBLog.d(LOG_TAG, "URI was detected: " + uri.toString());
-            if (!NodeConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
-                setupWalletFromUri();
-                return;
-            }
-        }
-
-        // BitBanana was started using NFC.
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-
-            NfcUtil.readTag(LandingActivity.this, intent, payload -> App.getAppContext().setUriSchemeData(payload));
+        if (App.getAppContext().getUriSchemeData() != null) {
             if (!NodeConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
                 return;
@@ -129,6 +109,10 @@ public class LandingActivity extends BaseAppCompatActivity {
             PrefsUtil.editPrefs().remove(PrefsUtil.NODE_CONFIGS).commit();
 
             Intent homeIntent = new Intent(this, HomeActivity.class);
+
+            // Makes sure exiting via back button from Home Screen works later (instead of going to empty activity)
+            finishAffinity();
+
             startActivity(homeIntent);
         }
     }
