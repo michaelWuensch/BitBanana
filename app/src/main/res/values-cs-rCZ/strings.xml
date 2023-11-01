@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Zrušit</string>
     <string name="lightning">Lightning</string>
@@ -42,7 +42,6 @@
     <string name="channel_event">Událost kanálu</string>
     <string name="scan_qr_code">Skenovat QR-kód</string>
     <string name="node">Uzel</string>
-    <string name="funds_available">K dispozici: %s</string>
     <string name="amount_invalid">Částka je neplatná.</string>
     <string name="success">Úspěch</string>
     <string name="suggested_peers">Doporučené peery</string>
@@ -179,7 +178,6 @@
     <string name="settings_manageChannels">Správa Lightning kanálů</string>
     <string name="settings_scramblePin">Zamíchaná PIN obrazovka</string>
     <string name="settings_preventScreenRecording">Zabraňte nahrávání obrazovky</string>
-    <string name="settings_hideTotalBalance">Skrýt celkový zůstatek</string>
     <string name="settings_hideTotalBalance_explanation">Po aktivaci klepnutím na logo BitBanana na domovské obrazovce odhalíte zůstatek.</string>
     <string name="settings_resetSecurityWarnings">Resetujte bezpečnostní varování</string>
     <string name="settings_help">Potřebujete pomoc?</string>
@@ -325,7 +323,6 @@
     <string name="biometricNotSetup">Chcete-li tuto funkci použít, musíte v nastavení systému Android nastavit biometrickou autentizaci.</string>
     <string name="invoice_detail">Detail faktury</string>
     <string name="transaction_detail">Detail transakce</string>
-    <string name="app_reset_title">Vezměte na vědomí</string>
     <string name="app_reset_message">Aplikace byla resetována, protože poslední aktualizace zahrnovala některé strukturální změny. \nBohužel budete muset znovu projít procesem nastavení.</string>
     <string name="nfc_type_not_supported">Nepodporovaný typ NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-kódy obsahující následující informace jsou platné: \n\n- Bitcoinová adresa\n- Žádost o bitcoin platbu\n- Žádost o lightning platbu</string>

@@ -36,7 +36,6 @@
     <string name="channel_event">Evento Canale</string>
     <string name="scan_qr_code">Scansiona QR-Code</string>
     <string name="node">Nodo</string>
-    <string name="funds_available">Disponibile: %s</string>
     <string name="amount_invalid">L\'importo non è valido.</string>
     <string name="success">Successo</string>
     <string name="suggested_peers">Peer Suggeriti</string>
@@ -160,7 +159,6 @@
     <string name="settings_manageChannels">Gestisci Canali Lightning</string>
     <string name="settings_scramblePin">Rimescola Schermata PIN</string>
     <string name="settings_preventScreenRecording">Previeni Registrazione Schermo</string>
-    <string name="settings_hideTotalBalance">Nascondi bilancio totale</string>
     <string name="settings_hideTotalBalance_explanation">Quando è attivo, fai tap sul logo BitBanana nella home per mostrare il tuo bilancio.</string>
     <string name="settings_resetSecurityWarnings">Ripristina Avvisi di Sicurezza</string>
     <string name="settings_help">Serve aiuto?</string>
@@ -273,7 +271,6 @@
     <string name="biometricNotSetup">Per utilizzare questa funzione, devi configurare l\'autenticazione biometrica nelle impostazioni del tuo sistema Android.</string>
     <string name="invoice_detail">Dettaglio Fattura</string>
     <string name="transaction_detail">Dettagli Transazione</string>
-    <string name="app_reset_title">Notare che</string>
     <string name="app_reset_message">L\'app è stata ripristinata poiché l\'ultimo aggiornamento ha incluso alcune modifiche strutturali.\nPurtroppo dovrai ripetere il processo di installazione.</string>
     <string name="nfc_type_not_supported">Tipo NFC non supportato</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes contenenti quanto segue sono validi:\n\n- Indirizzo Bitcoin \n- Richiesta di Pagamento Bitcoin \n- Richiesta Pagamento Lightning</string>

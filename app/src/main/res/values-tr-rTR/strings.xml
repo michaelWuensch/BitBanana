@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">Tamam</string>
     <string name="cancel">İptal et</string>
@@ -80,7 +80,6 @@
     <string name="settings_btcUnit">Bitcoin Birimi</string>
     <string name="settings_currency">İkinci birim</string>
     <string name="settings_language">Dil</string>
-    <string name="settings_hideTotalBalance">Toplam bakiyeyi gizle</string>
     <string name="settings_resetSecurityWarnings">Güvenlik ayarlarını sıfırla</string>
     <string name="settings_help">Yardım ister misin?</string>
     <string name="settings_reportIssue">Bir Sorunu Bildirin</string>

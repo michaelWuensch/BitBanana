@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">Acceptă</string>
     <string name="cancel">Anulează</string>
@@ -40,7 +40,6 @@
     <string name="channel_event">Eveniment Canal</string>
     <string name="scan_qr_code">Scanează un cod QR</string>
     <string name="node">Nod</string>
-    <string name="funds_available">Disponibil: %s</string>
     <string name="amount_invalid">Suma este nevalabilă.</string>
     <string name="success">Succes</string>
     <string name="suggested_peers">Peeri sugerați</string>
@@ -124,7 +123,6 @@
     <string name="settings_manageChannels">Gestionează canalele Lightning</string>
     <string name="settings_scramblePin">Amestecă ecranul PIN</string>
     <string name="settings_preventScreenRecording">Împiedică înregistrarea ecranului</string>
-    <string name="settings_hideTotalBalance">Ascunde suma totală</string>
     <string name="settings_hideTotalBalance_explanation">Când funcția e activată, apasă logoul BitBanana de pe pagina de acasă pentru a afișa suma disponibilă.</string>
     <string name="settings_resetSecurityWarnings">Resetează avertizările de securitate</string>
     <string name="settings_help">Ai nevoie de ajutor?</string>
@@ -224,6 +222,5 @@
     <string name="biometricNotSetup">Pentru a utiliza această funcționalitate trebuie să configurezi autentificarea biometrică în setările de sistem pentru Android.</string>
     <string name="invoice_detail">Detaliile facturii</string>
     <string name="transaction_detail">Detaliile tranzacției</string>
-    <string name="app_reset_title">Vă rugăm să rețineți</string>
     <string name="app_reset_message">Aplicația a fost resetată deoarece ultima actualizare a inclus unele schimbări structurale.\nDin păcate va fi necesar să treci din nou prin procesul de configurare.</string>
 </resources>

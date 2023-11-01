@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Peruuta</string>
     <string name="lightning">Salama</string>
@@ -41,7 +41,6 @@
     <string name="channel_event">Kanava tapahtuma</string>
     <string name="scan_qr_code">Skannaa QR-koodi</string>
     <string name="node">Solmu</string>
-    <string name="funds_available">Käytettävissä:%s</string>
     <string name="amount_invalid">Määrä on väärin.</string>
     <string name="success">Onnistui</string>
     <string name="install">Asenna</string>
@@ -164,7 +163,6 @@
     <string name="settings_manageChannels">Hallitsee Salamakanavia</string>
     <string name="settings_scramblePin">Sekoita PIN näyttö</string>
     <string name="settings_preventScreenRecording">Estä näytön tallennus</string>
-    <string name="settings_hideTotalBalance">Piilota kokonaissaldo</string>
     <string name="settings_hideTotalBalance_explanation">Kun aktivoitu, klikkaa BitBanana-logoa pääsivulla nähdäksesi saldosi.</string>
     <string name="settings_resetSecurityWarnings">Palauta alkuperäiset turvallisuusilmoitukset</string>
     <string name="settings_help">Tarvitsetko apua?</string>
@@ -285,7 +283,6 @@
     <string name="biometricNotSetup">Tämän toiminnon käyttäminen edellyttää että olet ottanut käyttöön Android-laitteesi asetuksista Biometrisen tunnistautumisen .</string>
     <string name="invoice_detail">Laskun tiedot</string>
     <string name="transaction_detail">Tapahtumant tiedot</string>
-    <string name="app_reset_title">Huomautus</string>
     <string name="app_reset_message">Sovelluksen viimeisin päivitys sisälsi rakenteellisia muutoksia.\nNiistä johtuen sinun on valitettavasti suoritettava käyttöönoton tehtävät uudelleen.</string>
     <string name="nfc_type_not_supported">NFC-tyyppi ei ole tuettu</string>
     <string name="help_dialog_scanPaymentRequest">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- Bitcoin-osoite\n- Bitcoin-maksupyyntö\n- Lightning-lasku</string>
@@ -386,4 +383,4 @@
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
     <string name="backup_data_invalid_file_chosen">Tämä ei ole toimiva varmuuskopio. Valitsethan tiedoston joka oli luotu tässä sovelluksella?</string>
-    </resources>
+</resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Cancelar</string>
     <string name="onChain">En cadena</string>
@@ -40,7 +40,6 @@
     <string name="channel_event">Evento de canal</string>
     <string name="scan_qr_code">Escanear código QR</string>
     <string name="node">Nodo</string>
-    <string name="funds_available">Disponible: %s</string>
     <string name="amount_invalid">La cantidad no es válida.</string>
     <string name="success">Éxito</string>
     <string name="suggested_peers">Nodos Sugeridos</string>
@@ -92,7 +91,7 @@
     <string name="channel_close_error">Error de cierre de canal</string>
     <string name="channel_close_confirmation">Realmente desea cerrar el canal con\n\n%s\n</string>
     <string name="channel_close_force_confirmation">Realmente desea forzar el cierre de canal con:\n\n%1$s\n\nLos fondos serán bloqueados por %2$s.</string>
-    <string name="channel_close_time">Retraso de tiempo de cierre</string>
+    <string name="channel_close_time">Tiempo hasta que cierre</string>
     <string name="channel_open">Abrir Canal</string>
     <string name="channel_open_success">Apertura de canal iniciada con éxito</string>
     <string name="channel_open_error">Error de apertura de canal</string>
@@ -135,8 +134,7 @@
     <string name="settings_manageChannels">Administrar Canales de Pago</string>
     <string name="settings_scramblePin">Mezclar Pantalla de PIN</string>
     <string name="settings_preventScreenRecording">Prevenir la Grabación de la Pantalla</string>
-    <string name="settings_hideTotalBalance">Esconder el balance total</string>
-    <string name="settings_hideTotalBalance_explanation">Cuando activado, un toque al logo de BitBanana revelará su balance.</string>
+    <string name="settings_hideTotalBalance_explanation">Ahora el saldo total está oculto. Toca el logo de BitBanana en la pantalla de inicio para revelarlo.</string>
     <string name="settings_resetSecurityWarnings">Restablecer las Advertencias de Seguridad</string>
     <string name="settings_help">Necesita Ayuda?</string>
     <string name="settings_reportIssue">Reportar un Problema</string>
@@ -225,6 +223,168 @@
     <string name="biometricNotSetup">Para poder acceder a esta función debes configurar la autenticación biométrica en la configuración de su sistema Android.</string>
     <string name="invoice_detail">Detalle de factura</string>
     <string name="transaction_detail">Detalles de la Transacción</string>
-    <string name="app_reset_title">Tenga en cuenta</string>
     <string name="app_reset_message">La aplicación se ha restablecido ya que la última actualización incluyó algunos cambios estructurales.\nDesafortunadamente tendrá que realizar el proceso de configuración inicial nuevamente.</string>
+    <string name="settings_featureCoinControl_summary">Gestión avanzada de los fondos en la cadena. Proporciona una lista de todos los UTXOs y permite seleccionar los específicos al enviar los fondos. La selección de las monedas se automatiza si se desactiva.</string>
+    <string name="channel_visibility_public">público</string>
+    <string name="settings_scan_clipboard">Revisar el portapapeles</string>
+    <string name="save">Guardar</string>
+    <string name="documentation">Documentación</string>
+    <string name="withdraw">Retirar</string>
+    <string name="activity_utxos">Monedas (UTXO)</string>
+    <string name="demo_setupNodeFirstAvatar">Primero debes conectarte a un nodo, antes de poder ver la información de tu nodo y tu avatar.</string>
+    <string name="settings_featureHelpButtons_summary">¿Lo práctico\? Los botones de la aplicación ayudan a los nuevos usuarios con explicaciones detalladas.</string>
+    <string name="settings_payer_data">Identificación del pago</string>
+    <string name="peer">Par</string>
+    <string name="activity_backup">Copia de Seguridad</string>
+    <string name="settings_scan_clipboard_summary">Comprueba automáticamente en el portapapeles los datos que BitBanana puede manejar.</string>
+    <string name="no">No</string>
+    <string name="unknown">Desconocido</string>
+    <string name="settings_featureRoutingSummary_summary">Proporciona acceso a todos los eventos de enrutamiento junto con un resumen.</string>
+    <string name="activity_routing_policy">Política del enrutamiento</string>
+    <string name="channel_visibility">Visibilidad</string>
+    <string name="activity_manage_contacts_open_channel_mode">Canal abierto con…</string>
+    <string name="settings_systemLanguage">Idioma del sistema</string>
+    <string name="settings_removePin">Quitar el pin</string>
+    <string name="guardian_zero_amount_invoice">Esta factura no especifica el importe. Aunque es muy poco probable, las facturas sin un importe específico pueden usarse y, en ese caso, el destinatario recibirá menos de lo esperado. Si es posible utiliza una factura con un total específico.</string>
+    <string name="settings_addPin">Proteger con un PIN</string>
+    <string name="demo_setupNodeFirst">Primero tienes que conectarte a un nodo.</string>
+    <string name="scan">Escanear</string>
+    <string name="description">Descripción</string>
+    <string name="settings_featureCoinControl">Monedero</string>
+    <string name="channel_close_type_breach">No cumplir</string>
+    <string name="payee">Recipiente</string>
+    <string name="channel_close_type_coop">Cooperativa</string>
+    <string name="settings_changePin">Cambiar/eliminar el PIN</string>
+    <string name="settings_featureRoutingSummary">Resumen del enrutamiento</string>
+    <string name="pubkey">Clave pública</string>
+    <string name="support">Soporte</string>
+    <string name="ok">DE ACUERDO</string>
+    <string name="send">Enviar</string>
+    <string name="manually">Manualmente</string>
+    <string name="activity_manage_channels_closed">Canales cerrados</string>
+    <string name="navigation_node">Nodo</string>
+    <string name="settings_tor">Tor</string>
+    <string name="activity_manage_contacts_send_mode">Enviar a…</string>
+    <string name="activity_contact_details">Detalles de los contactos</string>
+    <string name="activity_manage_nodes">Administrar los nodos</string>
+    <string name="activity_manage_channels">Canales</string>
+    <string name="notConnected">No conectado</string>
+    <string name="confirmations">Confirmaciones</string>
+    <string name="settings_category_general">General</string>
+    <string name="guardian_oldLndVersion_remote">Por favor actualiza.
+\n
+\nEl nodo al que estás conectado y ejecuta una versión antigua de LND. Las versiones a continuación
+\n%1$s están descontinuadas.</string>
+    <string name="activity_forwarding">Enrutamiento</string>
+    <string name="open">Abrir</string>
+    <string name="settings_features">Características</string>
+    <string name="percent">Por ciento</string>
+    <string name="lightning">Lightning</string>
+    <string name="you">Tu</string>
+    <string name="send_SendOnChainInstead">Enviar en cadena</string>
+    <string name="private_channel">Canal privado</string>
+    <string name="search">Buscar</string>
+    <string name="guardian_externalLink">Estás a punto de abrir un enlace con los datos confidenciales en tu navegador. Si bien BitBanana anonimiza todo su tráfico con la red Tor, tu navegador no lo hace. Si deseas mantener estos datos privados, utiliza un navegador Tor para abrir el enlace.</string>
+    <string name="channel_close_type">Tipo de cierre</string>
+    <string name="settings_tor_summary">Anonimizar todo el tráfico web usando la red Tor. Esto sólo afecta a cosas como obtener los tipos de cambio o interactuar con los servicios LNURL. El uso o no de Tor para conectarse a un nodo puede establecerse individualmente para cada nodo en la configuración de la conexión.</string>
+    <string name="channel_visibility_private">privado</string>
+    <string name="settings">Ajustes</string>
+    <string name="guardian_backup_overrides_existing_data">¡Algunos datos ya existen!
+\nAl restaurar una copia de seguridad se borrarán todos los datos siguientes antes de la restauración:
+\n
+\n- Datos de la conexión al nodo
+\n- Contactos
+\n
+\n¿Continuar\?</string>
+    <string name="pin_changed">¡Código Pin cambiado!</string>
+    <string name="activity_manage_contacts">Gestionar los contactos</string>
+    <string name="channel_close_type_force_close">Forzar el cierre</string>
+    <string name="activity_manual_setup">Datos de la conexión</string>
+    <string name="guardian_certificate_verification">Si la verificación de los certificados está desactivada, es vulnerable a un ataque. Haz esto sólo si sabes lo que estás haciendo.
+\n
+\nEn su lugar, te recomendamos configurar correctamente el certificado.
+\nEsto significa que el certificado de tu nodo debe incluir el nombre del host que estás utilizando en esta conexión. Añade el nombre del host a tlsextradomain en lnd.conf antes de volver a crear el certificado.</string>
+    <string name="activity_node_details">Detalles de los nodos</string>
+    <string name="privacy">Privacidad</string>
+    <string name="settings_features_summary">Personaliza la aplicación según tus necesidades activando o desactivando las funciones.</string>
+    <string name="maximum_abbreviation">máximo</string>
+    <string name="settings_showHelpButtons">Mostrar los botones de la información</string>
+    <string name="settings_featureContacts_summary">Envía dinero fácilmente con una lista de contactos perfectamente organizada.</string>
+    <string name="contribute">Contribuir</string>
+    <string name="settings_lnPrivateChannelHints">Incluir sugerencias para la ruta para los canales privados en las facturas</string>
+    <string name="settings_featureSignVerify_summary">Permite firmar y verificar los mensajes con tu nodo.</string>
+    <string name="settings_receiveAddressDisplayValues_0">Compatibilidad con SegWit (P2PSH)</string>
+    <string name="settings_exchangeRateProvider">Proveedor del cambio</string>
+    <string name="error_connection_network_unreachable">No se puede acceder al host.
+\n
+\nPor favor, asegúrate de que dispones de conexión a Internet.</string>
+    <string name="settings_receiveAddressDisplayValues_1">SegWit nativo (Bech32)</string>
+    <string name="error_connection_no_internet">¡No hay conexión a Internet!</string>
+    <string name="settings_onChainFeePresets">Ajustes preestablecidos para las tarifas en cadena</string>
+    <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">El host (%1$s) no puede resolverse. Actualiza la configuración de la conexión de tu nodo si ahora se puede acceder a él con una dirección o un nombre para el host diferentes.</string>
+    <string name="error_connection_tor_unreachable">La conexión Tor ha fallado.
+\n Por favor, activa Tor en los ajustes de la conexión de los nodos.</string>
+    <string name="settings_slowFee">Transacción lenta</string>
+    <string name="error_useRegtestRequest">Estás conectado a la red REGTEST. Utiliza las direcciones REGTEST o las solicitudes de pago.</string>
+    <string name="error">Fallo</string>
+    <string name="settings_fastFee">Transacción rápida</string>
+    <string name="settings_mediumFee">Transacción media</string>
+    <string name="error_connection_host_verification_failed">Error al verificar el nombre del host.
+\n
+\nEl nombre del host de tu conexión no coincide con el nombre del host proporcionado en el certificado.
+\n
+\n Tienes que desactivar la verificación de los certificados en la configuración de la conexión de los nodos o tienes que volver a crear tu certificado. Asegúrate de que el nombre del host se añade a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
+    <string name="error_connection_unknown">La conexión ha fallado.</string>
+    <string name="error_connection_lnd_unavailable">No se puede conectar a LND.
+\n
+\n- Asegúrate de que daemon LND se está ejecutando en tu servidor.
+\n
+\n- Asegúrate de que el reenvío de puertos está activo. (Puerto: %1$s)</string>
+    <string name="error_zeroAmountPaymentRequest">Esto es un pago con importe cero. BitBanana no admite pagos con importe cero por motivos de seguridad.</string>
+    <string name="settings_hideAllBalances_explanation">Ahora todos los saldos están difuminados y el saldo total se oculta tras el logotipo de BitBanana. Simplemente toca en cualquier campo difuminado o el logo de BitBanana para revelar temporalmente tu saldo.</string>
+    <string name="settings_hideBalanceType_total">Únicamente el saldo total</string>
+    <string name="error_connection_internal_server_clearnet">El nodo es accesible pero devuelve un error interno. Este error puede ser causado por el uso de un puerto incorrecto. Como está intentando conectarse a un Nodo en clearnet, desactivar Tor en la configuración de la conexión de los nodos también podría resolver el problema.</string>
+    <string name="error_payment_invalid_details">Los pagos no coinciden con los datos especificados en la factura que estás intentando pagar.</string>
+    <string name="error_connection_internal_server">El nodo es accesible pero devuelve un error interno. Este error puede deberse al uso de un puerto incorrecto.</string>
+    <string name="error_payment_no_route">No se ha encontrado ninguna ruta que respete tu límite de %1$.1f%%. Aumentar el límite de las tarifas en los ajustes o abrir nuevos canales podría resolver el problema.</string>
+    <string name="off">Apagado</string>
+    <string name="error_payment_timeout">Se acabó el tiempo. No se pudo encontrar ninguna ruta.</string>
+    <string name="error_invalid_data_to_create_channel">Formato no válido.
+\nPor favor, utiliza uno de los siguientes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:puerto
+\n- Canal LNURL</string>
+    <string name="error_channel_open_node_setup">Primero hay que conectarse a un nodo antes de abrir un canal.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora.
+\nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
+    <string name="error_invalid_bitcoin_request">Petición de bitcoin inválida.</string>
+    <string name="settings_hideBalance">Ocultar el saldo</string>
+    <string name="error_lightning_uri_invalid">Formato no válido.
+\nPor favor, utiliza uno de los siguientes:
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:puerto</string>
+    <string name="error_connection_tor_bootstrapping">Tor no podía arrancar.
+\n
+\nBitBanana Android ahora soporta Tor de forma nativa. Si usa Orbot, por favor elimina BitBanana de la lista de activados de Tor de Orbot o apaga Orbot completamente.</string>
+    <string name="error_empty_node_name">No se admite un nombre vacío.</string>
+    <string name="available">Disponible</string>
+    <string name="settings_hideBalanceType_all">Todos los saldos</string>
+    <string name="note">Nota</string>
+    <string name="error_lnd_connection_failed">Error en la conexión con LND, inténtelo de nuevo.</string>
+    <string name="error_invalid_ln_address_format">Formato no válido para Dirección Lightning. Una dirección Lightning se parece a una dirección de correo electrónico.
+\n
+\nnombredeusuario@dominio</string>
+    <string name="error_invalid_fee_preset_value">El valor tiene que ser mayor que 0.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">No se ha podido leer la respuesta de %1$s.</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Se han actualizado las políticas de enrutamiento, pero no se han podido aplicar las nuevas reglas a %1$d de sus canales.</string>
+    <string name="error_payment_insufficient_balance">La cantidad a pagar es superior a la que puedes enviar por lightning con tus actuales canales abiertos.</string>
+    <string name="error_tor_exchange_rate">No se ha podido obtener el tipo de cambio. El servicio que está utilizando parece bloquear las peticiones procedentes de la red Tor. Intenta cambiar el proveedor de tipos de cambio en la configuración avanzada.</string>
+    <string name="error_only_payment_data_allowed">Aquí se admiten únicamente datos de pago.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Por favor asegúrate de que el destinatario ha activado la función de envío de llaves.</string>
+    <string name="error_node_not_yet_ready">Tu nodo aún no ha sincronizado completamente. Por favor inténtalo de nuevo más tarde.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s parece bloquear peticiones procedentes de la red Tor. Puedes intentar desactivar Tor en la configuración o contactar con el servicio y solicitar que actualicen sus reglas de cloudflare.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Tasa de comisión demasiado alta. Se permite un máximo de %1$.2f%%.</string>
 </resources>

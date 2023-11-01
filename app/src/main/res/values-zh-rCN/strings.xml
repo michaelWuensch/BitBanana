@@ -41,7 +41,6 @@
     <string name="channel_event">通道事件</string>
     <string name="scan_qr_code">扫描 QR 码</string>
     <string name="node">节点</string>
-    <string name="funds_available">可用资金：%s</string>
     <string name="amount_invalid">无效金额</string>
     <string name="suggested_peers">推荐节点</string>
     <string name="continue_string">继续</string>
@@ -88,7 +87,6 @@
     <string name="settings_currency">辅助单位</string>
     <string name="settings_language">语言</string>
     <string name="settings_systemLanguage">系统语言</string>
-    <string name="settings_hideTotalBalance">隐藏总余额</string>
     <string name="settings_help">需要帮助吗？</string>
     <string name="settings_reportIssue">报告问题</string>
     <string name="settings_about">关于 BitBanana</string>

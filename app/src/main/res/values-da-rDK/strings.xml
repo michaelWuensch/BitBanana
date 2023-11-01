@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Annuller</string>
     <string name="share">Del</string>
@@ -39,7 +39,6 @@
     <string name="event">Begivenhed</string>
     <string name="channel_event">Kanal begivenhed</string>
     <string name="scan_qr_code">Skan QR-kode</string>
-    <string name="funds_available">Til rådighed: %s</string>
     <string name="amount_invalid">Ugyldig beløb.</string>
     <string name="success">Lykkedes</string>
     <string name="suggested_peers">Foreslåede Peers</string>

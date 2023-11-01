@@ -40,7 +40,6 @@
     <string name="event">Събитие</string>
     <string name="channel_event">Канално Събитие</string>
     <string name="scan_qr_code">Сканирай QR-Код</string>
-    <string name="funds_available">Налични: %s</string>
     <string name="amount_invalid">Количеството е невалидно.</string>
     <string name="success">Успех</string>
     <string name="suggested_peers">Предложени Пийъри</string>
@@ -154,7 +153,6 @@
     <string name="settings_manageChannels">Управление на lightning канали</string>
     <string name="settings_scramblePin">Разбъркване на ПИН Екрана</string>
     <string name="settings_preventScreenRecording">Забраняване записването на екрана</string>
-    <string name="settings_hideTotalBalance">Скриване на баланса</string>
     <string name="settings_hideTotalBalance_explanation">Когато е активирано, чукнете на логото на началния екран, за да видите баланса си.</string>
     <string name="settings_resetSecurityWarnings">Нулиране на Предупрежденията за Сигурност</string>
     <string name="settings_help">Нужда от помощ?</string>
@@ -258,7 +256,6 @@
     <string name="biometricNotSetup">За да използвате тази функция трябва да настроите биометричната автентикация в системните настройки на Андроид.</string>
     <string name="invoice_detail">Детайли за фактурата</string>
     <string name="transaction_detail">Детайли за Транзакцията</string>
-    <string name="app_reset_title">Имайте впредвид</string>
     <string name="app_reset_message">Приложението бе нулирано, понеже последната актуализация включва някои структурни промени.\nЗа жалост ще трябва да преминете през процеса за настройване отново.</string>
     <string name="nfc_type_not_supported">Неподдържан NFC тип</string>
     <string name="help_dialog_scanPaymentRequest">QR-Кодове, съдържащи следните, са валидни:\n\n- Биткойн Адрес\n- Биткойн Заявка за Плащане\n- Lightning Заявка за Плащане</string>

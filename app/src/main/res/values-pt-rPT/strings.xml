@@ -40,7 +40,6 @@
     <string name="channel_event">Evento do Canal</string>
     <string name="scan_qr_code">Ler QR-Code</string>
     <string name="node">Nó</string>
-    <string name="funds_available">Disponível: %s</string>
     <string name="amount_invalid">Montante inválido.</string>
     <string name="success">Sucesso</string>
     <string name="suggested_peers">Pares Sugeridos</string>
@@ -318,7 +317,6 @@
     <string name="drawer_menu_channels">Canais</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s enviou uma solicitação de pagamento inválida.</string>
     <string name="advanced_channel_details_explanation_initiator">Quem abriu o canal\?</string>
-    <string name="app_reset_title">Por favor note</string>
     <string name="unknown">Desconhecido</string>
     <string name="support_contribute_description">Ajude a melhorar o BitBanana.</string>
     <string name="change_data">Mudar dados</string>
@@ -485,7 +483,6 @@
     <string name="settings_scan_clipboard_summary">Automaticamente verificar a área de transferência por dados com os quais o BitBanana pode lidar.</string>
     <string name="settings_manageChannels">Gerir canais Lightning</string>
     <string name="settings_scramblePin">Misturar números do PIN</string>
-    <string name="settings_hideTotalBalance">Ocultar saldo total</string>
     <string name="settings_changePin">Alterar/Remover PIN</string>
     <string name="settings_blockExplorer_tor_toast">O navegador Tor para Android é necessário.</string>
     <string name="settings_addressType">Tipo de Endereço Bitcoin</string>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Annuler</string>
     <string name="onChain">On-chain</string>
@@ -40,7 +40,6 @@
     <string name="channel_event">Événement de canal</string>
     <string name="scan_qr_code">Scannez le QR Code</string>
     <string name="node">Nœud</string>
-    <string name="funds_available">Disponible : %s</string>
     <string name="amount_invalid">Le montant est invalide.</string>
     <string name="success">Succès</string>
     <string name="suggested_peers">Pairs suggérés</string>
@@ -164,7 +163,6 @@
     <string name="settings_manageChannels">Gérer les canaux Lightning</string>
     <string name="settings_scramblePin">Mélanger l\'écran</string>
     <string name="settings_preventScreenRecording">Empêcher les captures d\'écran</string>
-    <string name="settings_hideTotalBalance">Cacher le solde total</string>
     <string name="settings_hideTotalBalance_explanation">Sur la page d\'accueil, appuyez sur le logo BitBanana pour révéler votre solde.</string>
     <string name="settings_resetSecurityWarnings">Réinitialiser les avertissements de sécurité</string>
     <string name="settings_help">Besoin d\'aide ?</string>
@@ -379,4 +377,4 @@
     <string name="backup_data_no_data">Aucune donnée à sauvegarder.</string>
     <string name="backup_data_version_too_old">La sauvegarde a été faite avec une version plus récente. Veuillez mettre à jour l\'application avant d\'importer la sauvegarde.</string>
     <string name="backup_data_invalid_file_chosen">Ce n\'est pas un fichier de sauvegarde valide. Veuillez choisir un fichier qui a été créé avec cette application.</string>
-    </resources>
+</resources>
