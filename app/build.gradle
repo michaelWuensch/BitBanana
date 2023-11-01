@@ -57,7 +57,7 @@ android {
     }
     namespace 'app.michaelwuensch.bitbanana'
     lint {
-        disable 'MissingTranslation', 'MissingQuantity'
+        disable 'MissingTranslation', 'ExtraTranslation', 'MissingQuantity'
     }
 }
 
