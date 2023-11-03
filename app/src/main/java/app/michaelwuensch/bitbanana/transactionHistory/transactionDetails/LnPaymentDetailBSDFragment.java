@@ -17,14 +17,18 @@ import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
 public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
@@ -119,8 +123,25 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
             // This will only be true for payments done with LND 0.7.0-beta and later
             decodeLightningInvoice(payment.getPaymentRequest());
         } else {
-            mMemo.setVisibility(View.GONE);
-            mMemoLabel.setVisibility(View.GONE);
+            // See if we have a message in custom records
+            boolean customRecordMessage = false;
+            try {
+                Map<Long, ByteString> customRecords = lastHop.getCustomRecordsMap();
+                for (Long key : customRecords.keySet()) {
+                    if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                        mMemo.setText(customRecords.get(key).toString(StandardCharsets.UTF_8));
+                        customRecordMessage = true;
+                        break;
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+            if (!customRecordMessage) {
+                // Nothing there, hide the view
+                mMemo.setVisibility(View.GONE);
+                mMemoLabel.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -131,12 +152,12 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
                 .subscribe(paymentRequest -> {
-                    if (!paymentRequest.getDescription().isEmpty()) {
-                        // Set description
-                        mMemo.setText(paymentRequest.getDescription());
-                    } else {
+                    if (paymentRequest.getDescription().isEmpty()) {
                         mMemo.setVisibility(View.GONE);
                         mMemoLabel.setVisibility(View.GONE);
+                    } else {
+                        // Set description
+                        mMemo.setText(paymentRequest.getDescription());
                     }
                 }, throwable -> BBLog.d(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
     }

@@ -2,8 +2,14 @@ package app.michaelwuensch.bitbanana.transactionHistory.listItems;
 
 import android.view.View;
 
-import app.michaelwuensch.bitbanana.util.Wallet;
+import com.google.protobuf.ByteString;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.PaymentUtil;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 
 public class LnInvoiceViewHolder extends TransactionViewHolder {
@@ -25,7 +31,22 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
 
         // Set description
         if (lnInvoiceItem.getInvoice().getMemo().equals("")) {
-            setSecondaryDescription("", false);
+            // See if we have a message in custom records
+            boolean customRecordMessage = false;
+            try {
+                Map<Long, ByteString> customRecords = lnInvoiceItem.getInvoice().getHtlcs(0).getCustomRecordsMap();
+                for (Long key : customRecords.keySet()) {
+                    if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                        setSecondaryDescription(customRecords.get(key).toString(StandardCharsets.UTF_8), true);
+                        customRecordMessage = true;
+                        break;
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+            if (!customRecordMessage)
+                setSecondaryDescription("", false);
         } else {
             setSecondaryDescription(lnInvoiceItem.getInvoice().getMemo(), true);
         }

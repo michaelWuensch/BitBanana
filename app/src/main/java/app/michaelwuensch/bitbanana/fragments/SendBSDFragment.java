@@ -73,6 +73,8 @@ public class SendBSDFragment extends BaseBSDFragment {
     private Button mBtnSend;
     private Button mFallbackButton;
     private TextView mPayee;
+    private EditText mEtComment;
+    private View mVCommentLayout;
 
     private PayReq mLnPaymentRequest;
     private String mLnInvoice;
@@ -172,6 +174,8 @@ public class SendBSDFragment extends BaseBSDFragment {
         mBtnSend = view.findViewById(R.id.sendButton);
         mFallbackButton = view.findViewById(R.id.fallbackButton);
         mPayee = view.findViewById(R.id.sendPayee);
+        mEtComment = view.findViewById(R.id.inputComment);
+        mVCommentLayout = view.findViewById(R.id.inputCommentLayout);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -276,6 +280,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             mResultView.setTypeIcon(R.drawable.ic_onchain_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_onChainPayment);
+            mVCommentLayout.setVisibility(View.GONE);
 
             if (mMemo == null) {
                 mExtvMemo.setVisibility(View.GONE);
@@ -366,8 +371,10 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             if (mIsKeysend) {
                 mPayee.setText(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
+                mVCommentLayout.setVisibility(View.VISIBLE);
             } else {
                 mPayee.setText(ContactsManager.getInstance().getNameByContactData(mLnPaymentRequest.getDestination()));
+                mVCommentLayout.setVisibility(View.GONE);
             }
 
             if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
@@ -386,7 +393,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
                     mEtAmount.requestFocus();
-                }, 200);
+                }, 600);
             } else {
                 // A specific amount was requested. We are not allowed to change the amount
                 mFixedAmount = mLnPaymentRequest.getNumSatoshis();
@@ -497,8 +504,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         }
 
         if (mIsKeysend) {
-
-            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat);
+            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat, mEtComment.getText().toString());
 
             PaymentUtil.sendPayment(keysendSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
                 @Override

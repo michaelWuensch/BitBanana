@@ -13,19 +13,23 @@ import com.github.lightningnetwork.lnd.routerrpc.SendToRouteRequest;
 import com.google.common.io.BaseEncoding;
 import com.google.protobuf.ByteString;
 
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PaymentUtil {
+
+    public static final long KEYSEND_MESSAGE_RECORD = 34349334L;
 
     private static final String LOG_TAG = PaymentUtil.class.getSimpleName();
     private static final long KEYSEND_PREIMAGE_RECORD = 5482373484L;
@@ -195,7 +199,7 @@ public class PaymentUtil {
                 .build();
     }
 
-    public static SendPaymentRequest prepareKeySendPayment(String pubkey, long amountSat) {
+    public static SendPaymentRequest prepareKeySendPayment(String pubkey, long amountSat, String message) {
         long feeLimit = calculateAbsoluteFeeLimit(amountSat);
 
         // Create the preimage upfront
@@ -206,13 +210,20 @@ public class PaymentUtil {
         // PaymentHash will be sha256(preimage)
         ByteString paymentHash = ByteString.copyFrom(UtilFunctions.sha256HashByte(preimage));
 
+        Map<Long, ByteString> customRecords = new HashMap<>();
+        customRecords.put(KEYSEND_PREIMAGE_RECORD, ByteString.copyFrom(preimage));
+
+        if (message != null && !message.isEmpty()) {
+            customRecords.put(KEYSEND_MESSAGE_RECORD, ByteString.copyFrom(message, StandardCharsets.UTF_8));
+        }
+
         return SendPaymentRequest.newBuilder()
                 .setDest(byteStringFromHex(pubkey))
                 .setAmt(amountSat)
                 .setFeeLimitSat(feeLimit)
                 .setPaymentHash(paymentHash)
                 .setNoInflightUpdates(true)
-                .putDestCustomRecords(KEYSEND_PREIMAGE_RECORD, ByteString.copyFrom(preimage))
+                .putAllDestCustomRecords(customRecords)
                 .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
                 .setMaxParts(1) // KeySend does not support multi path payments
                 .build();
