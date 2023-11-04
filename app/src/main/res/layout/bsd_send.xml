@@ -241,8 +241,8 @@
                     app:layout_constraintTop_toBottomOf="@id/sendMemo"
                     tools:visibility="visible" />
 
-                <LinearLayout
-                    android:id="@+id/inputCommentLayout"
+                <app.michaelwuensch.bitbanana.customView.PaymentCommentView
+                    android:id="@+id/paymentComment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
@@ -254,32 +254,7 @@
                     android:paddingBottom="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/numpadView">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/lnurl_pay_comment_for_payee"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/helpButton"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/inputComment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_text_input_seablue_gradient"
-                        android:ems="10"
-                        android:enabled="true"
-                        android:inputType="textMultiLine"
-                        android:maxHeight="100dp"
-                        android:maxLines="5"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
                 <Button
                     android:id="@+id/sendButton"
@@ -297,7 +272,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/inputCommentLayout" />
+                    app:layout_constraintTop_toBottomOf="@id/paymentComment" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

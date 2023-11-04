@@ -47,6 +47,7 @@ import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
+import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
@@ -73,8 +74,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private Button mBtnSend;
     private Button mFallbackButton;
     private TextView mPayee;
-    private EditText mEtComment;
-    private View mVCommentLayout;
+    private PaymentCommentView mPcvComment;
 
     private PayReq mLnPaymentRequest;
     private String mLnInvoice;
@@ -174,8 +174,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         mBtnSend = view.findViewById(R.id.sendButton);
         mFallbackButton = view.findViewById(R.id.fallbackButton);
         mPayee = view.findViewById(R.id.sendPayee);
-        mEtComment = view.findViewById(R.id.inputComment);
-        mVCommentLayout = view.findViewById(R.id.inputCommentLayout);
+        mPcvComment = view.findViewById(R.id.paymentComment);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -184,7 +183,6 @@ public class SendBSDFragment extends BaseBSDFragment {
         mHandler = new Handler();
 
         mNumpad.bindEditText(mEtAmount);
-
 
         // deactivate default keyboard for number input.
         mEtAmount.setShowSoftInputOnFocus(false);
@@ -280,7 +278,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             mResultView.setTypeIcon(R.drawable.ic_onchain_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_onChainPayment);
-            mVCommentLayout.setVisibility(View.GONE);
+            mPcvComment.setVisibility(View.GONE);
 
             if (mMemo == null) {
                 mExtvMemo.setVisibility(View.GONE);
@@ -371,10 +369,11 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             if (mIsKeysend) {
                 mPayee.setText(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
-                mVCommentLayout.setVisibility(View.VISIBLE);
+                mPcvComment.setupCharLimit(200);
+                mPcvComment.setVisibility(View.VISIBLE);
             } else {
                 mPayee.setText(ContactsManager.getInstance().getNameByContactData(mLnPaymentRequest.getDestination()));
-                mVCommentLayout.setVisibility(View.GONE);
+                mPcvComment.setVisibility(View.GONE);
             }
 
             if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
@@ -504,7 +503,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         }
 
         if (mIsKeysend) {
-            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat, mEtComment.getText().toString());
+            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat, mPcvComment.getData());
 
             PaymentUtil.sendPayment(keysendSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
                 @Override

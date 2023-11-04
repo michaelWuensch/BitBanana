@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.TypedValue;
@@ -56,6 +55,7 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView;
@@ -85,8 +85,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private View mSendInputsView;
     private EditText mEtAmount;
-    private EditText mEtComment;
-    private View mVCommentLayout;
+    private PaymentCommentView mPcvComment;
     private TextView mTvUnit;
     private View mDescriptionView;
     private NumpadView mNumpad;
@@ -150,8 +149,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
         mSendInputsView = view.findViewById(R.id.sendInputsView);
         mEtAmount = view.findViewById(R.id.sendAmount);
-        mEtComment = view.findViewById(R.id.inputComment);
-        mVCommentLayout = view.findViewById(R.id.inputCommentLayout);
+        mPcvComment = view.findViewById(R.id.paymentComment);
         mTvUnit = view.findViewById(R.id.unit);
         mDescription = view.findViewById(R.id.expandableDescription);
         mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
@@ -176,9 +174,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
         // Handle comment field
         if (mPaymentData.isCommentAllowed()) {
-            mEtComment.setFilters(new InputFilter[]{new InputFilter.LengthFilter(mPaymentData.getCommentMaxLength())});
+            mPcvComment.setupCharLimit(mPaymentData.getCommentMaxLength());
         } else {
-            mVCommentLayout.setVisibility(View.GONE);
+            mPcvComment.setVisibility(View.GONE);
         }
 
         // Handle payer data view
@@ -339,7 +337,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
                         .setAmount(mFinalChosenAmount * 1000)
-                        .setComment(mEtComment.getText().toString())
+                        .setComment(mPcvComment.getData())
                         .setPayerData(mPayerData)
                         .build();
 
