@@ -376,6 +376,15 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mPcvComment.setVisibility(View.GONE);
             }
 
+            // Scroll to comment when focused
+            mPcvComment.setOnFocusChangedListener(new PaymentCommentView.onCommentFocusChangedListener() {
+                @Override
+                public void onFocusChanged(View view, boolean b) {
+                    if (b)
+                        mBSDScrollableMainView.focusOnView(mPcvComment, 0);
+                }
+            });
+
             if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
                 mExtvMemo.setVisibility(View.GONE);
             } else {

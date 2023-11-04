@@ -18,6 +18,7 @@ public class PaymentCommentView extends LinearLayout {
 
     private TextView mTvCharCount;
     private EditText mEtComment;
+    private onCommentFocusChangedListener mOnFocusChangedListener;
     private int mCharLimit;
 
     public PaymentCommentView(Context context) {
@@ -57,6 +58,14 @@ public class PaymentCommentView extends LinearLayout {
                 updateCharCount();
             }
         });
+
+        mEtComment.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (mOnFocusChangedListener != null)
+                    mOnFocusChangedListener.onFocusChanged(view, b);
+            }
+        });
     }
 
     /**
@@ -78,8 +87,16 @@ public class PaymentCommentView extends LinearLayout {
         return mEtComment.getText().toString();
     }
 
+    public void setOnFocusChangedListener(onCommentFocusChangedListener listener) {
+        mOnFocusChangedListener = listener;
+    }
+
     private void updateCharCount() {
         String limitString = "" + mEtComment.getText().length() + "/" + mCharLimit;
         mTvCharCount.setText(limitString);
+    }
+
+    public interface onCommentFocusChangedListener {
+        void onFocusChanged(View view, boolean b);
     }
 }

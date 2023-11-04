@@ -22,6 +22,7 @@ public class PayerDataView extends LinearLayout {
     private PayerDataEntryView mPayerDataPubkey;
     private Context mActivity;
     private ImageButton mHelpButton;
+    private onFieldFocusedListener mOnFieldFocusedListener;
 
     public PayerDataView(Context context) {
         super(context);
@@ -45,6 +46,30 @@ public class PayerDataView extends LinearLayout {
         mPayerDataIdentifier = view.findViewById(R.id.payerDataIdentifier);
         mPayerDataEmail = view.findViewById(R.id.payerDataEmail);
         mPayerDataPubkey = view.findViewById(R.id.payerDataPubkey);
+
+        mPayerDataName.setOnEditTextFocusedListener(new PayerDataEntryView.onEditTextFocusedListener() {
+            @Override
+            public void onEditTextFocused() {
+                if (mOnFieldFocusedListener != null)
+                    mOnFieldFocusedListener.onFieldFocused(mPayerDataName.getTop());
+            }
+        });
+
+        mPayerDataIdentifier.setOnEditTextFocusedListener(new PayerDataEntryView.onEditTextFocusedListener() {
+            @Override
+            public void onEditTextFocused() {
+                if (mOnFieldFocusedListener != null)
+                    mOnFieldFocusedListener.onFieldFocused(mPayerDataIdentifier.getTop());
+            }
+        });
+
+        mPayerDataEmail.setOnEditTextFocusedListener(new PayerDataEntryView.onEditTextFocusedListener() {
+            @Override
+            public void onEditTextFocused() {
+                if (mOnFieldFocusedListener != null)
+                    mOnFieldFocusedListener.onFieldFocused(mPayerDataEmail.getTop());
+            }
+        });
 
         //HelpButton
         mHelpButton = findViewById(R.id.helpButton);
@@ -95,5 +120,13 @@ public class PayerDataView extends LinearLayout {
             pdb.setPubkey(mPayerDataPubkey.getData());
 
         return pdb.build();
+    }
+
+    public void setOnFieldFocusedListener(onFieldFocusedListener listener) {
+        mOnFieldFocusedListener = listener;
+    }
+
+    public interface onFieldFocusedListener {
+        void onFieldFocused(int offset);
     }
 }

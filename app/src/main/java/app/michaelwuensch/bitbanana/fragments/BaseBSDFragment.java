@@ -11,8 +11,11 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
+
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class BaseBSDFragment extends RxBSDFragment {
 
@@ -36,6 +39,24 @@ public class BaseBSDFragment extends RxBSDFragment {
             csRoot.clone(csLayout);
             csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.7));
             csRoot.applyTo(csLayout);
+
+            // Adjust Resize did not work correctly. It was not possible to scroll all the way down on a bottom sheet when soft keyboard was shown.
+            // We try to fix this by decreasing the size when the keyboard opens.
+            KeyboardVisibilityEvent.setEventListener(getActivity(), getViewLifecycleOwner(), new KeyboardVisibilityEventListener() {
+                @Override
+                public void onVisibilityChanged(boolean b) {
+                    ConstraintSet csRoot = new ConstraintSet();
+                    csRoot.clone(csLayout);
+                    if (b) {
+                        csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.4));
+                        csRoot.applyTo(csLayout);
+                    } else {
+                        csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.7));
+                        csRoot.applyTo(csLayout);
+                    }
+                }
+            });
+
         } catch (Exception ignored) {
         }
 

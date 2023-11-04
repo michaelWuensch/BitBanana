@@ -179,6 +179,15 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             mPcvComment.setVisibility(View.GONE);
         }
 
+        // Scroll to comment when focused
+        mPcvComment.setOnFocusChangedListener(new PaymentCommentView.onCommentFocusChangedListener() {
+            @Override
+            public void onFocusChanged(View view, boolean b) {
+                if (b)
+                    mBSDScrollableMainView.focusOnView(mPcvComment, 0);
+            }
+        });
+
         // Handle payer data view
         if (mPaymentData.requestsPayerData()) {
             mPayerDataView.setupView(mPaymentData.getRequestedPayerData(), getActivity());
@@ -188,6 +197,13 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 switchToFailedScreen(getContext().getString(R.string.lnurl_payer_data_not_supported));
             }
         }
+
+        mPayerDataView.setOnFieldFocusedListener(new PayerDataView.onFieldFocusedListener() {
+            @Override
+            public void onFieldFocused(int offset) {
+                mBSDScrollableMainView.focusOnView(mPayerDataView, offset);
+            }
+        });
 
         // Input validation for the amount field.
         mEtAmount.addTextChangedListener(new TextWatcher() {

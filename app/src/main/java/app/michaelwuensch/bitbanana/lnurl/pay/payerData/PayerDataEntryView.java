@@ -17,6 +17,7 @@ public class PayerDataEntryView extends LinearLayout {
     private CheckBox mPayerDataCheckbox;
     private TextView mPayerDataDescription;
     private EditText mPayerDataInput;
+    private onEditTextFocusedListener mOnEditTextFocusedListener;
 
 
     public PayerDataEntryView(Context context) {
@@ -45,6 +46,14 @@ public class PayerDataEntryView extends LinearLayout {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mPayerDataInput.setEnabled(isChecked);
+            }
+        });
+
+        mPayerDataInput.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b && mOnEditTextFocusedListener != null)
+                    mOnEditTextFocusedListener.onEditTextFocused();
             }
         });
     }
@@ -90,5 +99,13 @@ public class PayerDataEntryView extends LinearLayout {
 
     public EditText getEditText() {
         return mPayerDataInput;
+    }
+
+    public void setOnEditTextFocusedListener(onEditTextFocusedListener listener) {
+        mOnEditTextFocusedListener = listener;
+    }
+
+    public interface onEditTextFocusedListener {
+        void onEditTextFocused();
     }
 }

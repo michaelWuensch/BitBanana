@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,5 +150,17 @@ public class BSDScrollableMainView extends ConstraintLayout {
 
     public interface OnMoreListener {
         void onMore();
+    }
+
+    public final void focusOnView(final View view, int offset) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int vTop = view.getTop();
+                int vBottom = view.getBottom();
+                int sHeight = mContentView.getBottom();
+                mContentView.smoothScrollTo(0, ((vTop + vBottom - sHeight + offset) / 2));
+            }
+        }, 250);
     }
 }
