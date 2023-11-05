@@ -627,6 +627,9 @@
     <string name="forwarding_no_forwarding_events">No forwarding events in the selected period</string>
     <string name="forwarding_earned_description">Earned in the selected period</string>
     <string name="forwarding_volume_description">Routed in the selected period</string>
+    <string name="forwarding_avg_earned_description">Earned on average per event</string>
+    <string name="forwarding_avg_volume_description">Routed on average per event</string>
+    <string name="forwarding_avg_events_per_day">Events per day on average</string>
     <string name="forwarding_closed_channel">Closed channel</string>
 
     <string name="sign_verify">Sign/Verify</string>

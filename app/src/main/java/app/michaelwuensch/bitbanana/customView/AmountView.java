@@ -229,6 +229,10 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mCanBlur = canBlur;
     }
 
+    public void setSwitchValueOnClick(boolean switchValueOnClick) {
+        mSwitchesValueOnClick = switchValueOnClick;
+    }
+
     private void applyBlur() {
         if (mCanBlur && isBlurActivated() && !mIsUndefinedValue) {
             if (!mIsBlurred) {

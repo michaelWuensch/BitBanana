@@ -1,7 +1,6 @@
 package app.michaelwuensch.bitbanana.forwarding;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -9,9 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
@@ -30,7 +33,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.forwarding.listItems.DateItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.forwarding.listItems.ForwardingListItem;
@@ -38,35 +41,31 @@ import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String LOG_TAG = ForwardingActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private ForwardingEventItemAdapter mAdapter;
+    private ForwardingEventItemAdapter mForwardingEventListAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TabLayout mTabLayoutPeriod;
-    private TabLayout mDots;
     private long mPeriod = 24 * 60 * 60; // in seconds
-    private AmountView mTVAmount;
-    private TextView mTVUnit;
-    private View mVHeaderProgress;
-    private View mVHeaderSummary;
-    private TextView mTvSummaryText;
 
     private List<ForwardingListItem> mForwardingItems;
     private List<ForwardingEvent> mTempForwardingEventsList;
     private List<ForwardingEvent> mForwardingEventsList;
     private TextView mEmptyListText;
 
+    private CustomViewPager mSummaryViewPager;
+    private ForwardingActivity.SummaryPagerAdapter mSummaryPagerAdapter;
+
     private long mEarnedMsats = 0;
     private long mRoutedMsats = 0;
+    private int mRoutingEventsCount = 0;
     private boolean mIsVolume = false;
 
     @Override
@@ -75,12 +74,6 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         setContentView(R.layout.activity_forwarding);
 
         mTabLayoutPeriod = findViewById(R.id.periodTabLayout);
-        mDots = findViewById(R.id.tabDots);
-        mTVAmount = findViewById(R.id.amount);
-        mTVUnit = findViewById(R.id.unit);
-        mVHeaderProgress = findViewById(R.id.earnedFeeProgress);
-        mVHeaderSummary = findViewById(R.id.forwardingHeaderSummary);
-        mTvSummaryText = findViewById(R.id.forwardingSummaryText);
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -93,34 +86,40 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         mForwardingItems = new ArrayList<>();
 
+        // Setup summary view pager
+        mSummaryViewPager = findViewById(R.id.summary_viewpager);
+        mSummaryPagerAdapter = new ForwardingActivity.SummaryPagerAdapter(getSupportFragmentManager());
+        mSummaryViewPager.setAdapter(mSummaryPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(mSummaryViewPager, true);
+
+        mSummaryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateSummaryTexts();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(ForwardingActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new ForwardingEventItemAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        // Make dots unclickable
-        for (View v : mDots.getTouchables()) {
-            v.setEnabled(false);
-        }
-
-        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
-
-        mIsVolume = PrefsUtil.getPrefs().getBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, false);
-        updateSummaryTexts();
+        mForwardingEventListAdapter = new ForwardingEventItemAdapter(this);
+        mRecyclerView.setAdapter(mForwardingEventListAdapter);
 
         // display current state of the list
         updateForwardingEventDisplayList();
-
-        mVHeaderSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsVolume = !mIsVolume;
-                updateSummaryTexts();
-            }
-        });
 
         mTabLayoutPeriod.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -200,6 +199,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
             }
         }
         mForwardingItems.addAll(forwardingEvents);
+        mRoutingEventsCount = forwardingEvents.size();
 
         // Add the Date Lines
         for (ForwardingListItem item : forwardingEvents) {
@@ -216,11 +216,11 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         }
 
         // Update the list view
-        mAdapter.replaceAll(mForwardingItems);
+        mForwardingEventListAdapter.replaceAll(mForwardingItems);
 
         // Set number in activity title
-        if (forwardingEvents.size() > 0) {
-            String title = getResources().getString(R.string.activity_forwarding) + " (" + forwardingEvents.size() + ")";
+        if (mRoutingEventsCount > 0) {
+            String title = getResources().getString(R.string.activity_forwarding) + " (" + mRoutingEventsCount + ")";
             setTitle(title);
         } else {
             setTitle(getResources().getString(R.string.activity_forwarding));
@@ -235,20 +235,17 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void updateSummaryTexts() {
-        if (mIsVolume) {
-            // Set earned amount texts
-            mTVAmount.setAmountSat(mRoutedMsats / 1000);
-            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-            mTvSummaryText.setText(R.string.forwarding_volume_description);
-            mDots.selectTab(mDots.getTabAt(1));
-            PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, true).apply();
-        } else {
-            // Set earned amount texts
-            mTVAmount.setAmountSat(mEarnedMsats / 1000);
-            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-            mTvSummaryText.setText(R.string.forwarding_earned_description);
-            mDots.selectTab(mDots.getTabAt(0));
-            PrefsUtil.editPrefs().putBoolean(PrefsUtil.ROUTING_SUMMARY_VOLUME, false).apply();
+        if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
+            mSummaryPagerAdapter.getAmountEarnedFragment().setAmountSat(mEarnedMsats / 1000);
+        if (mSummaryPagerAdapter.getRoutedVolumeFragment() != null)
+            mSummaryPagerAdapter.getRoutedVolumeFragment().setAmountSat(mRoutedMsats / 1000);
+        if (mSummaryPagerAdapter.getAverageEarnedFragment() != null)
+            mSummaryPagerAdapter.getAverageEarnedFragment().setAmountMSat(mEarnedMsats / Math.max(mRoutingEventsCount, 1));
+        if (mSummaryPagerAdapter.getAverageVolumeFragment() != null)
+            mSummaryPagerAdapter.getAverageVolumeFragment().setAmountSat(mRoutedMsats / 1000 / Math.max(mRoutingEventsCount, 1));
+        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null) {
+            double daysInPeriod = (mPeriod / (24.0 * 60.0 * 60.0));
+            mSummaryPagerAdapter.getAverageEventsPerDayFragment().overrideValue(String.format(getResources().getConfiguration().getLocales().get(0), "%.2g%n", mRoutingEventsCount / daysInPeriod));
         }
     }
 
@@ -259,12 +256,6 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
     public void onForwardingEventSelect(ByteString forwardingEvent) {
         // ToDo: Open details page when a forwarding event was selected.
     }
@@ -272,8 +263,16 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private void refreshData() {
         if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
             setTitle(getResources().getString(R.string.activity_forwarding));
-            mTVAmount.setVisibility(View.GONE);
-            mVHeaderProgress.setVisibility(View.VISIBLE);
+            if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
+                mSummaryPagerAdapter.getAmountEarnedFragment().setInProgress(true);
+            if (mSummaryPagerAdapter.getRoutedVolumeFragment() != null)
+                mSummaryPagerAdapter.getRoutedVolumeFragment().setInProgress(true);
+            if (mSummaryPagerAdapter.getAverageEarnedFragment() != null)
+                mSummaryPagerAdapter.getAverageEarnedFragment().setInProgress(true);
+            if (mSummaryPagerAdapter.getAverageVolumeFragment() != null)
+                mSummaryPagerAdapter.getAverageVolumeFragment().setInProgress(true);
+            if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null)
+                mSummaryPagerAdapter.getAverageEventsPerDayFragment().setInProgress(true);
             mEmptyListText.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.INVISIBLE);
             fetchForwardingHistory(10000, mPeriod);
@@ -283,8 +282,16 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void refreshFinished() {
-        mTVAmount.setVisibility(View.VISIBLE);
-        mVHeaderProgress.setVisibility(View.GONE);
+        if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
+            mSummaryPagerAdapter.getAmountEarnedFragment().setInProgress(false);
+        if (mSummaryPagerAdapter.getRoutedVolumeFragment() != null)
+            mSummaryPagerAdapter.getRoutedVolumeFragment().setInProgress(false);
+        if (mSummaryPagerAdapter.getAverageEarnedFragment() != null)
+            mSummaryPagerAdapter.getAverageEarnedFragment().setInProgress(false);
+        if (mSummaryPagerAdapter.getAverageVolumeFragment() != null)
+            mSummaryPagerAdapter.getAverageVolumeFragment().setInProgress(false);
+        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null)
+            mSummaryPagerAdapter.getAverageEventsPerDayFragment().setInProgress(false);
         mRecyclerView.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -352,10 +359,62 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("firstCurrencyIsPrimary")) {
-            mTVUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+    public class SummaryPagerAdapter extends FragmentPagerAdapter {
+        private ForwardingSummaryFragment mAmountEarned;
+        private ForwardingSummaryFragment mRoutedVolume;
+        private ForwardingSummaryFragment mAverageEarned;
+        private ForwardingSummaryFragment mAverageVolume;
+        private ForwardingSummaryFragment mAverageEventsPerDay;
+
+
+        public SummaryPagerAdapter(FragmentManager fm) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            mAmountEarned = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AMOUNT_EARNED);
+            mRoutedVolume = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_ROUTED_VOLUME);
+            mAverageEarned = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_EARNED);
+            mAverageVolume = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_ROUTED);
+            mAverageEventsPerDay = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_EVENTS_PER_DAY);
+        }
+
+        @Override
+        public Fragment getItem(int pos) {
+            switch (pos) {
+                case 0:
+                    return mAmountEarned;
+                case 1:
+                    return mRoutedVolume;
+                case 2:
+                    return mAverageEarned;
+                case 3:
+                    return mAverageVolume;
+                default:
+                    return mAverageEventsPerDay;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 5;
+        }
+
+        public ForwardingSummaryFragment getAmountEarnedFragment() {
+            return mAmountEarned;
+        }
+
+        public ForwardingSummaryFragment getRoutedVolumeFragment() {
+            return mRoutedVolume;
+        }
+
+        public ForwardingSummaryFragment getAverageEarnedFragment() {
+            return mAverageEarned;
+        }
+
+        public ForwardingSummaryFragment getAverageVolumeFragment() {
+            return mAverageVolume;
+        }
+
+        public ForwardingSummaryFragment getAverageEventsPerDayFragment() {
+            return mAverageEventsPerDay;
         }
     }
 }
