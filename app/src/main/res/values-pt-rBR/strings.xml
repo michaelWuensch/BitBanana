@@ -720,4 +720,7 @@
     <string name="stealth_mode_enable">Ativar modo furtivo:</string>
     <string name="stealth_mode_disable_instruction_calc">Faça um cálculo que resulte em 21</string>
     <string name="settings_on_off">Ligado / Desligado</string>
+    <string name="forwarding_avg_earned_description">Ganho em média por evento</string>
+    <string name="forwarding_avg_volume_description">Roteado em média por evento</string>
+    <string name="forwarding_avg_events_per_day">Eventos por dia em média</string>
 </resources>
