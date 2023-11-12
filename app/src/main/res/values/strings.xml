@@ -112,6 +112,7 @@
     <string name="off">Off</string>
     <string name="available">Available</string>
     <string name="note">Note</string>
+    <string name="disconnect">Disconnect</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -131,6 +132,7 @@
     <string name="activity_utxos">Coins (UTXOs)</string>
     <string name="activity_forwarding">Routing</string>
     <string name="activity_routing_policy">Routing Policy</string>
+    <string name="activity_peers">Peers</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -297,6 +299,8 @@
     <string name="settings_featureContacts_summary">Make sending money a breeze with a neatly organized contact list.</string>
     <string name="settings_featureCoinControl">Coin Control</string>
     <string name="settings_featureCoinControl_summary">Advanced management of on-chain funds. Provides a list of all UTXOs and allows to select specific ones when sending funds. Coin selection is automated if disabled.</string>
+    <string name="settings_featurePeers">Peer Management</string>
+    <string name="settings_featurePeers_summary">While peer management is automated, this feature still offers manual control for viewing and managing your connected peers.</string>
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
@@ -473,6 +477,8 @@
     <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
     <string name="help_dialog_settings_features">BitBanana\'s commitment to also serving experts means offering a rich set of features. However, we recognize that not everyone may require all of these functionalities. With our customizable settings, you have the flexibility to hide any features that are not relevant to your needs, ensuring a tailored experience.</string>
     <string name="help_dialog_stealth_mode">Utilize stealth mode to defend your phone against quick physical searches, creating the illusion that BitBanana isn\'t present on your device. This is achieved by replacing your app\'s icon and name and launching a decoy app. However, note that the app\'s icon and name won\'t be changed in the app list in your system settings.\n\nIt is not a perfect solution, but it helps to make the presence of your Bitcoin software less obvious.</string>
+    <string name="help_dialog_peers">This list displays all the peers currently connected to your node. Peers are essentially other nodes operating within the network. They collaborate by exchanging information, ensuring each node has a clear view of the network\'s status.\n\nAs an example, when your node wants to change something, such as updating a channel policy, it notifies all the peers it\'s connected to. These peers, in turn, relay the information to their own connected peers, creating a ripple effect that ensures the entire network is informed.\n\nYour node establishes connections with peers automatically, typically prioritizing those peers with whom you have active channels. Nevertheless, you maintain the flexibility to manually establish or break connections and access more details about your peers through this interface.</string>
+    <string name="help_dialog_scanPeer">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -667,5 +673,8 @@
     <string name="stealth_mode_enable_instruction">Close the app</string>
     <string name="stealth_mode_disable">Disable stealth mode:</string>
     <string name="stealth_mode_disable_instruction_calc">Perform a calculation that results in 21</string>
+
+    <string name="peers_no_peers">No peers</string>
+    <string name="peers_add">Add peer</string>
 
 </resources>

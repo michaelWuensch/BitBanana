@@ -246,6 +246,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.peers.PeersActivity"
+            android:label="@string/activity_peers"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.peers.ScanPeerActivity"
+            android:label="@string/peers_add"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity"
             android:label="@string/sign_verify"
             android:screenOrientation="portrait"
@@ -262,6 +271,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.peers.PeerDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
 
         <activity
             android:name=".decoyApps.CalcActivity"
