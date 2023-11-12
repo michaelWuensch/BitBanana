@@ -723,4 +723,20 @@
     <string name="forwarding_avg_earned_description">Ganho em média por evento</string>
     <string name="forwarding_avg_volume_description">Roteado em média por evento</string>
     <string name="forwarding_avg_events_per_day">Eventos por dia em média</string>
+    <string name="settings_featurePeers_summary">Embora o gerenciamento de pares seja automatizado, esta função ainda fornece controles manuais para ver e gerenciar seus pares conectados.</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="peers_no_peers">Sem pares</string>
+    <string name="help_dialog_peers">Esta lista exibe todos os pares atualmente conectados ao seu nó. Pares são essencialmente outros nós operando dentro da rede. Eles colaboram ao trocar informações, garantindo que cada nó tenha uma visão clara do estado da rede.
+\n
+\nPor exemplo, quando seu nó quer mudar algo, como atualizar uma política do canal, ele notifica todos os pares aos quais está conectado. Estes pares, então, transmitem a informação aos seus próprios pares conectados, criando um efeito onda que garante que a rede inteira esteja informada.
+\n
+\nSeu nó estabelece conexões com pares automaticamente, geralmente priorizando esses pares com os quais você tem canais ativos. Ainda assim, você mantém a flexibilidade de manualmente estabelecer ou quebrar conexões e acessar mais detalhes sobre seus pares através desta interface.</string>
+    <string name="settings_featurePeers">Gerenciamento de Pares</string>
+    <string name="help_dialog_scanPeer">São válidos os códigos QR contendo o seguinte:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="activity_peers">Pares</string>
+    <string name="peers_add">Adicionar par</string>
 </resources>
