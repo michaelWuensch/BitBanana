@@ -88,6 +88,7 @@ public class Wallet {
     private final Set<ChannelOpenUpdateListener> mChannelOpenUpdateListeners = new HashSet<>();
     private final Set<HtlcSubscriptionListener> mHtlcSubscriptionListeners = new HashSet<>();
     private final Set<UtxoSubscriptionListener> mUtxoSubscriptionListeners = new HashSet<>();
+    private final Set<PeerUpdateListener> mPeerUpdateListeners = new HashSet<>();
 
     public List<Transaction> mOnChainTransactionList;
     public List<Invoice> mInvoiceList;
@@ -628,7 +629,7 @@ public class Wallet {
                         openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        connectPeer(nodeUri, amount, targetConf, isPrivate);
+                        connectPeer(nodeUri, true, amount, targetConf, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -640,10 +641,10 @@ public class Wallet {
                 }));
     }
 
-    private void connectPeer(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
+    public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
             BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, amount, targetConf, isPrivate);
+            fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, targetConf, isPrivate);
             return;
         }
 
@@ -656,7 +657,10 @@ public class Wallet {
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(connectPeerResponse -> {
                     BBLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
-                    openChannelConnected(nodeUri, amount, targetConf, isPrivate);
+                    broadcastPeerConnectedEvent();
+                    if (openChannel) {
+                        openChannelConnected(nodeUri, amount, targetConf, isPrivate);
+                    }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
@@ -672,7 +676,7 @@ public class Wallet {
                 }));
     }
 
-    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
+    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(nodeUri.getPubKey())
                 .build();
@@ -685,7 +689,7 @@ public class Wallet {
                         LightningNodeUri nodeUriWithHost = LightningParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, amount, targetConf, isPrivate);
+                            connectPeer(nodeUriWithHost, openChannel, amount, targetConf, isPrivate);
                         } else {
                             BBLog.d(LOG_TAG, "Failed to parse nodeUri");
                             broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
@@ -1718,6 +1722,20 @@ public class Wallet {
         mWalletLoadedListeners.remove(listener);
     }
 
+    private void broadcastPeerConnectedEvent() {
+        for (PeerUpdateListener listener : mPeerUpdateListeners) {
+            listener.onConnectedToPeer();
+        }
+    }
+
+    public void registerPeerUpdateListener(PeerUpdateListener listener) {
+        mPeerUpdateListeners.add(listener);
+    }
+
+    public void unregisterPeerUpdateListener(PeerUpdateListener listener) {
+        mPeerUpdateListeners.remove(listener);
+    }
+
     public interface LndConnectionTestListener {
 
         int ERROR_LOCKED = 0;
@@ -1802,6 +1820,10 @@ public class Wallet {
 
     public interface NodeInfoFetchedListener {
         void onNodeInfoFetched(String pubkey);
+    }
+
+    public interface PeerUpdateListener {
+        void onConnectedToPeer();
     }
 
     public interface ChannelOpenUpdateListener {

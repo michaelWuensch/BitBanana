@@ -41,6 +41,11 @@ public class FeatureManager {
         return true;
     }
 
+    public static boolean isPeersEnabled() {
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featurePeers", false);
+        return settingEnabled;
+    }
+
     public static boolean isSignVerifyEnabled() {
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled;
