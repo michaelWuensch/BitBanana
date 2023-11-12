@@ -73,6 +73,7 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.peers.PeersActivity;
 import app.michaelwuensch.bitbanana.settings.SettingsActivity;
 import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
@@ -853,6 +854,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         } else if (id == R.id.drawerUTXOs) {
             Intent intentUTXOs = new Intent(this, UTXOsActivity.class);
             startActivity(intentUTXOs);
+        } else if (id == R.id.drawerPeers) {
+            Intent intentPeers = new Intent(this, PeersActivity.class);
+            startActivityForResult(intentPeers, 0);
         } else if (id == R.id.drawerSignVerify) {
             Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
             startActivity(intentSignVerify);
@@ -903,6 +907,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         drawerMenu.findItem(R.id.drawerChannels).setVisible(FeatureManager.isChannelManagementEnabled());
         drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingEnabled());
         drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isCoinControlEnabled());
+        drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
         drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isCoinControlEnabled() || FeatureManager.isRoutingEnabled() || FeatureManager.isSignVerifyEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
