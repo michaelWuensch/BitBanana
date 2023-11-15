@@ -243,8 +243,17 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
             mSummaryPagerAdapter.getAverageEarnedFragment().setAmountMSat(mEarnedMsats / Math.max(mRoutingEventsCount, 1));
         if (mSummaryPagerAdapter.getAverageVolumeFragment() != null)
             mSummaryPagerAdapter.getAverageVolumeFragment().setAmountSat(mRoutedMsats / 1000 / Math.max(mRoutingEventsCount, 1));
-        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null) {
-            double daysInPeriod = (mPeriod / (24.0 * 60.0 * 60.0));
+        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null && mForwardingEventsList != null) {
+            long period;
+            if (mTabLayoutPeriod.getSelectedTabPosition() == 6) {
+                // when "all" is selected, we use the period between the first forwarding event that occurred and now to calculate the daily average.
+                long now = System.currentTimeMillis();
+                long firstForwarding = mForwardingEventsList.get(0).getTimestampNs() / 1000000L;
+                period = (now - firstForwarding) / 1000;
+            } else {
+                period = mPeriod;
+            }
+            double daysInPeriod = (period / (24.0 * 60.0 * 60.0));
             mSummaryPagerAdapter.getAverageEventsPerDayFragment().overrideValue(String.format(getResources().getConfiguration().getLocales().get(0), "%.2g%n", mRoutingEventsCount / daysInPeriod));
         }
     }
