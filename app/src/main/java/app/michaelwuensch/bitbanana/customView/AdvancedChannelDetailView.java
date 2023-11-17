@@ -24,7 +24,7 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
     private ImageView mExpandArrowImage;
     private ImageView mLine;
     private View mVBasicDetails;
-    private ViewSwitcher mVsDetailsValueSwitcher;
+    public ViewSwitcher mVsDetailsValueSwitcher;
     private ClickableConstraintLayoutGroup mGroupExpandedContent;
 
 

@@ -113,6 +113,8 @@
     <string name="available">Available</string>
     <string name="note">Note</string>
     <string name="disconnect">Disconnect</string>
+    <string name="reliability">Reliability</string>
+    <string name="network">Network</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -677,4 +679,18 @@
     <string name="peers_no_peers">No peers</string>
     <string name="peers_add">Add peer</string>
 
+    <string name="peer_ping">Ping</string>
+    <string name="peer_ping_explanation">The time it takes for the peer to respond.</string>
+    <string name="peer_flap_count">Flap count</string>
+    <string name="peer_flap_count_explanation">Total occurrences of this peer going offline or coming online, documented across restarts. The count reduces gradually if the peer has not recently flapped, allowing forgiveness for historically high flap counts.</string>
+    <string name="peer_last_flap">Last flap</string>
+    <string name="peer_last_flap_explanation">Elapsed time since the peer\'s most recent offline event.</string>
+    <string name="peer_last_errors">Last errors</string>
+    <string name="peer_mutual_channels">Mutual channels</string>
+    <string name="peer_mutual_channels_explanation">The count of active channels you have open with this peer.</string>
+    <string name="peer_total_channels">Total Channels</string>
+    <string name="peer_total_channels_explanation">The total count of public channels maintained by this peer.</string>
+    <string name="peer_total_capacity">Total Capacity</string>
+    <string name="peer_total_capacity_explanation">Total node capacity, derived from the sum of channel capacities.</string>
+    <string name="peer_features">Features</string>
 </resources>
