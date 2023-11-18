@@ -15,7 +15,7 @@ import androidx.transition.TransitionManager;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
-public class AdvancedChannelDetailView extends ConstraintLayout {
+public class BBExpandablePropertyView extends ConstraintLayout {
 
     private TextView mTvDetailLabel;
     private TextView mTvDetailValue;
@@ -24,27 +24,27 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
     private ImageView mExpandArrowImage;
     private ImageView mLine;
     private View mVBasicDetails;
-    private ViewSwitcher mVsDetailsValueSwitcher;
+    public ViewSwitcher mVsDetailsValueSwitcher;
     private ClickableConstraintLayoutGroup mGroupExpandedContent;
 
 
-    public AdvancedChannelDetailView(Context context) {
+    public BBExpandablePropertyView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public AdvancedChannelDetailView(Context context, AttributeSet attrs) {
+    public BBExpandablePropertyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AdvancedChannelDetailView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BBExpandablePropertyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        View view = inflate(getContext(), R.layout.view_advanced_channel_detail, this);
+        View view = inflate(getContext(), R.layout.view_expandable_property, this);
 
         mTvDetailLabel = view.findViewById(R.id.detailLabel);
         mTvDetailValue = view.findViewById(R.id.detailValue);
@@ -76,12 +76,12 @@ public class AdvancedChannelDetailView extends ConstraintLayout {
         // Apply attributes from XML
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AdvancedChannelDetailView);
-            String attrLabel = a.getString(R.styleable.AdvancedChannelDetailView_label);
-            String attrValue = a.getString(R.styleable.AdvancedChannelDetailView_value);
-            String attrExplanation = a.getString(R.styleable.AdvancedChannelDetailView_explanation);
-            boolean attrHasLine = a.getBoolean(R.styleable.AdvancedChannelDetailView_hasLine, true);
-            boolean mIsAmountDetail = a.getBoolean(R.styleable.AdvancedChannelDetailView_isAmountDetail, false);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BBExpandablePropertyView);
+            String attrLabel = a.getString(R.styleable.BBExpandablePropertyView_label);
+            String attrValue = a.getString(R.styleable.BBExpandablePropertyView_value);
+            String attrExplanation = a.getString(R.styleable.BBExpandablePropertyView_explanation);
+            boolean attrHasLine = a.getBoolean(R.styleable.BBExpandablePropertyView_hasLine, true);
+            boolean mIsAmountDetail = a.getBoolean(R.styleable.BBExpandablePropertyView_isAmountDetail, false);
 
             if (attrLabel != null)
                 setLabel(attrLabel);

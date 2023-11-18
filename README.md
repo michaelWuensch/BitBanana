@@ -36,10 +36,10 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] And of course, BitBanana is Bitcoin only!
 
 **Node Management**
-
 - [x] Use your node as a lightning wallet wherever you are
 - [x] Manage multiple nodes
-- [x] Channel Management
+- [x] Manage peers
+- [x] Manage channels
 - [x] Manage routing fees
 - [x] Routing summary
 

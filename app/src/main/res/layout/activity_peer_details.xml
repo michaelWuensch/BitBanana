@@ -15,8 +15,174 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_margin="10dp"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/settings_category_general"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/remotePubKeyLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="@string/pubkey"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/remotePubKeyText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/remotePubKeyLabel"
+                    tools:text="0279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+                <ImageView
+                    android:id="@+id/remotePubKeyCopyIcon"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:background="@null"
+                    app:layout_constraintBottom_toBottomOf="@+id/remotePubKeyText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/remotePubKeyText"
+                    app:srcCompat="@drawable/ic_content_copy_black_24dp"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/remotePubKeyText"
+                    app:srcCompat="@color/gray_dark"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/remoteAddressLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:text="@string/address"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line" />
+
+                <TextView
+                    android:id="@+id/remoteAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toStartOf="@id/remotePubKeyCopyIcon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/remoteAddressLabel"
+                    tools:text="0279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+                <ImageView
+                    android:id="@+id/remoteAddressCopyIcon"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:background="@null"
+                    app:layout_constraintBottom_toBottomOf="@+id/remoteAddress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/remoteAddress"
+                    app:srcCompat="@drawable/ic_content_copy_black_24dp"
+                    app:tint="@color/white" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="@string/reliability"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/ping"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_ping_explanation"
+                app:label="@string/peer_ping" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/lastFlap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_last_flap_explanation"
+                app:label="@string/peer_last_flap" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/flapCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_flap_count_explanation"
+                app:label="@string/peer_flap_count" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/errors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hasLine="false"
+                app:label="@string/peer_last_errors" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/network"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/mutualChannels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_mutual_channels_explanation"
+                app:label="@string/peer_mutual_channels" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/totalChannels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_total_channels_explanation"
+                app:label="@string/peer_total_channels" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/totalCapacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:explanation="@string/peer_total_capacity_explanation"
+                app:isAmountDetail="true"
+                app:label="@string/peer_total_capacity" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/features"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hasLine="false"
+                app:label="@string/peer_features" />
 
         </LinearLayout>
 
