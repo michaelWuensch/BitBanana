@@ -31,7 +31,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.contacts.ScanContactActivity;
-import app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView;
+import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.lightning.LightningParser;
 import app.michaelwuensch.bitbanana.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.AliasManager;
@@ -56,15 +56,15 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
     private ImageView mIvPubkeyCopyIcon;
     private TextView mTVAddress;
     private ImageView mIvAddressCopyIcon;
-    private AdvancedChannelDetailView mPing;
-    private AdvancedChannelDetailView mFlapCount;
-    private AdvancedChannelDetailView mLastFlap;
-    private AdvancedChannelDetailView mErrors;
+    private BBExpandablePropertyView mPing;
+    private BBExpandablePropertyView mFlapCount;
+    private BBExpandablePropertyView mLastFlap;
+    private BBExpandablePropertyView mErrors;
 
-    private AdvancedChannelDetailView mChannelsWithYou;
-    private AdvancedChannelDetailView mTotalChannels;
-    private AdvancedChannelDetailView mTotalCapacity;
-    private AdvancedChannelDetailView mFeatures;
+    private BBExpandablePropertyView mChannelsWithYou;
+    private BBExpandablePropertyView mTotalChannels;
+    private BBExpandablePropertyView mTotalCapacity;
+    private BBExpandablePropertyView mFeatures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +108,13 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         ////// Reliability section
         mPing.setValue(mPeer.getPingTime() / 1000L + " ms");
         mFlapCount.setValue(String.valueOf(mPeer.getFlapCount()));
-        long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapNs() / 1000000L);
-        String durationString = TimeFormatUtil.formattedDuration(durationSinceLastFlap / 1000L, PeerDetailsActivity.this);
-        mLastFlap.setValue(durationString);
+        if (mPeer.getLastFlapNs() == 0) {
+            mLastFlap.setValue(getResources().getString(R.string.fee_not_available));
+        } else {
+            long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapNs() / 1000000L);
+            String durationString = TimeFormatUtil.formattedDuration(durationSinceLastFlap / 1000L, PeerDetailsActivity.this);
+            mLastFlap.setValue(durationString);
+        }
 
         // Errors
         mErrors.setValue(String.valueOf(mPeer.getErrorsCount()));

@@ -119,28 +119,28 @@
                 android:textColor="@color/banana_yellow"
                 android:textSize="16sp" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/ping"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:explanation="@string/peer_ping_explanation"
                 app:label="@string/peer_ping" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/lastFlap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:explanation="@string/peer_last_flap_explanation"
                 app:label="@string/peer_last_flap" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/flapCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:explanation="@string/peer_flap_count_explanation"
                 app:label="@string/peer_flap_count" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/errors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,21 +155,21 @@
                 android:textColor="@color/banana_yellow"
                 android:textSize="16sp" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/mutualChannels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:explanation="@string/peer_mutual_channels_explanation"
                 app:label="@string/peer_mutual_channels" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/totalChannels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:explanation="@string/peer_total_channels_explanation"
                 app:label="@string/peer_total_channels" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/totalCapacity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                 app:isAmountDetail="true"
                 app:label="@string/peer_total_capacity" />
 
-            <app.michaelwuensch.bitbanana.customView.AdvancedChannelDetailView
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
                 android:id="@+id/features"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -687,7 +687,7 @@
     <string name="peer_last_flap_explanation">Elapsed time since the peer\'s most recent offline event.</string>
     <string name="peer_last_errors">Last errors</string>
     <string name="peer_mutual_channels">Mutual channels</string>
-    <string name="peer_mutual_channels_explanation">The count of active channels you have open with this peer.</string>
+    <string name="peer_mutual_channels_explanation">The count of channels you have open with this peer.</string>
     <string name="peer_total_channels">Total Channels</string>
     <string name="peer_total_channels_explanation">The total count of public channels maintained by this peer.</string>
     <string name="peer_total_capacity">Total Capacity</string>
