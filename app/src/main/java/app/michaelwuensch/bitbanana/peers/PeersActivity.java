@@ -30,11 +30,13 @@ import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsMana
 import app.michaelwuensch.bitbanana.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PeersActivity extends BaseAppCompatActivity implements PeerSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.PeerUpdateListener {
@@ -109,9 +111,12 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                             mPeersItems.clear();
+                            ArrayList<String> peersToFetchInfo = new ArrayList<>();
                             for (Peer peer : listPeersResponse.getPeersList()) {
                                 PeerListItem currItem = new PeerListItem(peer);
                                 mPeersItems.add(currItem);
+                                if (!AliasManager.getInstance().hasUpToDateAliasInfo(peer.getPubKey()))
+                                    peersToFetchInfo.add(peer.getPubKey());
                             }
                             // Show "No peers" if the list is empty
                             if (mPeersItems.size() == 0) {
@@ -130,6 +135,17 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
                             // Update the list view
                             mAdapter.replaceAll(mPeersItems);
+
+
+                            // Fetch aliases for peers if necessary
+                            if (peersToFetchInfo.size() > 0) {
+                                BBLog.d(LOG_TAG, "Fetching node info for " + peersToFetchInfo.size() + " nodes.");
+
+                                mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
+                                        .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
+                                        .doOnNext(integer -> Wallet.getInstance().fetchNodeInfoFromLND(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
+                                        .subscribe());
+                            }
 
                         }
                         , throwable -> {
