@@ -739,4 +739,20 @@
 \n- pubkey@host:port</string>
     <string name="activity_peers">Pares</string>
     <string name="peers_add">Adicionar par</string>
+    <string name="peer_total_channels">Total de Canais</string>
+    <string name="peer_total_channels_explanation">A contagem total de canais públicos gerenciados por este par.</string>
+    <string name="peer_flap_count">Contagem de flaps</string>
+    <string name="peer_ping">Ping</string>
+    <string name="peer_last_flap_explanation">Tempo transcorrido desde o último evento off-line do par.</string>
+    <string name="peer_ping_explanation">O tempo que leva para o par responder.</string>
+    <string name="peer_mutual_channels">Canais mútuos</string>
+    <string name="peer_last_flap">Último flap</string>
+    <string name="peer_total_capacity">Capacidade Total</string>
+    <string name="network">Rede</string>
+    <string name="peer_last_errors">Últimos erros</string>
+    <string name="reliability">Confiabilidade</string>
+    <string name="peer_total_capacity_explanation">Capacidade total de nós, derivado da soma das capacidades do canal.</string>
+    <string name="peer_flap_count_explanation">Total de ocorrências deste par ficando off-line ou entrando na rede, documentado através de reinícios. A contagem reduz gradualmente se o par não fez flap recentemente, permitindo tolerância para contagens de flap historicamente altas.</string>
+    <string name="peer_features">Funções</string>
+    <string name="peer_mutual_channels_explanation">A contagem de canais que você abriu com este par.</string>
 </resources>
