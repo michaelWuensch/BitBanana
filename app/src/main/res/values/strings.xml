@@ -395,6 +395,9 @@
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Fee rate to high. A maximum of %1$.2f%% is allowed.</string>
     <string name="error_no_permission_to_read_file">Access Denied: Unable to read the file. We recommend moving it to a different location, such as the \"Downloads\" folder, and accessing it from there.</string>
     <string name="error_block_explorer_setup_invalid">Block Explorer setup invalid.</string>
+    <string name="error_funds_not_confirmed_yet">You have sufficient on-chain funds, but their confirmation is still pending. Please wait for your on-chain funds to confirm. You can track the status of your funds through the UTXO view or transaction history.</string>
+    <string name="error_insufficient_on_chain_funds">Insufficient on-chain funds. Maximum available:</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Insufficient lightning liquidity for sending. Open additional channels to increase it.\nCurrent maximum:</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>

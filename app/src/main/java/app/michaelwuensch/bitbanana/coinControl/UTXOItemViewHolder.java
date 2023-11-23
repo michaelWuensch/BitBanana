@@ -15,6 +15,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
     private static final String LOG_TAG = UTXOItemViewHolder.class.getSimpleName();
 
+    private View mUTXOContentView;
     private TextView mUTXOAddress;
     private AmountView mUTXOAmount;
     private View mRootView;
@@ -27,6 +28,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
         mUTXOAddress = v.findViewById(R.id.utxoAddress);
         mUTXOAmount = v.findViewById(R.id.utxoAmount);
+        mUTXOContentView = v.findViewById(R.id.utxoContent);
         mRootView = v.findViewById(R.id.utxoRootView);
         mContext = v.getContext();
     }
@@ -37,8 +39,10 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
         mUTXOAddress.setText(utxoListItem.getUtxo().getAddress());
 
         // Set utxo amount
-
         mUTXOAmount.setAmountSat(utxoListItem.getUtxo().getAmountSat());
+
+        // Show unconfirmed as semitransparent
+        mUTXOContentView.setAlpha(utxoListItem.getUtxo().getConfirmations() == 0 ? 0.5f : 1f);
 
         // Set on click listener
         setOnRootViewClickListener(utxoListItem);

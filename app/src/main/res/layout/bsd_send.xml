@@ -1,292 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_bottom_sheets">
+    android:layout_height="match_parent">
 
-    <app.michaelwuensch.bitbanana.customView.BSDScrollableMainView
-        android:id="@+id/scrollableBottomSheet"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bottom_sheets">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/contentTopLayout"
+        <app.michaelwuensch.bitbanana.customView.BSDScrollableMainView
+            android:id="@+id/scrollableBottomSheet"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <app.michaelwuensch.bitbanana.customView.BSDResultView
-                android:id="@+id/resultLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <Button
-                    android:id="@+id/fallbackButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="-15dp"
-                    android:background="@drawable/bg_clickable_item"
-                    android:text="@string/send_SendOnChainInstead"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
-            </app.michaelwuensch.bitbanana.customView.BSDResultView>
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/inputLayout"
+                android:id="@+id/contentTopLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/sendInputsView"
+                <app.michaelwuensch.bitbanana.customView.BSDResultView
+                    android:id="@+id/resultLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="30dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="30dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:id="@+id/line"
+                    <Button
+                        android:id="@+id/fallbackButton"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@color/gray" />
-
-                    <TextView
-                        android:id="@+id/payeeSourceLabel"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:maxLength="50"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="9dp"
-                        android:text="@string/payee"
-                        android:textAlignment="viewStart"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/line" />
-
-                    <TextView
-                        android:id="@+id/sendPayee"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:paddingStart="15dp"
-                        android:paddingTop="9dp"
-                        android:paddingBottom="9dp"
-                        android:textAlignment="viewEnd"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="-15dp"
+                        android:background="@drawable/bg_clickable_item"
+                        android:text="@string/send_SendOnChainInstead"
+                        android:textAllCaps="false"
+                        android:textColor="@color/banana_yellow"
                         android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/payeeSourceLabel"
-                        app:layout_constraintTop_toBottomOf="@id/line"
-                        tools:text="Alice (0238834839...)" />
-
-                    <ImageView
-                        android:id="@+id/line2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/payeeSourceLabel"
-                        app:srcCompat="@color/gray" />
-
-                    <!-- Dummy item to prevent EditText from receiving focus -->
-                    <LinearLayout
-                        android:layout_width="0px"
-                        android:layout_height="0px"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/sendAmountLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="#00000000"
-                        android:ems="10"
-                        android:maxLength="50"
-                        android:text="@string/amount"
-                        android:textAlignment="viewStart"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                    <EditText
-                        android:id="@+id/sendAmount"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="#00000000"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="0dp"
-                        android:textAlignment="textEnd"
-                        android:textSize="20sp"
-                        app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                    <LinearLayout
-                        android:id="@+id/sendUnitLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/sendAmount"
-                        app:layout_constraintTop_toBottomOf="@id/line2">
-
-                        <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                            android:id="@+id/sendUnit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:gravity="center"
-                            android:textSize="30sp"
-                            android:textStyle="italic"
-                            tools:text="BTC" />
-
-                        <ImageView
-                            android:id="@+id/sendSwitchUnitImage"
-                            android:layout_width="18dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:paddingStart="4dp"
-                            android:paddingTop="5dp"
-                            app:srcCompat="@drawable/ic_swap_vert_black_24dp"
-                            app:tint="@color/banana_yellow" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/line3"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@color/gray" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <RelativeLayout
-                    android:id="@+id/sendFeeTopLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendInputsView">
-
-                    <app.michaelwuensch.bitbanana.customView.LightningFeeView
-                        android:id="@+id/sendFeeLightningLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="30dp"
                         android:visibility="gone" />
 
-                    <app.michaelwuensch.bitbanana.customView.OnChainFeeView
-                        android:id="@+id/sendFeeOnChainLayout"
+                </app.michaelwuensch.bitbanana.customView.BSDResultView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/inputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/sendInputsView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="30dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="30dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/line"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@color/gray" />
+
+                        <TextView
+                            android:id="@+id/payeeSourceLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:maxLength="50"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="9dp"
+                            android:text="@string/payee"
+                            android:textAlignment="viewStart"
+                            android:textSize="20sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line" />
+
+                        <TextView
+                            android:id="@+id/sendPayee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:paddingStart="15dp"
+                            android:paddingTop="9dp"
+                            android:paddingBottom="9dp"
+                            android:textAlignment="viewEnd"
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/payeeSourceLabel"
+                            app:layout_constraintTop_toBottomOf="@id/line"
+                            tools:text="Alice (0238834839...)" />
+
+                        <ImageView
+                            android:id="@+id/line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/payeeSourceLabel"
+                            app:srcCompat="@color/gray" />
+
+                        <!-- Dummy item to prevent EditText from receiving focus -->
+                        <LinearLayout
+                            android:layout_width="0px"
+                            android:layout_height="0px"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/sendAmountLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#00000000"
+                            android:ems="10"
+                            android:maxLength="50"
+                            android:text="@string/amount"
+                            android:textAlignment="viewStart"
+                            android:textSize="20sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line2" />
+
+                        <EditText
+                            android:id="@+id/sendAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginEnd="5dp"
+                            android:background="#00000000"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:textAlignment="textEnd"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toStartOf="@+id/sendUnitLayout"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/line2" />
+
+                        <LinearLayout
+                            android:id="@+id/sendUnitLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/sendAmount"
+                            app:layout_constraintTop_toBottomOf="@id/line2">
+
+                            <app.michaelwuensch.bitbanana.customView.NonClippingTextView
+                                android:id="@+id/sendUnit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="50dp"
+                                android:gravity="center"
+                                android:textSize="30sp"
+                                android:textStyle="italic"
+                                tools:text="BTC" />
+
+                            <ImageView
+                                android:id="@+id/sendSwitchUnitImage"
+                                android:layout_width="18dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:paddingStart="4dp"
+                                android:paddingTop="5dp"
+                                app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                                app:tint="@color/banana_yellow" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/line3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:srcCompat="@color/gray" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/sendFeeTopLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendInputsView">
+
+                        <app.michaelwuensch.bitbanana.customView.LightningFeeView
+                            android:id="@+id/sendFeeLightningLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="30dp"
+                            android:visibility="gone" />
+
+                        <app.michaelwuensch.bitbanana.customView.OnChainFeeView
+                            android:id="@+id/sendFeeOnChainLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="30dp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </RelativeLayout>
+
+                    <app.michaelwuensch.bitbanana.customView.ExpandableTextView
+                        android:id="@+id/sendMemo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendFeeTopLayout" />
+
+                    <app.michaelwuensch.bitbanana.customView.NumpadView
+                        android:id="@+id/numpadView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendMemo"
+                        tools:visibility="visible" />
+
+                    <app.michaelwuensch.bitbanana.customView.PaymentCommentView
+                        android:id="@+id/paymentComment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/rounded_rectangle_seablue"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/numpadView" />
+
+                    <Button
+                        android:id="@+id/sendButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="30dp"
                         android:layout_marginEnd="30dp"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/bg_clickable_item"
+                        android:text="@string/send_sendPayment"
+                        android:textAllCaps="false"
+                        android:textColor="@color/banana_yellow"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/paymentComment" />
 
-                </RelativeLayout>
-
-                <app.michaelwuensch.bitbanana.customView.ExpandableTextView
-                    android:id="@+id/sendMemo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="30dp"
-                    android:paddingEnd="30dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendFeeTopLayout" />
-
-                <app.michaelwuensch.bitbanana.customView.NumpadView
-                    android:id="@+id/numpadView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginBottom="15dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sendMemo"
-                    tools:visibility="visible" />
-
-                <app.michaelwuensch.bitbanana.customView.PaymentCommentView
-                    android:id="@+id/paymentComment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="30dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/rounded_rectangle_seablue"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
-
-                <Button
-                    android:id="@+id/sendButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/bg_clickable_item"
-                    android:text="@string/send_sendPayment"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/paymentComment" />
-
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>
+        </app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>
 
-    <app.michaelwuensch.bitbanana.customView.BSDProgressView
-        android:id="@+id/paymentProgressLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="false"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <app.michaelwuensch.bitbanana.customView.BSDProgressView
+            android:id="@+id/paymentProgressLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
