@@ -172,4 +172,8 @@ public class PrefsUtil {
     public static String getCustomBlockExplorerTransactionSuffix() {
         return getPrefs().getString("customBlockExplorerTransactionSuffix", "/tx/");
     }
+
+    public static boolean getAreInvoicesWithoutSpecifiedAmountAllowed() {
+        return getPrefs().getBoolean("unspecifiedAmountInvoices", false);
+    }
 }

@@ -124,8 +124,13 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
                 mChooseTypeView.setVisibility(View.GONE);
                 mMemoView.setVisibility(View.GONE);
-                mBtnNext.setEnabled(false);
-                mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                if (PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
+                    mBtnNext.setEnabled(true);
+                    mBtnNext.setTextColor(getResources().getColor(R.color.banana_yellow));
+                } else {
+                    mBtnNext.setEnabled(false);
+                    mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                }
                 mEtAmount.setHint(getResources().getString(R.string.amount));
 
                 if (canReceiveLightningPayment) {
@@ -249,7 +254,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                        } else if (mReceiveAmountSats == 0) {
+                        } else if (mReceiveAmountSats == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
                             // Disable 0 sat ln invoices
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
