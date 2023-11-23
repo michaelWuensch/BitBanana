@@ -63,6 +63,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     private CheckBox mPrivateCheckbox;
     private long mValueChannelCapacitySats;
     private boolean mBlockOnInputChanged;
+    private long mOnChainUnconfirmed;
+    private long mOnChainConfirmed;
 
     @Nullable
     @Override
@@ -170,10 +172,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
                 // values from LND
                 long minSendAmount = 20000;
-                long maxSendAmount = 17666215;
+                long absoluteMaxSendAmount = 17666215;
+                long maxSendAmount = absoluteMaxSendAmount;
 
                 if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
                     long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
+                    long onChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
 
                     if (onChainAvailable < maxSendAmount) {
                         maxSendAmount = onChainAvailable;
@@ -188,9 +192,21 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
                     if (mValueChannelCapacitySats > maxSendAmount) {
                         // amount is to big
-                        String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendAmount);
-                        showError(message, Snackbar.LENGTH_LONG);
-                        return;
+                        if (mValueChannelCapacitySats > absoluteMaxSendAmount) {
+                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(absoluteMaxSendAmount);
+                            showError(message, Snackbar.LENGTH_LONG);
+                            return;
+                        } else {
+                            if (mValueChannelCapacitySats < (onChainAvailable + onChainUnconfirmed)) {
+                                String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
+                                showError(message, 10000);
+                                return;
+                            } else {
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(onChainAvailable + onChainUnconfirmed);
+                                showError(message, Snackbar.LENGTH_LONG);
+                                return;
+                            }
+                        }
                     }
 
                 } else {
@@ -254,6 +270,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     private void setAvailableFunds() {
         long available = Wallet.getInstance().getBalances().onChainConfirmed();
+        mOnChainConfirmed = available;
+        mOnChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
         mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
         mTvOnChainFunds.setLabelVisibility(true);
         mTvOnChainFunds.setAmountSat(available);

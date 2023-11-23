@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
@@ -33,6 +34,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
 import com.github.lightningnetwork.lnd.lnrpc.Route;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.HomeActivity;
@@ -94,6 +96,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private boolean mIsKeysend;
     private long mSendAmountSat;
     private boolean mBlockOnInputChanged;
+    private View mRootView;
 
     public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
@@ -159,6 +162,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         }
 
         View view = inflater.inflate(R.layout.bsd_send, container);
+        mRootView = view;
 
         mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
         mProgressScreen = view.findViewById(R.id.paymentProgressLayout);
@@ -219,9 +223,19 @@ public class SendBSDFragment extends BaseBSDFragment {
                     }
 
                     if (mSendAmountSat > maxSendable) {
+                        if (mOnChain) {
+                            if (mSendAmountSat < Wallet.getInstance().getBalances().onChainTotal()) {
+                                String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
+                                showError(message, 10000);
+                            } else {
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainTotal());
+                                showError(message, 4000);
+                            }
+                        } else {
+                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendable);
+                            showError(message, 6000);
+                        }
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendable);
-                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mSendButtonEnabled_input = false;
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
@@ -827,5 +841,12 @@ public class SendBSDFragment extends BaseBSDFragment {
                 setFeeFailure();
             }
         });
+    }
+
+    private void showError(String message, int duration) {
+        Snackbar msg = Snackbar.make(mRootView.findViewById(R.id.coordinator), message, duration);
+        View sbView = msg.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
+        msg.show();
     }
 }
