@@ -92,137 +92,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="10dp"
-            android:textAlignment="textEnd"
-            android:textColor="@color/gray"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/BalanceLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="TESTNET" />
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/bitbanana_logo"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/sendButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/BalanceLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/sendButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4">
-
-            <LinearLayout
-                android:id="@+id/BalancePrimaryLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:id="@+id/BalancePrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="38sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Primary" />
-
-                <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                    android:id="@+id/BalancePrimaryUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="italic"
-                    tools:text="BTC" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/BalanceSecondaryLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/BalancePrimaryLayout">
-
-                <TextView
-                    android:id="@+id/BalanceSecondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary"
-                    tools:text="Secondary" />
-
-                <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                    android:id="@+id/BalanceSecondaryUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    tools:text="sat" />
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <LinearLayout
             android:id="@+id/scanButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="50dp"
             android:background="@drawable/button_scan_ripple"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/sendButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mainBalanceView"
+            app:layout_constraintVertical_bias="0.75">
 
             <ImageView
                 android:layout_width="36dp"
@@ -268,28 +150,29 @@
             app:layout_constraintHorizontal_bias="0.74"
             app:layout_constraintStart_toEndOf="@+id/sendButton" />
 
-        <ImageView
-            android:id="@+id/switchButtonImage"
-            android:layout_width="28dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="4dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/ic_swap_vert_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
-            app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
-            app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
-            app:layout_constraintVertical_bias="0.6"
-            app:tint="@color/banana_yellow" />
+        <app.michaelwuensch.bitbanana.customView.MainBalanceView
+            android:id="@+id/mainBalanceView"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:layout_constraintBottom_toTopOf="@id/sendButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.55" />
 
         <Button
             android:id="@+id/setupWallet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_rectangle_orange_gradient"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -298,7 +181,7 @@
             app:layout_constraintBottom_toTopOf="@+id/scanButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/BalanceLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/guidelineTop" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

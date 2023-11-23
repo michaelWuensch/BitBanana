@@ -9,6 +9,7 @@
         <attr name="setLabelText" format="string" />
         <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />
+        <attr name="subscribeToPrefChange" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BBInputFieldView">

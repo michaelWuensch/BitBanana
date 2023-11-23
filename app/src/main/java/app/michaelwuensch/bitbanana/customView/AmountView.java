@@ -34,6 +34,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     private boolean mCanBlur;
     private boolean mIsBlurred = false;
     private String mAmountText;
+    private boolean mSubscribeToPrefChange;
 
 
     public AmountView(Context context) {
@@ -58,9 +59,6 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mTvLabel = view.findViewById(R.id.amountLabel);
         mTvAmount = view.findViewById(R.id.amountTextView);
 
-        if (!isInEditMode())
-            PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
-
         // Apply attributes from XML
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
@@ -70,6 +68,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
             boolean attrShowLabel = a.getBoolean(R.styleable.AmountView_showLabel, false);
             mCanBlur = a.getBoolean(R.styleable.AmountView_canBlur, true);
+            mSubscribeToPrefChange = a.getBoolean(R.styleable.AmountView_subscribeToPrefChange, true);
             int attrTextSize = a.getDimensionPixelSize(R.styleable.AmountView_textSize, 0);
             ColorStateList attrTextColor = a.getColorStateList(R.styleable.AmountView_textColor);
 
@@ -83,6 +82,9 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             // Don't forget to recycle the TypedArray
             a.recycle();
         }
+
+        if (!isInEditMode() && mSubscribeToPrefChange)
+            PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
         if (mSwitchesValueOnClick || isBlurActivated()) {
             mTvAmount.setOnClickListener(new OnClickListener() {
@@ -227,6 +229,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
 
     public void setCanBlur(boolean canBlur) {
         mCanBlur = canBlur;
+        removeBlur(false);
     }
 
     public void setSwitchValueOnClick(boolean switchValueOnClick) {
