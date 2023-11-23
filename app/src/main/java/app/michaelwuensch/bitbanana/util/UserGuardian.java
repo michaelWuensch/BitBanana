@@ -34,6 +34,7 @@ public class UserGuardian {
     private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
     private static final String DIALOG_CERTIFICATE_VERIFICATION = "guardianCertificateVerification";
     private static final String DIALOG_BACKUP_OVERRIDES_EXISTING_DATA = "guardianBackupOverridesExistingData";
+    private static final String DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES = "guardianAllowUnspecifiedAmountInvoice";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -69,6 +70,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_EXTERNAL_LINK, true)
                 .putBoolean(DIALOG_ZERO_AMOUNT_INVOICE, true)
                 .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
+                .putBoolean(DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES, true)
                 .apply();
     }
 
@@ -191,12 +193,23 @@ public class UserGuardian {
     }
 
     /**
-     * Warn the user about possible zero amount invoice exploit.
+     * Warn the user about possible zero amount invoice exploit when trying to pay such an invoice
      */
     public void securityZeroAmountInvoice() {
         mCurrentDialogName = DIALOG_ZERO_AMOUNT_INVOICE;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_zero_amount_invoice);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about possible unspecified amount invoice exploit when trying to enable creating such invoices.
+     */
+    public void securityAllowUnspecifiedAmountInvoices() {
+        mCurrentDialogName = DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_invoices_without_specified_amount);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }

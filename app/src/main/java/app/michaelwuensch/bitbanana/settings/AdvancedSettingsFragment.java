@@ -24,6 +24,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getSimpleName();
     private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
+    private SwitchPreference mSwUnspecifiedAmountInvoices;
     private ListPreference mListBlockExplorer;
     private ListPreference mListLnExpiry;
     private ListPreference mListFeeLimit;
@@ -79,6 +80,22 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         });
 
         setFeeSummary(mListFeeLimit, mListFeeLimit.getValue());
+
+        // On change unspecified amount invoices
+        mSwUnspecifiedAmountInvoices = findPreference("unspecifiedAmountInvoices");
+        mSwUnspecifiedAmountInvoices.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!mSwUnspecifiedAmountInvoices.isChecked()) {
+                    // Ask user to confirm enabling unspecified amount invoices
+                    new UserGuardian(getActivity(), () -> mSwUnspecifiedAmountInvoices.setChecked(true)).securityAllowUnspecifiedAmountInvoices();
+                    // the value is set from the guardian callback, that's why we don't change switch state here.
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        });
 
         // Remove Biometrics setting if it is not available anyway on the device.
         SwitchPreference swBiometrics = findPreference("biometricsEnabled");
