@@ -1,0 +1,8 @@
+- Balance details on home screen
+- Added peer management (enable it in settings if needed)
+- More statistics on routing summary
+- Keysend messages
+- Opt in for invoicing without specific amounts
+- Improved error messages 
+- Character count indication on payment comments
+- Translation updates
