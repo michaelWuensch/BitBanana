@@ -720,4 +720,45 @@
     <string name="stealth_mode_enable">Ativar modo furtivo:</string>
     <string name="stealth_mode_disable_instruction_calc">Faça um cálculo que resulte em 21</string>
     <string name="settings_on_off">Ligado / Desligado</string>
+    <string name="forwarding_avg_earned_description">Ganho em média por evento</string>
+    <string name="forwarding_avg_volume_description">Roteado em média por evento</string>
+    <string name="forwarding_avg_events_per_day">Eventos por dia em média</string>
+    <string name="settings_featurePeers_summary">Embora o gerenciamento de pares seja automatizado, esta função ainda fornece controles manuais para ver e gerenciar seus pares conectados.</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="peers_no_peers">Sem pares</string>
+    <string name="help_dialog_peers">Esta lista exibe todos os pares atualmente conectados ao seu nó. Pares são essencialmente outros nós operando dentro da rede. Eles colaboram ao trocar informações, garantindo que cada nó tenha uma visão clara do estado da rede.
+\n
+\nPor exemplo, quando seu nó quer mudar algo, como atualizar uma política do canal, ele notifica todos os pares aos quais está conectado. Estes pares, então, transmitem a informação aos seus próprios pares conectados, criando um efeito onda que garante que a rede inteira esteja informada.
+\n
+\nSeu nó estabelece conexões com pares automaticamente, geralmente priorizando esses pares com os quais você tem canais ativos. Ainda assim, você mantém a flexibilidade de manualmente estabelecer ou quebrar conexões e acessar mais detalhes sobre seus pares através desta interface.</string>
+    <string name="settings_featurePeers">Gerenciamento de Pares</string>
+    <string name="help_dialog_scanPeer">São válidos os códigos QR contendo o seguinte:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="activity_peers">Pares</string>
+    <string name="peers_add">Adicionar par</string>
+    <string name="peer_total_channels">Total de Canais</string>
+    <string name="peer_total_channels_explanation">A contagem total de canais públicos gerenciados por este par.</string>
+    <string name="peer_flap_count">Contagem de flaps</string>
+    <string name="peer_ping">Ping</string>
+    <string name="peer_last_flap_explanation">Tempo transcorrido desde o último evento off-line do par.</string>
+    <string name="peer_ping_explanation">O tempo que leva para o par responder.</string>
+    <string name="peer_mutual_channels">Canais mútuos</string>
+    <string name="peer_last_flap">Último flap</string>
+    <string name="peer_total_capacity">Capacidade Total</string>
+    <string name="network">Rede</string>
+    <string name="peer_last_errors">Últimos erros</string>
+    <string name="reliability">Confiabilidade</string>
+    <string name="peer_total_capacity_explanation">Capacidade total de nós, derivado da soma das capacidades do canal.</string>
+    <string name="peer_flap_count_explanation">Total de ocorrências deste par ficando off-line ou entrando na rede, documentado através de reinícios. A contagem reduz gradualmente se o par não fez flap recentemente, permitindo tolerância para contagens de flap historicamente altas.</string>
+    <string name="peer_features">Funções</string>
+    <string name="peer_mutual_channels_explanation">A contagem de canais que você abriu com este par.</string>
+    <string name="error_funds_not_confirmed_yet">Você tem fundos na cadeia suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que seus fundos sejam confirmados. Você pode rastrear o status dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
+    <string name="error_insufficient_on_chain_funds">Fundos na cadeia insuficientes. Máximo disponível:</string>
+    <string name="settings_unspecifiedAmountInvoices">Permitir faturas sem uma quantia específica</string>
+    <string name="guardian_invoices_without_specified_amount">Faturas sem uma quantia específica são um risco de segurança. Apesar de altamente improvável, intermediários na rota podem explorar essas faturas, causando o recipiente receber menos que o esperado sem detectar. Nenhum risco assim existe em pagamentos através de um canal direto.</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Liquidez Lightning insuficiente para enviar. Abra canais adicionais para aumentá-la.
+\nMáximo atual:</string>
 </resources>

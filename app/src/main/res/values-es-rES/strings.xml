@@ -387,4 +387,9 @@
     <string name="error_node_not_yet_ready">Tu nodo aún no ha sincronizado completamente. Por favor inténtalo de nuevo más tarde.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s parece bloquear peticiones procedentes de la red Tor. Puedes intentar desactivar Tor en la configuración o contactar con el servicio y solicitar que actualicen sus reglas de cloudflare.</string>
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Tasa de comisión demasiado alta. Se permite un máximo de %1$.2f%%.</string>
+    <string name="settings_custom">A medida …</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="settings_customBlockExplorer_address_suffix">Sufijo de la dirección</string>
+    <string name="activity_peers">Pares</string>
+    <string name="settings_customBlockExplorer_host_description">Por favor, indique la dirección del host de su explorador personalizado. Si alojas tú mismo el explorador de bloques, tu privacidad se mantendrá intacta.</string>
 </resources>

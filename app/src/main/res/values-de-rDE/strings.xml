@@ -636,4 +636,49 @@
     <string name="stealth_mode_disable_instruction_calc">Führe eine Berechnung durch, die 21 ergibt</string>
     <string name="settings_customBlockExplorer_host_description">Bitte gib die Host-Adresse für deinen benutzerdefinierten Explorer an. Wenn du den Block-Explorer selbst hostest, bleibt deine Privatsphäre vollständig gewahrt.</string>
     <string name="settings_on_off">An / Aus</string>
+    <string name="settings_featurePeers_summary">Obwohl die Verwaltung der Peers automatisiert ist, bietet diese Funktion immer noch die Möglichkeit, die angeschlossenen Peers manuell anzuzeigen und zu verwalten.</string>
+    <string name="error_funds_not_confirmed_yet">Du hast genügend On-Chain-Guthaben, aber die Bestätigung steht noch aus. Bitte warte auf die Bestätigung deiner On-Chain-Gelder. Du kannst den Status deines Guthabens über die UTXO-Ansicht oder den Transaktionsverlauf verfolgen.</string>
+    <string name="peer_total_channels">Kanäle insgesamt</string>
+    <string name="peer_total_channels_explanation">Die Gesamtzahl der öffentlichen Kanäle, die von diesem Peer verwaltet werden.</string>
+    <string name="peer_flap_count">Verbindungsabbrüche</string>
+    <string name="error_insufficient_on_chain_funds">Unzureichendes On-Chain-Guthaben. Maximal verfügbar:</string>
+    <string name="peer_ping">Ping</string>
+    <string name="settings_unspecifiedAmountInvoices">Zahlungsanfragen ohne Betrag zulassen</string>
+    <string name="balance_details_on_chain_unconfirmed">On-Chain unbestätigt:</string>
+    <string name="peer_last_flap_explanation">Verstrichene Zeit seit dem letzten Verbindungsabbruch des Peers.</string>
+    <string name="peer_ping_explanation">Die Zeit, die der Peer braucht, um zu antworten.</string>
+    <string name="guardian_invoices_without_specified_amount">Zahlungsanfragen ohne einen bestimmten Betrag stellen ein Sicherheitsrisiko dar. Auch wenn es sehr unwahrscheinlich ist, könnten Intermediäre der Zahlungsroute diese ausnutzen, so dass der Empfänger unentdeckt weniger als erwartet erhält. Bei Zahlungen über einen direkten Kanal besteht ein solches Risiko nicht.</string>
+    <string name="peer_mutual_channels">Gemeinsame Kanäle</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Unzureichende Lighting Liquidität zum Senden. Öffne zusätzliche Kanäle, um sie zu erhöhen.
+\nDerzeitiges Maximum:</string>
+    <string name="peer_last_flap">Letzter Verbindungsabbruch</string>
+    <string name="balance_details_lightning">Offene Kanäle:</string>
+    <string name="disconnect">Trennen</string>
+    <string name="peers_no_peers">Keine Peers</string>
+    <string name="peer_total_capacity">Gesamtkapazität</string>
+    <string name="network">Netzwerk</string>
+    <string name="peer_last_errors">Letzte Fehler</string>
+    <string name="reliability">Zuverlässigkeit</string>
+    <string name="help_dialog_peers">In dieser Liste werden alle Peers angezeigt, die derzeit mit deinem Knoten verbunden sind. Peers sind im Wesentlichen andere Knoten innerhalb des Netzwerks. Sie arbeiten zusammen, indem sie Informationen austauschen und sicherstellen, dass jeder Knoten einen klaren Überblick über den Status des Netzwerks hat.
+\n
+\nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist.
+\n
+\nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und über diese Schnittstelle auf weitere Details über deine Peers zuzugreifen.</string>
+    <string name="settings_featurePeers">Peer Management</string>
+    <string name="forwarding_avg_earned_description">Durchschnittliche Einnahmen pro Ereignis</string>
+    <string name="peer_total_capacity_explanation">Gesamtkapazität des Knotens, die sich aus der Summe der Kanalkapazitäten ergibt.</string>
+    <string name="peer_flap_count_explanation">Gesamtzahl der Fälle, in denen dieser Peer offline oder online geht, dokumentiert über alle Neustarts. Die Anzahl verringert sich allmählich, wenn der Peer in letzter Zeit nicht ausgefallen ist, so dass historisch hohe Verbindungsabbrüche verziehen werden können.</string>
+    <string name="help_dialog_scanPeer">QR-Codes, die Folgendes enthalten, sind gültig:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="activity_peers">Peers</string>
+    <string name="forwarding_avg_volume_description">Durchschnittlich weitergeleitet pro Ereignis</string>
+    <string name="peer_features">Funktionen</string>
+    <string name="peer_mutual_channels_explanation">Die Anzahl der Kanäle, die du mit diesem Peer geöffnet hast.</string>
+    <string name="balance_details_lightning_pending">Ausstehende Kanäle:</string>
+    <string name="forwarding_avg_events_per_day">Ereignisse pro Tag im Durchschnitt</string>
+    <string name="peers_add">Peer hinzufügen</string>
+    <string name="balance_details_on_chain_confirmed">On-Chain bestätigt:</string>
 </resources>
