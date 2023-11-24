@@ -1,21 +1,14 @@
 package app.michaelwuensch.bitbanana.fragments;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,13 +26,11 @@ import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkU
 import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ManageContactsActivity;
+import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
 import app.michaelwuensch.bitbanana.tor.TorManager;
-import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.Balances;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -55,16 +46,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private static final String LOG_TAG = WalletFragment.class.getSimpleName();
 
-    private TextView mTvPrimaryBalance;
-    private TextView mTvPrimaryBalanceUnit;
-    private TextView mTvSecondaryBalance;
-    private TextView mTvSecondaryBalanceUnit;
-    private TextView mTvMode;
-    private ConstraintLayout mClBalanceLayout;
-    private ImageView mIvLogo;
-    private ImageView mIvSwitchButton;
-    private Animation mBalanceFadeOutAnimation;
-    private Animation mLogoFadeInAnimation;
+    private MainBalanceView mMainBalanceView;
     private ConstraintLayout mWalletConnectedLayout;
     private ConstraintLayout mWalletNotConnectedLayout;
     private ConstraintLayout mLoadingWalletLayout;
@@ -95,16 +77,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         View view = inflater.inflate(R.layout.fragment_wallet, container, false);
 
         // Get View elements
-        mClBalanceLayout = view.findViewById(R.id.BalanceLayout);
-        mIvLogo = view.findViewById(R.id.logo);
-        mIvSwitchButton = view.findViewById(R.id.switchButtonImage);
-        mTvPrimaryBalance = view.findViewById(R.id.BalancePrimary);
-        mTvPrimaryBalanceUnit = view.findViewById(R.id.BalancePrimaryUnit);
-        mTvSecondaryBalance = view.findViewById(R.id.BalanceSecondary);
-        mTvSecondaryBalanceUnit = view.findViewById(R.id.BalanceSecondaryUnit);
-        mTvMode = view.findViewById(R.id.mode);
-        mBalanceFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.balance_fade_out);
-        mLogoFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.logo_fade_in);
+        mMainBalanceView = view.findViewById(R.id.mainBalanceView);
         mWalletConnectedLayout = view.findViewById(R.id.walletConnected);
         mWalletNotConnectedLayout = view.findViewById(R.id.ConnectionError);
         mLoadingWalletLayout = view.findViewById(R.id.loading);
@@ -146,26 +119,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        mBalanceFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                mClBalanceLayout.setVisibility(View.VISIBLE);
-                mIvSwitchButton.setVisibility(View.VISIBLE);
-                mIvLogo.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                mClBalanceLayout.setVisibility(View.INVISIBLE);
-                mIvSwitchButton.setVisibility(View.INVISIBLE);
-                mIvLogo.setVisibility(View.VISIBLE);
-                mIvLogo.startAnimation(mLogoFadeInAnimation);
-            }
-        });
 
         // Hide balance if the setting was chosen
         if (!PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
@@ -189,71 +142,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             }
         });
 
-        // Action when clicked on the logo
-        mIvLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBalanceFadeOutAnimation.reset();
-                mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
-                mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
-            }
-        });
-
-
-        // Swap action when clicked on balance or cancel the fade out in case balance is hidden
-        mClBalanceLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
-                    MonetaryUtil.getInstance().switchCurrencies();
-                } else {
-                    mBalanceFadeOutAnimation.reset();
-                    mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
-                    mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
-                }
-            }
-        });
-
-        mClBalanceLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String balances = "On-Chain confirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainConfirmed())
-                        + "\nOn-Chain unconfirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainUnconfirmed())
-                        + "\nChannel balance: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().channelBalance())
-                        + "\nChannel pending: " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().channelBalancePending());
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
-                        .setMessage(balances)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                            }
-                        });
-
-                Dialog dlg = adb.create();
-                // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.isScreenRecordingPrevented()) {
-                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                }
-                dlg.show();
-                return false;
-            }
-        });
-
-        // Swap action when clicked swap icon next to balance
-        mIvSwitchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MonetaryUtil.getInstance().switchCurrencies();
-
-                // also cancel fade out if hideTotalBalance option is active
-                if (!PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {
-                    mBalanceFadeOutAnimation.reset();
-                    mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
-                    mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
-                }
-            }
-        });
 
         // Action when clicked on "scan"
         View btnScan = view.findViewById(R.id.scanButton);
@@ -350,34 +238,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     private void updateTotalBalanceDisplay() {
-
-        Handler threadHandler = new Handler(Looper.getMainLooper());
-
-        threadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // Adapt unit text size depending on its length
-                if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
-                    mTvPrimaryBalanceUnit.setTextSize(20);
-                } else {
-                    mTvPrimaryBalanceUnit.setTextSize(32);
-                }
-
-                Balances balances;
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-                    balances = Wallet.getInstance().getBalances();
-                } else {
-                    balances = Wallet.getInstance().getDemoBalances();
-                }
-
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(balances.total()));
-                mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromSats(balances.total()));
-                mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
-
-                BBLog.v(LOG_TAG, "Total balance display updated");
-            }
-        });
+        mMainBalanceView.updateBalances();
     }
 
     @Override
@@ -423,25 +284,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mWalletConnectedLayout.setVisibility(View.VISIBLE);
             mLoadingWalletLayout.setVisibility(View.GONE);
             mWalletNotConnectedLayout.setVisibility(View.GONE);
-
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-                switch (Wallet.getInstance().getNetwork()) {
-                    case MAINNET:
-                        mTvMode.setVisibility(View.GONE);
-                        break;
-                    case TESTNET:
-                        mTvMode.setText("TESTNET");
-                        mTvMode.setVisibility(View.VISIBLE);
-                        break;
-                    case REGTEST:
-                        mTvMode.setText("REGTEST");
-                        mTvMode.setVisibility(View.VISIBLE);
-                }
-            } else {
-                // Wallet is not setup
-                mTvMode.setVisibility(View.GONE);
-            }
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
+            mMainBalanceView.updateNetworkInfo();
         } else {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
             mWalletConnectedLayout.setVisibility(View.GONE);
@@ -550,15 +394,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     private void hideBalance() {
-        mClBalanceLayout.setVisibility(View.INVISIBLE);
-        mIvSwitchButton.setVisibility(View.INVISIBLE);
-        mIvLogo.setVisibility(View.VISIBLE);
+        mMainBalanceView.hideBalance();
     }
 
     private void showBalance() {
-        mClBalanceLayout.setVisibility(View.VISIBLE);
-        mIvSwitchButton.setVisibility(View.VISIBLE);
-        mIvLogo.setVisibility(View.INVISIBLE);
+        mMainBalanceView.showBalance();
     }
 
     private void updateStatusDot(String walletAlias) {

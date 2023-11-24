@@ -697,4 +697,9 @@
     <string name="peer_total_capacity">Total Capacity</string>
     <string name="peer_total_capacity_explanation">Total node capacity, derived from the sum of channel capacities.</string>
     <string name="peer_features">Features</string>
+
+    <string name="balance_details_on_chain_confirmed">On-Chain confirmed:</string>
+    <string name="balance_details_on_chain_unconfirmed">On-Chain pending:</string>
+    <string name="balance_details_lightning">Open channels:</string>
+    <string name="balance_details_lightning_pending">Pending channels:</string>
 </resources>
