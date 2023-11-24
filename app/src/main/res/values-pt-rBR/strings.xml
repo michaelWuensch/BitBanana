@@ -755,10 +755,14 @@
     <string name="peer_flap_count_explanation">Total de ocorrências deste par ficando off-line ou entrando na rede, documentado através de reinícios. A contagem reduz gradualmente se o par não fez flap recentemente, permitindo tolerância para contagens de flap historicamente altas.</string>
     <string name="peer_features">Funções</string>
     <string name="peer_mutual_channels_explanation">A contagem de canais que você abriu com este par.</string>
-    <string name="error_funds_not_confirmed_yet">Você tem fundos na cadeia suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que seus fundos sejam confirmados. Você pode rastrear o status dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
-    <string name="error_insufficient_on_chain_funds">Fundos na cadeia insuficientes. Máximo disponível:</string>
+    <string name="error_funds_not_confirmed_yet">Você tem fundos on-chain suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que seus fundos sejam confirmados. Você pode rastrear o status dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
+    <string name="error_insufficient_on_chain_funds">Fundos on-chain insuficientes. Máximo disponível:</string>
     <string name="settings_unspecifiedAmountInvoices">Permitir faturas sem uma quantia específica</string>
     <string name="guardian_invoices_without_specified_amount">Faturas sem uma quantia específica são um risco de segurança. Apesar de altamente improvável, intermediários na rota podem explorar essas faturas, causando o recipiente receber menos que o esperado sem detectar. Nenhum risco assim existe em pagamentos através de um canal direto.</string>
     <string name="error_insufficient_lightning_sending_liquidity">Liquidez Lightning insuficiente para enviar. Abra canais adicionais para aumentá-la.
 \nMáximo atual:</string>
+    <string name="balance_details_on_chain_unconfirmed">Pendentes on-chain:</string>
+    <string name="balance_details_lightning">Canais abertos:</string>
+    <string name="balance_details_lightning_pending">Canais pendentes:</string>
+    <string name="balance_details_on_chain_confirmed">Confirmados on-chain:</string>
 </resources>
