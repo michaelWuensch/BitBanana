@@ -104,57 +104,62 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
     private void updatePeersDisplayList() {
 
-        ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder()
-                .build();
+        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            if (LndConnection.getInstance().isConnected()) {
 
-        mCompositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(listPeersRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .subscribe(listPeersResponse -> {
-                            mPeersItems.clear();
-                            ArrayList<String> peersToFetchInfo = new ArrayList<>();
-                            for (Peer peer : listPeersResponse.getPeersList()) {
-                                PeerListItem currItem = new PeerListItem(peer);
-                                mPeersItems.add(currItem);
-                                if (!AliasManager.getInstance().hasUpToDateAliasInfo(peer.getPubKey()))
-                                    peersToFetchInfo.add(peer.getPubKey());
-                            }
-                            // Show "No peers" if the list is empty
-                            if (mPeersItems.size() == 0) {
-                                mEmptyListText.setVisibility(View.VISIBLE);
-                            } else {
-                                mEmptyListText.setVisibility(View.GONE);
-                            }
+                ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder()
+                        .build();
 
-                            // Set number in activity title
-                            if (mPeersItems.size() > 0) {
-                                String title = getResources().getString(R.string.activity_peers) + " (" + mPeersItems.size() + ")";
-                                setTitle(title);
-                            } else {
-                                setTitle(getResources().getString(R.string.activity_peers));
-                            }
+                mCompositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(listPeersRequest)
+                        .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                        .subscribe(listPeersResponse -> {
+                                    mPeersItems.clear();
+                                    ArrayList<String> peersToFetchInfo = new ArrayList<>();
+                                    for (Peer peer : listPeersResponse.getPeersList()) {
+                                        PeerListItem currItem = new PeerListItem(peer);
+                                        mPeersItems.add(currItem);
+                                        if (!AliasManager.getInstance().hasUpToDateAliasInfo(peer.getPubKey()))
+                                            peersToFetchInfo.add(peer.getPubKey());
+                                    }
+                                    // Show "No peers" if the list is empty
+                                    if (mPeersItems.size() == 0) {
+                                        mEmptyListText.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mEmptyListText.setVisibility(View.GONE);
+                                    }
 
-                            // Update the list view
-                            mAdapter.replaceAll(mPeersItems);
+                                    // Set number in activity title
+                                    if (mPeersItems.size() > 0) {
+                                        String title = getResources().getString(R.string.activity_peers) + " (" + mPeersItems.size() + ")";
+                                        setTitle(title);
+                                    } else {
+                                        setTitle(getResources().getString(R.string.activity_peers));
+                                    }
 
-
-                            // Fetch aliases for peers if necessary
-                            if (peersToFetchInfo.size() > 0) {
-                                BBLog.d(LOG_TAG, "Fetching node info for " + peersToFetchInfo.size() + " nodes.");
-
-                                mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
-                                        .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                                        .doOnNext(integer -> Wallet.getInstance().fetchNodeInfoFromLND(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
-                                        .subscribe());
-                            }
-
-                        }
-                        , throwable -> {
-                            BBLog.w(LOG_TAG, "Fetching peer list failed." + throwable.getMessage());
-                        }));
+                                    // Update the list view
+                                    mAdapter.replaceAll(mPeersItems);
 
 
-        // Remove refreshing symbol
-        mSwipeRefreshLayout.setRefreshing(false);
+                                    // Fetch aliases for peers if necessary
+                                    if (peersToFetchInfo.size() > 0) {
+                                        BBLog.d(LOG_TAG, "Fetching node info for " + peersToFetchInfo.size() + " nodes.");
+
+                                        mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
+                                                .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
+                                                .doOnNext(integer -> Wallet.getInstance().fetchNodeInfoFromLND(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
+                                                .subscribe());
+                                    }
+
+                                }
+                                , throwable -> {
+                                    BBLog.w(LOG_TAG, "Fetching peer list failed." + throwable.getMessage());
+                                }));
+
+
+                // Remove refreshing symbol
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
     }
 
     @Override

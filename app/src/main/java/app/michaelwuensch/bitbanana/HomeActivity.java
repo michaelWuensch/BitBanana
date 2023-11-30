@@ -323,6 +323,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void openWallet() {
 
+        updateDrawerNavigationMenuVisibilities();
+
         if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
