@@ -33,13 +33,13 @@ import okhttp3.Response;
  * The result can be obtained by the OnLnUrlReadListener interface.
  * <p>
  * Relevant specifications:
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/02.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/03.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/06.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/07.md
- * https://github.com/fiatjaf/lnurl-rfc/blob/luds/17.md
+ * https://github.com/lnurl/luds/blob/luds/01.md
+ * https://github.com/lnurl/luds/blob/luds/02.md
+ * https://github.com/lnurl/luds/blob/luds/03.md
+ * https://github.com/lnurl/luds/blob/luds/04.md
+ * https://github.com/lnurl/luds/blob/luds/06.md
+ * https://github.com/lnurl/luds/blob/luds/07.md
+ * https://github.com/lnurl/luds/blob/luds/17.md
  */
 
 public class LnUrlReader {
@@ -49,7 +49,7 @@ public class LnUrlReader {
         if (UriUtil.isLNURLUri(data)) {
             // We have a lud-17 lnurl that is not bech32 encoded.
             // Please refer to the following specification:
-            // https://github.com/fiatjaf/lnurl-rfc/blob/luds/17.md
+            // https://github.com/lnurl/luds/blob/luds/17.md
             if (UriUtil.removeURI(data).isEmpty()) {
                 listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
                 return;
@@ -60,12 +60,23 @@ public class LnUrlReader {
             } else {
                 lnurl = "https://" + UriUtil.removeURI(data);
             }
+
+            boolean lnurlHandled = handleLNURLAuth(ctx, lnurl, listener);
+            if (lnurlHandled)
+                return;
+
+            if (UriUtil.isLNURLAUri(data)) {
+                // It was a keyauth:// link but not recognized as a lnurl auth as login tag was missing.
+                listener.onError("LnurlAuth was is missing tag=login paramerter.", RefConstants.ERROR_DURATION_MEDIUM);
+                return;
+            }
+
             initialRequest(ctx, lnurl, listener);
         } else {
             try {
                 // Extract fallback LNURL from URL if one is present
                 // Please refer to the following specification:
-                // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
+                // https://github.com/lnurl/luds/blob/luds/01.md
                 URL url = new URL(data);
                 String query = url.getQuery();
                 if (query != null && query.toLowerCase().contains("lightning=lnurl1")) {
@@ -81,29 +92,12 @@ public class LnUrlReader {
                 // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
                 String decodedLnUrl = LnurlDecoder.decode(data);
                 BBLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
-                URL decodedUrl = null;
-                try {
-                    decodedUrl = new URL(decodedLnUrl);
-                    String query = decodedUrl.getQuery();
-                    // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
-                    // Please refer to the following specification:
-                    // https://github.com/fiatjaf/lnurl-rfc/blob/luds/04.md
-                    if (query != null && query.contains("tag=login")) {
-                        String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
-                        if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
-                            listener.onValidLnUrlAuth(decodedUrl);
-                        } else {
-                            listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
-                        }
-                        return;
-                    }
-                } catch (MalformedURLException e) {
-                    listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
-                }
+
+                boolean lnurlHandled = handleLNURLAuth(ctx, decodedLnUrl, listener);
+                if (lnurlHandled)
+                    return;
 
                 initialRequest(ctx, decodedLnUrl, listener);
-
-
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 BBLog.e(LOG_TAG, "LNURL is invalid. Decoding failed.");
@@ -111,6 +105,30 @@ public class LnUrlReader {
             } catch (LnurlDecoder.NoLnUrlDataException e) {
                 listener.onNoLnUrlData();
             }
+        }
+    }
+
+    private static boolean handleLNURLAuth(Context ctx, String decodedLnUrl, OnLnUrlReadListener listener) {
+        try {
+            URL decodedUrl = new URL(decodedLnUrl);
+            String query = decodedUrl.getQuery();
+            // Check if it has a query param called login. In this case do not make a GET request as the AuthFlow works different.
+            // Please refer to the following specification:
+            // https://github.com/lnurl/luds/blob/luds/04.md
+            if (query != null && query.contains("tag=login")) {
+                String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
+                if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
+                    listener.onValidLnUrlAuth(decodedUrl);
+                    return true;
+                } else {
+                    listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
+                    return true;
+                }
+            }
+            return false;
+        } catch (MalformedURLException e) {
+            listener.onError(ctx.getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_MEDIUM);
+            return true;
         }
     }
 

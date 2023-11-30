@@ -55,7 +55,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Fiat currency prices
 - [x] Support for SegWit & Taproot
 - [x] Sign/Verify
-- [x] LNURL support (pay, withdraw & channel)
+- [x] LNURL support (pay, withdraw, auth, channel)
 
 **Security & Privacy**
 - [x] 100% Self-custodial
