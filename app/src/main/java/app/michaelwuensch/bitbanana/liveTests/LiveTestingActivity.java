@@ -91,10 +91,15 @@ public class LiveTestingActivity extends BaseAppCompatActivity {
         test.execute("LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKHW6T5DPJ8YCTH8AEK2UMND9HKU0FHVV6NXEFNX4NRYET9VSUNQERPVFSN2CNP8YURVD35XSCNQVNZVCCXVVE5X43KGDT9X33KXDPN8YENWCENV3SKVWPKXYUXVD3CXCURW2S4MTN", BitcoinStringAnalyzerTest.RESULT_LNURL_WITHDRAW);
         test.execute("LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKKX6RPDEHX2MPLWDJHXUMFDAHR6DMRX5EK2VE4VCEX2ETY8YCXGCTZVY6KYCFE8QMRVDP5XYCRYCNXXPNRXDP4VDJR2EF5VD3NGVEEXVMKXVMYV9NRSD338PNRVWPK8QMSJTMXDN", BitcoinStringAnalyzerTest.RESULT_LNURL_CHANNEL);
         test.execute("LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKKCMM8D9HR7ARPVU7KCMM8D9HZV6E385MKXDFNV5EN2E3JV4JKGWFSV3SKYCF4VFSNJWPKXC6RGVFSXF3XVVRXXV6R2CMYX4JNGCMRXSENJVEHVVEKGCTX8QMRZWRXXCURVWPHWN2ETM", BitcoinStringAnalyzerTest.RESULT_LNURL_AUTH);
+        // lud-17 schemes
         test.execute("lnurlp://lnurl.fiatjaf.com/lnurl-pay?session=82d6122cbe3c1a9806aab55bd57d10c74e68eb405fa0c022791dba67fcd8ee7b", BitcoinStringAnalyzerTest.RESULT_LNURL_PAY);
         test.execute("LNURLP://lnurl.fiatjaf.com/lnurl-pay?session=82d6122cbe3c1a9806aab55bd57d10c74e68eb405fa0c022791dba67fcd8ee7b", BitcoinStringAnalyzerTest.RESULT_LNURL_PAY);
         test.execute("lnurlc://lnurl.fiatjaf.com/lnurl-channel?session=7c53e35f2eed90daba5ba986644102bf0f345cd5e4cc43937c3daf8618f68687", BitcoinStringAnalyzerTest.RESULT_LNURL_CHANNEL);
         test.execute("lnurlw://lnurl.fiatjaf.com/lnurl-withdraw?session=7c53e35f2eed90daba5ba986644102bf0f345cd5e4cc43937c3daf8618f68687", BitcoinStringAnalyzerTest.RESULT_LNURL_WITHDRAW);
+        test.execute("KEYAUTH://lightninglogin.live/login?k1=98434f6c23b9423de261e4bed4f0217ba9c1dae80eb0a67e26b1466cb5cb1cb2&tag=login", BitcoinStringAnalyzerTest.RESULT_LNURL_AUTH);
+        test.execute("keyauth://lightninglogin.live/login?k1=98434f6c23b9423de261e4bed4f0217ba9c1dae80eb0a67e26b1466cb5cb1cb2&tag=login", BitcoinStringAnalyzerTest.RESULT_LNURL_AUTH);
+        test.execute("keyauth://lightninglogin.live/login?k1=98434f6c23b9423de261e4bed4f0217ba9c1dae80eb0a67e26b1466cb5cb1cb2", BitcoinStringAnalyzerTest.RESULT_ERROR);
+        test.execute("keyauth://lightninglogin.live/login?k1=94de261e4bed4f0267e26b1466cb5cb1cb2&tag=login", BitcoinStringAnalyzerTest.RESULT_ERROR);
         // lud-17 schemes without // are not supported
         test.execute("lnurlp:lnurl.fiatjaf.com/lnurl-pay?session=82d6122cbe3c1a9806aab55bd57d10c74e68eb405fa0c022791dba67fcd8ee7b", BitcoinStringAnalyzerTest.RESULT_UNKNOWN);
         test.execute("LNURLP:lnurl.fiatjaf.com/lnurl-pay?session=82d6122cbe3c1a9806aab55bd57d10c74e68eb405fa0c022791dba67fcd8ee7b", BitcoinStringAnalyzerTest.RESULT_UNKNOWN);

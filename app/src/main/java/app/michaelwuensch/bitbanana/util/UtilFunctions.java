@@ -6,13 +6,16 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.Mac;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class UtilFunctions {
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
@@ -96,7 +99,7 @@ public class UtilFunctions {
         return new String(hexChars);
     }
 
-    public static byte[] hexStringToByteArray(String hex) {
+    public static byte[] hexToBytes(String hex) {
         int l = hex.length();
         byte[] data = new byte[l / 2];
         for (int i = 0; i < l; i += 2) {
@@ -177,5 +180,26 @@ public class UtilFunctions {
         // first 3 bytes are the block height
         byte[] blockheightBytes = {0x00, chanIDBytes[0], chanIDBytes[1], chanIDBytes[2]};
         return intFromByteArray(blockheightBytes);
+    }
+
+    public static String hmacSHA256(byte[] data, byte[] key) {
+        return hashHmac("HmacSHA256", data, key);
+    }
+
+    private static String hashHmac(String algorithm, byte[] data, byte[] key) {
+        String result = "";
+        final SecretKeySpec secretKey = new SecretKeySpec(key,
+                algorithm);
+        try {
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(secretKey);
+            byte[] macData = mac.doFinal(data);
+            result = bytesToHex(macData);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

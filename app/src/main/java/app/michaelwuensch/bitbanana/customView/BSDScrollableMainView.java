@@ -15,6 +15,7 @@ import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 
 public class BSDScrollableMainView extends ConstraintLayout {
     private NestedScrollView mContentView;
@@ -24,8 +25,8 @@ public class BSDScrollableMainView extends ConstraintLayout {
     private ImageView mTitleIcon;
     private TextView mTitle;
     private OnCloseListener mOnCloseListener;
-    private OnHelpListener mOnHelpListener;
     private OnMoreListener mOnMoreListener;
+    private int mHelpMessage;
 
     public BSDScrollableMainView(Context context) {
         super(context);
@@ -63,8 +64,8 @@ public class BSDScrollableMainView extends ConstraintLayout {
         //HelpButton
         mHelpButton = findViewById(R.id.helpButton);
         mHelpButton.setOnClickListener(view1 -> {
-            if (mOnHelpListener != null)
-                mOnHelpListener.onHelp();
+            if (mHelpMessage != 0)
+                HelpDialogUtil.showDialog(getContext(), mHelpMessage);
         });
 
         //MoreButton
@@ -132,8 +133,8 @@ public class BSDScrollableMainView extends ConstraintLayout {
         mOnCloseListener = listener;
     }
 
-    public void setOnHelpListener(OnHelpListener listener) {
-        mOnHelpListener = listener;
+    public void setHelpMessage(int message) {
+        mHelpMessage = message;
     }
 
     public void setOnMoreListener(OnMoreListener listener) {
@@ -142,10 +143,6 @@ public class BSDScrollableMainView extends ConstraintLayout {
 
     public interface OnCloseListener {
         void onClosed();
-    }
-
-    public interface OnHelpListener {
-        void onHelp();
     }
 
     public interface OnMoreListener {

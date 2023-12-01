@@ -65,6 +65,7 @@ import app.michaelwuensch.bitbanana.fragments.SendBSDFragment;
 import app.michaelwuensch.bitbanana.fragments.WalletFragment;
 import app.michaelwuensch.bitbanana.lightning.LNAddress;
 import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.lnurl.auth.LnUrlAuthBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
@@ -706,7 +707,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidLnUrlAuth(URL url) {
-                showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
+                LnUrlAuthBSDFragment lnUrlAuthBSDFragment = LnUrlAuthBSDFragment.createLnUrlAuthDialog(url);
+                lnUrlAuthBSDFragment.show(getSupportFragmentManager(), "lnurlAuthBottomSheetDialog");
             }
 
             @Override

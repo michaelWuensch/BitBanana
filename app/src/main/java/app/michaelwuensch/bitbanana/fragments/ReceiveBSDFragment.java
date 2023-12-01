@@ -33,7 +33,6 @@ import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsMana
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -90,7 +89,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setHelpButtonVisibility(true);
-        mBSDScrollableMainView.setOnHelpListener(() -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_LightningVsOnChain));
+        mBSDScrollableMainView.setHelpMessage(R.string.help_dialog_LightningVsOnChain);
         mBSDScrollableMainView.setTitle(R.string.receive);
 
         mNumpad.bindEditText(mEtAmount);

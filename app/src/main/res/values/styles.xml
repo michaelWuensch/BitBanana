@@ -89,6 +89,11 @@
         <item name="android:backgroundDimAmount">0.7</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
+
+        <item name="android:dialogTheme">@style/BBDialog</item>
+        <item name="android:alertDialogTheme">@style/BBDialog</item>
+        <item name="dialogTheme">@style/BBDialog</item>
+        <item name="alertDialogTheme">@style/BBDialog</item>
     </style>
 
     <style name="BBBottomSheetDialogTheme" parent="BaseBBBottomSheetDialog" />
