@@ -705,7 +705,7 @@ public class Wallet {
     }
 
     private void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
-        byte[] nodeKeyBytes = UtilFunctions.hexStringToByteArray(nodeUri.getPubKey());
+        byte[] nodeKeyBytes = UtilFunctions.hexToBytes(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
                 .setTargetConf(targetConf)

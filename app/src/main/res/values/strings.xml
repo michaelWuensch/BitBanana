@@ -399,6 +399,7 @@
     <string name="error_funds_not_confirmed_yet">You have sufficient on-chain funds, but their confirmation is still pending. Please wait for your on-chain funds to confirm. You can track the status of your funds through the UTXO view or transaction history.</string>
     <string name="error_insufficient_on_chain_funds">Insufficient on-chain funds. Maximum available:</string>
     <string name="error_insufficient_lightning_sending_liquidity">Insufficient lightning liquidity for sending. Open additional channels to increase it.\nCurrent maximum:</string>
+    <string name="error_tor_might_cause_problem">Tor could cause this issue. Please try to deactivate tor in the settings.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -485,6 +486,7 @@
     <string name="help_dialog_stealth_mode">Utilize stealth mode to defend your phone against quick physical searches, creating the illusion that BitBanana isn\'t present on your device. This is achieved by replacing your app\'s icon and name and launching a decoy app. However, note that the app\'s icon and name won\'t be changed in the app list in your system settings.\n\nIt is not a perfect solution, but it helps to make the presence of your Bitcoin software less obvious.</string>
     <string name="help_dialog_peers">This list displays all the peers currently connected to your node. Peers are essentially other nodes operating within the network. They collaborate by exchanging information, ensuring each node has a clear view of the network\'s status.\n\nAs an example, when your node wants to change something, such as updating a channel policy, it notifies all the peers it\'s connected to. These peers, in turn, relay the information to their own connected peers, creating a ripple effect that ensures the entire network is informed.\n\nYour node establishes connections with peers automatically, typically prioritizing those peers with whom you have active channels. Nevertheless, you maintain the flexibility to manually establish or break connections and access more details about your peers through this interface.</string>
     <string name="help_dialog_scanPeer">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_lnurl_auth">Your node serves as a private authentication method for accessing a service. The procedure is based on message-signing and does not share any information about your node. If your node stops operating, you will lose the ability to log in to the associated account.</string>
 
     <string name="node_name">Node Name</string>
     <string name="delete">Delete</string>
@@ -702,4 +704,16 @@
     <string name="balance_details_on_chain_unconfirmed">On-Chain pending:</string>
     <string name="balance_details_lightning">Open channels:</string>
     <string name="balance_details_lightning_pending">Pending channels:</string>
+
+    <string name="register">Register</string>
+    <string name="login_verb">Log in</string>
+    <string name="auth_link_account">Link with account</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="lnurl_auth_register_info">Do you want to use your node to register an account at that service?</string>
+    <string name="lnurl_auth_login_info">Do you want to use your node to log in to that service?</string>
+    <string name="lnurl_auth_link_info">Do you want to link your existing account with your node?</string>
+    <string name="lnurl_auth_auth_info">Do you want to use your node to authenticate with that service?</string>
+    <string name="lnurl_auth_success">Authentication was successful!</string>
+    <string name="lnurl_auth_fail">Authentication\nfailed</string>
+
 </resources>
