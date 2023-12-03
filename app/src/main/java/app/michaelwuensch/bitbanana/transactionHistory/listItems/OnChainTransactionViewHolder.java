@@ -32,7 +32,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         setTimeOfDay(onChainTransactionItem.mCreationDate);
 
         // is internal?
-        if (Wallet.getInstance().isTransactionInternal(onChainTransactionItem.getOnChainTransaction())) {
+        if (Wallet.getInstance().isChannelTransaction(onChainTransactionItem.getOnChainTransaction())) {
 
             setIcon(TransactionIcon.INTERNAL);
             setFeeSat(fee, false);

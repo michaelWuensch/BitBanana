@@ -35,6 +35,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PreviousOutPoint;
+import com.github.lightningnetwork.lnd.lnrpc.Resolution;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
@@ -1112,15 +1113,15 @@ public class Wallet {
 
 
     /**
-     * This function determines if we put the given on-chain transaction into the internal group.
+     * This function determines if the given transaction is is associated with a channel operation.
      *
      * @param transaction
      * @return
      */
-    public boolean isTransactionInternal(Transaction transaction) {
+    public boolean isChannelTransaction(Transaction transaction) {
 
         // This is faster especially for nodes with lots of channels
-        if (hasInternalTransactionLabel(transaction)) {
+        if (hasChannelTransactionLabel(transaction)) {
             return true;
         }
 
@@ -1182,6 +1183,11 @@ public class Wallet {
                 if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
                     return true;
                 }
+                for (Resolution res : c.getResolutionsList()) {
+                    if (transaction.getTxHash().equals(res.getSweepTxid())) {
+                        return true;
+                    }
+                }
             }
         }
 
@@ -1189,14 +1195,14 @@ public class Wallet {
     }
 
     /**
-     * This function determines if according to the label this is a internal transaction.
+     * This function determines if according to the label, that gets applied automatically by lnd, this is a chanel transaction.
      * The labelTypes are derived from: https://github.com/lightningnetwork/lnd/blob/master/labels/labels.go
      *
      * @param transaction
      * @return
      */
-    public boolean hasInternalTransactionLabel(Transaction transaction) {
-        String[] labelType = {":openchannel", ":closechannel", ":justicetx", ":sweep"};
+    public boolean hasChannelTransactionLabel(Transaction transaction) {
+        String[] labelType = {":openchannel", ":closechannel", ":justicetx"};
         if (transaction.getLabel() != null && !transaction.getLabel().isEmpty()) {
             for (String label : labelType) {
                 if (transaction.getLabel().toLowerCase().contains(label)) {
@@ -1277,17 +1283,14 @@ public class Wallet {
                 String[] parts = c.getChannelPoint().split(":");
                 if (transaction.getTxHash().equals(parts[0]) || transaction.getTxHash().equals(c.getClosingTxHash())) {
                     return c.getRemotePubkey();
-                } else if (transaction.getLabel().toLowerCase().contains("sweep")) {
-                    // force closes are marked with a "sweep" label in lnd
-                    List<PreviousOutPoint> previousOutPoints = transaction.getPreviousOutpointsList();
-                    for (PreviousOutPoint op : previousOutPoints) {
-                        if (op.getOutpoint().split(":")[0].equals(c.getClosingTxHash()))
-                            return c.getRemotePubkey();
+                }
+                for (Resolution res : c.getResolutionsList()) {
+                    if (transaction.getTxHash().equals(res.getSweepTxid())) {
+                        return c.getRemotePubkey();
                     }
                 }
             }
         }
-
         return "";
     }
 
@@ -1315,7 +1318,7 @@ public class Wallet {
 
     /**
      * Returns the block height of a channel opening transaction.
-     * This only works if we are the initator of the channel as LND will not store the transaction otherwhise.
+     * This only works if we are the initiator of the channel as LND will not store the transaction otherwhise.
      *
      * @param channelPoint channel point as string
      * @return block height. -1 if not available.
