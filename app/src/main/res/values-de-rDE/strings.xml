@@ -681,4 +681,17 @@
     <string name="forwarding_avg_events_per_day">Ereignisse pro Tag im Durchschnitt</string>
     <string name="peers_add">Peer hinzufügen</string>
     <string name="balance_details_on_chain_confirmed">On-Chain bestätigt:</string>
+    <string name="lnurl_auth_success">Authentifizierung war erfolgreich!</string>
+    <string name="lnurl_auth_fail">Authentifizierung
+\nfehlgeschlagen</string>
+    <string name="lnurl_auth_link_info">Möchtest du dein bestehendes Konto mit deinem Knoten verknüpfen?</string>
+    <string name="login_verb">Einloggen</string>
+    <string name="register">Registrieren</string>
+    <string name="authenticate">Authentifizieren</string>
+    <string name="help_dialog_lnurl_auth">Dein Knoten dient als private Authentifizierungsmethode für den Zugriff auf einen Dienst. Das Verfahren basiert auf dem Signieren von Nachrichten und gibt keine Informationen über deinen Knoten weiter. Wenn dein Knoten nicht mehr funktioniert, verlierst du die Möglichkeit, dich bei dem zugehörigen Konto anzumelden.</string>
+    <string name="error_tor_might_cause_problem">Tor könnte dieses Problem verursachen. Bitte versuche, Tor in den Einstellungen zu deaktivieren.</string>
+    <string name="auth_link_account">Mit Account verknüpfen</string>
+    <string name="lnurl_auth_login_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst anzumelden?</string>
+    <string name="lnurl_auth_auth_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst zu authentifizieren?</string>
+    <string name="lnurl_auth_register_info">Möchtest du deinen Knoten verwenden, um ein Konto bei diesem Dienst zu registrieren?</string>
 </resources>
