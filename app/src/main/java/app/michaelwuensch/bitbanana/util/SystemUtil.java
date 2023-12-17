@@ -23,6 +23,11 @@ public class SystemUtil {
      * @return
      */
     public static String getSystemCurrencyCode() {
-        return Currency.getInstance(getSystemLocale()).getCurrencyCode();
+        Currency currency = Currency.getInstance(getSystemLocale());
+        if (currency == null) {
+            // in case system currency fails, we fall back to USD
+            currency = Currency.getInstance("USD");
+        }
+        return currency.getCurrencyCode();
     }
 }

@@ -132,7 +132,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
 
 
         // is internal?
-        if (Wallet.getInstance().isTransactionInternal(mTransaction)) {
+        if (Wallet.getInstance().isChannelTransaction(mTransaction)) {
             bindInternal();
         } else {
             bindNormalTransaction();
@@ -169,8 +169,13 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 mEvent.setText(R.string.closed_channel);
                 break;
             case -1:
-                // amount < 0 (Channel opened)
-                mEvent.setText(R.string.opened_channel);
+                if (mTransaction.getLabel().toLowerCase().contains("sweep")) {
+                    // in some rare cases for sweep transactions the value is actually the fee payed for the sweep.
+                    mEvent.setText(R.string.closed_channel);
+                } else {
+                    // amount < 0 (Channel opened)
+                    mEvent.setText(R.string.opened_channel);
+                }
                 break;
         }
     }
