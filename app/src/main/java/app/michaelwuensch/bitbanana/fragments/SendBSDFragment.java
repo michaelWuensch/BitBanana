@@ -433,7 +433,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                     if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
 
                         long paymentAmount;
-                        if (mIsKeysend) {
+                        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
                             paymentAmount = mSendAmountSat;
                         } else {
                             paymentAmount = mLnPaymentRequest.getNumSatoshis();
