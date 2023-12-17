@@ -755,10 +755,27 @@
     <string name="peer_flap_count_explanation">Total de ocorrências deste par ficando off-line ou entrando na rede, documentado através de reinícios. A contagem reduz gradualmente se o par não fez flap recentemente, permitindo tolerância para contagens de flap historicamente altas.</string>
     <string name="peer_features">Funções</string>
     <string name="peer_mutual_channels_explanation">A contagem de canais que você abriu com este par.</string>
-    <string name="error_funds_not_confirmed_yet">Você tem fundos na cadeia suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que seus fundos sejam confirmados. Você pode rastrear o status dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
-    <string name="error_insufficient_on_chain_funds">Fundos na cadeia insuficientes. Máximo disponível:</string>
+    <string name="error_funds_not_confirmed_yet">Você tem fundos on-chain suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que seus fundos sejam confirmados. Você pode rastrear o status dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
+    <string name="error_insufficient_on_chain_funds">Fundos on-chain insuficientes. Máximo disponível:</string>
     <string name="settings_unspecifiedAmountInvoices">Permitir faturas sem uma quantia específica</string>
     <string name="guardian_invoices_without_specified_amount">Faturas sem uma quantia específica são um risco de segurança. Apesar de altamente improvável, intermediários na rota podem explorar essas faturas, causando o recipiente receber menos que o esperado sem detectar. Nenhum risco assim existe em pagamentos através de um canal direto.</string>
     <string name="error_insufficient_lightning_sending_liquidity">Liquidez Lightning insuficiente para enviar. Abra canais adicionais para aumentá-la.
 \nMáximo atual:</string>
+    <string name="balance_details_on_chain_unconfirmed">Pendentes on-chain:</string>
+    <string name="balance_details_lightning">Canais abertos:</string>
+    <string name="balance_details_lightning_pending">Canais pendentes:</string>
+    <string name="balance_details_on_chain_confirmed">Confirmados on-chain:</string>
+    <string name="lnurl_auth_success">A autenticação foi bem-sucedida!</string>
+    <string name="lnurl_auth_fail">A autenticação
+\nfalhou</string>
+    <string name="lnurl_auth_link_info">Deseja ligar sua conta existente a seu nó?</string>
+    <string name="login_verb">Fazer login</string>
+    <string name="register">Registrar</string>
+    <string name="authenticate">Autenticar</string>
+    <string name="help_dialog_lnurl_auth">Seu nó serve como um método de autenticação privado para acessar um serviço. O processo é baseado em assinatura de mensagem e não compartilha nenhuma informação sobre seu nó. Se seu nó parar de funcionar, você perderá a habilidade de fazer login na conta associada.</string>
+    <string name="error_tor_might_cause_problem">Tor pode ter causado este problema. Por favor tente desativar o Tor nas configurações.</string>
+    <string name="auth_link_account">Ligar com conta</string>
+    <string name="lnurl_auth_login_info">Deseja usar seu nó para fazer login neste serviço?</string>
+    <string name="lnurl_auth_auth_info">Deseja usar seu nó para autenticar com este serviço?</string>
+    <string name="lnurl_auth_register_info">Deseja usar seu nó para registrar uma conta neste serviço?</string>
 </resources>
