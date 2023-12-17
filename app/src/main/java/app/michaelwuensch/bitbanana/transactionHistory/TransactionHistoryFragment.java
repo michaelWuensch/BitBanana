@@ -253,7 +253,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
                     OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
-                    if (Wallet.getInstance().isTransactionInternal(t)) {
+                    if (Wallet.getInstance().isChannelTransaction(t)) {
                         internalTransactions.add(onChainTransactionItem);
                     } else {
                         if (t.getAmount() != 0) {
