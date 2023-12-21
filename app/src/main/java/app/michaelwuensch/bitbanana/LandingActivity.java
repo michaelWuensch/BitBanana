@@ -14,7 +14,8 @@ import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;

@@ -12,9 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfigsJson;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfigsJson;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;

@@ -7,7 +7,7 @@ import android.content.Intent;
 
 import app.michaelwuensch.bitbanana.pin.PinEntryActivity;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 
 public class PinScreenUtil {
 

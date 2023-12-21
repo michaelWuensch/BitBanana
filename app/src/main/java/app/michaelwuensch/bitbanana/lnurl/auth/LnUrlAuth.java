@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;

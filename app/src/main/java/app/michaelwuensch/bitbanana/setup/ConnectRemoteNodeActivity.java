@@ -5,12 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -34,8 +34,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
-                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
+            if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
             }
             if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
                 String connectString = App.getAppContext().getUriSchemeData();

@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="app.michaelwuensch.bitbanana.nodesManagement.NodeDetailsActivity">
+        tools:context="app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/type"

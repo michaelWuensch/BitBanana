@@ -7,7 +7,7 @@ import android.os.Handler;
 
 import java.util.concurrent.RejectedExecutionException;
 
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.util.BBLog;
 

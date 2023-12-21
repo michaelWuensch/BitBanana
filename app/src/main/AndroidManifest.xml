@@ -103,11 +103,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.HomeActivity"
+            android:name="app.michaelwuensch.bitbanana.home.HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.ScanActivity"
+            android:name="app.michaelwuensch.bitbanana.home.ScanActivity"
             android:label="@string/scan"
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
@@ -134,12 +134,12 @@
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.channelManagement.ManageChannelsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity"
             android:label="@string/activity_manage_channels"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity"
             android:label="@string/activity_manage_nodes"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
@@ -179,12 +179,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.SupportActivity"
+            android:name="app.michaelwuensch.bitbanana.support.SupportActivity"
             android:label="@string/support"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.channelManagement.ScanNodePubKeyActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.channels.ScanNodePubKeyActivity"
             android:label="@string/channel_open"
             android:screenOrientation="portrait" />
         <activity
@@ -193,32 +193,32 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.nodesManagement.NodeDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity"
             android:label="@string/activity_node_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.contacts.ScanContactActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity"
             android:label="@string/add_contact"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.contacts.ManualAddContactActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.contacts.ManualAddContactActivity"
             android:label="@string/add_contact"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.contacts.ManageContactsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity"
             android:label="@string/activity_manage_contacts"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.contacts.ContactDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity"
             android:label="@string/activity_contact_details"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.licenses.LicensesActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.licenses.LicensesActivity"
             android:label="@string/third_party_licenses"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
@@ -229,7 +229,7 @@
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.channelManagement.AdvancedChannelDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.channels.itemDetails.AdvancedChannelDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
@@ -238,22 +238,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.coinControl.UTXOsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity"
             android:label="@string/activity_utxos"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.forwarding.ForwardingActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingActivity"
             android:label="@string/activity_forwarding"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.peers.PeersActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.peers.PeersActivity"
             android:label="@string/activity_peers"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.peers.ScanPeerActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.peers.ScanPeerActivity"
             android:label="@string/peers_add"
             android:screenOrientation="portrait" />
         <activity
@@ -268,13 +268,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.channelManagement.UpdateRoutingPolicyActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivity"
             android:label="@string/activity_routing_policy"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.peers.PeerDetailsActivity"
+            android:name="app.michaelwuensch.bitbanana.listViews.peers.itemDetails.PeerDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
 

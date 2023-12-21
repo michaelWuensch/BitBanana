@@ -11,10 +11,10 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 
 public class NodeSpinner extends AppCompatSpinner {
 
@@ -74,7 +74,7 @@ public class NodeSpinner extends AppCompatSpinner {
                         }
                     } else {
                         // Open node management
-                        Intent intent = new Intent(getContext(), ManageNodesActivity.class);
+                        Intent intent = new Intent(getContext(), ManageBackendConfigsActivity.class);
                         getContext().startActivity(intent);
 
                         // If going back we don't want to have "Manage.." selected

@@ -2,7 +2,7 @@ package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.app.Application;
 
-import app.michaelwuensch.bitbanana.tor.TorSetup;
+import app.michaelwuensch.bitbanana.connection.tor.TorSetup;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 

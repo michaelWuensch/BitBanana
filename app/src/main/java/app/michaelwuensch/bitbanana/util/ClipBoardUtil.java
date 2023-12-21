@@ -20,8 +20,8 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 
 public class ClipBoardUtil {
     private static final String LOG_TAG = ClipBoardUtil.class.getSimpleName();

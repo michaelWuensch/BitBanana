@@ -1,6 +1,6 @@
 package app.michaelwuensch.bitbanana.backup;
 
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 
 public class DataBackup {

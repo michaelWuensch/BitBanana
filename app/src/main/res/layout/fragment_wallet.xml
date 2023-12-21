@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.michaelwuensch.bitbanana.fragments.WalletFragment">
+    tools:context="app.michaelwuensch.bitbanana.home.WalletFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"

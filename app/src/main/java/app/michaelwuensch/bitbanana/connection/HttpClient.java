@@ -3,7 +3,7 @@ package app.michaelwuensch.bitbanana.connection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import okhttp3.OkHttpClient;

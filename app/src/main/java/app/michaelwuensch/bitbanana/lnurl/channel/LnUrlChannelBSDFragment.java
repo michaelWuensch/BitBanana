@@ -41,16 +41,16 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
+import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
-import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -135,7 +135,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
     private void openChannel() {
 
         BBLog.v(TAG, "Remote Node uri: " + mLnUrlChannelResponse.getUri());
-        LightningNodeUri nodeUri = LightningParser.parseNodeUri(mLnUrlChannelResponse.getUri());
+        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(mLnUrlChannelResponse.getUri());
 
         if (nodeUri == null) {
             BBLog.e(TAG, "Node Uri could not be parsed");

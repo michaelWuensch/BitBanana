@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import java.nio.charset.StandardCharsets;
 
-import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;

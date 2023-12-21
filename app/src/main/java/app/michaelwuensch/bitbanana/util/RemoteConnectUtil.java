@@ -19,13 +19,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.btcPay.BTCPayConfig;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.btcPay.BTCPayConfigParser;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectConfig;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectStringParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay.BTCPayConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay.BTCPayConfigParser;
+import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectStringParser;
 
 public class RemoteConnectUtil {
 

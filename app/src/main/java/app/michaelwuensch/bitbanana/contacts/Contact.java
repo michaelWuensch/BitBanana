@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.lightning.LNAddress;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
+import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
 
 public class Contact implements Comparable<Contact>, Serializable {
 
@@ -45,7 +45,7 @@ public class Contact implements Comparable<Contact>, Serializable {
     }
 
     public LightningNodeUri getAsNodeUri() {
-        return LightningParser.parseNodeUri(contactData);
+        return LightningNodeUirParser.parseNodeUri(contactData);
     }
 
     public LNAddress getLightningAddress() {

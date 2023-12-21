@@ -10,11 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.lightning.LNAddress;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -131,7 +130,7 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfNodeUri(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        LightningNodeUri nodeUri = LightningParser.parseNodeUri(inputString);
+        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(inputString);
 
         if (nodeUri != null) {
             listener.onValidNodeUri(nodeUri);

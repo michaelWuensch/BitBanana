@@ -29,10 +29,10 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
 import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
-import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.AppUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;

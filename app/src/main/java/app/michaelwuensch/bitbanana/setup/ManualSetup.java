@@ -12,15 +12,15 @@ import android.widget.CompoundButton;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import app.michaelwuensch.bitbanana.HomeActivity;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -50,8 +50,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
-                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
+            if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
             }
         }
 
@@ -201,7 +201,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (id == R.id.scanButton) {
             Intent intent = new Intent(ManualSetup.this, ConnectRemoteNodeActivity.class);
-            intent.putExtra(ManageNodesActivity.NODE_ID, mWalletUUID);
+            intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mWalletUUID);
             startActivity(intent);
             return true;
         }
