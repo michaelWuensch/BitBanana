@@ -51,6 +51,7 @@ import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -97,6 +98,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private long mSendAmountSat;
     private boolean mBlockOnInputChanged;
     private View mRootView;
+    private DebounceHandler mFeeCaclulationDebounceHandler = new DebounceHandler();
 
     public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
@@ -274,7 +276,18 @@ public class SendBSDFragment extends BaseBSDFragment {
                 // calculate fees
                 if (mAmountValid) {
                     mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
-                    calculateFee();
+
+                    if (!mOnChain && mLnPaymentRequest.getNumSatoshis() == 0) {
+                        mSendButtonEnabled_feeCalculate = false;
+                        mFeeCaclulationDebounceHandler.attempt(new Runnable() {
+                            @Override
+                            public void run() {
+                                calculateFee();
+                            }
+                        }, 650);
+                    } else {
+                        calculateFee();
+                    }
                 } else {
                     setFeeFailure();
                 }
@@ -817,21 +830,26 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             @Override
             public void onSuccess(long fee, Route route, long paymentAmountSat) {
-                mRoute = route;
-                mCalculatedFee = fee;
-                mCalculatedFeePercent = (fee / (double) paymentAmountSat);
-                String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
-                setCalculatedFeeAmountLightning(mCalculatedFee, feePercentageString, false);
+                if (route.getTotalAmtMsat() - route.getTotalFeesMsat() == mSendAmountSat * 1000) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
+                    mRoute = route;
+                    mCalculatedFee = fee;
+                    mCalculatedFeePercent = (fee / (double) paymentAmountSat);
+                    String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
+                    setCalculatedFeeAmountLightning(mCalculatedFee, feePercentageString, false);
+                }
             }
 
             @Override
             public void onNoRoute(long paymentAmountSat) {
-                // Display fee according to max UserSetting
-                mCalculatedFee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
-                mCalculatedFeePercent = PaymentUtil.calculateRelativeFeeLimit(paymentAmountSat);
-                String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
-                long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
-                setCalculatedFeeAmountLightning(fee, feePercentageString, true);
+                if (paymentAmountSat == mSendAmountSat) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
+                    mRoute = null;
+                    // Display fee according to max UserSetting
+                    mCalculatedFee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
+                    mCalculatedFeePercent = PaymentUtil.calculateRelativeFeeLimit(paymentAmountSat);
+                    String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
+                    long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
+                    setCalculatedFeeAmountLightning(fee, feePercentageString, true);
+                }
             }
 
             @Override
