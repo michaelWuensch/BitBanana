@@ -486,7 +486,7 @@
     <string name="settings_changePin">Alterar/Remover PIN</string>
     <string name="settings_blockExplorer_tor_toast">O navegador Tor para Android é necessário.</string>
     <string name="settings_addressType">Tipo de Endereço Bitcoin</string>
-    <string name="settings_hideTotalBalance_explanation">Quando ativo, toque a logo do BitBanana no ecrã inicial para revelar o seu balanço.</string>
+    <string name="settings_hideTotalBalance_explanation">O balanço total está oculto agora. Toque a logo BitBanana no ecrã inicial para revelá-lo.</string>
     <string name="settings_exchangeRateProvider">Provedora de Taxas de Câmbio</string>
     <string name="settings_receiveAddressDisplayValues_0">SegWit de Compatibilidade (P2PSH)</string>
     <string name="settings_lnRequestExpiryTitle">Expiração da Solicitação Lightning</string>
@@ -640,7 +640,7 @@
     <string name="contact_type_ln_node">Nó Lightning</string>
     <string name="ln_address">Endereço Lightning</string>
     <string name="manual_send_input_hint">Dados de endereço ou de pagamento</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">As taxas que receberá ao encaminhar uma transação neste canal. A taxa total que receberá é a soma da taxa base (em msat) e a quantia da taxa.
+    <string name="advanced_channel_details_explanation_local_routing_fee">As taxas que receberá ao encaminhar uma transação neste canal. A taxa total que receberá é a soma da taxa base e a quantia da taxa.
 \nA taxa base é o que recebe para cada encaminhamento, não importa qual seja a quantia da transação.
 \nA quantia recebida pela taxa depende da quantia da transação.</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">As taxas que o outro nó receberá quanto ele encaminha uma transação neste canal. Isto se aplica apenas a encaminhamento de transações. Não terá de pagar nada se usar este canal para as suas transações.</string>
@@ -696,4 +696,135 @@
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificado</string>
     <string name="spinner_manage_nodes">Gerir…</string>
+    <string name="settings_featureCoinControl_summary">Gestão avançada de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos. A seleção de moeda é automatizada se estiver desativada.</string>
+    <string name="settings_custom">Personalizado…</string>
+    <string name="settings_featurePeers_summary">Embora o gestão de pares seja automatizada, esta função ainda fornece controles manuais para ver e gerir os seus pares conectados.</string>
+    <string name="error_block_explorer_setup_invalid">Configuração do explorador de blocos inválida.</string>
+    <string name="stealth_mode_disable">Desativar o modo furtivo:</string>
+    <string name="lnurl_auth_success">A autenticação foi bem-sucedida!</string>
+    <string name="error_funds_not_confirmed_yet">Tem fundos on-chain suficientes, mas a confirmação deles ainda está pendente. Por favor aguarde para que os seus fundos sejam confirmados. Pode rastrear o estado dos seus fundos através da visão UTXO ou pelo histórico de transação.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix_description">Ao buscar uma transação no explorador, a ligação a ser invocado será assim:
+\nHost + Sufixo de Transação + ID de Transação.</string>
+    <string name="peer_total_channels">Total de Canais</string>
+    <string name="settings_hideAllBalances_explanation">Todos os balanços estão borrados agora e o balanço total está escondido atrás da logo BitBanana. Apenas toque qualquer campo borrado ou a logo BitBanana para revelar temporariamente o seu balanço.</string>
+    <string name="settings_hideBalanceType_total">Apenas o balanço total</string>
+    <string name="settings_featureHelpButtons_summary">Os úteis botões ? ao redor do app ajudam novos utilizadores com explicações detalhadas.</string>
+    <string name="htlc_max">Máx. HTLC</string>
+    <string name="lnurl_auth_fail">A autenticação
+\nfalhou</string>
+    <string name="peer_total_channels_explanation">A contagem total de canais públicos gerenciados por este par.</string>
+    <string name="settings_custom_block_explorer">Explorador de Blocos Personalizado</string>
+    <string name="lnurl_auth_link_info">Deseja ligar a sua conta existente ao seu nó?</string>
+    <string name="peer">Par</string>
+    <string name="fee_base">Taxa Base</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">O valor máximo que está disposto a encaminhar neste canal numa única transação.</string>
+    <string name="peer_flap_count">Contagem de flaps</string>
+    <string name="error_insufficient_on_chain_funds">Fundos on-chain insuficientes. Máximo disponível:</string>
+    <string name="peer_ping">Ping</string>
+    <string name="stealth_mode_description_calc">BitBanana agora se parece com uma calculadora!</string>
+    <string name="settings_unspecifiedAmountInvoices">Permitir faturas sem uma quantia específica</string>
+    <string name="settings_featureRoutingSummary_summary">Provê acesso a todos os eventos de roteamento junto com um resumo de roteamento.</string>
+    <string name="activity_routing_policy">Política de Roteamento</string>
+    <string name="balance_details_on_chain_unconfirmed">Pendentes on-chain:</string>
+    <string name="peer_last_flap_explanation">Tempo transcorrido desde o último evento off-line do par.</string>
+    <string name="peer_ping_explanation">O tempo que leva para o par responder.</string>
+    <string name="settings_featureSignVerify_summary">Permite assinar e verificar mensagens com o seu nó.</string>
+    <string name="guardian_invoices_without_specified_amount">Faturas sem uma quantia específica são um risco de segurança. Apesar de altamente improvável, intermediários na rota podem explorar essas faturas, causando o recipiente receber menos que o esperado sem detetar. Nenhum risco assim existe em pagamentos através de um canal direto.</string>
+    <string name="explanation_channel_commitment_type">Cada parceiro tem uma transação de compromisso que apenas ele pode enviar à blockchain para obter a sua cota de bitcoins. Diferentes tipos de transações de compromisso resultam em canais tendo diferentes propriedades.</string>
+    <string name="settings_featureCoinControl">Controle de Moeda</string>
+    <string name="login_verb">Fazer login</string>
+    <string name="routing_policy_applies_for_all_channels">Atenção! Se enviados, estes ajustes serão aplicados a todos os seus canais!</string>
+    <string name="off">Inativo</string>
+    <string name="peer_mutual_channels">Canais mútuos</string>
+    <string name="help_dialog_base_fee">Independentemente do valor da transação, receberá uma taxa base para cada transação que encaminha pelo canal. A sua taxa total é a soma desta taxa base e a taxa de cobrança.</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Liquidez Lightning insuficiente para enviar. Abra canais adicionais para aumentá-la.
+\nMáximo atual:</string>
+    <string name="routing_policy_update_success">Política de roteamento atualizada com sucesso.</string>
+    <string name="settings_featureRoutingSummary">Resumo de Roteamento</string>
+    <string name="register">Registar</string>
+    <string name="channel_commitment_type">Tipo de Compromisso</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Políticas de Roteamento atualizadas, mas para %1$d dos seus canais as novas regras não puderam ser atualizadas.</string>
+    <string name="peer_last_flap">Último flap</string>
+    <string name="stealth_mode_enable_instruction">Fechar o app</string>
+    <string name="balance_details_lightning">Canais abertos:</string>
+    <string name="disconnect">Desconectar</string>
+    <string name="help_dialog_fee_rate">A taxa de cobrança é uma taxa que escala conforme o valor da transação que encaminha pelo canal. A sua taxa total é a soma desta taxa de cobrança e a taxa base.</string>
+    <string name="authenticate">Autenticar</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">O menor valor que o seu par está disposto a encaminhar neste canal numa única transação.</string>
+    <string name="onChain">Rede Bitcoin</string>
+    <string name="peers_no_peers">Sem pares</string>
+    <string name="help_dialog_stealth_mode">Utilize o modo furtivo para defender o seu telefone contra revistas físicas, criando a ilusão que o BitBanana não está presente no seu dispositivo. Isto é feito a substituir o ícone da sua app e a abrir uma app de disfarce. No entanto, note que o ícone do app e o nome não serão alterados na lista de apps nas configurações do seu sistema.
+\n
+\nNão é uma solução perfeita, mas ajuda a fazer a presença do seu software BitBanana menos óbvia.</string>
+    <string name="help_dialog_lnurl_auth">O seu nó serve como um método de autenticação privado para aceder um serviço. O processo é baseado em assinatura de mensagem e não partilha nenhuma informação sobre o seu nó. Se o seu nó parar de funcionar, perderá a habilidade de fazer login na conta associada.</string>
+    <string name="settings_stealth_mode">Modo Furtivo</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">O maior valor que o seu par está disposto a encaminhar neste canal numa única transação.</string>
+    <string name="settings_stealth_mode_summary">Ative o modo furtivo para proteger contra revistas físicas do seu dispositivo</string>
+    <string name="stealth_mode_enable">Ativar modo furtivo:</string>
+    <string name="peer_total_capacity">Capacidade Total</string>
+    <string name="network">Rede</string>
+    <string name="htlc_min">Mín. HTLC</string>
+    <string name="help_dialog_minHTLC">O menor valor que está disposto a encaminhar neste canal numa única transação.
+\n
+\nMantenha este campo vazio se não deseja mudar o valor atualmente definido.</string>
+    <string name="fee_rate">Taxa de Cobrança</string>
+    <string name="error_tor_might_cause_problem">Tor pode ter causado este problema. Por favor tente desativar o Tor nas configurações.</string>
+    <string name="peer_last_errors">Últimos erros</string>
+    <string name="auth_link_account">Ligar com conta</string>
+    <string name="reliability">Confiabilidade</string>
+    <string name="error_no_permission_to_read_file">Acesso Negado: incapaz de ler o ficheiro. Recomendamos movê-lo para uma localização diferente, como a pasta \"Downloads\", e acessá-lo por lá.</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">O menor valor que está disposto a encaminhar neste canal numa única transação.</string>
+    <string name="settings_hideBalance">Esconder balanço</string>
+    <string name="help_dialog_peers">Esta lista exibe todos os pares atualmente conectados ao seu nó. Pares são essencialmente outros nós operando dentro da rede. Eles colaboram ao trocar informações, garantindo que cada nó tenha uma visão clara do estado da rede.
+\n
+\nPor exemplo, quando o seu nó quer mudar algo, como atualizar uma política do canal, ele notifica todos os pares aos quais está conectado. Estes pares, então, transmitem a informação aos seus próprios pares conectados, criando um efeito onda que garante que a rede inteira esteja informada.
+\n
+\nSeu nó estabelece conexões com pares automaticamente, geralmente priorizando esses pares com os quais tem canais ativos. Ainda assim, mantém a flexibilidade de manualmente estabelecer ou quebrar conexões e aceder mais pormenores sobre os seus pares através desta interface.</string>
+    <string name="settings_features">Funções</string>
+    <string name="percent">Percentagem</string>
+    <string name="settings_customBlockExplorer_address_suffix">Sufixo do Endereço</string>
+    <string name="settings_featurePeers">Gestão de Pares</string>
+    <string name="lnurl_auth_login_info">Deseja usar o seu nó para fazer login neste serviço?</string>
+    <string name="forwarding_avg_earned_description">Ganho em média por evento</string>
+    <string name="peer_total_capacity_explanation">Capacidade total de nós, derivado da soma das capacidades do canal.</string>
+    <string name="you">Você</string>
+    <string name="peer_flap_count_explanation">Total de ocorrências deste par ficar off-line ou entrar na rede, documentado através de reinícios. A contagem reduz gradualmente se o par não fez flap recentemente, permitindo tolerância para contagens de flap historicamente altas.</string>
+    <string name="help_dialog_scanPeer">São válidos os códigos QR contendo o seguinte:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="settings_customBlockExplorer_address_suffix_description">Ao buscar um endereço no explorador, a ligação a ser invocada será assim:
+\nHost + Sufixo do Endereço + Endereço.</string>
+    <string name="lnurl_auth_auth_info">Deseja usar o seu nó para autenticar com este serviço?</string>
+    <string name="activity_peers">Pares</string>
+    <string name="available">Disponível</string>
+    <string name="help_dialog_settings_features">O compromisso do BitBanana com também servir a experts significa oferecer um rico conjunto de funções. Porém, reconhecemos que nem todos podem necessitar de todas estas funcionalidades. Com os ajustes personalizáveis, tem a flexibilidade para esconder quaisquer funções que não sejam relevantes para as suas necessidades, garantindo uma experiência adaptada.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Taxa de cobrança muito alta. O máximo permitido é %1$.2f%%.</string>
+    <string name="forwarding_avg_volume_description">Roteado em média por evento</string>
+    <string name="peer_features">Funções</string>
+    <string name="settings_customBlockExplorer_transaction_suffix">Sufixo de Transação</string>
+    <string name="settings_hideBalanceType_all">Todos os balanços</string>
+    <string name="explanation_timelock_delta">Numa rota de pagamento, cada passo intermediário define uma janela de tempo específica (em blocos) dentro da qual irá processar a transação com sucesso. Senão, será considerada como falha por ter expirado. Em caso de falhas de pagamento ou comportamento não cooperativo, esta janela de tempo é crucial, pois permite que participantes naquela etapa consigam tomar as ações necessárias, como reverter cooperativamente a transação (rebobinando o HTLC) ou resolvendo de forma não cooperativa na blockchain.
+\n
+\nUm valor maior neste contexto aumenta a resiliência do canal contra falhas de nó temporárias. Porém, pode potencialmente reduzir a atratividade do canal para roteamento pois, no pior cenário, pagamentos podem ter demoras prolongadas. Além disso, em casos raros de pagamentos presos, os fundos dos participantes do canal alocados para aquele evento de encaminhamento serão travados durante a duração desta janela de tempo.
+\n
+\n144 blocos é cerca de um dia.</string>
+    <string name="peer_mutual_channels_explanation">A contagem de canais que abriu com este par.</string>
+    <string name="stealth_mode_disable_instruction_calc">Faça um cálculo que resulte em 21</string>
+    <string name="note">Nota</string>
+    <string name="settings_customBlockExplorer_host_description">Por favor insira o endereço de host para o seu explorador personalizado. Quando você mesmo hospeda o seu explorador de blocos, a sua privacidade é totalmente mantida.</string>
+    <string name="settings_features_summary">Personalize a app para as suas necessidades ao ativar ou desativar as funções.</string>
+    <string name="settings_on_off">Ligado / Desligado</string>
+    <string name="timelock_delta">Diferença de Bloqueio Temporal</string>
+    <string name="balance_details_lightning_pending">Canais pendentes:</string>
+    <string name="forwarding_avg_events_per_day">Eventos por dia em média</string>
+    <string name="help_dialog_maxHTLC">O valor máximo que está disposto a encaminhar neste canal numa única transação.
+\n
+\nMantenha este campo vazio se não deseja mudar o valor atualmente definido.</string>
+    <string name="submit_routing_policy">Atualizar Política de Roteamento</string>
+    <string name="settings_featureContacts_summary">Faça o envio de dinheiro ser uma moleza com uma lista de contatos bem organizada.</string>
+    <string name="lnurl_auth_register_info">Deseja usar o seu nó para registar uma conta neste serviço?</string>
+    <string name="peers_add">Adicionar par</string>
+    <string name="balance_details_on_chain_confirmed">Confirmados on-chain:</string>
 </resources>
