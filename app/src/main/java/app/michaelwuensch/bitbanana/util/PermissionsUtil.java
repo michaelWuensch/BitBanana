@@ -26,11 +26,11 @@ public class PermissionsUtil {
     }
 
 
-    private static boolean hasPermission(Context context, String permission) {
+    public static boolean hasPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private static void requestPermissions(Context context, String[] permissions, int code, boolean forceRequest) {
+    public static void requestPermissions(Context context, String[] permissions, int code, boolean forceRequest) {
 
         for (int i = 0; i < permissions.length; i++) {
             // Do not request permission if user already denied it.
