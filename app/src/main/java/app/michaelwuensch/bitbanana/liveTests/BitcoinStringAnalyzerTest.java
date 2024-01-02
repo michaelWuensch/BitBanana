@@ -5,7 +5,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
@@ -120,7 +120,7 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                 if (expected == RESULT_LND_CONNECT)
                     mResultListener.onSuccess(input, RESULT_LND_CONNECT, null);
                 else
@@ -128,7 +128,7 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 if (expected == RESULT_BTCPAY_CONNECT)
                     mResultListener.onSuccess(input, RESULT_BTCPAY_CONNECT, null);
                 else

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.home.SendBSDFragment;
@@ -57,7 +57,7 @@ public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
         bsdScrollableMainView.setTitleIconVisibility(true);
         bsdScrollableMainView.setTitle(R.string.choose_action);
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false, true, null);
         }
 

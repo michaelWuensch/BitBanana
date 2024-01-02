@@ -17,7 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.util.BBLog;
 
 /**
@@ -33,7 +33,7 @@ public class LndSSLSocketFactory {
         throw new AssertionError();
     }
 
-    public static SSLSocketFactory create(BBNodeConfig BBNodeConfig) {
+    public static SSLSocketFactory create(BackendConfig BackendConfig) {
         SSLContext sslCtx = null;
 
         try {
@@ -43,7 +43,7 @@ public class LndSSLSocketFactory {
             return null;
         }
 
-        if (BBNodeConfig.isTorHostAddress() || !BBNodeConfig.getVerifyCertificate()) {
+        if (BackendConfig.isTorHostAddress() || !BackendConfig.getVerifyCertificate()) {
             // Always trust the certificate on Tor connection
             try {
                 sslCtx.init(null, new TrustManager[]{new BlindTrustManager()}, null);
@@ -55,11 +55,11 @@ public class LndSSLSocketFactory {
 
         } else {
             // On clearnet when verify certificate is enabled, we want to validate the certificate.
-            if (BBNodeConfig.getCert() != null && !BBNodeConfig.getCert().isEmpty()) {
+            if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
                 //try to create a trustmanager that trust the certificate that was transmitted with the lndconnect string.
                 try {
                     InputStream caInput = null;
-                    String certificateBase64UrlString = BBNodeConfig.getCert();
+                    String certificateBase64UrlString = BackendConfig.getCert();
                     byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
 
                     // Generate the CA Certificate from the supplied byte array

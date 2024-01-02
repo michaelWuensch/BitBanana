@@ -10,8 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
@@ -108,13 +108,13 @@ public class BitcoinStringAnalyzer {
     private static void checkIfRemoteConnection(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         RemoteConnectUtil.decodeConnectionString(ctx, inputString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                listener.onValidLndConnectString(baseNodeConfig);
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
+                listener.onValidLndConnectString(baseBackendConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                listener.onValidBTCPayConnectData(baseNodeConfig);
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                listener.onValidBTCPayConnectData(baseBackendConfig);
             }
 
             @Override
@@ -136,7 +136,7 @@ public class BitcoinStringAnalyzer {
             listener.onValidNodeUri(nodeUri);
 
         } else {
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                 checkIfLnOrBitcoinInvoice(ctx, compositeDisposable, inputString, listener);
             } else {
                 listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
@@ -216,9 +216,9 @@ public class BitcoinStringAnalyzer {
 
         void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
-        void onValidLndConnectString(BaseNodeConfig baseNodeConfig);
+        void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
 
-        void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig);
+        void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
 

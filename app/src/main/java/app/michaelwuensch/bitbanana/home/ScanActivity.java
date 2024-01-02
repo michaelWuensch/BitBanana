@@ -21,7 +21,7 @@ import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 
 public class ScanActivity extends BaseScannerActivity {
@@ -124,12 +124,12 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                 readableDataFound(data);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 readableDataFound(data);
             }
 

@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect;
+package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect;
 
 import com.google.common.io.BaseEncoding;
 
@@ -10,10 +10,10 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.BaseConnectionParser;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 
 /**
  * This class parses a lndconnect which is defined in this project:
@@ -123,11 +123,13 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
 
                 // everything is ok
                 LndConnectConfig lndConnectConfig = new LndConnectConfig();
+                lndConnectConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
                 lndConnectConfig.setHost(connectURI.getHost());
                 lndConnectConfig.setPort(connectURI.getPort());
+                lndConnectConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                lndConnectConfig.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
                 lndConnectConfig.setCert(cert);
                 lndConnectConfig.setMacaroon(macaroon);
-                lndConnectConfig.setImplementation(BaseNodeConfig.NODE_IMPLEMENTATION_LND);
                 lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 setConnectionConfig(lndConnectConfig);

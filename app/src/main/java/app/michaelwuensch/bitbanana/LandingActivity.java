@@ -12,11 +12,15 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -35,7 +39,7 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         // BitBanana was started from an URI link.
         if (App.getAppContext().getUriSchemeData() != null) {
-            if (!NodeConfigsManager.getInstance().hasAnyConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
+            if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
                 setupWalletFromUri();
                 return;
             }
@@ -45,17 +49,23 @@ public class LandingActivity extends BaseAppCompatActivity {
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
             if (ver < RefConstants.CURRENT_SETTINGS_VERSION) {
-                if (ver < 22) {
+                if (ver == 21) {
                     migrateLanguageSetting();
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
+                    migrateBackendConfigs();
                     enterWallet();
-                } else if (ver < 23) {
+                } else if (ver == 22) {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
+                    migrateBackendConfigs();
                     enterWallet();
-                } else {
+                } else if (ver == 23) {
                     migrateHideBalanceOptions();
+                    migrateBackendConfigs();
+                    enterWallet();
+                } else { // ver == 24
+                    migrateBackendConfigs();
                     enterWallet();
                 }
             } else {
@@ -68,7 +78,7 @@ public class LandingActivity extends BaseAppCompatActivity {
     }
 
     private void resetApp() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // Reset settings
             PrefsUtil.editPrefs().clear().commit();
             try {
@@ -94,7 +104,7 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Set new settings version
         PrefsUtil.editPrefs().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             PinScreenUtil.askForAccess(this, () -> {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -107,7 +117,7 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         } else {
             // Clear connection data if something is there
-            PrefsUtil.editPrefs().remove(PrefsUtil.NODE_CONFIGS).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.BACKEND_CONFIGS).commit();
 
             Intent homeIntent = new Intent(this, HomeActivity.class);
 
@@ -131,6 +141,24 @@ public class LandingActivity extends BaseAppCompatActivity {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList());
         } else {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(currentPrefsValue));
+        }
+    }
+
+    private void migrateBackendConfigs() {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
+                config.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                config.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
+                config.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                config.setVpnConfig(null);
+                BackendConfigsManager.getInstance().updateBackendConfig(config);
+            }
+            try {
+                BackendConfigsManager.getInstance().apply();
+            } catch (GeneralSecurityException | IOException e) {
+                BBLog.w(LOG_TAG, "Saving BackendConfigs migration failed");
+                throw new RuntimeException(e);
+            }
         }
     }
 

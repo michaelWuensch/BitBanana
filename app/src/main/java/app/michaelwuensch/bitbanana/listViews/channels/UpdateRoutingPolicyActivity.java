@@ -18,7 +18,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetailBSDFragment;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -104,7 +104,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     // Validate input
                     if (mFeeRate.getData() != null) {
                         if (Double.valueOf(mFeeRate.getData()) > 25.0) {

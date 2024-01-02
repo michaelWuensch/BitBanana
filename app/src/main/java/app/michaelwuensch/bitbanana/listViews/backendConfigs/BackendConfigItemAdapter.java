@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.items.BackendConfigItemViewHolder;
 
 
 public class BackendConfigItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<BBNodeConfig> mItems;
+    private List<BackendConfig> mItems;
 
     // Construct the adapter with a data list
-    public BackendConfigItemAdapter(List<BBNodeConfig> dataset) {
+    public BackendConfigItemAdapter(List<BackendConfig> dataset) {
         mItems = dataset;
     }
 
@@ -32,7 +32,7 @@ public class BackendConfigItemAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         BackendConfigItemViewHolder nodeViewHolder = (BackendConfigItemViewHolder) holder;
-        BBNodeConfig remoteNodeItem = mItems.get(position);
+        BackendConfig remoteNodeItem = mItems.get(position);
         nodeViewHolder.bindRemoteNodeItem(remoteNodeItem);
     }
 

@@ -42,7 +42,7 @@ import okhttp3.Response;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -116,7 +116,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
         // Action when clicked on "Open Channel"
         Button btnOpen = view.findViewById(R.id.openButton);
         btnOpen.setOnClickListener(v -> {
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                 switchToProgressScreen();
                 openChannel();
             } else {

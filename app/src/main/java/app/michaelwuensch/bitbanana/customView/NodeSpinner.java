@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatSpinner;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 public class NodeSpinner extends AppCompatSpinner {
 
@@ -61,16 +61,16 @@ public class NodeSpinner extends AppCompatSpinner {
                 if (initFinished) {
                     int lastPos = adapterView.getCount() - 1;
                     if (position != lastPos) {
-                        String selectedNodeId = NodeConfigsManager.getInstance().getAllNodeConfigs(true).get(position).getId();
-                        if (!NodeConfigsManager.getInstance().getCurrentNodeConfig().getId().equals(selectedNodeId)) {
+                        String selectedNodeId = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(position).getId();
+                        if (!BackendConfigsManager.getInstance().getCurrentBackendConfig().getId().equals(selectedNodeId)) {
                             // Save selected Node ID in prefs making it the current node.
-                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, selectedNodeId).commit();
+                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, selectedNodeId).commit();
 
                             // Update the node spinner list, so everything is at it's correct position again.
                             updateList();
 
                             // Inform the listener. This is where the new node is opened.
-                            mListener.onNodeChanged(selectedNodeId, NodeConfigsManager.getInstance().getNodeConfigById(selectedNodeId).getAlias());
+                            mListener.onNodeChanged(selectedNodeId, BackendConfigsManager.getInstance().getBackendConfigById(selectedNodeId).getAlias());
                         }
                     } else {
                         // Open node management
@@ -104,9 +104,9 @@ public class NodeSpinner extends AppCompatSpinner {
 
         initFinished = false;
 
-        String[] items = new String[NodeConfigsManager.getInstance().getAllNodeConfigs(true).size() + 1];
-        for (int i = 0; i < NodeConfigsManager.getInstance().getAllNodeConfigs(true).size(); i++) {
-            items[i] = NodeConfigsManager.getInstance().getAllNodeConfigs(true).get(i).getAlias();
+        String[] items = new String[BackendConfigsManager.getInstance().getAllBackendConfigs(true).size() + 1];
+        for (int i = 0; i < BackendConfigsManager.getInstance().getAllBackendConfigs(true).size(); i++) {
+            items[i] = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(i).getAlias();
         }
         items[items.length - 1] = getContext().getResources().getString(R.string.spinner_manage_nodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.node_spinner_item, items);

@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -1338,7 +1338,7 @@ public class Wallet {
      */
     public long getMaxLightningReceiveAmount() {
 
-        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             return 0;
         }
 
@@ -1361,7 +1361,7 @@ public class Wallet {
      */
     public long getMaxLightningSendAmount() {
 
-        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             return 0;
         }
 

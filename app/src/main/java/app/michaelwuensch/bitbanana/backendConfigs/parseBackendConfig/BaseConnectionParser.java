@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData;
+package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig;
 
 /**
  * Base class meant to be extended for parsing various connection strings like

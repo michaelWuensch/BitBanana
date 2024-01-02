@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.listViews.peers.itemDetails.PeerDetailsActivity;
@@ -106,7 +106,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
     private void updatePeersDisplayList() {
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (LndConnection.getInstance().isConnected()) {
 
                 ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder()
@@ -237,7 +237,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
     @Override
     public void onRefresh() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
             updatePeersDisplayList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);

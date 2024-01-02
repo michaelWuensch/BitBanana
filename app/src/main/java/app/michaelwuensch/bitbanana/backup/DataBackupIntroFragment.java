@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -55,7 +55,7 @@ public class DataBackupIntroFragment extends Fragment {
         buttonRestoreBackup.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (NodeConfigsManager.getInstance().hasAnyConfigs() || ContactsManager.getInstance().hasAnyContacts()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() || ContactsManager.getInstance().hasAnyContacts()) {
                     new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
                         @Override
                         public void onGuardianConfirmed() {

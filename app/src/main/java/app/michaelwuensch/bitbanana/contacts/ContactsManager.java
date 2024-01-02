@@ -35,7 +35,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.NodeAliasInfo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -279,7 +279,7 @@ public class ContactsManager {
                 if (AliasManager.getInstance().hasAliasInfo(contactData))
                     input.setText(AliasManager.getInstance().getAlias(contactData));
                 else {
-                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                         Wallet.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet.NodeInfoFetchedListener() {
                             @Override
                             public void onNodeInfoFetched(String pubkey) {

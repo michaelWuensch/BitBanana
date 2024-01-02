@@ -20,7 +20,7 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 
 public class ClipBoardUtil {
@@ -128,12 +128,12 @@ public class ClipBoardUtil {
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }
 

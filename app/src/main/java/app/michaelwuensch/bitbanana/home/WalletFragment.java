@@ -22,7 +22,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
@@ -98,7 +98,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 updateTotalBalanceDisplay();
 
                 // Save the new chosen node in prefs
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
                 // Update status dot
                 updateStatusDot(alias);
@@ -175,7 +175,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Action when clicked on "setup wallet"
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             mBtnSetup.setVisibility(View.INVISIBLE);
         }
         mBtnSetup.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +195,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 showLoading();
-                updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
                 // We delay the execution, to make it obvious to the user the button press had an effect.
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -228,7 +228,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void walletLoadingCompleted() {
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
 
             // Show info about mode (offline, connected, error, testnet or mainnet, ...)
             onInfoUpdated(Wallet.getInstance().isInfoFetched());
@@ -253,7 +253,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                     hideBalance();
                 }
             }
-            if (key.equals(PrefsUtil.CURRENT_NODE_CONFIG)) {
+            if (key.equals(PrefsUtil.CURRENT_BACKEND_CONFIG)) {
                 updateSpinnerVisibility();
             }
         }
@@ -302,9 +302,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
 
         // Update status dot
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             mStatusDot.setVisibility(View.VISIBLE);
-            updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
+            updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
         } else {
             mStatusDot.setVisibility(View.GONE);
         }
@@ -341,7 +341,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
         updateSpinnerVisibility();
 
-        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // If the App is not setup yet,
             // this will cause to get the status text updated. Otherwise it would be empty.
             Wallet.getInstance().simulateFetchInfoForDemo();
@@ -362,7 +362,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     public void updateSpinnerVisibility() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             mNodeSpinner.updateList();
             mNodeSpinner.setVisibility(View.VISIBLE);
         } else {
@@ -401,7 +401,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void updateStatusDot(String walletAlias) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor()) {
+        if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor()) {
             mStatusDot.setImageResource(R.drawable.tor_icon);
             mStatusDot.getLayoutParams().height = (int) metrics.scaledDensity * 20;
             mStatusDot.getLayoutParams().width = (int) metrics.scaledDensity * 20;
@@ -430,7 +430,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onLndConnectError(int error) {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (error != Wallet.LndConnectionTestListener.ERROR_LOCKED) {
                 onInfoUpdated(false);
                 if (error == Wallet.LndConnectionTestListener.ERROR_AUTHENTICATION) {
@@ -462,7 +462,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onLndConnectError(String error) {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             onInfoUpdated(false);
             String errorMessage;
             if (error.toLowerCase().contains("shutdown") && error.toLowerCase().contains("channel")) {
@@ -491,13 +491,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mNodeSpinner.updateList();
         mNodeSpinner.setVisibility(View.VISIBLE);
         mStatusDot.setVisibility(View.VISIBLE);
-        updateStatusDot(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
+        updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
         mBtnSetup.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onTorBootstrappingFailed() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             onInfoUpdated(false);
             mTvConnectError.setText(R.string.error_connection_tor_bootstrapping);
         } else {

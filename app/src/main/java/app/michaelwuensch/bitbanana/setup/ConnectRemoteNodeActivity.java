@@ -9,7 +9,7 @@ import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -85,13 +85,13 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
         RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                connectIfUserConfirms(baseNodeConfig);
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                connectIfUserConfirms(baseNodeConfig);
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
             }
 
             @Override
@@ -107,22 +107,22 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
 
-    private void connectIfUserConfirms(BaseNodeConfig baseNodeConfig) {
+    private void connectIfUserConfirms(BaseBackendConfig baseBackendConfig) {
         // Ask user to confirm the connection to remote host
         new UserGuardian(this, () -> {
-            connect(baseNodeConfig);
-        }).securityConnectToRemoteServer(baseNodeConfig.getHost());
+            connect(baseBackendConfig);
+        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
     }
 
-    private void connect(BaseNodeConfig baseNodeConfig) {
+    private void connect(BaseBackendConfig baseBackendConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();

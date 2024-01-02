@@ -51,11 +51,11 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
@@ -155,7 +155,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mNavigationView.getHeaderView(0).findViewById(R.id.headerButton).setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     if (Wallet.getInstance().isConnectedToLND()) {
                         if (Wallet.getInstance().getNodeUris().length > 0) {
                             Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
@@ -328,7 +328,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         updateDrawerNavigationMenuVisibilities();
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             TimeOutUtil.getInstance().setCanBeRestarted(true);
 
             // ToDo: This should be improved to be a permanent message instead of showing an endless spinner.
@@ -336,7 +336,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 Toast.makeText(this, R.string.error_connection_no_internet, Toast.LENGTH_LONG).show();
             }
 
-            if (NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor()) {
+            if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor()) {
                 // After Tor is successfully started, it will automatically open the lnd connection
                 TorManager.getInstance().startTor();
 
@@ -425,7 +425,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().cancelSubscriptions();
 
         // Kill lnd connection
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             LndConnection.getInstance().closeConnection();
         }
     }
@@ -598,7 +598,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         NfcUtil.readTag(this, intent, new NfcUtil.OnNfcResponseListener() {
             @Override
             public void onSuccess(String payload) {
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     analyzeString(payload);
                 } else {
                     BBLog.d(LOG_TAG, "Wallet not setup.");
@@ -720,13 +720,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                addWallet(baseNodeConfig);
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
+                addWallet(baseBackendConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                addWallet(baseNodeConfig);
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                addWallet(baseBackendConfig);
             }
 
             @Override
@@ -808,13 +808,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     }
 
-    private void addWallet(BaseNodeConfig baseNodeConfig) {
+    private void addWallet(BaseBackendConfig baseBackendConfig) {
         new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, baseNodeConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, baseBackendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                 @Override
                 public void onSaved(String id) {
-                    if (NodeConfigsManager.getInstance().getAllNodeConfigs(false).size() == 1) {
+                    if (BackendConfigsManager.getInstance().getAllBackendConfigs(false).size() == 1) {
                         // This was the first wallet that was added. Open it immediately.
                         mPagerAdapter.getWalletFragment().showLoading();
                         openWallet();
@@ -845,7 +845,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     showError(error, duration);
                 }
             });
-        }).securityConnectToRemoteServer(baseNodeConfig.getHost());
+        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
     }
 
     @Override
@@ -890,7 +890,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
         userAvatarView.setupWithNodeUri(Wallet.getInstance().getNodeUris()[0], false);
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
-        userWalletName.setText(NodeConfigsManager.getInstance().getCurrentNodeConfig().getAlias());
+        userWalletName.setText(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
         TextView lndVersion = findViewById(R.id.lndVersion);
         String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
         lndVersion.setText(lndVersionString);

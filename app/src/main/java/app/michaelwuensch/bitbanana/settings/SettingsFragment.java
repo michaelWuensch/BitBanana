@@ -29,7 +29,7 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -129,7 +129,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     if (PrefsUtil.isPinEnabled()) {
                         Intent intent = new Intent(getActivity(), PinSetupActivity.class);
                         intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);

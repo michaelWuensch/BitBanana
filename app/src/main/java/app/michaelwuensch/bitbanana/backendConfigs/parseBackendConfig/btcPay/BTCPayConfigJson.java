@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay;
+package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay;
 
 import androidx.annotation.NonNull;
 

@@ -2,8 +2,10 @@
   "connections": [
     {
       "id": "e4f2fcf7-82c7-46f4-8867-50c3f8a603f4",
+      "backend": "lnd-grpc",
       "alias": "FirstWalletName",
-      "type": "remote",
+      "location": "remote",
+      "network": "mainnet",
       "host": "TestHost",
       "port": 10009,
       "cert": "TestCert",
@@ -11,8 +13,10 @@
     },
     {
       "id": "a4f2fcf7-82c7-46f4-8867-50c3f8a603f4",
+      "backend": "core-lightning-grpc",
       "alias": "SecondWalletName",
-      "type": "local",
+      "location": "local",
+      "network": "testnet",
       "host": "host",
       "port": 0,
       "cert": "cert",

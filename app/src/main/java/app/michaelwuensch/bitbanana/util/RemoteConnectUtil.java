@@ -13,19 +13,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfigParser;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectStringParser;
+import app.michaelwuensch.bitbanana.connection.HttpClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay.BTCPayConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay.BTCPayConfigParser;
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectStringParser;
 
 public class RemoteConnectUtil {
 
@@ -129,7 +129,7 @@ public class RemoteConnectUtil {
     }
 
 
-    public static void saveRemoteConfiguration(Context ctx, BaseNodeConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(Context ctx, BaseBackendConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
         int port = config.getPort();
         if (port == 8080) {
             // BitBanana Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
@@ -152,33 +152,48 @@ public class RemoteConnectUtil {
         }
     }
 
-    private static void executeSaveRemoteConfiguration(BaseNodeConfig config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
-        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
+    private static void executeSaveRemoteConfiguration(BaseBackendConfig config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
+        BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
 
         try {
             if (config instanceof LndConnectConfig) {
-                LndConnectConfig lndConfig = (LndConnectConfig) config;
+                LndConnectConfig lndConnectConfig = (LndConnectConfig) config;
 
                 String id;
                 if (walletUUID == null) {
 
-                    if (nodeConfigsManager.doesDestinationExist(lndConfig.getHost(), port)) {
+                    if (backendConfigsManager.doesDestinationExist(lndConnectConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
-                    id = nodeConfigsManager.addNodeConfig(lndConfig.getHost(),
-                            BBNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, lndConfig.getHost(), port,
-                            lndConfig.getCert(), lndConfig.getMacaroon(), lndConfig.getUseTor(), lndConfig.getVerifyCertificate()).getId();
+                    BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setHost(lndConnectConfig.getHost());
+                    configToAdd.setPort(port);
+                    configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                    configToAdd.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    configToAdd.setNetwork(lndConnectConfig.getNetwork());
+                    configToAdd.setCert(lndConnectConfig.getCert());
+                    configToAdd.setMacaroon(lndConnectConfig.getMacaroon());
+                    configToAdd.setUseTor(lndConnectConfig.getUseTor());
+                    configToAdd.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
+
+                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
                 } else {
                     id = walletUUID;
-                    String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
-                    nodeConfigsManager.updateNodeConfig(id, oldAlias,
-                            BBNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, lndConfig.getHost(), port,
-                            lndConfig.getCert(), lndConfig.getMacaroon(), lndConfig.getUseTor(), lndConfig.getVerifyCertificate());
+                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
+                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setHost(lndConnectConfig.getHost());
+                    backendConfig.setPort(port);
+                    backendConfig.setCert(lndConnectConfig.getCert());
+                    backendConfig.setMacaroon(lndConnectConfig.getMacaroon());
+                    backendConfig.setUseTor(lndConnectConfig.getUseTor());
+                    backendConfig.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
+                    // id, alias, location, network and VPNConfig stay the same as this info is not available
+                    backendConfigsManager.updateBackendConfig(backendConfig);
                 }
 
-                nodeConfigsManager.apply();
+                backendConfigsManager.apply();
 
                 listener.onSaved(id);
 
@@ -188,23 +203,39 @@ public class RemoteConnectUtil {
                 String id;
                 if (walletUUID == null) {
 
-                    if (nodeConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
+                    if (backendConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
                         listener.onAlreadyExists();
                         return;
                     }
 
-                    id = nodeConfigsManager.addNodeConfig(btcPayConfig.getHost(),
-                            BBNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, btcPayConfig.getHost(), port,
-                            null, btcPayConfig.getMacaroon(), btcPayConfig.getUseTor(), btcPayConfig.getVerifyCertificate()).getId();
+                    BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setHost(btcPayConfig.getHost());
+                    configToAdd.setPort(port);
+                    configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                    configToAdd.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    configToAdd.setNetwork(btcPayConfig.getNetwork());
+                    configToAdd.setCert(null);
+                    configToAdd.setMacaroon(btcPayConfig.getMacaroon());
+                    configToAdd.setUseTor(btcPayConfig.getUseTor());
+                    configToAdd.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
+
+                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
                 } else {
                     id = walletUUID;
-                    String oldAlias = nodeConfigsManager.getNodeConfigById(id).getAlias();
-                    nodeConfigsManager.updateNodeConfig(id, oldAlias,
-                            BBNodeConfig.NODE_TYPE_REMOTE, BaseNodeConfig.NODE_IMPLEMENTATION_LND, btcPayConfig.getHost(), port,
-                            null, btcPayConfig.getMacaroon(), btcPayConfig.getUseTor(), btcPayConfig.getVerifyCertificate());
+                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
+                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setNetwork(btcPayConfig.getNetwork());
+                    backendConfig.setHost(btcPayConfig.getHost());
+                    backendConfig.setPort(port);
+                    backendConfig.setCert(null);
+                    backendConfig.setMacaroon(btcPayConfig.getMacaroon());
+                    backendConfig.setUseTor(btcPayConfig.getUseTor());
+                    backendConfig.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
+                    // id, alias, location and VPNConfig stay the same as this info is not available
+                    backendConfigsManager.updateBackendConfig(backendConfig);
                 }
 
-                nodeConfigsManager.apply();
+                backendConfigsManager.apply();
 
                 listener.onSaved(id);
 
@@ -225,9 +256,9 @@ public class RemoteConnectUtil {
 
     public interface OnRemoteConnectDecodedListener {
 
-        void onValidLndConnectString(BaseNodeConfig baseNodeConfig);
+        void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
 
-        void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig);
+        void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
 
         void onNoConnectData();
 

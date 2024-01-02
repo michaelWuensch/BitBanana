@@ -16,7 +16,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.Balances;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -228,7 +228,7 @@ public class MainBalanceView extends MotionLayout {
                 }
 
                 Balances balances;
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     balances = Wallet.getInstance().getBalances();
                 } else {
                     balances = Wallet.getInstance().getDemoBalances();
@@ -251,7 +251,7 @@ public class MainBalanceView extends MotionLayout {
     }
 
     public void updateNetworkInfo() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     mTvMode.setVisibility(View.GONE);

@@ -32,7 +32,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingEventListItem;
@@ -270,7 +270,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void refreshData() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
             setTitle(getResources().getString(R.string.activity_forwarding));
             if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
                 mSummaryPagerAdapter.getAmountEarnedFragment().setInProgress(true);

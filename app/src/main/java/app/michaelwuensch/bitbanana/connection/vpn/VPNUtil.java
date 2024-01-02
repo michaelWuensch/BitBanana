@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.util;
+package app.michaelwuensch.bitbanana.connection.vpn;
 
 
 import android.app.Activity;
@@ -8,10 +8,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.widget.Toast;
 
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.PermissionsUtil;
+
 public class VPNUtil {
 
     private static final String LOG_TAG = VPNUtil.class.getSimpleName();
-    
+
     private static final String APP_NAME_TAILSCALE = "Tailscale";
     private static final String PACKAGE_TAILSCALE = "com.tailscale.ipn";
     private static final String ACTION_START_TAILSCALE = "com.tailscale.ipn.CONNECT_VPN";
@@ -40,12 +43,26 @@ public class VPNUtil {
         activity.sendBroadcast(intent);
     }
 
-    public static void startWireGuard(Activity activity, String tunnelName) {
+    public static void startWireGuardTunnel(Activity activity, String tunnelName) {
         if (PermissionsUtil.hasPermission(activity, PERMISSION_WIREGUARD)) {
-            BBLog.d(LOG_TAG, "Starting VPN (WireGuard)");
+            BBLog.d(LOG_TAG, "Starting VPN (WireGuard Tunnel)");
             Intent intent = new Intent();
             intent.setAction(ACTION_START_WIREGUARD);
             intent.setPackage(PACKAGE_WIREGUARD);
+            intent.putExtra("tunnel", tunnelName);
+            activity.sendBroadcast(intent);
+        } else {
+            PermissionsUtil.requestPermissions(activity, new String[]{PERMISSION_WIREGUARD}, 1, false);
+        }
+    }
+
+    public static void stopWireGuardTunnel(Activity activity, String tunnelName) {
+        if (PermissionsUtil.hasPermission(activity, PERMISSION_WIREGUARD)) {
+            BBLog.d(LOG_TAG, "Stopping VPN (WireGuard Tunnel)");
+            Intent intent = new Intent();
+            intent.setAction(ACTION_STOP_WIREGUARD);
+            intent.setPackage(PACKAGE_WIREGUARD);
+            intent.putExtra("tunnel", tunnelName);
             activity.sendBroadcast(intent);
         } else {
             PermissionsUtil.requestPermissions(activity, new String[]{PERMISSION_WIREGUARD}, 1, false);
@@ -57,7 +74,7 @@ public class VPNUtil {
     }
 
     public static boolean isWireGuardInstalled(Context ctx) {
-        return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_TAILSCALE);
+        return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_WIREGUARD);
     }
 
     private static boolean isAppInstalled(Context ctx, String package_name, String app_name) {

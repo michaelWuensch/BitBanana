@@ -30,7 +30,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -111,7 +111,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             @Override
             public void onClick(View v) {
                 mOnChain = false;
-                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !NodeConfigsManager.getInstance().hasAnyConfigs();
+                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !BackendConfigsManager.getInstance().hasAnyBackendConfigs();
 
                 // Manage visibilities and animation
                 AutoTransition autoTransition = new AutoTransition();
@@ -242,7 +242,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     mEtAmount.setTextColor(getResources().getColor(R.color.white));
                 } else {
                     long maxReceivable;
-                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                         maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
@@ -305,7 +305,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     }
 
     private void generateRequest() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
 

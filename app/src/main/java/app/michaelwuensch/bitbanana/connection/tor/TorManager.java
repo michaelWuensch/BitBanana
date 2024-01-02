@@ -7,7 +7,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.matthewnelson.topl_service.TorServiceController;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 /**
  * Singleton to manage Tor.
@@ -68,8 +68,8 @@ public class TorManager {
     }
 
     public boolean isCurrentNodeConnectionTor() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
-            return NodeConfigsManager.getInstance().getCurrentNodeConfig().getUseTor();
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            return BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor();
         } else {
             return false;
         }

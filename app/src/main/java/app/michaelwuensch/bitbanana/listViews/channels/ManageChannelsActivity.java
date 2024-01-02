@@ -36,7 +36,7 @@ import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosing
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -121,7 +121,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         // Fetch channels from LND. This will automatically update the view when finished.
         // This is necessary, as we might display outdated data otherwise.
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (LndConnection.getInstance().isConnected()) {
                 Wallet.getInstance().fetchChannelsFromLND();
             }
@@ -288,7 +288,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onRefresh() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && LndConnection.getInstance().isConnected()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
             Wallet.getInstance().fetchChannelsFromLND();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);

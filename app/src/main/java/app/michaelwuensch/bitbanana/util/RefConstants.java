@@ -19,8 +19,9 @@ public class RefConstants {
     22: Changed language selection (0.6.6)
     23: Changed currency codes (0.6.7)
     24: Changed balanceHide options (0.6.8)
+    25: Added additional data to backup config: Network. Changed values for backend (0.7.3-beta)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 24;
+    public static final int CURRENT_SETTINGS_VERSION = 25;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 
@@ -43,14 +44,15 @@ public class RefConstants {
     History:
     0: Initial release (0.5.3-beta)
     1: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
+    2: Added additional data to backup config: Network. Changed values for backend (0.7.3-beta)
     */
-    public static final int DATA_BACKUP_VERSION = 1;
+    public static final int DATA_BACKUP_VERSION = 2;
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
 
 
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;
-    public static final int NODE_CONFIG_JSON_VERSION = 0;
+    public static final int BACKEND_CONFIG_JSON_VERSION = 0;
 
     // API request timeouts (in seconds)
     public static final int TIMEOUT_SHORT = 5;

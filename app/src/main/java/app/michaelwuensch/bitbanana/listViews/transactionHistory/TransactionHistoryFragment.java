@@ -35,7 +35,7 @@ import java.util.Set;
 
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.HistoryListItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.DateItem;
@@ -245,7 +245,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         List<HistoryListItem> internalTransactions = new LinkedList<>();
         Set<HistoryListItem> dateLines = new HashSet<>();
 
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
 
             // Add all payment relevant items to one of the lists above
 
@@ -382,7 +382,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
     @Override
     public void onRefresh() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && Wallet.getInstance().isInfoFetched()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isInfoFetched()) {
             Wallet.getInstance().fetchLNDTransactionHistory();
             redrawHistoryList();
         } else {

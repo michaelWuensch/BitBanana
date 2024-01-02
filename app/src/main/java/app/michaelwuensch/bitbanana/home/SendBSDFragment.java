@@ -40,7 +40,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
@@ -211,13 +211,13 @@ public class SendBSDFragment extends BaseBSDFragment {
                     // make text red if input is too large
                     long maxSendable;
                     if (mOnChain) {
-                        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                             maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
                         } else {
                             maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
                         }
                     } else {
-                        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                             maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
                         } else {
                             maxSendable = 750000;
@@ -443,7 +443,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 @Override
                 public void onClick(View v) {
 
-                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
 
                         long paymentAmount = getLightningPaymentAmountSat();
                         
@@ -718,7 +718,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     }
 
     private void calculateFee() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             setCalculatingFee();
 
             if (mOnChain) {

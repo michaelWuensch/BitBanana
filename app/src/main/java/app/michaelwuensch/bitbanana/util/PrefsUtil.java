@@ -28,7 +28,7 @@ public class PrefsUtil {
     public static final String SETTINGS_VERSION = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
-    public static final String CURRENT_NODE_CONFIG = "current_wallet_config";
+    public static final String CURRENT_BACKEND_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
     public static final String LANGUAGE = "language";
     public static final String EXCHANGE_RATE_PROVIDER = "exchangeRateProvider";
@@ -42,21 +42,20 @@ public class PrefsUtil {
     public static final String FEE_PRESET_FAST = "feePresetFast";
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
-    public static final String ROUTING_SUMMARY_VOLUME = "routingSummaryMode";
     public static final String BALANCE_HIDE_TYPE = "hideBalanceType";
     public static final String BLOCK_EXPLORER = "blockExplorer";
     public static final String CUSTOM_BLOCK_EXPLORER_HOST = "customBlockExplorerHost";
-
-    // node config preferences references
-    public static final String NODE_CONFIGS = "wallet_configs";
-    public static final String CONTACTS = "contacts";
-    public static final String RANDOM_SOURCE = "random_source";
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";
     public static final String DEFAULT_FEE_PRESET_VALUE_FAST = "1";
     public static final String DEFAULT_FEE_PRESET_VALUE_MEDIUM = "18";
     public static final String DEFAULT_FEE_PRESET_VALUE_SLOW = "144";
+
+    // encrypted preferences references
+    public static final String BACKEND_CONFIGS = "wallet_configs";
+    public static final String CONTACTS = "contacts";
+    public static final String RANDOM_SOURCE = "random_source";
 
 
     // Access to default shared prefs
@@ -132,8 +131,8 @@ public class PrefsUtil {
         return getPrefs().getBoolean("biometricsEnabled", true);
     }
 
-    public static String getCurrentNodeConfig() {
-        return getPrefs().getString(CURRENT_NODE_CONFIG, "");
+    public static String getCurrentBackendConfig() {
+        return getPrefs().getString(CURRENT_BACKEND_CONFIG, "");
     }
 
     public static boolean isPinEnabled() {

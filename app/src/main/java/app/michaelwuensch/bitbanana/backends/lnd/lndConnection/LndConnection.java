@@ -31,8 +31,8 @@ import app.michaelwuensch.bitbanana.backends.lnd.RemoteLndWalletUnlockerService;
 import app.michaelwuensch.bitbanana.backends.lnd.RemoteLndWatchtowerClientService;
 import app.michaelwuensch.bitbanana.backends.lnd.RemoteLndWatchtowerService;
 import app.michaelwuensch.bitbanana.connection.BlindHostnameVerifier;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorProxyDetector;
 import app.michaelwuensch.bitbanana.backends.lnd.RemoteLndLightningService;
 import app.michaelwuensch.bitbanana.backends.lnd.RemoteLndStateService;
@@ -68,7 +68,7 @@ public class LndConnection {
     private LndWalletUnlockerService mLndWalletUnlockerService;
     private LndWatchtowerService mLndWatchtowerService;
     private LndWatchtowerClientService mLndWatchtowerClientService;
-    private BBNodeConfig mConnectionConfig;
+    private BackendConfig mConnectionConfig;
     private boolean isConnected = false;
 
     private LndConnection() {
@@ -141,7 +141,7 @@ public class LndConnection {
     private void readSavedConnectionInfo() {
 
         // Load current wallet connection config
-        mConnectionConfig = NodeConfigsManager.getInstance().getCurrentNodeConfig();
+        mConnectionConfig = BackendConfigsManager.getInstance().getCurrentBackendConfig();
 
         // Generate Macaroon
         mMacaroon = new MacaroonCallCredential(mConnectionConfig.getMacaroon());
@@ -210,7 +210,7 @@ public class LndConnection {
     }
 
     public void reconnect() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             closeConnection();
             openConnection();
         }
@@ -237,7 +237,7 @@ public class LndConnection {
         }
     }
 
-    public BBNodeConfig getConnectionConfig() {
+    public BackendConfig getConnectionConfig() {
         return mConnectionConfig;
     }
 

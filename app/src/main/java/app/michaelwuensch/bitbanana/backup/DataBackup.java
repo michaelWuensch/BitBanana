@@ -1,13 +1,13 @@
 package app.michaelwuensch.bitbanana.backup;
 
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 
 public class DataBackup {
-    private BBNodeConfig[] connections;
+    private BackendConfig[] connections;
     private Contact[] contacts;
 
-    public BBNodeConfig[] getWalletConfigs() {
+    public BackendConfig[] getBackendConfigs() {
         return connections;
     }
 
@@ -15,8 +15,8 @@ public class DataBackup {
         return contacts;
     }
 
-    public void setWalletConfigs(BBNodeConfig[] mBBNodeConfigs) {
-        this.connections = mBBNodeConfigs;
+    public void setWalletConfigs(BackendConfig[] mBackendConfigs) {
+        this.connections = mBackendConfigs;
     }
 
     public void setContacts(Contact[] mContacts) {

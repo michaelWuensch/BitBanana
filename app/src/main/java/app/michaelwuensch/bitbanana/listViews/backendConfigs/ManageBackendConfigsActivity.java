@@ -16,8 +16,8 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
@@ -27,7 +27,7 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List<BBNodeConfig> mNodeItems;
+    private List<BackendConfig> mNodeItems;
     private TextView mEmptyListText;
 
     @Override
@@ -70,8 +70,8 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
     private void updateNodeDisplayList() {
 
         mNodeItems.clear();
-        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
-        mNodeItems.addAll(nodeConfigsManager.getAllNodeConfigs(false));
+        BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
+        mNodeItems.addAll(backendConfigsManager.getAllBackendConfigs(false));
 
         // Show "No nodes" if the list is empty
         if (mNodeItems.size() == 0) {

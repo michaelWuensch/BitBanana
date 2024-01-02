@@ -25,8 +25,8 @@ import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 
 public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
@@ -107,7 +107,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, mId).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, mId).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -191,10 +191,10 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                 if (input.getText().toString().trim().isEmpty()) {
                     Toast.makeText(BackendConfigDetailsActivity.this, R.string.error_empty_node_name, Toast.LENGTH_LONG).show();
                 } else {
-                    NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
-                    nodeConfigsManager.renameNodeConfig(NodeConfigsManager.getInstance().getNodeConfigById(mId), input.getText().toString());
+                    BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
+                    backendConfigsManager.renameBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(mId), input.getText().toString());
                     try {
-                        nodeConfigsManager.apply();
+                        backendConfigsManager.apply();
                         TextView tvWalletName = findViewById(R.id.nodeName);
                         tvWalletName.setText(input.getText().toString().trim());
                     } catch (Exception e) {
@@ -208,8 +208,8 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
         });
     }
 
-    private BBNodeConfig getWalletConfig() {
-        return NodeConfigsManager.getInstance().getNodeConfigById(mId);
+    private BackendConfig getWalletConfig() {
+        return BackendConfigsManager.getInstance().getBackendConfigById(mId);
     }
 
     private void openHome() {
@@ -220,18 +220,18 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
     }
 
     private void deleteWallet() {
-        NodeConfigsManager nodeConfigsManager = NodeConfigsManager.getInstance();
-        nodeConfigsManager.removeNodeConfig(NodeConfigsManager.getInstance().getNodeConfigById(mId));
+        BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
+        backendConfigsManager.removeBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(mId));
         try {
-            nodeConfigsManager.apply();
+            backendConfigsManager.apply();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (PrefsUtil.getCurrentNodeConfig().equals(mId)) {
+        if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {
             Wallet.getInstance().reset();
             LndConnection.getInstance().closeConnection();
-            PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_NODE_CONFIG).commit();
+            PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_BACKEND_CONFIG).commit();
             Intent intent = new Intent(BackendConfigDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

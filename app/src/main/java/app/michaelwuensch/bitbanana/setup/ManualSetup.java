@@ -15,10 +15,10 @@ import androidx.appcompat.widget.SwitchCompat;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -67,19 +67,19 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
-            BBNodeConfig BBNodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
-            mEtHost.setValue(BBNodeConfig.getHost());
-            mEtPort.setValue(String.valueOf(BBNodeConfig.getPort()));
-            mEtMacaroon.setValue(BBNodeConfig.getMacaroon());
-            mSwTor.setChecked(BBNodeConfig.getUseTor());
-            if (BBNodeConfig.getUseTor()) {
+            BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
+            mEtHost.setValue(BackendConfig.getHost());
+            mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
+            mEtMacaroon.setValue(BackendConfig.getMacaroon());
+            mSwTor.setChecked(BackendConfig.getUseTor());
+            if (BackendConfig.getUseTor()) {
                 mSwVerify.setChecked(false);
                 mSwVerify.setVisibility(View.GONE);
             } else {
-                mSwVerify.setChecked(BBNodeConfig.getVerifyCertificate());
+                mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             }
-            if (BBNodeConfig.getCert() != null && !BBNodeConfig.getCert().isEmpty()) {
-                mEtCertificate.setValue(BBNodeConfig.getCert());
+            if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
+                mEtCertificate.setValue(BackendConfig.getCert());
             }
         }
 
@@ -147,15 +147,15 @@ public class ManualSetup extends BaseAppCompatActivity {
         });
     }
 
-    private void connect(BaseNodeConfig baseNodeConfig) {
+    private void connect(BaseBackendConfig baseBackendConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();

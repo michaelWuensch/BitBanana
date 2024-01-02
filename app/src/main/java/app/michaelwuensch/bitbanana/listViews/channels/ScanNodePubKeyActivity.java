@@ -9,7 +9,7 @@ import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
@@ -109,12 +109,12 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 

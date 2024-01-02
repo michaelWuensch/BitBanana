@@ -15,7 +15,7 @@ import app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.Backend
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.BBNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 
 public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,10 +39,10 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         mContext = v.getContext();
     }
 
-    public void bindRemoteNodeItem(BBNodeConfig BBNodeConfig) {
+    public void bindRemoteNodeItem(BackendConfig BackendConfig) {
 
         // Set Icon
-        if (BBNodeConfig.getType().equals(BBNodeConfig.NODE_TYPE_LOCAL)) {
+        if (BackendConfig.getLocation().equals(BackendConfig.LOCATION_LOCAL)) {
             mIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);
@@ -50,24 +50,24 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.banana_yellow)));
 
         // Set current active icon visibility
-        if (BBNodeConfig.getId().equals(PrefsUtil.getCurrentNodeConfig())) {
+        if (BackendConfig.getId().equals(PrefsUtil.getCurrentBackendConfig())) {
             mCurrentActiveIcon.setVisibility(View.VISIBLE);
         } else {
             mCurrentActiveIcon.setVisibility(View.GONE);
         }
 
         // Set node type description
-        mNodeTypDescription.setText(BBNodeConfig.getType());
+        mNodeTypDescription.setText(BackendConfig.getLocation());
 
         // Set node name
-        mNodeName.setText(BBNodeConfig.getAlias());
+        mNodeName.setText(BackendConfig.getAlias());
 
         // Set on click listener
         mRootView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(mContext, BackendConfigDetailsActivity.class);
-                intent.putExtra(ManageBackendConfigsActivity.NODE_ID, BBNodeConfig.getId());
+                intent.putExtra(ManageBackendConfigsActivity.NODE_ID, BackendConfig.getId());
                 mContext.startActivity(intent);
             }
         });

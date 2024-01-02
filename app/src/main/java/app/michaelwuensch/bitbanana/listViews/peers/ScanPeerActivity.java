@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.backendConfigs.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -46,7 +46,7 @@ public class ScanPeerActivity extends BaseScannerActivity {
     }
 
     private boolean finishWithNode(LightningNodeUri nodeUri) {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             Intent intent = new Intent();
             intent.putExtra(EXTRA_NODE_URI, nodeUri);
             setResult(RESULT_OK, intent);

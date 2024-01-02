@@ -1,9 +1,10 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay;
+package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.BaseConnectionParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 
@@ -78,6 +79,8 @@ public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
         }
 
         // Everything is valid. Set defaults and continue.
+        configuration.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+        configuration.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
         configuration.setUseTor(RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
         configuration.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
         setConnectionConfig(configuration);

@@ -1,8 +1,8 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseConnectionData.btcPay;
+package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseNodeConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 
-public class BTCPayConfig extends BaseNodeConfig {
+public class BTCPayConfig extends BaseBackendConfig {
 
     public static String TYPE_GRPC = "GRPC";
     public static String CRYPTO_TYPE_BTC = "BTC";
