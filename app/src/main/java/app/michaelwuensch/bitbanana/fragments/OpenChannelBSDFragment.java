@@ -24,8 +24,8 @@ import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;

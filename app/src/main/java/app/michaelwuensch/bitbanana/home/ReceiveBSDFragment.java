@@ -27,12 +27,12 @@ import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
-import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;

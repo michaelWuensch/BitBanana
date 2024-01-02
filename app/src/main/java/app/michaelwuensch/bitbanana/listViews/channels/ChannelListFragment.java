@@ -28,7 +28,7 @@ public class ChannelListFragment extends Fragment implements ChannelSelectListen
     private ChannelItemAdapter mAdapter;
     private ChannelSelectListener mChannelSelectListener;
 
-    public void setChannelSelectListener (ChannelSelectListener channelSelectListener) {
+    public void setChannelSelectListener(ChannelSelectListener channelSelectListener) {
         mChannelSelectListener = channelSelectListener;
     }
 

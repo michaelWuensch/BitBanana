@@ -2,11 +2,11 @@ package app.michaelwuensch.bitbanana.connection.tor;
 
 import androidx.annotation.NonNull;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import io.matthewnelson.topl_service_base.TorPortInfo;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
 

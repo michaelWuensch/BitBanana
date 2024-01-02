@@ -13,16 +13,16 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelViewHolder;
 
 

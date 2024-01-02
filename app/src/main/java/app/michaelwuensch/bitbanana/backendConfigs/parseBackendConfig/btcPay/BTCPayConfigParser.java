@@ -5,8 +5,8 @@ import com.google.gson.JsonSyntaxException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
-import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
 /**
  * This class parses a BTCPayConfig JSON which is defined in this project:

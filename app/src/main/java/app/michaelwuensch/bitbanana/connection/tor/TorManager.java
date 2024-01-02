@@ -3,11 +3,11 @@ package app.michaelwuensch.bitbanana.connection.tor;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.matthewnelson.topl_service.TorServiceController;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 
 /**
  * Singleton to manage Tor.

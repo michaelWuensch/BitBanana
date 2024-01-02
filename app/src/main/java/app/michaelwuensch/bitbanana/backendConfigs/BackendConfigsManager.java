@@ -1,7 +1,6 @@
 package app.michaelwuensch.bitbanana.backendConfigs;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -123,7 +122,7 @@ public class BackendConfigsManager {
      * Adds a backend configuration to our current setup.
      * Do not forget to call apply() afterwards to make this change permanent.
      *
-     * @param config    The config to add. If it has an ID already set it will be overridden.
+     * @param config The config to add. If it has an ID already set it will be overridden.
      */
     public BackendConfig addBackendConfig(@NonNull BackendConfig config) {
 

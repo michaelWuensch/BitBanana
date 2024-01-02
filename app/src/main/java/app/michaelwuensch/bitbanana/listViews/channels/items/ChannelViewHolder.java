@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.listViews.channels.ChannelSelectListener;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.listViews.channels.ChannelSelectListener;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;

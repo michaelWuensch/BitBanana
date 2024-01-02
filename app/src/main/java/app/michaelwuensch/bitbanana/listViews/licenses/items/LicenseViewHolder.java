@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.listViews.licenses.Dependency;
-import app.michaelwuensch.bitbanana.listViews.licenses.items.LicenseListItem;
 
 public class LicenseViewHolder extends RecyclerView.ViewHolder {
 

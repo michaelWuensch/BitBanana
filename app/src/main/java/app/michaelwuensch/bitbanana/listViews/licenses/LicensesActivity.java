@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.listViews.licenses.items.LicenseListItem;
 import app.michaelwuensch.bitbanana.util.AppUtil;
-import app.michaelwuensch.bitbanana.R;
 
 public class LicensesActivity extends BaseAppCompatActivity {
 

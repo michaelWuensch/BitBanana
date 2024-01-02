@@ -19,11 +19,11 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import java.math.BigDecimal;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;

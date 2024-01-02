@@ -3,12 +3,12 @@ package app.michaelwuensch.bitbanana.listViews.peers;
 import android.content.Intent;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
 public class ScanPeerActivity extends BaseScannerActivity {

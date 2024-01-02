@@ -11,10 +11,10 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 
-import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class NodeSpinner extends AppCompatSpinner {
 

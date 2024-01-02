@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.SortedList;
 
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.DateLineViewHolder;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingEventItemViewHolder;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingEventListItem;
-import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingListItem;
 
 

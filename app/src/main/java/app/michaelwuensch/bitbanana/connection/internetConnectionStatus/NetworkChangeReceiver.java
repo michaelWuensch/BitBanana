@@ -8,8 +8,8 @@ import android.os.Handler;
 import java.util.concurrent.RejectedExecutionException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.util.Wallet;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 

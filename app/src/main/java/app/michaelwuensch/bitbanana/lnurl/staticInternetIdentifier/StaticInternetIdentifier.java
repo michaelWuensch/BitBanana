@@ -12,8 +12,8 @@ import java.io.IOException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
+import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import okhttp3.Call;

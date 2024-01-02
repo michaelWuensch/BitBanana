@@ -7,7 +7,7 @@ public class UTXOListItem implements Comparable<UTXOListItem> {
     public long mCreationDate = 0;
     private Utxo mUtxo;
 
-    public UTXOListItem(Utxo utxo){
+    public UTXOListItem(Utxo utxo) {
         mUtxo = utxo;
     }
 

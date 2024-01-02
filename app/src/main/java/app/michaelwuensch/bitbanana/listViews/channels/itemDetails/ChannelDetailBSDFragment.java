@@ -26,12 +26,12 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
+import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.AmountView;
-import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;

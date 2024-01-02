@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.SortedList;
 
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.DateLineViewHolder;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.HistoryListItem;
-import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.OnChainTransactionViewHolder;
-import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnInvoiceItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnInvoiceViewHolder;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnPaymentItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnPaymentViewHolder;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.OnChainTransactionItem;
+import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.OnChainTransactionViewHolder;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import app.michaelwuensch.bitbanana.R;
 
 
 public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

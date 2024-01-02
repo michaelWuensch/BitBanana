@@ -5,11 +5,11 @@ import android.content.Context;
 
 import androidx.core.app.NotificationCompat;
 
+import app.michaelwuensch.bitbanana.BuildConfig;
+import app.michaelwuensch.bitbanana.R;
 import io.matthewnelson.topl_service.TorServiceController;
 import io.matthewnelson.topl_service.lifecycle.BackgroundManager;
 import io.matthewnelson.topl_service.notification.ServiceNotification;
-import app.michaelwuensch.bitbanana.BuildConfig;
-import app.michaelwuensch.bitbanana.R;
 
 public class TorSetup {
 

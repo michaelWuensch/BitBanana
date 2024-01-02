@@ -16,8 +16,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 
 /**

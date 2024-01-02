@@ -10,10 +10,10 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
-import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
 /**
  * This class parses a lndconnect which is defined in this project:

@@ -30,13 +30,13 @@ import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.ScrambledNumpad;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.util.BiometricUtil;
 
 
 public class PinFragment extends Fragment {

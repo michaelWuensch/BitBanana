@@ -26,7 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.CustomViewPager;
+import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelItem;
@@ -35,13 +39,9 @@ import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChann
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.customView.CustomViewPager;
-import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
-import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -394,7 +394,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             mOpenChannelsList = new ChannelListFragment();
             mOpenChannelsList.setChannelSelectListener(ManageChannelsActivity.this);
             mClosedChannelsList = new ChannelListFragment();
-            mClosedChannelsList .setChannelSelectListener(ManageChannelsActivity.this);
+            mClosedChannelsList.setChannelSelectListener(ManageChannelsActivity.this);
         }
 
         @Override
