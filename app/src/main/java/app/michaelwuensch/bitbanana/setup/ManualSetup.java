@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
+import app.michaelwuensch.bitbanana.customView.VPNConfigView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -40,6 +41,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtCertificate;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
+    private VPNConfigView mVpnConfigView;
     private Button mBtnSave;
     private String mWalletUUID;
 
@@ -63,6 +65,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtCertificate = findViewById(R.id.inputCertificate);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
+        mVpnConfigView = findViewById(R.id.vpnConfigView);
         mBtnSave = findViewById(R.id.saveButton);
 
         // Fill in vales if existing wallet is edited
@@ -72,6 +75,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
             mEtMacaroon.setValue(BackendConfig.getMacaroon());
             mSwTor.setChecked(BackendConfig.getUseTor());
+            mVpnConfigView.setupWithVpnConfig(BackendConfig.getVpnConfig());
             if (BackendConfig.getUseTor()) {
                 mSwVerify.setChecked(false);
                 mSwVerify.setVisibility(View.GONE);

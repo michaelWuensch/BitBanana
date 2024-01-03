@@ -21,6 +21,7 @@
         <attr name="minLines" format="integer" />
         <attr name="maxLines" format="integer" />
         <attr name="maxLinesFocused" format="integer" />
+        <attr name="inputAreaBgDrawable" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="BBExpandablePropertyView">

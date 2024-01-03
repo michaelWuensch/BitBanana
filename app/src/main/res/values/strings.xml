@@ -353,7 +353,7 @@
     <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_no_internet">No internet connection!</string>
     <string name="error_connection_tor_unreachable">Tor connection failed.\n Please turn on Tor in the nodes connection settings.</string>
-    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana Android now natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
+    <string name="error_connection_tor_bootstrapping">Tor was unable to bootstrap.\n\nBitBanana natively supports Tor. If you use Orbot, please remove BitBanana from Orbot\'s Tor activated list or shutdown Orbot completely.</string>
     <string name="error_connection_wallet_locked">Please unlock the wallet.</string>
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
@@ -715,5 +715,12 @@
     <string name="lnurl_auth_auth_info">Do you want to use your node to authenticate with that service?</string>
     <string name="lnurl_auth_success">Authentication was successful!</string>
     <string name="lnurl_auth_fail">Authentication\nfailed</string>
+
+    <string name="vpn">VPN</string>
+    <string name="vpn_automation">VPN Automation</string>
+    <string name="vpn_no_vpn">No VPN</string>
+    <string name="vpn_start_on_open">Start on open</string>
+    <string name="vpn_stop_on_close">Stop on close</string>
+    <string name="vpn_tunnel_name">Tunnel</string>
 
 </resources>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rectangle_seablue"
+    android:padding="10dp">
+
+    <app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup
+        android:id="@+id/topGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="vpnAutomationLabel, vpnName, arrowImage"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/vpnAutomationLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/vpn"
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/vpnName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:paddingEnd="5dp"
+        android:textAlignment="textEnd"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/vpnAutomationLabel"
+        app:layout_constraintEnd_toStartOf="@+id/arrowImage"
+        app:layout_constraintStart_toEndOf="@id/vpnAutomationLabel"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="none" />
+
+    <ImageView
+        android:id="@+id/arrowImage"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/vpnAutomationLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_down_24dp"
+        app:tint="@color/banana_yellow" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/expandedContentGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="typeSpinnerLayout, tunnelInputLayout, startSwitch, stopSwitch"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/typeSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vpnAutomationLabel">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/border_spinner_bright">
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:popupBackground="@drawable/bg_spinner_popup" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/tunnelInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/typeSpinnerLayout">
+
+        <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+            android:id="@+id/tunnelInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inputAreaBgDrawable="@drawable/border_text_input_seablue_gradient"
+            app:inputLabel="@string/vpn_tunnel_name"
+            app:inputLabelDetails=""
+            app:maxLines="1" />
+    </FrameLayout>
+
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/startSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/vpn_start_on_open"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tunnelInputLayout" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/stopSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/vpn_stop_on_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/startSwitch" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package app.michaelwuensch.bitbanana.connection.vpn;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -26,54 +25,95 @@ public class VPNUtil {
     private static final String ACTION_START_WIREGUARD = "com.wireguard.android.action.SET_TUNNEL_UP";
     private static final String ACTION_STOP_WIREGUARD = "com.wireguard.android.action.SET_TUNNEL_DOWN";
 
+    public static void startVPN(VPNConfig vpnConfig, Context context) {
+        if (vpnConfig != null) {
+            switch (vpnConfig.getVpnType()) {
+                case TAILSCALE:
+                    startTailscale(context);
+                    break;
+                case WIREGUARD:
+                    startWireGuardTunnel(context, vpnConfig.getTunnelName());
+                    break;
+            }
+        }
+    }
 
-    public static void startTailscale(Activity activity) {
+    public static void stopVPN(VPNConfig vpnConfig, Context context) {
+        if (vpnConfig != null) {
+            switch (vpnConfig.getVpnType()) {
+                case TAILSCALE:
+                    stopTailscale(context);
+                    break;
+                case WIREGUARD:
+                    stopWireGuardTunnel(context, vpnConfig.getTunnelName());
+                    break;
+            }
+        }
+    }
+
+    private static void startTailscale(Context context) {
         BBLog.d(LOG_TAG, "Starting VPN (Tailscale)");
         Intent intent = new Intent();
         intent.setAction(ACTION_START_TAILSCALE);
         intent.setPackage(PACKAGE_TAILSCALE);
-        activity.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
-    public static void stopTailscale(Activity activity) {
+    private static void stopTailscale(Context context) {
         BBLog.d(LOG_TAG, "Stopping VPN (Tailscale)");
         Intent intent = new Intent();
         intent.setAction(ACTION_STOP_TAILSCALE);
         intent.setPackage(PACKAGE_TAILSCALE);
-        activity.sendBroadcast(intent);
+        context.sendBroadcast(intent);
     }
 
-    public static void startWireGuardTunnel(Activity activity, String tunnelName) {
-        if (PermissionsUtil.hasPermission(activity, PERMISSION_WIREGUARD)) {
-            BBLog.d(LOG_TAG, "Starting VPN (WireGuard Tunnel)");
+    private static void startWireGuardTunnel(Context context, String tunnelName) {
+        if (PermissionsUtil.hasPermission(context, PERMISSION_WIREGUARD)) {
+            BBLog.d(LOG_TAG, "Starting VPN (WireGuard, Tunnel: " + tunnelName + ")");
             Intent intent = new Intent();
             intent.setAction(ACTION_START_WIREGUARD);
             intent.setPackage(PACKAGE_WIREGUARD);
             intent.putExtra("tunnel", tunnelName);
-            activity.sendBroadcast(intent);
+            context.sendBroadcast(intent);
         } else {
-            PermissionsUtil.requestPermissions(activity, new String[]{PERMISSION_WIREGUARD}, 1, false);
+            BBLog.w(LOG_TAG, "No permission to start VPN (WireGuard Tunnel). Requesting permission.");
+            PermissionsUtil.requestPermissions(context, new String[]{PERMISSION_WIREGUARD}, 1, false);
         }
     }
 
-    public static void stopWireGuardTunnel(Activity activity, String tunnelName) {
-        if (PermissionsUtil.hasPermission(activity, PERMISSION_WIREGUARD)) {
-            BBLog.d(LOG_TAG, "Stopping VPN (WireGuard Tunnel)");
+    private static void stopWireGuardTunnel(Context context, String tunnelName) {
+        if (PermissionsUtil.hasPermission(context, PERMISSION_WIREGUARD)) {
+            BBLog.d(LOG_TAG, "Stopping VPN (WireGuard, Tunnel" + tunnelName + ")");
             Intent intent = new Intent();
             intent.setAction(ACTION_STOP_WIREGUARD);
             intent.setPackage(PACKAGE_WIREGUARD);
             intent.putExtra("tunnel", tunnelName);
-            activity.sendBroadcast(intent);
+            context.sendBroadcast(intent);
         } else {
-            PermissionsUtil.requestPermissions(activity, new String[]{PERMISSION_WIREGUARD}, 1, false);
+            BBLog.w(LOG_TAG, "No permission to stop VPN (WireGuard Tunnel). Requesting permission.");
+            PermissionsUtil.requestPermissions(context, new String[]{PERMISSION_WIREGUARD}, 1, false);
         }
     }
 
-    public static boolean isTailscaleInstalled(Context ctx) {
+    public static boolean isVpnAppInstalled(VPNConfig vpnConfig, Context ctx) {
+        if (vpnConfig != null) {
+            switch (vpnConfig.getVpnType()) {
+                case NONE:
+                    return true;
+                case TAILSCALE:
+                    return isTailscaleInstalled(ctx);
+                case WIREGUARD:
+                    return isWireGuardInstalled(ctx);
+            }
+        }
+        return true;
+    }
+
+    private static boolean isTailscaleInstalled(Context ctx) {
         return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_TAILSCALE);
     }
 
-    public static boolean isWireGuardInstalled(Context ctx) {
+    private static boolean isWireGuardInstalled(Context ctx) {
         return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_WIREGUARD);
     }
 
