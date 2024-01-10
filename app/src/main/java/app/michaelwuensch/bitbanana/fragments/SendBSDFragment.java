@@ -445,12 +445,8 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                     if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
 
-                        long paymentAmount;
-                        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
-                            paymentAmount = mSendAmountSat;
-                        } else {
-                            paymentAmount = mLnPaymentRequest.getNumSatoshis();
-                        }
+                        long paymentAmount = getLightningPaymentAmountSat();
+                        
                         // sanity check for fees
                         if (mCalculatedFee != -1) {
                             if (mCalculatedFeePercent >= 1f) {
@@ -830,7 +826,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             @Override
             public void onSuccess(long fee, Route route, long paymentAmountSat) {
-                if (route.getTotalAmtMsat() - route.getTotalFeesMsat() == mSendAmountSat * 1000) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
+                if (route.getTotalAmtMsat() - route.getTotalFeesMsat() == getLightningPaymentAmountSat() * 1000) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
                     mRoute = route;
                     mCalculatedFee = fee;
                     mCalculatedFeePercent = (fee / (double) paymentAmountSat);
@@ -841,7 +837,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             @Override
             public void onNoRoute(long paymentAmountSat) {
-                if (paymentAmountSat == mSendAmountSat) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
+                if (paymentAmountSat == getLightningPaymentAmountSat()) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
                     mRoute = null;
                     // Display fee according to max UserSetting
                     mCalculatedFee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
@@ -859,6 +855,14 @@ public class SendBSDFragment extends BaseBSDFragment {
                 setFeeFailure();
             }
         });
+    }
+
+    private long getLightningPaymentAmountSat() {
+        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
+            return mSendAmountSat;
+        } else {
+            return mLnPaymentRequest.getNumSatoshis();
+        }
     }
 
     private void showError(String message, int duration) {
