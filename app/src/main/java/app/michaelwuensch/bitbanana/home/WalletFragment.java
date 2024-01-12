@@ -533,7 +533,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mTvConnectError.setText(message);
 
         switch (errorCode) {
-            case BackendSwitcher.ERROR_VPN_START_ISSUE:
+            case BackendSwitcher.ERROR_VPN_UNKNOWN_START_ISSUE:
                 mBtnVpnSettings.setVisibility(View.VISIBLE);
                 break;
             default:

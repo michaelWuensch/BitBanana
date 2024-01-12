@@ -21,7 +21,7 @@ public class BackendSwitcher {
     public static final int ERROR_NO_INTERNET = 0;
     public static final int ERROR_VPN_NOT_INSTALLED = 1;
     public static final int ERROR_VPN_NO_CONTROL_PERMISSION = 2;
-    public static final int ERROR_VPN_START_ISSUE = 3;
+    public static final int ERROR_VPN_UNKNOWN_START_ISSUE = 3;
     public static final int ERROR_TOR_FAILED = 4;
 
     private static final String LOG_TAG = BackendSwitcher.class.getSimpleName();
@@ -127,9 +127,11 @@ public class BackendSwitcher {
         } else {
             setBackendState(BackendState.ERROR);
             if (!VPNUtil.isVpnAppInstalled(getCurrentBackendConfig().getVpnConfig(), ctx)) {
-                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start_not_installed, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_NOT_INSTALLED);
+                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_not_installed, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_NOT_INSTALLED);
+            } else if (!VPNUtil.hasPermissionToControlVpn(getCurrentBackendConfig().getVpnConfig(), ctx)) {
+                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_no_permission, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_NO_CONTROL_PERMISSION);
             } else {
-                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_START_ISSUE);
+                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_unknown, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_UNKNOWN_START_ISSUE);
             }
         }
     }

@@ -725,8 +725,10 @@
     <string name="vpn_tunnel_name">Tunnel</string>
     <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">To use this VPN you first have to install the %1$s app.</string>
     <string name="vpn_wireguard_additional_info">To allow for automation of WireGuard you first need to open up the WireGuard app, navigate to its settings, and then allow control for external apps.</string>
-    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Oops! Looks like the VPN cannot be started automatically.\n\nYou have to install the %1$s app to use VPN specified in your connection settings.</string>
-    <string name="vpn_unable_to_start" comment="Parameters are:  %1$s: appName">Oops! Looks like the VPN cannot be started automatically.\n\nEnsure that the %1$s app is running in the background. If it does, make sure all android battery optimizations are deactivated for %1$s and then restart the %1$s app. Use the button below to go to the settings.\n\n If that doesn\'t help either, open the %1$s app and start the VPN manually to resolve the issue.</string>
+    <string name="vpn_unable_to_start">Oops! Looks like the VPN cannot be started automatically.</string>
+    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">You have to install the %1$s app to use VPN specified in your connection settings.</string>
+    <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">You have to grant BitBanana permission to control %1$s.</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Ensure that the %1$s app is running in the background. If it does, make sure all android battery optimizations are deactivated for %1$s and then restart the %1$s app. Use the button below to go to the settings.\n\n If that doesn\'t help either, open the %1$s app and start the VPN manually to resolve the issue.</string>
     <string name="vpn_change_battery_settings">Change battery settings</string>
 
     <string name="connection_state_disconnecting">Purge connections…</string>
