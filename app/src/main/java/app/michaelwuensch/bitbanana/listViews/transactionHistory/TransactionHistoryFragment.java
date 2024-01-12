@@ -234,8 +234,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     public void updateHistoryDisplayList() {
 
         // Save state, we want to keep the scroll offset after the update.
-        Parcelable recyclerViewState;
-        recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        Parcelable recyclerViewState = null;
+        if (mRecyclerView.getLayoutManager() != null)
+            recyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
 
 
         mHistoryItems.clear();
@@ -331,7 +332,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         }
 
         // Restore state (e.g. scroll offset)
-        mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        if (recyclerViewState != null)
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
     // The redraw method is used to redraw the view holders on an unchanged data set
