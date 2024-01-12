@@ -17,6 +17,7 @@ import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class VPNConfigView extends ConstraintLayout {
@@ -26,6 +27,7 @@ public class VPNConfigView extends ConstraintLayout {
     private ClickableConstraintLayoutGroup mTopGroup;
     private Group mExpandedContentGroup;
     private Spinner mSpType;
+    private TextView mTvAdditionalInfo;
     private BBInputFieldView mInputViewTunnel;
     private SwitchCompat mSwStart;
     private SwitchCompat mSwStop;
@@ -53,6 +55,7 @@ public class VPNConfigView extends ConstraintLayout {
         mArrowImage = view.findViewById(R.id.arrowImage);
         mExpandedContentGroup = view.findViewById(R.id.expandedContentGroup);
         mSpType = view.findViewById(R.id.typeSpinner);
+        mTvAdditionalInfo = view.findViewById(R.id.additionalInfo);
         mInputViewTunnel = view.findViewById(R.id.tunnelInput);
         mSwStart = view.findViewById(R.id.startSwitch);
         mSwStop = view.findViewById(R.id.stopSwitch);
@@ -76,14 +79,29 @@ public class VPNConfigView extends ConstraintLayout {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 VPNConfig.VPNType selectedType = VPNConfig.VPNType.values()[position];
                 mTvVpnName.setText(selectedType.getDisplayName());
+                mTvAdditionalInfo.setVisibility(GONE);
                 switch (selectedType) {
                     case NONE:
-                    case TAILSCALE:
                         mInputViewTunnel.setVisibility(GONE);
                         mInputViewTunnel.setValue(null);
                         break;
+                    case TAILSCALE:
+                        mInputViewTunnel.setVisibility(GONE);
+                        mInputViewTunnel.setValue(null);
+                        if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
+                            mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
+                            mTvAdditionalInfo.setVisibility(VISIBLE);
+                        }
+                        break;
                     case WIREGUARD:
                         mInputViewTunnel.setVisibility(VISIBLE);
+                        if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
+                            mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
+                            mTvAdditionalInfo.setVisibility(VISIBLE);
+                        } else if (!VPNUtil.hasPermissionToControlVpn(getVPNConfig(), getContext())) {
+                            mTvAdditionalInfo.setText(R.string.vpn_wireguard_additional_info);
+                            mTvAdditionalInfo.setVisibility(VISIBLE);
+                        }
                         break;
                 }
             }

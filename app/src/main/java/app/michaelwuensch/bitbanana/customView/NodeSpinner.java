@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 public class NodeSpinner extends AppCompatSpinner {
 
     private boolean initFinished;
+    private String mSelectedNodeId;
 
     public NodeSpinner(Context context) {
         super(context);
@@ -55,22 +56,24 @@ public class NodeSpinner extends AppCompatSpinner {
     private void init() {
         updateList();
 
+        mSelectedNodeId = PrefsUtil.getCurrentBackendConfig();
+
         this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (initFinished) {
                     int lastPos = adapterView.getCount() - 1;
                     if (position != lastPos) {
-                        String selectedNodeId = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(position).getId();
-                        if (!BackendConfigsManager.getInstance().getCurrentBackendConfig().getId().equals(selectedNodeId)) {
+                        mSelectedNodeId = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(position).getId();
+                        if (!BackendConfigsManager.getInstance().getCurrentBackendConfig().getId().equals(mSelectedNodeId)) {
                             // Save selected Node ID in prefs making it the current node.
-                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, selectedNodeId).commit();
+                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, mSelectedNodeId).commit();
 
                             // Update the node spinner list, so everything is at it's correct position again.
                             updateList();
 
                             // Inform the listener. This is where the new node is opened.
-                            mListener.onNodeChanged(selectedNodeId, BackendConfigsManager.getInstance().getBackendConfigById(selectedNodeId).getAlias());
+                            mListener.onNodeChanged(mSelectedNodeId);
                         }
                     } else {
                         // Open node management
@@ -116,10 +119,14 @@ public class NodeSpinner extends AppCompatSpinner {
     }
 
     public interface OnNodeSpinnerChangedListener {
-        void onNodeChanged(String id, String alias);
+        void onNodeChanged(String id);
     }
 
     public void setOnNodeSpinnerChangedListener(OnNodeSpinnerChangedListener listener) {
         mListener = listener;
+    }
+
+    public String getSelectedNodeId() {
+        return mSelectedNodeId;
     }
 }

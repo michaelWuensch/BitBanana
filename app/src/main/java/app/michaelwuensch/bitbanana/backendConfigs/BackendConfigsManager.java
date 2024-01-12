@@ -209,9 +209,11 @@ public class BackendConfigsManager {
                         break;
                     }
                 }
-                BackendConfig currentConfig = sortedList.get(index);
-                sortedList.remove(index);
-                sortedList.add(0, currentConfig);
+                if (index != -1) {
+                    BackendConfig currentConfig = sortedList.get(index);
+                    sortedList.remove(index);
+                    sortedList.add(0, currentConfig);
+                }
             }
         }
         return sortedList;

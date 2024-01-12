@@ -58,15 +58,38 @@
                 app:maxLinesFocused="5"
                 app:minLines="3" />
 
-            <TextView
-                android:id="@+id/inputLabel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:paddingTop="15dp"
-                android:text="@string/vpn_automation"
-                android:textSize="18sp"
-                tools:ignore="HardcodedText" />
+                android:orientation="horizontal"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:id="@+id/vpnAutomationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/vpn_automation"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <android.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/vpnHelpButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="-5dp"
+                    android:background="?actionBarItemBackground"
+                    app:srcCompat="@drawable/ic_help_black_24dp"
+                    app:tint="@color/gray" />
+
+            </LinearLayout>
+
 
             <app.michaelwuensch.bitbanana.customView.VPNConfigView
                 android:id="@+id/vpnConfigView"

@@ -22,6 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -108,7 +109,7 @@ public class DataBackupUtil {
                     backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
                     backendConfig.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
                     backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
-                    backendConfig.setVpnConfig(null);
+                    backendConfig.setVpnConfig(new VPNConfig());
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
                 try {
@@ -130,7 +131,7 @@ public class DataBackupUtil {
                     backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
                     backendConfig.setUseTor(backendConfig.isTorHostAddress());
                     backendConfig.setVerifyCertificate(!backendConfig.isTorHostAddress());
-                    backendConfig.setVpnConfig(null);
+                    backendConfig.setVpnConfig(new VPNConfig());
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
                 try {

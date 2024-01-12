@@ -9,6 +9,7 @@ package app.michaelwuensch.bitbanana.backendConfigs;
  */
 public abstract class BaseBackendConfig {
 
+    public static final String BACKEND_NONE = "none";
     public static final String BACKEND_LND_GRPC = "lnd-grpc";
     public static final String BACKEND_CORE_LIGHTNING_GRPC = "core-lightning-grpc";
     public static final String LOCATION_LOCAL = "local";
@@ -103,6 +104,14 @@ public abstract class BaseBackendConfig {
     }
 
     public boolean isLocal() {
-        return this.location.equals(LOCATION_LOCAL);
+        if (this.location != null)
+            return this.location.equals(LOCATION_LOCAL);
+        return false;
+    }
+
+    public boolean isHostAddressTor() {
+        if (getHost() != null)
+            return this.getHost().toLowerCase().contains(".onion");
+        return false;
     }
 }

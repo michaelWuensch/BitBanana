@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -149,7 +150,7 @@ public class LandingActivity extends BaseAppCompatActivity {
                 config.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
                 config.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
                 config.setLocation(BaseBackendConfig.LOCATION_REMOTE);
-                config.setVpnConfig(null);
+                config.setVpnConfig(new VPNConfig());
                 BackendConfigsManager.getInstance().updateBackendConfig(config);
             }
             try {

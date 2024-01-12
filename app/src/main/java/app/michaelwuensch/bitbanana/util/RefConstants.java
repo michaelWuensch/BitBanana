@@ -19,7 +19,7 @@ public class RefConstants {
     22: Changed language selection (0.6.6)
     23: Changed currency codes (0.6.7)
     24: Changed balanceHide options (0.6.8)
-    25: Added additional data to backup config: Network. Changed values for backend (0.7.3-beta)
+    25: Added additional data to backup config: Network, VPNConfig. Changed values for backend (0.7.3-beta)
     */
     public static final int CURRENT_SETTINGS_VERSION = 25;
 
@@ -67,7 +67,12 @@ public class RefConstants {
     public static final int ERROR_DURATION_VERY_LONG = 12000;
 
     // Number of seconds after moving the app to background until the app gets locked.
-    public static final int ACCESS_TIMEOUT = 10;
+    public static final int ACCESS_TIMEOUT = 15;
+
+    // Number of seconds after moving the app to background until all connection is teared down.
+    // This should be long enough so that a user can shortly minimize the app and go back without having to reconnect
+    // If a PIN is activated, the connection will also be stopped when the PIN Screen is shown.
+    public static final int DISCONNECT_TIMEOUT = 30;
 
     // Schedule intervals
     public static final int EXCHANGE_RATE_PERIOD = 90;

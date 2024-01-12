@@ -285,7 +285,7 @@ public class Wallet {
                             // - Tor is turned on, but the host cannot be resolved
                             broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
                         } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
-                            if (LndConnection.getInstance().getConnectionConfig().isTorHostAddress()) {
+                            if (BackendSwitcher.getCurrentBackendConfig().isTorHostAddress()) {
                                 // This is the case if:
                                 // - Tor is turned on and an incorrect port is used.
                                 broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
@@ -351,8 +351,7 @@ public class Wallet {
 
                     // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
                     // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
-                    LndConnection.getInstance().closeConnection();
-                    LndConnection.getInstance().openConnection();
+                    LndConnection.getInstance().restartLNDConnection();
 
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.

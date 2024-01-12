@@ -42,7 +42,7 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
     public void bindRemoteNodeItem(BackendConfig BackendConfig) {
 
         // Set Icon
-        if (BackendConfig.getLocation().equals(BackendConfig.LOCATION_LOCAL)) {
+        if (BackendConfig.getLocation() != null &&BackendConfig.getLocation().equals(BackendConfig.LOCATION_LOCAL)) {
             mIcon.setImageResource(R.drawable.ic_local_black_24dp);
         } else {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);

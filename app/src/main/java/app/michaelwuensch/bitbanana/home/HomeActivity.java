@@ -48,13 +48,10 @@ import app.michaelwuensch.bitbanana.IdentityActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
-import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.customView.UserAvatarView;
 import app.michaelwuensch.bitbanana.fragments.ChooseNodeActionBSDFragment;
@@ -82,6 +79,7 @@ import app.michaelwuensch.bitbanana.settings.SettingsActivity;
 import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
 import app.michaelwuensch.bitbanana.support.SupportActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
@@ -135,6 +133,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private NavigationView mNavigationView;
     public CustomViewPager mViewPager;
     private HomePagerAdapter mPagerAdapter;
+    private Handler mBackgroundCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +232,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
 
         mUnlockDialog = buildUnlockDialog();
+        mBackgroundCloseHandler = new Handler();
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -269,8 +269,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mLNDInfoScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            BBLog.v(LOG_TAG, "LND info check initiated");
-                            Wallet.getInstance().fetchInfoFromLND();
+                            if (BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.BACKEND_CONNECTED) {
+                                BBLog.v(LOG_TAG, "Scheduled LND info check initiated.");
+                                Wallet.getInstance().fetchInfoFromLND();
+                            }
                         }
                     }, 0, 30, TimeUnit.SECONDS);
         }
@@ -301,6 +303,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void continueMoveToForeground() {
+        mBackgroundCloseHandler.removeCallbacksAndMessages(null);
         // start listeners and schedules
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();
@@ -321,37 +324,17 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         FeatureManager.registerFeatureChangedListener(this);
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
-        openWallet();
+
+        // We delay the actual opening of the wallet so that the wallet fragment has time to be loaded first
+        new Handler().postDelayed(() -> openWallet(), 300);
     }
 
     public void openWallet() {
+        //VPNUtil.registerVPNCallback(HomeActivity.this);
+        BackendSwitcher.activateCurrentBackendConfig(HomeActivity.this, false);
 
+        // ToDo: move to state events
         updateDrawerNavigationMenuVisibilities();
-
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            TimeOutUtil.getInstance().setCanBeRestarted(true);
-
-            // ToDo: This should be improved to be a permanent message instead of showing an endless spinner.
-            if (!NetworkUtil.isConnectedToInternet(HomeActivity.this)) {
-                Toast.makeText(this, R.string.error_connection_no_internet, Toast.LENGTH_LONG).show();
-            }
-
-            if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor()) {
-                // After Tor is successfully started, it will automatically open the lnd connection
-                TorManager.getInstance().startTor();
-
-                // If the TorProxy is still running, as we for example just minimized the app for a moment,
-                // the event to open the lnd connection does not fire. Therefore we do it manually in that case.
-                if (TorManager.getInstance().isProxyRunning()) {
-                    LndConnection.getInstance().openConnection();
-                }
-            } else {
-                if (PrefsUtil.isTorEnabled())
-                    TorManager.getInstance().startTor();
-                // Start lnd connection
-                LndConnection.getInstance().openConnection();
-            }
-        }
 
         // Check if BitBanana was started from an URI link or by NFC.
         if (App.getAppContext().getUriSchemeData() != null) {
@@ -366,29 +349,29 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     // This function gets called when app is moved to background.
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
-
         BBLog.d(LOG_TAG, "BitBanana moved to background");
+
+        // ToDo: check if this works here!
+        if (TimeOutUtil.getInstance().getCanBeRestarted()) {
+            TimeOutUtil.getInstance().restartTimer();
+        }
+        TimeOutUtil.getInstance().setCanBeRestarted(false);
 
         App.getAppContext().connectionToLNDEstablished = false;
 
-        stopListenersAndSchedules();
-
+        mBackgroundCloseHandler.postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        BBLog.d(LOG_TAG, "Destroying HomeActivity.");
         stopListenersAndSchedules();
         // Remove observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().removeObserver(this);
     }
 
     private void stopListenersAndSchedules() {
-        if (TimeOutUtil.getInstance().getCanBeRestarted()) {
-            TimeOutUtil.getInstance().restartTimer();
-            BBLog.d(LOG_TAG, "PIN timer restarted");
-        }
-        TimeOutUtil.getInstance().setCanBeRestarted(false);
 
         // Unregister Handler, Wallet Loaded & Info Listener
         Wallet.getInstance().unregisterLndConnectionTestListener(this);
@@ -424,10 +407,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Kill Server Streams
         Wallet.getInstance().cancelSubscriptions();
 
-        // Kill lnd connection
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            LndConnection.getInstance().closeConnection();
-        }
+        BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
     }
 
     @Override
@@ -911,11 +891,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void updateDrawerNavigationMenuVisibilities() {
         Menu drawerMenu = mNavigationView.getMenu();
         drawerMenu.findItem(R.id.drawerChannels).setVisible(FeatureManager.isChannelManagementEnabled());
-        drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingEnabled());
-        drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isCoinControlEnabled());
-        drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersEnabled());
+        drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingListViewEnabled());
+        drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isUTXOListViewEnabled());
+        drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersListViewEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
-        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isCoinControlEnabled() || FeatureManager.isRoutingEnabled() || FeatureManager.isSignVerifyEnabled());
+        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
     }
 

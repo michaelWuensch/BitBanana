@@ -5,6 +5,7 @@ import java.util.Set;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.matthewnelson.topl_service.TorServiceController;
@@ -41,14 +42,17 @@ public class TorManager {
     }
 
     public void startTor() {
+        BBLog.d(LOG_TAG, "Start Tor called.");
         TorServiceController.startTor();
     }
 
     public void stopTor() {
+        BBLog.d(LOG_TAG, "Stop Tor called.");
         TorServiceController.stopTor();
     }
 
     public void restartTor() {
+        BBLog.d(LOG_TAG, "Restart Tor called.");
         TorServiceController.restartTor();
     }
 

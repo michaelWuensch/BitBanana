@@ -22,6 +22,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTC
 import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectStringParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -132,7 +133,7 @@ public class RemoteConnectUtil {
     public static void saveRemoteConfiguration(Context ctx, BaseBackendConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
         int port = config.getPort();
         if (port == 8080) {
-            // BitBanana Android does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
+            // BitBanana does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.rest_port)
                     .setCancelable(false)
@@ -156,7 +157,37 @@ public class RemoteConnectUtil {
         BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
 
         try {
-            if (config instanceof LndConnectConfig) {
+            if (config instanceof BackendConfig) {
+                BackendConfig backendConfig = (BackendConfig) config;
+
+                String id;
+                if (walletUUID == null) {
+
+                    if (backendConfigsManager.doesDestinationExist(backendConfig.getHost(), port)) {
+                        listener.onAlreadyExists();
+                        return;
+                    }
+
+                    backendConfig.setPort(port);
+                    backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                    id = backendConfigsManager.addBackendConfig(backendConfig).getId();
+                } else {
+                    id = walletUUID;
+                    BackendConfig backendConfig2 = backendConfigsManager.getBackendConfigById(id);
+                    // All data that cannot be set on manual setup page has to be fetched from existing wallet.
+                    backendConfig.setId(backendConfig2.getId());
+                    backendConfig.setAlias(backendConfig2.getAlias());
+                    backendConfig.setLocation(backendConfig2.getLocation());
+                    backendConfig.setNetwork(backendConfig2.getNetwork());
+                    backendConfig.setBackend(backendConfig2.getBackend());
+                    backendConfigsManager.updateBackendConfig(backendConfig);
+                }
+
+                backendConfigsManager.apply();
+
+                listener.onSaved(id);
+
+            } else if (config instanceof LndConnectConfig) {
                 LndConnectConfig lndConnectConfig = (LndConnectConfig) config;
 
                 String id;
@@ -218,6 +249,7 @@ public class RemoteConnectUtil {
                     configToAdd.setMacaroon(btcPayConfig.getMacaroon());
                     configToAdd.setUseTor(btcPayConfig.getUseTor());
                     configToAdd.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
+                    configToAdd.setVpnConfig(new VPNConfig());
 
                     id = backendConfigsManager.addBackendConfig(configToAdd).getId();
                 } else {

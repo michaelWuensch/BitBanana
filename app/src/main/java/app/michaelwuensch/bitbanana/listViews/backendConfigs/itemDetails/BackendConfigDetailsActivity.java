@@ -19,14 +19,13 @@ import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
+import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
 
 
 public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
@@ -112,14 +111,8 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
 
-                Wallet.getInstance().reset();
-
-                if (!getWalletConfig().isLocal()) {
-                    // ToDo: Stop local LND if we switch to a remote wallet (right now it stops, but then it crashes when switching back to Local LND
-                    openHome();
-                } else {
-                    openHome();
-                }
+                // This will automatically open the current connection previously saved in the shared prefs
+                openHome();
             }
         });
 
@@ -229,8 +222,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
         }
 
         if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {
-            Wallet.getInstance().reset();
-            LndConnection.getInstance().closeConnection();
+            BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
             PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_BACKEND_CONFIG).commit();
             Intent intent = new Intent(BackendConfigDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

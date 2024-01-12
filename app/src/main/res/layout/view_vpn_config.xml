@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="typeSpinnerLayout, tunnelInputLayout, startSwitch, stopSwitch"
+        app:constraint_referenced_ids="typeSpinnerLayout, additionalInfoLayout, tunnelInputLayout, startSwitch, stopSwitch"
         tools:visibility="visible" />
 
     <LinearLayout
@@ -87,12 +87,29 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/tunnelInputLayout"
+        android:id="@+id/additionalInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/typeSpinnerLayout">
+
+        <TextView
+            android:id="@+id/additionalInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@string/vpn_wireguard_additional_info"
+            android:textColor="@color/banana_yellow" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/tunnelInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/additionalInfoLayout">
 
         <app.michaelwuensch.bitbanana.customView.BBInputFieldView
             android:id="@+id/tunnelInput"

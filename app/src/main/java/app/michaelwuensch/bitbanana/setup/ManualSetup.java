@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -16,12 +17,13 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.customView.VPNConfigView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -29,7 +31,6 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -43,6 +44,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private SwitchCompat mSwVerify;
     private VPNConfigView mVpnConfigView;
     private Button mBtnSave;
+    private ImageButton mVpnHelpButton;
     private String mWalletUUID;
 
     @Override
@@ -67,6 +69,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         mSwVerify = findViewById(R.id.verifyCertSwitch);
         mVpnConfigView = findViewById(R.id.vpnConfigView);
         mBtnSave = findViewById(R.id.saveButton);
+        mVpnHelpButton = findViewById(R.id.vpnHelpButton);
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
@@ -116,6 +119,14 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
+        mVpnHelpButton.setVisibility(FeatureManager.isHelpButtonsEnabled() ? View.VISIBLE : View.GONE);
+        mVpnHelpButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                HelpDialogUtil.showDialog(ManualSetup.this, R.string.help_dialog_vpn_automation);
+            }
+        });
+
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,56 +148,49 @@ public class ManualSetup extends BaseAppCompatActivity {
                 }
 
                 // everything is ok
-                LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setHost(mEtHost.getData());
-                lndConnectConfig.setPort(Integer.parseInt(mEtPort.getData()));
-                lndConnectConfig.setMacaroon(mEtMacaroon.getData());
-                lndConnectConfig.setUseTor(mSwTor.isChecked());
-                lndConnectConfig.setVerifyCertificate(mSwVerify.isChecked());
-                if (!mEtCertificate.getData().isEmpty()) {
-                    lndConnectConfig.setCert(mEtCertificate.getData());
-                }
-                connect(lndConnectConfig);
-            }
-        });
-    }
+                BackendConfig backendConfig = new BackendConfig();
+                backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                backendConfig.setHost(mEtHost.getData());
+                backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
+                backendConfig.setMacaroon(mEtMacaroon.getData());
+                backendConfig.setUseTor(mSwTor.isChecked());
+                backendConfig.setVerifyCertificate(mSwVerify.isChecked());
+                backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
+                backendConfig.setCert(mEtCertificate.getData());
 
-    private void connect(BaseBackendConfig baseBackendConfig) {
-        // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+                RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
-            @Override
-            public void onSaved(String id) {
+                    @Override
+                    public void onSaved(String id) {
 
-                // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
+                        // The configuration was saved. Now make it the currently active wallet.
+                        PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
-                // Do not ask for pin again...
-                TimeOutUtil.getInstance().restartTimer();
+                        // Do not ask for pin again...
+                        TimeOutUtil.getInstance().restartTimer();
 
-                // In case another wallet was open before, we want to have all values reset.
-                Wallet.getInstance().reset();
+                        // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
+                        Intent intent = new Intent(ManualSetup.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
 
-                // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
-                Intent intent = new Intent(ManualSetup.this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
+                    @Override
+                    public void onAlreadyExists() {
+                        new AlertDialog.Builder(ManualSetup.this)
+                                .setMessage(R.string.node_already_exists)
+                                .setCancelable(true)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                    }
+                                }).show();
+                    }
 
-            @Override
-            public void onAlreadyExists() {
-                new AlertDialog.Builder(ManualSetup.this)
-                        .setMessage(R.string.node_already_exists)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
-            }
-
-            @Override
-            public void onError(String error, int duration) {
-                showError(error, duration);
+                    @Override
+                    public void onError(String error, int duration) {
+                        showError(error, duration);
+                    }
+                });
             }
         });
     }

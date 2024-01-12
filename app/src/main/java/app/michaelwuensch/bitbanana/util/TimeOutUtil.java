@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.util;
 
 public class TimeOutUtil {
+    private static final String LOG_TAG = TimeOutUtil.class.getSimpleName();
 
     private static long appClosed = 0L;
     private static TimeOutUtil instance = null;
@@ -20,6 +21,7 @@ public class TimeOutUtil {
 
     public void restartTimer() {
         appClosed = System.currentTimeMillis();
+        BBLog.d(LOG_TAG, "PIN timer restarted");
     }
 
     public boolean isTimedOut() {
