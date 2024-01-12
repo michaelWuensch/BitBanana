@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect;
+package app.michaelwuensch.bitbanana.backendConfigs.lndConnect;
 
 import com.google.common.io.BaseEncoding;
 
@@ -11,7 +11,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
@@ -123,7 +123,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
 
                 // everything is ok
                 LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                lndConnectConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                 lndConnectConfig.setHost(connectURI.getHost());
                 lndConnectConfig.setPort(connectURI.getPort());
                 lndConnectConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);

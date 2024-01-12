@@ -75,7 +75,7 @@ public class BackendConfigsManagerTest {
         BackendConfig result = manager.getBackendConfigById(WALLET_1_ID);
 
         assertEquals(expected.getId(), result.getId());
-        assertEquals(expected.getBackend(), result.getBackend());
+        assertEquals(expected.getBackendType(), result.getBackendType());
         assertEquals(expected.getAlias(), result.getAlias());
         assertEquals(expected.getLocation(), result.getLocation());
         assertEquals(expected.getHost(), result.getHost());
@@ -96,7 +96,7 @@ public class BackendConfigsManagerTest {
         BackendConfig configToAdd = new BackendConfig();
         configToAdd.setAlias(expected.getAlias());
         configToAdd.setLocation(expected.getLocation());
-        configToAdd.setBackend(expected.getBackend());
+        configToAdd.setBackendType(expected.getBackendType());
         configToAdd.setNetwork(expected.getNetwork());
         configToAdd.setHost(expected.getHost());
         configToAdd.setPort(expected.getPort());
@@ -110,7 +110,7 @@ public class BackendConfigsManagerTest {
         BackendConfig actual = (BackendConfig) manager.getBackendConfigsJson().getConnections().toArray()[0];
 
         assertEquals(expected.getAlias(), actual.getAlias());
-        assertEquals(expected.getBackend(), actual.getBackend());
+        assertEquals(expected.getBackendType(), actual.getBackendType());
         assertEquals(expected.getCert(), actual.getCert());
         assertEquals(expected.getLocation(), actual.getLocation());
         assertEquals(expected.getNetwork(), actual.getNetwork());
@@ -175,7 +175,7 @@ public class BackendConfigsManagerTest {
         assertTrue(renamed);
         assertNotNull(manager.getBackendConfigById(WALLET_1_ID));
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getBackend(), actual.getBackend());
+        assertEquals(expected.getBackendType(), actual.getBackendType());
         assertEquals(expected.getAlias(), actual.getAlias());
         assertEquals(expected.getCert(), actual.getCert());
         assertEquals(expected.getLocation(), actual.getLocation());

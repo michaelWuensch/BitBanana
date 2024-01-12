@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect;
+package app.michaelwuensch.bitbanana.backendConfigs.lndConnect;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 

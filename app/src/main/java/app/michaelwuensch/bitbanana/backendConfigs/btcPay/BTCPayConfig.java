@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay;
+package app.michaelwuensch.bitbanana.backendConfigs.btcPay;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 

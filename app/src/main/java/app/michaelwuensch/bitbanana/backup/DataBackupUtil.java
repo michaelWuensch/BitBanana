@@ -108,7 +108,7 @@ public class DataBackupUtil {
                     // Adds the defaults to the newly introduced or renamed config properties.
                     backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
                     backendConfig.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
-                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     backendConfig.setVpnConfig(new VPNConfig());
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
@@ -128,7 +128,7 @@ public class DataBackupUtil {
                     // Adds the defaults to the newly introduced or renamed config properties.
                     backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
                     backendConfig.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
-                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     backendConfig.setUseTor(backendConfig.isTorHostAddress());
                     backendConfig.setVerifyCertificate(!backendConfig.isTorHostAddress());
                     backendConfig.setVpnConfig(new VPNConfig());

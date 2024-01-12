@@ -9,9 +9,9 @@ package app.michaelwuensch.bitbanana.backendConfigs;
  */
 public abstract class BaseBackendConfig {
 
-    public static final String BACKEND_NONE = "none";
-    public static final String BACKEND_LND_GRPC = "lnd-grpc";
-    public static final String BACKEND_CORE_LIGHTNING_GRPC = "core-lightning-grpc";
+    public static final String BACKEND_TYPE_NONE = "none";
+    public static final String BACKEND_TYPE_LND_GRPC = "lnd-grpc";
+    public static final String BACKEND_TYPE_CORE_LIGHTNING_GRPC = "core-lightning-grpc";
     public static final String LOCATION_LOCAL = "local";
     public static final String LOCATION_REMOTE = "remote";
     public static final String NETWORK_UNKNOWN = "unknown";
@@ -20,7 +20,7 @@ public abstract class BaseBackendConfig {
     public static final String NETWORK_REGTEST = "regtest";
     public static final String NETWORK_SIGNET = "signet";
 
-    private String backend;
+    private String backendType;
     private String host;
     private int port;
     private String location;
@@ -31,12 +31,12 @@ public abstract class BaseBackendConfig {
     private boolean VerifyCertificate;
 
 
-    public String getBackend() {
-        return this.backend;
+    public String getBackendType() {
+        return this.backendType;
     }
 
-    public void setBackend(String backend) {
-        this.backend = backend;
+    public void setBackendType(String backendType) {
+        this.backendType = backendType;
     }
 
     public String getHost() {

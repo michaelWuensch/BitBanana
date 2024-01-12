@@ -154,8 +154,8 @@ public class BackendSwitcher {
 
         // Connect to backend
         setBackendState(BackendState.CONNECTING_TO_BACKEND);
-        switch (currentBackendConfig.getBackend()) {
-            case BaseBackendConfig.BACKEND_LND_GRPC:
+        switch (currentBackendConfig.getBackendType()) {
+            case BaseBackendConfig.BACKEND_TYPE_LND_GRPC:
                 LndConnection.getInstance().openConnection();
         }
         setBackendState(BackendState.BACKEND_CONNECTED);
@@ -169,8 +169,8 @@ public class BackendSwitcher {
             String backendConfigAlias = currentBackendConfig.getAlias();
             BBLog.d(LOG_TAG, "Deactivating backendConfig: " + backendConfigAlias);
             setBackendState(BackendState.DISCONNECTING);
-            switch (currentBackendConfig.getBackend()) {
-                case BaseBackendConfig.BACKEND_LND_GRPC:
+            switch (currentBackendConfig.getBackendType()) {
+                case BaseBackendConfig.BACKEND_TYPE_LND_GRPC:
                     LndConnection.getInstance().closeConnection();
             }
 

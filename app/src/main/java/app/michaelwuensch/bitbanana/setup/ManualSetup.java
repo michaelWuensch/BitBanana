@@ -149,7 +149,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
                 // everything is ok
                 BackendConfig backendConfig = new BackendConfig();
-                backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                 backendConfig.setHost(mEtHost.getData());
                 backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
                 backendConfig.setMacaroon(mEtMacaroon.getData());

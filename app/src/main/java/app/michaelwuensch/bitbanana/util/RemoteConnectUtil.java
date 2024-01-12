@@ -17,10 +17,10 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfigParser;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.lndConnect.LndConnectStringParser;
+import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
+import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import okhttp3.Call;
@@ -179,7 +179,7 @@ public class RemoteConnectUtil {
                     backendConfig.setAlias(backendConfig2.getAlias());
                     backendConfig.setLocation(backendConfig2.getLocation());
                     backendConfig.setNetwork(backendConfig2.getNetwork());
-                    backendConfig.setBackend(backendConfig2.getBackend());
+                    backendConfig.setBackendType(backendConfig2.getBackendType());
                     backendConfigsManager.updateBackendConfig(backendConfig);
                 }
 
@@ -202,7 +202,7 @@ public class RemoteConnectUtil {
                     configToAdd.setHost(lndConnectConfig.getHost());
                     configToAdd.setPort(port);
                     configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
-                    configToAdd.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    configToAdd.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     configToAdd.setNetwork(lndConnectConfig.getNetwork());
                     configToAdd.setCert(lndConnectConfig.getCert());
                     configToAdd.setMacaroon(lndConnectConfig.getMacaroon());
@@ -213,7 +213,7 @@ public class RemoteConnectUtil {
                 } else {
                     id = walletUUID;
                     BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     backendConfig.setHost(lndConnectConfig.getHost());
                     backendConfig.setPort(port);
                     backendConfig.setCert(lndConnectConfig.getCert());
@@ -243,7 +243,7 @@ public class RemoteConnectUtil {
                     configToAdd.setHost(btcPayConfig.getHost());
                     configToAdd.setPort(port);
                     configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
-                    configToAdd.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    configToAdd.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     configToAdd.setNetwork(btcPayConfig.getNetwork());
                     configToAdd.setCert(null);
                     configToAdd.setMacaroon(btcPayConfig.getMacaroon());
@@ -255,7 +255,7 @@ public class RemoteConnectUtil {
                 } else {
                     id = walletUUID;
                     BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    backendConfig.setBackend(BaseBackendConfig.BACKEND_LND_GRPC);
+                    backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     backendConfig.setNetwork(btcPayConfig.getNetwork());
                     backendConfig.setHost(btcPayConfig.getHost());
                     backendConfig.setPort(port);

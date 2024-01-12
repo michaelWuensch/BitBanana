@@ -12,8 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfigJson;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay.BTCPayConfigParser;
+import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigJson;
+import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;

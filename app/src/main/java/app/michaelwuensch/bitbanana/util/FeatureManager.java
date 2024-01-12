@@ -22,18 +22,18 @@ public class FeatureManager {
     }
 
     public static boolean isRoutingListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureRoutingSummary", true);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isEditRoutingPoliciesEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         return backendSupported;
     }
 
     public static boolean isUTXOListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
         return settingEnabled && backendSupported;
     }
@@ -44,18 +44,18 @@ public class FeatureManager {
     }
 
     public static boolean isChannelManagementEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         return backendSupported;
     }
 
     public static boolean isPeersListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featurePeers", false);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isSignVerifyEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_NONE, BaseBackendConfig.BACKEND_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled && backendSupported;
     }
@@ -84,12 +84,12 @@ public class FeatureManager {
     private static boolean isCurrentBackendSupported(List<String> supportedBackends) {
         if (BackendSwitcher.getCurrentBackendConfig() == null) {
             for (String backend : supportedBackends) {
-                if (backend.equals(BaseBackendConfig.BACKEND_NONE))
+                if (backend.equals(BaseBackendConfig.BACKEND_TYPE_NONE))
                     return true;
             }
         } else {
             for (String backend : supportedBackends) {
-                if (backend.equals(BackendSwitcher.getCurrentBackendConfig().getBackend()))
+                if (backend.equals(BackendSwitcher.getCurrentBackendConfig().getBackendType()))
                     return true;
             }
         }

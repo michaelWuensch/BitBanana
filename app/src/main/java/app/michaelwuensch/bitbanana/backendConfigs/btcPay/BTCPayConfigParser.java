@@ -1,10 +1,10 @@
-package app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.btcPay;
+package app.michaelwuensch.bitbanana.backendConfigs.btcPay;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.parseBackendConfig.BaseConnectionParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
