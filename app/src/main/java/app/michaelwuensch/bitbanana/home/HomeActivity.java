@@ -330,7 +330,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     public void openWallet() {
-        //VPNUtil.registerVPNCallback(HomeActivity.this);
         BackendSwitcher.activateCurrentBackendConfig(HomeActivity.this, false);
 
         // ToDo: move to state events

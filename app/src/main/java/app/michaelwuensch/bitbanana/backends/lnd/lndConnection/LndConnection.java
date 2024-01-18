@@ -146,38 +146,43 @@ public class LndConnection {
             hostnameVerifier = new BlindHostnameVerifier();
         }
 
-        // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-        if (BackendSwitcher.getCurrentBackendConfig().getUseTor()) {
-            mSecureChannel = OkHttpChannelBuilder
-                    .forAddress(host, port)
-                    .proxyDetector(new TorProxyDetector(TorManager.getInstance().getProxyPort()))//
-                    .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                    .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
-                    .build();
-        } else {
-            mSecureChannel = OkHttpChannelBuilder
-                    .forAddress(host, port)
-                    .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                    .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
-                    .build();
+        try {
+
+            // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
+            if (BackendSwitcher.getCurrentBackendConfig().getUseTor()) {
+                mSecureChannel = OkHttpChannelBuilder
+                        .forAddress(host, port)
+                        .proxyDetector(new TorProxyDetector(TorManager.getInstance().getProxyPort()))//
+                        .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
+                        .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .build();
+            } else {
+                mSecureChannel = OkHttpChannelBuilder
+                        .forAddress(host, port)
+                        .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
+                        .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .build();
+            }
+
+            MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendSwitcher.getCurrentBackendConfig().getMacaroon());
+
+            mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, macaroon);
+            mLndChainKitService = new RemoteLndChainKitService(mSecureChannel, macaroon);
+            mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, macaroon);
+            mLndInvoicesService = new RemoteLndInvoicesService(mSecureChannel, macaroon);
+            mLndLightningService = new RemoteLndLightningService(mSecureChannel, macaroon);
+            mLndPeersService = new RemoteLndPeersService(mSecureChannel, macaroon);
+            mLndRouterService = new RemoteLndRouterService(mSecureChannel, macaroon);
+            mLndSignerService = new RemoteLndSignerService(mSecureChannel, macaroon);
+            mLndStateService = new RemoteLndStateService(mSecureChannel, macaroon);
+            mLndVersionerService = new RemoteLndVersionerService(mSecureChannel, macaroon);
+            mLndWalletKitService = new RemoteLndWalletKitService(mSecureChannel, macaroon);
+            mLndWatchtowerService = new RemoteLndWatchtowerService(mSecureChannel, macaroon);
+            mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, macaroon);
+            mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, macaroon);
+        } catch (Exception e) {
+            BackendSwitcher.setError(BackendSwitcher.ERROR_GRPC_CREATING_STUBS);
         }
-
-        MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendSwitcher.getCurrentBackendConfig().getMacaroon());
-
-        mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, macaroon);
-        mLndChainKitService = new RemoteLndChainKitService(mSecureChannel, macaroon);
-        mLndChainNotifierService = new RemoteLndChainNotifierService(mSecureChannel, macaroon);
-        mLndInvoicesService = new RemoteLndInvoicesService(mSecureChannel, macaroon);
-        mLndLightningService = new RemoteLndLightningService(mSecureChannel, macaroon);
-        mLndPeersService = new RemoteLndPeersService(mSecureChannel, macaroon);
-        mLndRouterService = new RemoteLndRouterService(mSecureChannel, macaroon);
-        mLndSignerService = new RemoteLndSignerService(mSecureChannel, macaroon);
-        mLndStateService = new RemoteLndStateService(mSecureChannel, macaroon);
-        mLndVersionerService = new RemoteLndVersionerService(mSecureChannel, macaroon);
-        mLndWalletKitService = new RemoteLndWalletKitService(mSecureChannel, macaroon);
-        mLndWatchtowerService = new RemoteLndWatchtowerService(mSecureChannel, macaroon);
-        mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, macaroon);
-        mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, macaroon);
     }
 
     public void openConnection() {

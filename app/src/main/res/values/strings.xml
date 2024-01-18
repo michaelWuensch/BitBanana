@@ -400,6 +400,8 @@
     <string name="error_insufficient_on_chain_funds">Insufficient on-chain funds. Maximum available:</string>
     <string name="error_insufficient_lightning_sending_liquidity">Insufficient lightning liquidity for sending. Open additional channels to increase it.\nCurrent maximum:</string>
     <string name="error_tor_might_cause_problem">Tor could cause this issue. Please try to deactivate tor in the settings.</string>
+    <string name="error_grpc_setup_failed">Failed to initiate gRPC connection.</string>
+    <string name="error_tor_bootstrapping_failed">Tor bootstrapping failed.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>

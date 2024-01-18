@@ -25,7 +25,7 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
             HttpClient.getInstance().restartHttpClient();
 
             // Continue backend connection process if it waited for Tor connection to be established
-            if (BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
+            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
                 BackendSwitcher.activateBackendConfig4();
             }
         } else {
@@ -58,6 +58,10 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
         BBLog.v(LOG_TAG, notice);
         if (notice.startsWith("WARN|BaseEventListener|Problem bootstrapping.")) {
             TorManager.getInstance().broadcastTorError();
+            // Show error message on connection screen
+            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
+                BackendSwitcher.setError(BackendSwitcher.ERROR_TOR_BOOTSTRAPPING_FAILED);
+            }
         }
     }
 

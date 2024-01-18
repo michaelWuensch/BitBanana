@@ -11,6 +11,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
@@ -22,7 +23,8 @@ public class BackendSwitcher {
     public static final int ERROR_VPN_NOT_INSTALLED = 1;
     public static final int ERROR_VPN_NO_CONTROL_PERMISSION = 2;
     public static final int ERROR_VPN_UNKNOWN_START_ISSUE = 3;
-    public static final int ERROR_TOR_FAILED = 4;
+    public static final int ERROR_TOR_BOOTSTRAPPING_FAILED = 4;
+    public static final int ERROR_GRPC_CREATING_STUBS = 5;
 
     private static final String LOG_TAG = BackendSwitcher.class.getSimpleName();
 
@@ -42,7 +44,7 @@ public class BackendSwitcher {
         activateBackendConfig(BackendConfigsManager.getInstance().getCurrentBackendConfig(), ctx, force);
     }
 
-    public static void activateBackendConfig(BackendConfig backendConfig, Context ctx, boolean force) {
+    public static void activateBackendConfig(BackendConfig backendConfig, Context ctx, boolean forceCleanReload) {
         if (!hasBackendConfigs() || backendConfig == null)
             return;
 
@@ -54,8 +56,8 @@ public class BackendSwitcher {
         // Allow resetting the Pin timeout
         TimeOutUtil.getInstance().setCanBeRestarted(true);
 
-        // Stop if requested backend is already active and we don't force to reload
-        if (!force && backendConfig.equals(currentBackendConfig) && currentBackendState == BackendState.BACKEND_CONNECTED) {
+        // Stop if requested backend is already active and we don't forceCleanReload to reload
+        if (!forceCleanReload && backendConfig.equals(currentBackendConfig) && currentBackendState == BackendState.BACKEND_CONNECTED) {
             BBLog.d(LOG_TAG, "The requested backend is already active.");
             return;
         }
@@ -67,12 +69,14 @@ public class BackendSwitcher {
             boolean keepVPN = false;
             boolean keepTor = false;
 
-            if (currentBackendConfig != null && currentBackendConfig.getVpnConfig() != null && currentBackendConfig.getVpnConfig().isSameVPN(backendConfig.getVpnConfig()))
-                keepVPN = true;
-            if (currentBackendConfig != null && currentBackendConfig.getUseTor() == backendConfig.getUseTor())
-                keepTor = true;
-            if (currentBackendConfig != null)
-                deactivateCurrentBackendConfig(ctx, keepVPN, keepTor);
+            if (!forceCleanReload) {
+                if (currentBackendConfig.getVpnConfig() != null && currentBackendConfig.getVpnConfig().isSameVPN(backendConfig.getVpnConfig()))
+                    keepVPN = true;
+                if (currentBackendConfig.getUseTor() == backendConfig.getUseTor())
+                    keepTor = true;
+            }
+
+            deactivateCurrentBackendConfig(ctx, keepVPN, keepTor);
 
             // After deactivating the old config we need to wait a bit so everything is cleanly shut down.
             delayHandler.postDelayed(() -> activateBackendConfig2(backendConfig, ctx), 500);
@@ -90,8 +94,7 @@ public class BackendSwitcher {
 
         // Check internet connection
         if (!NetworkUtil.isConnectedToInternet(ctx)) {
-            setBackendState(BackendState.ERROR);
-            broadcastBackendStateError(ctx.getString(R.string.error_connection_no_internet), ERROR_NO_INTERNET);
+            setError(ERROR_NO_INTERNET);
             return;
         }
 
@@ -127,11 +130,11 @@ public class BackendSwitcher {
         } else {
             setBackendState(BackendState.ERROR);
             if (!VPNUtil.isVpnAppInstalled(getCurrentBackendConfig().getVpnConfig(), ctx)) {
-                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_not_installed, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_NOT_INSTALLED);
+                setError(ERROR_VPN_NOT_INSTALLED);
             } else if (!VPNUtil.hasPermissionToControlVpn(getCurrentBackendConfig().getVpnConfig(), ctx)) {
-                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_no_permission, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_NO_CONTROL_PERMISSION);
+                setError(ERROR_VPN_NO_CONTROL_PERMISSION);
             } else {
-                broadcastBackendStateError(ctx.getString(R.string.vpn_unable_to_start) + "\n\n" + ctx.getString(R.string.vpn_unable_to_start_unknown, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), ERROR_VPN_UNKNOWN_START_ISSUE);
+                setError(ERROR_VPN_UNKNOWN_START_ISSUE);
             }
         }
     }
@@ -160,6 +163,9 @@ public class BackendSwitcher {
             case BaseBackendConfig.BACKEND_TYPE_LND_GRPC:
                 LndConnection.getInstance().openConnection();
         }
+        if (currentBackendState == BackendState.ERROR)
+            return;
+
         setBackendState(BackendState.BACKEND_CONNECTED);
 
         // Start opening the wallet depending on the implementation. Unlock if necessary
@@ -212,6 +218,30 @@ public class BackendSwitcher {
     private static void setupDelayHandler() {
         if (delayHandler == null) {
             delayHandler = new Handler();
+        }
+    }
+
+    public static void setError(int errorCode) {
+        setBackendState(BackendState.ERROR);
+        switch (errorCode) {
+            case ERROR_NO_INTERNET:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_connection_no_internet), errorCode);
+                break;
+            case ERROR_VPN_NOT_INSTALLED:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.vpn_unable_to_start) + "\n\n" + App.getAppContext().getString(R.string.vpn_unable_to_start_not_installed, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), errorCode);
+                break;
+            case ERROR_VPN_NO_CONTROL_PERMISSION:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.vpn_unable_to_start) + "\n\n" + App.getAppContext().getString(R.string.vpn_unable_to_start_no_permission, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), errorCode);
+                break;
+            case ERROR_VPN_UNKNOWN_START_ISSUE:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.vpn_unable_to_start) + "\n\n" + App.getAppContext().getString(R.string.vpn_unable_to_start_unknown, currentBackendConfig.getVpnConfig().getVpnType().getDisplayName()), errorCode);
+                break;
+            case ERROR_TOR_BOOTSTRAPPING_FAILED:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_tor_bootstrapping_failed), errorCode);
+                break;
+            case ERROR_GRPC_CREATING_STUBS:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_grpc_setup_failed), errorCode);
+                break;
         }
     }
 
