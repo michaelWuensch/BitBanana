@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.google.gson.Gson;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
@@ -46,6 +49,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private Button mBtnSave;
     private ImageButton mVpnHelpButton;
     private String mWalletUUID;
+    private BackendConfig mOriginalBackendConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +75,12 @@ public class ManualSetup extends BaseAppCompatActivity {
         mBtnSave = findViewById(R.id.saveButton);
         mVpnHelpButton = findViewById(R.id.vpnHelpButton);
 
+        mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
             BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
+            mOriginalBackendConfig = BackendConfig;
             mEtHost.setValue(BackendConfig.getHost());
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
             mEtMacaroon.setValue(BackendConfig.getMacaroon());
@@ -130,67 +137,85 @@ public class ManualSetup extends BaseAppCompatActivity {
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mEtHost.getData().isEmpty()) {
-                    showError("Host must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (mEtPort.getData().isEmpty()) {
-                    showError("Port must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (mEtMacaroon.getData().isEmpty()) {
-                    showError("Macaroon must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
-                    showError("Macaroon must be provided in hex format!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
+                save();
+            }
+        });
+    }
 
-                // everything is ok
-                BackendConfig backendConfig = new BackendConfig();
-                backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
-                backendConfig.setHost(mEtHost.getData());
-                backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
-                backendConfig.setMacaroon(mEtMacaroon.getData());
-                backendConfig.setUseTor(mSwTor.isChecked());
-                backendConfig.setVerifyCertificate(mSwVerify.isChecked());
-                backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
-                backendConfig.setCert(mEtCertificate.getData());
+    private BackendConfig getBackendConfig() {
+        BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
+        backendConfig.setHost(mEtHost.getData());
+        try {
+            backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
+        } catch (Exception ignored) {
+        }
+        backendConfig.setMacaroon(mEtMacaroon.getData());
+        backendConfig.setUseTor(mSwTor.isChecked());
+        backendConfig.setVerifyCertificate(mSwVerify.isChecked());
+        backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
+        backendConfig.setCert(mEtCertificate.getData());
+        if (mOriginalBackendConfig != null) {
+            backendConfig.setId(mOriginalBackendConfig.getId());
+            backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
+            backendConfig.setAlias(mOriginalBackendConfig.getAlias());
+            backendConfig.setLocation(mOriginalBackendConfig.getLocation());
+        }
+        return backendConfig;
+    }
 
-                RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+    private void save() {
+        if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
+            showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
 
-                    @Override
-                    public void onSaved(String id) {
+        // everything is ok
+        BackendConfig backendConfig = getBackendConfig();
 
-                        // The configuration was saved. Now make it the currently active wallet.
-                        PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
+        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
-                        // Do not ask for pin again...
-                        TimeOutUtil.getInstance().restartTimer();
+            @Override
+            public void onSaved(String id) {
 
-                        // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
-                        Intent intent = new Intent(ManualSetup.this, HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
+                // The configuration was saved. Now make it the currently active wallet.
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
-                    @Override
-                    public void onAlreadyExists() {
-                        new AlertDialog.Builder(ManualSetup.this)
-                                .setMessage(R.string.node_already_exists)
-                                .setCancelable(true)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                    }
-                                }).show();
-                    }
+                // Do not ask for pin again...
+                TimeOutUtil.getInstance().restartTimer();
 
-                    @Override
-                    public void onError(String error, int duration) {
-                        showError(error, duration);
-                    }
-                });
+                // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
+                Intent intent = new Intent(ManualSetup.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAlreadyExists() {
+                new AlertDialog.Builder(ManualSetup.this)
+                        .setMessage(R.string.node_already_exists)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        }).show();
+            }
+
+            @Override
+            public void onError(String error, int duration) {
+                showError(error, duration);
             }
         });
     }
@@ -212,8 +237,39 @@ public class ManualSetup extends BaseAppCompatActivity {
             intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mWalletUUID);
             startActivity(intent);
             return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mWalletUUID != null) {
+            // we are in edit mode
+            String original = new Gson().toJson(mOriginalBackendConfig);
+            String actual = new Gson().toJson(getBackendConfig());
+
+            if (!original.equals(actual))
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.unsaved_changes)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                save();
+                            }
+                        })
+                        .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ManualSetup.super.onBackPressed();
+                            }
+                        })
+                        .show();
+            else
+                ManualSetup.super.onBackPressed();
+        }
     }
 }
