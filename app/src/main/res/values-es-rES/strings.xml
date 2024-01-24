@@ -216,7 +216,9 @@
     <string name="fee_not_available">N/A</string>
     <string name="fee_limit_title">Alerta de límite de tarifa</string>
     <string name="fee_limit_threshold">Tarifa límite para pagos por encima de %1$d sats: %2$s</string>
-    <string name="fee_limit_exceeded">La tarifa para este pago (%1$.1f%%) excede el límite especificado en la configuración (%2$.0f%%).\n\n¿Realmente quieres pagar esta factura?</string>
+    <string name="fee_limit_exceeded">La comisión por este pago (%1$.1f%%) excede el límite especificado en la configuración (%2$.1f%%).
+\n
+\n¿De verdad quieres pagar esta factura?</string>
     <string name="fee_limit_exceeded_payment">La tarifa para este pago (%1$d sats) será mayor que el monto del pago (%2$d sats).\n\n¿Realmente quieres pagar esta factura?</string>
     <string name="unlock_wallet">Desbloquear Billetera</string>
     <string name="biometricPrompt_title">Autenticación Biométrica</string>
@@ -279,7 +281,7 @@
     <string name="open">Abrir</string>
     <string name="settings_features">Características</string>
     <string name="percent">Por ciento</string>
-    <string name="lightning">Lightning</string>
+    <string name="lightning">Iluminación</string>
     <string name="you">Tu</string>
     <string name="send_SendOnChainInstead">Enviar en cadena</string>
     <string name="private_channel">Canal privado</string>
@@ -392,4 +394,150 @@
     <string name="settings_customBlockExplorer_address_suffix">Sufijo de la dirección</string>
     <string name="activity_peers">Pares</string>
     <string name="settings_customBlockExplorer_host_description">Por favor, indique la dirección del host de su explorador personalizado. Si alojas tú mismo el explorador de bloques, tu privacidad se mantendrá intacta.</string>
+    <string name="error_tor_might_cause_problem">Tor puede causar este problema. Por favor, intente desactivar Tor en la configuración.</string>
+    <string name="help_dialog_fee_rate">La tasa de comisión es una comisión que varía en función del valor de la transacción que usted reenvía a través del canal. La comisión total recibida es la suma de esta tasa y la comisión base.</string>
+    <string name="help_dialog_maxHTLC">El valor máximo que está dispuesto a reenviar por este canal en una sola transacción.
+\n
+\nMantenga este campo vacío si no desea cambiar el valor establecido actualmente.</string>
+    <string name="help_dialog_minHTLC">El valor más pequeño que está dispuesto a reenviar por este canal en una sola transacción.
+\n
+\nMantenga este campo vacío si no desea cambiar el valor establecido actualmente.</string>
+    <string name="help_dialog_settings_features">El compromiso de BitBanana de servir también a los expertos implica ofrecer un rico conjunto de funcionalidades. Sin embargo, reconocemos que no todo el mundo puede necesitar todas estas funcionalidades. Con nuestros ajustes personalizables, tienes la flexibilidad de ocultar cualquier característica que no sea relevante para tus necesidades, asegurando una experiencia a medida.</string>
+    <string name="help_dialog_lnurl_auth">Tu nodo sirve como método privado de autenticación para acceder a un servicio. El procedimiento se basa en la firma de mensajes y no comparte ninguna información sobre tu nodo. Si tu nodo deja de funcionar, perderás la posibilidad de iniciar sesión en la cuenta asociada.</string>
+    <string name="settings_stealth_mode">Modo sigiloso</string>
+    <string name="settings_on_off">Encendido / Apagado</string>
+    <string name="error_block_explorer_setup_invalid">La configuración del Explorador de Bloques no es válida.</string>
+    <string name="help_dialog_scanNodePublicKey">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- pubkey
+\n- pubclave@host
+\n- pubkey@host:port
+\n- LNURL-Channel</string>
+    <string name="help_dialog_scanContact">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- Dirección Lightning
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="help_dialog_scanGeneric">Aquí todo está permitido.
+\nBasta con escanear un QR-Code y BitBanana determinará automáticamente qué acción tomar en función de los datos.</string>
+    <string name="help_dialog_base_fee">Independientemente del valor de la transacción, recibirá una comisión base fija por cada transacción que reenvíe a través del canal. La comisión total recibida es la suma de esta comisión base y la tasa de comisión.</string>
+    <string name="node_name">Nombre del nodo</string>
+    <string name="delete">Borrar</string>
+    <plurals name="blocks">
+        <item quantity="one">%d Bloque</item>
+        <item quantity="many">%d Bloques</item>
+        <item quantity="other">%d Bloques</item>
+    </plurals>
+    <string name="connectionData">Datos de la conexión</string>
+    <string name="change_data">Modificar datos</string>
+    <plurals name="duration_second">
+        <item quantity="one">%d Segundo</item>
+        <item quantity="many">%d Segundos</item>
+        <item quantity="other">%d Segundos</item>
+    </plurals>
+    <string name="rename">Cambiar el nombre</string>
+    <string name="settings_custom_block_explorer">Explorador de bloques personalizado</string>
+    <string name="settings_featurePeers_summary">Aunque la gestión de pares está automatizada, esta función sigue ofreciendo control manual para ver y gestionar los pares conectados.</string>
+    <string name="error_insufficient_on_chain_funds">Fondos en cadena insuficientes. Máximo disponible:</string>
+    <string name="error_funds_not_confirmed_yet">Tiene fondos suficientes en la cadena, pero su confirmación aún está pendiente. Espere a que se confirmen sus fondos en la cadena. Puedes seguir el estado de tus fondos a través de la vista UTXO o del historial de transacciones.</string>
+    <string name="error_no_permission_to_read_file">Acceso denegado: No se puede leer el archivo. Le recomendamos que lo mueva a otra ubicación, como la carpeta \"Descargas\", y acceda a él desde allí.</string>
+    <string name="reliability">Fiabilidad</string>
+    <string name="network">Red</string>
+    <string name="settings_customBlockExplorer_address_suffix_description">Al consultar una dirección en el explorador, el enlace que se invocará será el siguiente:
+\nHost + Sufijo de dirección + Dirección.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix">Sufijo de la transacción</string>
+    <string name="help_dialog_identity">Este es tu nodo en la red lightning.
+\n
+\nAl pulsar sobre la imagen de tu avatar aparecerá un código QR.
+\nOtros pueden escanear ese código y añadirte a sus contactos, abrir canales contigo o enviarte dinero.
+\n
+\nEste avatar es único.
+\nSe genera automáticamente a partir de tu clave pública y no puede modificarse.</string>
+    <string name="help_dialog_scanPaymentRequest">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- Direcciones Bitcoin
+\n- Solicitudes de pago en Bitcoin
+\n- Solicitudes de pago Lightning</string>
+    <string name="help_dialog_channels">La lista de canales del rayo representa sus fondos del rayo. Los canales Lightning son necesarios para participar en la red Lightning que permite pagos instantáneos y baratos en bitcoin.
+\n
+\nPara \"convertir\" los fondos en cadena a los fondos del rayo que tiene que abrir un canal. Para \"convertir\" los fondos del rayo de nuevo en fondos en cadena, usted tiene que cerrar un canal existente.
+\nAmbos canales de operación, de apertura y cierre, se logran mediante una transacción en cadena que cuesta honorarios. Por lo tanto, trate de mantener los canales abiertos durante el mayor tiempo posible!
+\n
+\nUna forma sencilla de empezar a abrir canales es usar lightningnetwork.plus.</string>
+    <string name="help_dialog_connect_node_help">Por desgracia, estos códigos QR son tan grandes que algunos dispositivos no son capaces de escanearlos. Si este es tu caso, tendrás que volver a copiar y pegar.
+\n
+\nSi necesitas más ayuda, consulta nuestra documentación de configuración.</string>
+    <string name="nfc_type_not_supported">Tipo de NFC no admitido</string>
+    <string name="help_dialog_private_channels">Los canales privados no son más seguros, simplemente no son visibles para la red.
+\nUtilice canales privados sólo si abre un canal a un nodo que no enruta pagos o cuando no enrute pagos usted mismo.
+\nPara enrutar pagos tu nodo debe tener un tiempo de actividad muy alto. Si ejecuta su nodo en un dispositivo móvil o un dispositivo que está a menudo fuera de línea, no debe enrutar los pagos y se adhieren a los canales privados.</string>
+    <string name="help_dialog_scanConnectionInfo">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- Cadena lndconnect (lndconnect://...)
+\n- Conexión al servidor BTCPay (config=...)
+\n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos sus fondos On-Chain.
+\nDe forma similar a las monedas, las salidas de transacciones no gastadas (UTXOs) sólo pueden gastarse en conjunto. Como los UTXOs pueden tener cualquier valor, simplemente recibirás cambio en forma de otro UTXO cuando envíes transacciones.</string>
+    <string name="help_dialog_sign_verify">Al firmar un mensaje con tu nodo, puedes demostrar que eres el propietario de ese nodo. Como la firma contiene la clave pública del nodo, otros pueden verificar el mensaje firmado.
+\n
+\nEsta característica se puede utilizar en diferentes escenarios, como la prueba de identidad o, por ejemplo, para iniciar sesión con tu nodo en algunos servicios.</string>
+    <string name="help_dialog_LightningVsOnChain">Lightning:
+\n
+\n+ instantáneo
+\n+ comisiones bajas
+\n- no siempre posible
+\n
+\nPerfecto para transacciones pequeñas.
+\nUtilizar siempre que sea posible.
+\n
+\n
+\nEn cadena:
+\n
+\n+ siempre posible
+\n- más lento
+\n- comisiones más altas
+\n
+\nBueno para grandes transacciones.
+\nUtilícelo cuando Lightning no sea posible.</string>
+    <string name="help_dialog_forwarding">Esta vista muestra todos los pagos que ha reenviado a otros participantes de la red relámpago. Además, puedes ver los fondos que has ganado por prestar ese servicio.
+\n
+\nEn la red Lightning se utilizan canales para los pagos. Cuando dos participantes quieren enviarse fondos pero no tienen un canal abierto entre ellos, tendrán que encontrar a otros participantes de la red que sí lo tengan.
+\n
+\nEjemplo:
+\nAlicia quiere enviar fondos a Carol, pero no tiene un canal con Carol. Por tanto, un pago directo es imposible. Pero si Alicia tiene un canal con Bob y Bob tiene un canal con Carol, hay una solución. Bob puede reenviar el pago a Carol.
+\n
+\nLos pagos suelen utilizar múltiples reenvíos (saltos) para llegar finalmente a su destino.</string>
+    <string name="help_dialog_payer_data_settings">Algunos beneficiarios admiten o incluso exigen que les envíes información adicional sobre ti. Para mayor comodidad, puede establecer valores predeterminados aquí, de modo que no tenga que introducir esta información cada vez. Estos datos sólo se almacenan localmente en el teléfono.
+\n
+\nTenga en cuenta que, incluso con los valores predeterminados establecidos, podrá modificar los datos al realizar un pago. También podrás elegir qué datos se envían.
+\n
+\nUsted es responsable de decidir si utiliza datos reales o falsos. Como regla general, le aconsejamos que sólo envíe datos reales si es necesario por alguna razón. (Por ejemplo, cuando vaya a recibir un código por correo, etc.)</string>
+    <string name="help_dialog_payer_data_payment">Este beneficiario admite o incluso exige que le envíes información adicional sobre ti.
+\n
+\nUsted es responsable de decidir si utiliza datos reales o falsos. Como regla general, aconsejamos enviar datos reales sólo si es necesario por alguna razón. (Por ejemplo, cuando vaya a recibir un código por correo, etc.)
+\n
+\nSi una marca de verificación no puede ser desmarcada, entonces este dato está marcado como obligatorio por el beneficiario. Si no quiere enviar esos datos tendrá que cancelar el pago.</string>
+    <string name="help_dialog_stealth_mode">Utiliza el modo oculto para defender tu teléfono de búsquedas físicas rápidas, creando la ilusión de que BitBanana no está presente en tu dispositivo. Esto se consigue sustituyendo el icono y el nombre de tu aplicación e iniciando una aplicación señuelo. Sin embargo, ten en cuenta que el icono y el nombre de la aplicación no cambiarán en la lista de aplicaciones de la configuración del sistema.
+\n
+\nNo es una solución perfecta, pero ayuda a que la presencia de tu software Bitcoin sea menos obvia.</string>
+    <string name="help_dialog_peers">Esta lista muestra todos los peers conectados actualmente a tu nodo. Los pares son esencialmente otros nodos que operan dentro de la red. Colaboran intercambiando información, asegurando que cada nodo tenga una visión clara del estado de la red.
+\n
+\nPor ejemplo, cuando tu nodo quiere cambiar algo, como actualizar una política de canales, lo notifica a todos los peers a los que está conectado. Estos, a su vez, transmiten la información a sus pares conectados, creando un efecto dominó que asegura que toda la red esté informada.
+\n
+\nTu nodo establece conexiones con pares de forma automática, normalmente dando prioridad a aquellos pares con los que tienes canales activos. No obstante, usted mantiene la flexibilidad de establecer o romper conexiones manualmente y acceder a más detalles sobre sus pares a través de esta interfaz.</string>
+    <string name="help_dialog_scanPeer">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- pubkey
+\n- pubclave@host
+\n- pubkey@host:port</string>
+    <string name="open_node">Seleccionar este nodo</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Liquidez Lightning insuficiente para enviar. Abra canales adicionales para aumentarlo.
+\nMáximo actual:</string>
+    <string name="guardian_invoices_without_specified_amount">Las facturas que carecen de un importe concreto suponen un riesgo para la seguridad. Aunque es muy improbable, los intermediarios a lo largo de la ruta pueden aprovecharse de tales facturas, haciendo que el destinatario reciba menos de lo esperado sin ser detectado. Este riesgo no existe en los pagos directos.</string>
+    <string name="settings_customBlockExplorer_transaction_suffix_description">Al consultar una transacción en el explorador, el enlace que se invocará será el siguiente:
+\nHost + Sufijo de la transacción + TransactionID.</string>
+    <string name="settings_featurePeers">Gestión por pares</string>
+    <string name="settings_unspecifiedAmountInvoices">Permitir facturas sin importe concreto</string>
+    <string name="settings_stealth_mode_summary">Habilite el modo oculto para protegerse contra búsquedas físicas en su dispositivo</string>
 </resources>
