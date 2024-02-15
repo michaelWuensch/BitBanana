@@ -16,7 +16,7 @@ import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 public class ExchangeRateUtilTest {
 
     // The exchange rate read from the endpoints is in relation to BTC.
-    // Internally we use Satoshis. That's why a received rate of 1.0 has to equal 1E-8 after parsing.
+    // Internally we use Milli Satoshis. That's why a received rate of 1.0 has to equal 1E-11 after parsing.
 
     @Test
     public void parseBlockchainInfoResponse() throws JSONException {
@@ -24,7 +24,7 @@ public class ExchangeRateUtilTest {
         JSONObject out = ExchangeRateUtil.getInstance().parseBlockchainInfoResponse(in);
 
         assertEquals(2, out.length());
-        assertEquals(1E-8, out.getJSONObject("USD").getDouble("rate"));
+        assertEquals(1E-11, out.getJSONObject("USD").getDouble("rate"));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class ExchangeRateUtilTest {
         JSONObject out = ExchangeRateUtil.getInstance().parseCoinbaseResponse(in);
 
         assertEquals(2, out.length());
-        assertEquals(1E-8, out.getJSONObject("USD").getDouble("rate"));
+        assertEquals(1E-11, out.getJSONObject("USD").getDouble("rate"));
     }
 
     private String readStringFromFile(String filename) {
