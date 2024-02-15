@@ -417,7 +417,7 @@ public class Wallet {
         compositeDisposable.add(Single.zip(walletBalance, channelBalance, pendingChannels, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
 
             setOnChainBalance(walletBalanceResponse.getTotalBalance(), walletBalanceResponse.getConfirmedBalance(), walletBalanceResponse.getUnconfirmedBalance());
-            setChannelBalance(channelBalanceResponse.getBalance(), channelBalanceResponse.getPendingOpenBalance());
+            setChannelBalance(channelBalanceResponse.getLocalBalance().getSat(), channelBalanceResponse.getPendingOpenLocalBalance().getSat());
             setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
 
             return true;
