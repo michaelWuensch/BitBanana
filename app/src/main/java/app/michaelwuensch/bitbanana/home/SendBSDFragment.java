@@ -277,7 +277,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 if (mAmountValid) {
                     mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
 
-                    if (!mOnChain && mLnPaymentRequest.getNumSatoshis() == 0) {
+                    if (mIsKeysend || (!mOnChain && mLnPaymentRequest.getNumSatoshis() == 0)) {
                         mSendButtonEnabled_feeCalculate = false;
                         mFeeCaclulationDebounceHandler.attempt(new Runnable() {
                             @Override
