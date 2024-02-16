@@ -209,7 +209,7 @@ public class Wallet {
                     }
                 }, throwable -> {
                     // If we are unable to determine the wallet state we call the following function that will handle the error messages.
-                    BBLog.d("LockState", throwable.getMessage());
+                    BBLog.w("LockState", throwable.getMessage()); // There is a hard coded proxy connect timeout of 30 seconds that we cannot change. With tor we often reach this.
                     loadWallet();
                 }));
     }

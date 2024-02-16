@@ -19,6 +19,7 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
 
             int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
             TorManager.getInstance().setIsProxyRunning(true);
+            TorManager.getInstance().setIsConnecting(false);
             TorManager.getInstance().setProxyPort(port);
 
             // restart HTTP Client

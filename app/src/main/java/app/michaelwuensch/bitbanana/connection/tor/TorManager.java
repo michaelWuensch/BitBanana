@@ -21,6 +21,7 @@ public class TorManager {
 
     private int mProxyPort;
     private boolean isProxyRunning = false;
+    private boolean isConnecting = false;
 
     public int getProxyPort() {
         return mProxyPort;
@@ -35,7 +36,13 @@ public class TorManager {
     }
 
     public void setIsProxyRunning(boolean proxyRunning) {
+        if (!proxyRunning)
+            isConnecting = false;
         isProxyRunning = proxyRunning;
+    }
+
+    public void setIsConnecting(boolean connecting) {
+        isConnecting = connecting;
     }
 
     private TorManager() {
@@ -43,11 +50,13 @@ public class TorManager {
 
     public void startTor() {
         BBLog.d(LOG_TAG, "Start Tor called.");
+        isConnecting = true;
         TorServiceController.startTor();
     }
 
     public void stopTor() {
         BBLog.d(LOG_TAG, "Stop Tor called.");
+        isConnecting = false;
         TorServiceController.stopTor();
     }
 
@@ -58,14 +67,18 @@ public class TorManager {
 
     public void switchTorPrefState(boolean newActive) {
         if (newActive) {
-            startTor();
-            // restarting HTTP Client and LND Connection will happen automatically as soon as the new proxy is established.
+            if (!isProxyRunning()) {
+                startTor();
+                // HTTP Client gets restarted automatically once tor connection is established.
+            } else {
+                // restart HTTP Client
+                HttpClient.getInstance().restartHttpClient();
+            }
         } else {
-            if (!isCurrentNodeConnectionTor()) {
+            if (!isCurrentNodeConnectionTor() && (isConnecting || isProxyRunning)) {
                 // Stop tor service if not used by current node.
                 stopTor();
             }
-
             // restart HTTP Client
             HttpClient.getInstance().restartHttpClient();
         }

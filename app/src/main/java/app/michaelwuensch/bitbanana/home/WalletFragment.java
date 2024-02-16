@@ -276,7 +276,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         super.onResume();
 
         if (PrefsUtil.isTorEnabled() && !TorManager.getInstance().isProxyRunning()) {
-            showLoading();
+            TorManager.getInstance().startTor();
         }
 
         // Update status dot
@@ -385,7 +385,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void updateStatusDot(String walletAlias) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor()) {
+        if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor() && TorManager.getInstance().isProxyRunning()) {
             mStatusDot.setImageResource(R.drawable.tor_icon);
             mStatusDot.getLayoutParams().height = (int) metrics.scaledDensity * 20;
             mStatusDot.getLayoutParams().width = (int) metrics.scaledDensity * 20;
@@ -495,19 +495,19 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onBackendStateChanged(BackendSwitcher.BackendState backendState) {
         switch (backendState) {
-            case NO_BACKEND_SELECTED:
-                updateTotalBalanceDisplay();
-
-                // Clear history list
-                ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
-                break;
             case DISCONNECTING:
                 mTvLoadingText.setText(R.string.connection_state_disconnecting);
                 updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()).getAlias());
                 // Show loading screen
                 showLoading();
                 break;
+            case NO_BACKEND_SELECTED:
+                updateTotalBalanceDisplay();
+                // Clear history list
+                ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
+                break;
             case ACTIVATING_BACKEND:
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
                 break;
             case STARTING_VPN:
                 mTvLoadingText.setText(R.string.connection_state_starting_vpn);
@@ -516,6 +516,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvLoadingText.setText(R.string.connection_state_starting_tor);
                 break;
             case TOR_CONNECTED:
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
                 break;
             case CONNECTING_TO_BACKEND:
                 mTvLoadingText.setText(R.string.connection_state_connecting);

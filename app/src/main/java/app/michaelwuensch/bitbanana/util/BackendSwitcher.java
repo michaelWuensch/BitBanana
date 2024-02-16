@@ -147,6 +147,8 @@ public class BackendSwitcher {
 
                 // The activateBackendConfig4() function is called as soon as tor is successfully started.
                 TorManager.getInstance().startTor();
+            } else {
+                activateBackendConfig4();
             }
         } else {
             activateBackendConfig4();
