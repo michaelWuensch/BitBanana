@@ -47,7 +47,6 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     private RecyclerView mRecyclerView;
     private ContactItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private FloatingActionButton mFab;
     private View mVEFab;
     private View mVEFabOptionManually;
     private View mVEFabOptionScan;

@@ -206,17 +206,6 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
 
             @Override
-            public void onAlreadyExists() {
-                new AlertDialog.Builder(ManualSetup.this)
-                        .setMessage(R.string.node_already_exists)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
-            }
-
-            @Override
             public void onError(String error, int duration) {
                 showError(error, duration);
             }

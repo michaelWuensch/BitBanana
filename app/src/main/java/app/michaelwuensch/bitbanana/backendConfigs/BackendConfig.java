@@ -48,6 +48,23 @@ public class BackendConfig extends BaseBackendConfig implements Comparable<Backe
         return RemoteConnectUtil.isTorHostAddress(getHost());
     }
 
+    public BackendConfig getCopy() {
+        BackendConfig copy = new BackendConfig();
+        copy.setId(getId());
+        copy.setLocation(getLocation());
+        copy.setNetwork(getNetwork());
+        copy.setHost(getHost());
+        copy.setPort(getPort());
+        copy.setAlias(getAlias());
+        copy.setMacaroon(getMacaroon());
+        copy.setCert(getCert());
+        copy.setUseTor(getUseTor());
+        copy.setVerifyCertificate(getVerifyCertificate());
+        copy.setVpnConfig(getVpnConfig());
+        copy.setBackendType(getBackendType());
+        return copy;
+    }
+
     @Override
     public int compareTo(BackendConfig BackendConfig) {
         BackendConfig other = BackendConfig;

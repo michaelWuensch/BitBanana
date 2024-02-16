@@ -115,6 +115,8 @@
     <string name="disconnect">Disconnect</string>
     <string name="reliability">Reliability</string>
     <string name="network">Network</string>
+    <string name="type">Type</string>
+    <string name="duplicate">Duplicate</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -404,6 +406,7 @@
     <string name="error_tor_bootstrapping_failed">Tor bootstrapping failed.</string>
     <string name="error_input_field_empty">The %1$s input field must not be empty.</string>
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
+    <string name="error_duplication">Duplication failed.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -494,6 +497,7 @@
     <string name="help_dialog_vpn_automation">This setting makes using a VPN more convenient. You can still connect using a VPN even if you do not have a VPN chosen here, but then you have to start and stop the VPN manually whenever you want to connect.</string>
 
     <string name="node_name">Node Name</string>
+    <string name="name_duplicate">Name of duplicate</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="change_data">Change data</string>
@@ -507,7 +511,6 @@
     <string name="no_nodes">No nodes</string>
     <string name="spinner_manage_nodes">Manage…</string>
     <string name="node_added">Node connection data has been added.</string>
-    <string name="node_already_exists">This node already exists.\nIf you want to update its connection data, please go to the nodes detail page.</string>
     <string name="useTor">Use Tor</string>
     <string name="verify_certificate">Certificate Verification</string>
 
@@ -742,5 +745,6 @@
 
     <string name="unsaved_changes">There are unsaved changes.</string>
     <string name="discard">Discard</string>
+    <string name="duplication_successful">Duplication was successful.</string>
 
 </resources>

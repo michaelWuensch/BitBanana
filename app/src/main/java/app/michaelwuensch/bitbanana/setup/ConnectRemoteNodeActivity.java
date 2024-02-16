@@ -137,17 +137,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onAlreadyExists() {
-                new AlertDialog.Builder(ConnectRemoteNodeActivity.this)
-                        .setMessage(R.string.node_already_exists)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
-            }
-
-            @Override
             public void onError(String error, int duration) {
                 showError(error, duration);
             }

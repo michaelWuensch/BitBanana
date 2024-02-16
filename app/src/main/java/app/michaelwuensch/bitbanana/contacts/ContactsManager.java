@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.contacts;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -298,7 +299,12 @@ public class ContactsManager {
         input.setShowSoftInputOnFocus(true);
         input.requestFocus();
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+        }, 250);
 
         adb.setView(viewInflated);
 

@@ -163,11 +163,6 @@ public class RemoteConnectUtil {
                 String id;
                 if (walletUUID == null) {
 
-                    if (backendConfigsManager.doesDestinationExist(backendConfig.getHost(), port)) {
-                        listener.onAlreadyExists();
-                        return;
-                    }
-
                     backendConfig.setPort(port);
                     backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
                     id = backendConfigsManager.addBackendConfig(backendConfig).getId();
@@ -192,11 +187,6 @@ public class RemoteConnectUtil {
 
                 String id;
                 if (walletUUID == null) {
-
-                    if (backendConfigsManager.doesDestinationExist(lndConnectConfig.getHost(), port)) {
-                        listener.onAlreadyExists();
-                        return;
-                    }
 
                     BackendConfig configToAdd = new BackendConfig();
                     configToAdd.setHost(lndConnectConfig.getHost());
@@ -233,11 +223,6 @@ public class RemoteConnectUtil {
 
                 String id;
                 if (walletUUID == null) {
-
-                    if (backendConfigsManager.doesDestinationExist(btcPayConfig.getHost(), port)) {
-                        listener.onAlreadyExists();
-                        return;
-                    }
 
                     BackendConfig configToAdd = new BackendConfig();
                     configToAdd.setHost(btcPayConfig.getHost());
@@ -300,8 +285,6 @@ public class RemoteConnectUtil {
     public interface OnSaveRemoteConfigurationListener {
 
         void onSaved(String walletId);
-
-        void onAlreadyExists();
 
         void onError(String error, int duration);
     }

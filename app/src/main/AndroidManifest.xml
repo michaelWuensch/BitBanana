@@ -202,7 +202,8 @@
             android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity"
             android:label="@string/activity_node_details"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar" />
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity"
             android:label="@string/add_contact"
@@ -222,7 +223,8 @@
             android:name="app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity"
             android:label="@string/activity_contact_details"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar" />
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name="app.michaelwuensch.bitbanana.listViews.licenses.LicensesActivity"
             android:label="@string/third_party_licenses"

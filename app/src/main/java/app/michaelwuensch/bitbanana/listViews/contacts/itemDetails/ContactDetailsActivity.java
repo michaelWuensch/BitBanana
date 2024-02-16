@@ -199,7 +199,7 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_edit:
+            case R.id.action_rename:
                 rename();
                 break;
             case R.id.action_delete:
