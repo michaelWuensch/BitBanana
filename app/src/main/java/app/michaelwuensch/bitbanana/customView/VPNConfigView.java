@@ -78,32 +78,7 @@ public class VPNConfigView extends ConstraintLayout {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 VPNConfig.VPNType selectedType = VPNConfig.VPNType.values()[position];
-                mTvVpnName.setText(selectedType.getDisplayName());
-                mTvAdditionalInfo.setVisibility(GONE);
-                switch (selectedType) {
-                    case NONE:
-                        mInputViewTunnel.setVisibility(GONE);
-                        mInputViewTunnel.setValue(null);
-                        break;
-                    case TAILSCALE:
-                        mInputViewTunnel.setVisibility(GONE);
-                        mInputViewTunnel.setValue(null);
-                        if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
-                            mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
-                            mTvAdditionalInfo.setVisibility(VISIBLE);
-                        }
-                        break;
-                    case WIREGUARD:
-                        mInputViewTunnel.setVisibility(VISIBLE);
-                        if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
-                            mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
-                            mTvAdditionalInfo.setVisibility(VISIBLE);
-                        } else if (!VPNUtil.hasPermissionToControlVpn(getVPNConfig(), getContext())) {
-                            mTvAdditionalInfo.setText(R.string.vpn_wireguard_additional_info);
-                            mTvAdditionalInfo.setVisibility(VISIBLE);
-                        }
-                        break;
-                }
+                updateView(selectedType);
             }
 
             @Override
@@ -111,6 +86,36 @@ public class VPNConfigView extends ConstraintLayout {
 
             }
         });
+    }
+
+    public void updateView(VPNConfig.VPNType selectedType) {
+        mTvVpnName.setText(selectedType.getDisplayName());
+        mTvAdditionalInfo.setVisibility(GONE);
+        switch (selectedType) {
+            case NONE:
+                mInputViewTunnel.setVisibility(GONE);
+                mInputViewTunnel.setValue(null);
+                break;
+            case TAILSCALE:
+                mInputViewTunnel.setVisibility(GONE);
+                mInputViewTunnel.setValue(null);
+                if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
+                    mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
+                    mTvAdditionalInfo.setVisibility(VISIBLE);
+                }
+                break;
+            case WIREGUARD:
+                mInputViewTunnel.setVisibility(VISIBLE);
+                if (!VPNUtil.isVpnAppInstalled(getVPNConfig(), getContext())) {
+                    mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_install_vpn_app_hint, selectedType.getDisplayName()));
+                } else if (!VPNUtil.hasPermissionToControlVpn(getVPNConfig(), getContext())) {
+                    mTvAdditionalInfo.setText(getContext().getString(R.string.vpn_unable_to_start_no_permission, selectedType.getDisplayName()));
+                } else {
+                    mTvAdditionalInfo.setText(R.string.vpn_wireguard_additional_info);
+                }
+                mTvAdditionalInfo.setVisibility(VISIBLE);
+                break;
+        }
     }
 
     public void setupWithVpnConfig(VPNConfig vpnConfig) {

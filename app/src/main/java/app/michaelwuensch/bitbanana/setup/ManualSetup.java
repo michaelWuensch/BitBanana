@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.setup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.google.gson.Gson;
@@ -21,6 +23,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.customView.VPNConfigView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
@@ -270,6 +273,24 @@ public class ManualSetup extends BaseAppCompatActivity {
                         .show();
             else
                 ManualSetup.super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == VPNUtil.PERMISSION_WIREGUARD_REQUEST_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                int grantResult = grantResults[i];
+
+                if (permission.equals(VPNUtil.PERMISSION_WIREGUARD)) {
+                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                        mVpnConfigView.updateView(mVpnConfigView.getVPNConfig().getVpnType());
+                    }
+                }
+            }
         }
     }
 }

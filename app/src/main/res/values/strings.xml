@@ -728,7 +728,7 @@
     <string name="vpn_stop_on_close">Stop on close</string>
     <string name="vpn_tunnel_name">Tunnel</string>
     <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">To use this VPN you first have to install the %1$s app.</string>
-    <string name="vpn_wireguard_additional_info">To allow for automation of WireGuard you first need to open up the WireGuard app, navigate to its settings, and then allow control for external apps.</string>
+    <string name="vpn_wireguard_additional_info">To allow for automation of WireGuard you need to open up the WireGuard app, navigate to its settings, and then allow control for external apps.</string>
     <string name="vpn_unable_to_start">Oops! Looks like the VPN cannot be started automatically.</string>
     <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">You have to install the %1$s app to use VPN specified in your connection settings.</string>
     <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">You have to grant BitBanana permission to control %1$s.</string>

@@ -11,10 +11,6 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
  */
 public class VPNConfig {
 
-    public final static String VPN_NAME_NONE = "none";
-    public final static String VPN_NAME_TAILSCALE = "tailscale";
-    public final static String VPN_NAME_WIREGUARD = "wireguard";
-
     private VPNType vpnType = VPNType.NONE;
     private String tunnelName;
     private boolean startVPNOnOpen = true;

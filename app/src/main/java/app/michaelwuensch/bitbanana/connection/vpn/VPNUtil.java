@@ -27,7 +27,8 @@ public class VPNUtil {
 
     private static final String APP_NAME_WIREGUARD = "WireGuard";
     private static final String PACKAGE_WIREGUARD = "com.wireguard.android";
-    private static final String PERMISSION_WIREGUARD = "com.wireguard.android.permission.CONTROL_TUNNELS";
+    public static final String PERMISSION_WIREGUARD = "com.wireguard.android.permission.CONTROL_TUNNELS";
+    public static final int PERMISSION_WIREGUARD_REQUEST_CODE = 1;
     private static final String ACTION_START_WIREGUARD = "com.wireguard.android.action.SET_TUNNEL_UP";
     private static final String ACTION_STOP_WIREGUARD = "com.wireguard.android.action.SET_TUNNEL_DOWN";
 
@@ -103,7 +104,7 @@ public class VPNUtil {
                 case TAILSCALE:
                     return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_TAILSCALE);
                 case WIREGUARD:
-                    return isAppInstalled(ctx, PACKAGE_TAILSCALE, APP_NAME_WIREGUARD);
+                    return isAppInstalled(ctx, PACKAGE_WIREGUARD, APP_NAME_WIREGUARD);
             }
         }
         return true;
@@ -203,7 +204,7 @@ public class VPNUtil {
             return true;
         } else {
             BBLog.w(LOG_TAG, "No permission to control VPN (WireGuard Tunnel). Requesting permission.");
-            PermissionsUtil.requestPermissions(context, new String[]{PERMISSION_WIREGUARD}, 1, false);
+            PermissionsUtil.requestPermissions(context, new String[]{PERMISSION_WIREGUARD}, PERMISSION_WIREGUARD_REQUEST_CODE, false);
             return false;
         }
     }
