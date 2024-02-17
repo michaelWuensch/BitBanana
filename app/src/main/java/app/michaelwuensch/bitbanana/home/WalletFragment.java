@@ -497,7 +497,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         switch (backendState) {
             case DISCONNECTING:
                 mTvLoadingText.setText(R.string.connection_state_disconnecting);
-                updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()).getAlias());
+                if (BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()) != null)
+                    updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()).getAlias());
                 // Show loading screen
                 showLoading();
                 break;

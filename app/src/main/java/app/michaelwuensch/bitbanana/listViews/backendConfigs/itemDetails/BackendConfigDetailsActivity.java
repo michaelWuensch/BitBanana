@@ -273,6 +273,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
         }
 
         if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {
+            // Current active backend is deleted...
             BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
             PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_BACKEND_CONFIG).commit();
             Intent intent = new Intent(BackendConfigDetailsActivity.this, LandingActivity.class);
