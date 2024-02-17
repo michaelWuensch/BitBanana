@@ -74,7 +74,7 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="isTorEnabled"
             android:summary="@string/settings_tor_summary"
             android:title="@string/settings_tor"

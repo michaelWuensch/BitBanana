@@ -153,7 +153,7 @@ public class PrefsUtil {
     }
 
     public static boolean isTorEnabled() {
-        return getPrefs().getBoolean("isTorEnabled", true);
+        return getPrefs().getBoolean("isTorEnabled", false);
     }
 
     public static String getBlockExplorer() {
