@@ -233,6 +233,11 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     // This method is used if the data set of the list changed. E.g. new transactions appeared, etc.
     public void updateHistoryDisplayList() {
 
+        if (mRecyclerView == null || mRecyclerView.getLayoutManager() == null || mAdapter == null) {
+            BBLog.w(LOG_TAG, "Skipped updating history as some elements are null");
+            return;
+        }
+
         // Save state, we want to keep the scroll offset after the update.
         Parcelable recyclerViewState = null;
         if (mRecyclerView.getLayoutManager() != null)

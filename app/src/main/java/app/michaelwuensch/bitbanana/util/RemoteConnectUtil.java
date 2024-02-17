@@ -187,6 +187,7 @@ public class RemoteConnectUtil {
                 if (walletUUID == null) {
 
                     BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setAlias(lndConnectConfig.getHost());
                     configToAdd.setHost(lndConnectConfig.getHost());
                     configToAdd.setPort(port);
                     configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
@@ -196,19 +197,19 @@ public class RemoteConnectUtil {
                     configToAdd.setMacaroon(lndConnectConfig.getMacaroon());
                     configToAdd.setUseTor(lndConnectConfig.getUseTor());
                     configToAdd.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
+                    configToAdd.setVpnConfig(new VPNConfig());
 
                     id = backendConfigsManager.addBackendConfig(configToAdd).getId();
                 } else {
                     id = walletUUID;
                     BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
+                    // Here we only override the information that is actually contained in the lndconnect string. We want to keep everything else as it is
                     backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
                     backendConfig.setHost(lndConnectConfig.getHost());
                     backendConfig.setPort(port);
                     backendConfig.setCert(lndConnectConfig.getCert());
                     backendConfig.setMacaroon(lndConnectConfig.getMacaroon());
-                    backendConfig.setUseTor(lndConnectConfig.getUseTor());
-                    backendConfig.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
-                    // id, alias, location, network and VPNConfig stay the same as this info is not available
+                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
                     backendConfigsManager.updateBackendConfig(backendConfig);
                 }
 
@@ -223,6 +224,7 @@ public class RemoteConnectUtil {
                 if (walletUUID == null) {
 
                     BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setAlias(btcPayConfig.getHost());
                     configToAdd.setHost(btcPayConfig.getHost());
                     configToAdd.setPort(port);
                     configToAdd.setLocation(BaseBackendConfig.LOCATION_REMOTE);
@@ -245,8 +247,7 @@ public class RemoteConnectUtil {
                     backendConfig.setCert(null);
                     backendConfig.setMacaroon(btcPayConfig.getMacaroon());
                     backendConfig.setUseTor(btcPayConfig.getUseTor());
-                    backendConfig.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
-                    // id, alias, location and VPNConfig stay the same as this info is not available
+                    // id, alias, location, verifyCertificate and VPNConfig stay the same as this info is not available
                     backendConfigsManager.updateBackendConfig(backendConfig);
                 }
 
