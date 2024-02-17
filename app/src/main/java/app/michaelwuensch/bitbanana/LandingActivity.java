@@ -147,9 +147,9 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void migrateBackendConfigs() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
-                config.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
-                config.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
-                config.setLocation(BaseBackendConfig.LOCATION_REMOTE);
+                config.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                config.setNetwork(BaseBackendConfig.Network.UNKNOWN);
+                config.setLocation(BaseBackendConfig.Location.REMOTE);
                 config.setVpnConfig(new VPNConfig());
                 BackendConfigsManager.getInstance().updateBackendConfig(config);
             }

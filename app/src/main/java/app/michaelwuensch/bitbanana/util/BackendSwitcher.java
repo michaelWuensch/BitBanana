@@ -9,7 +9,6 @@ import java.util.Set;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
@@ -162,7 +161,7 @@ public class BackendSwitcher {
         // Connect to backend
         setBackendState(BackendState.CONNECTING_TO_BACKEND);
         switch (currentBackendConfig.getBackendType()) {
-            case BaseBackendConfig.BACKEND_TYPE_LND_GRPC:
+            case LND_GRPC:
                 LndConnection.getInstance().openConnection();
         }
         if (currentBackendState == BackendState.ERROR)
@@ -180,7 +179,7 @@ public class BackendSwitcher {
             BBLog.d(LOG_TAG, "Deactivating backendConfig: " + backendConfigAlias);
             setBackendState(BackendState.DISCONNECTING);
             switch (currentBackendConfig.getBackendType()) {
-                case BaseBackendConfig.BACKEND_TYPE_LND_GRPC:
+                case LND_GRPC:
                     LndConnection.getInstance().closeConnection();
             }
 

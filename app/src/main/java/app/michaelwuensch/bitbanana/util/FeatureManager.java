@@ -22,18 +22,27 @@ public class FeatureManager {
     }
 
     public static boolean isRoutingListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureRoutingSummary", true);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isEditRoutingPoliciesEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         return backendSupported;
     }
 
     public static boolean isUTXOListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
         return settingEnabled && backendSupported;
     }
@@ -44,18 +53,27 @@ public class FeatureManager {
     }
 
     public static boolean isChannelManagementEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         return backendSupported;
     }
 
     public static boolean isPeersListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featurePeers", false);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isSignVerifyEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(BaseBackendConfig.BACKEND_TYPE_NONE, BaseBackendConfig.BACKEND_TYPE_LND_GRPC));
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC
+        ));
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled && backendSupported;
     }
@@ -81,15 +99,15 @@ public class FeatureManager {
         featureChangedListeners.remove(listener);
     }
 
-    private static boolean isCurrentBackendSupported(List<String> supportedBackends) {
+    private static boolean isCurrentBackendSupported(List<BaseBackendConfig.BackendType> supportedBackends) {
         if (BackendSwitcher.getCurrentBackendConfig() == null) {
-            for (String backend : supportedBackends) {
-                if (backend.equals(BaseBackendConfig.BACKEND_TYPE_NONE))
+            for (BaseBackendConfig.BackendType backend : supportedBackends) {
+                if (backend == BaseBackendConfig.BackendType.NONE)
                     return true;
             }
         } else {
-            for (String backend : supportedBackends) {
-                if (backend.equals(BackendSwitcher.getCurrentBackendConfig().getBackendType()))
+            for (BaseBackendConfig.BackendType backend : supportedBackends) {
+                if (backend == BackendSwitcher.getCurrentBackendConfig().getBackendType())
                     return true;
             }
         }

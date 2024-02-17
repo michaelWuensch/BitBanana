@@ -9,9 +9,12 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -54,6 +57,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private ImageButton mVpnHelpButton;
     private String mWalletUUID;
     private BackendConfig mOriginalBackendConfig;
+    private Spinner mSpType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +83,59 @@ public class ManualSetup extends BaseAppCompatActivity {
         mVpnConfigView = findViewById(R.id.vpnConfigView);
         mBtnSave = findViewById(R.id.saveButton);
         mVpnHelpButton = findViewById(R.id.vpnHelpButton);
+        mSpType = findViewById(R.id.typeSpinner);
 
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        String[] items = new String[3];
+        items[0] = BaseBackendConfig.BackendType.LND_GRPC.getDisplayName();
+        items[1] = BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
+        items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
+
+        mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
+        mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        // Lnd gRPC
+                    case 1:
+                        // Core Lightning gRPC
+                        mEtPort.setVisibility(View.VISIBLE);
+                        mEtMacaroon.setVisibility(View.VISIBLE);
+                        mEtCertificate.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        // Lnd Hub
+                        mEtPort.setVisibility(View.GONE);
+                        mEtMacaroon.setVisibility(View.GONE);
+                        mEtCertificate.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
             BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
             mOriginalBackendConfig = BackendConfig;
+            switch (BackendConfig.getBackendType()) {
+                case LND_GRPC:
+                    mSpType.setSelection(0);
+                    break;
+                case CORE_LIGHTNING_GRPC:
+                    mSpType.setSelection(1);
+                    break;
+                case LND_HUB:
+                    mSpType.setSelection(2);
+                    break;
+            }
             mEtName.setValue(BackendConfig.getAlias());
             mEtHost.setValue(BackendConfig.getHost());
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
@@ -101,6 +151,8 @@ public class ManualSetup extends BaseAppCompatActivity {
             if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
                 mEtCertificate.setValue(BackendConfig.getCert());
             }
+        } else {
+            mSpType.setSelection(0);
         }
 
         mSwTor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -151,7 +203,17 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BackendConfig getBackendConfig() {
         BackendConfig backendConfig = new BackendConfig();
         backendConfig.setAlias(mEtName.getData());
-        backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
+        switch (mSpType.getSelectedItemPosition()) {
+            case 0:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                break;
+            case 1:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                break;
+            case 2:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
+                break;
+        }
         backendConfig.setHost(mEtHost.getData());
         try {
             backendConfig.setPort(Integer.parseInt(mEtPort.getData()));

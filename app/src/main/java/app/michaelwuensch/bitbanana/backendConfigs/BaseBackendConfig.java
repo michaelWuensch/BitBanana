@@ -1,5 +1,8 @@
 package app.michaelwuensch.bitbanana.backendConfigs;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.App;
+
 /**
  * Base class meant to be extended for more specific backend configurations like
  * - BTCPay Configuration
@@ -9,33 +12,24 @@ package app.michaelwuensch.bitbanana.backendConfigs;
  */
 public abstract class BaseBackendConfig {
 
-    public static final String BACKEND_TYPE_NONE = "none";
-    public static final String BACKEND_TYPE_LND_GRPC = "lnd-grpc";
-    public static final String BACKEND_TYPE_CORE_LIGHTNING_GRPC = "core-lightning-grpc";
-    public static final String LOCATION_LOCAL = "local";
-    public static final String LOCATION_REMOTE = "remote";
-    public static final String NETWORK_UNKNOWN = "unknown";
-    public static final String NETWORK_MAINNET = "mainnet";
-    public static final String NETWORK_TESTNET = "testnet";
-    public static final String NETWORK_REGTEST = "regtest";
-    public static final String NETWORK_SIGNET = "signet";
-
-    private String backendType;
+    private BackendType backendType;
     private String host;
     private int port;
-    private String location;
-    private String network;
+    private Location location;
+    private Network network;
     private String cert;
     private String macaroon;
+    private String user;
+    private String password;
     private boolean UseTor;
     private boolean VerifyCertificate;
 
 
-    public String getBackendType() {
+    public BackendType getBackendType() {
         return this.backendType;
     }
 
-    public void setBackendType(String backendType) {
+    public void setBackendType(BackendType backendType) {
         this.backendType = backendType;
     }
 
@@ -55,19 +49,19 @@ public abstract class BaseBackendConfig {
         this.port = port;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return this.location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
-    public String getNetwork() {
+    public Network getNetwork() {
         return this.network;
     }
 
-    public void setNetwork(String network) {
+    public void setNetwork(Network network) {
         this.network = network;
     }
 
@@ -85,6 +79,22 @@ public abstract class BaseBackendConfig {
 
     public void setMacaroon(String macaroon) {
         this.macaroon = macaroon;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean getUseTor() {
@@ -105,7 +115,7 @@ public abstract class BaseBackendConfig {
 
     public boolean isLocal() {
         if (this.location != null)
-            return this.location.equals(LOCATION_LOCAL);
+            return this.location == Location.LOCAL;
         return false;
     }
 
@@ -113,5 +123,86 @@ public abstract class BaseBackendConfig {
         if (getHost() != null)
             return this.getHost().toLowerCase().contains(".onion");
         return false;
+    }
+
+    public enum BackendType {
+        NONE,
+        LND_GRPC,
+        CORE_LIGHTNING_GRPC,
+        LND_HUB;
+
+        public static BaseBackendConfig.BackendType parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return NONE;
+            }
+        }
+
+        public String getDisplayName() {
+            switch (this) {
+                case LND_GRPC:
+                    return "LND (gRPC)";
+                case CORE_LIGHTNING_GRPC:
+                    return "Core Lightning (gRPC)";
+                case LND_HUB:
+                    return "LNDHub";
+                default:
+                    return App.getAppContext().getString(R.string.none);
+            }
+        }
+    }
+
+    public enum Network {
+        UNKNOWN,
+        MAINNET,
+        TESTNET,
+        REGTEST,
+        SIGNET;
+
+        public static BaseBackendConfig.Network parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return UNKNOWN;
+            }
+        }
+
+        public String getDisplayName() {
+            switch (this) {
+                case MAINNET:
+                    return "Mainnet";
+                case TESTNET:
+                    return "Testnet";
+                case REGTEST:
+                    return "RegTest";
+                case SIGNET:
+                    return "Signet";
+                default:
+                    return App.getAppContext().getString(R.string.unknown);
+            }
+        }
+    }
+
+    public enum Location {
+        LOCAL,
+        REMOTE;
+
+        public static BaseBackendConfig.Location parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return REMOTE;
+            }
+        }
+
+        public String getDisplayName() {
+            switch (this) {
+                case LOCAL:
+                    return "Local";
+                default:
+                    return "Remote";
+            }
+        }
     }
 }

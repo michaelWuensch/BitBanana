@@ -123,11 +123,11 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
 
                 // everything is ok
                 LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
+                lndConnectConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
                 lndConnectConfig.setHost(connectURI.getHost());
                 lndConnectConfig.setPort(connectURI.getPort());
-                lndConnectConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
-                lndConnectConfig.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
+                lndConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
+                lndConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
                 lndConnectConfig.setCert(cert);
                 lndConnectConfig.setMacaroon(macaroon);
                 lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));

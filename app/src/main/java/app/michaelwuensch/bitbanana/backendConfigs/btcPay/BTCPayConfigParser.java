@@ -79,8 +79,8 @@ public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
         }
 
         // Everything is valid. Set defaults and continue.
-        configuration.setLocation(BaseBackendConfig.LOCATION_REMOTE);
-        configuration.setNetwork(BaseBackendConfig.NETWORK_UNKNOWN);
+        configuration.setLocation(BaseBackendConfig.Location.REMOTE);
+        configuration.setNetwork(BaseBackendConfig.Network.UNKNOWN);
         configuration.setUseTor(RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
         configuration.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
         setConnectionConfig(configuration);

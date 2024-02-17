@@ -102,6 +102,8 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             vConnectionData.setVisibility(View.VISIBLE);
             TextView tvTypeLabel = findViewById(R.id.typeLabel);
             tvTypeLabel.setText(getResources().getString(R.string.type) + ":");
+            TextView tvType = findViewById(R.id.type);
+            tvType.setText(getWalletConfig().getBackendType().getDisplayName());
             TextView tvHostLabel = findViewById(R.id.hostLabel);
             tvHostLabel.setText(getResources().getString(R.string.host) + ":");
             TextView tvHost = findViewById(R.id.host);

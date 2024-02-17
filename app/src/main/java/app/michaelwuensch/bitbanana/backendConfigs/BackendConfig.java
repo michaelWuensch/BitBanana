@@ -58,6 +58,8 @@ public class BackendConfig extends BaseBackendConfig implements Comparable<Backe
         copy.setAlias(getAlias());
         copy.setMacaroon(getMacaroon());
         copy.setCert(getCert());
+        copy.setUser(getUser());
+        copy.setPassword(getPassword());
         copy.setUseTor(getUseTor());
         copy.setVerifyCertificate(getVerifyCertificate());
         copy.setVpnConfig(getVpnConfig());
