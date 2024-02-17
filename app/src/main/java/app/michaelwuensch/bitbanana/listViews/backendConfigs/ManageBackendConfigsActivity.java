@@ -8,8 +8,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.setup.ManualSetup;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
 
 public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
@@ -29,6 +28,8 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
     private List<BackendConfig> mNodeItems;
     private TextView mEmptyListText;
+    private View mVEFabOptionManually;
+    private View mVEFabOptionScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
         mRecyclerView = findViewById(R.id.nodesList);
         mEmptyListText = findViewById(R.id.listEmpty);
+        mVEFabOptionManually = findViewById(R.id.efabManualOption);
+        mVEFabOptionScan = findViewById(R.id.efabScanOption);
 
         mNodeItems = new ArrayList<>();
 
@@ -49,13 +52,21 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mVEFabOptionScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add a new node
+                // Add a new node by scanning
                 Intent intent = new Intent(ManageBackendConfigsActivity.this, SetupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
+
+        mVEFabOptionManually.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Add a new contact manually
+                Intent intent = new Intent(ManageBackendConfigsActivity.this, ManualSetup.class);
                 startActivity(intent);
             }
         });

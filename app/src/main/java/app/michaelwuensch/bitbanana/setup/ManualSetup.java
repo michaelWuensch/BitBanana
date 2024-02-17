@@ -42,6 +42,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = ManualSetup.class.getSimpleName();
 
+    private BBInputFieldView mEtName;
     private BBInputFieldView mEtHost;
     private BBInputFieldView mEtPort;
     private BBInputFieldView mEtMacaroon;
@@ -68,6 +69,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         setContentView(R.layout.activity_manual_setup);
 
+        mEtName = findViewById(R.id.inputName);
         mEtHost = findViewById(R.id.inputHost);
         mEtPort = findViewById(R.id.inputPort);
         mEtMacaroon = findViewById(R.id.inputMacaroon);
@@ -84,6 +86,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         if (mWalletUUID != null) {
             BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
             mOriginalBackendConfig = BackendConfig;
+            mEtName.setValue(BackendConfig.getAlias());
             mEtHost.setValue(BackendConfig.getHost());
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
             mEtMacaroon.setValue(BackendConfig.getMacaroon());
@@ -147,6 +150,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
     private BackendConfig getBackendConfig() {
         BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setAlias(mEtName.getData());
         backendConfig.setBackendType(BaseBackendConfig.BACKEND_TYPE_LND_GRPC);
         backendConfig.setHost(mEtHost.getData());
         try {
@@ -161,13 +165,16 @@ public class ManualSetup extends BaseAppCompatActivity {
         if (mOriginalBackendConfig != null) {
             backendConfig.setId(mOriginalBackendConfig.getId());
             backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
-            backendConfig.setAlias(mOriginalBackendConfig.getAlias());
             backendConfig.setLocation(mOriginalBackendConfig.getLocation());
         }
         return backendConfig;
     }
 
     private void save() {
+        if (mEtName.getData() == null || mEtName.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.name)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
         if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
             showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
             return;
@@ -262,6 +269,27 @@ public class ManualSetup extends BaseAppCompatActivity {
                         .show();
             else
                 ManualSetup.super.onBackPressed();
+        } else {
+            // we are in add manually mode
+            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon != null || mEtCertificate != null) {
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.unsaved_changes)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                save();
+                            }
+                        })
+                        .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ManualSetup.super.onBackPressed();
+                            }
+                        })
+                        .show();
+            } else {
+                ManualSetup.super.onBackPressed();
+            }
         }
     }
 

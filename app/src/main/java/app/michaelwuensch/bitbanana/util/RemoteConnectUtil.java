@@ -162,7 +162,6 @@ public class RemoteConnectUtil {
 
                 String id;
                 if (walletUUID == null) {
-
                     backendConfig.setPort(port);
                     backendConfig.setLocation(BaseBackendConfig.LOCATION_REMOTE);
                     id = backendConfigsManager.addBackendConfig(backendConfig).getId();
@@ -171,7 +170,6 @@ public class RemoteConnectUtil {
                     BackendConfig backendConfig2 = backendConfigsManager.getBackendConfigById(id);
                     // All data that cannot be set on manual setup page has to be fetched from existing wallet.
                     backendConfig.setId(backendConfig2.getId());
-                    backendConfig.setAlias(backendConfig2.getAlias());
                     backendConfig.setLocation(backendConfig2.getLocation());
                     backendConfig.setNetwork(backendConfig2.getNetwork());
                     backendConfig.setBackendType(backendConfig2.getBackendType());
