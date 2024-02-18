@@ -514,8 +514,6 @@
 \nPro přeposílání plateb musí být váš uzel často online. Pokud je váš uzel na mobilním zařízení nebo je často offline, neměl(a) byste přeposílat platby a použijte privátní kanály.</string>
     <string name="node_name">Jméno uzlu</string>
     <string name="confirm_node_deletion">Opravdu chcete smazat připojení k tomuto uzlu\?</string>
-    <string name="node_already_exists">Tento uzel už existuje.
-\nPokud chcete upravit jeho data o připojení jdete na stránku detailu uzlu.</string>
     <string name="useTor">Použít Tor</string>
     <string name="lnurl_payer_data_name">Jméno</string>
     <string name="lnurl_payer_data_identifier">Lightning adresa</string>

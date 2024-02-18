@@ -348,7 +348,6 @@
     <string name="no_nodes">Keine Nodes</string>
     <string name="spinner_manage_nodes">Verwalten…</string>
     <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
-    <string name="node_already_exists">Diese Node existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Node Details.</string>
     <string name="useTor">Tor verwenden</string>
     <string name="verify_certificate">Zertifikat verifizieren</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>

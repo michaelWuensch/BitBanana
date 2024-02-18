@@ -574,8 +574,6 @@
     <string name="fee_tier_fast_title">Rápido</string>
     <string name="fee_tier_slow_description">Transação Lenta</string>
     <string name="fee_estimated_duration">Entrega Estimada: %1$s</string>
-    <string name="node_already_exists">O nó já existe.
-\nSe deseja atualizar seus dados de conexão, por favor vá à página de detalhes do nó.</string>
     <string name="no_nodes">Nenhum nó</string>
     <string name="lnurl_withdraw_fail">Saque
 \nfalhou</string>
