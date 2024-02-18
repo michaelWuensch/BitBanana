@@ -254,7 +254,11 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:\n\n- рядок Lndconnect (lndconnect://...)\n- підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:
+\n
+\n- рядок Lndconnect (lndconnect://...)
+\n- підключення до сервера BtcPay (config=...)
+\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
