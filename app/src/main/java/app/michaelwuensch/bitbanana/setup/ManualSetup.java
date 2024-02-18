@@ -333,7 +333,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                 ManualSetup.super.onBackPressed();
         } else {
             // we are in add manually mode
-            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon != null || mEtCertificate != null) {
+            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon.getData() != null || mEtCertificate.getData() != null) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.unsaved_changes)
                         .setCancelable(true)
