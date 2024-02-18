@@ -246,6 +246,7 @@ public class BackendSwitcher {
                 break;
             case ERROR_UNKNOWN_BACKEND_TYPE:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_unknown_backend), errorCode);
+                break;
             case ERROR_GRPC_CREATING_STUBS:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_grpc_setup_failed), errorCode);
                 break;
