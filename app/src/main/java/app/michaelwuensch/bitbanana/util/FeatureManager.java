@@ -78,6 +78,15 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isBalanceDetailsEnabled() {
+        boolean backendSupported = isCurrentBackendSupported(List.of(
+                BaseBackendConfig.BackendType.NONE,
+                BaseBackendConfig.BackendType.LND_GRPC,
+                BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC
+        ));
+        return backendSupported;
+    }
+
     public interface FeatureChangedListener {
         void onFeatureChanged();
     }
