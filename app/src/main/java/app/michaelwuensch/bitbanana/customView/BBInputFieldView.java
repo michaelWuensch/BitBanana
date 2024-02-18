@@ -137,6 +137,10 @@ public class BBInputFieldView extends LinearLayout {
         return mEtInput;
     }
 
+    public void setSingleLine(boolean singleLine) {
+        getEditText().setSingleLine(singleLine);
+    }
+
     public void setInputType(int type) {
         getEditText().setInputType(type);
     }
