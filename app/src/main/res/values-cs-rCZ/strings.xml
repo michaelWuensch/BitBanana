@@ -225,7 +225,9 @@
     <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
-    <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.\n\nBitBanana Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
+    <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.
+\n
+\nBitBanana Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
@@ -333,7 +335,11 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
+    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:
+\n
+\n- Lndconnect řetězec (lndconnect://...)
+\n- BtcPay Server připojení (config=...)
+\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a BitBanana automaticky určí, která akce bude provedena v závislosti na datech.</string>
     <string name="help_dialog_identity">Toto je vaše identita v lightning síti.\n\nKlepnutím na obrázek svého avatara zobrazíte QR kód.\nOstatní mohou tento kód naskenovat a přidat si vás ke svým kontaktům, otevřít s vámi kanály nebo vám poslat peníze.\n\nTento avatar je jedinečný.\nByl vygenerován automaticky na základě vašeho veřejného klíče a nelze jej změnit.</string>
