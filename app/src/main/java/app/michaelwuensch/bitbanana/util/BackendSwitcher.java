@@ -23,7 +23,8 @@ public class BackendSwitcher {
     public static final int ERROR_VPN_NO_CONTROL_PERMISSION = 2;
     public static final int ERROR_VPN_UNKNOWN_START_ISSUE = 3;
     public static final int ERROR_TOR_BOOTSTRAPPING_FAILED = 4;
-    public static final int ERROR_GRPC_CREATING_STUBS = 5;
+    public static final int ERROR_UNKNOWN_BACKEND_TYPE = 5;
+    public static final int ERROR_GRPC_CREATING_STUBS = 6;
 
     private static final String LOG_TAG = BackendSwitcher.class.getSimpleName();
 
@@ -163,6 +164,9 @@ public class BackendSwitcher {
         switch (currentBackendConfig.getBackendType()) {
             case LND_GRPC:
                 LndConnection.getInstance().openConnection();
+                break;
+            default:
+                setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
         if (currentBackendState == BackendState.ERROR)
             return;
@@ -240,6 +244,8 @@ public class BackendSwitcher {
             case ERROR_TOR_BOOTSTRAPPING_FAILED:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_tor_bootstrapping_failed), errorCode);
                 break;
+            case ERROR_UNKNOWN_BACKEND_TYPE:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_unknown_backend), errorCode);
             case ERROR_GRPC_CREATING_STUBS:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_grpc_setup_failed), errorCode);
                 break;
