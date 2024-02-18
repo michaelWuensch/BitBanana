@@ -7,9 +7,9 @@ import android.os.Handler;
 
 import java.util.concurrent.RejectedExecutionException;
 
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
@@ -19,7 +19,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         int status = NetworkUtil.getConnectivityStatus(context);
         BBLog.d("NetworkChangeReceiver: ", "Network status changed to " + NetworkUtil.getConnectivityStatusString(context));
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
                 // The following command will find out, if we have a connection to LND
                 Wallet.getInstance().fetchInfoFromLND();

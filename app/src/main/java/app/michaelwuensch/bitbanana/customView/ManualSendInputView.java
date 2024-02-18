@@ -15,12 +15,12 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -115,12 +115,17 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
-                    public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+                    public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                         invalidInput();
                     }
 
                     @Override
-                    public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+                    public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                        invalidInput();
+                    }
+
+                    @Override
+                    public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                         invalidInput();
                     }
 

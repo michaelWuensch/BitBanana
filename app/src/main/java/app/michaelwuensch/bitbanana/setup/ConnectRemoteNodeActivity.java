@@ -5,12 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import app.michaelwuensch.bitbanana.HomeActivity;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -34,8 +34,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
-                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
+            if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
             }
             if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
                 String connectString = App.getAppContext().getUriSchemeData();
@@ -85,13 +85,18 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
         RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                connectIfUserConfirms(baseNodeConfig);
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                connectIfUserConfirms(baseNodeConfig);
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
+            }
+
+            @Override
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
             }
 
             @Override
@@ -107,22 +112,22 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
 
-    private void connectIfUserConfirms(BaseNodeConfig baseNodeConfig) {
+    private void connectIfUserConfirms(BaseBackendConfig baseBackendConfig) {
         // Ask user to confirm the connection to remote host
         new UserGuardian(this, () -> {
-            connect(baseNodeConfig);
-        }).securityConnectToRemoteServer(baseNodeConfig.getHost());
+            connect(baseBackendConfig);
+        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
     }
 
-    private void connect(BaseNodeConfig baseNodeConfig) {
+    private void connect(BaseBackendConfig baseBackendConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
@@ -134,17 +139,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
                 Intent intent = new Intent(ConnectRemoteNodeActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }
-
-            @Override
-            public void onAlreadyExists() {
-                new AlertDialog.Builder(ConnectRemoteNodeActivity.this)
-                        .setMessage(R.string.node_already_exists)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
             }
 
             @Override

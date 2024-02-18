@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.contacts;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -35,7 +36,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.NodeAliasInfo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -279,7 +280,7 @@ public class ContactsManager {
                 if (AliasManager.getInstance().hasAliasInfo(contactData))
                     input.setText(AliasManager.getInstance().getAlias(contactData));
                 else {
-                    if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                         Wallet.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet.NodeInfoFetchedListener() {
                             @Override
                             public void onNodeInfoFetched(String pubkey) {
@@ -298,7 +299,12 @@ public class ContactsManager {
         input.setShowSoftInputOnFocus(true);
         input.requestFocus();
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+        }, 250);
 
         adb.setView(viewInflated);
 

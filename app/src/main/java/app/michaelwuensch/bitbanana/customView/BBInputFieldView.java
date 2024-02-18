@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -82,6 +83,7 @@ public class BBInputFieldView extends LinearLayout {
             mMinLines = a.getInt(R.styleable.BBInputFieldView_minLines, 1);
             mMaxLines = a.getInt(R.styleable.BBInputFieldView_maxLines, 1);
             mMaxLinesFocused = a.getInt(R.styleable.BBInputFieldView_maxLinesFocused, 1);
+            Drawable bg = a.getDrawable(R.styleable.BBInputFieldView_inputAreaBgDrawable);
 
             if (attrLabel != null)
                 setDescription(attrLabel);
@@ -92,6 +94,9 @@ public class BBInputFieldView extends LinearLayout {
                 setValue(attrDefaultValue);
             if ((mMinLines > 1 || mMaxLines > 1) && mMaxLines >= mMinLines)
                 setLineCount(mMinLines, mMaxLines);
+            if (bg != null) {
+                mEtInput.setBackground(bg);
+            }
 
             // Don't forget to recycle the TypedArray
             a.recycle();

@@ -21,9 +21,50 @@
             android:padding="15dp">
 
             <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:helpButtonText="@string/help_dialog_node_nickname"
+                app:inputLabel="@string/name"
+                app:inputLabelDetails=""
+                app:showHelpButton="true" />
+
+            <LinearLayout
+                android:id="@+id/typeSpinnerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vpnAutomationLabel">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_spinner">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/typeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:popupBackground="@drawable/bg_spinner_popup" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
                 android:id="@+id/inputHost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:inputLabel="@string/host"
                 app:inputLabelDetails=""
                 app:maxLines="2" />
@@ -57,6 +98,45 @@
                 app:maxLines="3"
                 app:maxLinesFocused="5"
                 app:minLines="3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:id="@+id/vpnAutomationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/vpn_automation"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <android.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/vpnHelpButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="-5dp"
+                    android:background="?actionBarItemBackground"
+                    app:srcCompat="@drawable/ic_help_black_24dp"
+                    app:tint="@color/gray" />
+
+            </LinearLayout>
+
+
+            <app.michaelwuensch.bitbanana.customView.VPNConfigView
+                android:id="@+id/vpnConfigView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/torSwitch"

@@ -16,9 +16,10 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.Balances;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -44,6 +45,8 @@ public class MainBalanceView extends MotionLayout {
     private AmountView mAvOnChainPending;
     private AmountView mAvLighting;
     private AmountView mAvLightningPending;
+    private View mBalanceDetails;
+    private View mHandle;
 
     private boolean mIsExpanded;
     private boolean mIsTransitioning;
@@ -83,7 +86,10 @@ public class MainBalanceView extends MotionLayout {
         mAvOnChainPending = view.findViewById(R.id.onChainPending);
         mAvLighting = view.findViewById(R.id.lightningConfirmed);
         mAvLightningPending = view.findViewById(R.id.lightningPending);
+        mBalanceDetails = view.findViewById(R.id.balanceDetails);
+        mHandle = view.findViewById(R.id.handle);
 
+        updateBalanceDetailsVisibility();
 
         /*
         Making it possible to touch drag and click at the same time turned out to be tricky.
@@ -214,11 +220,12 @@ public class MainBalanceView extends MotionLayout {
                 mMotionLayout.jumpToState(R.id.end);
         }
 
-
         Handler threadHandler = new Handler(Looper.getMainLooper());
         threadHandler.post(new Runnable() {
             @Override
             public void run() {
+
+                updateBalanceDetailsVisibility();
 
                 // Adapt unit text size depending on its length
                 if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
@@ -228,7 +235,7 @@ public class MainBalanceView extends MotionLayout {
                 }
 
                 Balances balances;
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     balances = Wallet.getInstance().getBalances();
                 } else {
                     balances = Wallet.getInstance().getDemoBalances();
@@ -251,7 +258,7 @@ public class MainBalanceView extends MotionLayout {
     }
 
     public void updateNetworkInfo() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     mTvMode.setVisibility(View.GONE);
@@ -315,5 +322,18 @@ public class MainBalanceView extends MotionLayout {
         mClBalanceLayout.clearAnimation();
         mIvSwitchButton.clearAnimation();
         mIvHandleIcon.clearAnimation();
+    }
+
+    private void updateBalanceDetailsVisibility() {
+
+        int detailsVisibility = FeatureManager.isBalanceDetailsEnabled() ? View.VISIBLE : View.GONE;
+        mFLHandleForClick.setVisibility(detailsVisibility);
+        mIvHandleIcon.setVisibility(detailsVisibility);
+        mBalanceDetails.setVisibility(detailsVisibility);
+
+        if (mIsExpanded && !FeatureManager.isBalanceDetailsEnabled())
+            mMotionLayout.jumpToState(R.id.start);
+
+        mMotionLayout.getDefinedTransitions().forEach(transition -> transition.setEnabled(FeatureManager.isBalanceDetailsEnabled()));
     }
 }

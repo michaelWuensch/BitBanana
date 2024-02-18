@@ -21,8 +21,8 @@ import java.util.Date;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 
 
 public class DataBackupCreateFragment extends Fragment implements DataBackupCreatePagerAdapter.BackupAction {

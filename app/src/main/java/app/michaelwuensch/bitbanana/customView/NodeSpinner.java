@@ -11,14 +11,15 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class NodeSpinner extends AppCompatSpinner {
 
     private boolean initFinished;
+    private String mSelectedNodeId;
 
     public NodeSpinner(Context context) {
         super(context);
@@ -55,26 +56,28 @@ public class NodeSpinner extends AppCompatSpinner {
     private void init() {
         updateList();
 
+        mSelectedNodeId = PrefsUtil.getCurrentBackendConfig();
+
         this.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 if (initFinished) {
                     int lastPos = adapterView.getCount() - 1;
                     if (position != lastPos) {
-                        String selectedNodeId = NodeConfigsManager.getInstance().getAllNodeConfigs(true).get(position).getId();
-                        if (!NodeConfigsManager.getInstance().getCurrentNodeConfig().getId().equals(selectedNodeId)) {
+                        mSelectedNodeId = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(position).getId();
+                        if (!BackendConfigsManager.getInstance().getCurrentBackendConfig().getId().equals(mSelectedNodeId)) {
                             // Save selected Node ID in prefs making it the current node.
-                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, selectedNodeId).commit();
+                            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, mSelectedNodeId).commit();
 
                             // Update the node spinner list, so everything is at it's correct position again.
                             updateList();
 
                             // Inform the listener. This is where the new node is opened.
-                            mListener.onNodeChanged(selectedNodeId, NodeConfigsManager.getInstance().getNodeConfigById(selectedNodeId).getAlias());
+                            mListener.onNodeChanged(mSelectedNodeId);
                         }
                     } else {
                         // Open node management
-                        Intent intent = new Intent(getContext(), ManageNodesActivity.class);
+                        Intent intent = new Intent(getContext(), ManageBackendConfigsActivity.class);
                         getContext().startActivity(intent);
 
                         // If going back we don't want to have "Manage.." selected
@@ -104,9 +107,9 @@ public class NodeSpinner extends AppCompatSpinner {
 
         initFinished = false;
 
-        String[] items = new String[NodeConfigsManager.getInstance().getAllNodeConfigs(true).size() + 1];
-        for (int i = 0; i < NodeConfigsManager.getInstance().getAllNodeConfigs(true).size(); i++) {
-            items[i] = NodeConfigsManager.getInstance().getAllNodeConfigs(true).get(i).getAlias();
+        String[] items = new String[BackendConfigsManager.getInstance().getAllBackendConfigs(true).size() + 1];
+        for (int i = 0; i < BackendConfigsManager.getInstance().getAllBackendConfigs(true).size(); i++) {
+            items[i] = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(i).getAlias();
         }
         items[items.length - 1] = getContext().getResources().getString(R.string.spinner_manage_nodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.node_spinner_item, items);
@@ -116,10 +119,14 @@ public class NodeSpinner extends AppCompatSpinner {
     }
 
     public interface OnNodeSpinnerChangedListener {
-        void onNodeChanged(String id, String alias);
+        void onNodeChanged(String id);
     }
 
     public void setOnNodeSpinnerChangedListener(OnNodeSpinnerChangedListener listener) {
         mListener = listener;
+    }
+
+    public String getSelectedNodeId() {
+        return mSelectedNodeId;
     }
 }

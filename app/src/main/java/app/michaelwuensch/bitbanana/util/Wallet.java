@@ -58,12 +58,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
-import app.michaelwuensch.bitbanana.tor.TorManager;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -210,7 +209,7 @@ public class Wallet {
                     }
                 }, throwable -> {
                     // If we are unable to determine the wallet state we call the following function that will handle the error messages.
-                    BBLog.d("LockState", throwable.getMessage());
+                    BBLog.w("LockState", throwable.getMessage()); // There is a hard coded proxy connect timeout of 30 seconds that we cannot change. With tor we often reach this.
                     loadWallet();
                 }));
     }
@@ -247,7 +246,7 @@ public class Wallet {
                     if (mNodeUris == null) {
                         mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                         for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                            mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                            mNodeUris[i] = LightningNodeUirParser.parseNodeUri(infoResponse.getUris(i));
                         }
                     }
                     broadcastLndConnectionTestResult(true, -1);
@@ -286,7 +285,7 @@ public class Wallet {
                             // - Tor is turned on, but the host cannot be resolved
                             broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
                         } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
-                            if (LndConnection.getInstance().getConnectionConfig().isTorHostAddress()) {
+                            if (BackendSwitcher.getCurrentBackendConfig().isTorHostAddress()) {
                                 // This is the case if:
                                 // - Tor is turned on and an incorrect port is used.
                                 broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
@@ -352,8 +351,7 @@ public class Wallet {
 
                     // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
                     // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
-                    LndConnection.getInstance().closeConnection();
-                    LndConnection.getInstance().openConnection();
+                    LndConnection.getInstance().restartLNDConnection();
 
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
@@ -462,7 +460,7 @@ public class Wallet {
                         if (mNodeUris == null) {
                             mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                             for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                                mNodeUris[i] = LightningParser.parseNodeUri(infoResponse.getUris(i));
+                                mNodeUris[i] = LightningNodeUirParser.parseNodeUri(infoResponse.getUris(i));
                             }
                         }
                         mInfoFetched = true;
@@ -687,7 +685,7 @@ public class Wallet {
                 .subscribe(nodeInfo -> {
                     if (nodeInfo.getNode().getAddressesCount() > 0) {
                         String tempUri = nodeUri.getPubKey() + "@" + nodeInfo.getNode().getAddresses(0).getAddr();
-                        LightningNodeUri nodeUriWithHost = LightningParser.parseNodeUri(tempUri);
+                        LightningNodeUri nodeUriWithHost = LightningNodeUirParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
                             connectPeer(nodeUriWithHost, openChannel, amount, targetConf, isPrivate);
@@ -1339,7 +1337,7 @@ public class Wallet {
      */
     public long getMaxLightningReceiveAmount() {
 
-        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             return 0;
         }
 
@@ -1362,7 +1360,7 @@ public class Wallet {
      */
     public long getMaxLightningSendAmount() {
 
-        if (!NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             return 0;
         }
 

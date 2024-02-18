@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/deep_sea_blue"
     android:fitsSystemWindows="false"
-    tools:context="app.michaelwuensch.bitbanana.HomeActivity"
+    tools:context="app.michaelwuensch.bitbanana.home.HomeActivity"
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:background="@color/deep_sea_blue"
         android:clickable="true"
-        tools:context="app.michaelwuensch.bitbanana.HomeActivity">
+        tools:context="app.michaelwuensch.bitbanana.home.HomeActivity">
 
         <app.michaelwuensch.bitbanana.customView.CustomViewPager
             android:id="@+id/viewPager"
