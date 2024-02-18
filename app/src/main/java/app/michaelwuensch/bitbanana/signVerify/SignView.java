@@ -18,8 +18,8 @@ import com.google.protobuf.ByteString;
 import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -92,7 +92,7 @@ public class SignView extends LinearLayout {
     }
 
     private void sign() {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             String message = mEtMessageToSign.getText().toString();
             if (!message.isEmpty()) {
                 SignMessageRequest signMessageRequest = SignMessageRequest.newBuilder()

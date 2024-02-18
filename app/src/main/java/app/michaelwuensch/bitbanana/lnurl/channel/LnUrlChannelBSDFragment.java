@@ -34,27 +34,27 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.customView.BSDProgressView;
+import app.michaelwuensch.bitbanana.customView.BSDResultView;
+import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.customView.BSDProgressView;
-import app.michaelwuensch.bitbanana.customView.BSDResultView;
-import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.fragments.BaseBSDFragment;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
-import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
-import app.michaelwuensch.bitbanana.tor.TorManager;
-import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
-import app.michaelwuensch.bitbanana.util.BBLog;
 
 
 public class LnUrlChannelBSDFragment extends BaseBSDFragment {
@@ -116,7 +116,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
         // Action when clicked on "Open Channel"
         Button btnOpen = view.findViewById(R.id.openButton);
         btnOpen.setOnClickListener(v -> {
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                 switchToProgressScreen();
                 openChannel();
             } else {
@@ -135,7 +135,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
     private void openChannel() {
 
         BBLog.v(TAG, "Remote Node uri: " + mLnUrlChannelResponse.getUri());
-        LightningNodeUri nodeUri = LightningParser.parseNodeUri(mLnUrlChannelResponse.getUri());
+        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(mLnUrlChannelResponse.getUri());
 
         if (nodeUri == null) {
             BBLog.e(TAG, "Node Uri could not be parsed");

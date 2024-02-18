@@ -2,7 +2,7 @@ package app.michaelwuensch.bitbanana;
 
 import org.junit.Test;
 
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectStringParser;
+import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
 
 import static junit.framework.TestCase.assertEquals;
 

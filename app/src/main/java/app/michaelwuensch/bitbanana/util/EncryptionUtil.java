@@ -60,7 +60,9 @@ public class EncryptionUtil {
             outputStream.write(iv);
             outputStream.write(encryptedData);
             return outputStream.toByteArray();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IOException | IllegalArgumentException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException |
+                 InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException |
+                 IllegalBlockSizeException | IOException | IllegalArgumentException e) {
             e.printStackTrace();
             BBLog.e(TAG, "Error encrypting data.");
         }
@@ -89,7 +91,9 @@ public class EncryptionUtil {
             // decrypt the message
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
             return cipher.doFinal(message);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException |
+                 InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException |
+                 IllegalBlockSizeException | IllegalArgumentException e) {
             e.printStackTrace();
             BBLog.e(TAG, "Error decrypting data.");
         }

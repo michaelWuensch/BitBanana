@@ -24,15 +24,16 @@ import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.lndConnection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -175,7 +176,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                 long absoluteMaxSendAmount = 17666215;
                 long maxSendAmount = absoluteMaxSendAmount;
 
-                if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
                     long onChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
 
@@ -362,7 +363,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
      * This function is used to calculate the expected on chain fee.
      */
     private void estimateOnChainFee(long amount, int targetConf) {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // We choose a dummy bech32 address. The fee amount depends only on the address type.
             String address;
             switch (Wallet.getInstance().getNetwork()) {

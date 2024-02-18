@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity">
+    tools:context="app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,12 +30,58 @@
             android:scrollbars="vertical" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
+        android:id="@+id/expandable_fab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.nambimobile.widgets.efab.Overlay
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:overlay_alpha="0.85"
+            app:overlay_closingAnimationDurationMs="200"
+            app:overlay_color="@color/deep_sea_blue"
+            app:overlay_openingAnimationDurationMs="200" />
+
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:id="@+id/expandable_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:efab_closingAnimationDurationMs="150"
+            app:efab_closingAnticipateTension="0"
+            app:efab_color="@color/banana_yellow"
+            app:efab_fabOptionSize="mini"
+            app:efab_firstFabOptionMarginPx="125"
+            app:efab_icon="@drawable/ic_add_black_24dp"
+            app:efab_iconAnimationRotationDeg="45"
+            app:efab_openingAnimationDurationMs="150"
+            app:efab_size="normal"
+            app:efab_successiveFabOptionMarginPx="110" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/efabScanOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_color="@color/banana_yellow"
+            app:fab_icon="@drawable/ic_scan_qr_code_24dp"
+            app:fab_openingAnimationDurationMs="100"
+            app:label_backgroundColor="@color/sea_blue_gradient"
+            app:label_hiddenToVisibleAnimationDurationMs="100"
+            app:label_text="@string/scan" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/efabManualOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_color="@color/banana_yellow"
+            app:fab_icon="@drawable/outline_sign_24"
+            app:fab_openingAnimationDurationMs="100"
+            app:label_backgroundColor="@color/sea_blue_gradient"
+            app:label_hiddenToVisibleAnimationDurationMs="100"
+            app:label_text="@string/manually" />
+
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

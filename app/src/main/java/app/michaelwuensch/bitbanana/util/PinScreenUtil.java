@@ -5,14 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import app.michaelwuensch.bitbanana.pin.PinEntryActivity;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.pin.PinEntryActivity;
 
 public class PinScreenUtil {
 
     static public void askForAccess(Activity activity, OnSecurityCheckPerformedListener onSecurityCheckPerformedListener) {
-        if (NodeConfigsManager.getInstance().hasAnyConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
             if (PrefsUtil.isPinEnabled()) {
                 // Go to PIN entry screen
                 Intent pinIntent = new Intent(activity, PinEntryActivity.class);

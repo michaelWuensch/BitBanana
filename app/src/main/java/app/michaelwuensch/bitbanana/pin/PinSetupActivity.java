@@ -10,14 +10,14 @@ import androidx.fragment.app.FragmentTransaction;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.HomeActivity;
-import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 
 
 public class PinSetupActivity extends BaseAppCompatActivity implements PinActivityInterface {

@@ -3,24 +3,36 @@ package app.michaelwuensch.bitbanana.setup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 
-import app.michaelwuensch.bitbanana.HomeActivity;
+import com.google.gson.Gson;
+
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.BBNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.connection.parseConnectionData.lndConnect.LndConnectConfig;
+import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
-import app.michaelwuensch.bitbanana.nodesManagement.ManageNodesActivity;
+import app.michaelwuensch.bitbanana.customView.VPNConfigView;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
+import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -28,20 +40,24 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
     private static final String LOG_TAG = ManualSetup.class.getSimpleName();
 
+    private BBInputFieldView mEtName;
     private BBInputFieldView mEtHost;
     private BBInputFieldView mEtPort;
     private BBInputFieldView mEtMacaroon;
     private BBInputFieldView mEtCertificate;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
+    private VPNConfigView mVpnConfigView;
     private Button mBtnSave;
+    private ImageButton mVpnHelpButton;
     private String mWalletUUID;
+    private BackendConfig mOriginalBackendConfig;
+    private Spinner mSpType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,37 +66,93 @@ public class ManualSetup extends BaseAppCompatActivity {
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.containsKey(ManageNodesActivity.NODE_ID)) {
-                mWalletUUID = extras.getString(ManageNodesActivity.NODE_ID);
+            if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
+                mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
             }
         }
 
         setContentView(R.layout.activity_manual_setup);
 
+        mEtName = findViewById(R.id.inputName);
         mEtHost = findViewById(R.id.inputHost);
         mEtPort = findViewById(R.id.inputPort);
         mEtMacaroon = findViewById(R.id.inputMacaroon);
         mEtCertificate = findViewById(R.id.inputCertificate);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
+        mVpnConfigView = findViewById(R.id.vpnConfigView);
         mBtnSave = findViewById(R.id.saveButton);
+        mVpnHelpButton = findViewById(R.id.vpnHelpButton);
+        mSpType = findViewById(R.id.typeSpinner);
+
+        mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        String[] items = new String[3];
+        items[0] = BaseBackendConfig.BackendType.LND_GRPC.getDisplayName();
+        items[1] = BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
+        items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
+
+        mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
+        mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        // Lnd gRPC
+                    case 1:
+                        // Core Lightning gRPC
+                        mEtPort.setVisibility(View.VISIBLE);
+                        mEtMacaroon.setVisibility(View.VISIBLE);
+                        mEtCertificate.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        // Lnd Hub
+                        mEtPort.setVisibility(View.GONE);
+                        mEtMacaroon.setVisibility(View.GONE);
+                        mEtCertificate.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
-            BBNodeConfig BBNodeConfig = NodeConfigsManager.getInstance().getNodeConfigById(mWalletUUID);
-            mEtHost.setValue(BBNodeConfig.getHost());
-            mEtPort.setValue(String.valueOf(BBNodeConfig.getPort()));
-            mEtMacaroon.setValue(BBNodeConfig.getMacaroon());
-            mSwTor.setChecked(BBNodeConfig.getUseTor());
-            if (BBNodeConfig.getUseTor()) {
+            BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
+            mOriginalBackendConfig = BackendConfig;
+            switch (BackendConfig.getBackendType()) {
+                case LND_GRPC:
+                    mSpType.setSelection(0);
+                    break;
+                case CORE_LIGHTNING_GRPC:
+                    mSpType.setSelection(1);
+                    break;
+                case LND_HUB:
+                    mSpType.setSelection(2);
+                    break;
+            }
+            mEtName.setValue(BackendConfig.getAlias());
+            mEtHost.setValue(BackendConfig.getHost());
+            mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
+            mEtMacaroon.setValue(BackendConfig.getMacaroon());
+            mSwTor.setChecked(BackendConfig.getUseTor());
+            mVpnConfigView.setupWithVpnConfig(BackendConfig.getVpnConfig());
+            if (BackendConfig.getUseTor()) {
                 mSwVerify.setChecked(false);
                 mSwVerify.setVisibility(View.GONE);
             } else {
-                mSwVerify.setChecked(BBNodeConfig.getVerifyCertificate());
+                mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             }
-            if (BBNodeConfig.getCert() != null && !BBNodeConfig.getCert().isEmpty()) {
-                mEtCertificate.setValue(BBNodeConfig.getCert());
+            if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
+                mEtCertificate.setValue(BackendConfig.getCert());
             }
+        } else {
+            mSpType.setSelection(0);
         }
 
         mSwTor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -112,72 +184,94 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
+        mVpnHelpButton.setVisibility(FeatureManager.isHelpButtonsEnabled() ? View.VISIBLE : View.GONE);
+        mVpnHelpButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                HelpDialogUtil.showDialog(ManualSetup.this, R.string.help_dialog_vpn_automation);
+            }
+        });
+
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mEtHost.getData().isEmpty()) {
-                    showError("Host must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (mEtPort.getData().isEmpty()) {
-                    showError("Port must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (mEtMacaroon.getData().isEmpty()) {
-                    showError("Macaroon must not be empty!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-                if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
-                    showError("Macaroon must be provided in hex format!", RefConstants.ERROR_DURATION_SHORT);
-                    return;
-                }
-
-                // everything is ok
-                LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setHost(mEtHost.getData());
-                lndConnectConfig.setPort(Integer.parseInt(mEtPort.getData()));
-                lndConnectConfig.setMacaroon(mEtMacaroon.getData());
-                lndConnectConfig.setUseTor(mSwTor.isChecked());
-                lndConnectConfig.setVerifyCertificate(mSwVerify.isChecked());
-                if (!mEtCertificate.getData().isEmpty()) {
-                    lndConnectConfig.setCert(mEtCertificate.getData());
-                }
-                connect(lndConnectConfig);
+                save();
             }
         });
     }
 
-    private void connect(BaseNodeConfig baseNodeConfig) {
-        // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, baseNodeConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+    private BackendConfig getBackendConfig() {
+        BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setAlias(mEtName.getData());
+        switch (mSpType.getSelectedItemPosition()) {
+            case 0:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                break;
+            case 1:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                break;
+            case 2:
+                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
+                break;
+        }
+        backendConfig.setHost(mEtHost.getData());
+        try {
+            backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
+        } catch (Exception ignored) {
+        }
+        backendConfig.setMacaroon(mEtMacaroon.getData());
+        backendConfig.setUseTor(mSwTor.isChecked());
+        backendConfig.setVerifyCertificate(mSwVerify.isChecked());
+        backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
+        backendConfig.setCert(mEtCertificate.getData());
+        if (mOriginalBackendConfig != null) {
+            backendConfig.setId(mOriginalBackendConfig.getId());
+            backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
+            backendConfig.setLocation(mOriginalBackendConfig.getLocation());
+        }
+        return backendConfig;
+    }
+
+    private void save() {
+        if (mEtName.getData() == null || mEtName.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.name)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty()) {
+            showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+        if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
+            showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+
+        // everything is ok
+        BackendConfig backendConfig = getBackendConfig();
+
+        RemoteConnectUtil.saveRemoteConfiguration(ManualSetup.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {
 
                 // The configuration was saved. Now make it the currently active wallet.
-                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_NODE_CONFIG, id).commit();
+                PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
                 // Do not ask for pin again...
                 TimeOutUtil.getInstance().restartTimer();
-
-                // In case another wallet was open before, we want to have all values reset.
-                Wallet.getInstance().reset();
 
                 // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
                 Intent intent = new Intent(ManualSetup.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }
-
-            @Override
-            public void onAlreadyExists() {
-                new AlertDialog.Builder(ManualSetup.this)
-                        .setMessage(R.string.node_already_exists)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        }).show();
             }
 
             @Override
@@ -201,11 +295,81 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (id == R.id.scanButton) {
             Intent intent = new Intent(ManualSetup.this, ConnectRemoteNodeActivity.class);
-            intent.putExtra(ManageNodesActivity.NODE_ID, mWalletUUID);
+            intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mWalletUUID);
             startActivity(intent);
             return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mWalletUUID != null) {
+            // we are in edit mode
+            String original = new Gson().toJson(mOriginalBackendConfig);
+            String actual = new Gson().toJson(getBackendConfig());
+
+            if (!original.equals(actual))
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.unsaved_changes)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                save();
+                            }
+                        })
+                        .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ManualSetup.super.onBackPressed();
+                            }
+                        })
+                        .show();
+            else
+                ManualSetup.super.onBackPressed();
+        } else {
+            // we are in add manually mode
+            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon != null || mEtCertificate != null) {
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.unsaved_changes)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                save();
+                            }
+                        })
+                        .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ManualSetup.super.onBackPressed();
+                            }
+                        })
+                        .show();
+            } else {
+                ManualSetup.super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == VPNUtil.PERMISSION_WIREGUARD_REQUEST_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                int grantResult = grantResults[i];
+
+                if (permission.equals(VPNUtil.PERMISSION_WIREGUARD)) {
+                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                        mVpnConfigView.updateView(mVpnConfigView.getVPNConfig().getVpnType());
+                    }
+                }
+            }
+        }
     }
 }

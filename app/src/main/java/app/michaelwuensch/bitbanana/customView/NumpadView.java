@@ -103,7 +103,7 @@ public class NumpadView extends ConstraintLayout {
         });
     }
 
-    public void clearInput(){
+    public void clearInput() {
         if (mEditText != null) {
             mEditText.getEditableText().clear();
         }

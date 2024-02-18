@@ -120,7 +120,7 @@ public class TimeFormatUtil {
 
         if (duration < 86400) {
             formattedString = hoursString + divider(hoursString, minutesString) + minutesString;
-        } else if (duration < 31536000){
+        } else if (duration < 31536000) {
             formattedString = daysString + divider(daysString, hoursString) + hoursString;
         } else {
             formattedString = yearsString + divider(yearsString, daysString) + daysString;

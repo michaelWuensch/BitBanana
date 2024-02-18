@@ -5,7 +5,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
 
 /**
  * This class manages the decoding of bech32 encoded lnurls.
- *
+ * <p>
  * Please refer to the following specification:
  * https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md
  */

@@ -4,13 +4,13 @@ import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import java.net.URL;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -33,6 +33,7 @@ public class BitcoinStringAnalyzerTest {
     public static final int RESULT_BTCPAY_CONNECT = 10;
     public static final int RESULT_NODE_URI = 11;
     public static final int RESULT_URL = 12;
+    public static final int RESULT_LNDHUB_CONNECT = 13;
     private static final String ERROR_LNURL_CHECK_FAILED = "The end result was a lnurl, but BitcoinStringAnalyzer.isLnUrl() did not recognize it.";
 
     CompositeDisposable mCompositeDisposable;
@@ -120,7 +121,7 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
                 if (expected == RESULT_LND_CONNECT)
                     mResultListener.onSuccess(input, RESULT_LND_CONNECT, null);
                 else
@@ -128,7 +129,15 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                if (expected == RESULT_LNDHUB_CONNECT)
+                    mResultListener.onSuccess(input, RESULT_LNDHUB_CONNECT, null);
+                else
+                    mResultListener.onFailed(input, expected, RESULT_LNDHUB_CONNECT, null);
+            }
+
+            @Override
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 if (expected == RESULT_BTCPAY_CONNECT)
                     mResultListener.onSuccess(input, RESULT_BTCPAY_CONNECT, null);
                 else

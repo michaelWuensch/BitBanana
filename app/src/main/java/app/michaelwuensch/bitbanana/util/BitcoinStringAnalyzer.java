@@ -10,11 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.connection.BaseNodeConfig;
-import app.michaelwuensch.bitbanana.connection.manageNodeConfigs.NodeConfigsManager;
-import app.michaelwuensch.bitbanana.lightning.LNAddress;
-import app.michaelwuensch.bitbanana.lightning.LightningNodeUri;
-import app.michaelwuensch.bitbanana.lightning.LightningParser;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -22,6 +19,8 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class BitcoinStringAnalyzer {
@@ -109,13 +108,18 @@ public class BitcoinStringAnalyzer {
     private static void checkIfRemoteConnection(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         RemoteConnectUtil.decodeConnectionString(ctx, inputString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseNodeConfig baseNodeConfig) {
-                listener.onValidLndConnectString(baseNodeConfig);
+            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
+                listener.onValidLndConnectString(baseBackendConfig);
             }
 
             @Override
-            public void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig) {
-                listener.onValidBTCPayConnectData(baseNodeConfig);
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                listener.onValidLndHubConnectString(baseBackendConfig);
+            }
+
+            @Override
+            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                listener.onValidBTCPayConnectData(baseBackendConfig);
             }
 
             @Override
@@ -131,13 +135,13 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfNodeUri(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        LightningNodeUri nodeUri = LightningParser.parseNodeUri(inputString);
+        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(inputString);
 
         if (nodeUri != null) {
             listener.onValidNodeUri(nodeUri);
 
         } else {
-            if (NodeConfigsManager.getInstance().hasAnyConfigs()) {
+            if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                 checkIfLnOrBitcoinInvoice(ctx, compositeDisposable, inputString, listener);
             } else {
                 listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
@@ -217,9 +221,11 @@ public class BitcoinStringAnalyzer {
 
         void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
-        void onValidLndConnectString(BaseNodeConfig baseNodeConfig);
+        void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
 
-        void onValidBTCPayConnectData(BaseNodeConfig baseNodeConfig);
+        void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
+
+        void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
 
