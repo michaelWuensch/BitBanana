@@ -406,6 +406,7 @@
     <string name="error_tor_might_cause_problem">Tor could cause this issue. Please try to deactivate tor in the settings.</string>
     <string name="error_grpc_setup_failed">Failed to initiate gRPC connection.</string>
     <string name="error_tor_bootstrapping_failed">Tor bootstrapping failed.</string>
+    <string name="error_unknown_backend">Unknown backend type.</string>
     <string name="error_input_field_empty">The %1$s input field must not be empty.</string>
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
     <string name="error_duplication">Duplication failed.</string>
