@@ -133,6 +133,11 @@ public class ClipBoardUtil {
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }

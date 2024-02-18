@@ -113,6 +113,11 @@ public class BitcoinStringAnalyzer {
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                listener.onValidLndHubConnectString(baseBackendConfig);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 listener.onValidBTCPayConnectData(baseBackendConfig);
             }
@@ -217,6 +222,8 @@ public class BitcoinStringAnalyzer {
         void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
         void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
+
+        void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
 
         void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
 

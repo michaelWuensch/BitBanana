@@ -120,6 +120,11 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
+                    public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                        invalidInput();
+                    }
+
+                    @Override
                     public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                         invalidInput();
                     }

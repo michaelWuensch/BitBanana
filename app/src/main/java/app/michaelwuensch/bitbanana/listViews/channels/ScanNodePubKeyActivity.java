@@ -114,6 +114,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }

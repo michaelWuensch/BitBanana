@@ -129,6 +129,11 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                readableDataFound(data);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 readableDataFound(data);
             }

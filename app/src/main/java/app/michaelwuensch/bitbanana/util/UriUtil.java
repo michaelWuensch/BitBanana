@@ -13,6 +13,7 @@ public class UriUtil {
     public static final String URI_PREFIX_LNURLP = "lnurlp://";
     public static final String URI_PREFIX_LNURLW = "lnurlw://";
     public static final String URI_PREFIX_LNURLA = "keyauth://";
+    public static final String URI_PREFIX_LND_HUB = "lndhub://";
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -62,6 +63,10 @@ public class UriUtil {
         return hasPrefix(URI_PREFIX_LNURLA, data);
     }
 
+    public static boolean isLNDHUBUri(String data) {
+        return hasPrefix(URI_PREFIX_LND_HUB, data);
+    }
+
     public static String removeURI(@NonNull String data) {
         if (isLightningUri(data)) {
             return data.substring(URI_PREFIX_LIGHTNING.length());
@@ -77,6 +82,8 @@ public class UriUtil {
             return data.substring((URI_PREFIX_LNURLW).length());
         } else if (isLNURLAUri(data)) {
             return data.substring((URI_PREFIX_LNURLA).length());
+        } else if (isLNDHUBUri(data)) {
+            return data.substring((URI_PREFIX_LND_HUB).length());
         } else {
             return data;
         }

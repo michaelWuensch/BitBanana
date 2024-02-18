@@ -71,6 +71,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
+                <data android:scheme="lndhub" />
             </intent-filter>
             <intent-filter>
 
@@ -86,6 +87,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
+                <data android:scheme="lndhub" />
             </intent-filter>
         </activity>
 

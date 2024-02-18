@@ -90,6 +90,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 connectIfUserConfirms(baseBackendConfig);
             }

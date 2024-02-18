@@ -14,6 +14,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
+import app.michaelwuensch.bitbanana.util.UriUtil;
 
 /**
  * This class parses a lndconnect which is defined in this project:
@@ -48,7 +49,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
         }
 
         // validate scheme
-        if (!mConnectionString.toLowerCase().startsWith("lndconnect://")) {
+        if (!UriUtil.isLNDConnectUri(mConnectionString)) {
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }

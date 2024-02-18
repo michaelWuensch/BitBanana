@@ -704,6 +704,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                addWallet(baseBackendConfig);
+            }
+
+            @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
                 addWallet(baseBackendConfig);
             }

@@ -33,6 +33,7 @@ public class BitcoinStringAnalyzerTest {
     public static final int RESULT_BTCPAY_CONNECT = 10;
     public static final int RESULT_NODE_URI = 11;
     public static final int RESULT_URL = 12;
+    public static final int RESULT_LNDHUB_CONNECT = 13;
     private static final String ERROR_LNURL_CHECK_FAILED = "The end result was a lnurl, but BitcoinStringAnalyzer.isLnUrl() did not recognize it.";
 
     CompositeDisposable mCompositeDisposable;
@@ -125,6 +126,14 @@ public class BitcoinStringAnalyzerTest {
                     mResultListener.onSuccess(input, RESULT_LND_CONNECT, null);
                 else
                     mResultListener.onFailed(input, expected, RESULT_LND_CONNECT, null);
+            }
+
+            @Override
+            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
+                if (expected == RESULT_LNDHUB_CONNECT)
+                    mResultListener.onSuccess(input, RESULT_LNDHUB_CONNECT, null);
+                else
+                    mResultListener.onFailed(input, expected, RESULT_LNDHUB_CONNECT, null);
             }
 
             @Override

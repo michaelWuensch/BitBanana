@@ -21,6 +21,8 @@ import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
+import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectStringParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import okhttp3.Call;
@@ -39,6 +41,10 @@ public class RemoteConnectUtil {
         }
         if (UriUtil.isLNDConnectUri(data)) {
             decodeLndConnectString(ctx, data, listener);
+        } else if (UriUtil.isLNDHUBUri(data)) {
+            listener.onNoConnectData();
+            // ToDo: replace the above line with the following to enable scanning for lndhub strings
+            // decodeLndHubConnectString(ctx, data, listener);
         } else if (data.startsWith("config=")) {
             // URL to BTCPayConfigJson
             String configUrl = data.replace("config=", "");
@@ -105,6 +111,20 @@ public class RemoteConnectUtil {
             }
         } else {
             listener.onValidLndConnectString(parser.getConnectionConfig());
+        }
+    }
+
+    private static void decodeLndHubConnectString(Context ctx, String data, OnRemoteConnectDecodedListener listener) {
+        LndHubConnectStringParser parser = new LndHubConnectStringParser(data).parse();
+
+        if (parser.hasError()) {
+            switch (parser.getError()) {
+                case LndHubConnectStringParser.ERROR_INVALID_CONNECT_STRING:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_invalidLndHubConnectString), RefConstants.ERROR_DURATION_LONG);
+                    break;
+            }
+        } else {
+            listener.onValidLndHubConnectString(parser.getConnectionConfig());
         }
     }
 
@@ -218,6 +238,38 @@ public class RemoteConnectUtil {
 
                 listener.onSaved(id);
 
+            } else if (config instanceof LndHubConnectConfig) {
+                LndHubConnectConfig lndHubConnectConfig = (LndHubConnectConfig) config;
+
+                String id;
+                if (walletUUID == null) {
+
+                    BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setAlias(lndHubConnectConfig.getHost());
+                    configToAdd.setHost(lndHubConnectConfig.getHost());
+                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
+                    configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
+                    configToAdd.setUser(lndHubConnectConfig.getUser());
+                    configToAdd.setPassword(lndHubConnectConfig.getPassword());
+                    configToAdd.setVpnConfig(new VPNConfig());
+
+                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
+                } else {
+                    id = walletUUID;
+                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
+                    // Here we only override the information that is actually contained in the lndhub connect string. We want to keep everything else as it is
+                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
+                    backendConfig.setHost(lndHubConnectConfig.getHost());
+                    backendConfig.setUser(lndHubConnectConfig.getUser());
+                    backendConfig.setPassword(lndHubConnectConfig.getPassword());
+                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
+                    backendConfigsManager.updateBackendConfig(backendConfig);
+                }
+
+                backendConfigsManager.apply();
+
+                listener.onSaved(id);
+
             } else if (config instanceof BTCPayConfig) {
                 BTCPayConfig btcPayConfig = (BTCPayConfig) config;
 
@@ -276,6 +328,8 @@ public class RemoteConnectUtil {
     public interface OnRemoteConnectDecodedListener {
 
         void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
+
+        void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
 
         void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
 
