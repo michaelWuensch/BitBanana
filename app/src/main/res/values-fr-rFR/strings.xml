@@ -205,7 +205,9 @@
     <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.\n\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.\n\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
     <string name="error_connection_network_unreachable">Impossible de joindre l\'hôte.\n\nVeuillez vous assurer que vous disposez d\'une connexion Internet.</string>
     <string name="error_connection_unknown">La connexion a échoué.</string>
-    <string name="error_connection_tor_bootstrapping">Tor n\'a pas pu démarrer.\n\nBitBanana Android prend désormais en charge Tor nativement. Si vous utilisez Orbot, veuillez supprimer BitBanana de la liste Vpn apps d\'Orbot ou arrêter complètement Orbot.</string>
+    <string name="error_connection_tor_bootstrapping">Tor n\'a pas pu démarrer.
+\n
+\nBitBanana Android prend désormais en charge Tor nativement. Si vous utilisez Orbot, veuillez supprimer BitBanana de la liste Vpn apps d\'Orbot ou arrêter complètement Orbot.</string>
     <string name="error_connection_wallet_locked">Veuillez déverrouiller le portefeuille.</string>
     <string name="error_connection_btcpay_invalid_json">La syntaxe JSON de la configuration du serveur BTCPay est invalide.</string>
     <string name="error_connection_btcpay_invalid_config">La configuration du serveur BTCPay ne spécifie pas de configuration gRPC pour Bitcoin.</string>
@@ -287,7 +289,11 @@
     <string name="help_dialog_scanPaymentRequest">Les QR-Codes contenant les éléments suivants sont valides :\n\n- Adresse Bitcoin\n- Demande de paiement Bitcoin\n- Demande de paiement Lightning</string>
     <string name="help_dialog_scanNodePublicKey">Les QR-Codes contenant les éléments suivants sont valides :\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanContact">Les codes QR contenant les éléments suivants sont valides :\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">Les QR-Codes contenant les éléments suivants sont valides :\n\n- Chaîne lndconnect (lndconnect://...)\n- Connexion BtcPayServer (config=...)\n- Contenu complet de votre fichier de configuration BTCPay Server</string>
+    <string name="help_dialog_scanConnectionInfo">Les QR-Codes contenant les éléments suivants sont valides :
+\n
+\n- Chaîne lndconnect (lndconnect://...)
+\n- Connexion BtcPayServer (config=...)
+\n- Contenu complet de votre fichier de configuration BTCPay Server</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instantané\n+ frais réduits\n- pas toujours possible\n\n Parfait pour les petites transactions.\n À utiliser chaque fois que possible.\n\n\n On-Chain :\n\n+ toujours possible\n- plus lent\ n- frais plus élevés\n\n Bon pour les grosses transactions.\n Utilisez-le lorsque Lightning n\'est pas possible.</string>
     <string name="help_dialog_scanGeneric">Tout est autorisé ici.\nScannez simplement un QR-Code et BitBanana déterminera automatiquement l\'action à entreprendre en fonction des données.</string>
     <string name="help_dialog_identity">Il s\'agit de votre identité sur le réseau Lightning.\n\nLorsque vous appuyez sur l\'image de votre avatar, vous révélerez un QR-Code.\nD\'autres peuvent scanner ce code et vous ajouter à leurs contacts, ouvrir des canaux avec vous ou vous envoyer de l\'argent. \n\nCet avatar est unique.\nIl a été généré automatiquement en fonction de votre clé publique et ne peut pas être modifié.</string>
