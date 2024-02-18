@@ -85,6 +85,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         mVpnHelpButton = findViewById(R.id.vpnHelpButton);
         mSpType = findViewById(R.id.typeSpinner);
 
+        mEtName.setSingleLine(true);
+        mEtHost.setSingleLine(true);
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         String[] items = new String[3];
