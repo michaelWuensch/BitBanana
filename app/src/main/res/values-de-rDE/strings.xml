@@ -117,7 +117,12 @@
     <string name="channel_close_success">Kanalschließung erfolgreich eingeleitet</string>
     <string name="channel_close_force">Kanalschließung erzwingen</string>
     <string name="channel_close_error">Fehler beim Schließen</string>
-    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit\n\n%s\n\nschließen?</string>
+    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit
+\n
+\n%s
+\n
+\nschließen?
+\n</string>
     <string name="channel_close_force_confirmation">Willst du wirklich die Kanalschließung mit
 \n
 \n%1$s
@@ -217,7 +222,7 @@
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
 \n
-\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
     <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
     <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
@@ -232,7 +237,7 @@
     <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
     <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.
 \n
-\nBitBanana Android unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne Bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
+\nBitBanana unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
@@ -367,7 +372,7 @@
     <string name="lnurl_service_not_responding">%s antwortet nicht</string>
     <string name="lnurl_service">Dienst</string>
     <string name="lnurl_service_provided_invalid_data">Der Dienst mit dem du interagierst hat ungültige Daten übermittelt.</string>
-    <string name="lnurl_channel_opening_question">Möchtest du wirklich einen Kanal mit folgendem Peer öffnen?</string>
+    <string name="lnurl_channel_opening_question">Möchtest du wirklich einen Kanal mit folgendem Peer öffnen:</string>
     <string name="lnurl_channel_pending_hint">Der Kanal wird geöffnet. Das kann eine Weile dauern.\nDu kannst den Status des Kanals jederzeit in deiner Kanalübersicht überprüfen.</string>
     <string name="lnurl_pay_insufficient_channel_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsanfrage geschickt.</string>
@@ -672,7 +677,7 @@
 \nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist.
 \n
 \nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und über diese Schnittstelle auf weitere Details über deine Peers zuzugreifen.</string>
-    <string name="settings_featurePeers">Peer Management</string>
+    <string name="settings_featurePeers">Peer-Verwaltung</string>
     <string name="forwarding_avg_earned_description">Durchschnittliche Einnahmen pro Ereignis</string>
     <string name="peer_total_capacity_explanation">Gesamtkapazität des Knotens, die sich aus der Summe der Kanalkapazitäten ergibt.</string>
     <string name="peer_flap_count_explanation">Gesamtzahl der Fälle, in denen dieser Peer offline oder online geht, dokumentiert über alle Neustarts. Die Anzahl verringert sich allmählich, wenn der Peer in letzter Zeit nicht ausgefallen ist, so dass historisch hohe Verbindungsabbrüche verziehen werden können.</string>
@@ -730,10 +735,10 @@
     <string name="discard">Verwerfen</string>
     <string name="duplication_successful">Die Duplizierung war erfolgreich.</string>
     <string name="guardian_custodial_lndhub">Du bist dabei, dich mit einem LNDHub-Konto zu verbinden. Wenn du nicht der Host des LNDHubs bist, handelt es sich um eine Vermögensverwaltung. Wer auch immer den LNDHub kontrolliert, hat die Kontrolle über dein Geld. Zahle nur so viel ein, wie du dieser Person anvertrauen kannst.</string>
-    <string name="error_connection_invalidLndHubConnectString">Ungültige lndhub Verbindungsdaten. 
+    <string name="error_connection_invalidLndHubConnectString">Ungültige LNDHub Verbindungsdaten. 
 \nBitte stelle sicher, dass du das folgende Format verwendest: 
 \n 
-\nlndhub://:@<host/></string>
+\nlndhub://[Benutzer]:[Passwort]@[Host]</string>
     <string name="error_tor_bootstrapping_failed">Tor-Bootstrapping ist fehlgeschlagen.</string>
     <string name="vpn_start_on_open">Beim Öffnen starten</string>
     <string name="error_input_macaroon_hex">Das Macaroon muss im Hex-Format angegeben werden.</string>
