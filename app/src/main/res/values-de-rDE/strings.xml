@@ -699,4 +699,43 @@
     <string name="lnurl_auth_login_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst anzumelden?</string>
     <string name="lnurl_auth_auth_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst zu authentifizieren?</string>
     <string name="lnurl_auth_register_info">Möchtest du deinen Knoten verwenden, um ein Konto bei diesem Dienst zu registrieren?</string>
+    <string name="error_grpc_setup_failed">Die gRPC-Verbindung konnte nicht initiiert werden.</string>
+    <string name="type">Typ</string>
+    <string name="duplicate">Duplizieren</string>
+    <string name="error_unknown_backend">Unbekannter Backend-Typ.</string>
+    <string name="error_input_field_empty">Das %1$s Eingabefeld darf nicht leer sein.</string>
+    <string name="error_duplication">Die Duplizierung ist fehlgeschlagen.</string>
+    <string name="help_dialog_node_nickname">Der Name wird nur verwendet, um deine Nodes in BitBanana zu organisieren. Er hat keine anderen Auswirkungen.</string>
+    <string name="name_duplicate">Name des Duplikats</string>
+    <string name="name">Name</string>
+    <string name="vpn">VPN</string>
+    <string name="vpn_automation">VPN-Automatisierung</string>
+    <string name="vpn_no_vpn">Kein VPN</string>
+    <string name="vpn_stop_on_close">Beim Schließen stoppen</string>
+    <string name="vpn_tunnel_name">Tunnel</string>
+    <string name="vpn_wireguard_additional_info">Um die Automatisierung von WireGuard zu ermöglichen, musst du die WireGuard-App öffnen, zu den Einstellungen navigieren und dann die Kontrolle für externe Apps erlauben.</string>
+    <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">Um dieses VPN zu nutzen, musst du zuerst die %1$s-App installieren.</string>
+    <string name="vpn_unable_to_start">Ups! Es sieht so aus, als ob das VPN nicht automatisch gestartet werden kann.</string>
+    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Du musst die %1$s-App installieren, um das in deinen Verbindungseinstellungen angegebene VPN zu verwenden.</string>
+    <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Du musst BitBanana die Erlaubnis geben, %1$s zu steuern.</string>
+    <string name="vpn_change_battery_settings">Batterieeinstellungen ändern</string>
+    <string name="connection_state_starting_vpn">VPN wird gestartet…</string>
+    <string name="connection_state_disconnecting">Vorhandene Verbindungen werden getrennt…</string>
+    <string name="connection_state_starting_tor">Tor wird gestartet…</string>
+    <string name="connection_state_connecting">Verbindung wird hergestellt…</string>
+    <string name="unsaved_changes">Es gibt nicht gespeicherte Änderungen.</string>
+    <string name="discard">Verwerfen</string>
+    <string name="duplication_successful">Die Duplizierung war erfolgreich.</string>
+    <string name="guardian_custodial_lndhub">Du bist dabei, dich mit einem LNDHub-Konto zu verbinden. Wenn du nicht der Host des LNDHubs bist, handelt es sich um eine Vermögensverwaltung. Wer auch immer den LNDHub kontrolliert, hat die Kontrolle über dein Geld. Zahle nur so viel ein, wie du dieser Person anvertrauen kannst.</string>
+    <string name="error_connection_invalidLndHubConnectString">Ungültige lndhub Verbindungsdaten.
+\nBitte stelle sicher, dass du das folgende Format verwendest:
+\n
+\nlndhub://:@<host/></string>
+    <string name="error_tor_bootstrapping_failed">Tor-Bootstrapping ist fehlgeschlagen.</string>
+    <string name="vpn_start_on_open">Beim Öffnen starten</string>
+    <string name="error_input_macaroon_hex">Das Macaroon muss im Hex-Format angegeben werden.</string>
+    <string name="help_dialog_vpn_automation">Diese Einstellung macht die Verwendung eines VPN bequemer, da sie den Vorgang automatisiert. Du kannst dich auch dann mit einem VPN verbinden, wenn du hier nichts auswählst, aber dann musst du das VPN manuell starten und stoppen, wenn du eine Verbindung herstellen willst.</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Stelle sicher, dass die %1$s-App im Hintergrund ausgeführt wird. Wenn dies der Fall ist, stelle sicher, dass alle Android-Akku-Optimierungen für %1$s deaktiviert sind, und starte dann die %1$s-App neu. Verwende die Schaltfläche unten, um zu den Einstellungen zu gelangen.
+\n
+\nWenn auch das nicht hilft, öffne die %1$s-App und starte das VPN manuell, um das Problem zu beheben.</string>
 </resources>
