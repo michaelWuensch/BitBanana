@@ -195,7 +195,10 @@
     <string name="error_qr_code_result_null">Impossible de lire le QR Code. Veuillez réessayer.</string>
     <string name="error_connection_unsupported_format">Format de connexion non pris en charge.\nVeuillez utiliser un des formats suivants :\n\n- Chaîne lndconnect (lndconnect://...)\n- Configuration de BTCPay Server (config=...)\n- contenu de votre fichier de configuration BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Impossible de récupérer la configuration de BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Chaîne lndconnect invalide.\nAssurez-vous d\'utiliser le format suivant :\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Chaîne lndconnect invalide.
+\nAssurez-vous d\'utiliser le format suivant :
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Le certificat est invalide.</string>
     <string name="error_connection_no_macaroon">Vos informations de connexion ne contiennent pas de fichier macaroon. Un fichier macaroon est nécessaire.</string>
     <string name="error_connection_invalid_macaroon">Le fichier macaroon est invalide.</string>
