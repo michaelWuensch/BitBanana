@@ -654,6 +654,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                             if (errorCode == InvoiceUtil.ERROR_INVOICE_EXPIRED)
                                 Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_expired, Toast.LENGTH_LONG).show();
+                            else
+                                Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_invalid_data, Toast.LENGTH_LONG).show();
                         }
 
                         @Override
