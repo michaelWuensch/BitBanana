@@ -33,6 +33,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Connect to remote lightning nodes (Only LND supported right now)
 - [x] Available in many languages
 - [x] Explanations and help across the app
+- [x] Convenient VPN automation
 - [x] And of course, BitBanana is Bitcoin only!
 
 **Node Management**
