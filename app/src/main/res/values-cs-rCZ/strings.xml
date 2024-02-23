@@ -44,7 +44,7 @@
     <string name="node">Uzel</string>
     <string name="amount_invalid">Částka je neplatná.</string>
     <string name="success">Úspěch</string>
-    <string name="suggested_peers">Doporučené peery</string>
+    <string name="suggested_peers">Doporučené protistrany</string>
     <string name="none">Žádný</string>
     <string name="install">Instalovat</string>
     <string name="continue_string">Pokračovat</string>
@@ -178,7 +178,7 @@
     <string name="settings_manageChannels">Správa Lightning kanálů</string>
     <string name="settings_scramblePin">Zamíchaná PIN obrazovka</string>
     <string name="settings_preventScreenRecording">Zabraňte nahrávání obrazovky</string>
-    <string name="settings_hideTotalBalance_explanation">Po aktivaci klepnutím na logo BitBanana na domovské obrazovce odhalíte zůstatek.</string>
+    <string name="settings_hideTotalBalance_explanation">Celkový zůstatek je nyní skrytý. Kliknutím na logo BitBanana na domovské obrazovce jej odhalíte.</string>
     <string name="settings_resetSecurityWarnings">Resetujte bezpečnostní varování</string>
     <string name="settings_help">Potřebujete pomoc?</string>
     <string name="settings_reportIssue">Nahlásit problém</string>
@@ -215,7 +215,10 @@
     <string name="error_qr_code_result_null">Nelze přečíst QR-kód, zkuste to znovu.</string>
     <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.\nPoužijte jeden z následujících formátů:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Úplný obsah vašeho BTCPay Server config souboru</string>
     <string name="error_unableToFetchBTCPayConfig">Nelze načíst konfiguraci z BTCPay Serveru.</string>
-    <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.\nUjistěte se, že jste použili následující formát:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.
+\nUjistěte se, že jste použili následující formát:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Certifikát je neplatný.</string>
     <string name="error_connection_no_macaroon">Vaše informace o připojení neobsahují macaroon. To je povinné.</string>
     <string name="error_connection_invalid_macaroon">Macaroon je neplatný.</string>
@@ -225,7 +228,9 @@
     <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
-    <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.\n\nBitBanana Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
+    <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.
+\n
+\nBitBanana Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
@@ -236,17 +241,17 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="error_connect_peer">Nelze navázat spojení s rovnocenným uzlem.</string>
-    <string name="error_connect_peer_refused">Spojení bylo peerem odmítnuto.</string>
+    <string name="error_connect_peer">Nelze navázat spojení s uzlem protistrany.</string>
+    <string name="error_connect_peer_refused">Spojení bylo protistranou odmítnuto.</string>
     <string name="error_connect_peer_self">Nelze navázat spojení se sebou samým.</string>
     <string name="error_connect_peer_no_host">Nelze se připojit k uzlu bez adresy IP nebo hostitele.</string>
-    <string name="error_connect_peer_timeout">Ve stanoveném termínu se nelze připojit k peeru.</string>
+    <string name="error_connect_peer_timeout">Ve stanoveném termínu se k protistraně nepovedlo připojit.</string>
     <string name="error_channel_open_pending_max">Počet čekajících kanálů překračuje maximum.</string>
     <string name="error_channel_open_timeout">Kanál nelze otevřít ve stanoveném termínu.</string>
     <string name="error_channel_open">Nelze otevřít kanál s připojeným uzlem: %s</string>
-    <string name="error_get_peers">Nelze načíst seznam peerů.</string>
-    <string name="error_get_peers_timeout">Peery nemohli být načteni ve lhůtě.</string>
-    <string name="error_channel_close_offline">Peer je offline. Je povoleno pouze vynucené uzavření.</string>
+    <string name="error_get_peers">Nelze načíst seznam protistran.</string>
+    <string name="error_get_peers_timeout">Protistrany nemohly být načteni v časové lhůtě.</string>
+    <string name="error_channel_close_offline">Protistrana je offline. Je povoleno pouze vynucené uzavření.</string>
     <string name="error_channel_close_timeout">Kanál nelze ve stanoveném termínu zavřít.</string>
     <string name="error_channel_close">Kanál nelze zavřít: %s</string>
     <string name="error_pin_deactivation_attempt">Vypadá to, že se někdo pokusil deaktivovat váš kód PIN. Aplikace se nyní zavře.\nMůžete aplikaci znovu nainstalovat a pomocí procesu obnovy získat zpět přístup ke svým prostředkům.</string>
@@ -333,7 +338,11 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:\n\n- Lndconnect řetězec (lndconnect://...)\n- BtcPay Server připojení (config=...)\n- Celý obsah vašeho BTCPay Server config souboru</string>
+    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:
+\n
+\n- Lndconnect řetězec (lndconnect://...)
+\n- BtcPay Server připojení (config=...)
+\n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a BitBanana automaticky určí, která akce bude provedena v závislosti na datech.</string>
     <string name="help_dialog_identity">Toto je vaše identita v lightning síti.\n\nKlepnutím na obrázek svého avatara zobrazíte QR kód.\nOstatní mohou tento kód naskenovat a přidat si vás ke svým kontaktům, otevřít s vámi kanály nebo vám poslat peníze.\n\nTento avatar je jedinečný.\nByl vygenerován automaticky na základě vašeho veřejného klíče a nelze jej změnit.</string>
@@ -454,7 +463,7 @@
     <string name="activity_manage_nodes">Spravovat uzly</string>
     <string name="settings_showHelpButtons">Zobrazovat tlačítka nápovědy</string>
     <string name="node_added">Data pro připojení k uzlu byla přidána.</string>
-    <string name="advanced_channel_details_initiator_peer">Vzdálený uzel</string>
+    <string name="advanced_channel_details_initiator_peer">Protistrana</string>
     <string name="generated_signature">Vygenerovaný podpis:</string>
     <string name="documentation">Dokumentace</string>
     <string name="activity_utxos">Mince (UTXOs)</string>
@@ -514,8 +523,6 @@
 \nPro přeposílání plateb musí být váš uzel často online. Pokud je váš uzel na mobilním zařízení nebo je často offline, neměl(a) byste přeposílat platby a použijte privátní kanály.</string>
     <string name="node_name">Jméno uzlu</string>
     <string name="confirm_node_deletion">Opravdu chcete smazat připojení k tomuto uzlu\?</string>
-    <string name="node_already_exists">Tento uzel už existuje.
-\nPokud chcete upravit jeho data o připojení jdete na stránku detailu uzlu.</string>
     <string name="useTor">Použít Tor</string>
     <string name="lnurl_payer_data_name">Jméno</string>
     <string name="lnurl_payer_data_identifier">Lightning adresa</string>
@@ -586,4 +593,100 @@
     <string name="help_dialog_connect_node_help">Bohužel jsou tyto QR kódy tak velké, že je některá zařízení nejsou schopná naskenovat. Pokud se vám to stane, budete jej muset ručně zkopírovat.
 \n
 \nPokud potřebujete pomoct, zkuste naši dokumentaci.</string>
+    <string name="help_dialog_stealth_mode">Díky režimu utajení se bude při zběžném fyzickém prohledání vašeho telefonu zdát, že aplikace BitBanana není nainstalována. Toho je docíleno změnou jména a ikonky aplikace a spuštěním zdánlivě jiné aplikace. V systémovém nastavení bude nicméně BitBanana vidět pod svým skutečným jménem a ikonkou.
+\n
+\nNení to dokonalé řešení, ale mělo by to trochu pomoci udělat váš bitcoinový software méně nápadný.</string>
+    <string name="forwarding_avg_events_per_day">Průměrně událostí za den</string>
+    <string name="signature_pubkey">Pubkey:</string>
+    <string name="htlc_min">Min HTLC</string>
+    <string name="stealth_mode_disable">Vypnout režim utajení:</string>
+    <string name="stealth_mode_disable_instruction_calc">Proveďte výpočet, jehož výsledkem bude 21</string>
+    <string name="peers_no_peers">Žádné protistrany</string>
+    <string name="peers_add">Přidat protistranu</string>
+    <string name="peer_ping">Ping</string>
+    <string name="peer_ping_explanation">Čas než protistrana odpoví.</string>
+    <string name="peer_last_flap_explanation">Čas od posledního momentu kdy šla protistrana offline.</string>
+    <string name="peer_last_errors">Poslední chyby</string>
+    <string name="peer_mutual_channels">Vzájemné kanály</string>
+    <string name="peer_mutual_channels_explanation">Počet kanálů otevřených s touto protistranou.</string>
+    <string name="peer_total_channels">Celkem kanálů</string>
+    <string name="peer_total_channels_explanation">Celkový počet veřejných kanálů protistrany.</string>
+    <string name="peer_total_capacity">Celková kapacita</string>
+    <string name="peer_total_capacity_explanation">Celková kapacita uzlu, odvozena od součtu kapacit kanálů.</string>
+    <string name="peer_features">Funkce</string>
+    <string name="balance_details_on_chain_confirmed">Potvrzeno on-chain:</string>
+    <string name="balance_details_on_chain_unconfirmed">Čekající on-chain:</string>
+    <string name="balance_details_lightning">V otevřených kanálech:</string>
+    <string name="balance_details_lightning_pending">V čekajících kanálech:</string>
+    <string name="register">Registrovat</string>
+    <string name="login_verb">Přihlásit se</string>
+    <string name="auth_link_account">Propojit s účtem</string>
+    <string name="authenticate">Ověřit</string>
+    <string name="lnurl_auth_register_info">Chcete použít váš uzel pro vytvoření účtu v dané službě?</string>
+    <string name="lnurl_auth_login_info">Chcete použít váš uzel pro přihlášení do dané služby?</string>
+    <string name="lnurl_auth_link_info">Chcete propojit váš existující účet s vaším uzlem?</string>
+    <string name="lnurl_auth_auth_info">Chcete použít váš uzel pro ověření se s danou službou?</string>
+    <string name="lnurl_auth_success">Ověření proběhlo úspěšně!</string>
+    <string name="lnurl_auth_fail">Ověření
+\nselhalo</string>
+    <string name="percent">Procent</string>
+    <string name="off">Vypnuto</string>
+    <string name="available">Dostupné</string>
+    <string name="note">Poznámka</string>
+    <string name="activity_routing_policy">Politika směrování</string>
+    <string name="settings_hideBalanceType_total">Pouze celkový zůstatek</string>
+    <string name="settings_hideBalance">Skrýt zůstatek</string>
+    <string name="settings_hideBalanceType_all">Všechny zůstatky</string>
+    <string name="fee_base">Základní poplatek</string>
+    <string name="fee_rate">Sazba poplatků</string>
+    <string name="timelock_delta">Časový zámek (bloky)</string>
+    <string name="htlc_max">Max HTLC</string>
+    <string name="routing_policy_update_success">Směrovací politika úspěšně uložena.</string>
+    <string name="routing_policy_applies_for_all_channels">Pozor! Při uložení se tato nastavení aplikují na všechny vaše kanály!</string>
+    <string name="stealth_mode_enable">Zapnout režim utajení:</string>
+    <string name="stealth_mode_enable_instruction">Zavřete aplikaci</string>
+    <string name="you">Vy</string>
+    <string name="peer">Protistrana</string>
+    <string name="submit_routing_policy">Aktualizovat politiku směrování</string>
+    <string name="description">Popis</string>
+    <string name="settings_featurePeers_summary">Správa protistran je automatická, tato funkce nicméně umožňuje manuální ovládání pro jejich správu.</string>
+    <string name="ok">OK</string>
+    <string name="forwarding_avg_earned_description">Průměrně vyděláno za událost</string>
+    <string name="forwarding_avg_volume_description">Průměrně směrováno za událost</string>
+    <string name="reliability">Spolehlivost</string>
+    <string name="network">Síť</string>
+    <string name="activity_peers">Protistrany</string>
+    <string name="help_dialog_scanPeer">QR kódy s následujícími informacemi jsou platné:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="settings_custom">Vlastní …</string>
+    <string name="guardian_invoices_without_specified_amount">Faktury bez specifické částky představují bezpečnostní riziko. Ačkoliv je to nepravděpodobné, prostředníci na platební cestě mohou takovou fakturu zneužít a přeposlat příjemci méně něž kolik očekává, a to aniž by to zjistil. Při přímé platbě sousedním uzlu toto riziko nehrozí.</string>
+    <string name="settings_features">Funkce</string>
+    <string name="settings_features_summary">Přizpůsobte si aplikaci vypnutím či zapnutím jednotlivých funkcí.</string>
+    <string name="settings_customBlockExplorer_address_suffix">Suffix pro adresu</string>
+    <string name="settings_customBlockExplorer_transaction_suffix">Suffix transakce</string>
+    <string name="settings_customBlockExplorer_transaction_suffix_description">Při vyhledání transakce v exploreru vypadá link následovně:
+\nHost + Suffix + TransactionID.</string>
+    <string name="settings_custom_block_explorer">Vlastní Block Explorer</string>
+    <string name="settings_featureHelpButtons_summary">Užitečná tlačítka s ? nabízí novým uživatelům detailní vysvětlení.</string>
+    <string name="settings_featureRoutingSummary">Shrnutí směrování</string>
+    <string name="settings_featureRoutingSummary_summary">Poskytuje přístup ke všem událostem směrování spolu se shrnutím.</string>
+    <string name="settings_featureCoinControl">Coin Control</string>
+    <string name="settings_on_off">Zapnuto / Vypnuto</string>
+    <string name="settings_customBlockExplorer_host_description">Zadejte prosím adresu svého block explorera. Když si ho hostujete sami, zůstane vaše soukromí zcela zachováno.</string>
+    <string name="settings_hideAllBalances_explanation">Všechny zůstatky jsou nyní rozmazané a celkový zůstatek je schovaný za logem BitBanana. Pro chvilkové zobrazení zůstatku klikněte na libovolné rozmazané pole nebo logo BitBanana.</string>
+    <string name="settings_customBlockExplorer_address_suffix_description">Při vyhledání adresy v exploreru vypadá link následovně:
+\nHost + Suffix + Adresa.</string>
+    <string name="stealth_mode_description_calc">BitBanana teď vypadá jako kalkulačka!</string>
+    <string name="settings_stealth_mode">Režim utajení</string>
+    <string name="settings_stealth_mode_summary">Zapněte režim utajení, abyste se chránili proti fyzickému prohledávání vašeho zařízení</string>
+    <string name="help_dialog_peers">Tento seznam obsahuje všechny protistrany momentálně připojené k vašemu uzlu. Protistrany jsou vesměs další uzly v síti. Vzájemně si vyměňují informace, aby každá měla přehled o zbytku sítě.
+\n
+\nNapř. když chce váš uzel změnit nastavení politiky kanálu tak upozorní všechny protistrany, ke kterým je připojen. Ty posléze upozorní na tuto změnu jejich připojené protistrany, což způsobí dominový efekt skrze celou síť.
+\n
+\nVáš uzel navazuje spojení automaticky, typicky k těm protistranám, se kterými máte aktivní kanál. Tato spojení můžete nicméně navazovat či ukončovat také manuálně v této aplikaci.</string>
+    <string name="settings_featurePeers">Správa protistran</string>
+    <string name="disconnect">Odpojit</string>
 </resources>

@@ -158,7 +158,10 @@
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPor favor, use um dos seguintes formatos:\n\n- String Lndconnect (lndconnect://...)\n- Conexão de BtcPay Server (config=...)\n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.\nCertifique-se de usar o seguinte formato:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
+\nCertifique-se de usar o seguinte formato:
+\n
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
     <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -574,8 +577,6 @@
     <string name="fee_tier_fast_title">Rápido</string>
     <string name="fee_tier_slow_description">Transação Lenta</string>
     <string name="fee_estimated_duration">Entrega Estimada: %1$s</string>
-    <string name="node_already_exists">O nó já existe.
-\nSe deseja atualizar seus dados de conexão, por favor vá à página de detalhes do nó.</string>
     <string name="no_nodes">Nenhum nó</string>
     <string name="lnurl_withdraw_fail">Saque
 \nfalhou</string>
@@ -610,7 +611,7 @@
     <string name="activity_manage_nodes">Gerenciar Nós</string>
     <string name="error_connection_tor_bootstrapping">Tor foi incapaz de realizar bootstrap.
 \n
-\nBitBanana Android agora suporta nativamente o Tor. Se você utiliza o Orbot, por favor remova o BitBanana da lista ativa de Tor do Orbot ou desative o Orbot completamente.</string>
+\nBitBanana suporta nativamente o Tor. Se você utiliza o Orbot, por favor remova o BitBanana da lista ativa de Tor do Orbot ou desative o Orbot completamente.</string>
     <string name="biometricNotSetup">Para usar esta ferramenta, você tem de configurar a autenticação biométrica nas configurações do seu sistema Android.</string>
     <string name="fee_limit_exceeded">A taxa para este pagamento (%1$.1f%%) excede o limite especificado nas configurações (%2$.1f%%).
 \n
@@ -778,4 +779,46 @@
     <string name="lnurl_auth_login_info">Deseja usar seu nó para fazer login neste serviço?</string>
     <string name="lnurl_auth_auth_info">Deseja usar seu nó para autenticar com este serviço?</string>
     <string name="lnurl_auth_register_info">Deseja usar seu nó para registrar uma conta neste serviço?</string>
+    <string name="connection_state_disconnecting">Limpar conexões existentes…</string>
+    <string name="connection_state_starting_vpn">Iniciando VPN…</string>
+    <string name="type">Tipo</string>
+    <string name="duplicate">Duplicar</string>
+    <string name="guardian_custodial_lndhub">Você está prestes a se conectar a uma conta LNDHub. Se você não for o host do LNDHub, isso é tutelar. Quem controla o LNDhub tem controle sobre seu dinheiro. Deposite apenas o quanto confiar a esta pessoa.</string>
+    <string name="error_tor_bootstrapping_failed">Inicialização do Tor falhou.</string>
+    <string name="error_unknown_backend">Tipo de backend desconhecido.</string>
+    <string name="error_duplication">Duplicação falhou.</string>
+    <string name="help_dialog_node_nickname">O nome é usado apenas para organizar seus nós no BitBanana. Ele não tem nenhum outro efeito.</string>
+    <string name="name_duplicate">Nome da duplicata</string>
+    <string name="name">Nome</string>
+    <string name="vpn">VPN</string>
+    <string name="vpn_no_vpn">Sem VPN</string>
+    <string name="vpn_start_on_open">Iniciar ao abrir</string>
+    <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">Para usar esta VPN você terá de instalar o app %1$s.</string>
+    <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Você terá de dar permissão ao BitBanana para controlar %1$s.</string>
+    <string name="connection_state_starting_tor">Iniciando o Tor…</string>
+    <string name="discard">Descartar</string>
+    <string name="error_connection_invalidLndHubConnectString">String de conexão lndhub inválida. 
+\nPor favor certifique-se que tenha usado o seguinte formato: 
+\n 
+\nlndhub://[user]:[password]@[host]</string>
+    <string name="error_grpc_setup_failed">Falha ao iniciar conexão gRPC.</string>
+    <string name="error_input_field_empty">O campo de entrada %1$s não pode estar vazio.</string>
+    <string name="error_input_macaroon_hex">O macaroon deve ser enviado em formato hexadecimal.</string>
+    <string name="help_dialog_vpn_automation">Esta configuração torna o uso de uma VPN mais conveniente ao automatizá-la. Você ainda pode se conectar usando uma VPN mesmo que não escolha nada aqui, mas neste caso terá de iniciar e parar a VPN manualmente sempre que quiser se conectar.</string>
+    <string name="vpn_automation">Automação da VPN</string>
+    <string name="vpn_stop_on_close">Parar ao fechar</string>
+    <string name="vpn_tunnel_name">Túnel</string>
+    <string name="vpn_wireguard_additional_info">Para permitir a automação do WireGuard você terá de abrir o app WireGuard, navegar nos ajustes, e então permitir o controle para apps externos.</string>
+    <string name="vpn_unable_to_start">Ops! Parece que a VPN não pode ser iniciada automaticamente.</string>
+    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Você terá de instalar o app %1$s para usar a VPN especificada nas suas configurações de conexão.</string>
+    <string name="connection_state_connecting">Conectando…</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Certifique-se de que o app %1$s esteja rodando em plano de fundo. Se sim, certifique-se de que todas as otimizações de bateria do Android estejam desativadas para %1$s e então reinicie o app %1$s. Use o botão abaixo para ir às configurações.
+\n
+\nSe isso também não ajudar, abra o app %1$s e inicie a VPN manualmente para resolver o problema.</string>
+    <string name="vpn_change_battery_settings">Mudar configurações de bateria</string>
+    <string name="unsaved_changes">Há alterações não salvas.</string>
+    <string name="duplication_successful">Duplicação foi bem-sucedida.</string>
+    <string name="on_chain_fallback_insufficient_funds">Fundos Lightning insuficientes. Recorrendo a pagamento on-chain.</string>
+    <string name="on_chain_fallback_expired">Pedido Lightning expirado. Recorrendo a pagamento on-chain.</string>
+    <string name="on_chain_fallback_invalid_data">Pedido Lightning inválido. Recorrendo a pagamento on-chain.</string>
 </resources>

@@ -117,7 +117,12 @@
     <string name="channel_close_success">Kanalschließung erfolgreich eingeleitet</string>
     <string name="channel_close_force">Kanalschließung erzwingen</string>
     <string name="channel_close_error">Fehler beim Schließen</string>
-    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit\n\n%s\n\nschließen?</string>
+    <string name="channel_close_confirmation">Willst du wirklich den Kanal mit
+\n
+\n%s
+\n
+\nschließen?
+\n</string>
     <string name="channel_close_force_confirmation">Willst du wirklich die Kanalschließung mit
 \n
 \n%1$s
@@ -214,7 +219,10 @@
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
     <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.\nBitte verwende eines der folgenden Formate:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
-    <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.\nBitte stelle sicher, dass du folgendes Format verwendet hast:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
+\nBitte stelle sicher, dass du folgendes Format verwendet hast:
+\n
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
     <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
     <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
@@ -227,7 +235,9 @@
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
     <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
-    <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.\n\nBitBanana Android unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne Bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
+    <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.
+\n
+\nBitBanana unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
@@ -327,7 +337,11 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Server Verbindung (config=...)
+\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.
@@ -348,7 +362,6 @@
     <string name="no_nodes">Keine Nodes</string>
     <string name="spinner_manage_nodes">Verwalten…</string>
     <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
-    <string name="node_already_exists">Diese Node existiert bereits.\nWenn du die Verbindungsdaten aktualisieren möchtest, gehe bitte zu den Node Details.</string>
     <string name="useTor">Tor verwenden</string>
     <string name="verify_certificate">Zertifikat verifizieren</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
@@ -359,7 +372,7 @@
     <string name="lnurl_service_not_responding">%s antwortet nicht</string>
     <string name="lnurl_service">Dienst</string>
     <string name="lnurl_service_provided_invalid_data">Der Dienst mit dem du interagierst hat ungültige Daten übermittelt.</string>
-    <string name="lnurl_channel_opening_question">Möchtest du wirklich einen Kanal mit folgendem Peer öffnen?</string>
+    <string name="lnurl_channel_opening_question">Möchtest du wirklich einen Kanal mit folgendem Peer öffnen:</string>
     <string name="lnurl_channel_pending_hint">Der Kanal wird geöffnet. Das kann eine Weile dauern.\nDu kannst den Status des Kanals jederzeit in deiner Kanalübersicht überprüfen.</string>
     <string name="lnurl_pay_insufficient_channel_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsanfrage geschickt.</string>
@@ -664,7 +677,7 @@
 \nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist.
 \n
 \nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und über diese Schnittstelle auf weitere Details über deine Peers zuzugreifen.</string>
-    <string name="settings_featurePeers">Peer Management</string>
+    <string name="settings_featurePeers">Peer-Verwaltung</string>
     <string name="forwarding_avg_earned_description">Durchschnittliche Einnahmen pro Ereignis</string>
     <string name="peer_total_capacity_explanation">Gesamtkapazität des Knotens, die sich aus der Summe der Kanalkapazitäten ergibt.</string>
     <string name="peer_flap_count_explanation">Gesamtzahl der Fälle, in denen dieser Peer offline oder online geht, dokumentiert über alle Neustarts. Die Anzahl verringert sich allmählich, wenn der Peer in letzter Zeit nicht ausgefallen ist, so dass historisch hohe Verbindungsabbrüche verziehen werden können.</string>
@@ -694,4 +707,46 @@
     <string name="lnurl_auth_login_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst anzumelden?</string>
     <string name="lnurl_auth_auth_info">Möchtest du deinen Knoten verwenden, um dich bei diesem Dienst zu authentifizieren?</string>
     <string name="lnurl_auth_register_info">Möchtest du deinen Knoten verwenden, um ein Konto bei diesem Dienst zu registrieren?</string>
+    <string name="error_grpc_setup_failed">Die gRPC-Verbindung konnte nicht initiiert werden.</string>
+    <string name="type">Typ</string>
+    <string name="duplicate">Duplizieren</string>
+    <string name="error_unknown_backend">Unbekannter Backend-Typ.</string>
+    <string name="error_input_field_empty">Das %1$s Eingabefeld darf nicht leer sein.</string>
+    <string name="error_duplication">Die Duplizierung ist fehlgeschlagen.</string>
+    <string name="help_dialog_node_nickname">Der Name wird nur verwendet, um deine Nodes in BitBanana zu organisieren. Er hat keine anderen Auswirkungen.</string>
+    <string name="name_duplicate">Name des Duplikats</string>
+    <string name="name">Name</string>
+    <string name="vpn">VPN</string>
+    <string name="vpn_automation">VPN-Automatisierung</string>
+    <string name="vpn_no_vpn">Kein VPN</string>
+    <string name="vpn_stop_on_close">Beim Schließen stoppen</string>
+    <string name="vpn_tunnel_name">Tunnel</string>
+    <string name="vpn_wireguard_additional_info">Um die Automatisierung von WireGuard zu ermöglichen, musst du die WireGuard-App öffnen, zu den Einstellungen navigieren und dann die Kontrolle für externe Apps erlauben.</string>
+    <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">Um dieses VPN zu nutzen, musst du zuerst die %1$s-App installieren.</string>
+    <string name="vpn_unable_to_start">Ups! Es sieht so aus, als ob das VPN nicht automatisch gestartet werden kann.</string>
+    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Du musst die %1$s-App installieren, um das in deinen Verbindungseinstellungen angegebene VPN zu verwenden.</string>
+    <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Du musst BitBanana die Erlaubnis geben, %1$s zu steuern.</string>
+    <string name="vpn_change_battery_settings">Batterieeinstellungen ändern</string>
+    <string name="connection_state_starting_vpn">VPN wird gestartet…</string>
+    <string name="connection_state_disconnecting">Vorhandene Verbindungen werden getrennt…</string>
+    <string name="connection_state_starting_tor">Tor wird gestartet…</string>
+    <string name="connection_state_connecting">Verbindung wird hergestellt…</string>
+    <string name="unsaved_changes">Es gibt nicht gespeicherte Änderungen.</string>
+    <string name="discard">Verwerfen</string>
+    <string name="duplication_successful">Die Duplizierung war erfolgreich.</string>
+    <string name="guardian_custodial_lndhub">Du bist dabei, dich mit einem LNDHub-Konto zu verbinden. Wenn du nicht der Host des LNDHubs bist, handelt es sich um eine Vermögensverwaltung. Wer auch immer den LNDHub kontrolliert, hat die Kontrolle über dein Geld. Zahle nur so viel ein, wie du dieser Person anvertrauen kannst.</string>
+    <string name="error_connection_invalidLndHubConnectString">Ungültige LNDHub Verbindungsdaten. 
+\nBitte stelle sicher, dass du das folgende Format verwendest: 
+\n 
+\nlndhub://[Benutzer]:[Passwort]@[Host]</string>
+    <string name="error_tor_bootstrapping_failed">Tor-Bootstrapping ist fehlgeschlagen.</string>
+    <string name="vpn_start_on_open">Beim Öffnen starten</string>
+    <string name="error_input_macaroon_hex">Das Macaroon muss im Hex-Format angegeben werden.</string>
+    <string name="help_dialog_vpn_automation">Diese Einstellung macht die Verwendung eines VPN bequemer, da sie den Vorgang automatisiert. Du kannst dich auch dann mit einem VPN verbinden, wenn du hier nichts auswählst, aber dann musst du das VPN manuell starten und stoppen, wenn du eine Verbindung herstellen willst.</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Stelle sicher, dass die %1$s-App im Hintergrund ausgeführt wird. Wenn dies der Fall ist, stelle sicher, dass alle Android-Akku-Optimierungen für %1$s deaktiviert sind, und starte dann die %1$s-App neu. Verwende die Schaltfläche unten, um zu den Einstellungen zu gelangen.
+\n
+\nWenn auch das nicht hilft, öffne die %1$s-App und starte das VPN manuell, um das Problem zu beheben.</string>
+    <string name="on_chain_fallback_insufficient_funds">Unzureichendes Lightning-Guthaben. Fallback auf On-Chain-Zahlung.</string>
+    <string name="on_chain_fallback_expired">Lightning-Anfrage ist abgelaufen. Fallback auf On-Chain-Zahlung.</string>
+    <string name="on_chain_fallback_invalid_data">Ungültige Lightning-Anfrage. Fallback auf On-Chain-Zahlung.</string>
 </resources>

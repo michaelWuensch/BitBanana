@@ -506,9 +506,9 @@
 \n- Cadeia Lndconnect (lndconnect://...)
 \n- Conexão de BtcPay Server (config=...)
 \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
-    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida.
-\nCertifique-se de usar o seguinte formato:
-\n
+    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. 
+\nCertifique-se de usar o seguinte formato: 
+\n 
 \nlndconnect://<ip>:<port>\?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</port></ip></string>
     <string name="error_connection_no_macaroon">As suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -620,8 +620,6 @@
 \n
 \nSe uma caixa de seleção não puder ser desmarcada então este dado é marcado como obrigatório pelo beneficiário. Se não quiser enviar este dado, terá de cancelar o pagamento.</string>
     <string name="node_added">Dados de conexão de nó foram adicionados.</string>
-    <string name="node_already_exists">O nó já existe.
-\nSe deseja atualizar os seus dados de conexão, por favor vá à página de detalhes do nó.</string>
     <string name="lnurl_decoding_no_lnurl_data">Os dados não contêm um LNURL válido.</string>
     <string name="lnurl_unsupported_type">Tipo LNURL não suportado</string>
     <string name="lnurl_service_not_responding">%s não responde</string>
