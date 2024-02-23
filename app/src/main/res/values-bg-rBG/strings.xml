@@ -182,7 +182,10 @@
     <string name="error_qr_code_result_null">Неуспешно четене на QR-Код, моля опитайте отново.</string>
     <string name="error_connection_unsupported_format">Неподдържан формат за свързване.\nМоля използвайте някой от следните формати:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Сървър връзка (config=...)\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
     <string name="error_unableToFetchBTCPayConfig">Неуспешно извеждане на конфигурация от BTCPay Сървър.</string>
-    <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.\nМоля уверете се, че използвате следния формат:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.
+\nМоля уверете се, че използвате следния формат:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Сертификатът е невалиден.</string>
     <string name="error_connection_no_macaroon">Вашата информация за свързване не съдържа macaroon. Това е задължително.</string>
     <string name="error_connection_invalid_macaroon">Мacaroon-ът е невалиден.</string>
