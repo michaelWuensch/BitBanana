@@ -215,7 +215,10 @@
     <string name="error_qr_code_result_null">Nelze přečíst QR-kód, zkuste to znovu.</string>
     <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.\nPoužijte jeden z následujících formátů:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Úplný obsah vašeho BTCPay Server config souboru</string>
     <string name="error_unableToFetchBTCPayConfig">Nelze načíst konfiguraci z BTCPay Serveru.</string>
-    <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.\nUjistěte se, že jste použili následující formát:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.
+\nUjistěte se, že jste použili následující formát:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Certifikát je neplatný.</string>
     <string name="error_connection_no_macaroon">Vaše informace o připojení neobsahují macaroon. To je povinné.</string>
     <string name="error_connection_invalid_macaroon">Macaroon je neplatný.</string>
