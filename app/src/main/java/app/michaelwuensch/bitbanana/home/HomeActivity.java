@@ -597,12 +597,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         @Override
                         public void onGuardianConfirmed() {
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
-                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                         }
                     }).securityZeroAmountInvoice();
                 } else {
                     SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
-                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                 }
             }
 
@@ -618,7 +618,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             if (Wallet.getInstance().getMaxLightningSendAmount() < paymentRequest.getNumSatoshis()) {
                                 // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
                                 SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                                sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
                             } else {
                                 if (paymentRequest.getNumSatoshis() == 0) {
@@ -629,14 +629,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                             String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
                                             String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
                                             SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
-                                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                         }
                                     }).securityZeroAmountInvoice();
                                 } else {
                                     String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
                                     String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
                                     SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
-                                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 }
                             }
                         }
@@ -651,7 +651,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
                             BBLog.d(LOG_TAG, "Falling back to onChain Invoice: " + error);
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                             if (errorCode == InvoiceUtil.ERROR_INVOICE_EXPIRED)
                                 Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_expired, Toast.LENGTH_LONG).show();
                             else
@@ -662,7 +662,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         public void onNoInvoiceData() {
                             // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                            sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                             Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_invalid_data, Toast.LENGTH_LONG).show();
                         }
                     });

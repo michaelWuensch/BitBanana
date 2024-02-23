@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -8,6 +9,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -20,6 +22,16 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 public class BaseBSDFragment extends RxBSDFragment {
 
     BottomSheetBehavior<FrameLayout> mBottomSheetBehavior;
+
+    // This function is used to fix a problem where background dimming did not work correctly sometimes when coming from the scan screen.
+    public void showDelayed(FragmentManager fragmentManager, String tag) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                show(fragmentManager, tag);
+            }
+        }, 100);
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
