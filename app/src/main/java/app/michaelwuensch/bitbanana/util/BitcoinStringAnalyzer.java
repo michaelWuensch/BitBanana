@@ -162,7 +162,7 @@ public class BitcoinStringAnalyzer {
             }
 
             @Override
-            public void onError(String error, int duration) {
+            public void onError(String error, int duration, int errorCode) {
                 listener.onError(error, duration);
             }
 

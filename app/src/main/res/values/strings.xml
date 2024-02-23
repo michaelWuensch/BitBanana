@@ -752,4 +752,7 @@
     <string name="discard">Discard</string>
     <string name="duplication_successful">Duplication was successful.</string>
 
+    <string name="on_chain_fallback_insufficient_funds">Insufficient lightning funds. Falling back to on-chain payment.</string>
+    <string name="on_chain_fallback_expired">Lightning request expired. Falling back to on-chain payment.</string>
+    <string name="on_chain_fallback_invalid_data">Lightning request contained invalid data. Falling back to on-chain payment.</string>
 </resources>
