@@ -158,7 +158,10 @@
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
     <string name="error_connection_unsupported_format">Unsupported connection format.\nPor favor, use um dos seguintes formatos:\n\n- String Lndconnect (lndconnect://...)\n- Conexão de BtcPay Server (config=...)\n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.\nCertifique-se de usar o seguinte formato:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
+\nCertifique-se de usar o seguinte formato:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
     <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -795,9 +798,9 @@
     <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Você terá de dar permissão ao BitBanana para controlar %1$s.</string>
     <string name="connection_state_starting_tor">Iniciando o Tor…</string>
     <string name="discard">Descartar</string>
-    <string name="error_connection_invalidLndHubConnectString">String de conexão lndhub inválida.
-\nPor favor certifique-se que tenha usado o seguinte formato:
-\n
+    <string name="error_connection_invalidLndHubConnectString">String de conexão lndhub inválida. 
+\nPor favor certifique-se que tenha usado o seguinte formato: 
+\n 
 \nlndhub://<user>:<password>\@<host/></password></user></string>
     <string name="error_grpc_setup_failed">Falha ao iniciar conexão gRPC.</string>
     <string name="error_input_field_empty">O campo de entrada %1$s não pode estar vazio.</string>
