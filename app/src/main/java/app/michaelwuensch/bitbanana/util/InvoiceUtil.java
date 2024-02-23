@@ -30,6 +30,9 @@ public class InvoiceUtil {
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_MAINNET = new ArrayList<>(Arrays.asList("1", "3", "bc1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));
+    public static final int ERROR_UNKNOWN = 0;
+    public static final int ERROR_NETWORK_MISMATCH = 1;
+    public static final int ERROR_INVOICE_EXPIRED = 1;
     private static final int INVOICE_LIGHTNING_MIN_LENGTH = 6;
 
 
@@ -85,7 +88,7 @@ public class InvoiceUtil {
                         decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                     } else {
                         // Show error. Please use a MAINNET invoice.
-                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case TESTNET:
@@ -93,7 +96,7 @@ public class InvoiceUtil {
                         decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                     } else {
                         // Show error. Please use a TESTNET invoice.
-                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case REGTEST:
@@ -101,7 +104,7 @@ public class InvoiceUtil {
                         decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
                     } else {
                         // Show error. Please use a REGTEST invoice.
-                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
             }
         } else {
@@ -146,7 +149,7 @@ public class InvoiceUtil {
                 } catch (URISyntaxException e) {
                     BBLog.w(LOG_TAG, "URI could not be parsed");
                     e.printStackTrace();
-                    listener.onError(ctx.getString(R.string.error_invalid_bitcoin_request), RefConstants.ERROR_DURATION_MEDIUM);
+                    listener.onError(ctx.getString(R.string.error_invalid_bitcoin_request), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
                 }
 
             } else {
@@ -165,21 +168,21 @@ public class InvoiceUtil {
                     if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_MAINNET, address)) {
                         listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
-                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case TESTNET:
                     if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
                         listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
-                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case REGTEST:
                     if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
                         listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
                     } else {
-                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM);
+                        listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
             }
@@ -201,13 +204,13 @@ public class InvoiceUtil {
 
                     if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
                         // Show error: payment request expired.
-                        listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT);
+                        listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
                     } else {
                         listener.onValidLightningInvoice(paymentRequest, invoice);
                     }
                 }, throwable -> {
                     // If LND can't decode the payment request, show the error LND throws (always english)
-                    listener.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
+                    listener.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
 
                     BBLog.d(LOG_TAG, throwable.getMessage());
                 }));
@@ -266,7 +269,7 @@ public class InvoiceUtil {
 
         void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 
-        void onError(String error, int duration);
+        void onError(String error, int duration, int errorCode);
 
         void onNoInvoiceData();
     }

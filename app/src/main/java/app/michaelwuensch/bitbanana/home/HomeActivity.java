@@ -619,6 +619,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                 // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
                                 SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                                 sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
                             } else {
                                 if (paymentRequest.getNumSatoshis() == 0) {
                                     // Warn about 0 sat invoices
@@ -646,11 +647,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         }
 
                         @Override
-                        public void onError(String error, int duration) {
+                        public void onError(String error, int duration, int errorCode) {
                             // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
                             BBLog.d(LOG_TAG, "Falling back to onChain Invoice: " + error);
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                             sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            if (errorCode == InvoiceUtil.ERROR_INVOICE_EXPIRED)
+                                Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_expired, Toast.LENGTH_LONG).show();
                         }
 
                         @Override
@@ -658,6 +661,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                             // If the added lightning parameter contains an invalid lightning invoice, we fall back to the onChain invoice.
                             SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                             sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                            Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_invalid_data, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
