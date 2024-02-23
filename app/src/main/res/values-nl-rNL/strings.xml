@@ -185,7 +185,10 @@
     <string name="error_qr_code_result_null">Kan QR-Code niet lezen, probeer opnieuw.</string>
     <string name="error_connection_unsupported_format">Niet ondersteund verbindingsformat.\nGebruik een van de volgende formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server verbinding (config=...)\n- Volledige inhoud van je BTCPay Server configbestand</string>
     <string name="error_unableToFetchBTCPayConfig">Kan de configuratie van BTCPay Server niet ophalen.</string>
-    <string name="error_connection_invalidLndConnectString">Ongeldige lndconnect string.\nControleer of je het volgende format gebruikt:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Ongeldige lndconnect string.
+\nControleer of je het volgende format gebruikt:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Dit certificaat is ongeldig.</string>
     <string name="error_connection_no_macaroon">Je verbindingsinformatie bevat geen macaroon. Dit is verplicht.</string>
     <string name="error_connection_invalid_macaroon">De macaroon is ongeldig.</string>
