@@ -741,4 +741,7 @@
     <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Stelle sicher, dass die %1$s-App im Hintergrund ausgeführt wird. Wenn dies der Fall ist, stelle sicher, dass alle Android-Akku-Optimierungen für %1$s deaktiviert sind, und starte dann die %1$s-App neu. Verwende die Schaltfläche unten, um zu den Einstellungen zu gelangen.
 \n
 \nWenn auch das nicht hilft, öffne die %1$s-App und starte das VPN manuell, um das Problem zu beheben.</string>
+    <string name="on_chain_fallback_insufficient_funds">Unzureichendes Lightning-Guthaben. Fallback auf On-Chain-Zahlung.</string>
+    <string name="on_chain_fallback_expired">Lightning-Anfrage ist abgelaufen. Fallback auf On-Chain-Zahlung.</string>
+    <string name="on_chain_fallback_invalid_data">Ungültige Lightning-Anfrage. Fallback auf On-Chain-Zahlung.</string>
 </resources>
