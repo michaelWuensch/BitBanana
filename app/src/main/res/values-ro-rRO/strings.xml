@@ -146,7 +146,10 @@
     <string name="error_qr_code_result_null">Imposibil de citit codul QR, încearcă din nou.</string>
     <string name="error_connection_unsupported_format">Format de conexiune nesuportat\nUtilizează unul din următoarele formate:\n\n- Adresă Lndconnect (lndconnect://...)\n- Conexiune BtcPay Server (config=...)\n- Conținutul complet al fișierului de configurare BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Nu s-a reușit descărcarea configurării de la serverul BTCPay.</string>
-    <string name="error_connection_invalidLndConnectString">Adresă lndconnect nevalabilă.\nAsigură-te că ai utilizat următorul format:\n\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Adresă lndconnect nevalabilă.
+\nAsigură-te că ai utilizat următorul format:
+\n
+\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
     <string name="error_connection_invalid_certificate">Certificatul este nevalabil.</string>
     <string name="error_connection_no_macaroon">Informația de conexiune nu conține un macaroon. El este obligatoriu.</string>
     <string name="error_connection_invalid_macaroon">Macaroonul este nevalabil.</string>
