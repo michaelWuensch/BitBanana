@@ -161,7 +161,7 @@
     <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
 \nCertifique-se de usar o seguinte formato:
 \n
-\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
     <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -460,7 +460,6 @@
     <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos:
 \n
 \n- String Lndconnect (lndconnect://...)
-\n- String LndHub (lndhub://...)
 \n- Conexão de servidor BtcPay (config=...)
 \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
     <string name="change_data">Mudar dados</string>
@@ -780,7 +779,7 @@
     <string name="lnurl_auth_login_info">Deseja usar seu nó para fazer login neste serviço?</string>
     <string name="lnurl_auth_auth_info">Deseja usar seu nó para autenticar com este serviço?</string>
     <string name="lnurl_auth_register_info">Deseja usar seu nó para registrar uma conta neste serviço?</string>
-    <string name="connection_state_disconnecting">Limpar conexões…</string>
+    <string name="connection_state_disconnecting">Limpar conexões existentes…</string>
     <string name="connection_state_starting_vpn">Iniciando VPN…</string>
     <string name="type">Tipo</string>
     <string name="duplicate">Duplicar</string>
@@ -801,7 +800,7 @@
     <string name="error_connection_invalidLndHubConnectString">String de conexão lndhub inválida. 
 \nPor favor certifique-se que tenha usado o seguinte formato: 
 \n 
-\nlndhub://<user>:<password>\@<host/></password></user></string>
+\nlndhub://[user]:[password]@[host]</string>
     <string name="error_grpc_setup_failed">Falha ao iniciar conexão gRPC.</string>
     <string name="error_input_field_empty">O campo de entrada %1$s não pode estar vazio.</string>
     <string name="error_input_macaroon_hex">O macaroon deve ser enviado em formato hexadecimal.</string>
@@ -819,4 +818,7 @@
     <string name="vpn_change_battery_settings">Mudar configurações de bateria</string>
     <string name="unsaved_changes">Há alterações não salvas.</string>
     <string name="duplication_successful">Duplicação foi bem-sucedida.</string>
+    <string name="on_chain_fallback_insufficient_funds">Fundos Lightning insuficientes. Recorrendo a pagamento on-chain.</string>
+    <string name="on_chain_fallback_expired">Pedido Lightning expirado. Recorrendo a pagamento on-chain.</string>
+    <string name="on_chain_fallback_invalid_data">Pedido Lightning inválido. Recorrendo a pagamento on-chain.</string>
 </resources>
