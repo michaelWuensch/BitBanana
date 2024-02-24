@@ -66,10 +66,14 @@ public class CalcActivity extends AppCompatActivity {
             calculate(false);
         };
 
-        Button[] simpleInputButtons = {btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_0, btn_point, btn_plus, btn_minus, btn_multiply, btn_percent, btn_sqrt, btn_bracket_left, btn_bracket_right};
+        Button[] simpleInputButtons = {btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9, btn_0, btn_point, btn_plus, btn_minus, btn_percent, btn_bracket_left, btn_bracket_right};
         for (Button btn : simpleInputButtons) {
             btn.setOnClickListener(simpleInputButtonClickListener);
         }
+
+        // Unfortunately we have to fall back to the more ugly version instead of adding them to the simpleInputButtons as these are not supported in the old 4.4.2 version
+        btn_multiply.setOnClickListener(view -> addInput("*"));
+        btn_sqrt.setOnClickListener(view -> addInput("sqrt("));
 
         btn_divide.setOnClickListener(new View.OnClickListener() {
             @Override

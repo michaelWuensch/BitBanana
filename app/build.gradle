@@ -154,8 +154,8 @@ dependencies {
     // Asynchronous programming library
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
 
-    // Math parser for the stealth mode calculator
-    implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.2.1")
+    // Math parser for the stealth mode calculator (we have to use the outdated version because of licensing reasons)
+    implementation("org.mariuszgromada.math:MathParser.org-mXparser:4.4.2")
 
     // Library to react to software keyboard visibility changes
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
