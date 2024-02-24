@@ -1,0 +1,16 @@
+- Fixed use of nonFree dep for F-Droid build
+
+These are the updates for 0.7.4 that never made it to the store because of the dependency:
+- VPN Automation (Tailscale, Wireguard)
+- Redesigned screens for node management
+- Allow manual adding of nodes
+- Option to duplicate nodes
+- Request to save unsaved changes before exiting connection settings
+- Huge performance improvement on restoring backups
+- Show details on loading screen while BitBanana is connecting to the node
+- For new users default setting for tor is now "off"
+- Provide the user with a notification when the system falls back to on-chain payment
+- Fixed crash on keysend
+- Fixed crash when saving a node connection without certificate
+- Other small UX improvements
+- Translation updates
