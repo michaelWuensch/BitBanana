@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
+import com.google.common.io.BaseEncoding;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -54,18 +56,25 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncoding();
                     enterWallet();
                 } else if (ver == 22) {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncoding();
                     enterWallet();
                 } else if (ver == 23) {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncoding();
                     enterWallet();
-                } else { // ver == 24
+                } else if (ver == 24) {
                     migrateBackendConfigs();
+                    migrateCertificateEncoding();
+                    enterWallet();
+                } else { // ver == 25
+                    migrateCertificateEncoding();
                     enterWallet();
                 }
             } else {
@@ -133,6 +142,23 @@ public class LandingActivity extends BaseAppCompatActivity {
         connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
         connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(connectIntent);
+    }
+
+    private void migrateCertificateEncoding() {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
+                if (config.getServerCert() != null) {
+                    config.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(config.getServerCert())));
+                    BackendConfigsManager.getInstance().updateBackendConfig(config);
+                }
+            }
+            try {
+                BackendConfigsManager.getInstance().apply();
+            } catch (GeneralSecurityException | IOException e) {
+                BBLog.w(LOG_TAG, "Certificate encoding migration failed");
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void migrateLanguageSetting() {

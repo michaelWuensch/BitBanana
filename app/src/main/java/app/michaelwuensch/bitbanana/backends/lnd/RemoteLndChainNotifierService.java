@@ -2,13 +2,15 @@ package app.michaelwuensch.bitbanana.backends.lnd;
 
 import com.github.lightningnetwork.lnd.chainrpc.ChainNotifierGrpc;
 
+import app.michaelwuensch.bitbanana.backends.DefaultObservable;
+import app.michaelwuensch.bitbanana.backends.RemoteStreamObserver;
 import io.grpc.CallCredentials;
 import io.grpc.Channel;
 import io.reactivex.rxjava3.core.Observable;
 
 public class RemoteLndChainNotifierService implements LndChainNotifierService {
 
-    private ChainNotifierGrpc.ChainNotifierStub asyncStub;
+    private final ChainNotifierGrpc.ChainNotifierStub asyncStub;
 
     public RemoteLndChainNotifierService(Channel channel, CallCredentials callCredentials) {
         asyncStub = ChainNotifierGrpc.newStub(channel).withCallCredentials(callCredentials);
@@ -16,17 +18,17 @@ public class RemoteLndChainNotifierService implements LndChainNotifierService {
 
     @Override
     public Observable<com.github.lightningnetwork.lnd.chainrpc.ConfEvent> registerConfirmationsNtfn(com.github.lightningnetwork.lnd.chainrpc.ConfRequest request) {
-        return DefaultObservable.createDefault(emitter -> asyncStub.registerConfirmationsNtfn(request, new RemoteLndStreamObserver<>(emitter)));
+        return DefaultObservable.createDefault(emitter -> asyncStub.registerConfirmationsNtfn(request, new RemoteStreamObserver<>(emitter)));
     }
 
     @Override
     public Observable<com.github.lightningnetwork.lnd.chainrpc.SpendEvent> registerSpendNtfn(com.github.lightningnetwork.lnd.chainrpc.SpendRequest request) {
-        return DefaultObservable.createDefault(emitter -> asyncStub.registerSpendNtfn(request, new RemoteLndStreamObserver<>(emitter)));
+        return DefaultObservable.createDefault(emitter -> asyncStub.registerSpendNtfn(request, new RemoteStreamObserver<>(emitter)));
     }
 
     @Override
     public Observable<com.github.lightningnetwork.lnd.chainrpc.BlockEpoch> registerBlockEpochNtfn(com.github.lightningnetwork.lnd.chainrpc.BlockEpoch request) {
-        return DefaultObservable.createDefault(emitter -> asyncStub.registerBlockEpochNtfn(request, new RemoteLndStreamObserver<>(emitter)));
+        return DefaultObservable.createDefault(emitter -> asyncStub.registerBlockEpochNtfn(request, new RemoteStreamObserver<>(emitter)));
     }
 
 }

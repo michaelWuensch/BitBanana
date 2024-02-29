@@ -49,7 +49,9 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtHost;
     private BBInputFieldView mEtPort;
     private BBInputFieldView mEtMacaroon;
-    private BBInputFieldView mEtCertificate;
+    private BBInputFieldView mEtServerCertificate;
+    private BBInputFieldView mEtClientCertificate;
+    private BBInputFieldView mEtClientKey;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
     private VPNConfigView mVpnConfigView;
@@ -77,7 +79,9 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtHost = findViewById(R.id.inputHost);
         mEtPort = findViewById(R.id.inputPort);
         mEtMacaroon = findViewById(R.id.inputMacaroon);
-        mEtCertificate = findViewById(R.id.inputCertificate);
+        mEtServerCertificate = findViewById(R.id.inputServerCertificate);
+        mEtClientCertificate = findViewById(R.id.inputClientCertificate);
+        mEtClientKey = findViewById(R.id.inputClientKey);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
         mVpnConfigView = findViewById(R.id.vpnConfigView);
@@ -89,10 +93,10 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtHost.setSingleLine(true);
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        String[] items = new String[3];
+        String[] items = new String[2];
         items[0] = BaseBackendConfig.BackendType.LND_GRPC.getDisplayName();
         items[1] = BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
-        items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
+        // items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
 
         mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
         mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -101,17 +105,27 @@ public class ManualSetup extends BaseAppCompatActivity {
                 switch (position) {
                     case 0:
                         // Lnd gRPC
+                        mEtPort.setVisibility(View.VISIBLE);
+                        mEtMacaroon.setVisibility(View.VISIBLE);
+                        mEtServerCertificate.setVisibility(View.VISIBLE);
+                        mEtClientCertificate.setVisibility(View.GONE);
+                        mEtClientKey.setVisibility(View.GONE);
+                        break;
                     case 1:
                         // Core Lightning gRPC
                         mEtPort.setVisibility(View.VISIBLE);
-                        mEtMacaroon.setVisibility(View.VISIBLE);
-                        mEtCertificate.setVisibility(View.VISIBLE);
+                        mEtMacaroon.setVisibility(View.GONE);
+                        mEtServerCertificate.setVisibility(View.VISIBLE);
+                        mEtClientCertificate.setVisibility(View.VISIBLE);
+                        mEtClientKey.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         // Lnd Hub
                         mEtPort.setVisibility(View.GONE);
                         mEtMacaroon.setVisibility(View.GONE);
-                        mEtCertificate.setVisibility(View.GONE);
+                        mEtServerCertificate.setVisibility(View.GONE);
+                        mEtClientCertificate.setVisibility(View.GONE);
+                        mEtClientKey.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -150,8 +164,8 @@ public class ManualSetup extends BaseAppCompatActivity {
             } else {
                 mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             }
-            if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
-                mEtCertificate.setValue(BackendConfig.getCert());
+            if (BackendConfig.getServerCert() != null && !BackendConfig.getServerCert().isEmpty()) {
+                mEtServerCertificate.setValue(BackendConfig.getServerCert());
             }
         } else {
             mSpType.setSelection(0);
@@ -225,7 +239,9 @@ public class ManualSetup extends BaseAppCompatActivity {
         backendConfig.setUseTor(mSwTor.isChecked());
         backendConfig.setVerifyCertificate(mSwVerify.isChecked());
         backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
-        backendConfig.setCert(mEtCertificate.getData());
+        backendConfig.setServerCert(mEtServerCertificate.getData());
+        backendConfig.setClientCert(mEtClientCertificate.getData());
+        backendConfig.setClientKey(mEtClientKey.getData());
         if (mOriginalBackendConfig != null) {
             backendConfig.setId(mOriginalBackendConfig.getId());
             backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
@@ -247,7 +263,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
-        if (mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty()) {
+        if ((mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty()) && mSpType.getSelectedItemPosition() == 0) {
             showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
@@ -335,7 +351,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                 ManualSetup.super.onBackPressed();
         } else {
             // we are in add manually mode
-            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon.getData() != null || mEtCertificate.getData() != null) {
+            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon.getData() != null || mEtServerCertificate.getData() != null || mEtClientCertificate.getData() != null || mEtClientKey.getData() != null) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.unsaved_changes)
                         .setCancelable(true)

@@ -129,7 +129,7 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 lndConnectConfig.setPort(connectURI.getPort());
                 lndConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
                 lndConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                lndConnectConfig.setCert(cert);
+                lndConnectConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
                 lndConnectConfig.setMacaroon(macaroon);
                 lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));

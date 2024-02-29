@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backends.lnd;
+package app.michaelwuensch.bitbanana.backends;
 
 import io.grpc.stub.StreamObserver;
 import io.reactivex.rxjava3.core.SingleEmitter;
@@ -6,11 +6,11 @@ import io.reactivex.rxjava3.core.SingleEmitter;
 /**
  * Used to wrap gRPC Observer with Rx SingleEmitter
  */
-public class RemoteLndSingleObserver<V> implements StreamObserver<V> {
+public class RemoteSingleObserver<V> implements StreamObserver<V> {
 
     private final SingleEmitter<V> mEmitter;
 
-    RemoteLndSingleObserver(SingleEmitter<V> emitter) {
+    public RemoteSingleObserver(SingleEmitter<V> emitter) {
         mEmitter = emitter;
     }
 

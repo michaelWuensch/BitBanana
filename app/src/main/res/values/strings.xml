@@ -512,6 +512,9 @@
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
+    <string name="server_certificate">Server Certificate</string>
+    <string name="client_certificate">Client Certificate</string>
+    <string name="client_key">Client Key</string>
     <string name="confirm_node_deletion">Do you really want to delete this node connection?</string>
     <string name="no_nodes">No nodes</string>
     <string name="spinner_manage_nodes">Manage…</string>
@@ -646,6 +649,7 @@
     <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
     <string name="backup_data_no_data">No data to backup.</string>
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
+    <string name="backup_data_backupVersion_too_old">This version was made with a very old version of BitBanana. Unfortunately it is no longer supported.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>

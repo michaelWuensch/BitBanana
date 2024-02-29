@@ -12,16 +12,74 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
  */
 public abstract class BaseBackendConfig {
 
+    /**
+     * The backend type we use. Depending on what is chosen here some of the fields below might not be used.
+     */
     private BackendType backendType;
+
+    /**
+     * The host where the backend is available.
+     */
     private String host;
+
+    /**
+     * The port on which the backend exposes the API that we want to access
+     */
     private int port;
+
+    /**
+     * Is the backend accessed remotely or locally on the device?
+     */
     private Location location;
+
+    /**
+     * The bitcoin network our backend is connected to.
+     */
     private Network network;
+
+    /**
+     * The certificate of the server (node we connect to) to authenticate to the client in mutual TLS
+     * The certificate is encoded as Base64 DER string.
+     */
     private String cert;
+
+    /**
+     * The certificate for the client to authenticate to the Server in mutual TLS
+     * The certificate is encoded as Base64 DER string.
+     */
+    private String clientCert;
+
+    /**
+     * The private key for the client to authenticate to the Server in mutual TLS
+     * The private key is encoded as Base64 DER string.
+     */
+    private String clientKey;
+
+    /**
+     * This allows for fine grained api restriction. E.g. only allow to create invoices etc.
+     * LND calls this "macaroon".
+     * CoreLightning calls this "rune".
+     */
     private String macaroon;
+
+    /**
+     * Username for APIs that require a user & password authentication
+     */
     private String user;
+
+    /**
+     * Password for APIs that require a user & password authentication
+     */
     private String password;
+
+    /**
+     * Whether or not tor is used to connect to the backend.
+     */
     private boolean UseTor;
+
+    /**
+     * Whether or not the server certificate should be verified by the client.
+     */
     private boolean VerifyCertificate;
 
 
@@ -65,12 +123,28 @@ public abstract class BaseBackendConfig {
         this.network = network;
     }
 
-    public String getCert() {
+    public String getServerCert() {
         return cert;
     }
 
-    public void setCert(String cert) {
-        this.cert = cert;
+    public void setServerCert(String serverCert) {
+        this.cert = serverCert;
+    }
+
+    public String getClientCert() {
+        return clientCert;
+    }
+
+    public void setClientCert(String clientCert) {
+        this.clientCert = clientCert;
+    }
+
+    public String getClientKey() {
+        return clientKey;
+    }
+
+    public void setClientKey(String clientKey) {
+        this.clientKey = clientKey;
     }
 
     public String getMacaroon() {

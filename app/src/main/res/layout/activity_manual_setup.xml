@@ -35,7 +35,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingTop="10dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vpnAutomationLabel">
@@ -89,12 +88,34 @@
                 app:minLines="3" />
 
             <app.michaelwuensch.bitbanana.customView.BBInputFieldView
-                android:id="@+id/inputCertificate"
+                android:id="@+id/inputServerCertificate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:inputLabel="@string/certificate"
-                app:inputLabelDetails="(Base64URL)"
+                app:inputLabelDetails="(Base64)"
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputClientCertificate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/client_certificate"
+                app:inputLabelDetails="(Base64)"
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputClientKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/client_key"
+                app:inputLabelDetails="(Base64)"
                 app:maxLines="3"
                 app:maxLinesFocused="5"
                 app:minLines="3" />

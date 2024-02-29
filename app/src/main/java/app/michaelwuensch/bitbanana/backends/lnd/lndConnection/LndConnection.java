@@ -70,7 +70,6 @@ public class LndConnection {
     private boolean isConnected = false;
 
     private LndConnection() {
-        ;
     }
 
     public static synchronized LndConnection getInstance() {
@@ -201,7 +200,7 @@ public class LndConnection {
         isConnected = false;
     }
 
-    public void restartLNDConnection() {
+    public void restartConnection() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             closeConnection();
             openConnection();

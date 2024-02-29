@@ -80,7 +80,7 @@ public class BackendConfigsManagerTest {
         assertEquals(expected.getLocation(), result.getLocation());
         assertEquals(expected.getHost(), result.getHost());
         assertEquals(expected.getPort(), result.getPort());
-        assertEquals(expected.getCert(), result.getCert());
+        assertEquals(expected.getServerCert(), result.getServerCert());
         assertEquals(expected.getMacaroon(), result.getMacaroon());
         assertEquals(expected.getUseTor(), result.getUseTor());
         assertEquals(expected.getVerifyCertificate(), result.getVerifyCertificate());
@@ -100,7 +100,7 @@ public class BackendConfigsManagerTest {
         configToAdd.setNetwork(expected.getNetwork());
         configToAdd.setHost(expected.getHost());
         configToAdd.setPort(expected.getPort());
-        configToAdd.setCert(expected.getCert());
+        configToAdd.setServerCert(expected.getServerCert());
         configToAdd.setMacaroon(expected.getMacaroon());
         configToAdd.setUseTor(expected.getUseTor());
         configToAdd.setVerifyCertificate(expected.getVerifyCertificate());
@@ -111,7 +111,7 @@ public class BackendConfigsManagerTest {
 
         assertEquals(expected.getAlias(), actual.getAlias());
         assertEquals(expected.getBackendType(), actual.getBackendType());
-        assertEquals(expected.getCert(), actual.getCert());
+        assertEquals(expected.getServerCert(), actual.getServerCert());
         assertEquals(expected.getLocation(), actual.getLocation());
         assertEquals(expected.getNetwork(), actual.getNetwork());
         assertEquals(expected.getHost(), actual.getHost());
@@ -177,7 +177,7 @@ public class BackendConfigsManagerTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getBackendType(), actual.getBackendType());
         assertEquals(expected.getAlias(), actual.getAlias());
-        assertEquals(expected.getCert(), actual.getCert());
+        assertEquals(expected.getServerCert(), actual.getServerCert());
         assertEquals(expected.getLocation(), actual.getLocation());
         assertEquals(expected.getHost(), actual.getHost());
         assertEquals(expected.getPort(), actual.getPort());

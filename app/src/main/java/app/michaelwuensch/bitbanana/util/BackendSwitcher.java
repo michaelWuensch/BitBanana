@@ -9,6 +9,7 @@ import java.util.Set;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
@@ -165,6 +166,9 @@ public class BackendSwitcher {
             case LND_GRPC:
                 LndConnection.getInstance().openConnection();
                 break;
+            case CORE_LIGHTNING_GRPC:
+                CoreLightningConnection.getInstance().openConnection();
+                break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
@@ -185,6 +189,10 @@ public class BackendSwitcher {
             switch (currentBackendConfig.getBackendType()) {
                 case LND_GRPC:
                     LndConnection.getInstance().closeConnection();
+                    break;
+                case CORE_LIGHTNING_GRPC:
+                    CoreLightningConnection.getInstance().closeConnection();
+                    break;
             }
 
             // Stop VPN

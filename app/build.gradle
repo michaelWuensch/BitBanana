@@ -9,7 +9,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "app.michaelwuensch.bitbanana"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 33
         versionCode 57
         versionName "0.7.6"
@@ -84,7 +84,7 @@ sourceSets {
 //  Needed for gRPC
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.13.0"
+        artifact = "com.google.protobuf:protoc:3.25.3"
     }
     plugins {
         javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }

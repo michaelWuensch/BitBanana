@@ -2,14 +2,11 @@ package app.michaelwuensch.bitbanana.backends.lnd.lndConnection;
 
 import com.google.common.io.BaseEncoding;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -19,6 +16,7 @@ import javax.net.ssl.TrustManagerFactory;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.CertificateUtil;
 
 /**
  * Creates an SSLSocketFactory instance for use with a self signed Certificate,
@@ -33,7 +31,7 @@ public class LndSSLSocketFactory {
         throw new AssertionError();
     }
 
-    public static SSLSocketFactory create(BackendConfig BackendConfig) {
+    public static SSLSocketFactory create(BackendConfig backendConfig) {
         SSLContext sslCtx = null;
 
         try {
@@ -43,8 +41,8 @@ public class LndSSLSocketFactory {
             return null;
         }
 
-        if (BackendConfig.isTorHostAddress() || !BackendConfig.getVerifyCertificate()) {
-            // Always trust the certificate on Tor connection
+        if (backendConfig.isTorHostAddress() || !backendConfig.getVerifyCertificate()) {
+            // Always trust the server certificate on Tor connection or when certificate validation is turned off.
             try {
                 sslCtx.init(null, new TrustManager[]{new BlindTrustManager()}, null);
             } catch (KeyManagementException e) {
@@ -55,16 +53,11 @@ public class LndSSLSocketFactory {
 
         } else {
             // On clearnet when verify certificate is enabled, we want to validate the certificate.
-            if (BackendConfig.getCert() != null && !BackendConfig.getCert().isEmpty()) {
-                //try to create a trustmanager that trust the certificate that was transmitted with the lndconnect string.
+            if (backendConfig.getServerCert() != null && !backendConfig.getServerCert().isEmpty()) {
+                // Try to create a TrustManager used to define whether the server certificate should be trusted or not.
                 try {
-                    InputStream caInput = null;
-                    String certificateBase64UrlString = BackendConfig.getCert();
-                    byte[] certificateBytes = BaseEncoding.base64Url().decode(certificateBase64UrlString);
-
-                    // Generate the CA Certificate from the supplied byte array
-                    caInput = new ByteArrayInputStream(certificateBytes);
-                    Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(caInput);
+                    // Generate the CA Certificate from the supplied data
+                    Certificate ca = createServerCertificate(backendConfig);
 
                     // Load the key store using the CA
                     KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -80,7 +73,7 @@ public class LndSSLSocketFactory {
                     return sslCtx.getSocketFactory();
 
                 } catch (Exception e) {
-                    BBLog.e(LOG_TAG, "Error while initializing self signed certificate.");
+                    BBLog.e(LOG_TAG, "Error initializing self signed certificate.");
                     e.printStackTrace();
                 }
             }
@@ -95,5 +88,10 @@ public class LndSSLSocketFactory {
             return null;
         }
         return sslCtx.getSocketFactory();
+    }
+
+    private static Certificate createServerCertificate(BackendConfig backendConfig) throws Exception {
+        byte[] serverCertificateBytes = BaseEncoding.base64().decode(backendConfig.getServerCert());
+        return CertificateUtil.certificateFromDER(serverCertificateBytes);
     }
 }

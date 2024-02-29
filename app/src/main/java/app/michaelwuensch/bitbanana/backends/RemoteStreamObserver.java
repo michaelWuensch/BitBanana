@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backends.lnd;
+package app.michaelwuensch.bitbanana.backends;
 
 import io.grpc.stub.StreamObserver;
 import io.reactivex.rxjava3.core.ObservableEmitter;
@@ -6,11 +6,11 @@ import io.reactivex.rxjava3.core.ObservableEmitter;
 /**
  * Used to wrap gRPC Observer with Rx ObservableEmitter
  */
-public class RemoteLndStreamObserver<V> implements StreamObserver<V> {
+public class RemoteStreamObserver<V> implements StreamObserver<V> {
 
     private final ObservableEmitter<V> mEmitter;
 
-    RemoteLndStreamObserver(ObservableEmitter<V> emitter) {
+    public RemoteStreamObserver(ObservableEmitter<V> emitter) {
         mEmitter = emitter;
     }
 

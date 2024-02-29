@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backends.lnd;
+package app.michaelwuensch.bitbanana.backends;
 
 import androidx.annotation.NonNull;
 

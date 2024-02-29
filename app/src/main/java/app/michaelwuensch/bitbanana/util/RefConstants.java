@@ -15,13 +15,14 @@ public class RefConstants {
     18: Wallet name based WalletConfigs -> UUID based WalletConfigs (0.3.0-beta)
     19: Androidx.security implementation (0.4.0-beta)
     20: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
-    21: Rebranding to BitBanana (0.6.0
+    21: Rebranding to BitBanana (0.6.0)
     22: Changed language selection (0.6.6)
     23: Changed currency codes (0.6.7)
     24: Changed balanceHide options (0.6.8)
-    25: Added additional data to backup config: Network, VPNConfig. Changed values for backend (0.7.3-beta)
+    25: Added additional data to backup config: Network, VPNConfig. Changed values for backend (0.7.3)
+    26: Changed certificate encoding from Base64Url to Base64 (0.7.6)
     */
-    public static final int CURRENT_SETTINGS_VERSION = 25;
+    public static final int CURRENT_SETTINGS_VERSION = 26;
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 
@@ -42,11 +43,14 @@ public class RefConstants {
     By keeping track of this number backwards compatibility can be ensured
     and new versions can restore backups from older versions.
     History:
-    0: Initial release (0.5.3-beta)
+    0: Initial release of data backup for phone migration (0.5.3-beta)
     1: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
-    2: Added additional data to backup config: Network. Changed values for backend (0.7.3-beta)
+    ----------- Change to BitBanana ------------
+    2: Added additional data to backup config: Network. Changed values for backend (0.7.3)
+    3: Changed certificate encoding from Base64Url to Base64 (0.7.6)
     */
-    public static final int DATA_BACKUP_VERSION = 2;
+    public static final int DATA_BACKUP_VERSION = 3;
+    public static final int DATA_BACKUP_LAST_SUPPORTED_VERSION = 0;
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
 
 

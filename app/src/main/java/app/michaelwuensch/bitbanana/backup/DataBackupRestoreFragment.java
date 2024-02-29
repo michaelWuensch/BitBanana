@@ -66,6 +66,8 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
                 if (mBackupVersion > RefConstants.DATA_BACKUP_VERSION) {
                     mAdapter.setBackupRestoreFinished(false, R.string.backup_data_version_too_old);
                     mViewPager.setCurrentItem(2);
+                } else if (mBackupVersion < RefConstants.DATA_BACKUP_LAST_SUPPORTED_VERSION) {
+                    mAdapter.setBackupRestoreFinished(false, R.string.backup_data_backupVersion_too_old);
                 } else {
                     showKeyboard();
                 }

@@ -212,7 +212,7 @@ public class RemoteConnectUtil {
                     configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
                     configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
                     configToAdd.setNetwork(lndConnectConfig.getNetwork());
-                    configToAdd.setCert(lndConnectConfig.getCert());
+                    configToAdd.setServerCert(lndConnectConfig.getServerCert());
                     configToAdd.setMacaroon(lndConnectConfig.getMacaroon());
                     configToAdd.setUseTor(lndConnectConfig.getUseTor());
                     configToAdd.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
@@ -226,7 +226,7 @@ public class RemoteConnectUtil {
                     backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
                     backendConfig.setHost(lndConnectConfig.getHost());
                     backendConfig.setPort(port);
-                    backendConfig.setCert(lndConnectConfig.getCert());
+                    backendConfig.setServerCert(lndConnectConfig.getServerCert());
                     backendConfig.setMacaroon(lndConnectConfig.getMacaroon());
                     backendConfig.setUser(null);
                     backendConfig.setPassword(null);
@@ -283,7 +283,7 @@ public class RemoteConnectUtil {
                     configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
                     configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
                     configToAdd.setNetwork(btcPayConfig.getNetwork());
-                    configToAdd.setCert(null);
+                    configToAdd.setServerCert(null);
                     configToAdd.setMacaroon(btcPayConfig.getMacaroon());
                     configToAdd.setUseTor(btcPayConfig.getUseTor());
                     configToAdd.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
@@ -297,7 +297,7 @@ public class RemoteConnectUtil {
                     backendConfig.setNetwork(btcPayConfig.getNetwork());
                     backendConfig.setHost(btcPayConfig.getHost());
                     backendConfig.setPort(port);
-                    backendConfig.setCert(null);
+                    backendConfig.setServerCert(null);
                     backendConfig.setMacaroon(btcPayConfig.getMacaroon());
                     backendConfig.setUseTor(btcPayConfig.getUseTor());
                     backendConfig.setUser(null);

@@ -117,12 +117,12 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             TextView tvMacaroon = findViewById(R.id.macaroon);
             tvMacaroon.setText(getWalletConfig().getMacaroon());
             TextView tvCertificateLabel = findViewById(R.id.certLabel);
-            if (getWalletConfig().getCert() != null) {
+            if (getWalletConfig().getServerCert() != null) {
                 tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
                 tvCertificateLabel.setVisibility(View.VISIBLE);
                 TextView tvCertificate = findViewById(R.id.cert);
                 tvCertificate.setVisibility(View.VISIBLE);
-                tvCertificate.setText(getWalletConfig().getCert());
+                tvCertificate.setText(getWalletConfig().getServerCert());
             } else {
                 tvCertificateLabel.setVisibility(View.GONE);
                 TextView tvCertificate = findViewById(R.id.cert);
