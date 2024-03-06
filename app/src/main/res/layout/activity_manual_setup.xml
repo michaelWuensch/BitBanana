@@ -120,6 +120,42 @@
                 app:maxLinesFocused="5"
                 app:minLines="3" />
 
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/username"
+                app:inputLabelDetails="" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inputPasswordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                    android:id="@+id/inputPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/password"
+                    app:inputLabelDetails=""
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/passwordVisibilityToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:padding="10dp"
+                    android:src="@drawable/outline_visibility_off_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/gray" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

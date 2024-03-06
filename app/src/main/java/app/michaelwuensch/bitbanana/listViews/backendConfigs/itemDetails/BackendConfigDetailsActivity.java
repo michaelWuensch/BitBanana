@@ -113,7 +113,12 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Port
             BBInfoLineView ilPort = findViewById(R.id.port);
-            ilPort.setData(String.valueOf(getWalletConfig().getPort()));
+            if (getWalletConfig().getBackendType() != BaseBackendConfig.BackendType.LND_HUB) {
+                ilPort.setVisibility(View.VISIBLE);
+                ilPort.setData(String.valueOf(getWalletConfig().getPort()));
+            } else {
+                ilPort.setVisibility(View.GONE);
+            }
 
             // Macaroon
             BBInfoLineView ilMacaroon = findViewById(R.id.macaroon);
@@ -149,6 +154,15 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                 ilClientPrivateKey.setData(getWalletConfig().getClientKey());
             } else {
                 ilClientPrivateKey.setVisibility(View.GONE);
+            }
+
+            // Username
+            BBInfoLineView ilUsername = findViewById(R.id.user);
+            if (getWalletConfig().getUser() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.LND_HUB) {
+                ilUsername.setVisibility(View.VISIBLE);
+                ilUsername.setData(getWalletConfig().getUser());
+            } else {
+                ilUsername.setVisibility(View.GONE);
             }
 
             // VPN

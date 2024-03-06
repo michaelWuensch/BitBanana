@@ -117,6 +117,8 @@
     <string name="network">Network</string>
     <string name="type">Type</string>
     <string name="duplicate">Duplicate</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>

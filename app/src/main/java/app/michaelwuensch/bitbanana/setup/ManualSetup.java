@@ -52,6 +52,10 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtServerCertificate;
     private BBInputFieldView mEtClientCertificate;
     private BBInputFieldView mEtClientKey;
+    private BBInputFieldView mEtUser;
+    private View mViewPasswordLayout;
+    private BBInputFieldView mEtPassword;
+    private ImageButton mIbPasswordVisibility;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
     private VPNConfigView mVpnConfigView;
@@ -60,6 +64,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private String mWalletUUID;
     private BackendConfig mOriginalBackendConfig;
     private Spinner mSpType;
+    private boolean pwVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +87,10 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtServerCertificate = findViewById(R.id.inputServerCertificate);
         mEtClientCertificate = findViewById(R.id.inputClientCertificate);
         mEtClientKey = findViewById(R.id.inputClientKey);
+        mEtUser = findViewById(R.id.inputUser);
+        mViewPasswordLayout = findViewById(R.id.inputPasswordLayout);
+        mEtPassword = findViewById(R.id.inputPassword);
+        mIbPasswordVisibility = findViewById(R.id.passwordVisibilityToggle);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
         mVpnConfigView = findViewById(R.id.vpnConfigView);
@@ -92,11 +101,26 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtName.setSingleLine(true);
         mEtHost.setSingleLine(true);
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-        String[] items = new String[2];
+        mIbPasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pwVisible) {
+                    mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    mIbPasswordVisibility.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_off_24));
+                } else {
+                    mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    mIbPasswordVisibility.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_24));
+                }
+                pwVisible = !pwVisible;
+            }
+        });
+
+        String[] items = new String[3];
         items[0] = BaseBackendConfig.BackendType.LND_GRPC.getDisplayName();
         items[1] = BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
-        // items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
+        items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
 
         mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
         mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -110,6 +134,8 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtServerCertificate.setVisibility(View.VISIBLE);
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
+                        mEtUser.setVisibility(View.GONE);
+                        mViewPasswordLayout.setVisibility(View.GONE);
                         break;
                     case 1:
                         // Core Lightning gRPC
@@ -118,6 +144,8 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtServerCertificate.setVisibility(View.VISIBLE);
                         mEtClientCertificate.setVisibility(View.VISIBLE);
                         mEtClientKey.setVisibility(View.VISIBLE);
+                        mEtUser.setVisibility(View.GONE);
+                        mViewPasswordLayout.setVisibility(View.GONE);
                         break;
                     case 2:
                         // Lnd Hub
@@ -126,6 +154,8 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtServerCertificate.setVisibility(View.GONE);
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
+                        mEtUser.setVisibility(View.VISIBLE);
+                        mViewPasswordLayout.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -173,6 +203,8 @@ public class ManualSetup extends BaseAppCompatActivity {
             if (BackendConfig.getClientKey() != null && !BackendConfig.getClientKey().isEmpty()) {
                 mEtClientKey.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientKey())));
             }
+            mEtUser.setValue(BackendConfig.getUser());
+            mEtPassword.setValue(BackendConfig.getPassword());
         } else {
             mSpType.setSelection(0);
         }
@@ -248,6 +280,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         backendConfig.setServerCert(mEtServerCertificate.getData());
         backendConfig.setClientCert(mEtClientCertificate.getData());
         backendConfig.setClientKey(mEtClientKey.getData());
+        backendConfig.setUser(mEtUser.getData());
+        backendConfig.setPassword(mEtPassword.getData());
         if (mOriginalBackendConfig != null) {
             backendConfig.setId(mOriginalBackendConfig.getId());
             backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
@@ -285,10 +319,22 @@ public class ManualSetup extends BaseAppCompatActivity {
         if (mSpType.getSelectedItemPosition() == 1) {
             // CoreLightning grpc
             if ((mEtClientCertificate.getData() == null || mEtClientCertificate.getData().isEmpty())) {
-                showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
+                showError(getString(R.string.error_input_field_empty, getString(R.string.username)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
             if ((mEtClientKey.getData() == null || mEtClientKey.getData().isEmpty())) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.password)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+        }
+
+        if (mSpType.getSelectedItemPosition() == 2) {
+            // CoreLightning grpc
+            if ((mEtUser.getData() == null || mEtUser.getData().isEmpty())) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+            if ((mEtPassword.getData() == null || mEtPassword.getData().isEmpty())) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.client_key)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
@@ -374,7 +420,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                 ManualSetup.super.onBackPressed();
         } else {
             // we are in add manually mode
-            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon.getData() != null || mEtServerCertificate.getData() != null || mEtClientCertificate.getData() != null || mEtClientKey.getData() != null) {
+            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtMacaroon.getData() != null || mEtServerCertificate.getData() != null || mEtClientCertificate.getData() != null || mEtClientKey.getData() != null || mEtUser.getData() != null || mEtPassword.getData() != null) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.unsaved_changes)
                         .setCancelable(true)
