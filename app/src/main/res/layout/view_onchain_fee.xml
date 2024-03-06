@@ -91,7 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sendFeeSpeed"
-        app:tabBackground="@drawable/tab_layout"
+        app:tabBackground="@drawable/tab_selector"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
         app:tabRippleColor="@null"

@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.customView;
+package app.michaelwuensch.bitbanana.setup;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -18,6 +18,8 @@ import androidx.transition.TransitionManager;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
+import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
+import app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class VPNConfigView extends ConstraintLayout {

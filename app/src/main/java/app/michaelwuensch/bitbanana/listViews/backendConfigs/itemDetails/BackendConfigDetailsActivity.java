@@ -143,7 +143,6 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(BackendConfigDetailsActivity.this, ManualSetup.class);
                     intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mId);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
             });

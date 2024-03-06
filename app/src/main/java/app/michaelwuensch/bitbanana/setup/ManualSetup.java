@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 
 import app.michaelwuensch.bitbanana.R;
@@ -28,7 +29,6 @@ import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
-import app.michaelwuensch.bitbanana.customView.VPNConfigView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -108,6 +108,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtMacaroon.setVisibility(View.VISIBLE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
+                        mEtServerCertificate.setDescription(getResources().getString(R.string.certificate));
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
                         break;
@@ -116,6 +117,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtMacaroon.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
+                        mEtServerCertificate.setDescription(getResources().getString(R.string.server_certificate));
                         mEtClientCertificate.setVisibility(View.VISIBLE);
                         mEtClientKey.setVisibility(View.VISIBLE);
                         break;
@@ -165,7 +167,13 @@ public class ManualSetup extends BaseAppCompatActivity {
                 mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             }
             if (BackendConfig.getServerCert() != null && !BackendConfig.getServerCert().isEmpty()) {
-                mEtServerCertificate.setValue(BackendConfig.getServerCert());
+                mEtServerCertificate.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getServerCert())));
+            }
+            if (BackendConfig.getClientCert() != null && !BackendConfig.getClientCert().isEmpty()) {
+                mEtClientCertificate.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientCert())));
+            }
+            if (BackendConfig.getClientKey() != null && !BackendConfig.getClientKey().isEmpty()) {
+                mEtClientKey.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientKey())));
             }
         } else {
             mSpType.setSelection(0);
@@ -263,14 +271,31 @@ public class ManualSetup extends BaseAppCompatActivity {
             showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
-        if ((mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty()) && mSpType.getSelectedItemPosition() == 0) {
-            showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
-            return;
+
+        if (mSpType.getSelectedItemPosition() == 0) {
+            // LND grpc
+            if ((mEtMacaroon.getData() == null || mEtMacaroon.getData().isEmpty())) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+            if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
+                showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
         }
-        if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
-            showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
-            return;
+
+        if (mSpType.getSelectedItemPosition() == 1) {
+            // CoreLightning grpc
+            if ((mEtClientCertificate.getData() == null || mEtClientCertificate.getData().isEmpty())) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+            if ((mEtClientKey.getData() == null || mEtClientKey.getData().isEmpty())) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.client_key)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
         }
+
 
         // everything is ok
         BackendConfig backendConfig = getBackendConfig();
