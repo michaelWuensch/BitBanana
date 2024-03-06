@@ -108,7 +108,6 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtMacaroon.setVisibility(View.VISIBLE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
-                        mEtServerCertificate.setDescription(getResources().getString(R.string.certificate));
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
                         break;
@@ -117,7 +116,6 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtMacaroon.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
-                        mEtServerCertificate.setDescription(getResources().getString(R.string.server_certificate));
                         mEtClientCertificate.setVisibility(View.VISIBLE);
                         mEtClientKey.setVisibility(View.VISIBLE);
                         break;

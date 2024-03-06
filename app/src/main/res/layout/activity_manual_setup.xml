@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="122dp"
                 android:layout_marginTop="10dp"
-                app:inputLabel="@string/certificate"
+                app:inputLabel="@string/server_certificate"
                 app:inputLabelDetails=""
                 app:maxLines="3"
                 app:maxLinesFocused="5"

@@ -25,7 +25,9 @@ import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
@@ -100,42 +102,63 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             vConnectionData.setVisibility(View.GONE);
         } else {
             vConnectionData.setVisibility(View.VISIBLE);
-            TextView tvTypeLabel = findViewById(R.id.typeLabel);
-            tvTypeLabel.setText(getResources().getString(R.string.type) + ":");
-            TextView tvType = findViewById(R.id.type);
-            tvType.setText(getWalletConfig().getBackendType().getDisplayName());
-            TextView tvHostLabel = findViewById(R.id.hostLabel);
-            tvHostLabel.setText(getResources().getString(R.string.host) + ":");
-            TextView tvHost = findViewById(R.id.host);
-            tvHost.setText(getWalletConfig().getHost());
-            TextView tvPortLabel = findViewById(R.id.portLabel);
-            tvPortLabel.setText(getResources().getString(R.string.port) + ":");
-            TextView tvPort = findViewById(R.id.port);
-            tvPort.setText(String.valueOf(getWalletConfig().getPort()));
-            TextView tvMacaroonLabel = findViewById(R.id.macaroonLabel);
-            tvMacaroonLabel.setText(getResources().getString(R.string.macaroon) + ":");
-            TextView tvMacaroon = findViewById(R.id.macaroon);
-            tvMacaroon.setText(getWalletConfig().getMacaroon());
-            TextView tvCertificateLabel = findViewById(R.id.certLabel);
-            if (getWalletConfig().getServerCert() != null) {
-                tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
-                tvCertificateLabel.setVisibility(View.VISIBLE);
-                TextView tvCertificate = findViewById(R.id.cert);
-                tvCertificate.setVisibility(View.VISIBLE);
-                tvCertificate.setText(getWalletConfig().getServerCert());
+
+            // Type
+            BBInfoLineView ilType = findViewById(R.id.type);
+            ilType.setData(getWalletConfig().getBackendType().getDisplayName());
+
+            // Host
+            BBInfoLineView ilHost = findViewById(R.id.host);
+            ilHost.setData(getWalletConfig().getHost());
+
+            // Port
+            BBInfoLineView ilPort = findViewById(R.id.port);
+            ilPort.setData(String.valueOf(getWalletConfig().getPort()));
+
+            // Macaroon
+            BBInfoLineView ilMacaroon = findViewById(R.id.macaroon);
+            if (getWalletConfig().getMacaroon() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.LND_GRPC) {
+                ilMacaroon.setVisibility(View.VISIBLE);
+                ilMacaroon.setData(getWalletConfig().getMacaroon());
             } else {
-                tvCertificateLabel.setVisibility(View.GONE);
-                TextView tvCertificate = findViewById(R.id.cert);
-                tvCertificate.setVisibility(View.GONE);
+                ilMacaroon.setVisibility(View.GONE);
             }
-            TextView tvVpnLabel = findViewById(R.id.vpnLabel);
-            tvVpnLabel.setText(getResources().getString(R.string.vpn) + ":");
-            TextView tvVpn = findViewById(R.id.vpn);
-            tvVpn.setText(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
-            TextView tvTorLabel = findViewById(R.id.torLabel);
-            tvTorLabel.setText(getResources().getString(R.string.settings_tor) + ":");
-            TextView tvTor = findViewById(R.id.tor);
-            tvTor.setText(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+
+            // Server Certificate
+            BBInfoLineView ilServerCertificate = findViewById(R.id.serverCert);
+            if (getWalletConfig().getServerCert() != null) {
+                ilServerCertificate.setVisibility(View.VISIBLE);
+                ilServerCertificate.setData(getWalletConfig().getServerCert());
+            } else {
+                ilServerCertificate.setVisibility(View.GONE);
+            }
+
+            // Client Certificate
+            BBInfoLineView ilClientCertificate = findViewById(R.id.clientCert);
+            if (getWalletConfig().getClientCert() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                ilClientCertificate.setVisibility(View.VISIBLE);
+                ilClientCertificate.setData(getWalletConfig().getClientCert());
+            } else {
+                ilClientCertificate.setVisibility(View.GONE);
+            }
+
+            // Client private key
+            BBInfoLineView ilClientPrivateKey = findViewById(R.id.clientPrivateKey);
+            if (getWalletConfig().getClientKey() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                ilClientPrivateKey.setVisibility(View.VISIBLE);
+                ilClientPrivateKey.setData(getWalletConfig().getClientKey());
+            } else {
+                ilClientPrivateKey.setVisibility(View.GONE);
+            }
+
+            // VPN
+            BBInfoLineView ilVpn = findViewById(R.id.vpn);
+            ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
+
+            // Tor
+            BBInfoLineView ilTor = findViewById(R.id.tor);
+            String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+            ilTor.setData(torData);
 
             Button changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {
