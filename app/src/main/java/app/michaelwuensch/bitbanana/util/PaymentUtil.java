@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

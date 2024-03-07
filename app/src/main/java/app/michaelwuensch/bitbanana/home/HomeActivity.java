@@ -102,7 +102,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
         Wallet.InfoListener, Wallet.LndConnectionTestListener,
-        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener, FeatureManager.FeatureChangedListener {
+        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener, FeatureManager.FeatureChangedListener, BackendSwitcher.BackendStateChangedListener {
 
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
@@ -124,6 +124,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     private boolean mInfoChangeListenerRegistered;
     private boolean mLndConnectionTestListenerRegistered;
+    private boolean mBackendChangedListenerRegistred;
     private boolean mWalletLoadedListener;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
@@ -321,6 +322,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
+        if (!mBackendChangedListenerRegistred) {
+            BackendSwitcher.registerBackendStateChangedListener(this);
+            mBackendChangedListenerRegistred = true;
+        }
         FeatureManager.registerFeatureChangedListener(this);
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
@@ -331,9 +336,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void openWallet() {
         BackendSwitcher.activateCurrentBackendConfig(HomeActivity.this, false);
-
-        // ToDo: move to state events
-        updateDrawerNavigationMenuVisibilities();
 
         // Check if BitBanana was started from an URI link or by NFC.
         if (App.getAppContext().getUriSchemeData() != null) {
@@ -380,6 +382,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         Wallet.getInstance().unregisterInfoListener(this);
         mInfoChangeListenerRegistered = false;
         FeatureManager.unregisterFeatureChangedListener(this);
+        BackendSwitcher.unregisterBackendStateChangedListener(this);
+        mBackendChangedListenerRegistred = false;
 
         mHandler.removeCallbacksAndMessages(null);
 
@@ -929,6 +933,37 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public void onFeatureChanged() {
         updateDrawerNavigationMenuVisibilities();
+    }
+
+    @Override
+    public void onBackendStateChanged(BackendSwitcher.BackendState backendState) {
+        switch (backendState) {
+            case DISCONNECTING:
+                break;
+            case NO_BACKEND_SELECTED:
+                updateDrawerNavigationMenuVisibilities();
+                break;
+            case ACTIVATING_BACKEND:
+                updateDrawerNavigationMenuVisibilities();
+                break;
+            case STARTING_VPN:
+                break;
+            case STARTING_TOR:
+                break;
+            case TOR_CONNECTED:
+                break;
+            case CONNECTING_TO_BACKEND:
+                break;
+            case BACKEND_CONNECTED:
+                break;
+            case ERROR:
+                break;
+        }
+    }
+
+    @Override
+    public void onBackendStateError(String message, int errorCode) {
+
     }
 
 

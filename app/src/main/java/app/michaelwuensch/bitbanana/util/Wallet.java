@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -351,7 +351,7 @@ public class Wallet {
 
                     // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
                     // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
-                    LndConnection.getInstance().restartLNDConnection();
+                    LndConnection.getInstance().restartConnection();
 
                     mHandler.postDelayed(() -> {
                         // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.

@@ -9,8 +9,12 @@ import java.util.Set;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningConnection;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.Backend;
+import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningBackend;
+import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
+import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
+import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.lndHub.LndHubBackend;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -32,6 +36,7 @@ public class BackendSwitcher {
     private static final Set<BackendStateChangedListener> backendStateChangedListeners = new HashSet<>();
 
     private static BackendConfig currentBackendConfig = null;
+    private static Backend currentBackend = new Backend();
     private static BackendState currentBackendState = BackendState.NO_BACKEND_SELECTED;
 
     private static Handler delayHandler;
@@ -87,6 +92,7 @@ public class BackendSwitcher {
     private static void activateBackendConfig2(BackendConfig backendConfig, Context ctx) {
         BBLog.d(LOG_TAG, "Activating backendConfig: " + backendConfig.getAlias());
         currentBackendConfig = backendConfig;
+        currentBackend = createBackend();
 
         // Save the new chosen node in prefs
         PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, backendConfig.getId()).commit();
@@ -169,6 +175,8 @@ public class BackendSwitcher {
             case CORE_LIGHTNING_GRPC:
                 CoreLightningConnection.getInstance().openConnection();
                 break;
+            case LND_HUB:
+                break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
@@ -207,6 +215,7 @@ public class BackendSwitcher {
 
             Wallet.getInstance().reset();
             currentBackendConfig = null;
+            currentBackend = new Backend();
             BBLog.d(LOG_TAG, backendConfigAlias + " deactivated.");
             setBackendState(BackendState.NO_BACKEND_SELECTED);
         }
@@ -214,6 +223,26 @@ public class BackendSwitcher {
 
     public static BackendConfig getCurrentBackendConfig() {
         return currentBackendConfig;
+    }
+
+    private static Backend createBackend() {
+        if (getCurrentBackendConfig() != null) {
+            switch (getCurrentBackendConfig().getBackendType()) {
+                case NONE:
+                    return new Backend();
+                case LND_GRPC:
+                    return new LndBackend();
+                case CORE_LIGHTNING_GRPC:
+                    return new CoreLightningBackend();
+                case LND_HUB:
+                    return new LndHubBackend();
+            }
+        }
+        return new Backend();
+    }
+
+    public static Backend getCurrentBackend() {
+        return currentBackend;
     }
 
     public static BackendState getBackendState() {

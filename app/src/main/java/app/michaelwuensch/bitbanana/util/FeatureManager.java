@@ -1,10 +1,9 @@
 package app.michaelwuensch.bitbanana.util;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backends.Backend;
 
 /**
  * This class is used to determine if a feature is available or not.
@@ -22,27 +21,17 @@ public class FeatureManager {
     }
 
     public static boolean isRoutingListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
+        boolean backendSupported = getBackend().supportsRouting();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureRoutingSummary", true);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isEditRoutingPoliciesEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
-        return backendSupported;
+        return getBackend().supportsRoutingPolicyManagement();
     }
 
     public static boolean isUTXOListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
+        boolean backendSupported = getBackend().supportsCoinControl();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
         return settingEnabled && backendSupported;
     }
@@ -53,38 +42,23 @@ public class FeatureManager {
     }
 
     public static boolean isChannelManagementEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
-        return backendSupported;
+        return getBackend().supportsChannelManagement();
     }
 
     public static boolean isPeersListViewEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
+        boolean backendSupported = getBackend().supportsPeerManagement();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featurePeers", false);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isSignVerifyEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC
-        ));
+        boolean backendSupported = getBackend().supportsMessageSigningByNodePrivateKey();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isBalanceDetailsEnabled() {
-        boolean backendSupported = isCurrentBackendSupported(List.of(
-                BaseBackendConfig.BackendType.NONE,
-                BaseBackendConfig.BackendType.LND_GRPC,
-                BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC
-        ));
-        return backendSupported;
+        return getBackend().supportsBalanceDetails();
     }
 
     public interface FeatureChangedListener {
@@ -108,18 +82,7 @@ public class FeatureManager {
         featureChangedListeners.remove(listener);
     }
 
-    private static boolean isCurrentBackendSupported(List<BaseBackendConfig.BackendType> supportedBackends) {
-        if (BackendSwitcher.getCurrentBackendConfig() == null) {
-            for (BaseBackendConfig.BackendType backend : supportedBackends) {
-                if (backend == BaseBackendConfig.BackendType.NONE)
-                    return true;
-            }
-        } else {
-            for (BaseBackendConfig.BackendType backend : supportedBackends) {
-                if (backend == BackendSwitcher.getCurrentBackendConfig().getBackendType())
-                    return true;
-            }
-        }
-        return false;
+    private static Backend getBackend() {
+        return BackendSwitcher.getCurrentBackend();
     }
 }
