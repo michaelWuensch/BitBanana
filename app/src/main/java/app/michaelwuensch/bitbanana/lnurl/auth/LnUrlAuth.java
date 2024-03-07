@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 import fr.acinq.secp256k1.Secp256k1;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import okhttp3.Call;
@@ -79,7 +80,7 @@ public class LnUrlAuth {
         mListener = authListener;
 
         String k1 = UtilFunctions.getQueryParam(mUrl, "k1");
-        if (k1 == null || k1.length() != 64 || !UtilFunctions.isHex(k1)) {
+        if (k1 == null || k1.length() != 64 || !HexUtil.isHex(k1)) {
             BBLog.e(LOG_TAG, "LNURL: Service did not provide a valid k1");
             mListener.onError("Service did not provide a valid k1");
             return;
@@ -96,18 +97,18 @@ public class LnUrlAuth {
                     String hashingKey = UtilFunctions.sha256Hash(signResponse.getSignature());
 
                     // LUD-13: 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as hmacSha256(hashingKey, service domain name).
-                    String linkingPrivKey = UtilFunctions.hmacSHA256(mUrl.getHost().getBytes(StandardCharsets.UTF_8), UtilFunctions.hexToBytes(hashingKey));
+                    String linkingPrivKey = UtilFunctions.hmacSHA256(mUrl.getHost().getBytes(StandardCharsets.UTF_8), HexUtil.hexToBytes(hashingKey));
 
                     // LUD-04: 3. LN WALLET signs k1 on secp256k1 using linkingPrivKey and DER-encodes the signature. LN WALLET Then issues a GET to LN SERVICE using <LNURL_hostname_and_path>?<LNURL_existing_query_parameters>&sig=<hex(sign(hexToBytes(k1), linkingPrivKey))>&key=<hex(linkingKey)>
-                    byte[] publicLinkingKeyUncompressed = Secp256k1.get().pubkeyCreate(UtilFunctions.hexToBytes(linkingPrivKey));
+                    byte[] publicLinkingKeyUncompressed = Secp256k1.get().pubkeyCreate(HexUtil.hexToBytes(linkingPrivKey));
                     byte[] linkingKey = Secp256k1.get().pubKeyCompress(publicLinkingKeyUncompressed);
-                    byte[] signed_K1 = Secp256k1.get().sign(UtilFunctions.hexToBytes(k1), UtilFunctions.hexToBytes(linkingPrivKey));
+                    byte[] signed_K1 = Secp256k1.get().sign(HexUtil.hexToBytes(k1), HexUtil.hexToBytes(linkingPrivKey));
                     byte[] signed_K1_DER_encoded = Secp256k1.get().compact2der(signed_K1);
 
                     LnUrlFinalAuthRequest lnUrlFinalAuthRequest = new LnUrlFinalAuthRequest.Builder()
                             .setDecodedLnUrl(mUrl)
-                            .setSig(UtilFunctions.bytesToHex(signed_K1_DER_encoded))
-                            .setLinkingKey(UtilFunctions.bytesToHex(linkingKey))
+                            .setSig(HexUtil.bytesToHex(signed_K1_DER_encoded))
+                            .setLinkingKey(HexUtil.bytesToHex(linkingKey))
                             .build();
 
                     BBLog.d(LOG_TAG, "Final auth request: " + lnUrlFinalAuthRequest.requestAsString());

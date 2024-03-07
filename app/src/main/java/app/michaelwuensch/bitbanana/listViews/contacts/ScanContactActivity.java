@@ -9,7 +9,7 @@ import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
 public class ScanContactActivity extends BaseScannerActivity {
@@ -49,7 +49,7 @@ public class ScanContactActivity extends BaseScannerActivity {
     }
 
     private boolean processUserData(String rawData) {
-        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(rawData);
+        LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(rawData);
 
         if (nodeUri == null) {
             LNAddress lnAddress = new LNAddress(rawData);

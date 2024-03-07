@@ -25,7 +25,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterHex;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterLowerCase;
@@ -126,7 +126,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
 
         switch (mType) {
             case NODEPUBKEY:
-                LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(data);
+                LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(data);
 
                 if (nodeUri != null) {
                     addContact(Contact.ContactType.NODEPUBKEY, name, data);

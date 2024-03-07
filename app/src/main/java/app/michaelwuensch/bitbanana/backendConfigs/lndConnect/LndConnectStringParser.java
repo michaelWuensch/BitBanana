@@ -2,17 +2,13 @@ package app.michaelwuensch.bitbanana.backendConfigs.lndConnect;
 
 import com.google.common.io.BaseEncoding;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.CertificateUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 
@@ -88,11 +84,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     try {
                         byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
                         try {
-                            // Generate the CA Certificate from the supplied byte array
-                            InputStream caInput = null;
-                            caInput = new ByteArrayInputStream(certificateBytes);
-                            Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(caInput);
-                        } catch (CertificateException e) {
+                            CertificateUtil.certificateFromDER(certificateBytes);
+                        } catch (Exception e) {
                             BBLog.e(LOG_TAG, "certificate validation failed");
                             mError = ERROR_INVALID_CERTIFICATE;
                             return this;
@@ -129,7 +122,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 lndConnectConfig.setPort(connectURI.getPort());
                 lndConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
                 lndConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                lndConnectConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
+                if (cert != null)
+                    lndConnectConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
                 lndConnectConfig.setMacaroon(macaroon);
                 lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));

@@ -36,7 +36,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.Wallet;
@@ -241,7 +241,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
                 .subscribe(disconnectPeerResponse -> {
                     BBLog.d(LOG_TAG, "Successfully disconnected peer");
                     Intent intentDeletePeer = new Intent();
-                    intentDeletePeer.putExtra(ScanContactActivity.EXTRA_NODE_URI, LightningNodeUirParser.parseNodeUri(mPeer.getPubKey() + "@" + mPeer.getAddress()));
+                    intentDeletePeer.putExtra(ScanContactActivity.EXTRA_NODE_URI, LightningNodeUriParser.parseNodeUri(mPeer.getPubKey() + "@" + mPeer.getAddress()));
                     setResult(RESPONSE_CODE_DELETE_PEER, intentDeletePeer);
                     finish();
                 }, throwable -> {
@@ -251,7 +251,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
     private void openChannel() {
         Intent intentOpenChannel = new Intent();
-        intentOpenChannel.putExtra(ScanContactActivity.EXTRA_NODE_URI, LightningNodeUirParser.parseNodeUri(mPeer.getPubKey() + "@" + mPeer.getAddress()));
+        intentOpenChannel.putExtra(ScanContactActivity.EXTRA_NODE_URI, LightningNodeUriParser.parseNodeUri(mPeer.getPubKey() + "@" + mPeer.getAddress()));
         setResult(RESPONSE_CODE_OPEN_CHANNEL, intentOpenChannel);
         finish();
     }

@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -117,7 +118,7 @@ public class LnUrlReader {
             // https://github.com/lnurl/luds/blob/luds/04.md
             if (query != null && query.contains("tag=login")) {
                 String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
-                if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
+                if (k1 != null && k1.length() == 64 && HexUtil.isHex(k1)) {
                     listener.onValidLnUrlAuth(decodedUrl);
                     return true;
                 } else {

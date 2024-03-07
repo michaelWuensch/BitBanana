@@ -3,8 +3,9 @@ package app.michaelwuensch.bitbanana.util;
 import androidx.annotation.NonNull;
 
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 
-public class LightningNodeUirParser {
+public class LightningNodeUriParser {
 
     private static int NODE_URI_MIN_LENGTH = 66;
 
@@ -15,7 +16,7 @@ public class LightningNodeUirParser {
 
         if (uri.length() == NODE_URI_MIN_LENGTH) {
             // PubKey only
-            if (UtilFunctions.isHex(uri)) {
+            if (HexUtil.isHex(uri)) {
                 return new LightningNodeUri.Builder().setPubKey(uri).build();
             } else {
                 return null;
@@ -33,10 +34,28 @@ public class LightningNodeUirParser {
             return null;
         }
 
-        if (UtilFunctions.isHex(parts[0])) {
-            return new LightningNodeUri.Builder().setPubKey(parts[0]).setHost(parts[1]).build();
+        String pubkey = parts[0];
+
+        String[] parts2 = parts[1].split(":");
+
+        if (parts2.length != 2) {
+            if (HexUtil.isHex(pubkey)) {
+                return new LightningNodeUri.Builder().setPubKey(pubkey).setHost(parts[1]).build();
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            if (HexUtil.isHex(pubkey)) {
+                int port;
+                try {
+                    port = Integer.parseInt(parts2[1]);
+                } catch (Exception e) {
+                    return null;
+                }
+                return new LightningNodeUri.Builder().setPubKey(pubkey).setHost(parts2[0]).setPort(port).build();
+            } else {
+                return null;
+            }
         }
     }
 }

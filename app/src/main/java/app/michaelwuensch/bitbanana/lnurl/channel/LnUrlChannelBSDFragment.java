@@ -47,7 +47,7 @@ import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -135,7 +135,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
     private void openChannel() {
 
         BBLog.v(TAG, "Remote Node uri: " + mLnUrlChannelResponse.getUri());
-        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(mLnUrlChannelResponse.getUri());
+        LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(mLnUrlChannelResponse.getUri());
 
         if (nodeUri == null) {
             BBLog.e(TAG, "Node Uri could not be parsed");

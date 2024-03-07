@@ -135,7 +135,7 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfNodeUri(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(inputString);
+        LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(inputString);
 
         if (nodeUri != null) {
             listener.onValidNodeUri(nodeUri);

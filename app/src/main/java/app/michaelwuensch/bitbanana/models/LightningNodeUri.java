@@ -8,16 +8,13 @@ public class LightningNodeUri implements Serializable {
 
     private String mPubKey;
     private String mHost;
-    private String mNickname;
-    private String mDescription;
-    private String mImage;
+    private int mPort;
 
-    private LightningNodeUri(@NonNull String pubKey, String host, String nickname, String description, String image) {
+
+    private LightningNodeUri(@NonNull String pubKey, String host, int port) {
         mPubKey = pubKey;
         mHost = host;
-        mNickname = nickname;
-        mDescription = description;
-        mImage = image;
+        mPort = port;
     }
 
     @NonNull
@@ -29,23 +26,16 @@ public class LightningNodeUri implements Serializable {
         return mHost;
     }
 
-    public String getNickname() {
-        return mNickname;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public String getImage() {
-        return mImage;
+    public int getPort() {
+        return mPort;
     }
 
     public String getAsString() {
         String uri = mPubKey;
-        if (mHost != null) {
+        if (mHost != null)
             uri = uri + "@" + mHost;
-        }
+        if (mPort != 0)
+            uri = uri + ":" + mPort;
         return uri;
     }
 
@@ -53,15 +43,13 @@ public class LightningNodeUri implements Serializable {
         if (getHost() == null) {
             return false;
         }
-        return getHost().toLowerCase().contains("onion");
+        return getHost().toLowerCase().contains(".onion");
     }
 
     public static class Builder {
         private String mPubKey;
         private String mHost;
-        private String mNickname;
-        private String mDescription;
-        private String mImage;
+        private int mPort;
 
         public Builder setPubKey(@NonNull String pubKey) {
             this.mPubKey = pubKey;
@@ -75,26 +63,14 @@ public class LightningNodeUri implements Serializable {
             return this;
         }
 
-        public Builder setNickname(String nickname) {
-            this.mNickname = nickname;
-
-            return this;
-        }
-
-        public Builder setDescription(String description) {
-            this.mDescription = description;
-
-            return this;
-        }
-
-        public Builder setImage(String image) {
-            this.mImage = image;
+        public Builder setPort(int port) {
+            this.mPort = port;
 
             return this;
         }
 
         public LightningNodeUri build() {
-            return new LightningNodeUri(mPubKey, mHost, mNickname, mDescription, mImage);
+            return new LightningNodeUri(mPubKey, mHost, mPort);
         }
     }
 }

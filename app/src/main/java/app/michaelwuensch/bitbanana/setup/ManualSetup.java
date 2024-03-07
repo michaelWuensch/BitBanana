@@ -40,6 +40,7 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -195,13 +196,13 @@ public class ManualSetup extends BaseAppCompatActivity {
                 mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             }
             if (BackendConfig.getServerCert() != null && !BackendConfig.getServerCert().isEmpty()) {
-                mEtServerCertificate.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getServerCert())));
+                mEtServerCertificate.setValue(HexUtil.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getServerCert())));
             }
             if (BackendConfig.getClientCert() != null && !BackendConfig.getClientCert().isEmpty()) {
-                mEtClientCertificate.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientCert())));
+                mEtClientCertificate.setValue(HexUtil.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientCert())));
             }
             if (BackendConfig.getClientKey() != null && !BackendConfig.getClientKey().isEmpty()) {
-                mEtClientKey.setValue(UtilFunctions.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientKey())));
+                mEtClientKey.setValue(HexUtil.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getClientKey())));
             }
             mEtUser.setValue(BackendConfig.getUser());
             mEtPassword.setValue(BackendConfig.getPassword());
@@ -310,7 +311,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
-            if (!UtilFunctions.isHex(mEtMacaroon.getData())) {
+            if (!HexUtil.isHex(mEtMacaroon.getData())) {
                 showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }

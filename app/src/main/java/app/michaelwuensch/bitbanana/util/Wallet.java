@@ -63,6 +63,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -246,7 +247,7 @@ public class Wallet {
                     if (mNodeUris == null) {
                         mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                         for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                            mNodeUris[i] = LightningNodeUirParser.parseNodeUri(infoResponse.getUris(i));
+                            mNodeUris[i] = LightningNodeUriParser.parseNodeUri(infoResponse.getUris(i));
                         }
                     }
                     broadcastLndConnectionTestResult(true, -1);
@@ -460,7 +461,7 @@ public class Wallet {
                         if (mNodeUris == null) {
                             mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
                             for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                                mNodeUris[i] = LightningNodeUirParser.parseNodeUri(infoResponse.getUris(i));
+                                mNodeUris[i] = LightningNodeUriParser.parseNodeUri(infoResponse.getUris(i));
                             }
                         }
                         mInfoFetched = true;
@@ -685,7 +686,7 @@ public class Wallet {
                 .subscribe(nodeInfo -> {
                     if (nodeInfo.getNode().getAddressesCount() > 0) {
                         String tempUri = nodeUri.getPubKey() + "@" + nodeInfo.getNode().getAddresses(0).getAddr();
-                        LightningNodeUri nodeUriWithHost = LightningNodeUirParser.parseNodeUri(tempUri);
+                        LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
                             connectPeer(nodeUriWithHost, openChannel, amount, targetConf, isPrivate);
@@ -704,7 +705,7 @@ public class Wallet {
     }
 
     private void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
-        byte[] nodeKeyBytes = UtilFunctions.hexToBytes(nodeUri.getPubKey());
+        byte[] nodeKeyBytes = HexUtil.hexToBytes(nodeUri.getPubKey());
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
                 .setTargetConf(targetConf)

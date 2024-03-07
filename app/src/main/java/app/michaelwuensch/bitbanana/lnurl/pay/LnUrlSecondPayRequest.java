@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.Random;
 
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 
 /**
  * This class helps to construct the second pay request.
@@ -83,7 +83,7 @@ public class LnUrlSecondPayRequest {
     private String generateNonce() {
         byte[] b = new byte[8];
         new Random().nextBytes(b);
-        return UtilFunctions.bytesToHex(b);
+        return HexUtil.bytesToHex(b);
     }
 
     private String appendComment() {

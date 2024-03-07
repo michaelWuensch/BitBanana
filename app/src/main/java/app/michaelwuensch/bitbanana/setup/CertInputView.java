@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 
 public class CertInputView extends BBInputFieldView {
 
@@ -55,7 +55,7 @@ public class CertInputView extends BBInputFieldView {
                     String tabText = String.valueOf(tab.getText());
                     switch (tabText) {
                         case "Hex":
-                            setValue(UtilFunctions.bytesToHex(getDataAsBytes()));
+                            setValue(HexUtil.bytesToHex(getDataAsBytes()));
                             break;
                         case "Base64":
                             setValue(convertCurrentDataToBase64());
@@ -107,9 +107,9 @@ public class CertInputView extends BBInputFieldView {
             String tabText = String.valueOf(mLastTab.getText());
             switch (tabText) {
                 case "Hex":
-                    if (!UtilFunctions.isHex(mEtInput.getText().toString()))
+                    if (!HexUtil.isHex(mEtInput.getText().toString()))
                         return null;
-                    byteData = UtilFunctions.hexToBytes(mEtInput.getText().toString());
+                    byteData = HexUtil.hexToBytes(mEtInput.getText().toString());
                     byteData = removePemOverhead(byteData);
                     break;
                 case "Base64":
