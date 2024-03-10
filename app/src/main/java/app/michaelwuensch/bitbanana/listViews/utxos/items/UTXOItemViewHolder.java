@@ -40,7 +40,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
         mUTXOAddress.setText(utxoListItem.getUtxo().getAddress());
 
         // Set utxo amount
-        mUTXOAmount.setAmountSat(utxoListItem.getUtxo().getAmountSat());
+        mUTXOAmount.setAmountMsat(utxoListItem.getUtxo().getAmountMsat());
 
         // Show unconfirmed as semitransparent
         mUTXOContentView.setAlpha(utxoListItem.getUtxo().getConfirmations() == 0 ? 0.5f : 1f);
@@ -58,7 +58,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mUTXOSelectListener != null) {
-                    mUTXOSelectListener.onUtxoSelect(item.getUtxo().toByteString());
+                    mUTXOSelectListener.onUtxoSelect(item.getUtxo());
                 }
             }
         });

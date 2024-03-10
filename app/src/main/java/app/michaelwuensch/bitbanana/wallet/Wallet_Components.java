@@ -32,11 +32,8 @@ import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PreviousOutPoint;
 import com.github.lightningnetwork.lnd.lnrpc.Resolution;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
-import com.github.lightningnetwork.lnd.walletrpc.ListLeasesRequest;
-import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.UtxoLease;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
@@ -50,10 +47,13 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.HexUtil;
@@ -544,42 +544,18 @@ public class Wallet_Components {
 
 
     public void fetchUTXOs() {
-        if (LndConnection.getInstance().getWalletKitService() != null) {
-            ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
-                    .setMaxConfs(999999999) // default is 0
-                    .build();
-
-            compositeDisposable.add(LndConnection.getInstance().getWalletKitService().listUnspent(listUnspentRequest)
-                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                    .subscribe(utxoList -> {
-                                mUTXOsList = utxoList.getUtxosList();
-
-                                // Notify Listeners
+        if (Wallet.getInstance().isInfoFetched()) {
+            compositeDisposable.add(BackendManager.getCurrentBackend().api().getUTXOList(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
+                    .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                    .subscribe(response -> {
+                                mUTXOsList = response;
                                 broadcastUtxoListUpdated();
                             }
                             , throwable -> {
-                                BBLog.w(LOG_TAG, "Fetching utxo list failed." + throwable.getMessage());
+                                BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.getMessage());
                             }));
-        }
-    }
-
-    public void fetchLockedUTXOs() {
-        if (LndConnection.getInstance().getWalletKitService() != null) {
-            ListLeasesRequest listLeasesRequest = ListLeasesRequest.newBuilder()
-                    .build();
-
-            compositeDisposable.add(LndConnection.getInstance().getWalletKitService().listLeases(listLeasesRequest)
-                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                    .subscribe(lockedUtxoList -> {
-                                mLockedUTXOsList = lockedUtxoList.getLockedUtxosList();
-
-                                // Notify Listeners
-                                broadcastLockedUtxoListUpdated();
-
-                            }
-                            , throwable -> {
-                                BBLog.w(LOG_TAG, "Fetching locked utxo list failed." + throwable.getMessage());
-                            }));
+        } else {
+            BBLog.w(LOG_TAG, "Fetching utxo list failed. Block height is not yet fetched.");
         }
     }
 
@@ -1137,15 +1113,6 @@ public class Wallet_Components {
         }
     }
 
-    /**
-     * Notify all listeners to locked utxo list update.
-     */
-    private void broadcastLockedUtxoListUpdated() {
-        for (UtxoSubscriptionListener listener : mUtxoSubscriptionListeners) {
-            listener.onLockedUtxoListUpdated();
-        }
-    }
-
     public void registerUtxoSubscriptionListener(UtxoSubscriptionListener listener) {
         mUtxoSubscriptionListeners.add(listener);
     }
@@ -1275,8 +1242,6 @@ public class Wallet_Components {
 
     public interface UtxoSubscriptionListener {
         void onUtxoListUpdated();
-
-        void onLockedUtxoListUpdated();
     }
 
     public interface ChannelEventSubscriptionListener {

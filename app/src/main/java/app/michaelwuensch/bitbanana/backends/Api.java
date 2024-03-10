@@ -1,7 +1,10 @@
 package app.michaelwuensch.bitbanana.backends;
 
+import java.util.List;
+
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import io.reactivex.rxjava3.core.Single;
 
@@ -28,6 +31,10 @@ public class Api {
     }
 
     public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<List<Utxo>> getUTXOList(long currentBlockHeight) {
         return Single.error(unsupportedException());
     }
 }

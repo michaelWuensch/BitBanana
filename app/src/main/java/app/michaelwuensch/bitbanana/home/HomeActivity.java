@@ -269,7 +269,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                 Wallet.getInstance().connectionTest(false);
                             }
                         }
-                    }, 0, 30, TimeUnit.SECONDS);
+                    }, 0, 15, TimeUnit.SECONDS);
         }
 
     }
@@ -838,8 +838,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 break;
             case NO_BACKEND_SELECTED:
                 updateDrawerNavigationMenuVisibilities();
-                if (mNodeInfoScheduler != null)
+                if (mNodeInfoScheduler != null) {
                     mNodeInfoScheduler.shutdownNow();
+                    mIsNodeInfoSchedulerRunning = false;
+                }
                 break;
             case ACTIVATING_BACKEND:
                 updateDrawerNavigationMenuVisibilities();

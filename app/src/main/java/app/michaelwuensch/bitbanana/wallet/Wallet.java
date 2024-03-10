@@ -289,7 +289,6 @@ public class Wallet {
 
                 // Fetch UTXOs
                 Wallet_Components.getInstance().fetchUTXOs();
-                Wallet_Components.getInstance().fetchLockedUTXOs();
 
                 // Subscribe to Transaction Events
                 Wallet_Components.getInstance().subscribeToTransactions();

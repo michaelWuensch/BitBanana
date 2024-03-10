@@ -1,6 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.utxos.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Utxo;
+import app.michaelwuensch.bitbanana.models.Utxo;
 
 public class UTXOListItem implements Comparable<UTXOListItem> {
 

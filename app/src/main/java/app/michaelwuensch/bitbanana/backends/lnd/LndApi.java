@@ -6,12 +6,16 @@ import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
@@ -58,7 +62,7 @@ public class LndApi extends Api {
                             .setSynced(response.getSyncedToChain())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getInfo failed! " + throwable.toString()));
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getInfo failed: " + throwable.toString()));
     }
 
     @Override
@@ -109,5 +113,29 @@ public class LndApi extends Api {
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> getUTXOList(long currentBlockHeight) {
+        ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
+                .setMaxConfs(999999999) // default is 0
+                .build();
+
+        return LndConnection.getInstance().getWalletKitService().listUnspent(listUnspentRequest)
+                .map(response -> {
+                    List<app.michaelwuensch.bitbanana.models.Utxo> utxoList = new ArrayList<>();
+                    for (Utxo utxo : response.getUtxosList()) {
+                        utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
+                                .setAddress(utxo.getAddress())
+                                .setAmountMsat(utxo.getAmountSat() * 1000)
+                                .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
+                                .setConfirmations(utxo.getConfirmations())
+                                .setTransactionID(utxo.getOutpoint().getTxidStr())
+                                .setOutputIndex(utxo.getOutpoint().getOutputIndex())
+                                .build());
+                    }
+                    return utxoList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.fillInStackTrace()));
     }
 }
