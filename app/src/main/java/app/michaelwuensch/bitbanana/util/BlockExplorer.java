@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 /**
  * This class allows showing details of On-Chain transactions and addresses using
@@ -28,7 +30,7 @@ public class BlockExplorer {
      * @param ctx
      */
     public void showTransaction(String transactionID, Context ctx) {
-        if (Wallet.getInstance().getNetwork() == Wallet.Network.REGTEST) {
+        if (Wallet.getInstance().getNetwork() == BaseBackendConfig.Network.REGTEST) {
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.regtest_blockexplorer_unavailable)
                     .setCancelable(true)
@@ -39,7 +41,7 @@ public class BlockExplorer {
 
         mContext = ctx;
         String explorer = PrefsUtil.getBlockExplorer();
-        boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
+        boolean isMainnet = Wallet.getInstance().getNetwork() == BaseBackendConfig.Network.MAINNET;
         String networkID = "";
         mUrl = "";
         mIsNetworkSupported = true;
@@ -90,7 +92,7 @@ public class BlockExplorer {
      */
     public void showAddress(String address, Context ctx) {
 
-        if (Wallet.getInstance().getNetwork() == Wallet.Network.REGTEST) {
+        if (Wallet.getInstance().getNetwork() == BaseBackendConfig.Network.REGTEST) {
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.regtest_blockexplorer_unavailable)
                     .setCancelable(true)
@@ -101,7 +103,7 @@ public class BlockExplorer {
 
         mContext = ctx;
         String explorer = PrefsUtil.getBlockExplorer();
-        boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
+        boolean isMainnet = Wallet.getInstance().getNetwork() == BaseBackendConfig.Network.MAINNET;
         String networkID = "";
         mUrl = "";
         mIsNetworkSupported = true;
@@ -171,7 +173,7 @@ public class BlockExplorer {
                 mContext.startActivity(browserIntent);
             } else {
                 String explorer = PrefsUtil.getBlockExplorer();
-                boolean isMainnet = Wallet.getInstance().getNetwork() == Wallet.Network.MAINNET;
+                boolean isMainnet = Wallet.getInstance().getNetwork() == BaseBackendConfig.Network.MAINNET;
                 unsupportedNetwork(explorer, isMainnet ? "mainnet" : "testnet", mContext);
             }
         }

@@ -17,12 +17,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.Balances;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 
 public class MainBalanceView extends MotionLayout {
     private static final String LOG_TAG = MainBalanceView.class.getSimpleName();
@@ -236,9 +237,9 @@ public class MainBalanceView extends MotionLayout {
 
                 Balances balances;
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    balances = Wallet.getInstance().getBalances();
+                    balances = Wallet_Balance.getInstance().getBalances();
                 } else {
-                    balances = Wallet.getInstance().getDemoBalances();
+                    balances = Wallet_Balance.getInstance().getDemoBalances();
                 }
 
                 mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(balances.total()));

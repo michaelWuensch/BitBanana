@@ -56,7 +56,8 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 
 public class SendBSDFragment extends BaseBSDFragment {
@@ -211,26 +212,18 @@ public class SendBSDFragment extends BaseBSDFragment {
                     // make text red if input is too large
                     long maxSendable;
                     if (mOnChain) {
-                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                            maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
-                        } else {
-                            maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
-                        }
+                        maxSendable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
                     } else {
-                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                            maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
-                        } else {
-                            maxSendable = 750000;
-                        }
+                        maxSendable = Wallet_Components.getInstance().getMaxLightningSendAmount();
                     }
 
                     if (mSendAmountSat > maxSendable) {
                         if (mOnChain) {
-                            if (mSendAmountSat < Wallet.getInstance().getBalances().onChainTotal()) {
+                            if (mSendAmountSat < Wallet_Balance.getInstance().getBalances().onChainTotal()) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainTotal());
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet_Balance.getInstance().getBalances().onChainTotal());
                                 showError(message, 4000);
                             }
                         } else {
@@ -363,7 +356,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendCoins(sendRequest)
                                 .subscribe(sendCoinsResponse -> {
                                     // updated the history, so it is shown the next time the user views it
-                                    Wallet.getInstance().updateOnChainTransactionHistory();
+                                    Wallet_Components.getInstance().updateOnChainTransactionHistory();
 
                                     BBLog.v(LOG_TAG, sendCoinsResponse.toString());
 
@@ -446,7 +439,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
 
                         long paymentAmount = getLightningPaymentAmountSat();
-                        
+
                         // sanity check for fees
                         if (mCalculatedFee != -1) {
                             if (mCalculatedFeePercent >= 1f) {

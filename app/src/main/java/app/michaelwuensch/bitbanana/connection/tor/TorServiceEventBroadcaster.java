@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import io.matthewnelson.topl_service_base.TorPortInfo;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
@@ -26,8 +26,8 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
             HttpClient.getInstance().restartHttpClient();
 
             // Continue backend connection process if it waited for Tor connection to be established
-            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
-                BackendSwitcher.activateBackendConfig4();
+            if (BackendManager.getCurrentBackendConfig() != null && BackendManager.getCurrentBackendConfig().getUseTor() && BackendManager.getBackendState() == BackendManager.BackendState.STARTING_TOR) {
+                BackendManager.activateBackendConfig4();
             }
         } else {
             TorManager.getInstance().setIsProxyRunning(false);
@@ -60,8 +60,8 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
         if (notice.startsWith("WARN|BaseEventListener|Problem bootstrapping.")) {
             TorManager.getInstance().broadcastTorError();
             // Show error message on connection screen
-            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
-                BackendSwitcher.setError(BackendSwitcher.ERROR_TOR_BOOTSTRAPPING_FAILED);
+            if (BackendManager.getCurrentBackendConfig() != null && BackendManager.getCurrentBackendConfig().getUseTor() && BackendManager.getBackendState() == BackendManager.BackendState.STARTING_TOR) {
+                BackendManager.setError(BackendManager.ERROR_TOR_BOOTSTRAPPING_FAILED);
             }
         }
     }

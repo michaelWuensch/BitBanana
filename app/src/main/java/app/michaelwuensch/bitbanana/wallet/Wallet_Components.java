@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.util;
+package app.michaelwuensch.bitbanana.wallet;
 
 
 import android.os.Handler;
@@ -6,8 +6,6 @@ import android.os.Handler;
 import com.github.lightningnetwork.lnd.lnrpc.ChanBackupSnapshot;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBackupSubscription;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
@@ -16,8 +14,6 @@ import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
-import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
@@ -27,7 +23,6 @@ import com.github.lightningnetwork.lnd.lnrpc.ListChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
-import com.github.lightningnetwork.lnd.lnrpc.NodeInfo;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
@@ -37,10 +32,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PreviousOutPoint;
 import com.github.lightningnetwork.lnd.lnrpc.Resolution;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
-import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
-import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
 import com.github.lightningnetwork.lnd.walletrpc.ListLeasesRequest;
@@ -57,29 +49,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.DebounceHandler;
+import app.michaelwuensch.bitbanana.util.HexUtil;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class Wallet {
+public class Wallet_Components {
 
-    private static final String LOG_TAG = Wallet.class.getSimpleName();
+    private static final String LOG_TAG = Wallet_Components.class.getSimpleName();
 
-    private static Wallet mInstance = null;
-    private final Set<BalanceListener> mBalanceListeners = new HashSet<>();
-    private final Set<InfoListener> mInfoListeners = new HashSet<>();
+    private static Wallet_Components mInstance = null;
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
-    private final Set<LndConnectionTestListener> mLndConnectionTestListeners = new HashSet<>();
-    private final Set<WalletLoadedListener> mWalletLoadedListeners = new HashSet<>();
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
     private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
     private final Set<ChannelEventSubscriptionListener> mChannelEventSubscriptionListeners = new HashSet<>();
@@ -101,45 +92,28 @@ public class Wallet {
     public List<PendingChannelsResponse.ForceClosedChannel> mPendingForceClosedChannelsList;
     public List<PendingChannelsResponse.WaitingCloseChannel> mPendingWaitingCloseChannelsList;
     public List<ChannelCloseSummary> mClosedChannelsList;
-    public List<NodeInfo> mNodeInfos = new LinkedList<>();
     public List<Utxo> mUTXOsList;
     public List<UtxoLease> mLockedUTXOsList;
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private long mOnChainBalanceTotal = 0;
-    private long mOnChainBalanceConfirmed = 0;
-    private long mOnChainBalanceUnconfirmed = 0;
-    private long mChannelBalance = 0;
-    private long mChannelBalancePendingOpen = 0;
-    private long mChannelBalanceLimbo = 0;
-    private String mIdentityPubKey;
-    private LightningNodeUri[] mNodeUris;
-    private int mSyncedBlockHeight;
-    private boolean mConnectedToLND = false;
-    private boolean mInfoFetched = false;
-    private boolean mBalancesFetched = false;
-    private boolean mChannelsFetched = false;
-    private boolean mIsWalletReady = false;
-    private boolean mSyncedToChain = false;
+    public boolean mChannelsFetched = false;
     private boolean mTransactionUpdated = false;
     private boolean mInvoicesUpdated = false;
     private boolean mPaymentsUpdated = false;
     private boolean mUpdatingHistory = false;
-    private Network mNetwork = Network.MAINNET;
-    private String mLNDVersionString;
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Handler mHandler = new Handler();
     private DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
-    private DebounceHandler mBalancesDebounceHandler = new DebounceHandler();
 
-    private Wallet() {
+    private Wallet_Components() {
         ;
     }
 
-    public static Wallet getInstance() {
+    public static Wallet_Components getInstance() {
 
         if (mInstance == null) {
-            mInstance = new Wallet();
+            mInstance = new Wallet_Components();
         }
 
         return mInstance;
@@ -150,15 +124,7 @@ public class Wallet {
      */
     public void reset() {
         compositeDisposable.clear();
-        mOnChainBalanceTotal = 0;
-        mOnChainBalanceConfirmed = 0;
-        mOnChainBalanceUnconfirmed = 0;
-        mChannelBalance = 0;
-        mChannelBalancePendingOpen = 0;
-        mChannelBalanceLimbo = 0;
 
-        mSyncedBlockHeight = 0;
-        mConnectedToLND = false;
         mOnChainTransactionList = null;
         mInvoiceList = null;
         mTempInvoiceUpdateList = null;
@@ -170,318 +136,16 @@ public class Wallet {
         mPendingWaitingCloseChannelsList = null;
         mUTXOsList = null;
         mLockedUTXOsList = null;
-
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
         mPaymentsUpdated = false;
         mUpdatingHistory = false;
-
-        mInfoFetched = false;
-        mBalancesFetched = false;
         mChannelsFetched = false;
-        mIsWalletReady = false;
-        mSyncedToChain = false;
-        mNetwork = Network.MAINNET;
-        mIdentityPubKey = null;
-        mNodeUris = null;
+
         mHandler.removeCallbacksAndMessages(null);
-        App.getAppContext().connectionToLNDEstablished = false;
         mChannelsUpdateDebounceHandler.shutdown();
-        mBalancesDebounceHandler.shutdown();
     }
 
-    public void checkIfLndIsUnlockedAndConnect() {
-
-        BBLog.d(LOG_TAG, "LND connection test.");
-        broadcastLndConnectionTestStarted();
-
-        compositeDisposable.add(LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                .subscribe(getStateResponse -> {
-
-                    switch (getStateResponse.getState()) {
-                        case LOCKED:
-                            BBLog.d("LockState", "Wallet is locked!");
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
-                            break;
-                        default:
-                            BBLog.d("LockState", "Wallet is unlocked.");
-                            loadWallet();
-                    }
-                }, throwable -> {
-                    // If we are unable to determine the wallet state we call the following function that will handle the error messages.
-                    BBLog.w("LockState", throwable.getMessage()); // There is a hard coded proxy connect timeout of 30 seconds that we cannot change. With tor we often reach this.
-                    loadWallet();
-                }));
-    }
-
-    /**
-     * This will be used on loading. If this request finishes without an error, our connection to LND is established.
-     * All listeners registered to LndConnectionTestListener will be informed about the result.
-     */
-    public void loadWallet() {
-        // Retrieve info from LND with gRPC (async)
-        mIsWalletReady = false;
-        mBalancesFetched = false;
-        mChannelsFetched = false;
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                .subscribe(infoResponse -> {
-                    BBLog.d(LOG_TAG, "LND is reachable.");
-                    // Save the received data.
-                    mSyncedToChain = infoResponse.getSyncedToChain();
-                    mSyncedBlockHeight = infoResponse.getBlockHeight();
-
-                    for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                        if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                            mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                            break;
-                        }
-                    }
-
-                    mLNDVersionString = infoResponse.getVersion();
-                    mInfoFetched = true;
-                    mConnectedToLND = true;
-                    mIdentityPubKey = infoResponse.getIdentityPubkey();
-                    if (mNodeUris == null) {
-                        mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
-                        for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                            mNodeUris[i] = LightningNodeUriParser.parseNodeUri(infoResponse.getUris(i));
-                        }
-                    }
-                    broadcastLndConnectionTestResult(true, -1);
-                }, throwable -> {
-
-                    if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
-                        BBLog.e(LOG_TAG, "LND Service unavailable");
-                        if (throwable.getCause() != null) {
-                            if (throwable.getCause().getMessage().toLowerCase().contains("cannot verify hostname")) {
-                                // This is the case if:
-                                // - The hostname used to initiate the lnd connection (the hostname from the lndconnect string) does not match with the hostname in the provided certificate.
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_VERIFICATION);
-                            } else if (throwable.getCause().getMessage().toLowerCase().contains("unable to resolve host")) {
-                                // This is the case if:
-                                // - We have an internet or network connection, but the desired host is not resolvable.
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
-                            } else if (throwable.getCause().getMessage().toLowerCase().contains("enetunreach")) {
-                                // This is the case if:
-                                // - We have no internet or network connection at all.
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE);
-                            } else if (throwable.getCause().getMessage().toLowerCase().contains("econnrefused")) {
-                                // This is the case if:
-                                // - LND daemon is not running
-                                // - An incorrect port is used
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_UNAVAILABLE);
-                            } else if (throwable.getCause().getMessage().toLowerCase().contains("trust anchor")) {
-                                // This is the case if:
-                                // - tor is not used and no certificate is provided or a wrong certificate is provided
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED);
-                            } else {
-                                // Unknown error. Print what gets returned directly, always english.
-                                broadcastLndConnectionTestResult(throwable.getCause().getMessage());
-                            }
-                        } else if (throwable.getMessage().toLowerCase().contains("404") && PrefsUtil.isTorEnabled()) {
-                            // This is the case if:
-                            // - Tor is turned on, but the host cannot be resolved
-                            broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
-                        } else if (throwable.getMessage().toLowerCase().contains("500") && PrefsUtil.isTorEnabled()) {
-                            if (BackendSwitcher.getCurrentBackendConfig().isTorHostAddress()) {
-                                // This is the case if:
-                                // - Tor is turned on and an incorrect port is used.
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL);
-                            } else {
-                                // This is the case if:
-                                // - happened for a user that used wireguard and connected to a clearnet node. Disabling tor solved connection issues.
-                                broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERNAL_CLEARNET);
-                            }
-                        } else {
-                            // Unknown error. Print what gets returned directly, always english.
-                            broadcastLndConnectionTestResult(throwable.getMessage());
-                        }
-                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        // This is the case if:
-                        // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
-                        BBLog.e(LOG_TAG, "Cannot reach remote");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TIMEOUT);
-                    } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
-                        // This is the case if:
-                        // - The macaroon is invalid
-                        BBLog.e(LOG_TAG, "Macaroon is invalid!");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
-                    } else if (throwable.getMessage().contains("UNKNOWN")) {
-                        // This is the case if:
-                        // - The macaroon has wrong encoding
-                        BBLog.e(LOG_TAG, "Macaroon is invalid!");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_AUTHENTICATION);
-                    } else if (throwable.getMessage().contains(".onion")) {
-                        // This is the case if:
-                        // - Tor is not active in the settings and the user tries to connect to a tor node.
-                        BBLog.e(LOG_TAG, "Cannot resolve onion address!");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_TOR);
-                    } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
-                        BBLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
-                        broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_INTERRUPTED);
-                    } else {
-                        // Unknown error. Print what gets returned directly, always english.
-                        BBLog.e(LOG_TAG, "Unknown connection error..");
-                        broadcastLndConnectionTestResult(throwable.getMessage());
-                    }
-                    BBLog.e(LOG_TAG, throwable.getMessage());
-                    if (throwable.getCause() != null) {
-                        BBLog.e(LOG_TAG, throwable.getCause().getMessage());
-                        throwable.getCause().printStackTrace();
-                    }
-                }));
-
-    }
-
-    /**
-     * Call this if the daemon is running, but the wallet is not unlocked yet.
-     *
-     * @param password
-     */
-    public void unlockWallet(String password) {
-        UnlockWalletRequest unlockRequest = UnlockWalletRequest.newBuilder()
-                .setWalletPassword(ByteString.copyFrom(password.getBytes()))
-                .build();
-
-        compositeDisposable.add(LndConnection.getInstance().getWalletUnlockerService().unlockWallet(unlockRequest)
-                .subscribe(unlockWalletResponse -> {
-                    BBLog.d(LOG_TAG, "successfully unlocked");
-
-                    // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
-                    // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
-                    LndConnection.getInstance().restartConnection();
-
-                    mHandler.postDelayed(() -> {
-                        // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
-                        // ToDo: Create a routine that retries this until successful
-                        loadWallet();
-                    }, 10000);
-
-                    mHandler.postDelayed(() -> {
-                        // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
-                        // That's why we update it again 10 seconds later.
-                        // ToDo: Create a routine that retries this until successful
-                        Wallet.getInstance().fetchChannelsFromLND();
-                    }, 12000);
-                }, throwable -> {
-                    BBLog.e(LOG_TAG, throwable.getMessage());
-                    // Show password prompt again after error
-                    broadcastLndConnectionTestResult(false, LndConnectionTestListener.ERROR_LOCKED);
-                }));
-    }
-
-    /**
-     * This will return a Balance object that contains all types of balances.
-     * Please note that this might be different from the actual balance on LND.
-     * To update what this function returns call fetchBalanceFromLND()
-     *
-     * @return
-     */
-    public Balances getBalances() {
-        return new Balances(mOnChainBalanceTotal, mOnChainBalanceConfirmed,
-                mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePendingOpen, mChannelBalanceLimbo);
-    }
-
-    /**
-     * This will return a Balance object that contains all types of balances.
-     * Use this only when wallet is not yet setup. The balances are not real and will always be the same.
-     * If desired, these values can be set to specific values for demonstration purposes.
-     *
-     * @return
-     */
-    public Balances getDemoBalances() {
-        return new Balances(0, 0,
-                0, 0, 0, 0);
-    }
-
-    public void fetchBalancesWithDebounce() {
-        BBLog.d(LOG_TAG, "Fetch balance from LND. (debounce)");
-
-        mBalancesDebounceHandler.attempt(this::fetchBalanceFromLND, DebounceHandler.DEBOUNCE_1_SECOND);
-    }
-
-    /**
-     * This will fetch the current balance from LND.
-     * All Listeners registered to BalanceListener will be informed about any changes.
-     */
-    public void fetchBalanceFromLND() {
-
-        Single<WalletBalanceResponse> walletBalance = LndConnection.getInstance().getLightningService().walletBalance(WalletBalanceRequest.newBuilder().build());
-        Single<ChannelBalanceResponse> channelBalance = LndConnection.getInstance().getLightningService().channelBalance(ChannelBalanceRequest.newBuilder().build());
-        Single<PendingChannelsResponse> pendingChannels = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
-
-        compositeDisposable.add(Single.zip(walletBalance, channelBalance, pendingChannels, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
-
-            setOnChainBalance(walletBalanceResponse.getTotalBalance(), walletBalanceResponse.getConfirmedBalance(), walletBalanceResponse.getUnconfirmedBalance());
-            setChannelBalance(channelBalanceResponse.getLocalBalance().getSat(), channelBalanceResponse.getPendingOpenLocalBalance().getSat());
-            setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
-
-            return true;
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-            // Zip executed without error
-            BBLog.d(LOG_TAG, "Balances Fetched!");
-            broadcastBalanceUpdate();
-
-            if (!mIsWalletReady) {
-                mBalancesFetched = true;
-                if (mChannelsFetched) {
-                    mIsWalletReady = true;
-                    broadcastWalletLoadedUpdate();
-                }
-            }
-        }, throwable -> BBLog.e(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
-    }
-
-    /**
-     * This will fetch the current info from LND.
-     * All Listeners registered to InfoListener will be informed about any changes.
-     */
-    public void fetchInfoFromLND() {
-        // Retrieve info from LND with gRPC (async)
-        if (LndConnection.getInstance().getLightningService() != null) {
-            compositeDisposable.add(LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
-                    .subscribe(infoResponse -> {
-
-                        // Save the received data.
-                        mSyncedToChain = infoResponse.getSyncedToChain();
-                        mLNDVersionString = infoResponse.getVersion();
-                        mIdentityPubKey = infoResponse.getIdentityPubkey();
-                        mSyncedBlockHeight = infoResponse.getBlockHeight();
-
-                        for (int i = 0; i < infoResponse.getChainsCount(); i++) {
-                            if (infoResponse.getChains(i).getChain().equals("bitcoin")) {
-                                mNetwork = Network.parseFromString(infoResponse.getChains(i).getNetwork());
-                                break;
-                            }
-                        }
-
-                        if (mNodeUris == null) {
-                            mNodeUris = new LightningNodeUri[infoResponse.getUrisCount()];
-                            for (int i = 0; i < infoResponse.getUrisCount(); i++) {
-                                mNodeUris[i] = LightningNodeUriParser.parseNodeUri(infoResponse.getUris(i));
-                            }
-                        }
-                        mInfoFetched = true;
-                        mConnectedToLND = true;
-
-                        broadcastInfoUpdate(true);
-                    }, throwable -> {
-                        if (throwable.getMessage().toLowerCase().contains("unavailable")) {
-                            mConnectedToLND = false;
-                            broadcastInfoUpdate(false);
-                        }
-                        BBLog.w(LOG_TAG, "Exception in fetch info task: " + throwable.getMessage());
-                    }));
-        }
-    }
-
-    public void simulateFetchInfoForDemo() {
-        mConnectedToLND = true;
-        broadcastInfoUpdate(true);
-    }
 
     /**
      * This will fetch all transaction history from LND.
@@ -821,11 +485,11 @@ public class Wallet {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
             // Zip executed without error
             BBLog.d(LOG_TAG, "Channels fetched!");
-            if (!mIsWalletReady) {
+            if (!Wallet.getInstance().mIsWalletReady) {
                 mChannelsFetched = true;
-                if (mBalancesFetched) {
-                    mIsWalletReady = true;
-                    broadcastWalletLoadedUpdate();
+                if (Wallet_Balance.getInstance().mBalancesFetched) {
+                    Wallet.getInstance().mIsWalletReady = true;
+                    Wallet.getInstance().setWalletLoadState(Wallet.WalletLoadState.WALLET_LOADED);
                 }
             }
         }, throwable -> BBLog.e(LOG_TAG, "Exception in get channels info request task: " + throwable.getMessage())));
@@ -956,7 +620,7 @@ public class Wallet {
                 .subscribe(transaction -> {
                     BBLog.d(LOG_TAG, "Received transaction subscription event.");
                     fetchTransactionsFromLND(); // update internal transaction list
-                    fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
+                    Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
                 }));
     }
@@ -971,7 +635,7 @@ public class Wallet {
         compositeDisposable.add(LndConnection.getInstance().getRouterService().subscribeHtlcEvents(SubscribeHtlcEventsRequest.newBuilder().build())
                 .subscribe(htlcEvent -> {
                     BBLog.d(LOG_TAG, "Received htlc subscription event. Type: " + htlcEvent.getEventType().toString());
-                    fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
+                    Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
                     updateLNDChannelsWithDebounce(); // Always update channels if a htlc event occurs.
                     broadcastHtlcEvent(htlcEvent);
                 }));
@@ -1377,139 +1041,6 @@ public class Wallet {
         return tempMax;
     }
 
-    public boolean isSyncedToChain() {
-        return mSyncedToChain;
-    }
-
-    public int getSyncedBlockHeight() {
-        return mSyncedBlockHeight;
-    }
-
-    public Network getNetwork() {
-        return mNetwork;
-    }
-
-    public String getLNDVersionString() {
-        if (isConnectedToLND() && mLNDVersionString != null) {
-            return mLNDVersionString;
-        } else {
-            return App.getAppContext().getString(R.string.notConnected);
-        }
-    }
-
-    public Version getLNDVersion() {
-        return new Version(mLNDVersionString.split("-")[0]);
-    }
-
-    public boolean isInfoFetched() {
-        return mInfoFetched;
-    }
-
-    public boolean isConnectedToLND() {
-        return mConnectedToLND;
-    }
-
-    public void setLNDAsDisconnected() {
-        mConnectedToLND = false;
-    }
-
-    public String getIdentityPubKey() {
-        return mIdentityPubKey;
-    }
-
-    public LightningNodeUri[] getNodeUris() {
-        return mNodeUris;
-    }
-
-    private void setOnChainBalance(long total, long confirmed, long unconfirmed) {
-        mOnChainBalanceTotal = total;
-        mOnChainBalanceConfirmed = confirmed;
-        mOnChainBalanceUnconfirmed = unconfirmed;
-    }
-
-    private void setChannelBalance(long balance, long pendingOpen) {
-        mChannelBalance = balance;
-        mChannelBalancePendingOpen = pendingOpen;
-    }
-
-    private void setChannelBalanceLimbo(long balanceLimbo) {
-        mChannelBalanceLimbo = balanceLimbo;
-    }
-
-    /**
-     * Notify all listeners about the lnd connection test result.
-     *
-     * @param success true if successful
-     * @param error   one of LndConnectionTestListener errors
-     */
-    public void broadcastLndConnectionTestResult(boolean success, int error) {
-        if (success) {
-            for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
-                listener.onLndConnectSuccess();
-            }
-        } else {
-            for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
-                listener.onLndConnectError(error);
-            }
-        }
-    }
-
-    public void broadcastLndConnectionTestResult(String errorMessage) {
-        for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
-            listener.onLndConnectError(errorMessage);
-        }
-    }
-
-    public void broadcastLndConnectionTestStarted() {
-        for (LndConnectionTestListener listener : mLndConnectionTestListeners) {
-            listener.onLndConnectionTestStarted();
-        }
-    }
-
-    public void registerLndConnectionTestListener(LndConnectionTestListener listener) {
-        mLndConnectionTestListeners.add(listener);
-    }
-
-    public void unregisterLndConnectionTestListener(LndConnectionTestListener listener) {
-        mLndConnectionTestListeners.remove(listener);
-    }
-
-    /**
-     * Notify all listeners to balance updates.
-     */
-    private void broadcastBalanceUpdate() {
-        for (BalanceListener listener : mBalanceListeners) {
-            listener.onBalanceUpdated();
-        }
-    }
-
-    public void registerBalanceListener(BalanceListener listener) {
-        mBalanceListeners.add(listener);
-    }
-
-    public void unregisterBalanceListener(BalanceListener listener) {
-        mBalanceListeners.remove(listener);
-    }
-
-    /**
-     * Notify all listeners to info updates.
-     *
-     * @param connected true if connected to wallet
-     */
-    private void broadcastInfoUpdate(boolean connected) {
-        for (InfoListener listener : mInfoListeners) {
-            listener.onInfoUpdated(connected);
-        }
-    }
-
-    public void registerInfoListener(InfoListener listener) {
-        mInfoListeners.add(listener);
-    }
-
-    public void unregisterInfoListener(InfoListener listener) {
-        mInfoListeners.remove(listener);
-    }
-
     /**
      * Notify all listeners to history updates.
      */
@@ -1710,20 +1241,6 @@ public class Wallet {
         mChannelOpenUpdateListeners.remove(listener);
     }
 
-    private void broadcastWalletLoadedUpdate() {
-        for (WalletLoadedListener listener : mWalletLoadedListeners) {
-            listener.onWalletLoaded();
-        }
-    }
-
-    public void registerWalletLoadedListener(WalletLoadedListener listener) {
-        mWalletLoadedListeners.add(listener);
-    }
-
-    public void unregisterWalletLoadedListener(WalletLoadedListener listener) {
-        mWalletLoadedListeners.remove(listener);
-    }
-
     private void broadcastPeerConnectedEvent() {
         for (PeerUpdateListener listener : mPeerUpdateListeners) {
             listener.onConnectedToPeer();
@@ -1736,42 +1253,6 @@ public class Wallet {
 
     public void unregisterPeerUpdateListener(PeerUpdateListener listener) {
         mPeerUpdateListeners.remove(listener);
-    }
-
-    public interface LndConnectionTestListener {
-
-        int ERROR_LOCKED = 0;
-        int ERROR_INTERRUPTED = 1;
-        int ERROR_TIMEOUT = 2;
-        int ERROR_UNAVAILABLE = 3;
-        int ERROR_AUTHENTICATION = 4;
-        int ERROR_TOR = 5;
-        int ERROR_HOST_VERIFICATION = 6;
-        int ERROR_HOST_UNRESOLVABLE = 7;
-        int ERROR_NETWORK_UNREACHABLE = 8;
-        int ERROR_CERTIFICATE_NOT_TRUSTED = 9;
-        int ERROR_INTERNAL = 10;
-        int ERROR_INTERNAL_CLEARNET = 11;
-
-        void onLndConnectError(int error);
-
-        void onLndConnectError(String error);
-
-        void onLndConnectSuccess();
-
-        void onLndConnectionTestStarted();
-    }
-
-    public interface WalletLoadedListener {
-        void onWalletLoaded();
-    }
-
-    public interface BalanceListener {
-        void onBalanceUpdated();
-    }
-
-    public interface InfoListener {
-        void onInfoUpdated(boolean connected);
     }
 
     public interface HistoryListener {
@@ -1844,22 +1325,4 @@ public class Wallet {
 
         void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
     }
-
-    public enum Network {
-        MAINNET,
-        TESTNET,
-        REGTEST;
-
-        public static Wallet.Network parseFromString(String enumAsString) {
-            try {
-                return valueOf(enumAsString.toUpperCase());
-            } catch (Exception ex) {
-                return MAINNET;
-            }
-        }
-    }
 }
-
-
-
-

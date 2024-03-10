@@ -3,7 +3,6 @@ package app.michaelwuensch.bitbanana.util;
 import androidx.annotation.NonNull;
 
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
 
 public class LightningNodeUriParser {
 

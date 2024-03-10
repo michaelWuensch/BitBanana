@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import app.michaelwuensch.bitbanana.backends.Backend;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 
 /**
  * This class is used to determine if a feature is available or not.
@@ -83,6 +84,6 @@ public class FeatureManager {
     }
 
     private static Backend getBackend() {
-        return BackendSwitcher.getCurrentBackend();
+        return BackendManager.getCurrentBackend();
     }
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 
 public class LnInvoiceViewHolder extends TransactionViewHolder {
@@ -66,7 +66,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
                 setIcon(TransactionIcon.PENDING);
                 setAmountPending(0L, false, true);
 
-                if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
+                if (Wallet_Components.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
                     setPrimaryDescription(mContext.getString(R.string.request_expired));
                     setDisplayMode(false);
@@ -77,7 +77,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
             }
         } else {
             // if a specific value was requested
-            if (Wallet.getInstance().isInvoicePayed(lnInvoiceItem.getInvoice())) {
+            if (Wallet_Components.getInstance().isInvoicePayed(lnInvoiceItem.getInvoice())) {
                 // The invoice has been payed
                 setIcon(TransactionIcon.LIGHTNING);
                 setPrimaryDescription(mContext.getString(R.string.received));
@@ -87,7 +87,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
                 setIcon(TransactionIcon.PENDING);
                 setAmountPending(amt, true, true);
 
-                if (Wallet.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
+                if (Wallet_Components.getInstance().isInvoiceExpired(lnInvoiceItem.getInvoice())) {
                     // The invoice has expired
                     setPrimaryDescription(mContext.getString(R.string.request_expired));
                     setDisplayMode(false);

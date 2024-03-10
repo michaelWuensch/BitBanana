@@ -49,7 +49,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
@@ -203,7 +203,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
         LnUrlFinalOpenChannelRequest lnUrlFinalOpenChannelRequest = new LnUrlFinalOpenChannelRequest.Builder()
                 .setCallback(mLnUrlChannelResponse.getCallback())
                 .setK1(mLnUrlChannelResponse.getK1())
-                .setRemoteId(Wallet.getInstance().getIdentityPubKey())
+                .setRemoteId(Wallet.getInstance().getCurrentNodeInfo().getPubKey())
                 .setIsPrivate(mPrivateCheckbox.isChecked())
                 .build();
 

@@ -60,7 +60,7 @@
                 tools:text="BitBanana version: 0.3.0-beta, build 2018 " />
 
             <TextView
-                android:id="@+id/lndVersion"
+                android:id="@+id/backendVersion"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:gravity="center_horizontal"

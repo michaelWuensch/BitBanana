@@ -19,7 +19,7 @@ import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import fr.acinq.secp256k1.Secp256k1;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import okhttp3.Call;

@@ -47,9 +47,9 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
-public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.ChannelsUpdatedSubscriptionListener {
+public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Components.ChannelsUpdatedSubscriptionListener {
 
     private static final String LOG_TAG = ManageChannelsActivity.class.getSimpleName();
 
@@ -70,7 +70,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channels);
 
-        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        Wallet_Components.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
         mChannelSummaryView = findViewById(R.id.channelSummary);
         mEmptyListText = findViewById(R.id.listEmpty);
@@ -123,7 +123,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         // This is necessary, as we might display outdated data otherwise.
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (LndConnection.getInstance().isConnected()) {
-                Wallet.getInstance().fetchChannelsFromLND();
+                Wallet_Components.getInstance().fetchChannelsFromLND();
             }
         }
     }
@@ -140,8 +140,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         // Add all open channel items
 
-        if (Wallet.getInstance().mOpenChannelsList != null) {
-            for (Channel c : Wallet.getInstance().mOpenChannelsList) {
+        if (Wallet_Components.getInstance().mOpenChannelsList != null) {
+            for (Channel c : Wallet_Components.getInstance().mOpenChannelsList) {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
                 if (c.getActive()) {
                     outbound += openChannelItem.getChannel().getLocalBalance();
@@ -156,40 +156,40 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         // Add all pending channel items
 
         // Add open pending
-        if (Wallet.getInstance().mPendingOpenChannelsList != null) {
-            for (PendingChannelsResponse.PendingOpenChannel c : Wallet.getInstance().mPendingOpenChannelsList) {
+        if (Wallet_Components.getInstance().mPendingOpenChannelsList != null) {
+            for (PendingChannelsResponse.PendingOpenChannel c : Wallet_Components.getInstance().mPendingOpenChannelsList) {
                 PendingOpenChannelItem pendingOpenChannelItem = new PendingOpenChannelItem(c);
                 mChannelItems.add(pendingOpenChannelItem);
             }
         }
 
         // Add closing pending
-        if (Wallet.getInstance().mPendingClosedChannelsList != null) {
-            for (PendingChannelsResponse.ClosedChannel c : Wallet.getInstance().mPendingClosedChannelsList) {
+        if (Wallet_Components.getInstance().mPendingClosedChannelsList != null) {
+            for (PendingChannelsResponse.ClosedChannel c : Wallet_Components.getInstance().mPendingClosedChannelsList) {
                 PendingClosingChannelItem pendingClosingChannelItem = new PendingClosingChannelItem(c);
                 mClosedChannelItems.add(pendingClosingChannelItem);
             }
         }
 
         // Add force closing pending
-        if (Wallet.getInstance().mPendingForceClosedChannelsList != null) {
-            for (PendingChannelsResponse.ForceClosedChannel c : Wallet.getInstance().mPendingForceClosedChannelsList) {
+        if (Wallet_Components.getInstance().mPendingForceClosedChannelsList != null) {
+            for (PendingChannelsResponse.ForceClosedChannel c : Wallet_Components.getInstance().mPendingForceClosedChannelsList) {
                 PendingForceClosingChannelItem pendingForceClosingChannelItem = new PendingForceClosingChannelItem(c);
                 mClosedChannelItems.add(pendingForceClosingChannelItem);
             }
         }
 
         // Add waiting for close
-        if (Wallet.getInstance().mPendingWaitingCloseChannelsList != null) {
-            for (PendingChannelsResponse.WaitingCloseChannel c : Wallet.getInstance().mPendingWaitingCloseChannelsList) {
+        if (Wallet_Components.getInstance().mPendingWaitingCloseChannelsList != null) {
+            for (PendingChannelsResponse.WaitingCloseChannel c : Wallet_Components.getInstance().mPendingWaitingCloseChannelsList) {
                 WaitingCloseChannelItem waitingCloseChannelItem = new WaitingCloseChannelItem(c);
                 mClosedChannelItems.add(waitingCloseChannelItem);
             }
         }
 
         // Add closed channel items
-        if (Wallet.getInstance().mClosedChannelsList != null) {
-            for (ChannelCloseSummary c : Wallet.getInstance().mClosedChannelsList) {
+        if (Wallet_Components.getInstance().mClosedChannelsList != null) {
+            for (ChannelCloseSummary c : Wallet_Components.getInstance().mClosedChannelsList) {
                 ClosedChannelItem closedChannelItem = new ClosedChannelItem(c);
                 mClosedChannelItems.add(closedChannelItem);
             }
@@ -274,7 +274,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     protected void onDestroy() {
-        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        Wallet_Components.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
 
         super.onDestroy();
     }
@@ -289,7 +289,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
-            Wallet.getInstance().fetchChannelsFromLND();
+            Wallet_Components.getInstance().fetchChannelsFromLND();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }

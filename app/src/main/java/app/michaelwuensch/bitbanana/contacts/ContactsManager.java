@@ -42,7 +42,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 /**
  * This SINGLETON class is used to load and save contacts.
@@ -281,7 +281,7 @@ public class ContactsManager {
                     input.setText(AliasManager.getInstance().getAlias(contactData));
                 else {
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                        Wallet.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet.NodeInfoFetchedListener() {
+                        Wallet_Components.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet_Components.NodeInfoFetchedListener() {
                             @Override
                             public void onNodeInfoFetched(String pubkey) {
                                 if (AliasManager.getInstance().hasAliasInfo(pubkey)) {

@@ -244,7 +244,7 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
     <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While BitBanana anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldNodeSoftwareVersion">It\'s time for an update!\n\nThe node you\'re connected to is operating on an outdated version of %1$s. Versions preceding %2$s are no longer supported by BitBanana.</string>
     <string name="guardian_zero_amount_invoice">This invoice does not specify an amount. Though very unlikely, invoices without a specific amount can be exploited and the recipient will receive less than expected in that case. If possible use an invoice with a specific amount.</string>
     <string name="guardian_certificate_verification">If certificate verification is disabled, you are vulnerable to a man-in-the-middle attack. Only do this if you know what you are doing.\n\nIt is advised to get the certificate setup correct instead.\nThis means the certificate from your node has to have the hostname included that you are using in this connection setting. Add the hostname to tlsextradomain in the lnd.conf before recreating the certificate.</string>
     <string name="guardian_backup_overrides_existing_data">Some data already exists!\nRestoring a backup will delete all following data before restoring:\n\n- Node Connection Data\n- Contacts\n\nContinue?</string>
@@ -412,6 +412,7 @@
     <string name="error_input_field_empty">The %1$s input field must not be empty.</string>
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
     <string name="error_duplication">Duplication failed.</string>
+    <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -749,10 +750,13 @@
     <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Ensure that the %1$s app is running in the background. If it does, make sure all android battery optimizations are deactivated for %1$s and then restart the %1$s app. Use the button below to go to the settings.\n\nIf that doesn\'t help either, open the %1$s app and start the VPN manually to resolve the issue.</string>
     <string name="vpn_change_battery_settings">Change battery settings</string>
 
-    <string name="connection_state_disconnecting">Purge existing connections…</string>
+    <string name="connection_state_disconnecting">Clear last connection…</string>
     <string name="connection_state_starting_vpn">Starting VPN…</string>
     <string name="connection_state_starting_tor">Starting Tor…</string>
     <string name="connection_state_connecting">Connecting…</string>
+    <string name="wallet_load_sate_testing_connection">Testing connection…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Reconnect after unlocking…</string>
+    <string name="wallet_load_state_fetching_data">Fetching data…</string>
 
     <string name="unsaved_changes">There are unsaved changes.</string>
     <string name="discard">Discard</string>

@@ -31,7 +31,7 @@ import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
@@ -130,7 +130,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
                 bindPayedInvoice(invoice);
             } else {
                 // The invoice has not been payed yet
-                if (Wallet.getInstance().isInvoiceExpired(invoice)) {
+                if (Wallet_Components.getInstance().isInvoiceExpired(invoice)) {
                     bindExpiredInvoice(invoice);
                 } else {
                     // The invoice has not yet expired
@@ -139,12 +139,12 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
             }
         } else {
             // if a specific value was requested
-            if (Wallet.getInstance().isInvoicePayed(invoice)) {
+            if (Wallet_Components.getInstance().isInvoicePayed(invoice)) {
                 // The invoice has been payed
                 bindPayedInvoice(invoice);
             } else {
                 // The invoice has not been payed yet
-                if (Wallet.getInstance().isInvoiceExpired(invoice)) {
+                if (Wallet_Components.getInstance().isInvoiceExpired(invoice)) {
                     // The invoice has expired
                     bindExpiredInvoice(invoice);
                 } else {

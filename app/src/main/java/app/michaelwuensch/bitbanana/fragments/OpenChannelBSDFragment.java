@@ -40,9 +40,11 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.ChannelOpenUpdateListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Components.ChannelOpenUpdateListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
@@ -96,7 +98,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         setFeeFailure();
         mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
 
-        Wallet.getInstance().registerChannelOpenUpdateListener(this);
+        Wallet_Components.getInstance().registerChannelOpenUpdateListener(this);
 
         if (getArguments() != null) {
             mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
@@ -177,8 +179,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                 long maxSendAmount = absoluteMaxSendAmount;
 
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
-                    long onChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
+                    long onChainAvailable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
+                    long onChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
 
                     if (onChainAvailable < maxSendAmount) {
                         maxSendAmount = onChainAvailable;
@@ -217,7 +219,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                 }
 
                 switchToProgressScreen();
-                Wallet.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                Wallet_Components.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
             }
         });
 
@@ -270,9 +272,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     }
 
     private void setAvailableFunds() {
-        long available = Wallet.getInstance().getBalances().onChainConfirmed();
+        long available = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
         mOnChainConfirmed = available;
-        mOnChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
+        mOnChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
         mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
         mTvOnChainFunds.setLabelVisibility(true);
         mTvOnChainFunds.setAmountSat(available);
@@ -287,7 +289,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     @Override
     public void onDestroy() {
-        Wallet.getInstance().unregisterChannelOpenUpdateListener(this);
+        Wallet_Components.getInstance().unregisterChannelOpenUpdateListener(this);
         super.onDestroy();
     }
 
@@ -295,9 +297,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
 
         if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
-            if (status == Wallet.ChannelOpenUpdateListener.SUCCESS) {
+            if (status == Wallet_Components.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
-                Wallet.getInstance().updateLNDChannelsWithDebounce();
+                Wallet_Components.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
                 getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorMessage(status, message)));

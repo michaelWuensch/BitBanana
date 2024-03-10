@@ -24,9 +24,9 @@ import app.michaelwuensch.bitbanana.listViews.utxos.itemDetails.UTXODetailBSDFra
 import app.michaelwuensch.bitbanana.listViews.utxos.items.UTXOListItem;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
-public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.UtxoSubscriptionListener {
+public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Components.UtxoSubscriptionListener {
 
     private static final String LOG_TAG = UTXOsActivity.class.getSimpleName();
 
@@ -52,7 +52,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mRecyclerView = findViewById(R.id.utxoList);
         mEmptyListText = findViewById(R.id.listEmpty);
 
-        Wallet.getInstance().registerUtxoSubscriptionListener(this);
+        Wallet_Components.getInstance().registerUtxoSubscriptionListener(this);
 
         mUTXOItems = new ArrayList<>();
 
@@ -73,14 +73,14 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         super.onResume();
 
         // Update the list
-        Wallet.getInstance().fetchUTXOs();
-        Wallet.getInstance().fetchLockedUTXOs();
+        Wallet_Components.getInstance().fetchUTXOs();
+        Wallet_Components.getInstance().fetchLockedUTXOs();
     }
 
     private void updateUTXOsDisplayList() {
         mUTXOItems.clear();
-        if (Wallet.getInstance().mUTXOsList != null) {
-            for (Utxo utxo : Wallet.getInstance().mUTXOsList) {
+        if (Wallet_Components.getInstance().mUTXOsList != null) {
+            for (Utxo utxo : Wallet_Components.getInstance().mUTXOsList) {
                 UTXOListItem currItem = new UTXOListItem(utxo);
                 mUTXOItems.add(currItem);
             }
@@ -134,8 +134,8 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
-            Wallet.getInstance().fetchUTXOs();
-            Wallet.getInstance().fetchLockedUTXOs();
+            Wallet_Components.getInstance().fetchUTXOs();
+            Wallet_Components.getInstance().fetchLockedUTXOs();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -153,7 +153,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
 
     @Override
     protected void onDestroy() {
-        Wallet.getInstance().unregisterUtxoSubscriptionListener(this);
+        Wallet_Components.getInstance().unregisterUtxoSubscriptionListener(this);
 
         super.onDestroy();
     }

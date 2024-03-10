@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 
 public class QRCodeGenerator {
 

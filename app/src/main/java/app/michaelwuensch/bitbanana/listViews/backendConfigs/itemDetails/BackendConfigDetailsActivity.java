@@ -31,7 +31,7 @@ import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -312,7 +312,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
         if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {
             // Current active backend is deleted...
-            BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
+            BackendManager.deactivateCurrentBackendConfig(this, false, false);
             PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_BACKEND_CONFIG).commit();
             Intent intent = new Intent(BackendConfigDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

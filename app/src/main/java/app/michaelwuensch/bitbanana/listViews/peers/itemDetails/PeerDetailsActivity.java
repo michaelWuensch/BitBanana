@@ -39,7 +39,7 @@ import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PeerDetailsActivity extends BaseAppCompatActivity {
@@ -139,12 +139,12 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         ////// Network Section
         // Channels with node
         int numChans = 0;
-        for (Channel c : Wallet.getInstance().mOpenChannelsList) {
+        for (Channel c : Wallet_Components.getInstance().mOpenChannelsList) {
             if (c.getRemotePubkey().equals(mPeer.getPubKey())) {
                 numChans++;
             }
         }
-        for (PendingChannelsResponse.PendingOpenChannel c : Wallet.getInstance().mPendingOpenChannelsList) {
+        for (PendingChannelsResponse.PendingOpenChannel c : Wallet_Components.getInstance().mPendingOpenChannelsList) {
             if (c.getChannel().getRemoteNodePub().equals(mPeer.getPubKey())) {
                 numChans++;
             }

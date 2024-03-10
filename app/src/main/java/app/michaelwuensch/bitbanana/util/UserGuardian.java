@@ -29,7 +29,7 @@ public class UserGuardian {
     private static final String DIALOG_HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
     private static final String DIALOG_OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
-    private static final String DIALOG_OLD_LND_VERSION = "guardianOldLndVersion";
+    private static final String DIALOG_OLD_NODE_SOFTWARE_VERSION = "guardianOldNodeSoftwareVersion";
     private static final String DIALOG_EXTERNAL_LINK = "guardianExternalLink";
     private static final String DIALOG_ZERO_AMOUNT_INVOICE = "guardianZeroAmountInvoice";
     private static final String DIALOG_CERTIFICATE_VERIFICATION = "guardianCertificateVerification";
@@ -67,7 +67,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
                 .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
-                .putBoolean(DIALOG_OLD_LND_VERSION, true)
+                .putBoolean(DIALOG_OLD_NODE_SOFTWARE_VERSION, true)
                 .putBoolean(DIALOG_EXTERNAL_LINK, true)
                 .putBoolean(DIALOG_ZERO_AMOUNT_INVOICE, true)
                 .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
@@ -184,12 +184,12 @@ public class UserGuardian {
     }
 
     /**
-     * Warn the user about using an old LND version.
+     * Warn the user about using a node the runs old unsupported software.
      */
-    public void securityOldLndVersion(String versionName) {
-        mCurrentDialogName = DIALOG_OLD_LND_VERSION;
+    public void securityOldNodeSoftwareVersion(String nodeSoftwareName, String versionName) {
+        mCurrentDialogName = DIALOG_OLD_NODE_SOFTWARE_VERSION;
         AlertDialog.Builder adb = createDialog(true);
-        String message = mContext.getResources().getString(R.string.guardian_oldLndVersion_remote, versionName);
+        String message = mContext.getResources().getString(R.string.guardian_oldNodeSoftwareVersion, nodeSoftwareName, versionName);
         adb.setMessage(message);
         showGuardianDialog(adb);
     }

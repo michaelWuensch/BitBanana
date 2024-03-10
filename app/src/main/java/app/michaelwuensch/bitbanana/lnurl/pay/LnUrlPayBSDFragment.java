@@ -67,7 +67,7 @@ import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -128,7 +128,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mPaymentData = (LnUrlPayResponse) args.getSerializable(LnUrlPayResponse.ARGS_KEY);
 
         // Calculate correct min and max withdrawal value for LNURL. BitBanana limits withdrawal to full satoshis.
-        mMaxSendable = Math.min((mPaymentData.getMaxSendable() / 1000), Wallet.getInstance().getMaxLightningSendAmount());
+        mMaxSendable = Math.min((mPaymentData.getMaxSendable() / 1000), Wallet_Components.getInstance().getMaxLightningSendAmount());
         mMinSendable = mPaymentData.getMinSendable() % 1000 == 0 ? Math.max((mPaymentData.getMinSendable() / 1000), 1L) : Math.max((mPaymentData.getMinSendable() / 1000) + 1L, 1L);
 
         // Extract the URL from the service

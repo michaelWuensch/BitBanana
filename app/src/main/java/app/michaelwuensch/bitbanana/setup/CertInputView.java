@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 
 public class CertInputView extends BBInputFieldView {
 

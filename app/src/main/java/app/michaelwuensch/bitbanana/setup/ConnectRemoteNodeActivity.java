@@ -1,7 +1,5 @@
 package app.michaelwuensch.bitbanana.setup;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,7 +16,8 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 

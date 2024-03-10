@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.util.inputFilters;
+package app.michaelwuensch.bitbanana.util;
 
 public class HexUtil {
     private final static char[] hexArray = "0123456789abcdef".toCharArray();

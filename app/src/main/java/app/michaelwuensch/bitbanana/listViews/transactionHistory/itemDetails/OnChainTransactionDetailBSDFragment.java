@@ -23,7 +23,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
 
@@ -132,7 +132,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
 
 
         // is internal?
-        if (Wallet.getInstance().isChannelTransaction(mTransaction)) {
+        if (Wallet_Components.getInstance().isChannelTransaction(mTransaction)) {
             bindInternal();
         } else {
             bindNormalTransaction();
@@ -156,7 +156,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
             mFeeLabel.setVisibility(View.GONE);
         }
 
-        String alias = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
+        String alias = AliasManager.getInstance().getAlias(Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(mTransaction));
         mNode.setText(alias);
 
         switch (amount.compareTo(0L)) {

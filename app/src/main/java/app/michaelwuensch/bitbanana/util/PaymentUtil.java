@@ -25,6 +25,8 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PaymentUtil {
@@ -129,7 +131,7 @@ public class PaymentUtil {
      * Used to delete a payment probe. We don't need these stored in the database. They just bloat it.
      */
     public static void deletePaymentProbe(CompositeDisposable compositeDisposable, String paymentHash) {
-        Version actualLNDVersion = Wallet.getInstance().getLNDVersion();
+        Version actualLNDVersion = Wallet.getInstance().getCurrentNodeInfo().getVersion();
         Version PaymentDeletionSupport = new Version("0.14");
 
         // ToDo: Remove version check later when versions below 0.14.0 are no longer supported
@@ -174,7 +176,7 @@ public class PaymentUtil {
                     switch (htlcAttempt.getStatus()) {
                         case SUCCEEDED:
                             // updated the history, so it is shown the next time the user views it
-                            Wallet.getInstance().updateLightningPaymentHistory();
+                            Wallet_Components.getInstance().updateLightningPaymentHistory();
                             result.onSuccess();
                             break;
                         case FAILED:
@@ -262,7 +264,7 @@ public class PaymentUtil {
                     switch (payment.getStatus()) {
                         case SUCCEEDED:
                             // updated the history, so it is shown the next time the user views it
-                            Wallet.getInstance().updateLightningPaymentHistory();
+                            Wallet_Components.getInstance().updateLightningPaymentHistory();
                             result.onSuccess(payment);
                             break;
                         case FAILED:

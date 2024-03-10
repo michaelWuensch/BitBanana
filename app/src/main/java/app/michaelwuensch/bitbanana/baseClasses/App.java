@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 public class App extends Application {
     private static App mContext;
-    public boolean connectionToLNDEstablished = false;
+
     // keep the data from the URI Scheme in memory, so we can access it from anywhere.
     private String uriSchemeData;
 

@@ -51,13 +51,14 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet_Components.HistoryListener, Wallet_Components.InvoiceSubscriptionListener, Wallet_Components.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getSimpleName();
 
@@ -147,9 +148,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mCompositeDisposable = new CompositeDisposable();
 
         // Register listeners
-        Wallet.getInstance().registerHistoryListener(this);
-        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
-        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        Wallet_Components.getInstance().registerHistoryListener(this);
+        Wallet_Components.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet_Components.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
 
         // use a linear layout manager
@@ -255,11 +256,11 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
             // Add all payment relevant items to one of the lists above
 
-            if (Wallet.getInstance().mOnChainTransactionList != null) {
-                for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
+            if (Wallet_Components.getInstance().mOnChainTransactionList != null) {
+                for (Transaction t : Wallet_Components.getInstance().mOnChainTransactionList) {
                     OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
-                    if (Wallet.getInstance().isChannelTransaction(t)) {
+                    if (Wallet_Components.getInstance().isChannelTransaction(t)) {
                         internalTransactions.add(onChainTransactionItem);
                     } else {
                         if (t.getAmount() != 0) {
@@ -269,16 +270,16 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 }
             }
 
-            if (Wallet.getInstance().mInvoiceList != null) {
-                for (Invoice i : Wallet.getInstance().mInvoiceList) {
+            if (Wallet_Components.getInstance().mInvoiceList != null) {
+                for (Invoice i : Wallet_Components.getInstance().mInvoiceList) {
 
                     LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
 
                     // add to list according to current state of the invoice
-                    if (Wallet.getInstance().isInvoicePayed(i)) {
+                    if (Wallet_Components.getInstance().isInvoicePayed(i)) {
                         normalPayments.add(lnInvoiceItem);
                     } else {
-                        if (Wallet.getInstance().isInvoiceExpired(i)) {
+                        if (Wallet_Components.getInstance().isInvoiceExpired(i)) {
                             expiredRequest.add(lnInvoiceItem);
                         } else {
                             normalPayments.add(lnInvoiceItem);
@@ -287,8 +288,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 }
             }
 
-            if (Wallet.getInstance().mPaymentsList != null) {
-                for (Payment p : Wallet.getInstance().mPaymentsList) {
+            if (Wallet_Components.getInstance().mPaymentsList != null) {
+                for (Payment p : Wallet_Components.getInstance().mPaymentsList) {
                     LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
                     normalPayments.add(lnPaymentItem);
                 }
@@ -382,15 +383,15 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         super.onDestroy();
 
         // Unregister listeners
-        Wallet.getInstance().unregisterHistoryListener(this);
-        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
-        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        Wallet_Components.getInstance().unregisterHistoryListener(this);
+        Wallet_Components.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet_Components.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
     }
 
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isInfoFetched()) {
-            Wallet.getInstance().fetchLNDTransactionHistory();
+            Wallet_Components.getInstance().fetchLNDTransactionHistory();
             redrawHistoryList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -488,7 +489,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
                     String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
-                    String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
+                    String nodePubKey = Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName = AliasManager.getInstance().getAlias(nodePubKey);
                     text = transactionAmount + nodeName;
                     break;

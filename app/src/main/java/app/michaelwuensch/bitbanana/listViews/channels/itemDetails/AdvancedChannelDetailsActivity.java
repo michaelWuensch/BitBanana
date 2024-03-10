@@ -30,7 +30,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
@@ -184,7 +184,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // channel lifetime
         int openHeight = UtilFunctions.getBlockHeightFromChanID(channel.getChanId());
-        int currentHeight = Wallet.getInstance().getSyncedBlockHeight();
+        int currentHeight = Wallet.getInstance().getCurrentNodeInfo().getBlockHeight();
         int ageInBlocks = currentHeight - openHeight;
         String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
         mDetailChannelLifetime.setValue(duration);
@@ -402,7 +402,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                     .subscribe(chanInfoResponse -> {
                         RoutingPolicy localPolicy;
                         RoutingPolicy remotePolicy;
-                        if (chanInfoResponse.getNode1Pub().equals(Wallet.getInstance().getNodeUris()[0].getPubKey())) {
+                        if (chanInfoResponse.getNode1Pub().equals(Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris()[0].getPubKey())) {
                             localPolicy = chanInfoResponse.getNode1Policy();
                             remotePolicy = chanInfoResponse.getNode2Policy();
                         } else {

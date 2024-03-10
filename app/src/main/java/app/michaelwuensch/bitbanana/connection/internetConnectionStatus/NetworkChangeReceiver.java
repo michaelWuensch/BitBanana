@@ -9,7 +9,7 @@ import java.util.concurrent.RejectedExecutionException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
@@ -21,24 +21,23 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         BBLog.d("NetworkChangeReceiver: ", "Network status changed to " + NetworkUtil.getConnectivityStatusString(context));
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
-                // The following command will find out, if we have a connection to LND
-                Wallet.getInstance().fetchInfoFromLND();
+                // The following command will find out, if we have a connection to our node
+                if (Wallet.getInstance().isConnectedToNode())
+                    Wallet.getInstance().connectionTest(false);
             } else {
                 // It needs some time to establish the connection to LND.
                 // Therefore we check the connection after a delay.
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
                     try {
-                        // The following command will find out, if we have a connection to LND
-                        Wallet.getInstance().fetchInfoFromLND();
+                        // The following command will find out, if we have a connection to our node
+                        if (Wallet.getInstance().isConnectedToNode())
+                            Wallet.getInstance().connectionTest(false);
                     } catch (RejectedExecutionException ex) {
                         BBLog.d(LOG_TAG, "Execute of fetchFromLND() was rejected");
                     }
                 }, 5000);
             }
-        } else {
-            // The wallet is not setup, simulate connection status. We don't want to show errors at this stage.
-            Wallet.getInstance().simulateFetchInfoForDemo();
         }
     }
 }

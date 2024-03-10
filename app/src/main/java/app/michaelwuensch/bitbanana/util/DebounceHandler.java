@@ -4,7 +4,7 @@ import android.os.Handler;
 
 public class DebounceHandler {
 
-    static int DEBOUNCE_1_SECOND = 1000;
+    public static int DEBOUNCE_1_SECOND = 1000;
 
     private Handler mHandler;
 

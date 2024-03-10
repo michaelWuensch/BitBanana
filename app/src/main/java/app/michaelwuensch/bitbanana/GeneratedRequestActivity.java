@@ -25,10 +25,10 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 
-public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet.InvoiceSubscriptionListener {
+public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet_Components.InvoiceSubscriptionListener {
 
     private static final String LOG_TAG = GeneratedRequestActivity.class.getSimpleName();
 
@@ -63,7 +63,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
 
         // Register listeners
-        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet_Components.getInstance().registerInvoiceSubscriptionListener(this);
 
         mClRequestView = findViewById(R.id.requestView);
         mClPaymentReceivedView = findViewById(R.id.paymentReceivedView);
@@ -191,7 +191,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         super.onDestroy();
 
         // Unregister listeners
-        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet_Components.getInstance().unregisterInvoiceSubscriptionListener(this);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         runOnUiThread(new Runnable() {
             public void run() {
                 // Check if the invoice was payed
-                if (Wallet.getInstance().isInvoicePayed(invoice)) {
+                if (Wallet_Components.getInstance().isInvoicePayed(invoice)) {
                     // The updated invoice is payed, now check if it is the invoice whe currently have opened.
                     if (invoice.getAddIndex() == mLnInvoiceAddIndex) {
 

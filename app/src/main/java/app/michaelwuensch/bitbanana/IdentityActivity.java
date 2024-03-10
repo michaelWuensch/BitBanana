@@ -19,7 +19,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class IdentityActivity extends BaseAppCompatActivity {
 
@@ -41,7 +41,7 @@ public class IdentityActivity extends BaseAppCompatActivity {
         mTvIdentityString = findViewById(R.id.identityString);
         mTvTapHint = findViewById(R.id.tapHint);
 
-        mUserAvatarView.setupWithNodeUris(Wallet.getInstance().getNodeUris(), true);
+        mUserAvatarView.setupWithNodeUris(Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris(), true);
         mHasTorAndPublicIdentity = mUserAvatarView.hasTorAndPublicIdentity();
         if (mHasTorAndPublicIdentity) {
             mIdentitySwitchView.setVisibility(View.VISIBLE);

@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -106,6 +107,9 @@ public class InvoiceUtil {
                         // Show error. Please use a REGTEST invoice.
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
+                    break;
+                default:
+                    listener.onError(ctx.getString(R.string.error_unsupported_network), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
             }
         } else {
             // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
@@ -185,6 +189,8 @@ public class InvoiceUtil {
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
+                default:
+                    listener.onError(ctx.getString(R.string.error_unsupported_network), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
             }
         } else {
             listener.onNoInvoiceData();

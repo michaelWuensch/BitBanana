@@ -38,7 +38,7 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 
 public class ReceiveBSDFragment extends BaseBSDFragment {
@@ -243,7 +243,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 } else {
                     long maxReceivable;
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                        maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
+                        maxReceivable = Wallet_Components.getInstance().getMaxLightningReceiveAmount();
                     } else {
                         maxReceivable = 500000000000L;
                     }
@@ -375,10 +375,10 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     }
 
     private boolean hasLightningIncomeBalance() {
-        boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
+        boolean hasActiveChannels = Wallet_Components.getInstance().hasOpenActiveChannels();
 
         if (hasActiveChannels) {
-            if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
+            if (Wallet_Components.getInstance().getMaxLightningReceiveAmount() > 0L) {
                 // We have remote balances on at least one channel, so we can receive a lightning payment!
                 return true;
             } else {

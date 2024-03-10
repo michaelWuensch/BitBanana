@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.util;
+package app.michaelwuensch.bitbanana.backends;
 
 import android.content.Context;
 import android.os.Handler;
@@ -9,7 +9,7 @@ import java.util.Set;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.Backend;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningBackend;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
@@ -20,8 +20,12 @@ import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkU
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.TimeOutUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
-public class BackendSwitcher {
+public class BackendManager {
 
     public static final int ERROR_NO_INTERNET = 0;
     public static final int ERROR_VPN_NOT_INSTALLED = 1;
@@ -31,7 +35,7 @@ public class BackendSwitcher {
     public static final int ERROR_UNKNOWN_BACKEND_TYPE = 5;
     public static final int ERROR_GRPC_CREATING_STUBS = 6;
 
-    private static final String LOG_TAG = BackendSwitcher.class.getSimpleName();
+    private static final String LOG_TAG = BackendManager.class.getSimpleName();
 
     private static final Set<BackendStateChangedListener> backendStateChangedListeners = new HashSet<>();
 
@@ -132,7 +136,7 @@ public class BackendSwitcher {
             } else {
                 VPNCheckAttempts = 0;
                 // We delay this again, it seems to cause less problems if we wait again.
-                delayHandler.postDelayed(BackendSwitcher::activateBackendConfig3, 500);
+                delayHandler.postDelayed(BackendManager::activateBackendConfig3, 500);
             }
         } else {
             setBackendState(BackendState.ERROR);
@@ -175,8 +179,6 @@ public class BackendSwitcher {
             case CORE_LIGHTNING_GRPC:
                 CoreLightningConnection.getInstance().openConnection();
                 break;
-            case LND_HUB:
-                break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
@@ -184,9 +186,7 @@ public class BackendSwitcher {
             return;
 
         setBackendState(BackendState.BACKEND_CONNECTED);
-
-        // Start opening the wallet depending on the implementation. Unlock if necessary
-        Wallet.getInstance().checkIfLndIsUnlockedAndConnect();
+        Wallet.getInstance().open();
     }
 
     public static void deactivateCurrentBackendConfig(Context context, boolean keepVPN, boolean keepTor) {
@@ -225,6 +225,12 @@ public class BackendSwitcher {
         return currentBackendConfig;
     }
 
+    public static BaseBackendConfig.BackendType getCurrentBackendType() {
+        if (currentBackendConfig == null)
+            return BaseBackendConfig.BackendType.NONE;
+        return currentBackendConfig.getBackendType();
+    }
+
     private static Backend createBackend() {
         if (getCurrentBackendConfig() != null) {
             switch (getCurrentBackendConfig().getBackendType()) {
@@ -243,6 +249,10 @@ public class BackendSwitcher {
 
     public static Backend getCurrentBackend() {
         return currentBackend;
+    }
+
+    public static Api api() {
+        return currentBackend.api();
     }
 
     public static BackendState getBackendState() {

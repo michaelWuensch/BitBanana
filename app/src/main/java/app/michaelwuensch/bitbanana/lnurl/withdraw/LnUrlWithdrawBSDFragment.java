@@ -42,7 +42,7 @@ import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -94,7 +94,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
 
         // Calculate correct min and max withdrawal value for LNURL. BitBanana limits withdrawal to full satoshis.
-        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet.getInstance().getMaxLightningReceiveAmount());
+        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet_Components.getInstance().getMaxLightningReceiveAmount());
         mMinWithdrawable = mWithdrawData.getMinWithdrawable() % 1000 == 0 ? Math.max((mWithdrawData.getMinWithdrawable() / 1000), 1L) : Math.max((mWithdrawData.getMinWithdrawable() / 1000) + 1L, 1L);
 
         // Extract the URL from the Withdraw service

@@ -39,8 +39,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 
 public class ManualSetup extends BaseAppCompatActivity {
 

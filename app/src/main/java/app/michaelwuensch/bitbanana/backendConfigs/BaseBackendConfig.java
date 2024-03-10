@@ -236,7 +236,7 @@ public abstract class BaseBackendConfig {
 
         public static BaseBackendConfig.Network parseFromString(String enumAsString) {
             try {
-                return valueOf(enumAsString);
+                return valueOf(enumAsString.toUpperCase());
             } catch (Exception ex) {
                 return UNKNOWN;
             }

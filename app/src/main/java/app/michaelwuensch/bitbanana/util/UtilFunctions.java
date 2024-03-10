@@ -17,8 +17,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
-
 public class UtilFunctions {
     private static final String LOG_TAG = UtilFunctions.class.getSimpleName();
 

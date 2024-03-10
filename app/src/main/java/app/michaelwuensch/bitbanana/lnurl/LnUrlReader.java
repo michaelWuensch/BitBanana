@@ -23,7 +23,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.inputFilters.HexUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

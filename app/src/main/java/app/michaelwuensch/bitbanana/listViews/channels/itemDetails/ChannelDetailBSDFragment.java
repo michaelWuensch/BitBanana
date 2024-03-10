@@ -37,9 +37,9 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
-public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.ChannelCloseUpdateListener {
+public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_Components.ChannelCloseUpdateListener {
 
     public static final String TAG = ChannelDetailBSDFragment.class.getSimpleName();
     public static final String ARGS_CHANNEL = "CHANNEL";
@@ -170,7 +170,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         mFundingTx.setText(channel.getChannelPoint().substring(0, channel.getChannelPoint().indexOf(':')));
 
         // register for channel close events and keep channel point for later comparison
-        Wallet.getInstance().registerChannelCloseUpdateListener(this);
+        Wallet_Components.getInstance().registerChannelCloseUpdateListener(this);
         mChannelPoint = channel.getChannelPoint();
 
         showChannelVisibility(channel.getPrivate());
@@ -321,7 +321,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                     switchToProgressScreen();
-                    Wallet.getInstance().closeChannel(mChannelPoint, force);
+                    Wallet_Components.getInstance().closeChannel(mChannelPoint, force);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })
@@ -352,7 +352,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
-        Wallet.getInstance().unregisterChannelCloseUpdateListener(this);
+        Wallet_Components.getInstance().unregisterChannelCloseUpdateListener(this);
         super.onDismiss(dialog);
     }
 
@@ -363,10 +363,10 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet.
         if (getActivity() != null && mChannelPoint.equals(channelPoint)) {
 
             // fetch channels after closing finished
-            Wallet.getInstance().updateLNDChannelsWithDebounce();
+            Wallet_Components.getInstance().updateLNDChannelsWithDebounce();
 
             getActivity().runOnUiThread(() -> {
-                if (status == Wallet.ChannelCloseUpdateListener.SUCCESS) {
+                if (status == Wallet_Components.ChannelCloseUpdateListener.SUCCESS) {
                     switchToFinishScreen(true, null);
                 } else {
                     switchToFinishScreen(false, getDetailedErrorMessage(status, message));

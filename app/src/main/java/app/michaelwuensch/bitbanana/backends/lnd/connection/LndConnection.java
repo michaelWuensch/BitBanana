@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HostnameVerifier;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndAutopilotService;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndChainKitService;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndChainNotifierService;
@@ -38,8 +39,6 @@ import app.michaelwuensch.bitbanana.connection.BlindHostnameVerifier;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorProxyDetector;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
-import app.michaelwuensch.bitbanana.util.Wallet;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
@@ -136,11 +135,11 @@ public class LndConnection {
     }
 
     private void generateChannelAndStubs() {
-        String host = BackendSwitcher.getCurrentBackendConfig().getHost();
-        int port = BackendSwitcher.getCurrentBackendConfig().getPort();
+        String host = BackendManager.getCurrentBackendConfig().getHost();
+        int port = BackendManager.getCurrentBackendConfig().getPort();
 
         HostnameVerifier hostnameVerifier = null;
-        if (!BackendSwitcher.getCurrentBackendConfig().getVerifyCertificate() || BackendSwitcher.getCurrentBackendConfig().isTorHostAddress()) {
+        if (!BackendManager.getCurrentBackendConfig().getVerifyCertificate() || BackendManager.getCurrentBackendConfig().isTorHostAddress()) {
             // On Tor we do not need it, as tor already makes sure we are connected with the correct host.
             hostnameVerifier = new BlindHostnameVerifier();
         }
@@ -148,22 +147,22 @@ public class LndConnection {
         try {
 
             // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
-            if (BackendSwitcher.getCurrentBackendConfig().getUseTor()) {
+            if (BackendManager.getCurrentBackendConfig().getUseTor()) {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getProxyPort()))//
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(LndSSLSocketFactory.create(BackendSwitcher.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
                         .build();
             }
 
-            MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendSwitcher.getCurrentBackendConfig().getMacaroon());
+            MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendManager.getCurrentBackendConfig().getMacaroon());
 
             mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, macaroon);
             mLndChainKitService = new RemoteLndChainKitService(mSecureChannel, macaroon);
@@ -180,7 +179,7 @@ public class LndConnection {
             mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, macaroon);
             mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, macaroon);
         } catch (Exception e) {
-            BackendSwitcher.setError(BackendSwitcher.ERROR_GRPC_CREATING_STUBS);
+            BackendManager.setError(BackendManager.ERROR_GRPC_CREATING_STUBS);
         }
     }
 
@@ -219,7 +218,6 @@ public class LndConnection {
         try {
             if (mSecureChannel.shutdownNow().awaitTermination(1, TimeUnit.SECONDS)) {
                 BBLog.d(LOG_TAG, "LND channel shutdown successfully...");
-                Wallet.getInstance().setLNDAsDisconnected();
             } else {
                 BBLog.e(LOG_TAG, "LND channel shutdown failed...");
             }

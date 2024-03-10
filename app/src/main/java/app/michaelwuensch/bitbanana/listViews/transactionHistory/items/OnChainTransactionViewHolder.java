@@ -4,7 +4,7 @@ import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.AliasManager;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 
 public class OnChainTransactionViewHolder extends TransactionViewHolder {
@@ -32,7 +32,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
         setTimeOfDay(onChainTransactionItem.mCreationDate);
 
         // is internal?
-        if (Wallet.getInstance().isChannelTransaction(onChainTransactionItem.getOnChainTransaction())) {
+        if (Wallet_Components.getInstance().isChannelTransaction(onChainTransactionItem.getOnChainTransaction())) {
 
             setIcon(TransactionIcon.INTERNAL);
             setFeeSat(fee, false);
@@ -45,7 +45,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     // amount = 0
                     setAmount(amount, false);
                     setPrimaryDescription(mContext.getString(R.string.force_closed_channel));
-                    String pubkeyForceClose = Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
+                    String pubkeyForceClose = Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
                     String aliasForceClose = AliasManager.getInstance().getAlias(pubkeyForceClose);
                     setSecondaryDescription(aliasForceClose, true);
                     break;
@@ -53,7 +53,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     // amount > 0 (Channel closed)
                     setAmount(amount, false);
                     setPrimaryDescription(mContext.getString(R.string.closed_channel));
-                    String pubkeyClosed = Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
+                    String pubkeyClosed = Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction());
                     String aliasClosed = AliasManager.getInstance().getAlias(pubkeyClosed);
                     setSecondaryDescription(aliasClosed, true);
                     break;
@@ -62,7 +62,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                         // in some rare cases for sweep transactions the value is actually the fee payed for the sweep.
                         setAmount(amount, true);
                         setPrimaryDescription(mContext.getString(R.string.closed_channel));
-                        String aliasClose = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                        String aliasClose = AliasManager.getInstance().getAlias(Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
                         setSecondaryDescription(aliasClose, true);
                     } else {
                         // amount < 0 (Channel opened)
@@ -70,7 +70,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                         // Doing it this way looks nicer than having 0 for amount and the fee in small.
                         setAmount(fee * -1, true);
                         setPrimaryDescription(mContext.getString(R.string.opened_channel));
-                        String aliasOpened = AliasManager.getInstance().getAlias(Wallet.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
+                        String aliasOpened = AliasManager.getInstance().getAlias(Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(onChainTransactionItem.getOnChainTransaction()));
                         setSecondaryDescription(aliasOpened, true);
                     }
                     break;

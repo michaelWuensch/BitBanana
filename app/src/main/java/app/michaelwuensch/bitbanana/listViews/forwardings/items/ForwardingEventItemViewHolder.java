@@ -13,7 +13,7 @@ import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingEventSelectListener;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
@@ -46,7 +46,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
         // Set in channel name
         long inChanID = forwardingEventListItem.getForwardingEvent().getChanIdIn();
-        String inChanPubKey = Wallet.getInstance().getRemotePubKeyFromChannelId(inChanID);
+        String inChanPubKey = Wallet_Components.getInstance().getRemotePubKeyFromChannelId(inChanID);
         String inChanName = "";
         if (inChanPubKey == null) {
             inChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
@@ -57,7 +57,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
         // Set out channel name
         long outChanID = forwardingEventListItem.getForwardingEvent().getChanIdOut();
-        String outChanPubKey = Wallet.getInstance().getRemotePubKeyFromChannelId(outChanID);
+        String outChanPubKey = Wallet_Components.getInstance().getRemotePubKeyFromChannelId(outChanID);
         String outChanName = "";
         if (outChanPubKey == null) {
             outChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
