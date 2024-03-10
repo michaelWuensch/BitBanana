@@ -5,8 +5,13 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
+import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
+import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.google.protobuf.ByteString;
+
+import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
@@ -14,6 +19,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.Version;
@@ -73,5 +79,35 @@ public class LndApi extends Api {
 
             return balances;
         });
+    }
+
+    @Override
+    public Single<String> signMessageWithNode(String message) {
+        SignMessageRequest signMessageRequest = SignMessageRequest.newBuilder()
+                .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
+                .build();
+
+        return LndConnection.getInstance().getLightningService().signMessage(signMessageRequest)
+                .map(response -> {
+                    return response.getSignature();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
+        VerifyMessageRequest verifyMessageRequest = VerifyMessageRequest.newBuilder()
+                .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
+                .setSignatureBytes(ByteString.copyFrom(signature, StandardCharsets.UTF_8))
+                .build();
+
+        return LndConnection.getInstance().getLightningService().verifyMessage(verifyMessageRequest)
+                .map(response -> {
+                    return VerifyMessageResponse.newBuilder()
+                            .setIsValid(response.getValid())
+                            .setPubKey(response.getPubkey())
+                            .build();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
     }
 }

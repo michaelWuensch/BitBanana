@@ -1,9 +1,11 @@
 package app.michaelwuensch.bitbanana.backends.coreLightning;
 
+import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.ListfundsChannels;
 import com.github.ElementsProject.lightning.cln.ListfundsOutputs;
 import com.github.ElementsProject.lightning.cln.ListfundsRequest;
+import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
@@ -11,9 +13,9 @@ import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightn
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.core.Single;
@@ -91,5 +93,34 @@ public class CoreLightningApi extends Api {
                             .build();
                     return balances;
                 });
+    }
+
+    @Override
+    public Single<String> signMessageWithNode(String message) {
+        SignmessageRequest signMessageRequest = SignmessageRequest.newBuilder()
+                .setMessage(message)
+                .build();
+
+        return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().signMessage(signMessageRequest)
+                .map(response -> {
+                    return response.getZbase();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
+    }
+
+    public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
+        CheckmessageRequest checkMessageRequest = CheckmessageRequest.newBuilder()
+                .setMessage(message)
+                .setZbase(signature)
+                .build();
+
+        return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().checkMessage(checkMessageRequest)
+                .map(response -> {
+                    return VerifyMessageResponse.newBuilder()
+                            .setIsValid(response.getVerified())
+                            .setPubKey(ApiUtil.StringFromHexByteString(response.getPubkey()))
+                            .build();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
     }
 }

@@ -15,5 +15,6 @@ public class CoreLightningBackend extends Backend {
 
         // Features
         bSupportsBalanceDetails = true;
+        bSupportsMessageSigningByNodePrivateKey = true;
     }
 }

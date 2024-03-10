@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.backends;
 
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import io.reactivex.rxjava3.core.Single;
 
 public class Api {
@@ -19,6 +20,14 @@ public class Api {
     }
 
     public Single<Balances> getBalances() {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<String> signMessageWithNode(String message) {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
         return Single.error(unsupportedException());
     }
 }
