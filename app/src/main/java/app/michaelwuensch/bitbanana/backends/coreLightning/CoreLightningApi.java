@@ -16,6 +16,7 @@ import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightn
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -128,7 +129,7 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
     }
 
-    public Single<List<Utxo>> getUTXOList(long currentBlockHeight) {
+    public Single<List<Utxo>> getUTXOs(long currentBlockHeight) {
         return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listFunds(ListfundsRequest.newBuilder().build())
                 .map(response -> {
                     List<Utxo> utxoList = new ArrayList<>();
@@ -136,9 +137,11 @@ public class CoreLightningApi extends Api {
                         if (output.getStatus() == ListfundsOutputs.ListfundsOutputsStatus.CONFIRMED || output.getStatus() == ListfundsOutputs.ListfundsOutputsStatus.UNCONFIRMED) {
                             Utxo.Builder builder = Utxo.newBuilder()
                                     .setAddress(output.getAddress())
-                                    .setAmountMsat(output.getAmountMsat().getMsat())
-                                    .setTransactionID(ApiUtil.StringFromHexByteString(output.getTxid()))
-                                    .setOutputIndex(output.getOutput())
+                                    .setAmount(output.getAmountMsat().getMsat())
+                                    .setOutpoint(Outpoint.newBuilder()
+                                            .setTransactionID(ApiUtil.StringFromHexByteString(output.getTxid()))
+                                            .setOutputIndex(output.getOutput())
+                                            .build())
                                     .setBlockHeight(output.getBlockheight());
                             if (output.getBlockheight() == 0) {
                                 builder.setConfirmations(0);

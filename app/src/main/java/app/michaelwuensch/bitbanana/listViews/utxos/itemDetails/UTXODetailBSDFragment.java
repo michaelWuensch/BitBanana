@@ -89,14 +89,14 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
         String confirmationsLabel = getString(R.string.confirmations) + ":";
         mConfirmationsLabel.setText(confirmationsLabel);
 
-        mAmount.setAmountMsat(mUTXO.getAmountMsat());
+        mAmount.setAmountMsat(mUTXO.getAmount());
 
         mAddress.setText(mUTXO.getAddress());
-        mTransactionID.setText(mUTXO.getTransactionId());
+        mTransactionID.setText(mUTXO.getOutpoint().getTransactionID());
 
-        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mUTXO.getTransactionId(), getActivity()));
+        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mUTXO.getOutpoint().getTransactionID(), getActivity()));
         mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mUTXO.getAddress(), getActivity()));
-        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mUTXO.getTransactionId()));
+        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mUTXO.getOutpoint().getTransactionID()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mUTXO.getAddress()));
 
         mConfirmations.setText(String.valueOf(mUTXO.getConfirmations()));

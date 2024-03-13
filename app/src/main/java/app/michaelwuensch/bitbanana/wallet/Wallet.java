@@ -302,6 +302,9 @@ public class Wallet {
             case CORE_LIGHTNING_GRPC:
                 Wallet_Components.getInstance().mChannelsFetched = true;
                 Wallet_Balance.getInstance().fetchBalances();
+
+                // Fetch UTXOs
+                Wallet_Components.getInstance().fetchUTXOs();
         }
     }
 

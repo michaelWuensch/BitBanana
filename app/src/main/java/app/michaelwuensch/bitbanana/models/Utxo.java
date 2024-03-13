@@ -5,11 +5,10 @@ import java.io.Serializable;
 public class Utxo implements Serializable {
 
     private final String Address;
-    private final long AmountMsat;
+    private final long Amount;
     private final long BlockHeight;
     private final long Confirmations;
-    private final String TransactionId;
-    private final int OutputIndex;
+    private final Outpoint Outpoint;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -17,9 +16,8 @@ public class Utxo implements Serializable {
 
     private Utxo(Builder builder) {
         this.Address = builder.Address;
-        this.AmountMsat = builder.AmountMsat;
-        this.TransactionId = builder.TransactionID;
-        this.OutputIndex = builder.OutputIndex;
+        this.Amount = builder.Amount;
+        this.Outpoint = builder.Outpoint;
         this.BlockHeight = builder.BlockHeight;
         this.Confirmations = builder.Confirmations;
     }
@@ -28,21 +26,22 @@ public class Utxo implements Serializable {
         return Address;
     }
 
-    public long getAmountMsat() {
-        return AmountMsat;
+    /**
+     * Amount in msat
+     */
+    public long getAmount() {
+        return Amount;
     }
 
+    /**
+     * Block height where it was confirmed
+     */
     public long getBlockHeight() {
         return BlockHeight;
     }
 
-    public String getTransactionId() {
-        return TransactionId;
-    }
-
-
-    public int getOutputIndex() {
-        return OutputIndex;
+    public Outpoint getOutpoint() {
+        return Outpoint;
     }
 
     public long getConfirmations() {
@@ -54,11 +53,10 @@ public class Utxo implements Serializable {
     public static class Builder {
 
         private String Address;
-        private long AmountMsat;
+        private long Amount;
         private long BlockHeight;
         private long Confirmations;
-        private String TransactionID;
-        private int OutputIndex;
+        private Outpoint Outpoint;
 
         private Builder() {
             // required parameters
@@ -73,11 +71,17 @@ public class Utxo implements Serializable {
             return this;
         }
 
-        public Builder setAmountMsat(long amountMsat) {
-            this.AmountMsat = amountMsat;
+        /**
+         * Amount in msat
+         */
+        public Builder setAmount(long amount) {
+            this.Amount = amount;
             return this;
         }
 
+        /**
+         * Block height where it was confirmed
+         */
         public Builder setBlockHeight(long blockHeight) {
             BlockHeight = blockHeight;
             return this;
@@ -88,13 +92,8 @@ public class Utxo implements Serializable {
             return this;
         }
 
-        public Builder setTransactionID(String transactionID) {
-            this.TransactionID = transactionID;
-            return this;
-        }
-
-        public Builder setOutputIndex(int outputIndex) {
-            this.OutputIndex = outputIndex;
+        public Builder setOutpoint(Outpoint outpoint) {
+            this.Outpoint = outpoint;
             return this;
         }
     }

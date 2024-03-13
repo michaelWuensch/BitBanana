@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -116,7 +117,7 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> getUTXOList(long currentBlockHeight) {
+    public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> getUTXOs(long currentBlockHeight) {
         ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
                 .setMaxConfs(999999999) // default is 0
                 .build();
@@ -127,11 +128,13 @@ public class LndApi extends Api {
                     for (Utxo utxo : response.getUtxosList()) {
                         utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
                                 .setAddress(utxo.getAddress())
-                                .setAmountMsat(utxo.getAmountSat() * 1000)
+                                .setAmount(utxo.getAmountSat() * 1000)
                                 .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
                                 .setConfirmations(utxo.getConfirmations())
-                                .setTransactionID(utxo.getOutpoint().getTxidStr())
-                                .setOutputIndex(utxo.getOutpoint().getOutputIndex())
+                                .setOutpoint(Outpoint.newBuilder()
+                                        .setTransactionID(utxo.getOutpoint().getTxidStr())
+                                        .setOutputIndex(utxo.getOutpoint().getOutputIndex())
+                                        .build())
                                 .build());
                     }
                     return utxoList;

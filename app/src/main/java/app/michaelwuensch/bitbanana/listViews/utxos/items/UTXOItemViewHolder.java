@@ -40,7 +40,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
         mUTXOAddress.setText(utxoListItem.getUtxo().getAddress());
 
         // Set utxo amount
-        mUTXOAmount.setAmountMsat(utxoListItem.getUtxo().getAmountMsat());
+        mUTXOAmount.setAmountMsat(utxoListItem.getUtxo().getAmount());
 
         // Show unconfirmed as semitransparent
         mUTXOContentView.setAlpha(utxoListItem.getUtxo().getConfirmations() == 0 ? 0.5f : 1f);
