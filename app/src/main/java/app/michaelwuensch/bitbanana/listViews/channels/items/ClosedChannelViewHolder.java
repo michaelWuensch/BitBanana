@@ -14,11 +14,10 @@ public class ClosedChannelViewHolder extends ChannelViewHolder {
         mContentView.setAlpha(0.65f);
 
         // Set balances
-        long availableCapacity = closedChannelItem.getChannel().getCapacity();
-        setBalances(closedChannelItem.getChannel().getSettledBalance(), availableCapacity - closedChannelItem.getChannel().getSettledBalance(), availableCapacity);
+        setBalances(closedChannelItem.getChannel().getLocalBalance(), closedChannelItem.getChannel().getCapacity() - closedChannelItem.getChannel().getLocalBalance(), closedChannelItem.getChannel().getCapacity());
 
         // Set name
-        setName(closedChannelItem.getChannel().getRemotePubkey());
+        setName(closedChannelItem.getChannel().getRemotePubKey());
 
         setOnRootViewClickListener(closedChannelItem, ChannelListItem.TYPE_CLOSED_CHANNEL);
     }

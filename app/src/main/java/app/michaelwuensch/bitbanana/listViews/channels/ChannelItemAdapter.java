@@ -16,14 +16,8 @@ import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelViewHolder;
 import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelViewHolder;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelViewHolder;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelViewHolder;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelViewHolder;
-import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelViewHolder;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingChannelItem;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingChannelViewHolder;
 
 
 public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -87,14 +81,8 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case ChannelListItem.TYPE_OPEN_CHANNEL:
                 return new OpenChannelViewHolder(channelView);
-            case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
-                return new PendingOpenChannelViewHolder(channelView);
-            case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
-                return new PendingClosingChannelViewHolder(channelView);
-            case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                return new PendingForceClosingChannelViewHolder(channelView);
-            case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
-                return new WaitingCloseChannelViewHolder(channelView);
+            case ChannelListItem.TYPE_PENDING_CHANNEL:
+                return new PendingChannelViewHolder(channelView);
             case ChannelListItem.TYPE_CLOSED_CHANNEL:
                 return new ClosedChannelViewHolder(channelView);
             default:
@@ -114,29 +102,11 @@ public class ChannelItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 openChannelHolder.bindOpenChannelItem(openChannelItem);
                 openChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
-            case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
-                PendingOpenChannelViewHolder pendingOpenChannelHolder = (PendingOpenChannelViewHolder) holder;
-                PendingOpenChannelItem pendingOpenChannelItem = (PendingOpenChannelItem) mSortedList.get(position);
-                pendingOpenChannelHolder.bindPendingOpenChannelItem(pendingOpenChannelItem);
+            case ChannelListItem.TYPE_PENDING_CHANNEL:
+                PendingChannelViewHolder pendingOpenChannelHolder = (PendingChannelViewHolder) holder;
+                PendingChannelItem pendingChannelItem = (PendingChannelItem) mSortedList.get(position);
+                pendingOpenChannelHolder.bindPendingChannelItem(pendingChannelItem);
                 pendingOpenChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
-                break;
-            case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
-                PendingClosingChannelViewHolder pendingClosingChannelHolder = (PendingClosingChannelViewHolder) holder;
-                PendingClosingChannelItem pendingClosingChannelItem = (PendingClosingChannelItem) mSortedList.get(position);
-                pendingClosingChannelHolder.bindPendingClosingChannelItem(pendingClosingChannelItem);
-                pendingClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
-                break;
-            case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                PendingForceClosingChannelViewHolder pendingForceClosingChannelHolder = (PendingForceClosingChannelViewHolder) holder;
-                PendingForceClosingChannelItem pendingForceClosingChannelItem = (PendingForceClosingChannelItem) mSortedList.get(position);
-                pendingForceClosingChannelHolder.bindPendingForceClosingChannelItem(pendingForceClosingChannelItem);
-                pendingForceClosingChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
-                break;
-            case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
-                WaitingCloseChannelViewHolder waitingCloseChannelHolder = (WaitingCloseChannelViewHolder) holder;
-                WaitingCloseChannelItem waitingCloseChannelItem = (WaitingCloseChannelItem) mSortedList.get(position);
-                waitingCloseChannelHolder.bindWaitingCloseChannelItem(waitingCloseChannelItem);
-                waitingCloseChannelHolder.addOnChannelSelectListener(mChannelSelectListener);
                 break;
             case ChannelListItem.TYPE_CLOSED_CHANNEL:
                 ClosedChannelViewHolder closedChannelViewHolder = (ClosedChannelViewHolder) holder;

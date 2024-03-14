@@ -41,10 +41,10 @@ import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Components.ChannelOpenUpdateListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Channels.ChannelOpenUpdateListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
@@ -98,7 +98,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Co
         setFeeFailure();
         mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
 
-        Wallet_Components.getInstance().registerChannelOpenUpdateListener(this);
+        Wallet_Channels.getInstance().registerChannelOpenUpdateListener(this);
 
         if (getArguments() != null) {
             mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
@@ -219,7 +219,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Co
                 }
 
                 switchToProgressScreen();
-                Wallet_Components.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
             }
         });
 
@@ -289,7 +289,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Co
 
     @Override
     public void onDestroy() {
-        Wallet_Components.getInstance().unregisterChannelOpenUpdateListener(this);
+        Wallet_Channels.getInstance().unregisterChannelOpenUpdateListener(this);
         super.onDestroy();
     }
 
@@ -297,9 +297,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Co
     public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
 
         if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
-            if (status == Wallet_Components.ChannelOpenUpdateListener.SUCCESS) {
+            if (status == Wallet_Channels.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
-                Wallet_Components.getInstance().updateLNDChannelsWithDebounce();
+                Wallet_Channels.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
                 getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorMessage(status, message)));

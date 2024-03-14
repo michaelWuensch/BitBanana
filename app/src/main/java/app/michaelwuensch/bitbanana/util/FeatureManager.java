@@ -58,6 +58,14 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isOpenChannelEnabled() {
+        return getBackend().supportsOpenChannel() && getBackend().supportsChannelManagement();
+    }
+
+    public static boolean isCloseChannelEnabled() {
+        return getBackend().supportsCloseChannel() && getBackend().supportsChannelManagement();
+    }
+
     public static boolean isBalanceDetailsEnabled() {
         return getBackend().supportsBalanceDetails();
     }

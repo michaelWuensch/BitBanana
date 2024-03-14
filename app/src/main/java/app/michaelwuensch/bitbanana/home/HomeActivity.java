@@ -95,8 +95,8 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
@@ -387,7 +387,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
 
         // Kill Server Streams
-        Wallet_Components.getInstance().cancelSubscriptions();
+        Wallet.getInstance().cancelSubscriptions();
 
         BackendManager.deactivateCurrentBackendConfig(this, false, false);
     }
@@ -532,7 +532,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, lightningInvoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
                         @Override
                         public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                            if (Wallet_Components.getInstance().getMaxLightningSendAmount() < paymentRequest.getNumSatoshis()) {
+                            if (WalletUtil.getMaxLightningSendAmount() < paymentRequest.getNumSatoshis() * 1000) {
                                 // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
                                 SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                                 sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");

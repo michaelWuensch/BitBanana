@@ -16,7 +16,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
-public class ChannelViewHolder extends RecyclerView.ViewHolder {
+public abstract class ChannelViewHolder extends RecyclerView.ViewHolder {
 
     TextView mStatus;
     ImageView mStatusDot;
@@ -58,8 +58,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mLocalBar.setProgress((int) (localBarValue * 100f));
         mRemoteBar.setProgress((int) (remoteBarValue * 100f));
 
-        mLocalBalance.setAmountSat(local);
-        mRemoteBalance.setAmountSat(remote);
+        mLocalBalance.setAmountMsat(local);
+        mRemoteBalance.setAmountMsat(remote);
 
         mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(capacity));
     }
@@ -73,7 +73,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mChannelSelectListener != null) {
-                    mChannelSelectListener.onChannelSelect(item.getChannelByteString(), type);
+                    mChannelSelectListener.onChannelSelect(item.getSerializedChannel(), type);
                 }
             }
         });

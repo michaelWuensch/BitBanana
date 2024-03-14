@@ -51,14 +51,16 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet_Components.HistoryListener, Wallet_Components.InvoiceSubscriptionListener, Wallet_Components.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet_Components.HistoryListener, Wallet_Components.InvoiceSubscriptionListener, Wallet_Channels.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getSimpleName();
 
@@ -150,7 +152,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Compo
         // Register listeners
         Wallet_Components.getInstance().registerHistoryListener(this);
         Wallet_Components.getInstance().registerInvoiceSubscriptionListener(this);
-        Wallet_Components.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        Wallet_Channels.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
 
         // use a linear layout manager
@@ -260,7 +262,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Compo
                 for (Transaction t : Wallet_Components.getInstance().mOnChainTransactionList) {
                     OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
-                    if (Wallet_Components.getInstance().isChannelTransaction(t)) {
+                    if (WalletUtil.isChannelTransaction(t)) {
                         internalTransactions.add(onChainTransactionItem);
                     } else {
                         if (t.getAmount() != 0) {
@@ -385,7 +387,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Compo
         // Unregister listeners
         Wallet_Components.getInstance().unregisterHistoryListener(this);
         Wallet_Components.getInstance().unregisterInvoiceSubscriptionListener(this);
-        Wallet_Components.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        Wallet_Channels.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
     }
 
     @Override
@@ -489,7 +491,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Compo
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
                     String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
-                    String nodePubKey = Wallet_Components.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
+                    String nodePubKey = WalletUtil.getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName = AliasManager.getInstance().getAlias(nodePubKey);
                     text = transactionAmount + nodeName;
                     break;

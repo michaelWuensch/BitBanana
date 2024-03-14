@@ -9,12 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.view.menu.MenuBuilder;
 
-import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.DisconnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Feature;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Peer;
-import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.TimestampedError;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -33,13 +31,15 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PeerDetailsActivity extends BaseAppCompatActivity {
@@ -139,13 +139,13 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         ////// Network Section
         // Channels with node
         int numChans = 0;
-        for (Channel c : Wallet_Components.getInstance().mOpenChannelsList) {
-            if (c.getRemotePubkey().equals(mPeer.getPubKey())) {
+        for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList()) {
+            if (c.getRemotePubKey().equals(mPeer.getPubKey())) {
                 numChans++;
             }
         }
-        for (PendingChannelsResponse.PendingOpenChannel c : Wallet_Components.getInstance().mPendingOpenChannelsList) {
-            if (c.getChannel().getRemoteNodePub().equals(mPeer.getPubKey())) {
+        for (PendingChannel c : Wallet_Channels.getInstance().getPendingChannelsList()) {
+            if (c.getRemotePubKey().equals(mPeer.getPubKey())) {
                 numChans++;
             }
         }

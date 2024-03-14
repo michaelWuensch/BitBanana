@@ -27,14 +27,14 @@ public class OpenChannelViewHolder extends ChannelViewHolder {
 
     public void bindOpenChannelItem(final OpenChannelItem openChannelItem) {
         // Set state
-        setState(openChannelItem.getChannel().getActive());
+        setState(openChannelItem.getChannel().isActive());
 
         // Set balances
         long availableCapacity = openChannelItem.getChannel().getCapacity() - openChannelItem.getChannel().getCommitFee();
         setBalances(openChannelItem.getChannel().getLocalBalance(), openChannelItem.getChannel().getRemoteBalance(), availableCapacity);
 
         // Set name
-        setName(openChannelItem.getChannel().getRemotePubkey());
+        setName(openChannelItem.getChannel().getRemotePubKey());
 
         setOnRootViewClickListener(openChannelItem, ChannelListItem.TYPE_OPEN_CHANNEL);
     }

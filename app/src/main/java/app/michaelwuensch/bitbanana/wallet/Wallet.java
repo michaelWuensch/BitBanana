@@ -19,7 +19,9 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Wallet {
 
@@ -31,12 +33,10 @@ public class Wallet {
     private final Set<WalletLoadStateListener> mWalletLoadStateListeners = new HashSet<>();
 
     private WalletLoadState mWalletLoadState;
-    // ToDo: remove when fetching data is done correctly
-    public boolean mIsWalletReady = false;
     private CurrentNodeInfo mCurrentNodeInfo;
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Handler mHandler = new Handler();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final Handler mHandler = new Handler();
 
     private Wallet() {
         ;
@@ -69,13 +69,20 @@ public class Wallet {
      */
     public void reset() {
         Wallet_Balance.getInstance().reset();
+        Wallet_Channels.getInstance().reset();
         Wallet_Components.getInstance().reset();
 
-        mIsWalletReady = false;
         mCurrentNodeInfo = null;
         mWalletLoadState = WalletLoadState.NOT_LOADED;
 
         mHandler.removeCallbacksAndMessages(null);
+        compositeDisposable.clear();
+    }
+
+    public void cancelSubscriptions() {
+        Wallet_Balance.getInstance().cancelSubscriptions();
+        Wallet_Channels.getInstance().cancelSubscriptions();
+        Wallet_Components.getInstance().cancelSubscriptions();
         compositeDisposable.clear();
     }
 
@@ -150,7 +157,7 @@ public class Wallet {
                         // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
                         // That's why we update it again 10 seconds later.
                         // ToDo: Create a routine that retries this until successful
-                        Wallet_Components.getInstance().fetchChannelsFromLND();
+                        Wallet_Channels.getInstance().fetchChannels();
                     }, 12000);
                 }, throwable -> {
                     BBLog.e(LOG_TAG, throwable.getMessage());
@@ -281,27 +288,40 @@ public class Wallet {
 
         switch (BackendManager.getCurrentBackendType()) {
             case LND_GRPC:
+                // Fetching the data that is required before we show the wallet.
+                compositeDisposable.add(Single.zip(Wallet_Balance.getInstance().fetchBalanceSingle(),
+                        Wallet_Channels.getInstance().fetchChannelsSingle(),
+                        (response1, response2) -> {
+                            // Everything fetched, now show the wallet!
+                            setWalletLoadState(WalletLoadState.WALLET_LOADED);
+                            return true;
+                        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+                }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
 
                 // Fetch the transaction history
                 Wallet_Components.getInstance().fetchLNDTransactionHistory();
-                Wallet_Balance.getInstance().fetchBalances();
-                Wallet_Components.getInstance().fetchChannelsFromLND();
 
                 // Fetch UTXOs
                 Wallet_Components.getInstance().fetchUTXOs();
 
                 // Subscribe to Transaction Events
                 Wallet_Components.getInstance().subscribeToTransactions();
-                Wallet_Components.getInstance().subscribeToHtlcEvents();
+                Wallet_Channels.getInstance().subscribeToHtlcEvents();
                 Wallet_Components.getInstance().subscribeToInvoices();
 
-                if (mHandler != null) {
-                    mHandler.postDelayed(() -> Wallet_Components.getInstance().subscribeToChannelEvents(), 3000);
-                }
+                mHandler.postDelayed(() -> Wallet_Channels.getInstance().subscribeToChannelEvents(), 3000);
+
                 break;
             case CORE_LIGHTNING_GRPC:
-                Wallet_Components.getInstance().mChannelsFetched = true;
-                Wallet_Balance.getInstance().fetchBalances();
+                // Fetching the data that is required before we show the wallet.
+                compositeDisposable.add(Single.zip(Wallet_Balance.getInstance().fetchBalanceSingle(),
+                        Wallet_Channels.getInstance().fetchChannelsSingle(),
+                        (response1, response2) -> {
+                            // Everything fetched, now show the wallet!
+                            setWalletLoadState(WalletLoadState.WALLET_LOADED);
+                            return true;
+                        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
+                }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
 
                 // Fetch UTXOs
                 Wallet_Components.getInstance().fetchUTXOs();

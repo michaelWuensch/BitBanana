@@ -38,8 +38,8 @@ public class ChannelSummaryView extends LinearLayout {
     }
 
     public void updateBalances(long outbound, long inbound, long unavailable) {
-        mTVTotalOutbound.setAmountSat(outbound);
-        mTVTotalIntbound.setAmountSat(inbound);
-        mTVTotalUnavailable.setAmountSat(unavailable);
+        mTVTotalOutbound.setAmountMsat(outbound);
+        mTVTotalIntbound.setAmountMsat(inbound);
+        mTVTotalUnavailable.setAmountMsat(unavailable);
     }
 }

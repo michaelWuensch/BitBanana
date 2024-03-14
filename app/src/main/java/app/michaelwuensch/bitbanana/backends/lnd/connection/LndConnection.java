@@ -206,10 +206,6 @@ public class LndConnection {
         }
     }
 
-    public boolean isConnected() {
-        return isConnected;
-    }
-
     /**
      * Will shutdown the channel and cancel all active calls.
      * Waits for shutdown (blocking) and logs result.

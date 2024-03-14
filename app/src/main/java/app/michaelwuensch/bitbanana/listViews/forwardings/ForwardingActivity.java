@@ -42,6 +42,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ForwardingActivity extends BaseAppCompatActivity implements ForwardingEventSelectListener, SwipeRefreshLayout.OnRefreshListener {
@@ -270,7 +271,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     }
 
     private void refreshData() {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isConnectedToNode()) {
             setTitle(getResources().getString(R.string.activity_forwarding));
             if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
                 mSummaryPagerAdapter.getAmountEarnedFragment().setInProgress(true);

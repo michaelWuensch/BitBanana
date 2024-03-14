@@ -56,6 +56,7 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
@@ -214,7 +215,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                     if (mOnChain) {
                         maxSendable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
                     } else {
-                        maxSendable = Wallet_Components.getInstance().getMaxLightningSendAmount();
+                        maxSendable = WalletUtil.getMaxLightningSendAmount() / 1000;
                     }
 
                     if (mSendAmountSat > maxSendable) {

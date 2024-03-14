@@ -37,6 +37,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -107,7 +108,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
     private void updatePeersDisplayList() {
 
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            if (LndConnection.getInstance().isConnected()) {
+            if (Wallet.getInstance().isConnectedToNode()) {
 
                 ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder()
                         .build();
@@ -237,7 +238,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
     @Override
     public void onRefresh() {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isConnectedToNode()) {
             updatePeersDisplayList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);

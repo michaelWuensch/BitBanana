@@ -9,6 +9,8 @@ public class Backend {
     protected String mMinRequiredVersionName = "v0.0.0-beta";
     protected String mNodeImplementationName = "UNKNOWN";
     protected boolean bSupportsChannelManagement = false;
+    protected boolean bSupportsOpenChannel = false;
+    protected boolean bSupportsCloseChannel = false;
     protected boolean bSupportsPeerManagement = false;
     protected boolean bSupportsRouting = false;
     protected boolean bSupportsRoutingPolicyManagement = false;
@@ -38,6 +40,14 @@ public class Backend {
 
     public boolean supportsChannelManagement() {
         return bSupportsChannelManagement;
+    }
+
+    public boolean supportsOpenChannel() {
+        return bSupportsOpenChannel;
+    }
+
+    public boolean supportsCloseChannel() {
+        return bSupportsCloseChannel;
     }
 
     public boolean supportsPeerManagement() {

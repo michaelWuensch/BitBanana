@@ -15,6 +15,8 @@ public class LndBackend extends Backend {
 
         // Features
         bSupportsChannelManagement = true;
+        bSupportsOpenChannel = true;
+        bSupportsCloseChannel = true;
         bSupportsPeerManagement = true;
         bSupportsRouting = true;
         bSupportsRoutingPolicyManagement = true;

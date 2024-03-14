@@ -7,20 +7,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.lightningnetwork.lnd.lnrpc.Channel;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
-import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
-import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
-import com.github.lightningnetwork.lnd.lnrpc.RoutingPolicy;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetailBSDFragment;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
+import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -37,8 +33,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     private BBInputFieldView mMaxHTLC;
     private TextView mAllChannelsWarning;
     private Button mBtnSubmit;
-    private boolean mGlobal;
-    private ChannelPoint mChannelPoint;
+    private OpenChannel mChannel;
 
 
     private CompositeDisposable mCompositeDisposable;
@@ -50,8 +45,6 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_update_routing_policy);
 
         mCompositeDisposable = new CompositeDisposable();
-
-        mGlobal = true;
 
         // reference views
         mBaseFee = findViewById(R.id.baseFee);
@@ -73,21 +66,9 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey(ChannelDetailBSDFragment.ARGS_CHANNEL)) {
-                ByteString channelString = (ByteString) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL);
-                try {
-                    Channel channel = Channel.parseFrom(channelString);
-                    ByteString policyString = (ByteString) extras.getSerializable(EXTRA_ROUTING_POLICY);
-                    RoutingPolicy routingPolicy = RoutingPolicy.parseFrom(policyString);
-                    setDefaultValues(routingPolicy);
-                    String[] channelPointString = channel.getChannelPoint().split(":");
-                    mChannelPoint = ChannelPoint.newBuilder()
-                            .setFundingTxidStr(channelPointString[0])
-                            .setOutputIndex(Integer.valueOf(channelPointString[1]))
-                            .build();
-                    mGlobal = false;
-                } catch (InvalidProtocolBufferException e) {
-                    throw new RuntimeException(e);
-                }
+                mChannel = (OpenChannel) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL);
+                RoutingPolicy routingPolicy = (RoutingPolicy) extras.getSerializable(EXTRA_ROUTING_POLICY);
+                setDefaultValues(routingPolicy);
             }
         }
 
@@ -96,7 +77,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         String timelockDetailDescription = "(" + getResources().getQuantityString(R.plurals.blocks, 1000).replace("%d ", "") + ")";
         mTimelock.setDescriptionDetail(timelockDetailDescription);
 
-        if (!mGlobal) {
+        if (mChannel != null) {
             mAllChannelsWarning.setVisibility(View.GONE);
         }
 
@@ -115,56 +96,38 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
 
                     if (LndConnection.getInstance().getLightningService() != null) {
 
-                        PolicyUpdateRequest.Builder chanPolicyUpdateRequestBuilder = PolicyUpdateRequest.newBuilder()
-                                .setGlobal(mGlobal);
+                        UpdateRoutingPolicyRequest.Builder builder = UpdateRoutingPolicyRequest.newBuilder();
 
-                        if (mChannelPoint != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setChanPoint(mChannelPoint);
-                        }
+                        if (mChannel != null)
+                            builder.setChannel(mChannel);
 
                         // BaseFee if specified, will be set to 0 on lnd if not set
-                        if (mBaseFee.getData() != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setBaseFeeMsat(Integer.valueOf(mBaseFee.getData()));
-                        }
+                        if (mBaseFee.getData() != null)
+                            builder.setFeeBase(Integer.valueOf(mBaseFee.getData()));
 
                         // Fee Rate if specified, will be set to 0 on lnd if not set
-                        if (mFeeRate.getData() != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setFeeRatePpm((int) (Double.valueOf(mFeeRate.getData()) * 10000));
-                        }
+                        if (mFeeRate.getData() != null)
+                            builder.setFeeRate((long) (Double.valueOf(mFeeRate.getData()) * 10000));
 
                         // Timelock delta if specified, will be set to 0 on lnd if not set
-                        if (mTimelock.getData() != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setTimeLockDelta(Integer.valueOf(mTimelock.getData()));
-                        }
+                        if (mTimelock.getData() != null)
+                            builder.setDelay(Integer.valueOf(mTimelock.getData()));
 
                         // MinHTLC if specified
-                        if (mMinHTLC.getData() != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setMinHtlcMsat(Integer.valueOf(mMinHTLC.getData()))
-                                    .setMinHtlcMsatSpecified(true);
-                        }
+                        if (mMinHTLC.getData() != null)
+                            builder.setMinHTLC(Integer.valueOf(mMinHTLC.getData()));
 
                         // MaxHTLC if specified
-                        if (mMaxHTLC.getData() != null) {
-                            chanPolicyUpdateRequestBuilder
-                                    .setMaxHtlcMsat(Integer.valueOf(mMaxHTLC.getData()) * 1000);
-                        }
+                        if (mMaxHTLC.getData() != null)
+                            builder.setMaxHTLC(Integer.valueOf(mMaxHTLC.getData()) * 1000);
 
-                        mCompositeDisposable.add(LndConnection.getInstance().getLightningService().updateChannelPolicy(chanPolicyUpdateRequestBuilder.build())
-                                .subscribe(policyUpdateResponse -> {
-                                    if (policyUpdateResponse.getFailedUpdatesCount() > 0) {
-                                        for (FailedUpdate failedUpdate : policyUpdateResponse.getFailedUpdatesList()) {
-                                            BBLog.w(LOG_TAG, "Exception in updating chan policy for " + failedUpdate.getOutpoint().getTxidStr() + ": " + failedUpdate.getUpdateError());
-                                            if (!mGlobal)
-                                                showError(failedUpdate.getUpdateError(), RefConstants.ERROR_DURATION_MEDIUM);
-                                        }
-                                        if (mGlobal) {
-                                            showError(getResources().getString(R.string.error_routing_policy_only_partially_updated, policyUpdateResponse.getFailedUpdatesCount()), RefConstants.ERROR_DURATION_LONG);
-                                        }
+                        mCompositeDisposable.add(BackendManager.api().updateRoutingPolicy(builder.build())
+                                .subscribe(errorList -> {
+                                    if (errorList.size() > 0) {
+                                        if (mChannel == null)
+                                            showError(getResources().getString(R.string.error_routing_policy_only_partially_updated, errorList.size()), RefConstants.ERROR_DURATION_LONG);
+                                        else
+                                            showError(errorList.get(0), RefConstants.ERROR_DURATION_MEDIUM);
                                     } else {
                                         Toast.makeText(UpdateRoutingPolicyActivity.this, R.string.routing_policy_update_success, Toast.LENGTH_SHORT).show();
                                     }
@@ -188,10 +151,10 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     }
 
     private void setDefaultValues(RoutingPolicy policy) {
-        mBaseFee.setValue(String.valueOf(policy.getFeeBaseMsat()));
-        mFeeRate.setValue(String.valueOf(policy.getFeeRateMilliMsat() / 10000d));
-        mTimelock.setValue(String.valueOf(policy.getTimeLockDelta()));
-        mMinHTLC.setValue(String.valueOf(policy.getMinHtlc()));
-        mMaxHTLC.setValue(String.valueOf(policy.getMaxHtlcMsat() / 1000));
+        mBaseFee.setValue(String.valueOf(policy.getFeeBase()));
+        mFeeRate.setValue(String.valueOf(policy.getFeeRate() / 10000d));
+        mTimelock.setValue(String.valueOf(policy.getDelay()));
+        mMinHTLC.setValue(String.valueOf(policy.getMinHTLC()));
+        mMaxHTLC.setValue(String.valueOf(policy.getMaxHTLC() / 1000));
     }
 }
