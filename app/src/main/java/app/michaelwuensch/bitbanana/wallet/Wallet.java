@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
@@ -184,6 +185,14 @@ public class Wallet {
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mCurrentNodeInfo = response;
+
+                    // Save the network info to our backend configuration if it is different
+                    if (response.getNetwork() != BackendManager.getCurrentBackendConfig().getNetwork()) {
+                        BackendManager.getCurrentBackendConfig().setNetwork(response.getNetwork());
+                        BackendConfigsManager.getInstance().updateBackendConfig(BackendManager.getCurrentBackendConfig());
+                        BackendConfigsManager.getInstance().apply();
+                    }
+
                     broadcastInfoUpdate();
                     broadcastConnectionTestResult(true, -1);
                     if (loadWalletOnSuccess) {
@@ -345,9 +354,23 @@ public class Wallet {
         return mCurrentNodeInfo;
     }
 
+    /**
+     * Gets the bitcoin network the wallet is connected to.
+     * If the wallet is not fully loaded yet, this function will return UNKNOWN.
+     */
     public BaseBackendConfig.Network getNetwork() {
         if (getCurrentNodeInfo() == null)
             return BaseBackendConfig.Network.UNKNOWN;
+        return getCurrentNodeInfo().getNetwork();
+    }
+
+    /**
+     * Gets the bitcoin network the wallet is connected to.
+     * If the wallet is not fully loaded yet, this function will fall back to the saved network information from the connection config
+     */
+    public BaseBackendConfig.Network getNetworkWithFallback() {
+        if (getCurrentNodeInfo() == null || getCurrentNodeInfo().getNetwork() == BaseBackendConfig.Network.UNKNOWN)
+            return BackendManager.getCurrentBackendConfig().getNetwork();
         return getCurrentNodeInfo().getNetwork();
     }
 

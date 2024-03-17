@@ -328,7 +328,6 @@ public class MainBalanceView extends MotionLayout {
     private void updateBalanceDetailsVisibility() {
 
         int detailsVisibility = FeatureManager.isBalanceDetailsEnabled() ? View.VISIBLE : View.GONE;
-        mFLHandleForClick.setVisibility(detailsVisibility);
         mIvHandleIcon.setVisibility(detailsVisibility);
         mBalanceDetails.setVisibility(detailsVisibility);
 

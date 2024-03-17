@@ -9,6 +9,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 
@@ -104,9 +105,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     return this;
                 } else {
                     try {
-                        BaseEncoding.base64Url().decode(macaroon);
                         byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroon);
-                        macaroon = BaseEncoding.base16().encode(macaroonBytes);
+                        macaroon = HexUtil.bytesToHex(macaroonBytes);
                     } catch (IllegalArgumentException e) {
                         BBLog.e(LOG_TAG, "macaroon decoding failed");
 

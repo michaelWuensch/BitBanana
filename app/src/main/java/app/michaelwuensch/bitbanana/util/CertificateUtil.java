@@ -36,7 +36,10 @@ public class CertificateUtil {
             return result;
 
         result = privateKeyToPEM(DER);
-        return result;
+        if (result != null)
+            return result;
+        else
+            return null;
     }
 
     /**
@@ -66,6 +69,8 @@ public class CertificateUtil {
     private static String privateKeyToPEM(final byte[] DER) {
         final Base64.Encoder encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.getBytes());
         final String encodedCertText = new String(encoder.encode(DER));
+        if (encodedCertText == null || encodedCertText.isEmpty())
+            return null;
         return BEGIN_PRIVATE_KEY + LINE_SEPARATOR + encodedCertText + LINE_SEPARATOR + END_PRIVATE_KEY;
     }
 
