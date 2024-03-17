@@ -76,13 +76,13 @@
                 app:inputLabel="@string/port"
                 app:inputLabelDetails="" />
 
-            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
-                android:id="@+id/inputMacaroon"
+            <app.michaelwuensch.bitbanana.setup.AccessTokenInputView
+                android:id="@+id/inputAccessToken"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="122dp"
                 android:layout_marginTop="10dp"
                 app:inputLabel="@string/macaroon"
-                app:inputLabelDetails="(Hex)"
+                app:inputLabelDetails=""
                 app:maxLines="3"
                 app:maxLinesFocused="5"
                 app:minLines="3" />

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.tabs.TabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/accessTokenEncodingTabLayout"
+    android:layout_width="150dp"
+    android:layout_height="22dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/rounded_rectangle_seablue"
+    app:tabBackground="@drawable/tab_selector_dimmed"
+    app:tabIndicatorHeight="0dp"
+    app:tabMode="scrollable"
+    app:tabRippleColor="@null"
+    app:tabTextAppearance="@style/InputViewTabText">
+
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hex" />
+
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Base64" />
+
+    <com.google.android.material.tabs.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Base64Url" />
+</com.google.android.material.tabs.TabLayout>
