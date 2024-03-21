@@ -371,7 +371,6 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         @Override
         public Fragment getItem(int pos) {
             switch (pos) {
-
                 case 0:
                     return mOpenChannelsList;
                 case 1:

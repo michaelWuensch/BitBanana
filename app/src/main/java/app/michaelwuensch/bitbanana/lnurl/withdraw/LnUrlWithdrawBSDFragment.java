@@ -43,8 +43,6 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;

@@ -28,6 +28,7 @@ public class InvoiceUtil {
     public static String INVOICE_PREFIX_LIGHTNING_MAINNET = "lnbc";
     public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
     public static String INVOICE_PREFIX_LIGHTNING_REGTEST = "lnbcrt";
+    public static String INVOICE_PREFIX_LIGHTNING_SIGNET = "lntbs";
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_MAINNET = new ArrayList<>(Arrays.asList("1", "3", "bc1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));

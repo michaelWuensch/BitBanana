@@ -71,7 +71,7 @@ public class Wallet {
     public void reset() {
         Wallet_Balance.getInstance().reset();
         Wallet_Channels.getInstance().reset();
-        Wallet_Components.getInstance().reset();
+        Wallet_TransactionHistory.getInstance().reset();
 
         mCurrentNodeInfo = null;
         mWalletLoadState = WalletLoadState.NOT_LOADED;
@@ -83,7 +83,7 @@ public class Wallet {
     public void cancelSubscriptions() {
         Wallet_Balance.getInstance().cancelSubscriptions();
         Wallet_Channels.getInstance().cancelSubscriptions();
-        Wallet_Components.getInstance().cancelSubscriptions();
+        Wallet_TransactionHistory.getInstance().cancelSubscriptions();
         compositeDisposable.clear();
     }
 
@@ -308,15 +308,15 @@ public class Wallet {
                 }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
 
                 // Fetch the transaction history
-                Wallet_Components.getInstance().fetchLNDTransactionHistory();
+                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
 
                 // Fetch UTXOs
-                Wallet_Components.getInstance().fetchUTXOs();
+                Wallet_TransactionHistory.getInstance().fetchUTXOs();
 
                 // Subscribe to Transaction Events
-                Wallet_Components.getInstance().subscribeToTransactions();
+                Wallet_TransactionHistory.getInstance().subscribeToTransactions();
                 Wallet_Channels.getInstance().subscribeToHtlcEvents();
-                Wallet_Components.getInstance().subscribeToInvoices();
+                Wallet_TransactionHistory.getInstance().subscribeToInvoices();
 
                 mHandler.postDelayed(() -> Wallet_Channels.getInstance().subscribeToChannelEvents(), 3000);
 
@@ -333,7 +333,7 @@ public class Wallet {
                 }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
 
                 // Fetch UTXOs
-                Wallet_Components.getInstance().fetchUTXOs();
+                Wallet_TransactionHistory.getInstance().fetchUTXOs();
         }
     }
 

@@ -10,16 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
@@ -31,7 +27,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
     public static final String ARGS_TRANSACTION = "TRANSACTION";
 
     private BSDScrollableMainView mBSDScrollableMainView;
-    private Transaction mTransaction;
+    private OnChainTransaction mTransaction;
     private TextView mNodeLabel;
     private TextView mNode;
     private TextView mEventLabel;
@@ -80,23 +76,15 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
-            ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
-
-            try {
-                bindOnChainTransaction(transactionString);
-
-            } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                BBLog.d(TAG, "Failed to parse transaction.");
-                dismiss();
-            }
+            bindOnChainTransaction((OnChainTransaction) getArguments().getSerializable(ARGS_TRANSACTION));
         }
 
         return view;
     }
 
 
-    private void bindOnChainTransaction(ByteString transactionString) throws InvalidProtocolBufferException {
-        mTransaction = Transaction.parseFrom(transactionString);
+    private void bindOnChainTransaction(OnChainTransaction transaction) {
+        mTransaction = transaction;
 
         String nodeLabel = getString(R.string.node) + ":";
         mNodeLabel.setText(nodeLabel);
@@ -117,15 +105,15 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
 
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(mTransaction.getTimeStamp(), getActivity()));
 
-        mAddress.setText(mTransaction.getDestAddresses(0));
-        mTransactionID.setText(mTransaction.getTxHash());
 
-        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mTransaction.getTxHash(), getActivity()));
-        mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mTransaction.getDestAddresses(0), getActivity()));
-        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTxHash()));
-        mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
-        if (mTransaction.getNumConfirmations() < 7) {
-            mConfirmations.setText(String.valueOf(mTransaction.getNumConfirmations()));
+        mTransactionID.setText(mTransaction.getTransactionId());
+
+        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mTransaction.getTransactionId(), getActivity()));
+        //mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mTransaction.getDestAddresses(0), getActivity()));
+        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mTransaction.getTransactionId()));
+        //mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mTransaction.getDestAddresses(0)));
+        if (mTransaction.getConfirmations() < 7) {
+            mConfirmations.setText(String.valueOf(mTransaction.getConfirmations()));
         } else {
             mConfirmations.setText("6+");
         }
@@ -149,8 +137,8 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mAmount.setVisibility(View.GONE);
         mAmountLabel.setVisibility(View.GONE);
 
-        if (mTransaction.getTotalFees() > 0) {
-            mFee.setAmountSat(mTransaction.getTotalFees());
+        if (mTransaction.getFee() > 0) {
+            mFee.setAmountMsat(mTransaction.getFee());
         } else {
             mFee.setVisibility(View.GONE);
             mFeeLabel.setVisibility(View.GONE);
@@ -169,7 +157,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 mEvent.setText(R.string.closed_channel);
                 break;
             case -1:
-                if (mTransaction.getLabel().toLowerCase().contains("sweep")) {
+                if (mTransaction.hasLabel() && mTransaction.getLabel().toLowerCase().contains("sweep")) {
                     // in some rare cases for sweep transactions the value is actually the fee payed for the sweep.
                     mEvent.setText(R.string.closed_channel);
                 } else {
@@ -186,25 +174,25 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mNodeLabel.setVisibility(View.GONE);
         mEvent.setVisibility(View.GONE);
         mEventLabel.setVisibility(View.GONE);
-        mAmount.setAmountSat(Math.abs(mTransaction.getAmount()));
+        mAmount.setAmountMsat(Math.abs(mTransaction.getAmount()));
 
         Long amount = mTransaction.getAmount();
 
         switch (amount.compareTo(0L)) {
             case 0:
                 // amount = 0 (should actually not happen)
-                mFee.setAmountSat(mTransaction.getTotalFees());
+                mFee.setAmountMsat(mTransaction.getFee());
                 break;
             case 1:
                 // amount > 0 (received on-chain)
-                mAmount.setAmountSat(Math.abs(mTransaction.getAmount()));
+                mAmount.setAmountMsat(Math.abs(mTransaction.getAmount()));
                 mFee.setVisibility(View.GONE);
                 mFeeLabel.setVisibility(View.GONE);
                 break;
             case -1:
                 // amount < 0 (sent on-chain)
-                mAmount.setAmountSat(Math.abs(mTransaction.getAmount() + mTransaction.getTotalFees()));
-                mFee.setAmountSat(mTransaction.getTotalFees());
+                mAmount.setAmountMsat(Math.abs(mTransaction.getAmount() + mTransaction.getFee()));
+                mFee.setAmountMsat(mTransaction.getFee());
                 break;
         }
     }

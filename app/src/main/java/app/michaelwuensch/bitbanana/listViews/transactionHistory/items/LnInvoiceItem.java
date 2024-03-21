@@ -1,14 +1,15 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
+
+import app.michaelwuensch.bitbanana.models.LnInvoice;
 
 public class LnInvoiceItem extends TransactionItem {
-    private Invoice mInvoice;
+    private LnInvoice mInvoice;
 
-    public LnInvoiceItem(Invoice invoice) {
+    public LnInvoiceItem(LnInvoice invoice) {
         mInvoice = invoice;
-        mCreationDate = invoice.getCreationDate();
+        mCreationDate = invoice.getCreatedAt();
     }
 
     @Override
@@ -16,12 +17,12 @@ public class LnInvoiceItem extends TransactionItem {
         return TYPE_LN_INVOICE;
     }
 
-    public Invoice getInvoice() {
+    public LnInvoice getInvoice() {
         return mInvoice;
     }
 
     @Override
-    public ByteString getTransactionByteString() {
-        return mInvoice.toByteString();
+    public Serializable getSerializedTransaction() {
+        return mInvoice;
     }
 }

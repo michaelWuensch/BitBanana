@@ -17,7 +17,6 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 

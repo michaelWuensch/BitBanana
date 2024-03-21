@@ -95,18 +95,10 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         } else {
             mAmount.setStyleBasedOnValue(true);
         }
-        mAmount.setAmountSat(amount);
+        mAmount.setAmountMsat(amount);
     }
 
-    void setFeeSat(long amount, boolean visible) {
-        mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
-
-        String feeText = mContext.getResources().getString(R.string.fee) + ": ";
-        mTransactionFee.setLabelText(feeText);
-        mTransactionFee.setAmountSat(amount);
-    }
-
-    void setFeeMSat(long amount, boolean visible) {
+    void setFee(long amount, boolean visible) {
         mTransactionFee.setVisibility(visible ? View.VISIBLE : View.GONE);
 
         String feeText = mContext.getResources().getString(R.string.fee) + ": ";
@@ -123,8 +115,8 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
         mSecondaryDescription.setText(description);
     }
 
-    void setDisplayMode(boolean isOpaque) {
-        mContentView.setAlpha(isOpaque ? 1f : 0.5f);
+    void setTranslucent(boolean isTranslucent) {
+        mContentView.setAlpha(isTranslucent ? 0.5f : 1f);
     }
 
     public void addOnTransactionSelectListener(TransactionSelectListener transactionSelectListener) {
@@ -136,7 +128,7 @@ public class TransactionViewHolder extends HistoryItemViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mTransactionSelectListener != null) {
-                    mTransactionSelectListener.onTransactionSelect(item.getTransactionByteString(), type);
+                    mTransactionSelectListener.onTransactionSelect(item.getSerializedTransaction(), type);
                 }
             }
         });

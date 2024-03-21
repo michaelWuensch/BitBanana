@@ -58,7 +58,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
 public class SendBSDFragment extends BaseBSDFragment {
@@ -357,7 +357,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                         getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendCoins(sendRequest)
                                 .subscribe(sendCoinsResponse -> {
                                     // updated the history, so it is shown the next time the user views it
-                                    Wallet_Components.getInstance().updateOnChainTransactionHistory();
+                                    Wallet_TransactionHistory.getInstance().updateOnChainTransactionHistory();
 
                                     BBLog.v(LOG_TAG, sendCoinsResponse.toString());
 

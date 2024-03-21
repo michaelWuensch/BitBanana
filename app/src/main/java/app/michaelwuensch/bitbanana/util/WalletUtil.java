@@ -1,16 +1,14 @@
 package app.michaelwuensch.bitbanana.util;
 
-import com.github.lightningnetwork.lnd.lnrpc.PreviousOutPoint;
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-
-import java.util.List;
-
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
+import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
 public class WalletUtil {
@@ -54,29 +52,27 @@ public class WalletUtil {
      *
      * @return pubKey of the Node the channel is linked to
      */
-    public static String getNodePubKeyFromChannelTransaction(Transaction transaction) {
+    public static String getNodePubKeyFromChannelTransaction(OnChainTransaction transaction) {
 
         // open channels
         if (Wallet_Channels.getInstance().getOpenChannelsList() != null) {
             for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
-                if (transaction.getTxHash().equals(c.getFundingOutpoint().getTransactionID()))
+                if (transaction.getTransactionId().equals(c.getFundingOutpoint().getTransactionID()))
                     return c.getRemotePubKey();
         }
 
         // pending channels
         if (Wallet_Channels.getInstance().getPendingChannelsList() != null) {
             for (PendingChannel c : Wallet_Channels.getInstance().getPendingChannelsList()) {
-                if (transaction.getTxHash().equals(c.getFundingOutpoint().getTransactionID()))
+                if (transaction.getTransactionId().equals(c.getFundingOutpoint().getTransactionID()))
                     return c.getRemotePubKey();
-                if (c.hasCloseTransactionId())
-                    if (transaction.getTxHash().equals(c.getCloseTransactionId()))
+                if (c.hasCloseTransactionId()) {
+                    if (transaction.getTransactionId().equals(c.getCloseTransactionId()))
                         return c.getRemotePubKey();
-
-                List<PreviousOutPoint> previousOutPoints = transaction.getPreviousOutpointsList();
-                for (PreviousOutPoint op : previousOutPoints) {
-                    if (c.hasCloseTransactionId())
-                        if (op.getOutpoint().split(":")[0].equals(c.getCloseTransactionId()))
+                    for (Outpoint op : transaction.getInputs()) {
+                        if (op.getTransactionID().equals(c.getCloseTransactionId()))
                             return c.getRemotePubKey();
+                    }
                 }
             }
         }
@@ -84,10 +80,10 @@ public class WalletUtil {
         // closed channels
         if (Wallet_Channels.getInstance().getClosedChannelsList() != null) {
             for (ClosedChannel c : Wallet_Channels.getInstance().getClosedChannelsList()) {
-                if (transaction.getTxHash().equals(c.getFundingOutpoint().getTransactionID()) || transaction.getTxHash().equals(c.getCloseTransactionId()))
+                if (transaction.getTransactionId().equals(c.getFundingOutpoint().getTransactionID()) || transaction.getTransactionId().equals(c.getCloseTransactionId()))
                     return c.getRemotePubKey();
                 for (String sweepTxId : c.getSweepTransactionIds())
-                    if (transaction.getTxHash().equals(sweepTxId))
+                    if (transaction.getTransactionId().equals(sweepTxId))
                         return c.getRemotePubKey();
             }
         }
@@ -100,7 +96,7 @@ public class WalletUtil {
      * @param transaction
      * @return
      */
-    public static boolean isChannelTransaction(Transaction transaction) {
+    public static boolean isChannelTransaction(OnChainTransaction transaction) {
 
         // This is faster especially for nodes with lots of channels
         if (BackendManager.getCurrentBackendType() == BaseBackendConfig.BackendType.LND_GRPC && hasChannelTransactionLabel(transaction)) {
@@ -118,7 +114,7 @@ public class WalletUtil {
      * @param transaction
      * @return
      */
-    public static boolean hasChannelTransactionLabel(Transaction transaction) {
+    public static boolean hasChannelTransactionLabel(OnChainTransaction transaction) {
         String[] labelType = {":openchannel", ":closechannel", ":justicetx"};
         if (transaction.getLabel() != null && !transaction.getLabel().isEmpty())
             for (String label : labelType)
@@ -173,5 +169,14 @@ public class WalletUtil {
                 if (c.isActive())
                     tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalChannelConstraints().getChannelReserve(), 0);
         return tempMax;
+    }
+
+    public static int getBlockHeight() {
+        if (Wallet.getInstance().getCurrentNodeInfo() != null)
+            return Wallet.getInstance().getCurrentNodeInfo().getBlockHeight();
+        else {
+            BBLog.w(LOG_TAG, "Block height of 0 was returned as the wallet info is not yet available!");
+            return 0;
+        }
     }
 }

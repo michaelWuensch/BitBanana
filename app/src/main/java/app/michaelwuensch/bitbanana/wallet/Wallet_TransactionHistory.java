@@ -1,25 +1,15 @@
 package app.michaelwuensch.bitbanana.wallet;
 
 
-import android.os.Handler;
-
 import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
-import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.github.lightningnetwork.lnd.walletrpc.UtxoLease;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -28,32 +18,33 @@ import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
+import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class Wallet_Components {
+public class Wallet_TransactionHistory {
 
-    private static final String LOG_TAG = Wallet_Components.class.getSimpleName();
+    private static final String LOG_TAG = Wallet_TransactionHistory.class.getSimpleName();
 
-    private static Wallet_Components mInstance = null;
+    private static Wallet_TransactionHistory mInstance = null;
     private final Set<HistoryListener> mHistoryListeners = new HashSet<>();
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
     private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
     private final Set<UtxoSubscriptionListener> mUtxoSubscriptionListeners = new HashSet<>();
     private final Set<PeerUpdateListener> mPeerUpdateListeners = new HashSet<>();
 
-    public List<Transaction> mOnChainTransactionList;
-    public List<Invoice> mInvoiceList;
-    public List<Invoice> mTempInvoiceUpdateList;
-    public List<Payment> mPaymentsList;
+    private List<OnChainTransaction> mOnChainTransactionList;
+    private List<LnInvoice> mInvoiceList;
+    private List<LnPayment> mPaymentsList;
     public List<Utxo> mUTXOsList;
-    public List<UtxoLease> mLockedUTXOsList;
+
 
     private boolean mTransactionUpdated = false;
     private boolean mInvoicesUpdated = false;
@@ -61,17 +52,15 @@ public class Wallet_Components {
     private boolean mUpdatingHistory = false;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private final Handler mHandler = new Handler();
-    private final DebounceHandler mChannelsUpdateDebounceHandler = new DebounceHandler();
 
-    private Wallet_Components() {
+    private Wallet_TransactionHistory() {
         ;
     }
 
-    public static Wallet_Components getInstance() {
+    public static Wallet_TransactionHistory getInstance() {
 
         if (mInstance == null) {
-            mInstance = new Wallet_Components();
+            mInstance = new Wallet_TransactionHistory();
         }
 
         return mInstance;
@@ -83,26 +72,22 @@ public class Wallet_Components {
     public void reset() {
         mOnChainTransactionList = null;
         mInvoiceList = null;
-        mTempInvoiceUpdateList = null;
         mPaymentsList = null;
         mUTXOsList = null;
-        mLockedUTXOsList = null;
         mTransactionUpdated = false;
         mInvoicesUpdated = false;
         mPaymentsUpdated = false;
         mUpdatingHistory = false;
 
         compositeDisposable.clear();
-        mHandler.removeCallbacksAndMessages(null);
-        mChannelsUpdateDebounceHandler.shutdown();
     }
 
 
     /**
-     * This will fetch all transaction history from LND.
+     * This will fetch all transaction history from the node.
      * After that the history is provided in lists that can be handled in a synchronized way.
      */
-    public void fetchLNDTransactionHistory() {
+    public void fetchTransactionHistory() {
         // Set all updated flags to false. This way we can determine later, when update is finished.
 
         if (!mUpdatingHistory) {
@@ -111,14 +96,14 @@ public class Wallet_Components {
             mInvoicesUpdated = false;
             mPaymentsUpdated = false;
 
-            fetchTransactionsFromLND();
-            fetchInvoicesFromLND();
-            fetchPaymentsFromLND();
+            fetchOnChainTransactions();
+            fetchInvoicesList();
+            fetchPayments();
         }
     }
 
     /**
-     * This will fetch all lightning payment history from LND.
+     * This will fetch all lightning payment history from the node.
      * After that the history is provided in lists that can be handled in a synchronized way.
      * <p>
      * This will need less bandwidth than updating all history and can be called when a lightning
@@ -131,12 +116,24 @@ public class Wallet_Components {
             mUpdatingHistory = true;
             mPaymentsUpdated = false;
 
-            fetchPaymentsFromLND();
+            fetchPayments();
         }
     }
 
+    public List<LnInvoice> getInvoiceList() {
+        return mInvoiceList;
+    }
+
+    public List<LnPayment> getPaymentsList() {
+        return mPaymentsList;
+    }
+
+    public List<OnChainTransaction> getOnChainTransactionList() {
+        return mOnChainTransactionList;
+    }
+
     /**
-     * This will fetch all on-chain transaction history from LND.
+     * This will fetch all on-chain transaction history from the node.
      * After that the history is provided in lists that can be handled in a synchronized way.
      * <p>
      * This will need less bandwidth than updating all history and can be called when a lightning
@@ -149,7 +146,7 @@ public class Wallet_Components {
             mUpdatingHistory = true;
             mTransactionUpdated = false;
 
-            fetchTransactionsFromLND();
+            fetchOnChainTransactions();
         }
     }
 
@@ -164,67 +161,39 @@ public class Wallet_Components {
     }
 
     /**
-     * This will fetch all On-Chain transactions involved with the current wallet from LND.
+     * This will fetch all On-Chain transactions involved with the current wallet from the node.
      */
-    public void fetchTransactionsFromLND() {
-        // fetch on-chain transactions
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().getTransactions(GetTransactionsRequest.newBuilder().build())
-                .subscribe(transactionDetails -> {
-                    mOnChainTransactionList = Lists.reverse(transactionDetails.getTransactionsList());
-
+    public void fetchOnChainTransactions() {
+        compositeDisposable.add(BackendManager.api().listOnChainTransactions()
+                .subscribe(response -> {
+                    mOnChainTransactionList = response;
                     mTransactionUpdated = true;
                     isHistoryUpdateFinished();
                 }, throwable -> BBLog.e(LOG_TAG, "Exception in transaction request task: " + throwable.getMessage())));
     }
 
     /**
-     * This will fetch all lightning invoices from LND.
+     * This will fetch all lightning invoices from the node.
      */
-    public void fetchInvoicesFromLND() {
-
-        mTempInvoiceUpdateList = new LinkedList<>();
-
-        fetchInvoicesFromLND(100);
-    }
-
-    private void fetchInvoicesFromLND(long lastIndex) {
-        // Fetch lightning invoices
-        ListInvoiceRequest invoiceRequest = ListInvoiceRequest.newBuilder()
-                .setNumMaxInvoices(lastIndex)
-                .build();
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().listInvoices(invoiceRequest)
-                .subscribe(listInvoiceResponse -> {
-                    mTempInvoiceUpdateList.addAll(listInvoiceResponse.getInvoicesList());
-
-                    if (listInvoiceResponse.getLastIndexOffset() < lastIndex) {
-                        // we have fetched all available invoices!
-                        mInvoiceList = Lists.reverse(mTempInvoiceUpdateList);
-                        mTempInvoiceUpdateList = null;
-                        mInvoicesUpdated = true;
-                        isHistoryUpdateFinished();
-                    } else {
-                        // there are still invoices to fetch, get the next batch!
-                        fetchInvoicesFromLND(lastIndex + 100);
-                    }
+    public void fetchInvoicesList() {
+        compositeDisposable.add(BackendManager.api().listInvoices(0, 500)
+                .subscribe(response -> {
+                    mInvoiceList = Lists.reverse(response); // we want most recent on top.
+                    mInvoicesUpdated = true;
+                    isHistoryUpdateFinished();
                 }, throwable -> BBLog.e(LOG_TAG, "Exception in invoice request task: " + throwable.getMessage())));
     }
 
     /**
-     * This will fetch lightning payments from LND.
+     * This will fetch lightning payments from the node.
      */
-    public void fetchPaymentsFromLND() {
-        // Fetch lightning payments
-        ListPaymentsRequest paymentsRequest = ListPaymentsRequest.newBuilder()
-                .setIncludeIncomplete(false)
-                .build();
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().listPayments(paymentsRequest)
-                .subscribe(listPaymentsResponse -> {
-                    mPaymentsList = Lists.reverse(listPaymentsResponse.getPaymentsList());
+    public void fetchPayments() {
+        compositeDisposable.add(BackendManager.api().listLnPayments(0, 500)
+                .subscribe(response -> {
+                    mPaymentsList = Lists.reverse(response); // we want most recent on top.
                     mPaymentsUpdated = true;
                     isHistoryUpdateFinished();
-                }, throwable -> BBLog.e(LOG_TAG, "Exception in payment request task: " + throwable.getMessage())));
+                }, throwable -> BBLog.e(LOG_TAG, "Exception in fetch payments task: " + throwable.getMessage())));
     }
 
     public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
@@ -295,7 +264,7 @@ public class Wallet_Components {
      * For now we are just interested in the alias.
      * The AliasManager takes care of the result so we can use aliases in a non async way.
      */
-    public void fetchNodeInfoFromLND(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
+    public void fetchNodeInfo(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(pubkey)
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(response -> {
@@ -349,16 +318,16 @@ public class Wallet_Components {
     }
 
     /**
-     * Use this to subscribe the wallet to transaction events that happen on LND.
+     * Use this to subscribe the wallet to transaction events that happen on the node.
      * The events will be captured and forwarded to the TransactionSubscriptionListener.
      * All parts of the App that want to react on transaction events have to subscribe to the
      * TransactionSubscriptionListener.
      */
     public void subscribeToTransactions() {
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeTransactions(GetTransactionsRequest.newBuilder().build())
+        compositeDisposable.add(BackendManager.api().subscribeToOnChainTransactions()
                 .subscribe(transaction -> {
                     BBLog.d(LOG_TAG, "Received transaction subscription event.");
-                    fetchTransactionsFromLND(); // update internal transaction list
+                    fetchOnChainTransactions(); // update internal transaction list
                     Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
                 }));
@@ -369,17 +338,16 @@ public class Wallet_Components {
     }
 
     /**
-     * Use this to subscribe the wallet to invoice events that happen on LND.
+     * Use this to subscribe the wallet to invoice events that happen on the node.
      * The events will be captured and forwarded to the InvoiceSubscriptionListener.
      * All parts of the App that want to react on invoice events have to subscribe to the
      * InvoiceSubscriptionListener.
      */
     public void subscribeToInvoices() {
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeInvoices(InvoiceSubscription.newBuilder().build())
+        compositeDisposable.add(BackendManager.api().subscribeToInvoices()
                 .subscribe(invoice -> {
                     BBLog.d(LOG_TAG, "Received invoice subscription event.");
 
-                    // is this a new invoice or is an old one updated?
                     if (mInvoiceList != null) {
                         if (invoice.getAddIndex() > mInvoiceList.get(0).getAddIndex()) {
                             // this is a new one
@@ -387,7 +355,6 @@ public class Wallet_Components {
                             broadcastInvoiceAdded(invoice);
                         } else {
                             // this is an update
-
                             // Find out which element has to be replaced
                             int changeIndex = -1;
                             for (int i = 0; i < mInvoiceList.size() - 1; i++) {
@@ -402,43 +369,14 @@ public class Wallet_Components {
                                 mInvoiceList.set(changeIndex, invoice);
                             }
 
-                            // Inform all subscribers
                             broadcastInvoiceUpdated(invoice);
                         }
                     } else {
-                        // this is a new one
-                        mInvoiceList = new LinkedList<>();
+                        mInvoiceList = new ArrayList<>();
                         mInvoiceList.add(invoice);
                         broadcastInvoiceAdded(invoice);
                     }
                 }));
-    }
-
-    /**
-     * Returns if the invoice has been payed already.
-     *
-     * @param invoice
-     * @return
-     */
-    public boolean isInvoicePayed(Invoice invoice) {
-        boolean payed;
-        if (invoice.getValue() == 0) {
-            payed = invoice.getAmtPaidSat() != 0;
-        } else {
-            payed = invoice.getValue() <= invoice.getAmtPaidSat();
-        }
-        return payed;
-    }
-
-    /**
-     * Returns if the invoice has been expired. This function just checks if the expiration date is in the past.
-     * It will also return expired for already payed invoices.
-     *
-     * @param invoice
-     * @return
-     */
-    public boolean isInvoiceExpired(Invoice invoice) {
-        return invoice.getCreationDate() + invoice.getExpiry() < System.currentTimeMillis() / 1000;
     }
 
     /**
@@ -464,7 +402,7 @@ public class Wallet_Components {
      *
      * @param invoice the new invoice
      */
-    private void broadcastInvoiceAdded(Invoice invoice) {
+    private void broadcastInvoiceAdded(LnInvoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onNewInvoiceAdded(invoice);
         }
@@ -475,7 +413,7 @@ public class Wallet_Components {
      *
      * @param invoice the updated invoice
      */
-    private void broadcastInvoiceUpdated(Invoice invoice) {
+    private void broadcastInvoiceUpdated(LnInvoice invoice) {
         for (InvoiceSubscriptionListener listener : mInvoiceSubscriptionListeners) {
             listener.onExistingInvoiceUpdated(invoice);
         }
@@ -495,7 +433,7 @@ public class Wallet_Components {
      *
      * @param transaction the details about the transaction update
      */
-    private void broadcastTransactionUpdate(Transaction transaction) {
+    private void broadcastTransactionUpdate(OnChainTransaction transaction) {
         for (TransactionSubscriptionListener listener : mTransactionSubscriptionListeners) {
             listener.onTransactionEvent(transaction);
         }
@@ -545,13 +483,13 @@ public class Wallet_Components {
     }
 
     public interface InvoiceSubscriptionListener {
-        void onNewInvoiceAdded(Invoice invoice);
+        void onNewInvoiceAdded(LnInvoice invoice);
 
-        void onExistingInvoiceUpdated(Invoice invoice);
+        void onExistingInvoiceUpdated(LnInvoice invoice);
     }
 
     public interface TransactionSubscriptionListener {
-        void onTransactionEvent(Transaction transaction);
+        void onTransactionEvent(OnChainTransaction transaction);
     }
 
     public interface UtxoSubscriptionListener {

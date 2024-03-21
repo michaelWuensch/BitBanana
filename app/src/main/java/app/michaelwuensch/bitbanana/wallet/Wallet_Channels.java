@@ -114,7 +114,7 @@ public class Wallet_Channels {
                         openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        Wallet_Components.getInstance().connectPeer(nodeUri, true, amount, targetConf, isPrivate);
+                        Wallet_TransactionHistory.getInstance().connectPeer(nodeUri, true, amount, targetConf, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -230,7 +230,7 @@ public class Wallet_Channels {
 
         compositeDisposable.add(Observable.range(0, channelNodesList.size())
                 .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                .doOnNext(integer -> Wallet_Components.getInstance().fetchNodeInfoFromLND(channelNodesList.get(integer), integer == channelNodesList.size() - 1, true, null))
+                .doOnNext(integer -> Wallet_TransactionHistory.getInstance().fetchNodeInfo(channelNodesList.get(integer), integer == channelNodesList.size() - 1, true, null))
                 .subscribe());
 
         if (channelNodesList.size() == 0) {

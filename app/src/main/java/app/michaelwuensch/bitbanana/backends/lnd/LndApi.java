@@ -9,14 +9,22 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
+import com.github.lightningnetwork.lnd.lnrpc.Invoice;
+import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Resolution;
 import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
+import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
@@ -26,7 +34,9 @@ import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
@@ -42,13 +52,19 @@ import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
+import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
+import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
+import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.Version;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class LndApi extends Api {
@@ -406,5 +422,192 @@ public class LndApi extends Api {
                     return errorList;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
+    }
+
+    private LnInvoice getInvoiceFromLNDInvoice(Invoice lndInvoice) {
+        String keysendMessage = null;
+        try {
+            Map<Long, ByteString> customRecords = lndInvoice.getHtlcs(0).getCustomRecordsMap();
+            for (Long key : customRecords.keySet()) {
+                if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                    keysendMessage = customRecords.get(key).toString(StandardCharsets.UTF_8);
+                    break;
+                }
+            }
+        } catch (Exception ignored) {
+
+        }
+
+        return LnInvoice.newBuilder()
+                .setBolt11(lndInvoice.getPaymentRequest())
+                .setAmountRequested(lndInvoice.getValueMsat())
+                .setAmountPaid(lndInvoice.getAmtPaidMsat())
+                .setCreatedAt(lndInvoice.getCreationDate())
+                .setExpiresAt(lndInvoice.getCreationDate() + lndInvoice.getExpiry())
+                .setAddIndex(lndInvoice.getAddIndex())
+                .setMemo(lndInvoice.getMemo())
+                .setKeysendMessage(keysendMessage)
+                .build();
+    }
+
+    private Single<List<LnInvoice>> getInvoicesPage(int page, int pageSize) {
+        ListInvoiceRequest invoiceRequest = ListInvoiceRequest.newBuilder()
+                .setNumMaxInvoices(pageSize)
+                .setIndexOffset((long) page * pageSize)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().listInvoices(invoiceRequest)
+                .map(response -> {
+                    List<LnInvoice> invoicesList = new ArrayList<>();
+                    for (Invoice invoice : response.getInvoicesList()) {
+                        invoicesList.add(getInvoiceFromLNDInvoice(invoice));
+                    }
+                    return invoicesList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching Invoice page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<LnInvoice>> listInvoices(int page, int pageSize) {
+        return getInvoicesPage(page, pageSize)
+                .flatMap(data -> {
+                    if (data.isEmpty()) {
+                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
+                    } else if (data.size() < pageSize) {
+                        return Single.just(data);
+                    } else {
+                        return listInvoices(page + 1, pageSize)
+                                .flatMap(nextPageData -> {
+                                    data.addAll(nextPageData); // Combine current page data with next page data
+                                    return Single.just(data);
+                                });
+                    }
+                });
+    }
+
+    @Override
+    public Observable<LnInvoice> subscribeToInvoices() {
+        return LndConnection.getInstance().getLightningService().subscribeInvoices(InvoiceSubscription.newBuilder().build())
+                .map(invoice -> {
+                    return getInvoiceFromLNDInvoice(invoice);
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Invoice subscription failed: " + throwable.fillInStackTrace()));
+    }
+
+    private OnChainTransaction getOnChainTransactionFromLNDTransaction(Transaction lndTransaction) {
+        return OnChainTransaction.newBuilder()
+                .setTransactionId(lndTransaction.getTxHash())
+                .setAmount(lndTransaction.getAmount() * 1000)
+                .setBlockHeight(lndTransaction.getBlockHeight())
+                .setConfirmations(lndTransaction.getNumConfirmations())
+                .setFee(lndTransaction.getTotalFees() * 1000)
+                .setTimeStamp(lndTransaction.getTimeStamp())
+                //.setLabel(lndTransaction.getLabel())
+                .build();
+    }
+
+    @Override
+    public Single<List<OnChainTransaction>> listOnChainTransactions() {
+        GetTransactionsRequest request = GetTransactionsRequest.newBuilder()
+                .setEndHeight(-1) //include unconfirmed
+                .build();
+
+        return LndConnection.getInstance().getLightningService().getTransactions(request)
+                .map(response -> {
+                    List<OnChainTransaction> transactionList = new ArrayList<>();
+                    for (Transaction transaction : response.getTransactionsList())
+                        transactionList.add(getOnChainTransactionFromLNDTransaction(transaction));
+                    return transactionList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Observable<OnChainTransaction> subscribeToOnChainTransactions() {
+        GetTransactionsRequest request = GetTransactionsRequest.newBuilder()
+                .setEndHeight(-1) //include unconfirmed
+                .build();
+        return LndConnection.getInstance().getLightningService().subscribeTransactions(request)
+                .map(transaction -> {
+                    return getOnChainTransactionFromLNDTransaction(transaction);
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "OnChainTransaction subscription failed: " + throwable.fillInStackTrace()));
+    }
+
+    private LnPayment getLnPaymentFromLNDPayment(Payment lndPayment) {
+        Hop lastHop = lndPayment.getHtlcs(0).getRoute().getHops(lndPayment.getHtlcs(0).getRoute().getHopsCount() - 1);
+        String keysendMessage = null;
+        try {
+            Map<Long, ByteString> customRecords = lastHop.getCustomRecordsMap();
+            for (Long key : customRecords.keySet()) {
+                if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                    keysendMessage = customRecords.get(key).toString(StandardCharsets.UTF_8);
+                    break;
+                }
+            }
+        } catch (Exception ignored) {
+
+        }
+
+        LnPayment.Status paymentStatus;
+        switch (lndPayment.getStatus()) {
+            case SUCCEEDED:
+                paymentStatus = LnPayment.Status.SUCCEEDED;
+                break;
+            case FAILED:
+                paymentStatus = LnPayment.Status.FAILED;
+                break;
+            default:
+                paymentStatus = LnPayment.Status.PENDING;
+        }
+
+        return LnPayment.newBuilder()
+                .setPaymentHash(lndPayment.getPaymentHash())
+                .setPaymentPreimage(lndPayment.getPaymentPreimage())
+                .setDestinationPubKey(lastHop.getPubKey())
+                .setStatus(paymentStatus)
+                .setAmountPaid(lndPayment.getValueMsat())
+                .setFee(lndPayment.getFeeMsat())
+                .setCreatedAt(lndPayment.getCreationTimeNs() / 1000000000)
+                .setBolt11(lndPayment.getPaymentRequest())
+                .setMemo(PaymentRequestUtil.getMemo(lndPayment.getPaymentRequest()))
+                .setKeysendMessage(keysendMessage)
+                .build();
+    }
+
+    private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {
+        ListPaymentsRequest request = ListPaymentsRequest.newBuilder()
+                .setIncludeIncomplete(false)
+                .setMaxPayments(pageSize)
+                .setIndexOffset((long) page * pageSize)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().listPayments(request)
+                .map(response -> {
+                    List<LnPayment> paymentsList = new ArrayList<>();
+                    for (Payment payment : response.getPaymentsList()) {
+                        paymentsList.add(getLnPaymentFromLNDPayment(payment));
+                    }
+                    return paymentsList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching payment page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
+        return getLnPaymentPage(page, pageSize)
+                .flatMap(data -> {
+                    if (data.isEmpty()) {
+                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
+                    } else if (data.size() < pageSize) {
+                        return Single.just(data);
+                    } else {
+                        return listLnPayments(page + 1, pageSize)
+                                .flatMap(nextPageData -> {
+                                    data.addAll(nextPageData); // Combine current page data with next page data
+                                    return Single.just(data);
+                                });
+                    }
+                });
     }
 }

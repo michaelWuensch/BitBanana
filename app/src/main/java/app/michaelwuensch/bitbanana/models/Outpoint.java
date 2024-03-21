@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 public class Outpoint implements Serializable {
 
-    private String TransactionID;
-    private int OutputIndex;
+    private final String TransactionID;
+    private final int OutputIndex;
 
 
     private Outpoint(Builder builder) {

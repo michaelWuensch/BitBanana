@@ -26,7 +26,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PaymentUtil {
@@ -176,7 +176,7 @@ public class PaymentUtil {
                     switch (htlcAttempt.getStatus()) {
                         case SUCCEEDED:
                             // updated the history, so it is shown the next time the user views it
-                            Wallet_Components.getInstance().updateLightningPaymentHistory();
+                            Wallet_TransactionHistory.getInstance().updateLightningPaymentHistory();
                             result.onSuccess();
                             break;
                         case FAILED:
@@ -264,7 +264,7 @@ public class PaymentUtil {
                     switch (payment.getStatus()) {
                         case SUCCEEDED:
                             // updated the history, so it is shown the next time the user views it
-                            Wallet_Components.getInstance().updateLightningPaymentHistory();
+                            Wallet_TransactionHistory.getInstance().updateLightningPaymentHistory();
                             result.onSuccess(payment);
                             break;
                         case FAILED:

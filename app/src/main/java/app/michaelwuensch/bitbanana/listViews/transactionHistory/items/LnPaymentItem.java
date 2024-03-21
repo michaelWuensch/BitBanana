@@ -1,22 +1,15 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
 
-import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
+import app.michaelwuensch.bitbanana.models.LnPayment;
 
 public class LnPaymentItem extends TransactionItem {
-    private Payment mPayment;
-    private String mMemo;
+    private LnPayment mPayment;
 
-    public LnPaymentItem(Payment payment) {
+    public LnPaymentItem(LnPayment payment) {
         mPayment = payment;
-        mCreationDate = payment.getCreationDate();
-
-        if (payment.getPaymentRequest() != null && !payment.getPaymentRequest().isEmpty()) {
-            // This will only be true for payments done with LND 0.7.0-beta and later
-            mMemo = PaymentRequestUtil.getMemo(payment.getPaymentRequest());
-        }
+        mCreationDate = payment.getCreatedAt();
     }
 
     @Override
@@ -24,16 +17,12 @@ public class LnPaymentItem extends TransactionItem {
         return TYPE_LN_PAYMENT;
     }
 
-    public Payment getPayment() {
+    public LnPayment getPayment() {
         return mPayment;
     }
 
     @Override
-    public ByteString getTransactionByteString() {
-        return mPayment.toByteString();
-    }
-
-    public String getMemo() {
-        return mMemo;
+    public Serializable getSerializedTransaction() {
+        return mPayment;
     }
 }

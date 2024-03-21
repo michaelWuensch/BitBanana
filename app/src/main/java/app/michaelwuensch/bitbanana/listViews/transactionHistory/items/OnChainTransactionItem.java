@@ -1,12 +1,13 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
+
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 
 public class OnChainTransactionItem extends TransactionItem {
-    private Transaction mOnChainTransaction;
+    private OnChainTransaction mOnChainTransaction;
 
-    public OnChainTransactionItem(Transaction onChainTransaction) {
+    public OnChainTransactionItem(OnChainTransaction onChainTransaction) {
         mOnChainTransaction = onChainTransaction;
         mCreationDate = onChainTransaction.getTimeStamp();
     }
@@ -16,12 +17,12 @@ public class OnChainTransactionItem extends TransactionItem {
         return TYPE_ON_CHAIN_TRANSACTION;
     }
 
-    public Transaction getOnChainTransaction() {
+    public OnChainTransaction getOnChainTransaction() {
         return mOnChainTransaction;
     }
 
     @Override
-    public ByteString getTransactionByteString() {
-        return mOnChainTransaction.toByteString();
+    public Serializable getSerializedTransaction() {
+        return mOnChainTransaction;
     }
 }

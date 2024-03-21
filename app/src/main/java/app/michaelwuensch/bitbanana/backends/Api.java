@@ -4,15 +4,19 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
+import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
-import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
-import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class Api {
@@ -67,5 +71,43 @@ public class Api {
 
     public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest request) {
         return Single.error(unsupportedException());
+    }
+
+    /**
+     * This will fetch all invoice from the node in a paginated way.
+     *
+     * @param page     Use 0 as start of the recursion to fetch all invoices
+     * @param pageSize How many invoices are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @return A list of all invoices
+     */
+    public Single<List<LnInvoice>> listInvoices(int page, int pageSize) {
+        return Single.error(unsupportedException());
+    }
+
+    public Observable<LnInvoice> subscribeToInvoices() {
+        return Observable.error(unsupportedException());
+    }
+
+    public Single<List<OnChainTransaction>> listOnChainTransactions() {
+        return Single.error(unsupportedException());
+    }
+
+    public Observable<OnChainTransaction> subscribeToOnChainTransactions() {
+        return Observable.error(unsupportedException());
+    }
+
+    /**
+     * This will fetch all lightning payments from the node in a paginated way.
+     *
+     * @param page     Use 0 as start of the recursion to fetch all payments
+     * @param pageSize How many payments are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @return A list of all payments
+     */
+    public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
+        return Single.error(unsupportedException());
+    }
+
+    public Observable<LnPayment> subscribeToLnPayments() {
+        return Observable.error(unsupportedException());
     }
 }

@@ -38,11 +38,11 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import app.michaelwuensch.bitbanana.wallet.Wallet_Components;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class PeersActivity extends BaseAppCompatActivity implements PeerSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Components.PeerUpdateListener {
+public class PeersActivity extends BaseAppCompatActivity implements PeerSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_TransactionHistory.PeerUpdateListener {
 
     private static final String LOG_TAG = PeersActivity.class.getSimpleName();
     private static int REQUEST_CODE_ADD_PEER = 111;
@@ -94,7 +94,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         });
 
         // Register listeners
-        Wallet_Components.getInstance().registerPeerUpdateListener(this);
+        Wallet_TransactionHistory.getInstance().registerPeerUpdateListener(this);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
                                         mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
                                                 .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                                                .doOnNext(integer -> Wallet_Components.getInstance().fetchNodeInfoFromLND(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
+                                                .doOnNext(integer -> Wallet_TransactionHistory.getInstance().fetchNodeInfo(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
                                                 .subscribe());
                                     }
 
@@ -179,7 +179,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
     @Override
     protected void onDestroy() {
         mCompositeDisposable.dispose();
-        Wallet_Components.getInstance().unregisterPeerUpdateListener(this);
+        Wallet_TransactionHistory.getInstance().unregisterPeerUpdateListener(this);
         super.onDestroy();
     }
 
@@ -252,7 +252,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
                 if (nodeUri != null) {
-                    Wallet_Components.getInstance().connectPeer(nodeUri, false, 0, 0, false);
+                    Wallet_TransactionHistory.getInstance().connectPeer(nodeUri, false, 0, 0, false);
                 }
             }
         }
