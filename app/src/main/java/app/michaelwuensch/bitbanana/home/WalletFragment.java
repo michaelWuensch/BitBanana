@@ -514,7 +514,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
                 break;
             case ACTIVATING_BACKEND:
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                if (BackendManager.hasBackendConfigs())
+                    updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
                 break;
             case STARTING_VPN:
                 mTvLoadingText.setText(R.string.connection_state_starting_vpn);

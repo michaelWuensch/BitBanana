@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
@@ -92,8 +94,12 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         if (FeatureManager.isOpenChannelEnabled()) {
             fab.setOnClickListener(view -> {
-                Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
+                if (BackendManager.hasBackendConfigs()) {
+                    Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
+                } else {
+                    Toast.makeText(ManageChannelsActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                }
             });
         } else {
             fab.setVisibility(View.GONE);

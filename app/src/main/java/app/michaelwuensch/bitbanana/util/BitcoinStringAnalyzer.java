@@ -10,8 +10,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -137,15 +137,13 @@ public class BitcoinStringAnalyzer {
     private static void checkIfNodeUri(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(inputString);
 
-        if (nodeUri != null) {
+        if (nodeUri != null)
             listener.onValidNodeUri(nodeUri);
-
-        } else {
-            if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+        else {
+            if (BackendManager.hasBackendConfigs())
                 checkIfLnOrBitcoinInvoice(ctx, compositeDisposable, inputString, listener);
-            } else {
+            else
                 listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
-            }
         }
     }
 

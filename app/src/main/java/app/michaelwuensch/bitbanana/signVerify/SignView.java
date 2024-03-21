@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -87,7 +86,7 @@ public class SignView extends LinearLayout {
     }
 
     private void sign() {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+        if (BackendManager.hasBackendConfigs()) {
             String message = mEtMessageToSign.getText().toString();
             if (!message.isEmpty()) {
                 mCompositeDisposable.add(BackendManager.api().signMessageWithNode(message)

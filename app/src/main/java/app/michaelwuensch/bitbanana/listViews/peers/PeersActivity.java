@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -86,10 +88,14 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add a new peer
-                Intent intent = new Intent(PeersActivity.this, ScanPeerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivityForResult(intent, REQUEST_CODE_ADD_PEER);
+                if (BackendManager.hasBackendConfigs()) {
+                    // Add a new peer
+                    Intent intent = new Intent(PeersActivity.this, ScanPeerActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivityForResult(intent, REQUEST_CODE_ADD_PEER);
+                } else {
+                    Toast.makeText(PeersActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

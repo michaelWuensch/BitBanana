@@ -12,6 +12,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningBackend;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
+import app.michaelwuensch.bitbanana.backends.demo.DemoBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.backends.lndHub.LndHubBackend;
@@ -55,7 +56,15 @@ public class BackendManager {
     }
 
     public static void activateBackendConfig(BackendConfig backendConfig, Context ctx, boolean forceCleanReload) {
-        if (!hasBackendConfigs() || backendConfig == null)
+        if (!hasBackendConfigs()) {
+            BBLog.d(LOG_TAG, "Activating demo backend.");
+            currentBackend = createBackend();
+            setBackendState(BackendState.ACTIVATING_BACKEND);
+            setBackendState(BackendState.BACKEND_CONNECTED);
+            return;
+        }
+
+        if (backendConfig == null)
             return;
 
         BBLog.d(LOG_TAG, "Activate backendConfig " + backendConfig.getAlias() + " called.");
@@ -244,7 +253,7 @@ public class BackendManager {
                     return new LndHubBackend();
             }
         }
-        return new Backend();
+        return new DemoBackend();
     }
 
     public static Backend getCurrentBackend() {
