@@ -191,9 +191,9 @@ public class Wallet_Channels {
     }
 
     public Single<Boolean> fetchChannelsSingle() {
-        Single<List<OpenChannel>> openChannelsObservable = BackendManager.api().getOpenChannels();
-        Single<List<PendingChannel>> pendingChannelsObservable = BackendManager.api().getPendingChannels();
-        Single<List<ClosedChannel>> closedChannelsObservable = BackendManager.api().getClosedChannels();
+        Single<List<OpenChannel>> openChannelsObservable = BackendManager.api().listOpenChannels();
+        Single<List<PendingChannel>> pendingChannelsObservable = BackendManager.api().listPendingChannels();
+        Single<List<ClosedChannel>> closedChannelsObservable = BackendManager.api().listClosedChannels();
 
         return Single.zip(openChannelsObservable, pendingChannelsObservable, closedChannelsObservable, (openChannelsResponse, pendingChannelsResponse, closedChannelsResponse) -> {
             mOpenChannelsList = openChannelsResponse;

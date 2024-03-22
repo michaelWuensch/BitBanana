@@ -22,7 +22,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -135,7 +135,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                 }
                 break;
             case LNADDRESS:
-                LNAddress lnAddress = new LNAddress(data);
+                LnAddress lnAddress = new LnAddress(data);
                 if (lnAddress.isValid()) {
                     addContact(Contact.ContactType.LNADDRESS, name, data);
                 } else {

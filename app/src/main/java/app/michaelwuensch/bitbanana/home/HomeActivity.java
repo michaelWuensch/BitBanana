@@ -74,7 +74,7 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.settings.SettingsActivity;
 import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
@@ -704,7 +704,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
                         sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                     } else {
-                        LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                        LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                         analyzeString(lnAddress.toString());
                     }
                     if (mDrawer.isDrawerOpen(GravityCompat.START)) {

@@ -19,7 +19,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -49,7 +49,7 @@ public class BitcoinStringAnalyzer {
         String result = input.trim();
         // Before handling normal lnurls, check if there is a lnurl of form lnurlp://lightningAddress
         if (UriUtil.isLNURLPUri(result)) {
-            LNAddress lnAddress = new LNAddress(UriUtil.removeURI(result));
+            LnAddress lnAddress = new LnAddress(UriUtil.removeURI(result));
             if (lnAddress.isValid()) {
                 return UriUtil.removeURI(result);
             }

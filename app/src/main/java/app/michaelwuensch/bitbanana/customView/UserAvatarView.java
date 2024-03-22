@@ -11,7 +11,7 @@ import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.AvathorUtil;
@@ -25,7 +25,7 @@ public class UserAvatarView extends ConstraintLayout {
     private int mCurrentUriId = 0;
     private boolean mIsQRCodeIncluded;
 
-    private LNAddress mLnAddress;
+    private LnAddress mLnAddress;
 
     public UserAvatarView(Context context) {
         super(context);
@@ -52,7 +52,7 @@ public class UserAvatarView extends ConstraintLayout {
         showAvatar();
     }
 
-    public void setupWithLNAddress(LNAddress lnAddress, boolean includeQRCode) {
+    public void setupWithLNAddress(LnAddress lnAddress, boolean includeQRCode) {
         reset();
         mLnAddress = lnAddress;
         mIsQRCodeIncluded = includeQRCode;
@@ -125,7 +125,7 @@ public class UserAvatarView extends ConstraintLayout {
         }
     }
 
-    private void showIdentity(LNAddress lnAddress) {
+    private void showIdentity(LnAddress lnAddress) {
         if (mIsQRCodeIncluded) {
             // Generate "QR-Code"
             Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(lnAddress.toString(), 750);

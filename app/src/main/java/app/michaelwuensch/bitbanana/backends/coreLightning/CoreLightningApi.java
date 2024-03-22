@@ -162,7 +162,7 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
     }
 
-    public Single<List<Utxo>> getUTXOs(long currentBlockHeight) {
+    public Single<List<Utxo>> listUTXOs(long currentBlockHeight) {
         return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listFunds(ListfundsRequest.newBuilder().build())
                 .map(response -> {
                     List<Utxo> utxoList = new ArrayList<>();
@@ -191,7 +191,7 @@ public class CoreLightningApi extends Api {
     }
 
     @Override
-    public Single<List<OpenChannel>> getOpenChannels() {
+    public Single<List<OpenChannel>> listOpenChannels() {
         return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<OpenChannel> openChannelsList = new ArrayList<>();
@@ -229,7 +229,7 @@ public class CoreLightningApi extends Api {
     }
 
     @Override
-    public Single<List<PendingChannel>> getPendingChannels() {
+    public Single<List<PendingChannel>> listPendingChannels() {
         return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build())
                 .map(response -> {
                             List<PendingChannel> pendingChannelsList = new ArrayList<>();
@@ -285,7 +285,7 @@ public class CoreLightningApi extends Api {
     }
 
     @Override
-    public Single<List<ClosedChannel>> getClosedChannels() {
+    public Single<List<ClosedChannel>> listClosedChannels() {
         // closed channels only returns channels that are closed for more than 100 blocks, therefore we also need to get channels from listpeerchannels with state ONCHAIN
         Single<ListclosedchannelsResponse> clnClosedChannelsList = CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listClosedChannels(ListclosedchannelsRequest.newBuilder().build());
         Single<ListpeerchannelsResponse> clnPeerChannelsList = CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build());

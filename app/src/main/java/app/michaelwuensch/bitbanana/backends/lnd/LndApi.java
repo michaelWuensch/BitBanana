@@ -170,7 +170,7 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> getUTXOs(long currentBlockHeight) {
+    public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> listUTXOs(long currentBlockHeight) {
         ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
                 .setMaxConfs(999999999) // default is 0
                 .build();
@@ -196,7 +196,7 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<OpenChannel>> getOpenChannels() {
+    public Single<List<OpenChannel>> listOpenChannels() {
         return LndConnection.getInstance().getLightningService().listChannels(ListChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<OpenChannel> openChannelsList = new ArrayList<>();
@@ -233,7 +233,7 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<PendingChannel>> getPendingChannels() {
+    public Single<List<PendingChannel>> listPendingChannels() {
         return LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<PendingChannel> pendingChannelsList = new ArrayList<>();
@@ -306,7 +306,7 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<ClosedChannel>> getClosedChannels() {
+    public Single<List<ClosedChannel>> listClosedChannels() {
         return LndConnection.getInstance().getLightningService().closedChannels(ClosedChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<ClosedChannel> closedChannelsList = new ArrayList<>();

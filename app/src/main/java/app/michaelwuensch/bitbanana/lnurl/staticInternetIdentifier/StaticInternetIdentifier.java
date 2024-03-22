@@ -13,7 +13,7 @@ import java.io.IOException;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import okhttp3.Call;
@@ -31,7 +31,7 @@ public class StaticInternetIdentifier {
     private static final String LOG_TAG = StaticInternetIdentifier.class.getSimpleName();
 
     public static void checkIfValidStaticInternetIdentifier(Context ctx, String address, OnStaticIdentifierChecked listener) {
-        LNAddress lnAddress = new LNAddress(address);
+        LnAddress lnAddress = new LnAddress(address);
         if (!lnAddress.isValid()) {
             listener.onNoStaticInternetIdentifierData();
             return;
@@ -82,7 +82,7 @@ public class StaticInternetIdentifier {
         });
     }
 
-    private static String IdentifierToRequest(LNAddress lnAddress) {
+    private static String IdentifierToRequest(LnAddress lnAddress) {
         if (lnAddress.isTor()) {
             return "http://" + lnAddress.getDomain() + "/.well-known/lnurlp/" + lnAddress.getUsername();
         } else {

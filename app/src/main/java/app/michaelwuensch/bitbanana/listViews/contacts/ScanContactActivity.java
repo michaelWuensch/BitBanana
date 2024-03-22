@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -52,7 +52,7 @@ public class ScanContactActivity extends BaseScannerActivity {
         LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(rawData);
 
         if (nodeUri == null) {
-            LNAddress lnAddress = new LNAddress(rawData);
+            LnAddress lnAddress = new LnAddress(rawData);
             if (lnAddress.isValid()) {
                 return finishWithLNAddress(lnAddress);
             } else {
@@ -72,7 +72,7 @@ public class ScanContactActivity extends BaseScannerActivity {
         return true;
     }
 
-    private boolean finishWithLNAddress(LNAddress lnAddress) {
+    private boolean finishWithLNAddress(LnAddress lnAddress) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_LN_ADDRESS, lnAddress);
         setResult(RESULT_OK, intent);

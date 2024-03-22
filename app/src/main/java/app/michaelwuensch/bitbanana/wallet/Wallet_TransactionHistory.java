@@ -303,7 +303,7 @@ public class Wallet_TransactionHistory {
 
     public void fetchUTXOs() {
         if (Wallet.getInstance().isInfoFetched()) {
-            compositeDisposable.add(BackendManager.getCurrentBackend().api().getUTXOs(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
+            compositeDisposable.add(BackendManager.getCurrentBackend().api().listUTXOs(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
                     .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                     .subscribe(response -> {
                                 mUTXOsList = response;

@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
 
 import app.michaelwuensch.bitbanana.util.UriUtil;
 
-public class LNAddress implements Serializable {
+public class LnAddress implements Serializable {
     private String mUsername;
     private String mDomain;
     private final boolean mIsValid;
 
-    public LNAddress(String address) {
+    public LnAddress(String address) {
         String lnAddress = address;
         if (UriUtil.isLightningUri(address) || UriUtil.isLNURLPUri(address))
             lnAddress = UriUtil.removeURI(lnAddress);

@@ -15,8 +15,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.items.ContactItemViewHolder;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -186,7 +184,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                         });
                     }
                 } else {
-                    LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                    LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                     if (cm.doesContactDataExist(lnAddress.toString())) {
                         Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
                     } else {
@@ -210,7 +208,7 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         if (requestCode == REQUEST_CODE_CONTACT_ACTION) {
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
-                LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                 Intent intent = new Intent();
                 intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, nodeUri);
                 intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, lnAddress);

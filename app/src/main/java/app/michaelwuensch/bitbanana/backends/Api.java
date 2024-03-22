@@ -49,19 +49,19 @@ public class Api {
         return Single.error(unsupportedException());
     }
 
-    public Single<List<Utxo>> getUTXOs(long currentBlockHeight) {
+    public Single<List<Utxo>> listUTXOs(long currentBlockHeight) {
         return Single.error(unsupportedException());
     }
 
-    public Single<List<OpenChannel>> getOpenChannels() {
+    public Single<List<OpenChannel>> listOpenChannels() {
         return Single.error(unsupportedException());
     }
 
-    public Single<List<PendingChannel>> getPendingChannels() {
+    public Single<List<PendingChannel>> listPendingChannels() {
         return Single.error(unsupportedException());
     }
 
-    public Single<List<ClosedChannel>> getClosedChannels() {
+    public Single<List<ClosedChannel>> listClosedChannels() {
         return Single.error(unsupportedException());
     }
 
