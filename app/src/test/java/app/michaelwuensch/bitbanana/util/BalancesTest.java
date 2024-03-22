@@ -16,7 +16,7 @@ public class BalancesTest {
         long channelBalancePendingOpen = 100;
         long channelBalanceLimbo = 100;
 
-        Balances balances = new Balances.Builder()
+        Balances balances = Balances.newBuilder()
                 .setOnChainConfirmed(onChainBalanceConfirmed)
                 .setOnChainUnconfirmed(onChainBalanceUnconfirmed)
                 .setChannelBalance(channelBalance)
