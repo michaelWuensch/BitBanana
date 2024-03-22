@@ -6,6 +6,8 @@ import androidx.preference.PreferenceManager;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
+import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.GeneralSecurityException;
@@ -45,6 +47,7 @@ public class PrefsUtil {
     public static final String BALANCE_HIDE_TYPE = "hideBalanceType";
     public static final String BLOCK_EXPLORER = "blockExplorer";
     public static final String CUSTOM_BLOCK_EXPLORER_HOST = "customBlockExplorerHost";
+    public static final String AVATAR_STYLE = "avatarStyle";
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";
@@ -174,5 +177,9 @@ public class PrefsUtil {
 
     public static boolean getAreInvoicesWithoutSpecifiedAmountAllowed() {
         return getPrefs().getBoolean("unspecifiedAmountInvoices", false);
+    }
+
+    public static AvathorFactory.AvatarSet getAvatarSet() {
+        return AvathorFactory.AvatarSet.valueOf(getPrefs().getString(AVATAR_STYLE, "MIXED"));
     }
 }

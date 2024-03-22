@@ -317,6 +317,13 @@
     <string name="settings_receiveAddressDisplayValues_1">Native SegWit (Bech32)</string>
     <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
 
+    <string name="settings_avatarStyle">Avatar Style</string>
+    <string name="settings_avatarStyleDisplayValues_0">Mixed</string>
+    <string name="settings_avatarStyleDisplayValues_1">Robots</string>
+    <string name="settings_avatarStyleDisplayValues_2">Aliens</string>
+    <string name="settings_avatarStyleDisplayValues_3">Humans</string>
+    <string name="settings_avatarStyleDisplayValues_4">Animals</string>
+
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
     <string name="settings_unspecifiedAmountInvoices">Allow invoices without specific amount</string>
