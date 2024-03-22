@@ -23,5 +23,6 @@ public class LndBackend extends Backend {
         bSupportsCoinControl = true;
         bSupportsBalanceDetails = true;
         bSupportsMessageSigningByNodePrivateKey = true;
+        bSupportsLnurlAuth = true;
     }
 }

@@ -19,8 +19,8 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
-import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class BitcoinStringAnalyzer {
@@ -80,17 +80,26 @@ public class BitcoinStringAnalyzer {
 
             @Override
             public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
-                listener.onValidLnUrlChannel(channelResponse);
+                if (FeatureManager.isOpenChannelEnabled())
+                    listener.onValidLnUrlChannel(channelResponse);
+                else
+                    listener.onError(ctx.getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "OPEN_CHANNEL"), RefConstants.ERROR_DURATION_MEDIUM);
             }
 
             @Override
             public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
-                listener.onValidLnUrlHostedChannel(hostedChannelResponse);
+                if (FeatureManager.isOpenChannelEnabled())
+                    listener.onValidLnUrlHostedChannel(hostedChannelResponse);
+                else
+                    listener.onError(ctx.getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "OPEN_CHANNEL"), RefConstants.ERROR_DURATION_MEDIUM);
             }
 
             @Override
             public void onValidLnUrlAuth(URL url) {
-                listener.onValidLnUrlAuth(url);
+                if (FeatureManager.isLnurlAuthEnabled())
+                    listener.onValidLnUrlAuth(url);
+                else
+                    listener.onError(ctx.getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "LNURL_AUTH"), RefConstants.ERROR_DURATION_MEDIUM);
             }
 
             @Override

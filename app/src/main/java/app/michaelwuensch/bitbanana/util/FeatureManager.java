@@ -70,6 +70,10 @@ public class FeatureManager {
         return getBackend().supportsBalanceDetails();
     }
 
+    public static boolean isLnurlAuthEnabled() {
+        return getBackend().supportsLnurlAuth();
+    }
+
     public interface FeatureChangedListener {
         void onFeatureChanged();
     }
