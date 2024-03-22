@@ -55,7 +55,7 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
             case TYPE_LN_INVOICE:
                 return ((LnInvoiceItem) this).getInvoice().getAddIndex() == ((LnInvoiceItem) that).getInvoice().getAddIndex();
             case TYPE_LN_PAYMENT:
-                return ((LnPaymentItem) this).getPayment().getPaymentHash() == ((LnPaymentItem) that).getPayment().getPaymentHash();
+                return ((LnPaymentItem) this).getPayment().getPaymentHash().equals(((LnPaymentItem) that).getPayment().getPaymentHash());
             default:
                 return mCreationDate == that.mCreationDate;
         }

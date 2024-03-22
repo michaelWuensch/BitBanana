@@ -41,7 +41,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
     private ConstraintLayout mClRequestView;
     private ConstraintLayout mClPaymentReceivedView;
     private TextView mFinishedAmount;
-    private long mLnInvoiceAddIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             mAmount = extras.getString("amount");
             mMemo = extras.getString("memo");
             mLnInvoice = extras.getString("lnInvoice");
-            mLnInvoiceAddIndex = extras.getLong("lnInvoiceAddIndex");
         }
 
         setContentView(R.layout.activity_generate_request);
@@ -206,7 +204,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                 // Check if the invoice was payed
                 if (invoice.isPaid()) {
                     // The updated invoice is payed, now check if it is the invoice we currently have opened.
-                    if (invoice.getAddIndex() == mLnInvoiceAddIndex) {
+                    if (invoice.getBolt11().equals(mLnInvoice)) {
 
                         // It was payed, show success screen
                         mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(invoice.getAmountPaid()));

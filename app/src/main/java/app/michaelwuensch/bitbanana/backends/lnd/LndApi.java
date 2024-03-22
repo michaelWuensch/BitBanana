@@ -17,6 +17,7 @@ import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
@@ -50,10 +51,13 @@ import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
@@ -609,5 +613,47 @@ public class LndApi extends Api {
                                 });
                     }
                 });
+    }
+
+    @Override
+    public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        Invoice request = Invoice.newBuilder()
+                .setValueMsat(createInvoiceRequest.getAmount())
+                .setMemo(createInvoiceRequest.getDescription())
+                .setExpiry(createInvoiceRequest.getExpiry())
+                .setPrivate(createInvoiceRequest.getIncludeRouteHints())
+                .build();
+
+        return LndConnection.getInstance().getLightningService().addInvoice(request)
+                .map(response -> {
+                    return CreateInvoiceResponse.newBuilder()
+                            .setBolt11(response.getPaymentRequest())
+                            .build();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating invoice failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        int addressType = 5;
+        switch (newOnChainAddressRequest.getType()) {
+            case SEGWIT_COMPATIBILITY:
+                addressType = newOnChainAddressRequest.getUnused() ? 3 : 1;
+                break;
+            case SEGWIT:
+                addressType = newOnChainAddressRequest.getUnused() ? 2 : 0;
+                break;
+            case TAPROOT:
+                addressType = newOnChainAddressRequest.getUnused() ? 5 : 4;
+        }
+        NewAddressRequest request = NewAddressRequest.newBuilder()
+                .setTypeValue(addressType) // 2 = unused bech32 (native segwit) , 3 = unused Segwit compatibility address, 5 = unused Taproot (bech32m)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().newAddress(request)
+                .map(response -> {
+                    return response.getAddress();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
     }
 }

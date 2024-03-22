@@ -1,8 +1,11 @@
 package app.michaelwuensch.bitbanana.backends.coreLightning;
 
+import com.github.ElementsProject.lightning.cln.Amount;
+import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
+import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.ListchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsClosedchannels;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsRequest;
@@ -14,10 +17,12 @@ import com.github.ElementsProject.lightning.cln.ListnodesRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsChannels;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsResponse;
+import com.github.ElementsProject.lightning.cln.NewaddrRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
@@ -30,8 +35,11 @@ import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Utxo;
@@ -39,6 +47,7 @@ import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.core.Single;
 
@@ -365,5 +374,65 @@ public class CoreLightningApi extends Api {
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
+    }
+
+
+    @Override
+    public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        AmountOrAny amountMsat = null;
+        if (createInvoiceRequest.getAmount() == 0)
+            amountMsat = AmountOrAny.newBuilder()
+                    .setAny(true)
+                    .build();
+        else
+            amountMsat = AmountOrAny.newBuilder()
+                    .setAmount(Amount.newBuilder()
+                            .setMsat(createInvoiceRequest.getAmount())
+                            .build())
+                    .build();
+
+        InvoiceRequest request = InvoiceRequest.newBuilder()
+                .setAmountMsat(amountMsat)
+                .setDescription(createInvoiceRequest.getDescription())
+                .setExpiry(createInvoiceRequest.getExpiry())
+                // createInvoiceRequest.getIncludeRouteHints()  ???
+                .setLabel(UUID.randomUUID().toString())
+                .build();
+
+        return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().invoice(request)
+                .map(response -> {
+                    return CreateInvoiceResponse.newBuilder()
+                            .setBolt11(response.getBolt11())
+                            .build();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating invoice failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        NewaddrRequest.NewaddrAddresstype addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
+        switch (newOnChainAddressRequest.getType()) {
+            case SEGWIT_COMPATIBILITY:  // Core Lightning cannot produce legacy segwit addresses.
+            case SEGWIT:
+                addressType = NewaddrRequest.NewaddrAddresstype.BECH32;
+                break;
+            case TAPROOT:
+                addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
+        }
+        NewaddrRequest request = NewaddrRequest.newBuilder()
+                .setAddresstype(addressType)
+                .build();
+
+        return CoreLightningConnection.getInstance().getCoreLightningNodeServiceService().newAddr(request)
+                .map(response -> {
+                    String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
+                    switch (addressTypeString) {
+                        case "bech32":
+                            return response.getBech32();
+                        default:
+                            return response.getP2Tr();
+                    }
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
     }
 }

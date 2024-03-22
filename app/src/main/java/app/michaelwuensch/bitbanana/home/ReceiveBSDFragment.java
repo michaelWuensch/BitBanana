@@ -22,17 +22,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
-
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -311,29 +310,30 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
                 // generate onChain request
 
-                int addressType;
+                NewOnChainAddressRequest.Type addressType;
                 String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
                 if (addressTypeString.equals("bech32")) {
-                    addressType = 2;
+                    addressType = NewOnChainAddressRequest.Type.SEGWIT;
                 } else {
                     if (addressTypeString.equals("bech32m")) {
-                        addressType = 5;
+                        addressType = NewOnChainAddressRequest.Type.TAPROOT;
                     } else {
-                        addressType = 3;
+                        addressType = NewOnChainAddressRequest.Type.SEGWIT_COMPATIBILITY;
                     }
                 }
 
-                NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
-                        .setTypeValue(addressType) // 2 = unused bech32 (native segwit) , 3 = unused Segwit compatibility address, 5 = unused Taproot (bech32m)
+                NewOnChainAddressRequest newOnChainAddressRequest = NewOnChainAddressRequest.newBuilder()
+                        .setType(addressType)
+                        .setUnused(true)
                         .build();
 
                 BBLog.d(LOG_TAG, "OnChain generating...");
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
-                        .subscribe(newAddressResponse -> {
+                getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
+                        .subscribe(response -> {
                             String value = MonetaryUtil.getInstance().satsToBitcoinString(mReceiveAmountSats);
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("address", newAddressResponse.getAddress());
+                            intent.putExtra("address", response);
                             intent.putExtra("amount", value);
                             intent.putExtra("memo", mEtMemo.getText().toString());
                             startActivity(intent);
@@ -345,22 +345,19 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
             } else {
                 // generate lightning request
-
-                Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(mReceiveAmountSats)
-                        .setMemo(mEtMemo.getText().toString())
+                CreateInvoiceRequest invoiceRequest = CreateInvoiceRequest.newBuilder()
+                        .setAmount(mReceiveAmountSats * 1000L)
+                        .setDescription(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
-                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
-                        .subscribe(addInvoiceResponse -> {
-                            BBLog.v(LOG_TAG, addInvoiceResponse.toString());
-
+                getCompositeDisposable().add(BackendManager.api().createInvoice(invoiceRequest)
+                        .subscribe(response -> {
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("lnInvoice", addInvoiceResponse.getPaymentRequest());
-                            intent.putExtra("lnInvoiceAddIndex", addInvoiceResponse.getAddIndex());
+                            intent.putExtra("lnInvoice", response.getBolt11());
+                            //intent.putExtra("lnInvoiceAddIndex", response.getAddIndex());
                             startActivity(intent);
                             dismiss();
                         }, throwable -> {

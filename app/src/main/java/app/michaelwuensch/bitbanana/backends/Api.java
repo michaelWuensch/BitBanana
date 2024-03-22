@@ -9,9 +9,12 @@ import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Utxo;
@@ -109,5 +112,13 @@ public class Api {
 
     public Observable<LnPayment> subscribeToLnPayments() {
         return Observable.error(unsupportedException());
+    }
+
+    public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        return Single.error(unsupportedException());
     }
 }
