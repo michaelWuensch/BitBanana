@@ -18,7 +18,9 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -187,7 +189,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             public void onSingleClick(View v) {
                 mTvLoadingText.setText("");
                 showLoadingScreen();
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
                 BackendManager.activateCurrentBackendConfig(getActivity(), true);
             }
         });
@@ -202,7 +204,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mNodeSpinner.updateList();
         mNodeSpinner.setVisibility(View.VISIBLE);
         mStatusDot.setVisibility(View.VISIBLE);
-        updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+        updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
         mBtnSetup.setVisibility(View.INVISIBLE);
     }
 
@@ -263,7 +265,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Update status dot
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             mStatusDot.setVisibility(View.VISIBLE);
-            updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+            updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
         } else {
             mStatusDot.setVisibility(View.GONE);
         }
@@ -374,7 +376,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mMainBalanceView.showBalance();
     }
 
-    private void updateStatusDot(String walletAlias) {
+    private void updateStatusDot(BackendConfig backendConfig) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor() && TorManager.getInstance().isProxyRunning()) {
             mStatusDot.setImageResource(R.drawable.tor_icon);
@@ -387,6 +389,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
         mStatusDot.requestLayout();
 
+        String walletAlias;
+        if (backendConfig.getNetwork() == BaseBackendConfig.Network.MAINNET || backendConfig.getNetwork() == BaseBackendConfig.Network.UNKNOWN)
+            walletAlias = backendConfig.getAlias();
+        else
+            walletAlias = backendConfig.getAlias() + " (" + backendConfig.getNetwork().getDisplayName() + ")";
         mWalletNameWidthDummy.setText(walletAlias);
         if (NetworkUtil.getConnectivityStatus(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
@@ -504,7 +511,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             case DISCONNECTING:
                 mTvLoadingText.setText(R.string.connection_state_disconnecting);
                 if (BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()) != null)
-                    updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()).getAlias());
+                    updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()));
+
                 // Show loading screen
                 showLoadingScreen();
                 break;
@@ -515,7 +523,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 break;
             case ACTIVATING_BACKEND:
                 if (BackendManager.hasBackendConfigs())
-                    updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                    updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
                 break;
             case STARTING_VPN:
                 mTvLoadingText.setText(R.string.connection_state_starting_vpn);
@@ -524,7 +532,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvLoadingText.setText(R.string.connection_state_starting_tor);
                 break;
             case TOR_CONNECTED:
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
                 break;
             case CONNECTING_TO_BACKEND:
                 mTvLoadingText.setText(R.string.connection_state_connecting);

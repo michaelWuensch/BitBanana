@@ -249,7 +249,7 @@ public abstract class BaseBackendConfig {
                 case TESTNET:
                     return "Testnet";
                 case REGTEST:
-                    return "RegTest";
+                    return "Regtest";
                 case SIGNET:
                     return "Signet";
                 default:

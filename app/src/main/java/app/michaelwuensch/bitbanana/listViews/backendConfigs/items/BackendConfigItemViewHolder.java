@@ -24,6 +24,7 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
     private ImageView mIcon;
     private TextView mNodeTypDescription;
     private TextView mNodeName;
+    private TextView mNetworkName;
     private View mRootView;
     private Context mContext;
     private ImageView mCurrentActiveIcon;
@@ -34,6 +35,7 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         mIcon = v.findViewById(R.id.nodeTypeIcon);
         mNodeTypDescription = v.findViewById(R.id.nodeTypeDescription);
         mNodeName = v.findViewById(R.id.nodeName);
+        mNetworkName = v.findViewById(R.id.networkName);
         mRootView = v.findViewById(R.id.transactionRootView);
         mCurrentActiveIcon = v.findViewById(R.id.currentlyActiveIcon);
         mContext = v.getContext();
@@ -61,6 +63,17 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
 
         // Set node name
         mNodeName.setText(BackendConfig.getAlias());
+
+        // Set network info
+        switch (BackendConfig.getNetwork()) {
+            case MAINNET:
+            case UNKNOWN:
+                mNetworkName.setVisibility(View.GONE);
+                break;
+            default:
+                mNetworkName.setVisibility(View.VISIBLE);
+                mNetworkName.setText(BackendConfig.getNetwork().getDisplayName());
+        }
 
         // Set on click listener
         mRootView.setOnClickListener(new OnSingleClickListener() {
