@@ -421,6 +421,7 @@
     <string name="error_duplication">Duplication failed.</string>
     <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
     <string name="error_feature_not_supported_by_backend">While connected to %1$s, BitBanana does not support the following feature: %2$s</string>
+    <string name="error_reading_qrCode_in_image">Unable to scan or detect QR code in the image.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>

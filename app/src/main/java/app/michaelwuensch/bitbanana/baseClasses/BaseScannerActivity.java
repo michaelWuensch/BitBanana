@@ -1,8 +1,12 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -13,12 +17,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -33,6 +45,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.PermissionsUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 
 public abstract class BaseScannerActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private static final String LOG_TAG = BaseScannerActivity.class.getSimpleName();
@@ -40,6 +53,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     protected int mWhiteColor;
     protected ImageView mScannerInstructionsHelp;
     private ImageButton mBtnFlashlight;
+    private ImageButton mBtnGalery;
     private TextView mTvPermissionRequired;
     private Button mButtonPaste;
     private Button mButtonHelp;
@@ -49,6 +63,48 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private String mLastText;
     private long mLastTimeStamp;
     private boolean mIsFlashlightActive;
+
+    private ActivityResultLauncher<Intent> openGalleryRequest =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                    Uri uri = result.getData().getData();
+                    decodeQRCode(uri);
+                }
+            });
+
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        openGalleryRequest.launch(Intent.createChooser(intent, "Scan Gallery"));
+    }
+
+    private void decodeQRCode(Uri imageUri) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+
+            int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
+            bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+            LuminanceSource source = new RGBLuminanceSource(bitmap.getWidth(), bitmap.getHeight(), intArray);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+            QRCodeReader reader = new QRCodeReader();
+            com.google.zxing.Result result = reader.decode(binaryBitmap);
+
+            // The QR code content is in result.getText()
+            String qrCodeContent = result.getText();
+            proceedQrData(qrCodeContent);
+        } catch (Exception e) {
+            // Handle exceptions (e.g., QR code not found)
+            showError(getString(R.string.error_reading_qrCode_in_image), RefConstants.ERROR_DURATION_SHORT);
+        }
+    }
+
+    private void proceedQrData(String qrCodeContent) {
+        handleCameraResult(qrCodeContent);
+        // Your implementation here
+    }
 
 
     private BarcodeCallback callback = new BarcodeCallback() {
@@ -100,6 +156,8 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
         mButtonHelp.setOnClickListener(this);
         mBtnFlashlight = findViewById(R.id.scannerFlashButton);
         mBtnFlashlight.setOnClickListener(this);
+        mBtnGalery = findViewById(R.id.scannerGalleryButton);
+        mBtnGalery.setOnClickListener(this);
         mScannerInstructionsHelp = findViewById(R.id.scannerInstructionsHelp);
 
         if (FeatureManager.isHelpButtonsEnabled()) {
@@ -150,6 +208,9 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 break;
             case R.id.scannerHelp:
                 onButtonHelpClick();
+                break;
+            case R.id.scannerGalleryButton:
+                openGallery();
                 break;
             case R.id.scannerFlashButton:
                 onButtonFlashClick();
