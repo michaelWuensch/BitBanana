@@ -102,6 +102,8 @@ public class WalletUtil {
         if (BackendManager.getCurrentBackendType() == BaseBackendConfig.BackendType.LND_GRPC && hasChannelTransactionLabel(transaction)) {
             return true;
         }
+        if (BackendManager.getCurrentBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC)
+            return false;
 
         String pubKey = getNodePubKeyFromChannelTransaction(transaction);
         return !pubKey.equals("");

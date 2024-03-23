@@ -40,7 +40,7 @@ public class CoreLightningConnection {
         return mCoreLightningConnectionInstance;
     }
 
-    public CoreLightningNodeService getCoreLightningNodeServiceService() {
+    public CoreLightningNodeService getCoreLightningNodeService() {
         return mCoreLightningNodeService;
     }
 

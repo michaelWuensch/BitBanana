@@ -5,9 +5,11 @@ import java.io.Serializable;
 public class LnInvoice implements Serializable {
 
     private final String Bolt11;
+    private final String PaymentHash;
     private final long AmountRequested;
     private final long AmountPaid;
     private final long CreatedAt;
+    private final long PaidAt;
     private final long ExpiresAt;
     private final long AddIndex;
     private final String Memo;
@@ -21,9 +23,11 @@ public class LnInvoice implements Serializable {
 
     private LnInvoice(Builder builder) {
         this.Bolt11 = builder.Bolt11;
+        this.PaymentHash = builder.PaymentHash;
         this.AmountRequested = builder.AmountRequested;
         this.AmountPaid = builder.AmountPaid;
         this.CreatedAt = builder.CreatedAt;
+        this.PaidAt = builder.PaidAt;
         this.ExpiresAt = builder.ExpiresAt;
         this.AddIndex = builder.AddIndex;
         this.Memo = builder.Memo;
@@ -34,6 +38,13 @@ public class LnInvoice implements Serializable {
 
     public String getBolt11() {
         return Bolt11;
+    }
+
+    /**
+     * The hash of the payment preimage which will prove payment.
+     */
+    public String getPaymentHash() {
+        return PaymentHash;
     }
 
     /**
@@ -79,6 +90,13 @@ public class LnInvoice implements Serializable {
     }
 
     /**
+     * UNIX timestamp of when the invoice was paid in seconds since the unix epoch.
+     */
+    public long getPaidAt() {
+        return PaidAt;
+    }
+
+    /**
      * UNIX timestamp of when it will become / became unpayable in seconds since the unix epoch.
      */
     public long getExpiresAt() {
@@ -113,9 +131,11 @@ public class LnInvoice implements Serializable {
     public static class Builder {
 
         private String Bolt11;
+        private String PaymentHash;
         private long AmountRequested;
         private long AmountPaid;
         private long CreatedAt;
+        private long PaidAt;
         private long ExpiresAt;
         private long AddIndex;
         private String Memo;
@@ -133,6 +153,14 @@ public class LnInvoice implements Serializable {
 
         public Builder setBolt11(String bolt11) {
             this.Bolt11 = bolt11;
+            return this;
+        }
+
+        /**
+         * The hash of the payment preimage which will prove payment.
+         */
+        public Builder setPaymentHash(String paymentHash) {
+            PaymentHash = paymentHash;
             return this;
         }
 
@@ -157,6 +185,14 @@ public class LnInvoice implements Serializable {
          */
         public Builder setCreatedAt(long createdAt) {
             CreatedAt = createdAt;
+            return this;
+        }
+
+        /**
+         * UNIX timestamp of when the invoice was paid in seconds since the unix epoch.
+         */
+        public Builder setPaidAt(long paidAt) {
+            PaidAt = paidAt;
             return this;
         }
 

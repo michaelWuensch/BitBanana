@@ -334,6 +334,9 @@ public class Wallet {
 
                 // Fetch UTXOs
                 Wallet_TransactionHistory.getInstance().fetchUTXOs();
+
+                // Fetch the transaction history
+                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
         }
     }
 

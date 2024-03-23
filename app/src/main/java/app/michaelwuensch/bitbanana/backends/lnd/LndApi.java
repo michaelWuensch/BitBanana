@@ -444,9 +444,11 @@ public class LndApi extends Api {
 
         return LnInvoice.newBuilder()
                 .setBolt11(lndInvoice.getPaymentRequest())
+                .setPaymentHash(ApiUtil.StringFromHexByteString(lndInvoice.getRHash()))
                 .setAmountRequested(lndInvoice.getValueMsat())
                 .setAmountPaid(lndInvoice.getAmtPaidMsat())
                 .setCreatedAt(lndInvoice.getCreationDate())
+                .setPaidAt(lndInvoice.getSettleDate())
                 .setExpiresAt(lndInvoice.getCreationDate() + lndInvoice.getExpiry())
                 .setAddIndex(lndInvoice.getAddIndex())
                 .setMemo(lndInvoice.getMemo())
@@ -523,7 +525,7 @@ public class LndApi extends Api {
                         transactionList.add(getOnChainTransactionFromLNDTransaction(transaction));
                     return transactionList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching OnChainTransactions failed: " + throwable.fillInStackTrace()));
     }
 
     @Override

@@ -53,7 +53,7 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
             case TYPE_ON_CHAIN_TRANSACTION:
                 return ((OnChainTransactionItem) this).getOnChainTransaction().getTransactionId().equals(((OnChainTransactionItem) that).getOnChainTransaction().getTransactionId());
             case TYPE_LN_INVOICE:
-                return ((LnInvoiceItem) this).getInvoice().getAddIndex() == ((LnInvoiceItem) that).getInvoice().getAddIndex();
+                return ((LnInvoiceItem) this).getInvoice().getPaymentHash().equals(((LnInvoiceItem) that).getInvoice().getPaymentHash());
             case TYPE_LN_PAYMENT:
                 return ((LnPaymentItem) this).getPayment().getPaymentHash().equals(((LnPaymentItem) that).getPayment().getPaymentHash());
             default:
@@ -67,7 +67,7 @@ public abstract class HistoryListItem implements Comparable<HistoryListItem> {
             case TYPE_ON_CHAIN_TRANSACTION:
                 return ((OnChainTransactionItem) this).getOnChainTransaction().getTransactionId().hashCode();
             case TYPE_LN_INVOICE:
-                return Long.valueOf(((LnInvoiceItem) this).getInvoice().getAddIndex()).hashCode();
+                return Long.valueOf(((LnInvoiceItem) this).getInvoice().getPaymentHash()).hashCode();
             case TYPE_LN_PAYMENT:
                 return Long.valueOf(((LnPaymentItem) this).getPayment().getPaymentHash()).hashCode();
             default:
