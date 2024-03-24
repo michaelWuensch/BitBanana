@@ -147,7 +147,7 @@ public class OpenChannel implements Serializable {
      * This metric is designed to show how effective a given channel is.
      */
     public double getActivity() {
-        return (double) ((TotalSent + TotalReceived) / Capacity);
+        return ((TotalSent + TotalReceived) / (double) Capacity);
     }
 
 
