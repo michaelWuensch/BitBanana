@@ -62,7 +62,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
     private boolean mAmountValid = true;
-    private long mReceiveAmountSats;
+    private long mReceiveAmount;
     private boolean mBlockOnInputChanged;
 
     @Nullable
@@ -217,7 +217,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             public void onClick(View v) {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
-                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mReceiveAmountSats));
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mReceiveAmount, !mOnChain));
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mBlockOnInputChanged = false;
             }
@@ -242,18 +242,18 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 } else {
                     long maxReceivable;
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                        maxReceivable = WalletUtil.getMaxLightningReceiveAmount() / 1000;
+                        maxReceivable = WalletUtil.getMaxLightningReceiveAmount();
                     } else {
-                        maxReceivable = 500000000000L;
+                        maxReceivable = 500000000000000L;
                     }
                     if (!mEtAmount.getText().toString().equals(".")) {
-                        if (mReceiveAmountSats > maxReceivable) {
+                        if (mReceiveAmount > maxReceivable) {
                             mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxReceivable);
+                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxReceivable, true);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                        } else if (mReceiveAmountSats == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
+                        } else if (mReceiveAmount == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
                             // Disable 0 sat ln invoices
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
@@ -287,9 +287,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
                 if (mAmountValid) {
-                    mReceiveAmountSats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                    mReceiveAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -330,7 +330,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 BBLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
                         .subscribe(response -> {
-                            String value = MonetaryUtil.getInstance().satsToBitcoinString(mReceiveAmountSats);
+                            String value = MonetaryUtil.getInstance().msatsToBitcoinString(mReceiveAmount);
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("address", response);
@@ -346,7 +346,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             } else {
                 // generate lightning request
                 CreateInvoiceRequest invoiceRequest = CreateInvoiceRequest.newBuilder()
-                        .setAmount(mReceiveAmountSats * 1000L)
+                        .setAmount(mReceiveAmount)
                         .setDescription(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
                         .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))

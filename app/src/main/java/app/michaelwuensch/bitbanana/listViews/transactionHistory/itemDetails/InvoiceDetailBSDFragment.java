@@ -142,7 +142,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
     private void bindExpiredInvoice(LnInvoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
-        mAmount.setAmountSat(invoice.getAmountRequested());
+        mAmount.setAmountMsat(invoice.getAmountRequested());
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
     }

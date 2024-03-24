@@ -72,7 +72,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     private String mServiceURLString;
     private Handler mHandler;
     private LnUrlWithdrawResponse mWithdrawData;
-    private long mWithdrawAmountSats;
+    private long mWithdrawAmount;
     private boolean mBlockOnInputChanged;
 
     public static LnUrlWithdrawBSDFragment createWithdrawDialog(LnUrlWithdrawResponse response) {
@@ -93,9 +93,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdrawal value for LNURL. BitBanana limits withdrawal to full satoshis.
-        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), WalletUtil.getMaxLightningReceiveAmount() / 1000);
-        mMinWithdrawable = mWithdrawData.getMinWithdrawable() % 1000 == 0 ? Math.max((mWithdrawData.getMinWithdrawable() / 1000), 1L) : Math.max((mWithdrawData.getMinWithdrawable() / 1000) + 1L, 1L);
+        // Calculate correct min and max withdrawal value for LNURL.
+        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable()), WalletUtil.getMaxLightningReceiveAmount());
+        mMinWithdrawable = mWithdrawData.getMinWithdrawable();
 
         // Extract the URL from the Withdraw service
         try {
@@ -159,15 +159,15 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                     }
 
                     // make text red if input is too large or too small
-                    if (mWithdrawAmountSats > mMaxWithdrawable) {
+                    if (mWithdrawAmount > mMaxWithdrawable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMaxWithdrawable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMaxWithdrawable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (mWithdrawAmountSats < mMinWithdrawable) {
+                    } else if (mWithdrawAmount < mMinWithdrawable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMinWithdrawable);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMinWithdrawable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
@@ -176,7 +176,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                         mBtnWithdraw.setEnabled(true);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.banana_yellow));
                     }
-                    if (mWithdrawAmountSats == 0) {
+                    if (mWithdrawAmount == 0) {
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
                     }
@@ -197,9 +197,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), false);
                 if (mAmountValid) {
-                    mWithdrawAmountSats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                    mWithdrawAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -219,17 +219,17 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
 
         if (mWithdrawData.getMinWithdrawable() == mWithdrawData.getMaxWithdrawable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mWithdrawData.getMaxWithdrawable() / 1000;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+            mFixedAmount = mWithdrawData.getMaxWithdrawable();
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
             mEtAmount.setEnabled(false);
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
             mNumpad.setVisibility(View.VISIBLE);
-            mWithdrawAmountSats = mMaxWithdrawable;
+            mWithdrawAmount = mMaxWithdrawable;
             mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mMaxWithdrawable));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mMaxWithdrawable, true));
             mBlockOnInputChanged = false;
 
             mHandler.postDelayed(() -> {
@@ -252,7 +252,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 // Create ln-invoice
                 long value;
                 if (mFixedAmount == 0L) {
-                    value = mWithdrawAmountSats;
+                    value = mWithdrawAmount;
                 } else {
                     value = mFixedAmount;
                 }
@@ -328,9 +328,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mWithdrawAmountSats));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mWithdrawAmount, false));
                 } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, false));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mBlockOnInputChanged = false;
@@ -380,7 +380,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         mProgressView.spinningFinished(true);
         TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
         mWithdrawInputs.setVisibility(View.GONE);
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mWithdrawAmountSats));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mWithdrawAmount, true));
         mResultView.setVisibility(View.VISIBLE);
         mResultView.setHeading(R.string.lnurl_withdraw_success, true);
     }

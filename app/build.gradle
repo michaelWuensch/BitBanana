@@ -145,6 +145,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
 
+    // Implementation for some lightning basics like decoding a bolt 11 invoice
+    implementation 'fr.acinq.lightning:lightning-kmp:1.6.1'
+
     // secp256k1 implementation (Used for LNURL Auth)
     implementation 'fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.11.0'
 

@@ -237,13 +237,17 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
     private void updateSummaryTexts() {
         if (mSummaryPagerAdapter.getAmountEarnedFragment() != null)
-            mSummaryPagerAdapter.getAmountEarnedFragment().setAmountSat(mEarnedMsats / 1000);
-        if (mSummaryPagerAdapter.getRoutedVolumeFragment() != null)
-            mSummaryPagerAdapter.getRoutedVolumeFragment().setAmountSat(mRoutedMsats / 1000);
+            mSummaryPagerAdapter.getAmountEarnedFragment().setAmountMSat(mEarnedMsats);
+        if (mSummaryPagerAdapter.getRoutedVolumeFragment() != null) {
+            mSummaryPagerAdapter.getRoutedVolumeFragment().setMsatPrecision(false);
+            mSummaryPagerAdapter.getRoutedVolumeFragment().setAmountMSat(mRoutedMsats);
+        }
         if (mSummaryPagerAdapter.getAverageEarnedFragment() != null)
             mSummaryPagerAdapter.getAverageEarnedFragment().setAmountMSat(mEarnedMsats / Math.max(mRoutingEventsCount, 1));
-        if (mSummaryPagerAdapter.getAverageVolumeFragment() != null)
-            mSummaryPagerAdapter.getAverageVolumeFragment().setAmountSat(mRoutedMsats / 1000 / Math.max(mRoutingEventsCount, 1));
+        if (mSummaryPagerAdapter.getAverageVolumeFragment() != null) {
+            mSummaryPagerAdapter.getAverageVolumeFragment().setMsatPrecision(false);
+            mSummaryPagerAdapter.getAverageVolumeFragment().setAmountMSat(mRoutedMsats / Math.max(mRoutingEventsCount, 1));
+        }
         if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null && mForwardingEventsList != null) {
             long period;
             if (mTabLayoutPeriod.getSelectedTabPosition() == 6) {

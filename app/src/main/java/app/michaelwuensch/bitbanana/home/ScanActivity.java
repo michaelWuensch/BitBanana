@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
@@ -16,6 +14,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -84,7 +83,7 @@ public class ScanActivity extends BaseScannerActivity {
 
         BitcoinStringAnalyzer.analyze(ScanActivity.this, compositeDisposable, data, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                 readableDataFound(data);
             }
 

@@ -5,22 +5,17 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
 import com.google.common.net.UrlEscapers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import fr.acinq.lightning.payment.Bolt11Invoice;
 
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getSimpleName();
@@ -66,7 +61,7 @@ public class InvoiceUtil {
         return input.matches("^((bc1|tb1|bcrt1)[ac-hj-np-z02-9]{11,71}|(BC1|TB1|BCRT1)[AC-HJ-NP-Z02-9]{11,71})$");
     }
 
-    public static void readInvoice(Context ctx, CompositeDisposable compositeDisposable, String data, OnReadInvoiceCompletedListener listener) {
+    public static void readInvoice(Context ctx, String data, OnReadInvoiceCompletedListener listener) {
 
         // Avoid index out of bounds. An Request with less than 11 characters isn't valid.
         if (data.length() < 11) {
@@ -87,7 +82,7 @@ public class InvoiceUtil {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, lnInvoice) && !hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                        decodeLightningInvoice(ctx, listener, lnInvoice);
                     } else {
                         // Show error. Please use a MAINNET invoice.
                         listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -95,7 +90,7 @@ public class InvoiceUtil {
                     break;
                 case TESTNET:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                        decodeLightningInvoice(ctx, listener, lnInvoice);
                     } else {
                         // Show error. Please use a TESTNET invoice.
                         listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -103,7 +98,7 @@ public class InvoiceUtil {
                     break;
                 case REGTEST:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice, compositeDisposable);
+                        decodeLightningInvoice(ctx, listener, lnInvoice);
                     } else {
                         // Show error. Please use a REGTEST invoice.
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -139,7 +134,7 @@ public class InvoiceUtil {
                         for (String pair : valuePairs) {
                             String[] param = pair.split("=");
                             if (param[0].equals("amount")) {
-                                onChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8);
+                                onChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8 * 1000L) ;
                             }
                             if (param[0].equals("message")) {
                                 onChainInvoiceMessage = param[1];
@@ -198,30 +193,16 @@ public class InvoiceUtil {
         }
     }
 
-    private static void decodeLightningInvoice(Context ctx, OnReadInvoiceCompletedListener listener, String invoice, CompositeDisposable compositeDisposable) {
-        PayReqString decodePaymentRequest = PayReqString.newBuilder()
-                .setPayReq(invoice)
-                .build();
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                .timeout(RefConstants.TIMEOUT_SHORT * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(paymentRequest -> {
-                    BBLog.v(LOG_TAG, paymentRequest.toString());
-
-                    if (paymentRequest.getTimestamp() + paymentRequest.getExpiry() < System.currentTimeMillis() / 1000) {
-                        // Show error: payment request expired.
-                        listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
-                    } else {
-                        listener.onValidLightningInvoice(paymentRequest, invoice);
-                    }
-                }, throwable -> {
-                    // If LND can't decode the payment request, show the error LND throws (always english)
-                    listener.onError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
-
-                    BBLog.d(LOG_TAG, throwable.getMessage());
-                }));
-
+    private static void decodeLightningInvoice(Context ctx, OnReadInvoiceCompletedListener listener, String invoice) {
+        try {
+            DecodedBolt11 decodedBolt11 = decodeBolt11(invoice);
+            if (decodedBolt11.isExpired())
+                listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
+            else
+                listener.onValidLightningInvoice(decodedBolt11);
+        } catch (Exception e) {
+            listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
+        }
     }
 
     private static String appendParameter(String base, String name, String value) {
@@ -271,8 +252,30 @@ public class InvoiceUtil {
         return false;
     }
 
+    public static DecodedBolt11 decodeBolt11(String bolt11) throws Exception {
+        try {
+            Bolt11Invoice decoded = Bolt11Invoice.Companion.read(bolt11).get();
+            long amount = decoded.getAmount() == null ? 0 : decoded.getAmount().getMsat();
+            long expiry = decoded.getExpirySeconds() == null ? 3600 : decoded.getExpirySeconds(); // 3600 is default if not specified, see bolt11 specs
+            String descriptionHash = decoded.getDescriptionHash() == null ? null : decoded.getDescriptionHash().toHex();
+            return DecodedBolt11.newBuilder()
+                    .setBolt11String(bolt11)
+                    .setPaymentHash(decoded.getPaymentHash().toHex())
+                    .setPaymentSecret(decoded.getPaymentSecret().toHex())
+                    .setDestinationPubKey(decoded.getNodeId().toString())
+                    .setAmountRequested(amount)
+                    .setTimestamp(decoded.getTimestampSeconds())
+                    .setDescription(decoded.getDescription())
+                    .setDescriptionHash(descriptionHash)
+                    .setExpiry(expiry)
+                    .build();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
     public interface OnReadInvoiceCompletedListener {
-        void onValidLightningInvoice(PayReq paymentRequest, String invoice);
+        void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
 
         void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 

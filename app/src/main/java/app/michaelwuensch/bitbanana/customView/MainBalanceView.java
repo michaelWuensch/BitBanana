@@ -242,16 +242,16 @@ public class MainBalanceView extends MotionLayout {
                     balances = Wallet_Balance.getInstance().getDemoBalances();
                 }
 
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(balances.total()));
+                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(balances.total(), false));
                 mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromSats(balances.total()));
+                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromMSats(balances.total(), false));
                 mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
                 // Balance details
-                mAvOnChain.setAmountSat(balances.onChainConfirmed());
-                mAvOnChainPending.setAmountSat(balances.onChainUnconfirmed());
-                mAvLighting.setAmountSat(balances.channelBalance());
-                mAvLightningPending.setAmountSat(balances.channelBalancePending());
+                mAvOnChain.setAmountMsat(balances.onChainConfirmed());
+                mAvOnChainPending.setAmountMsat(balances.onChainUnconfirmed());
+                mAvLighting.setAmountMsat(balances.channelBalance());
+                mAvLightningPending.setAmountMsat(balances.channelBalancePending());
 
                 BBLog.v(LOG_TAG, "Total balance display updated");
             }

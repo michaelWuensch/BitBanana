@@ -73,7 +73,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
         mEarnedFee.setAmountMsat(forwardingEventListItem.getForwardingEvent().getFeeMsat());
 
         // Set forwarded amount
-        mForwardingAmount.setAmountSat(forwardingEventListItem.getForwardingEvent().getAmtIn());
+        mForwardingAmount.setAmountMsat(forwardingEventListItem.getForwardingEvent().getAmtIn() * 1000);
 
         // Set on click listener
         setOnRootViewClickListener(forwardingEventListItem);

@@ -113,31 +113,11 @@ public class MonetaryUtil {
     /**
      * Get the amount and display unit of the primary currency as properly formatted string.
      *
-     * @param sats in Satoshis
-     * @return formatted string
-     */
-    public String getPrimaryDisplayStringFromSats(long sats) {
-        return getPrimaryDisplayStringFromMSats(sats * 1000L);
-    }
-
-    /**
-     * Get the amount and display unit of the primary currency as properly formatted string.
-     *
      * @param msats in milli Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayStringFromMSats(long msats) {
-        return getPrimaryDisplayAmountStringFromMSats(msats) + " " + getPrimaryDisplayUnit();
-    }
-
-    /**
-     * Get the sat amount displayed as a properly formatted string in the primary currency.
-     *
-     * @param sats Satoshis
-     * @return formatted string
-     */
-    public String getPrimaryDisplayAmountStringFromSats(long sats) {
-        return getPrimaryDisplayAmountStringFromMSats(sats * 1000L);
+    public String getPrimaryDisplayStringFromMSats(long msats, boolean msatPrecision) {
+        return getPrimaryDisplayAmountStringFromMSats(msats, msatPrecision) + " " + getPrimaryDisplayUnit();
     }
 
     /**
@@ -146,8 +126,8 @@ public class MonetaryUtil {
      * @param msats milli Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayAmountStringFromMSats(long msats) {
-        return getPrimaryCurrency().formatValueAsDisplayString(msats);
+    public String getPrimaryDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+        return getPrimaryCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
 
@@ -163,11 +143,11 @@ public class MonetaryUtil {
     /**
      * Get the amount of the secondary currency as properly formatted string.
      *
-     * @param sats in Satoshis
+     * @param msats
      * @return formatted string
      */
-    public String getSecondaryDisplayAmountStringFromSats(long sats) {
-        return getSecondaryCurrency().formatValueAsDisplayString(sats * 1000L);
+    public String getSecondaryDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+        return getSecondaryCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
 
@@ -235,12 +215,11 @@ public class MonetaryUtil {
     public String getDisplayStringFromMsats(long msats) {
         if (getPrimaryCurrency().isBitcoin()) {
             if (msats % 1000 == 0)
-                return getPrimaryDisplayStringFromSats(msats / 1000);
+                return getPrimaryDisplayStringFromMSats(msats, true);
             else
                 return msats + " msat";
         } else {
-            long sats = msats / 1000;
-            return getPrimaryDisplayStringFromSats(sats);
+            return getPrimaryDisplayStringFromMSats(msats, true);
         }
     }
 
@@ -257,36 +236,35 @@ public class MonetaryUtil {
         }
     }
 
-    public String satsToPrimaryTextInputString(long sats) {
-        return getPrimaryCurrency().formatValueAsTextInputString(sats * 1000L, true);
+    public String msatsToPrimaryTextInputString(long msats, boolean allowMsat) {
+        return getPrimaryCurrency().formatValueAsTextInputString(msats, true, allowMsat);
     }
 
     /**
-     * Converts the supplied value to satoshis. The exchange rate of the primary currency is used.
+     * Converts the supplied value to msat. The exchange rate of the primary currency is used.
      *
      * @param primaryValue
      * @return String without grouping or fractions
      */
-    public long convertPrimaryTextInputToSatoshi(String primaryValue) {
-        long valueMSats = getPrimaryCurrency().TextInputToValueInMsats(primaryValue);
-        return valueMSats / 1000L;
+    public long convertPrimaryTextInputToMsat(String primaryValue) {
+        return getPrimaryCurrency().TextInputToValueInMsats(primaryValue);
     }
 
     /**
-     * Converts the given satoshis to a bitcoin string without grouping and maximum fractions of 8 digits.
+     * Converts the given msat to a bitcoin string without grouping and maximum fractions of 8 digits.
      * This string is for example used in bitcoin on-chain invoices.
      */
-    public String satsToBitcoinString(long sats) {
+    public String msatsToBitcoinString(long msats) {
         BBCurrency btcCurrency = new BBCurrency(BBCurrency.CURRENCY_CODE_BTC);
-        return btcCurrency.formatValueAsTextInputString(sats * 1000L, false);
+        return btcCurrency.formatValueAsTextInputString(msats, false, false);
     }
 
     /**
      * Checks if a numerical currency input is valid.
      * This function always checks against the rules of the primary currency.
      */
-    public boolean validateCurrencyInput(String input) {
-        return getPrimaryCurrency().validateInput(input);
+    public boolean validateCurrencyInput(String input, boolean allowMsat) {
+        return getPrimaryCurrency().validateInput(input, allowMsat);
     }
 
     private void setFirstCurrency(String currencyCode) {

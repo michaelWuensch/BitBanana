@@ -207,7 +207,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                     if (invoice.getBolt11().equals(mLnInvoice)) {
 
                         // It was payed, show success screen
-                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(invoice.getAmountPaid()));
+                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(invoice.getAmountPaid(), true));
                         mClPaymentReceivedView.setVisibility(View.VISIBLE);
                         mClRequestView.setVisibility(View.GONE);
                     }

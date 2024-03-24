@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.backends.lnd;
 
+import static app.michaelwuensch.bitbanana.util.PaymentUtil.KEYSEND_MESSAGE_RECORD;
+
 import com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
@@ -30,18 +32,21 @@ import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
@@ -54,6 +59,7 @@ import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -61,12 +67,14 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
-import app.michaelwuensch.bitbanana.util.PaymentUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -132,11 +140,11 @@ public class LndApi extends Api {
         return Single.zip(walletBalanceSingle, channelBalanceSingle, pendingChannelsSingle, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
 
             Balances balances = Balances.newBuilder()
-                    .setOnChainConfirmed(walletBalanceResponse.getConfirmedBalance())
-                    .setOnChainUnconfirmed(walletBalanceResponse.getUnconfirmedBalance())
-                    .setChannelBalance(channelBalanceResponse.getLocalBalance().getSat())
-                    .setChannelBalancePendingOpen(channelBalanceResponse.getPendingOpenLocalBalance().getSat())
-                    .setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance())
+                    .setOnChainConfirmed(walletBalanceResponse.getConfirmedBalance() * 1000L)
+                    .setOnChainUnconfirmed(walletBalanceResponse.getUnconfirmedBalance() * 1000L)
+                    .setChannelBalance(channelBalanceResponse.getLocalBalance().getMsat())
+                    .setChannelBalancePendingOpen(channelBalanceResponse.getPendingOpenLocalBalance().getMsat())
+                    .setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance() * 1000L)
                     .build();
 
             return balances;
@@ -433,7 +441,7 @@ public class LndApi extends Api {
         try {
             Map<Long, ByteString> customRecords = lndInvoice.getHtlcs(0).getCustomRecordsMap();
             for (Long key : customRecords.keySet()) {
-                if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                if (key == KEYSEND_MESSAGE_RECORD) {
                     keysendMessage = customRecords.get(key).toString(StandardCharsets.UTF_8);
                     break;
                 }
@@ -546,7 +554,7 @@ public class LndApi extends Api {
         try {
             Map<Long, ByteString> customRecords = lastHop.getCustomRecordsMap();
             for (Long key : customRecords.keySet()) {
-                if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
+                if (key == KEYSEND_MESSAGE_RECORD) {
                     keysendMessage = customRecords.get(key).toString(StandardCharsets.UTF_8);
                     break;
                 }
@@ -657,5 +665,77 @@ public class LndApi extends Api {
                     return response.getAddress();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
+        SendPaymentRequest request = null;
+        switch (sendLnPaymentRequest.getPaymentType()) {
+            case BOLT11_INVOICE:
+                request = SendPaymentRequest.newBuilder()
+                        .setPaymentRequest(sendLnPaymentRequest.getBolt11().getBolt11String())
+                        .setAmtMsat(sendLnPaymentRequest.getAmount())
+                        .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
+                        .setNoInflightUpdates(true)
+                        .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setMaxParts(10)
+                        .build();
+                break;
+            case KEYSEND:
+                Map<Long, ByteString> customRecords = new HashMap<>();
+                for (CustomRecord record : sendLnPaymentRequest.getCustomRecords())
+                    customRecords.put(record.getFieldNumber(), ApiUtil.ByteStringFromHexString(record.getValue()));
+
+                request = SendPaymentRequest.newBuilder()
+                        .setDest(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
+                        .setAmtMsat(sendLnPaymentRequest.getAmount())
+                        .setFeeLimitSat(sendLnPaymentRequest.getMaxFee())
+                        .setPaymentHash(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getPaymentHash()))
+                        .setNoInflightUpdates(true)
+                        .putAllDestCustomRecords(customRecords)
+                        .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setMaxParts(1) // KeySend does not support multi path payments
+                        .build();
+                break;
+        }
+
+        return LndConnection.getInstance().getRouterService().sendPaymentV2(request)
+                .map(response -> {
+                    switch (response.getStatus()) {
+                        case SUCCEEDED:
+                            return SendLnPaymentResponse.newBuilder()
+                                    .setPaymentPreimage(response.getPaymentPreimage())
+                                    .build();
+                        case FAILED:
+                            app.michaelwuensch.bitbanana.models.SendLnPaymentResponse.FailureReason failureReason = null;
+                            switch (response.getFailureReason()) {
+                                case FAILURE_REASON_TIMEOUT:
+                                    failureReason = SendLnPaymentResponse.FailureReason.TIMEOUT;
+                                    break;
+                                case FAILURE_REASON_NO_ROUTE:
+                                    failureReason = SendLnPaymentResponse.FailureReason.NO_ROUTE;
+                                    break;
+                                case FAILURE_REASON_INSUFFICIENT_BALANCE:
+                                    failureReason = SendLnPaymentResponse.FailureReason.INSUFFICIENT_FUNDS;
+                                    break;
+                                case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
+                                    failureReason = SendLnPaymentResponse.FailureReason.INCORRECT_PAYMENT_DETAILS;
+                                    break;
+                                default:
+                                    failureReason = SendLnPaymentResponse.FailureReason.UNKNOWN;
+                            }
+                            return SendLnPaymentResponse.newBuilder()
+                                    .setFailureReason(failureReason)
+                                    .setAmount(response.getValueMsat())
+                                    .build();
+                        default:
+                            return SendLnPaymentResponse.newBuilder()
+                                    .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                    .setAmount(response.getValueMsat())
+                                    .build();
+                    }
+                })
+                .firstOrError()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
     }
 }

@@ -117,7 +117,7 @@ public class OpenChannel implements Serializable {
     }
 
     /**
-     * The amount calculated to be paid in fees for the current set of commitment transactions.
+     * The amount in msat calculated to be paid in fees for the current set of commitment transactions.
      */
     public long getCommitFee() {
         return CommitFee;
@@ -258,7 +258,7 @@ public class OpenChannel implements Serializable {
         }
 
         /**
-         * The amount calculated to be paid in fees for the current set of commitment transactions.
+         * The amount in msat calculated to be paid in fees for the current set of commitment transactions.
          */
         public Builder setCommitFee(long commitFee) {
             CommitFee = commitFee;

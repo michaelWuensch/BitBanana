@@ -131,21 +131,21 @@ public class CoreLightningApi extends Api {
                     for (ListfundsOutputs output : response.getOutputsList()) {
                         switch (output.getStatus()) {
                             case CONFIRMED:
-                                onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat() / 1000;
+                                onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat();
                                 break;
                             case UNCONFIRMED:
-                                onChainUnconfirmed = onChainUnconfirmed + output.getAmountMsat().getMsat() / 1000;
+                                onChainUnconfirmed = onChainUnconfirmed + output.getAmountMsat().getMsat();
                                 break;
                         }
                     }
                     for (ListfundsChannels channel : response.getChannelsList()) {
                         switch (channel.getState()) {
                             case ChanneldNormal:
-                                channelBalance = channelBalance + channel.getOurAmountMsat().getMsat() / 1000;
+                                channelBalance = channelBalance + channel.getOurAmountMsat().getMsat();
                                 break;
                             case ChanneldAwaitingLockin:
                             case DualopendAwaitingLockin:
-                                channelBalancePending = channelBalancePending + channel.getOurAmountMsat().getMsat() / 1000;
+                                channelBalancePending = channelBalancePending + channel.getOurAmountMsat().getMsat();
                                 break;
                         }
                     }

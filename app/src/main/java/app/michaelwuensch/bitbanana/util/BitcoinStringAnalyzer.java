@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -19,6 +17,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnAddress;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -157,10 +156,10 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfLnOrBitcoinInvoice(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        InvoiceUtil.readInvoice(ctx, compositeDisposable, inputString, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+        InvoiceUtil.readInvoice(ctx, inputString, new InvoiceUtil.OnReadInvoiceCompletedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                listener.onValidLightningInvoice(paymentRequest, invoice);
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+                listener.onValidLightningInvoice(decodedBolt11);
             }
 
             @Override
@@ -212,7 +211,7 @@ public class BitcoinStringAnalyzer {
 
 
     public interface OnDataDecodedListener {
-        void onValidLightningInvoice(PayReq paymentRequest, String invoice);
+        void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
 
         void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 

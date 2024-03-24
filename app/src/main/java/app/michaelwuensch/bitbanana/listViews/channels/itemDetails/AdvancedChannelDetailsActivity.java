@@ -298,7 +298,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // commit fee
         if (channel.hasCommitFee()) {
-            mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
+            mDetailCommitFee.setAmountValueMsat(channel.getCommitFee());
             mDetailCommitFee.setVisibility(View.VISIBLE);
         }
     }

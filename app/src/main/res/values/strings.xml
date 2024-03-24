@@ -395,6 +395,7 @@
     <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
     <string name="error_payment_timeout">Timeout. No route could be found.</string>
     <string name="error_payment_no_route">No route was found that respects your fee limit of %1$.1f%%. Increasing your fee limit in the settings or opening new channels might solve the problem.</string>
+    <string name="error_payment_no_route_small_amount">No route was found. You are trying to send an amount that is so small, that many channels might not route it. Please check your the routing settings for your own channels and adapt the MinHTLC value if necessary.</string>
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>

@@ -141,7 +141,7 @@ public class OnChainFeeView extends ConstraintLayout {
     }
 
     public void onFeeSuccess(long sats) {
-        mTvSendFeeAmount.setAmountSat(sats);
+        mTvSendFeeAmount.setAmountMsat(sats * 1000);
         mTvSendFeeAmount.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
     }

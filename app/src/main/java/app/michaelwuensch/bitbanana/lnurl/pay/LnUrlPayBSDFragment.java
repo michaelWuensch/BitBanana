@@ -29,10 +29,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
-import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,17 +37,14 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -60,15 +53,18 @@ import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -106,7 +102,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private Handler mHandler;
     private LnUrlPayResponse mPaymentData;
     private LnUrlpPayerData mPayerData;
-    private long mSendAmountSat;
+    private long mSendAmount;
     private boolean mBlockOnInputChanged;
 
     public static LnUrlPayBSDFragment createLnUrlPayDialog(LnUrlPayResponse response) {
@@ -127,9 +123,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mPaymentData = (LnUrlPayResponse) args.getSerializable(LnUrlPayResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdrawal value for LNURL. BitBanana limits withdrawal to full satoshis.
-        mMaxSendable = Math.min((mPaymentData.getMaxSendable() / 1000), WalletUtil.getMaxLightningSendAmount() / 1000);
-        mMinSendable = mPaymentData.getMinSendable() % 1000 == 0 ? Math.max((mPaymentData.getMinSendable() / 1000), 1L) : Math.max((mPaymentData.getMinSendable() / 1000) + 1L, 1L);
+        // Calculate correct min and max withdrawal value for LNURL.
+        mMaxSendable = Math.min((mPaymentData.getMaxSendable()), WalletUtil.getMaxLightningSendAmount());
+        mMinSendable = mPaymentData.getMinSendable();
 
         // Extract the URL from the service
         try {
@@ -227,15 +223,15 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     }
 
                     // make text red if input is too large or too small
-                    if (mSendAmountSat > mMaxSendable) {
+                    if (mSendAmount > mMaxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMaxSendable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMaxSendable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (mSendAmountSat < mMinSendable) {
+                    } else if (mSendAmount < mMinSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMinSendable);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMinSendable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
@@ -244,7 +240,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         mBtnSend.setEnabled(true);
                         mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
                     }
-                    if (mSendAmountSat == 0) {
+                    if (mSendAmount == 0) {
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     }
@@ -272,9 +268,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), true);
                 if (mAmountValid) {
-                    mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                    mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -301,17 +297,17 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mPaymentData.getMaxSendable() / 1000;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+            mFixedAmount = mPaymentData.getMaxSendable();
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
             mEtAmount.setEnabled(false);
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
             mNumpad.setVisibility(View.VISIBLE);
-            mSendAmountSat = mMinSendable;
+            mSendAmount = mMinSendable;
             mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mMinSendable));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mMinSendable, true));
             mBlockOnInputChanged = false;
 
             mHandler.postDelayed(() -> {
@@ -333,7 +329,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 BBLog.v(LOG_TAG, "Lnurl pay initiated...");
 
                 if (mFixedAmount == 0L) {
-                    mFinalChosenAmount = mSendAmountSat;
+                    mFinalChosenAmount = mSendAmount;
                 } else {
                     mFinalChosenAmount = mFixedAmount;
                 }
@@ -352,7 +348,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 // Create send request
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
-                        .setAmount(mFinalChosenAmount * 1000)
+                        .setAmount(mFinalChosenAmount)
                         .setComment(mPcvComment.getData())
                         .setPayerData(mPayerData)
                         .build();
@@ -410,9 +406,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mSendAmountSat));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmount, true));
                 } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mEtAmount.setSelection(mEtAmount.getText().length());
@@ -444,86 +440,79 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             BBLog.d(LOG_TAG, "LNURL: Failed to pay. " + lnUrlPaySecondResponse.getReason());
             switchToFailedScreen(lnUrlPaySecondResponse.getReason());
         } else {
-            PayReqString decodePaymentRequest = PayReqString.newBuilder()
-                    .setPayReq(lnUrlPaySecondResponse.getPaymentRequest())
-                    .build();
+            try {
+                DecodedBolt11 decodedBolt11 = InvoiceUtil.decodeBolt11(lnUrlPaySecondResponse.getPaymentRequest());
+                BBLog.v(LOG_TAG, decodedBolt11.toString());
 
-            getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                    .timeout(RefConstants.TIMEOUT_SHORT * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(payReq -> {
-                        BBLog.v(LOG_TAG, payReq.toString());
+                String metadataHash;
+                if (mPayerData == null) {
+                    metadataHash = mPaymentData.getMetadataHash();
+                } else {
+                    metadataHash = UtilFunctions.sha256Hash(mPaymentData.getMetadata() + mPayerData.getAsJsonString());
+                }
 
-                        String metadataHash;
-                        if (mPayerData == null) {
-                            metadataHash = mPaymentData.getMetadataHash();
-                        } else {
-                            metadataHash = UtilFunctions.sha256Hash(mPaymentData.getMetadata() + mPayerData.getAsJsonString());
-                        }
-
-                        if (payReq.getTimestamp() + payReq.getExpiry() < System.currentTimeMillis() / 1000) {
-                            // Show error: payment request expired.
-                            BBLog.e(LOG_TAG, "LNURL: Payment request expired.");
-                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (payReq.getNumSatoshis() == 0) {
-                            // Disable 0 sat invoices
-                            BBLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
-                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (payReq.getNumSatoshis() != mFinalChosenAmount) {
-                            BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
-                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else if (!payReq.getDescriptionHash().equals(metadataHash)) {
-                            BBLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
-                            switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                        } else {
-                            SendPaymentRequest sendPaymentRequest = PaymentUtil.prepareMultiPathPayment(payReq, lnUrlPaySecondResponse.getPaymentRequest());
-                            BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
-                            sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
-                        }
-                    }, throwable -> {
-                        // If LND can't decode the payment request, show the error LND throws (always english)
-                        switchToFailedScreen(throwable.getMessage());
-                        BBLog.e(LOG_TAG, throwable.getMessage());
-                    }));
+                if (decodedBolt11.isExpired()) {
+                    // Show error: payment request expired.
+                    BBLog.e(LOG_TAG, "LNURL: Payment request expired.");
+                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                } else if (decodedBolt11.hasNoAmountSpecified()) {
+                    // Disable 0 sat invoices
+                    BBLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
+                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                } else if (decodedBolt11.getAmountRequested() != mFinalChosenAmount) {
+                    BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
+                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                } else if (decodedBolt11.getDescriptionHash() == null || !decodedBolt11.getDescriptionHash().equals(metadataHash)) {
+                    BBLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
+                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                } else {
+                    SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested());
+                    BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
+                    sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
+                }
+            } catch (Exception e) {
+                // If we can't decode the bolt11 invoice, show the error the library throws (always english)
+                switchToFailedScreen(e.getMessage());
+                BBLog.e(LOG_TAG, e.getMessage());
+            }
         }
     }
 
 
-    private void sendPayment(LnUrlPaySuccessAction successAction, SendPaymentRequest sendPaymentRequest) {
+    private void sendPayment(LnUrlPaySuccessAction successAction, SendLnPaymentRequest sendPaymentRequest) {
 
         BBLog.d(LOG_TAG, "Trying to send lightning payment...");
 
-        PaymentUtil.sendPayment(sendPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+        PaymentUtil.sendLnPayment(sendPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
             @Override
-            public void onSuccess(Payment payment) {
-                mHandler.postDelayed(() -> executeSuccessAction(successAction, payment), 300);
+            public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
+                mHandler.postDelayed(() -> executeSuccessAction(successAction, sendLnPaymentResponse), 300);
             }
 
             @SuppressLint("StringFormatInvalid")
             @Override
-            public void onError(String error, PaymentFailureReason reason, int duration) {
+            public void onError(String error, SendLnPaymentResponse sendLnPaymentResponse, int duration) {
                 String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                 String errorMessage;
-                if (reason != null) {
-                    switch (reason) {
-                        case FAILURE_REASON_TIMEOUT:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
-                            break;
-                        case FAILURE_REASON_NO_ROUTE:
+                switch (sendLnPaymentResponse.getFailureReason()) {
+                    case TIMEOUT:
+                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
+                        break;
+                    case NO_ROUTE:
+                        if (sendLnPaymentResponse.getAmount() > 0 && sendLnPaymentResponse.getAmount() < 1000L)
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route_small_amount);
+                        else
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                            break;
-                        case FAILURE_REASON_INSUFFICIENT_BALANCE:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
-                            break;
-                        case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
-                            break;
-                        default:
-                            errorMessage = errorPrefix + "\n\n" + error;
-                            break;
-                    }
-                } else {
-                    errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                        break;
+                    case INSUFFICIENT_FUNDS:
+                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
+                        break;
+                    case INCORRECT_PAYMENT_DETAILS:
+                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                        break;
+                    default:
+                        errorMessage = errorPrefix + "\n\n" + error;
+                        break;
                 }
                 mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
             }
@@ -531,9 +520,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     }
 
 
-    private void executeSuccessAction(LnUrlPaySuccessAction successAction, Payment payment) {
+    private void executeSuccessAction(LnUrlPaySuccessAction successAction, SendLnPaymentResponse sendLnPaymentResponse) {
 
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mFinalChosenAmount));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mFinalChosenAmount, true));
 
         if (successAction == null) {
             BBLog.d(LOG_TAG, "No Success action.");
@@ -577,7 +566,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             // Decrypt ciphertext with payment preimage
             BBLog.d(LOG_TAG, "SuccessAction: Aes.");
             try {
-                String decrypted = decrypt(successAction.getCiphertext(), payment.getPaymentPreimageBytes().toByteArray(), successAction.getIv());
+                String decrypted = decrypt(successAction.getCiphertext(), HexUtil.hexToBytes(sendLnPaymentResponse.getPaymentPreimage()), successAction.getIv());
                 BBLog.d(LOG_TAG, "Decrypted secret is: " + decrypted);
                 mTvSuccessActionText.setVisibility(View.GONE);
 

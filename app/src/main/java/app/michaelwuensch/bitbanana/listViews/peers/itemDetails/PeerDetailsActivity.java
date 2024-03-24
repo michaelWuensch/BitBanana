@@ -161,7 +161,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
                 .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
                 .subscribe(nodeInfo -> {
                     mTotalChannels.setValue(String.valueOf(nodeInfo.getNumChannels()));
-                    mTotalCapacity.setAmountValueSat(nodeInfo.getTotalCapacity());
+                    mTotalCapacity.setAmountValueMsat(nodeInfo.getTotalCapacity() * 1000L);
                     mTotalCapacity.setCanBlur(false);
                     // ToDo: Check if customRecords are useful
                     // nodeInfo.getNode().getCustomRecordsMap()

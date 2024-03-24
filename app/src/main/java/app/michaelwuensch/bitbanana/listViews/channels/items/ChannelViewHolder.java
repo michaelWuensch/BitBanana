@@ -61,7 +61,7 @@ public abstract class ChannelViewHolder extends RecyclerView.ViewHolder {
         mLocalBalance.setAmountMsat(local);
         mRemoteBalance.setAmountMsat(remote);
 
-        mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(capacity));
+        mCapacity.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(capacity, false));
     }
 
     public void addOnChannelSelectListener(ChannelSelectListener channelSelectListener) {

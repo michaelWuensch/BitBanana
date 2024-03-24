@@ -1,7 +1,5 @@
 package app.michaelwuensch.bitbanana.liveTests;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
@@ -10,6 +8,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -47,7 +46,7 @@ public class BitcoinStringAnalyzerTest {
     public void execute(String input, int expected) {
         BitcoinStringAnalyzer.analyze(App.getAppContext(), mCompositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                 if (expected == RESULT_LIGHTNING_INVOICE)
                     mResultListener.onSuccess(input, RESULT_LIGHTNING_INVOICE, null);
                 else

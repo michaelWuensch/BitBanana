@@ -50,8 +50,8 @@ public class LightningFeeView extends ConstraintLayout {
         mVFeeAmountLayout.setVisibility(View.GONE);
     }
 
-    public void setAmountSat(long sats, String percentString, boolean showMax) {
-        mTvSendFeeAmount.setAmountSat(sats);
+    public void setAmountMsat(long msats, String percentString, boolean showMax) {
+        mTvSendFeeAmount.setAmountMsat(msats);
         mTvSendFeeAmountPercent.setText(percentString);
         mVFeeAmountLayout.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);

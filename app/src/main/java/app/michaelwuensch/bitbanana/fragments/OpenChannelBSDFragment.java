@@ -64,7 +64,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     private LightningNodeUri mLightningNodeUri;
     private OnChainFeeView mOnChainFeeView;
     private CheckBox mPrivateCheckbox;
-    private long mValueChannelCapacitySats;
+    private long mValueChannelCapacity;
     private boolean mBlockOnInputChanged;
     private long mOnChainUnconfirmed;
     private long mOnChainConfirmed;
@@ -139,11 +139,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), false);
 
                 // calculate fees
                 if (mAmountValid) {
-                    mValueChannelCapacitySats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(mEtAmount.getText().toString());
+                    mValueChannelCapacity = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(mEtAmount.getText().toString());
                     calculateFee();
                 } else {
                     setFeeFailure();
@@ -156,7 +156,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         llUnit.setOnClickListener(v -> {
             mBlockOnInputChanged = true;
             MonetaryUtil.getInstance().switchCurrencies();
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mValueChannelCapacitySats));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mValueChannelCapacity, false));
             mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             setAvailableFunds();
             mBlockOnInputChanged = false;
@@ -174,8 +174,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                 }
 
                 // values from LND
-                long minSendAmount = 20000;
-                long absoluteMaxSendAmount = 17666215;
+                long minSendAmount = 20000 * 1000L;
+                long absoluteMaxSendAmount = 17666215 * 1000L;
                 long maxSendAmount = absoluteMaxSendAmount;
 
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
@@ -186,26 +186,26 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                         maxSendAmount = onChainAvailable;
                     }
 
-                    if (mValueChannelCapacitySats < minSendAmount) {
+                    if (mValueChannelCapacity < minSendAmount) {
                         // amount is to small
-                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(minSendAmount);
+                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(minSendAmount, false);
                         showError(message, Snackbar.LENGTH_LONG);
                         return;
                     }
 
-                    if (mValueChannelCapacitySats > maxSendAmount) {
+                    if (mValueChannelCapacity > maxSendAmount) {
                         // amount is to big
-                        if (mValueChannelCapacitySats > absoluteMaxSendAmount) {
-                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(absoluteMaxSendAmount);
+                        if (mValueChannelCapacity > absoluteMaxSendAmount) {
+                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(absoluteMaxSendAmount, false);
                             showError(message, Snackbar.LENGTH_LONG);
                             return;
                         } else {
-                            if (mValueChannelCapacitySats < (onChainAvailable + onChainUnconfirmed)) {
+                            if (mValueChannelCapacity < (onChainAvailable + onChainUnconfirmed)) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                                 return;
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(onChainAvailable + onChainUnconfirmed);
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(onChainAvailable + onChainUnconfirmed, false);
                                 showError(message, Snackbar.LENGTH_LONG);
                                 return;
                             }
@@ -219,7 +219,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                 }
 
                 switchToProgressScreen();
-                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity / 1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
             }
         });
 
@@ -277,7 +277,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mOnChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
         mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
         mTvOnChainFunds.setLabelVisibility(true);
-        mTvOnChainFunds.setAmountSat(available);
+        mTvOnChainFunds.setAmountMsat(available);
     }
 
     private void showError(String message, int duration) {
@@ -336,7 +336,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
 
     private void calculateFee() {
         setCalculatingFee();
-        estimateOnChainFee(mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+        estimateOnChainFee(mValueChannelCapacity /1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
     }
 
     /**
