@@ -91,7 +91,6 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                 if (BackendManager.hasBackendConfigs()) {
                     // Add a new peer
                     Intent intent = new Intent(PeersActivity.this, ScanPeerActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivityForResult(intent, REQUEST_CODE_ADD_PEER);
                 } else {
                     Toast.makeText(PeersActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();

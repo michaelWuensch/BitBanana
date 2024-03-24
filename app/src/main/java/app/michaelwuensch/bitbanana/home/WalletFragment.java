@@ -133,7 +133,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), ScanActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivityForResult(intent, HomeActivity.REQUEST_CODE_GENERIC_SCAN);
             }
         });

@@ -80,6 +80,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     }
 
     private void decodeQRCode(Uri imageUri) {
+        String qrCodeContent = null;
         try {
             Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
 
@@ -93,19 +94,15 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
             com.google.zxing.Result result = reader.decode(binaryBitmap);
 
             // The QR code content is in result.getText()
-            String qrCodeContent = result.getText();
-            proceedQrData(qrCodeContent);
+            qrCodeContent = result.getText();
+
         } catch (Exception e) {
             // Handle exceptions (e.g., QR code not found)
             showError(getString(R.string.error_reading_qrCode_in_image), RefConstants.ERROR_DURATION_SHORT);
+            return;
         }
-    }
-
-    private void proceedQrData(String qrCodeContent) {
         handleCameraResult(qrCodeContent);
-        // Your implementation here
     }
-
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -225,7 +222,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case PermissionsUtil.CAMERA_PERMISSION_CODE: {
+            case PermissionsUtil.CAMERA_PERMISSION_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, show the camera view.
@@ -236,7 +233,6 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                     mTvPermissionRequired.setVisibility(View.VISIBLE);
                     mBtnFlashlight.setEnabled(false);
                 }
-            }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -276,7 +272,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     }
 
     public void onButtonFlashClick() {
-        if (mIsFlashlightActive) { //ToDo
+        if (mIsFlashlightActive) {
             mIsFlashlightActive = false;
             mQRCodeScannerView.setTorchOff();
             mBtnFlashlight.setImageTintList(ColorStateList.valueOf(mWhiteColor));
