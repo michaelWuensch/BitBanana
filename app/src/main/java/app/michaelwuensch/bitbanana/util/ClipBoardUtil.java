@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -31,7 +32,11 @@ public class ClipBoardUtil {
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText(label, data);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+
+            // On Android 13+ clipboard toasts are handled automatically. For older ones we provide it.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+            }
 
             // Make sure the data just copied to clipboard does not trigger a clipboard scan popup
             String clipboardContentHash = UtilFunctions.sha256Hash(data.toString());
