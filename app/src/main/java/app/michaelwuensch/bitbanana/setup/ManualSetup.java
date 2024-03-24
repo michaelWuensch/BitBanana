@@ -319,11 +319,17 @@ public class ManualSetup extends BaseAppCompatActivity {
         if (mSpType.getSelectedItemPosition() == 1) {
             // CoreLightning grpc
             if ((mEtClientCertificate.getData() == null || mEtClientCertificate.getData().isEmpty())) {
-                showError(getString(R.string.error_input_field_empty, getString(R.string.username)), RefConstants.ERROR_DURATION_SHORT);
+                if (mEtClientCertificate.getEditText().getText().toString().isEmpty())
+                    showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
+                else
+                    showError(getString(R.string.error_input_invalid_data, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
             if ((mEtClientKey.getData() == null || mEtClientKey.getData().isEmpty())) {
-                showError(getString(R.string.error_input_field_empty, getString(R.string.password)), RefConstants.ERROR_DURATION_SHORT);
+                if (mEtClientKey.getEditText().getText().toString().isEmpty())
+                    showError(getString(R.string.error_input_field_empty, getString(R.string.client_key)), RefConstants.ERROR_DURATION_SHORT);
+                else
+                    showError(getString(R.string.error_input_invalid_data, getString(R.string.client_key)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
         }
@@ -331,11 +337,11 @@ public class ManualSetup extends BaseAppCompatActivity {
         if (mSpType.getSelectedItemPosition() == 2) {
             // LNDHub
             if ((mEtUser.getData() == null || mEtUser.getData().isEmpty())) {
-                showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
+                showError(getString(R.string.error_input_field_empty, getString(R.string.username)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
             if ((mEtPassword.getData() == null || mEtPassword.getData().isEmpty())) {
-                showError(getString(R.string.error_input_field_empty, getString(R.string.client_key)), RefConstants.ERROR_DURATION_SHORT);
+                showError(getString(R.string.error_input_field_empty, getString(R.string.password)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
         }
@@ -420,7 +426,16 @@ public class ManualSetup extends BaseAppCompatActivity {
                 ManualSetup.super.onBackPressed();
         } else {
             // we are in add manually mode
-            if (mEtName.getData() != null || mEtHost.getData() != null || mEtPort.getData() != null || mEtAccessToken.getData() != null || mEtServerCertificate.getData() != null || mEtClientCertificate.getData() != null || mEtClientKey.getData() != null || mEtUser.getData() != null || mEtPassword.getData() != null) {
+            if (mEtName.getData() != null ||
+                    mEtHost.getData() != null ||
+                    mEtPort.getData() != null ||
+                    mEtAccessToken.getData() != null ||
+                    mEtServerCertificate.getData() != null ||
+                    mEtClientCertificate.getData() != null ||
+                    mEtClientKey.getData() != null ||
+                    mEtUser.getData() != null ||
+                    mEtPassword.getData() != null) {
+
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.unsaved_changes)
                         .setCancelable(true)

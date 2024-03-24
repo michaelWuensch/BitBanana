@@ -389,7 +389,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mStatusDot.requestLayout();
 
         String walletAlias;
-        if (backendConfig.getNetwork() == BaseBackendConfig.Network.MAINNET || backendConfig.getNetwork() == BaseBackendConfig.Network.UNKNOWN)
+        if (backendConfig.getNetwork() == BaseBackendConfig.Network.MAINNET || backendConfig.getNetwork() == BaseBackendConfig.Network.UNKNOWN || backendConfig.getNetwork() == null)
             walletAlias = backendConfig.getAlias();
         else
             walletAlias = backendConfig.getAlias() + " (" + backendConfig.getNetwork().getDisplayName() + ")";

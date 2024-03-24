@@ -65,14 +65,16 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         mNodeName.setText(BackendConfig.getAlias());
 
         // Set network info
-        switch (BackendConfig.getNetwork()) {
-            case MAINNET:
-            case UNKNOWN:
-                mNetworkName.setVisibility(View.GONE);
-                break;
-            default:
-                mNetworkName.setVisibility(View.VISIBLE);
-                mNetworkName.setText(BackendConfig.getNetwork().getDisplayName());
+        if (BackendConfig.getNetwork() != null) {
+            switch (BackendConfig.getNetwork()) {
+                case MAINNET:
+                case UNKNOWN:
+                    mNetworkName.setVisibility(View.GONE);
+                    break;
+                default:
+                    mNetworkName.setVisibility(View.VISIBLE);
+                    mNetworkName.setText(BackendConfig.getNetwork().getDisplayName());
+            }
         }
 
         // Set on click listener

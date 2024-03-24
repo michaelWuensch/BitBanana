@@ -83,7 +83,10 @@ public class AccessTokenInputView extends BBInputFieldView {
 
     @Override
     public String getData() {
-        return HexUtil.bytesToHex(getDataAsBytes());
+        if (getDataAsBytes() != null)
+            return HexUtil.bytesToHex(getDataAsBytes());
+        else
+            return null;
     }
 
     private byte[] getDataAsBytes() {

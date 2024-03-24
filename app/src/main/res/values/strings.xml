@@ -417,6 +417,7 @@
     <string name="error_tor_bootstrapping_failed">Tor bootstrapping failed.</string>
     <string name="error_unknown_backend">Unknown backend type.</string>
     <string name="error_input_field_empty">The %1$s input field must not be empty.</string>
+    <string name="error_input_invalid_data">The %1$s input field contains invalid data.</string>
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
     <string name="error_duplication">Duplication failed.</string>
     <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
