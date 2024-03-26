@@ -9,7 +9,10 @@ public class LnInvoiceItem extends TransactionItem {
 
     public LnInvoiceItem(LnInvoice invoice) {
         mInvoice = invoice;
-        mCreationDate = invoice.getCreatedAt();
+        if (invoice.isPaid())
+            mCreationDate = invoice.getPaidAt();
+        else
+            mCreationDate = invoice.getCreatedAt();
     }
 
     @Override
