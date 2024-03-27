@@ -38,6 +38,7 @@ public class LndSSLSocketFactory {
             sslCtx = SSLContext.getInstance("TLS");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
 
@@ -73,7 +74,7 @@ public class LndSSLSocketFactory {
                     return sslCtx.getSocketFactory();
 
                 } catch (Exception e) {
-                    BBLog.e(LOG_TAG, "Error initializing self signed certificate.");
+                    BBLog.w(LOG_TAG, "Error creating TrustManager for server authentication.");
                     e.printStackTrace();
                 }
             }
@@ -83,8 +84,10 @@ public class LndSSLSocketFactory {
         // This will be the case for btc pay for example as no self signed certificates are used
         try {
             sslCtx.init(null, null, new SecureRandom());
+            BBLog.w(LOG_TAG, "Default TrustManager is used.");
         } catch (KeyManagementException e) {
             e.printStackTrace();
+            BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
         return sslCtx.getSocketFactory();

@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -41,52 +42,60 @@ public class CoreLightningSSLSocketFactory {
             sslCtx = SSLContext.getInstance("TLS");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
 
-        if (backendConfig.getServerCert() != null && !backendConfig.getServerCert().isEmpty()) {
-            try {
-                // Create a TrustManager used to define whether the server certificate should be trusted or not.
-                TrustManager[] tm;
-                if (backendConfig.isTorHostAddress() || !backendConfig.getVerifyCertificate()) {
-                    // Always trust the server certificate on Tor connection or when certificate validation is turned off.
-                    tm = new TrustManager[]{new BlindTrustManager()};
-                } else {
-                    // Generate the CA Certificate from the supplied data
-                    Certificate ca = createServerCertificate(backendConfig);
+        KeyManager[] km = null;
+        try {
+            // Initialize KeyManager for client authentication
+            KeyStore clientKeyStore = createClientKeyStore(backendConfig);
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf.init(clientKeyStore, null);
+            km = kmf.getKeyManagers();
+        } catch (Exception e) {
+            BBLog.e(LOG_TAG, "Error initializing key manager for client authentication.");
+            return null;
+        }
 
-                    // Load the key store using the CA
-                    KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                    keyStore.load(null, null);
-                    keyStore.setCertificateEntry("ca", ca);
+        try {
+            // Create a TrustManager used to define whether the server certificate should be trusted or not.
+            TrustManager[] tm;
+            if (backendConfig.isTorHostAddress() || !backendConfig.getVerifyCertificate()) {
+                // Always trust the server certificate on Tor connection or when certificate validation is turned off.
+                tm = new TrustManager[]{new BlindTrustManager()};
+            } else {
+                // Generate the CA Certificate from the supplied data
+                Certificate ca = createServerCertificate(backendConfig);
 
-                    // Initialize the TrustManager with this CA
-                    TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                    tmf.init(keyStore);
-                    tm = tmf.getTrustManagers();
-                }
+                // Load the key store using the CA
+                KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                keyStore.load(null, null);
+                keyStore.setCertificateEntry("ca", ca);
 
-                // Initialize KeyManager for client authentication
-                KeyStore clientKeyStore = createClientKeyStore(backendConfig);
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-                kmf.init(clientKeyStore, null);
-
-                // Create an SSL context that uses the created KeyManager and TrustManager
-                sslCtx.init(kmf.getKeyManagers(), tm, new SecureRandom());
-                return sslCtx.getSocketFactory();
-
-            } catch (Exception e) {
-                BBLog.e(LOG_TAG, "Error creating SSLSocketFactory for CoreLightning.");
-                e.printStackTrace();
+                // Initialize the TrustManager with this CA
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                tmf.init(keyStore);
+                tm = tmf.getTrustManagers();
             }
+
+            // Create an SSL context that uses the created KeyManager and TrustManager
+            sslCtx.init(km, tm, new SecureRandom());
+            return sslCtx.getSocketFactory();
+
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error creating TrustManager for server authentication.");
+            e.printStackTrace();
         }
 
         // If the above failed, use the default TrustManager which is used when set to null
         // This will be the case for btc pay for example as no self signed certificates are used
         try {
-            sslCtx.init(null, null, new SecureRandom());
+            sslCtx.init(km, null, new SecureRandom());
+            BBLog.w(LOG_TAG, "Default TrustManager is used.");
         } catch (KeyManagementException e) {
             e.printStackTrace();
+            BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
         return sslCtx.getSocketFactory();
