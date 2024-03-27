@@ -49,6 +49,9 @@ public class CertificateUtil {
      * @return
      */
     private static String certToPEM(final byte[] DER) {
+        if (DER == null)
+            return null;
+
         InputStream inputStream = new ByteArrayInputStream(DER);
         try {
             CertificateFactory.getInstance("X.509").generateCertificate(inputStream);
@@ -67,6 +70,9 @@ public class CertificateUtil {
      * @return
      */
     private static String privateKeyToPEM(final byte[] DER) {
+        if (DER == null)
+            return null;
+
         final Base64.Encoder encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.getBytes());
         final String encodedCertText = new String(encoder.encode(DER));
         if (encodedCertText == null || encodedCertText.isEmpty())
