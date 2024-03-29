@@ -19,6 +19,8 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
+import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningConnectConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectConfig;
@@ -41,6 +43,10 @@ public class RemoteConnectUtil {
         }
         if (UriUtil.isLNDConnectUri(data)) {
             decodeLndConnectString(ctx, data, listener);
+        } else if (UriUtil.isCoreLightningGRPCUri(data)) {
+            decodeCoreLightningConnectString(ctx, data, listener);
+        } else if (UriUtil.isCLightningRestUri(data)) {
+            listener.onError(ctx.getResources().getString(R.string.error_connection_no_c_lightning_rest_support), RefConstants.ERROR_DURATION_LONG);
         } else if (UriUtil.isLNDHUBUri(data)) {
             listener.onNoConnectData();
             // ToDo: replace the above line with the following to enable scanning for lndhub strings
@@ -111,6 +117,35 @@ public class RemoteConnectUtil {
             }
         } else {
             listener.onValidLndConnectString(parser.getConnectionConfig());
+        }
+    }
+
+    private static void decodeCoreLightningConnectString(Context ctx, String data, OnRemoteConnectDecodedListener listener) {
+        CoreLightningConnectStringParser parser = new CoreLightningConnectStringParser(data).parse();
+        // ToDo: nice error messages
+        if (parser.hasError()) {
+            switch (parser.getError()) {
+                case CoreLightningConnectStringParser.ERROR_INVALID_CONNECT_STRING:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_clngrpc_invalidConnectString), RefConstants.ERROR_DURATION_LONG);
+                    break;
+                case CoreLightningConnectStringParser.ERROR_INVALID_HOST_OR_PORT:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_invalid_host_or_port), RefConstants.ERROR_DURATION_MEDIUM);
+                    break;
+                case CoreLightningConnectStringParser.ERROR_NO_CLIENT_CERTIFICATE:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_clngrpc_missingClientCert), RefConstants.ERROR_DURATION_MEDIUM);
+                    break;
+                case CoreLightningConnectStringParser.ERROR_NO_CLIENT_KEY:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_clngrpc_missingClientKey), RefConstants.ERROR_DURATION_MEDIUM);
+                    break;
+                case CoreLightningConnectStringParser.ERROR_INVALID_CERTIFICATE_OR_KEY:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_clngrpc_invalidCertificateOrKey), RefConstants.ERROR_DURATION_MEDIUM);
+                    break;
+                case CoreLightningConnectStringParser.ERROR_PARAMETER_DECODING_FAILED:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_clngrpc_parameterDecodingFailed), RefConstants.ERROR_DURATION_LONG);
+                    break;
+            }
+        } else {
+            listener.onValidCoreLightningConnectData(parser.getConnectionConfig());
         }
     }
 
@@ -238,6 +273,47 @@ public class RemoteConnectUtil {
 
                 listener.onSaved(id);
 
+            } else if (config instanceof CoreLightningConnectConfig) {
+                CoreLightningConnectConfig coreLightningConnectConfig = (CoreLightningConnectConfig) config;
+
+                String id;
+                if (walletUUID == null) {
+
+                    BackendConfig configToAdd = new BackendConfig();
+                    configToAdd.setAlias(coreLightningConnectConfig.getHost());
+                    configToAdd.setHost(coreLightningConnectConfig.getHost());
+                    configToAdd.setPort(port);
+                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
+                    configToAdd.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                    configToAdd.setNetwork(coreLightningConnectConfig.getNetwork());
+                    configToAdd.setServerCert(coreLightningConnectConfig.getServerCert());
+                    configToAdd.setClientCert(coreLightningConnectConfig.getClientCert());
+                    configToAdd.setClientKey(coreLightningConnectConfig.getClientKey());
+                    configToAdd.setUseTor(coreLightningConnectConfig.getUseTor());
+                    configToAdd.setVerifyCertificate(coreLightningConnectConfig.getVerifyCertificate());
+                    configToAdd.setVpnConfig(new VPNConfig());
+
+                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
+                } else {
+                    id = walletUUID;
+                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
+                    // Here we only override the information that is actually contained in the lng-grpc string. We want to keep everything else as it is
+                    backendConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                    backendConfig.setHost(coreLightningConnectConfig.getHost());
+                    backendConfig.setPort(port);
+                    backendConfig.setServerCert(coreLightningConnectConfig.getServerCert());
+                    backendConfig.setClientCert(coreLightningConnectConfig.getClientCert());
+                    backendConfig.setClientKey(coreLightningConnectConfig.getClientKey());
+                    backendConfig.setUser(null);
+                    backendConfig.setPassword(null);
+                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
+                    backendConfigsManager.updateBackendConfig(backendConfig);
+                }
+
+                backendConfigsManager.apply();
+
+                listener.onSaved(id);
+
             } else if (config instanceof LndHubConnectConfig) {
                 LndHubConnectConfig lndHubConnectConfig = (LndHubConnectConfig) config;
 
@@ -332,6 +408,8 @@ public class RemoteConnectUtil {
         void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
 
         void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
+
+        void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig);
 
         void onNoConnectData();
 

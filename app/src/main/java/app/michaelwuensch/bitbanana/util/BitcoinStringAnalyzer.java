@@ -131,6 +131,11 @@ public class BitcoinStringAnalyzer {
             }
 
             @Override
+            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+                listener.onValidCoreLightningConnectData(baseBackendConfig);
+            }
+
+            @Override
             public void onError(String error, int duration) {
                 listener.onError(error, duration);
             }
@@ -232,6 +237,8 @@ public class BitcoinStringAnalyzer {
         void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
 
         void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
+
+        void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
 

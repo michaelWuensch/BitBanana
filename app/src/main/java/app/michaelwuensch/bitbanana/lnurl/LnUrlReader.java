@@ -48,10 +48,6 @@ public class LnUrlReader {
     private static final String LOG_TAG = LnUrlReader.class.getSimpleName();
 
     public static void readLnUrl(Context ctx, String data, OnLnUrlReadListener listener) {
-        if (!BackendManager.hasBackendConfigs()) {
-            listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
-            return;
-        }
         if (UriUtil.isLNURLUri(data)) {
             // We have a lud-17 lnurl that is not bech32 encoded.
             // Please refer to the following specification:
@@ -115,6 +111,10 @@ public class LnUrlReader {
     }
 
     private static boolean handleLNURLAuth(Context ctx, String decodedLnUrl, OnLnUrlReadListener listener) {
+        if (!BackendManager.hasBackendConfigs()) {
+            listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
+            return true;
+        }
         try {
             URL decodedUrl = new URL(decodedLnUrl);
             String query = decodedUrl.getQuery();

@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
@@ -20,8 +19,6 @@ import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
-    public static final String EXTRA_STARTED_FROM_URI = "startedFromURI";
-
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getSimpleName();
     private String mWalletUUID;
 
@@ -34,11 +31,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         if (extras != null) {
             if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
                 mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
-            }
-            if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
-                String connectString = App.getAppContext().getUriSchemeData();
-                App.getAppContext().setUriSchemeData(null);
-                verifyDesiredConnection(connectString);
             }
         }
 
@@ -94,6 +86,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
             @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                connectIfUserConfirms(baseBackendConfig);
+            }
+
+            @Override
+            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
                 connectIfUserConfirms(baseBackendConfig);
             }
 

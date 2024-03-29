@@ -17,16 +17,13 @@ import java.util.Arrays;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
-import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.UriUtil;
 
 public class LandingActivity extends BaseAppCompatActivity {
 
@@ -38,14 +35,6 @@ public class LandingActivity extends BaseAppCompatActivity {
 
         // Keep in app language picker in sync with system per app language setting.
         updateLanguageSetting();
-
-        // BitBanana was started from an URI link.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
-                setupWalletFromUri();
-                return;
-            }
-        }
 
         // support for clearing shared preferences, on breaking changes
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
@@ -135,13 +124,6 @@ public class LandingActivity extends BaseAppCompatActivity {
 
             startActivity(homeIntent);
         }
-    }
-
-    private void setupWalletFromUri() {
-        Intent connectIntent = new Intent(this, ConnectRemoteNodeActivity.class);
-        connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
-        connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(connectIntent);
     }
 
     private void migrateCertificateEncoding() {

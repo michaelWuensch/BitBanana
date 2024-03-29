@@ -14,6 +14,8 @@ public class UriUtil {
     public static final String URI_PREFIX_LNURLW = "lnurlw://";
     public static final String URI_PREFIX_LNURLA = "keyauth://";
     public static final String URI_PREFIX_LND_HUB = "lndhub://";
+    public static final String URI_PREFIX_CORE_LIGHTNING_GRPC = "cln-grpc://";
+    public static final String URI_PREFIX_C_LIGHTNING_REST = "c-lightning-rest://";
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -43,6 +45,13 @@ public class UriUtil {
         return hasPrefix(URI_PREFIX_LNDCONNECT, data);
     }
 
+    /**
+     * Returns if it is a URI that BitBanana can uses to establish a node connection.
+     */
+    public static boolean isConnectUri(String data) {
+        return isLNDConnectUri(data) || isCoreLightningGRPCUri(data);
+    }
+
     public static boolean isLNURLUri(String data) {
         return hasPrefix(URI_PREFIX_LNURLC, data) || hasPrefix(URI_PREFIX_LNURLP, data) || hasPrefix(URI_PREFIX_LNURLW, data) || hasPrefix(URI_PREFIX_LNURLA, data);
     }
@@ -67,6 +76,14 @@ public class UriUtil {
         return hasPrefix(URI_PREFIX_LND_HUB, data);
     }
 
+    public static boolean isCoreLightningGRPCUri(String data) {
+        return hasPrefix(URI_PREFIX_CORE_LIGHTNING_GRPC, data);
+    }
+
+    public static boolean isCLightningRestUri(String data) {
+        return hasPrefix(URI_PREFIX_C_LIGHTNING_REST, data);
+    }
+
     public static String removeURI(@NonNull String data) {
         if (isLightningUri(data)) {
             return data.substring(URI_PREFIX_LIGHTNING.length());
@@ -75,15 +92,19 @@ public class UriUtil {
         } else if (isLNDConnectUri(data)) {
             return data.substring(URI_PREFIX_LNDCONNECT.length());
         } else if (isLNURLCUri(data)) {
-            return data.substring((URI_PREFIX_LNURLC).length());
+            return data.substring(URI_PREFIX_LNURLC.length());
         } else if (isLNURLPUri(data)) {
-            return data.substring((URI_PREFIX_LNURLP).length());
+            return data.substring(URI_PREFIX_LNURLP.length());
         } else if (isLNURLWUri(data)) {
-            return data.substring((URI_PREFIX_LNURLW).length());
+            return data.substring(URI_PREFIX_LNURLW.length());
         } else if (isLNURLAUri(data)) {
-            return data.substring((URI_PREFIX_LNURLA).length());
+            return data.substring(URI_PREFIX_LNURLA.length());
         } else if (isLNDHUBUri(data)) {
-            return data.substring((URI_PREFIX_LND_HUB).length());
+            return data.substring(URI_PREFIX_LND_HUB.length());
+        } else if (isCoreLightningGRPCUri(data)) {
+            return data.substring(URI_PREFIX_CORE_LIGHTNING_GRPC.length());
+        } else if (isCLightningRestUri(data)) {
+            return data.substring(URI_PREFIX_C_LIGHTNING_REST.length());
         } else {
             return data;
         }

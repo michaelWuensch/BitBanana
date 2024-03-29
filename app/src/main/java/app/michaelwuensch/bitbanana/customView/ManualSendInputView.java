@@ -129,6 +129,11 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
+                    public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+                        invalidInput();
+                    }
+
+                    @Override
                     public void onValidNodeUri(LightningNodeUri nodeUri) {
                         mListener.onValid(mData);
                     }

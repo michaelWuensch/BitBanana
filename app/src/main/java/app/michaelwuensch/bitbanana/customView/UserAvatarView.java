@@ -182,7 +182,7 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key != null) {
             // Update the image
-            if (key.equals(PrefsUtil.AVATAR_STYLE)) {
+            if (key.equals(PrefsUtil.AVATAR_STYLE) && mNodeUris != null) {
                 mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
             }
         }

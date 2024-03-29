@@ -138,6 +138,11 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+                readableDataFound(data);
+            }
+
+            @Override
             public void onValidNodeUri(LightningNodeUri nodeUri) {
                 readableDataFound(data);
             }

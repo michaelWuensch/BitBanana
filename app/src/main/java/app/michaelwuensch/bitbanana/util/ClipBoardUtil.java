@@ -147,6 +147,11 @@ public class ClipBoardUtil {
             }
 
             @Override
+            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
+            }
+
+            @Override
             public void onValidNodeUri(LightningNodeUri nodeUri) {
                 showProceedQuestion(R.string.clipboard_scan_node_pubkey, context, listener);
             }

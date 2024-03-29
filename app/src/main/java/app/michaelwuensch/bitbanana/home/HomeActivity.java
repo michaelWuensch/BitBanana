@@ -231,6 +231,15 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+
+        // Setup wallet from URI if app was started by connect uri and no node is connected yet
+        if (App.getAppContext().getUriSchemeData() != null) {
+            if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs() && UriUtil.isConnectUri(App.getAppContext().getUriSchemeData())) {
+                analyzeString(App.getAppContext().getUriSchemeData());
+                App.getAppContext().setUriSchemeData(null);
+            }
+        }
     }
 
     // This schedule keeps us up to date on exchange rates
@@ -633,6 +642,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                addWallet(baseBackendConfig);
+            }
+
+            @Override
+            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
                 addWallet(baseBackendConfig);
             }
 

@@ -372,6 +372,12 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the nodes connection settings might also solve your problem.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Connecting BitBanana to Core Lightning via C-Lightning-Rest is not supported. Please check if your node shares cln-grpc connection details and use those for connection instead.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Invalid cln-grpc connect string.\nPlease make sure you used the following format:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidCertificateOrKey">A provided certificate or key is invalid.</string>
+    <string name="error_connection_clngrpc_missingClientCert">The mandatory client certificate is missing.</string>
+    <string name="error_connection_clngrpc_missingClientKey">The mandatory client key is missing.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for cln-grpc is invalid as the parameters are not encoded in base64url format.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
