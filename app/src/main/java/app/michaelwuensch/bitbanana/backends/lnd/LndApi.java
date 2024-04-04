@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -108,7 +108,7 @@ public class LndApi extends Api {
                             .setPubKey(response.getIdentityPubkey())
                             .setBlockHeight(response.getBlockHeight())
                             .setLightningNodeUris(lnUris)
-                            .setNetwork(BaseBackendConfig.Network.parseFromString(response.getChains(0).getNetwork()))
+                            .setNetwork(BackendConfig.Network.parseFromString(response.getChains(0).getNetwork()))
                             .setSynced(response.getSyncedToChain())
                             .build();
                 })

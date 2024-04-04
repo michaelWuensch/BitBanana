@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
@@ -97,7 +97,7 @@ public class CoreLightningApi extends Api {
                             .setPubKey(pubkey)
                             .setBlockHeight(response.getBlockheight())
                             .setLightningNodeUris(lnUris)
-                            .setNetwork(BaseBackendConfig.Network.parseFromString(response.getNetwork()))
+                            .setNetwork(BackendConfig.Network.parseFromString(response.getNetwork()))
                             .setSynced(!(response.hasWarningBitcoindSync() || response.hasWarningLightningdSync()))
                             .build();
                 })

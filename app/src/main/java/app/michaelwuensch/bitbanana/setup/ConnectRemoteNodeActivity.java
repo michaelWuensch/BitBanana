@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
@@ -75,23 +75,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
         RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                connectIfUserConfirms(backendConfig);
             }
 
             @Override
@@ -107,16 +92,16 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
 
-    private void connectIfUserConfirms(BaseBackendConfig baseBackendConfig) {
+    private void connectIfUserConfirms(BackendConfig backendConfig) {
         // Ask user to confirm the connection to remote host
         new UserGuardian(this, () -> {
-            connect(baseBackendConfig);
-        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
+            connect(backendConfig);
+        }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 
-    private void connect(BaseBackendConfig baseBackendConfig) {
+    private void connect(BackendConfig backendConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {

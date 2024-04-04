@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
@@ -114,22 +114,7 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
-                    public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                        invalidInput();
-                    }
-
-                    @Override
-                    public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                        invalidInput();
-                    }
-
-                    @Override
-                    public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                        invalidInput();
-                    }
-
-                    @Override
-                    public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+                    public void onValidConnectData(BackendConfig backendConfig) {
                         invalidInput();
                     }
 

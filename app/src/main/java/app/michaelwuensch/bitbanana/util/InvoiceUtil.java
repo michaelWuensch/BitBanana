@@ -134,7 +134,7 @@ public class InvoiceUtil {
                         for (String pair : valuePairs) {
                             String[] param = pair.split("=");
                             if (param[0].equals("amount")) {
-                                onChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8 * 1000L) ;
+                                onChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8 * 1000L);
                             }
                             if (param[0].equals("message")) {
                                 onChainInvoiceMessage = param[1];

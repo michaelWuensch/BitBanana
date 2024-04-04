@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -389,7 +388,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mStatusDot.requestLayout();
 
         String walletAlias;
-        if (backendConfig.getNetwork() == BaseBackendConfig.Network.MAINNET || backendConfig.getNetwork() == BaseBackendConfig.Network.UNKNOWN || backendConfig.getNetwork() == null)
+        if (backendConfig.getNetwork() == BackendConfig.Network.MAINNET || backendConfig.getNetwork() == BackendConfig.Network.UNKNOWN || backendConfig.getNetwork() == null)
             walletAlias = backendConfig.getAlias();
         else
             walletAlias = backendConfig.getAlias() + " (" + backendConfig.getNetwork().getDisplayName() + ")";

@@ -16,7 +16,6 @@ import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
@@ -45,25 +44,25 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
-                    migrateCertificateEncoding();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else if (ver == 22) {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
-                    migrateCertificateEncoding();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else if (ver == 23) {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
-                    migrateCertificateEncoding();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else if (ver == 24) {
                     migrateBackendConfigs();
-                    migrateCertificateEncoding();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else { // ver == 25
-                    migrateCertificateEncoding();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 }
             } else {
@@ -126,13 +125,16 @@ public class LandingActivity extends BaseAppCompatActivity {
         }
     }
 
-    private void migrateCertificateEncoding() {
+    private void migrateCertificateEncodingAndMacaroon() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
-                if (config.getServerCert() != null) {
-                    config.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(config.getServerCert())));
-                    BackendConfigsManager.getInstance().updateBackendConfig(config);
+                if (config.getMacaroon() != null) {
+                    config.setAuthenticationToken(config.getMacaroon().toLowerCase());
+                    config.setMacaroon(null);
                 }
+                if (config.getServerCert() != null)
+                    config.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(config.getServerCert())));
+                BackendConfigsManager.getInstance().updateBackendConfig(config);
             }
             try {
                 BackendConfigsManager.getInstance().apply();
@@ -155,9 +157,9 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void migrateBackendConfigs() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
-                config.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                config.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                config.setLocation(BaseBackendConfig.Location.REMOTE);
+                config.setBackendType(BackendConfig.BackendType.LND_GRPC);
+                config.setNetwork(BackendConfig.Network.UNKNOWN);
+                config.setLocation(BackendConfig.Location.REMOTE);
                 config.setVpnConfig(new VPNConfig());
                 BackendConfigsManager.getInstance().updateBackendConfig(config);
             }

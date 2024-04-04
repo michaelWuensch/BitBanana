@@ -20,7 +20,7 @@ public class RefConstants {
     23: Changed currency codes (0.6.7)
     24: Changed balanceHide options (0.6.8)
     25: Added additional data to backup config: Network, VPNConfig. Changed values for backend (0.7.3)
-    26: Changed certificate encoding from Base64Url to Base64 (0.7.6)
+    26: Changed certificate encoding from Base64Url to Base64 & macaroon to authenticationToken (0.7.6)
     */
     public static final int CURRENT_SETTINGS_VERSION = 26;
 
@@ -47,7 +47,7 @@ public class RefConstants {
     1: Added additional data to node connections: Implementation, Tor, Certificate verification (0.5.9-beta)
     ----------- Change to BitBanana ------------
     2: Added additional data to backup config: Network. Changed values for backend (0.7.3)
-    3: Changed certificate encoding from Base64Url to Base64 (0.7.6)
+    3: Changed certificate encoding from Base64Url to Base64, macaroon to authenticationToken (0.7.6)
     */
     public static final int DATA_BACKUP_VERSION = 3;
     public static final int DATA_BACKUP_LAST_SUPPORTED_VERSION = 0;

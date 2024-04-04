@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.UriUtil;
@@ -17,7 +17,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
  * lndhub://<USERNAME>:<PASSWORD>@<HOST>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class LndHubConnectStringParser extends BaseConnectionParser<LndHubConnectConfig> {
+public class LndHubConnectStringParser extends BaseConnectionParser {
 
     public static final int ERROR_INVALID_CONNECT_STRING = 0;
 
@@ -68,14 +68,15 @@ public class LndHubConnectStringParser extends BaseConnectionParser<LndHubConnec
         }
 
         // everything is ok
-        LndHubConnectConfig lndHubConnectConfig = new LndHubConnectConfig();
-        lndHubConnectConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
-        lndHubConnectConfig.setHost(hostURI.getHost());
-        lndHubConnectConfig.setUser(username);
-        lndHubConnectConfig.setPassword(password);
-        lndHubConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-        lndHubConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-        setConnectionConfig(lndHubConnectConfig);
+        BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setSource(BackendConfig.Source.LND_HUB_CONNECT);
+        backendConfig.setBackendType(BackendConfig.BackendType.LND_HUB);
+        backendConfig.setHost(hostURI.getHost());
+        backendConfig.setUser(username);
+        backendConfig.setPassword(password);
+        backendConfig.setLocation(BackendConfig.Location.REMOTE);
+        backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+        setBackendConfig(backendConfig);
         return this;
 
     }

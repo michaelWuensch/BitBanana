@@ -16,14 +16,9 @@ import java.io.IOException;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
-import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningConnectStringParser;
-import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
-import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectStringParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
@@ -116,7 +111,7 @@ public class RemoteConnectUtil {
                     break;
             }
         } else {
-            listener.onValidLndConnectString(parser.getConnectionConfig());
+            listener.onValidConnectData(parser.getBackendConfig());
         }
     }
 
@@ -145,7 +140,7 @@ public class RemoteConnectUtil {
                     break;
             }
         } else {
-            listener.onValidCoreLightningConnectData(parser.getConnectionConfig());
+            listener.onValidConnectData(parser.getBackendConfig());
         }
     }
 
@@ -159,7 +154,7 @@ public class RemoteConnectUtil {
                     break;
             }
         } else {
-            listener.onValidLndHubConnectString(parser.getConnectionConfig());
+            listener.onValidConnectData(parser.getBackendConfig());
         }
     }
 
@@ -180,14 +175,14 @@ public class RemoteConnectUtil {
             }
         } else {
             // Parsing was successful
-            listener.onValidBTCPayConnectData(btcPayConfigParser.getConnectionConfig());
+            listener.onValidConnectData(btcPayConfigParser.getBackendConfig());
         }
     }
 
 
-    public static void saveRemoteConfiguration(Context ctx, BaseBackendConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
+    public static void saveRemoteConfiguration(Context ctx, BackendConfig config, @Nullable String walletUUID, OnSaveRemoteConfigurationListener listener) {
         int port = config.getPort();
-        if (port == 8080) {
+        if (config.getBackendType() == BackendConfig.BackendType.LND_GRPC && port == 8080) {
             // BitBanana does not support REST. If the REST port was supplied, we ask the user if he wants to change it to 10009 (gRPC port).
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.rest_port)
@@ -208,185 +203,77 @@ public class RemoteConnectUtil {
         }
     }
 
-    private static void executeSaveRemoteConfiguration(BaseBackendConfig config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
+    private static void executeSaveRemoteConfiguration(BackendConfig config, @Nullable String walletUUID, int port, OnSaveRemoteConfigurationListener listener) {
         BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
 
         try {
-            if (config instanceof BackendConfig) {
-                BackendConfig backendConfig = (BackendConfig) config;
+            String id;
+            if (walletUUID == null) {
+                config.setPort(port);
+                if (config.getAlias() == null)
+                    config.setAlias(config.getHost());
+                id = backendConfigsManager.addBackendConfig(config).getId();
+            } else {
+                id = walletUUID;
+                BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
 
-                String id;
-                if (walletUUID == null) {
-                    backendConfig.setPort(port);
-                    backendConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                    id = backendConfigsManager.addBackendConfig(backendConfig).getId();
-                } else {
-                    id = walletUUID;
-                    BackendConfig backendConfig2 = backendConfigsManager.getBackendConfigById(id);
-                    // All data that cannot be set on manual setup page has to be fetched from existing wallet.
-                    backendConfig.setId(backendConfig2.getId());
-                    backendConfig.setLocation(backendConfig2.getLocation());
-                    backendConfig.setNetwork(backendConfig2.getNetwork());
-                    backendConfigsManager.updateBackendConfig(backendConfig);
-                }
-
-                backendConfigsManager.apply();
-
-                listener.onSaved(id);
-
-            } else if (config instanceof LndConnectConfig) {
-                LndConnectConfig lndConnectConfig = (LndConnectConfig) config;
-
-                String id;
-                if (walletUUID == null) {
-
-                    BackendConfig configToAdd = new BackendConfig();
-                    configToAdd.setAlias(lndConnectConfig.getHost());
-                    configToAdd.setHost(lndConnectConfig.getHost());
-                    configToAdd.setPort(port);
-                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
-                    configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                    configToAdd.setNetwork(lndConnectConfig.getNetwork());
-                    configToAdd.setServerCert(lndConnectConfig.getServerCert());
-                    configToAdd.setMacaroon(lndConnectConfig.getMacaroon());
-                    configToAdd.setUseTor(lndConnectConfig.getUseTor());
-                    configToAdd.setVerifyCertificate(lndConnectConfig.getVerifyCertificate());
-                    configToAdd.setVpnConfig(new VPNConfig());
-
-                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
-                } else {
-                    id = walletUUID;
-                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    // Here we only override the information that is actually contained in the lndconnect string. We want to keep everything else as it is
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                    backendConfig.setHost(lndConnectConfig.getHost());
-                    backendConfig.setPort(port);
-                    backendConfig.setServerCert(lndConnectConfig.getServerCert());
-                    backendConfig.setMacaroon(lndConnectConfig.getMacaroon());
-                    backendConfig.setUser(null);
-                    backendConfig.setPassword(null);
-                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
-                    backendConfigsManager.updateBackendConfig(backendConfig);
-                }
-
-                backendConfigsManager.apply();
-
-                listener.onSaved(id);
-
-            } else if (config instanceof CoreLightningConnectConfig) {
-                CoreLightningConnectConfig coreLightningConnectConfig = (CoreLightningConnectConfig) config;
-
-                String id;
-                if (walletUUID == null) {
-
-                    BackendConfig configToAdd = new BackendConfig();
-                    configToAdd.setAlias(coreLightningConnectConfig.getHost());
-                    configToAdd.setHost(coreLightningConnectConfig.getHost());
-                    configToAdd.setPort(port);
-                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
-                    configToAdd.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
-                    configToAdd.setNetwork(coreLightningConnectConfig.getNetwork());
-                    configToAdd.setServerCert(coreLightningConnectConfig.getServerCert());
-                    configToAdd.setClientCert(coreLightningConnectConfig.getClientCert());
-                    configToAdd.setClientKey(coreLightningConnectConfig.getClientKey());
-                    configToAdd.setUseTor(coreLightningConnectConfig.getUseTor());
-                    configToAdd.setVerifyCertificate(coreLightningConnectConfig.getVerifyCertificate());
-                    configToAdd.setVpnConfig(new VPNConfig());
-
-                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
-                } else {
-                    id = walletUUID;
-                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    // Here we only override the information that is actually contained in the lng-grpc string. We want to keep everything else as it is
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
-                    backendConfig.setHost(coreLightningConnectConfig.getHost());
-                    backendConfig.setPort(port);
-                    backendConfig.setServerCert(coreLightningConnectConfig.getServerCert());
-                    backendConfig.setClientCert(coreLightningConnectConfig.getClientCert());
-                    backendConfig.setClientKey(coreLightningConnectConfig.getClientKey());
-                    backendConfig.setUser(null);
-                    backendConfig.setPassword(null);
-                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
-                    backendConfigsManager.updateBackendConfig(backendConfig);
-                }
-
-                backendConfigsManager.apply();
-
-                listener.onSaved(id);
-
-            } else if (config instanceof LndHubConnectConfig) {
-                LndHubConnectConfig lndHubConnectConfig = (LndHubConnectConfig) config;
-
-                String id;
-                if (walletUUID == null) {
-
-                    BackendConfig configToAdd = new BackendConfig();
-                    configToAdd.setAlias(lndHubConnectConfig.getHost());
-                    configToAdd.setHost(lndHubConnectConfig.getHost());
-                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
-                    configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
-                    configToAdd.setUser(lndHubConnectConfig.getUser());
-                    configToAdd.setPassword(lndHubConnectConfig.getPassword());
-                    configToAdd.setVpnConfig(new VPNConfig());
-
-                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
-                } else {
-                    id = walletUUID;
-                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    // Here we only override the information that is actually contained in the lndhub connect string. We want to keep everything else as it is
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
-                    backendConfig.setHost(lndHubConnectConfig.getHost());
-                    backendConfig.setUser(lndHubConnectConfig.getUser());
-                    backendConfig.setPassword(lndHubConnectConfig.getPassword());
-                    // id, alias, location, network, useTor, verifyCertificate and VPNConfig stay the same as this info is not available
-                    backendConfigsManager.updateBackendConfig(backendConfig);
-                }
-
-                backendConfigsManager.apply();
-
-                listener.onSaved(id);
-
-            } else if (config instanceof BTCPayConfig) {
-                BTCPayConfig btcPayConfig = (BTCPayConfig) config;
-
-                String id;
-                if (walletUUID == null) {
-
-                    BackendConfig configToAdd = new BackendConfig();
-                    configToAdd.setAlias(btcPayConfig.getHost());
-                    configToAdd.setHost(btcPayConfig.getHost());
-                    configToAdd.setPort(port);
-                    configToAdd.setLocation(BaseBackendConfig.Location.REMOTE);
-                    configToAdd.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                    configToAdd.setNetwork(btcPayConfig.getNetwork());
-                    configToAdd.setServerCert(null);
-                    configToAdd.setMacaroon(btcPayConfig.getMacaroon());
-                    configToAdd.setUseTor(btcPayConfig.getUseTor());
-                    configToAdd.setVerifyCertificate(btcPayConfig.getVerifyCertificate());
-                    configToAdd.setVpnConfig(new VPNConfig());
-
-                    id = backendConfigsManager.addBackendConfig(configToAdd).getId();
-                } else {
-                    id = walletUUID;
-                    BackendConfig backendConfig = backendConfigsManager.getBackendConfigById(id);
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                    backendConfig.setNetwork(btcPayConfig.getNetwork());
-                    backendConfig.setHost(btcPayConfig.getHost());
-                    backendConfig.setPort(port);
-                    backendConfig.setServerCert(null);
-                    backendConfig.setMacaroon(btcPayConfig.getMacaroon());
-                    backendConfig.setUseTor(btcPayConfig.getUseTor());
-                    backendConfig.setUser(null);
-                    backendConfig.setPassword(null);
-                    // id, alias, location, verifyCertificate and VPNConfig stay the same as this info is not available
-                    backendConfigsManager.updateBackendConfig(backendConfig);
-                }
-
-                backendConfigsManager.apply();
-
-                listener.onSaved(id);
-
+                // We update an existing backend config. Therefore we only want to override the information
+                // that is actually provided within our new data.
+                if (config.getSource() != null)
+                    switch (config.getSource()) {
+                        case MANUAL_INPUT:
+                            backendConfig.setAlias(config.getAlias());
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setHost(config.getHost());
+                            backendConfig.setPort(port);
+                            backendConfig.setServerCert(config.getServerCert());
+                            backendConfig.setClientCert(config.getClientCert());
+                            backendConfig.setClientKey(config.getClientKey());
+                            backendConfig.setAuthenticationToken(config.getAuthenticationToken());
+                            backendConfig.setUser(config.getUser());
+                            backendConfig.setPassword(config.getPassword());
+                            backendConfig.setVpnConfig(config.getVpnConfig());
+                            backendConfig.setUseTor(config.getUseTor());
+                            backendConfig.setVerifyCertificate(config.getVerifyCertificate());
+                            break;
+                        case LND_CONNECT:
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setHost(config.getHost());
+                            backendConfig.setPort(port);
+                            backendConfig.setServerCert(config.getServerCert());
+                            backendConfig.setAuthenticationToken(config.getAuthenticationToken());
+                            break;
+                        case CLN_GRPC:
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setHost(config.getHost());
+                            backendConfig.setPort(port);
+                            backendConfig.setServerCert(config.getServerCert());
+                            backendConfig.setClientCert(config.getClientCert());
+                            backendConfig.setClientKey(config.getClientKey());
+                            break;
+                        case LND_HUB_CONNECT:
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setHost(config.getHost());
+                            backendConfig.setUser(config.getUser());
+                            backendConfig.setPassword(config.getPassword());
+                            break;
+                        case BTC_PAY_DATA:
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setHost(config.getHost());
+                            backendConfig.setPort(port);
+                            backendConfig.setAuthenticationToken(config.getAuthenticationToken());
+                            break;
+                        default:
+                            // Override everything and use the new one.
+                            backendConfig = config;
+                            backendConfig.setId(id);
+                    }
+                if (backendConfig.getVpnConfig() == null)
+                    backendConfig.setVpnConfig(new VPNConfig());
+                backendConfigsManager.updateBackendConfig(config);
             }
+            backendConfigsManager.apply();
+            listener.onSaved(id);
         } catch (Exception e) {
             e.printStackTrace();
             listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_SHORT);
@@ -403,13 +290,7 @@ public class RemoteConnectUtil {
 
     public interface OnRemoteConnectDecodedListener {
 
-        void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
-
-        void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
-
-        void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
-
-        void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig);
+        void onValidConnectData(BackendConfig backendConfig);
 
         void onNoConnectData();
 

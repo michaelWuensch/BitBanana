@@ -8,7 +8,7 @@ import android.os.Bundle;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
@@ -123,22 +123,7 @@ public class ScanActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                readableDataFound(data);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                readableDataFound(data);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                readableDataFound(data);
-            }
-
-            @Override
-            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+            public void onValidConnectData(BackendConfig backendConfig) {
                 readableDataFound(data);
             }
 

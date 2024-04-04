@@ -1,6 +1,6 @@
 package app.michaelwuensch.bitbanana.util;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
@@ -99,10 +99,10 @@ public class WalletUtil {
     public static boolean isChannelTransaction(OnChainTransaction transaction) {
 
         // This is faster especially for nodes with lots of channels
-        if (BackendManager.getCurrentBackendType() == BaseBackendConfig.BackendType.LND_GRPC && hasChannelTransactionLabel(transaction)) {
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC && hasChannelTransactionLabel(transaction)) {
             return true;
         }
-        if (BackendManager.getCurrentBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC)
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC)
             return false;
 
         String pubKey = getNodePubKeyFromChannelTransaction(transaction);

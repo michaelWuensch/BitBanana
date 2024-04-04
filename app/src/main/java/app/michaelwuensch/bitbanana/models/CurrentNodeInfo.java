@@ -1,6 +1,6 @@
 package app.michaelwuensch.bitbanana.models;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.util.Version;
 
 public class CurrentNodeInfo {
@@ -11,7 +11,7 @@ public class CurrentNodeInfo {
     private final String PubKey;
     private final LightningNodeUri[] LightningNodeUris;
     private final int BlockHeight;
-    private final BaseBackendConfig.Network Network;
+    private final BackendConfig.Network Network;
     private final boolean Synced;
 
     public static Builder newBuilder() {
@@ -53,7 +53,7 @@ public class CurrentNodeInfo {
         return BlockHeight;
     }
 
-    public BaseBackendConfig.Network getNetwork() {
+    public BackendConfig.Network getNetwork() {
         return Network;
     }
 
@@ -70,7 +70,7 @@ public class CurrentNodeInfo {
         private String PubKey;
         private LightningNodeUri[] LightningNodeUris;
         private int BlockHeight;
-        private BaseBackendConfig.Network Network;
+        private BackendConfig.Network Network;
         private boolean Synced;
 
         private Builder() {
@@ -111,7 +111,7 @@ public class CurrentNodeInfo {
             return this;
         }
 
-        public Builder setNetwork(BaseBackendConfig.Network network) {
+        public Builder setNetwork(BackendConfig.Network network) {
             Network = network;
             return this;
         }

@@ -25,13 +25,12 @@ import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
-import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -113,7 +112,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Port
             BBInfoLineView ilPort = findViewById(R.id.port);
-            if (getWalletConfig().getBackendType() != BaseBackendConfig.BackendType.LND_HUB) {
+            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.LND_HUB) {
                 ilPort.setVisibility(View.VISIBLE);
                 ilPort.setData(String.valueOf(getWalletConfig().getPort()));
             } else {
@@ -122,9 +121,9 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Macaroon
             BBInfoLineView ilMacaroon = findViewById(R.id.macaroon);
-            if (getWalletConfig().getMacaroon() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.LND_GRPC) {
+            if (getWalletConfig().getAuthenticationToken() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.LND_GRPC) {
                 ilMacaroon.setVisibility(View.VISIBLE);
-                ilMacaroon.setData(getWalletConfig().getMacaroon());
+                ilMacaroon.setData(getWalletConfig().getAuthenticationToken());
             } else {
                 ilMacaroon.setVisibility(View.GONE);
             }
@@ -140,7 +139,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Client Certificate
             BBInfoLineView ilClientCertificate = findViewById(R.id.clientCert);
-            if (getWalletConfig().getClientCert() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+            if (getWalletConfig().getClientCert() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
                 ilClientCertificate.setVisibility(View.VISIBLE);
                 ilClientCertificate.setData(getWalletConfig().getClientCert());
             } else {
@@ -149,7 +148,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Client private key
             BBInfoLineView ilClientPrivateKey = findViewById(R.id.clientPrivateKey);
-            if (getWalletConfig().getClientKey() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+            if (getWalletConfig().getClientKey() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
                 ilClientPrivateKey.setVisibility(View.VISIBLE);
                 ilClientPrivateKey.setData(getWalletConfig().getClientKey());
             } else {
@@ -158,7 +157,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Username
             BBInfoLineView ilUsername = findViewById(R.id.user);
-            if (getWalletConfig().getUser() != null && getWalletConfig().getBackendType() == BaseBackendConfig.BackendType.LND_HUB) {
+            if (getWalletConfig().getUser() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.LND_HUB) {
                 ilUsername.setVisibility(View.VISIBLE);
                 ilUsername.setData(getWalletConfig().getUser());
             } else {

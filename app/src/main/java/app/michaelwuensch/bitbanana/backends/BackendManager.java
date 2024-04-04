@@ -9,7 +9,6 @@ import java.util.Set;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.coreLightning.CoreLightningBackend;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.demo.DemoBackend;
@@ -234,9 +233,9 @@ public class BackendManager {
         return currentBackendConfig;
     }
 
-    public static BaseBackendConfig.BackendType getCurrentBackendType() {
+    public static BackendConfig.BackendType getCurrentBackendType() {
         if (currentBackendConfig == null)
-            return BaseBackendConfig.BackendType.NONE;
+            return BackendConfig.BackendType.NONE;
         return currentBackendConfig.getBackendType();
     }
 

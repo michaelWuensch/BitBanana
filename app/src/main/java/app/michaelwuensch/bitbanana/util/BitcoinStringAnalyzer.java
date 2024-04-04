@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
@@ -116,23 +116,8 @@ public class BitcoinStringAnalyzer {
     private static void checkIfRemoteConnection(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
         RemoteConnectUtil.decodeConnectionString(ctx, inputString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                listener.onValidLndConnectString(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                listener.onValidLndHubConnectString(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                listener.onValidBTCPayConnectData(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
-                listener.onValidCoreLightningConnectData(baseBackendConfig);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                listener.onValidConnectData(backendConfig);
             }
 
             @Override
@@ -232,13 +217,7 @@ public class BitcoinStringAnalyzer {
 
         void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
-        void onValidLndConnectString(BaseBackendConfig baseBackendConfig);
-
-        void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig);
-
-        void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig);
-
-        void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig);
+        void onValidConnectData(BackendConfig backendConfig);
 
         void onValidNodeUri(LightningNodeUri nodeUri);
 

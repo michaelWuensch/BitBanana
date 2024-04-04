@@ -4,7 +4,7 @@ import com.google.common.io.BaseEncoding;
 
 import java.net.URI;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
@@ -19,7 +19,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class CoreLightningConnectStringParser extends BaseConnectionParser<CoreLightningConnectConfig> {
+public class CoreLightningConnectStringParser extends BaseConnectionParser {
 
     public static final int ERROR_INVALID_CONNECT_STRING = 0;
     public static final int ERROR_INVALID_HOST_OR_PORT = 1;
@@ -139,20 +139,20 @@ public class CoreLightningConnectStringParser extends BaseConnectionParser<CoreL
                 }
 
                 // everything is ok
-                CoreLightningConnectConfig coreLightningConnectConfig = new CoreLightningConnectConfig();
-                coreLightningConnectConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
-                coreLightningConnectConfig.setHost(connectURI.getHost());
-                coreLightningConnectConfig.setPort(connectURI.getPort());
-                coreLightningConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                coreLightningConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
+                BackendConfig backendConfig = new BackendConfig();
+                backendConfig.setSource(BackendConfig.Source.CLN_GRPC);
+                backendConfig.setBackendType(BackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                backendConfig.setHost(connectURI.getHost());
+                backendConfig.setPort(connectURI.getPort());
+                backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
                 if (caCert != null)
-                    coreLightningConnectConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(caCert)));
-                coreLightningConnectConfig.setClientCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(clientCert)));
-                coreLightningConnectConfig.setClientKey(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(clientKey)));
-                coreLightningConnectConfig.setMacaroon(clientCert);
-                coreLightningConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                coreLightningConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                setConnectionConfig(coreLightningConnectConfig);
+                    backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(caCert)));
+                backendConfig.setClientCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(clientCert)));
+                backendConfig.setClientKey(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(clientKey)));
+                backendConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                backendConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                setBackendConfig(backendConfig);
                 return this;
 
             } else {

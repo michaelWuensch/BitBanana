@@ -16,7 +16,6 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
@@ -114,7 +113,7 @@ public class NodeSpinner extends AppCompatSpinner {
         String[] items = new String[BackendConfigsManager.getInstance().getAllBackendConfigs(true).size() + 1];
         List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(true);
         for (int i = 0; i < backendConfigs.size(); i++) {
-            if (backendConfigs.get(i).getNetwork() == BaseBackendConfig.Network.MAINNET || backendConfigs.get(i).getNetwork() == BaseBackendConfig.Network.UNKNOWN || backendConfigs.get(i).getNetwork() == null)
+            if (backendConfigs.get(i).getNetwork() == BackendConfig.Network.MAINNET || backendConfigs.get(i).getNetwork() == BackendConfig.Network.UNKNOWN || backendConfigs.get(i).getNetwork() == null)
                 items[i] = backendConfigs.get(i).getAlias();
             else
                 items[i] = backendConfigs.get(i).getAlias() + " (" + backendConfigs.get(i).getNetwork().getDisplayName() + ")";

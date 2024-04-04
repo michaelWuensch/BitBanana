@@ -22,7 +22,6 @@ import javax.crypto.NoSuchPaddingException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
@@ -106,11 +105,13 @@ public class DataBackupUtil {
                 BBLog.d(LOG_TAG, "Updating connections from old backup version (1) ...");
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
-                    // Converts the cert encoding.
-                    if (backendConfig.getServerCert() != null) {
-                        backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
-                        BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
                     }
+                    if (backendConfig.getServerCert() != null)
+                        backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
+                    BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
                 try {
                     BackendConfigsManager.getInstance().apply();
@@ -126,10 +127,14 @@ public class DataBackupUtil {
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
                     // Adds the defaults to the newly introduced or renamed config properties.
-                    backendConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                    backendConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                    backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                    backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+                    backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
                     backendConfig.setVpnConfig(new VPNConfig());
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
+                    }
                     if (backendConfig.getServerCert() != null)
                         backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
@@ -148,12 +153,16 @@ public class DataBackupUtil {
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
                     // Adds the defaults to the newly introduced or renamed config properties.
-                    backendConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                    backendConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                    backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                    backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+                    backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
                     backendConfig.setUseTor(backendConfig.isTorHostAddress());
                     backendConfig.setVerifyCertificate(!backendConfig.isTorHostAddress());
                     backendConfig.setVpnConfig(new VPNConfig());
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
+                    }
                     if (backendConfig.getServerCert() != null)
                         backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);

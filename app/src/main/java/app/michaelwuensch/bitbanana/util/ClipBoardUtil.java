@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
@@ -132,22 +132,7 @@ public class ClipBoardUtil {
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
-            }
-
-            @Override
-            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
+            public void onValidConnectData(BackendConfig backendConfig) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }
 

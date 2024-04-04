@@ -1,5 +1,11 @@
 package app.michaelwuensch.bitbanana;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
+
 import com.google.gson.Gson;
 
 import org.junit.Test;
@@ -15,12 +21,6 @@ import java.util.stream.Collectors;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsJson;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
 
 public class BackendConfigsManagerTest {
 
@@ -81,7 +81,7 @@ public class BackendConfigsManagerTest {
         assertEquals(expected.getHost(), result.getHost());
         assertEquals(expected.getPort(), result.getPort());
         assertEquals(expected.getServerCert(), result.getServerCert());
-        assertEquals(expected.getMacaroon(), result.getMacaroon());
+        assertEquals(expected.getAuthenticationToken(), result.getAuthenticationToken());
         assertEquals(expected.getUseTor(), result.getUseTor());
         assertEquals(expected.getVerifyCertificate(), result.getVerifyCertificate());
         assertEquals(expected.getVpnConfig(), result.getVpnConfig());
@@ -101,7 +101,7 @@ public class BackendConfigsManagerTest {
         configToAdd.setHost(expected.getHost());
         configToAdd.setPort(expected.getPort());
         configToAdd.setServerCert(expected.getServerCert());
-        configToAdd.setMacaroon(expected.getMacaroon());
+        configToAdd.setAuthenticationToken(expected.getAuthenticationToken());
         configToAdd.setUseTor(expected.getUseTor());
         configToAdd.setVerifyCertificate(expected.getVerifyCertificate());
         configToAdd.setVpnConfig(expected.getVpnConfig());
@@ -116,7 +116,7 @@ public class BackendConfigsManagerTest {
         assertEquals(expected.getNetwork(), actual.getNetwork());
         assertEquals(expected.getHost(), actual.getHost());
         assertEquals(expected.getPort(), actual.getPort());
-        assertEquals(expected.getMacaroon(), actual.getMacaroon());
+        assertEquals(expected.getAuthenticationToken(), actual.getAuthenticationToken());
         assertEquals(expected.getUseTor(), actual.getUseTor());
         assertEquals(expected.getVerifyCertificate(), actual.getVerifyCertificate());
         assertEquals(expected.getVpnConfig(), actual.getVpnConfig());
@@ -181,7 +181,7 @@ public class BackendConfigsManagerTest {
         assertEquals(expected.getLocation(), actual.getLocation());
         assertEquals(expected.getHost(), actual.getHost());
         assertEquals(expected.getPort(), actual.getPort());
-        assertEquals(expected.getMacaroon(), actual.getMacaroon());
+        assertEquals(expected.getAuthenticationToken(), actual.getAuthenticationToken());
         assertEquals(expected.getUseTor(), actual.getUseTor());
         assertEquals(expected.getVerifyCertificate(), actual.getVerifyCertificate());
         assertEquals(expected.getVpnConfig(), actual.getVpnConfig());

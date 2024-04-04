@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
@@ -48,7 +47,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtName;
     private BBInputFieldView mEtHost;
     private BBInputFieldView mEtPort;
-    private BBInputFieldView mEtAccessToken;
+    private BBInputFieldView mEtAuthenticationToken;
     private BBInputFieldView mEtServerCertificate;
     private BBInputFieldView mEtClientCertificate;
     private BBInputFieldView mEtClientKey;
@@ -83,7 +82,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtName = findViewById(R.id.inputName);
         mEtHost = findViewById(R.id.inputHost);
         mEtPort = findViewById(R.id.inputPort);
-        mEtAccessToken = findViewById(R.id.inputAccessToken);
+        mEtAuthenticationToken = findViewById(R.id.inputAuthenticationToken);
         mEtServerCertificate = findViewById(R.id.inputServerCertificate);
         mEtClientCertificate = findViewById(R.id.inputClientCertificate);
         mEtClientKey = findViewById(R.id.inputClientKey);
@@ -118,8 +117,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         });
 
         String[] items = new String[2];
-        items[0] = BaseBackendConfig.BackendType.LND_GRPC.getDisplayName();
-        items[1] = BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
+        items[0] = BackendConfig.BackendType.LND_GRPC.getDisplayName();
+        items[1] = BackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
         //items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
 
         mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
@@ -130,7 +129,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                     case 0:
                         // Lnd gRPC
                         mEtPort.setVisibility(View.VISIBLE);
-                        mEtAccessToken.setVisibility(View.VISIBLE);
+                        mEtAuthenticationToken.setVisibility(View.VISIBLE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
@@ -140,7 +139,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                     case 1:
                         // Core Lightning gRPC
                         mEtPort.setVisibility(View.VISIBLE);
-                        mEtAccessToken.setVisibility(View.GONE);
+                        mEtAuthenticationToken.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
                         mEtClientCertificate.setVisibility(View.VISIBLE);
                         mEtClientKey.setVisibility(View.VISIBLE);
@@ -150,7 +149,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                     case 2:
                         // Lnd Hub
                         mEtPort.setVisibility(View.GONE);
-                        mEtAccessToken.setVisibility(View.GONE);
+                        mEtAuthenticationToken.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.GONE);
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
@@ -185,7 +184,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             mEtName.setValue(BackendConfig.getAlias());
             mEtHost.setValue(BackendConfig.getHost());
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
-            mEtAccessToken.setValue(BackendConfig.getMacaroon());
+            mEtAuthenticationToken.setValue(BackendConfig.getAuthenticationToken());
             mSwTor.setChecked(BackendConfig.getUseTor());
             mVpnConfigView.setupWithVpnConfig(BackendConfig.getVpnConfig());
             if (BackendConfig.getUseTor()) {
@@ -256,16 +255,17 @@ public class ManualSetup extends BaseAppCompatActivity {
 
     private BackendConfig getBackendConfig() {
         BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setSource(BackendConfig.Source.MANUAL_INPUT);
         backendConfig.setAlias(mEtName.getData());
         switch (mSpType.getSelectedItemPosition()) {
             case 0:
-                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
                 break;
             case 1:
-                backendConfig.setBackendType(BaseBackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+                backendConfig.setBackendType(BackendConfig.BackendType.CORE_LIGHTNING_GRPC);
                 break;
             case 2:
-                backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_HUB);
+                backendConfig.setBackendType(BackendConfig.BackendType.LND_HUB);
                 break;
         }
         backendConfig.setHost(mEtHost.getData());
@@ -273,7 +273,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
         } catch (Exception ignored) {
         }
-        backendConfig.setMacaroon(mEtAccessToken.getData());
+        backendConfig.setAuthenticationToken(mEtAuthenticationToken.getData());
         backendConfig.setUseTor(mSwTor.isChecked());
         backendConfig.setVerifyCertificate(mSwVerify.isChecked());
         backendConfig.setVpnConfig(mVpnConfigView.getVPNConfig());
@@ -306,11 +306,11 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (mSpType.getSelectedItemPosition() == 0) {
             // LND grpc
-            if ((mEtAccessToken.getData() == null || mEtAccessToken.getData().isEmpty())) {
+            if ((mEtAuthenticationToken.getData() == null || mEtAuthenticationToken.getData().isEmpty())) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
-            if (!HexUtil.isHex(mEtAccessToken.getData())) {
+            if (!HexUtil.isHex(mEtAuthenticationToken.getData())) {
                 showError(getString(R.string.error_input_macaroon_hex), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
@@ -429,7 +429,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             if (mEtName.getData() != null ||
                     mEtHost.getData() != null ||
                     mEtPort.getData() != null ||
-                    mEtAccessToken.getData() != null ||
+                    mEtAuthenticationToken.getData() != null ||
                     mEtServerCertificate.getData() != null ||
                     mEtClientCertificate.getData() != null ||
                     mEtClientKey.getData() != null ||

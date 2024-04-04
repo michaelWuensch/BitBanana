@@ -3,9 +3,8 @@ package app.michaelwuensch.bitbanana.backendConfigs.lndConnect;
 import com.google.common.io.BaseEncoding;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
@@ -24,7 +23,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfig> {
+public class LndConnectStringParser extends BaseConnectionParser {
 
     public static final int ERROR_INVALID_CONNECT_STRING = 0;
     public static final int ERROR_NO_MACAROON = 1;
@@ -116,18 +115,19 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 }
 
                 // everything is ok
-                LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                lndConnectConfig.setHost(connectURI.getHost());
-                lndConnectConfig.setPort(connectURI.getPort());
-                lndConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                lndConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
+                BackendConfig backendConfig = new BackendConfig();
+                backendConfig.setSource(BackendConfig.Source.LND_CONNECT);
+                backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
+                backendConfig.setHost(connectURI.getHost());
+                backendConfig.setPort(connectURI.getPort());
+                backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
                 if (cert != null)
-                    lndConnectConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
-                lndConnectConfig.setMacaroon(macaroon);
-                lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                setConnectionConfig(lndConnectConfig);
+                    backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
+                backendConfig.setAuthenticationToken(macaroon);
+                backendConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                backendConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                setBackendConfig(backendConfig);
                 return this;
 
             } else {

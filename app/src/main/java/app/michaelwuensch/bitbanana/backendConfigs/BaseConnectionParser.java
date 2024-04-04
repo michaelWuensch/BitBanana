@@ -4,26 +4,24 @@ package app.michaelwuensch.bitbanana.backendConfigs;
  * Base class meant to be extended for parsing various connection strings like
  * - BTCPay Configuration
  * - LNConnect Configuration
- *
- * @param <T> type of config to be parsed
  */
-public abstract class BaseConnectionParser<T> {
+public abstract class BaseConnectionParser {
 
     protected int mError = -1;
     protected String mConnectionString;
 
-    private T mConnectionConfig;
+    private BackendConfig mBackendConfig;
 
     public BaseConnectionParser(String connectionString) {
         mConnectionString = connectionString;
     }
 
-    public T getConnectionConfig() {
-        return mConnectionConfig;
+    public BackendConfig getBackendConfig() {
+        return mBackendConfig;
     }
 
-    protected void setConnectionConfig(T connectionConfig) {
-        mConnectionConfig = connectionConfig;
+    protected void setBackendConfig(BackendConfig backendConfig) {
+        mBackendConfig = backendConfig;
     }
 
     public boolean hasError() {

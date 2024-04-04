@@ -162,7 +162,7 @@ public class LndConnection {
                         .build();
             }
 
-            MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendManager.getCurrentBackendConfig().getMacaroon());
+            MacaroonCallCredential macaroon = new MacaroonCallCredential(BackendManager.getCurrentBackendConfig().getAuthenticationToken());
 
             mLndAutopilotService = new RemoteLndAutopilotService(mSecureChannel, macaroon);
             mLndChainKitService = new RemoteLndChainKitService(mSecureChannel, macaroon);

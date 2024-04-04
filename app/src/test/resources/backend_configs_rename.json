@@ -7,7 +7,7 @@
       "cert": "TestCert",
       "host": "TestHost",
       "port": 10009,
-      "macaroon": "TestMacaroon"
+      "authenticationToken": "TestMacaroon"
     }
   ]
 }

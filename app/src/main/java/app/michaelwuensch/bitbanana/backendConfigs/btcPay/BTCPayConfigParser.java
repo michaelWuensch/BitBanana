@@ -3,7 +3,7 @@ package app.michaelwuensch.bitbanana.backendConfigs.btcPay;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -16,7 +16,7 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
+public class BTCPayConfigParser extends BaseConnectionParser {
 
     public static final int ERROR_INVALID_JSON = 0;
     public static final int ERROR_MISSING_BTC_GRPC_CONFIG = 1;
@@ -78,12 +78,18 @@ public class BTCPayConfigParser extends BaseConnectionParser<BTCPayConfig> {
             return this;
         }
 
-        // Everything is valid. Set defaults and continue.
-        configuration.setLocation(BaseBackendConfig.Location.REMOTE);
-        configuration.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-        configuration.setUseTor(RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
-        configuration.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
-        setConnectionConfig(configuration);
+        // Everything is valid.
+        BackendConfig backendConfig = new BackendConfig();
+        backendConfig.setSource(BackendConfig.Source.BTC_PAY_DATA);
+        backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
+        backendConfig.setHost(configuration.getHost());
+        backendConfig.setPort(configuration.getPort());
+        backendConfig.setLocation(BackendConfig.Location.REMOTE);
+        backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+        backendConfig.setAuthenticationToken(configuration.getMacaroon());
+        backendConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
+        backendConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(configuration.getHost()));
+        setBackendConfig(backendConfig);
         return this;
     }
 }

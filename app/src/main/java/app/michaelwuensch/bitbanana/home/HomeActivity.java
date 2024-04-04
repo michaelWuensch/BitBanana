@@ -45,8 +45,8 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.IdentityActivity;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
@@ -631,23 +631,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidCoreLightningConnectData(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                addWallet(backendConfig);
             }
 
             @Override
@@ -729,9 +714,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     }
 
-    private void addWallet(BaseBackendConfig baseBackendConfig) {
+    private void addWallet(BackendConfig backendConfig) {
         new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, baseBackendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                 @Override
                 public void onSaved(String id) {
@@ -755,7 +740,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     showError(error, duration);
                 }
             });
-        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
+        }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 
     @Override

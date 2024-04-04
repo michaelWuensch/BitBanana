@@ -336,7 +336,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
 
     private void calculateFee() {
         setCalculatingFee();
-        estimateOnChainFee(mValueChannelCapacity /1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+        estimateOnChainFee(mValueChannelCapacity / 1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
     }
 
     /**

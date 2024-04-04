@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
@@ -361,9 +361,9 @@ public class Wallet {
      * Gets the bitcoin network the wallet is connected to.
      * If the wallet is not fully loaded yet, this function will return UNKNOWN.
      */
-    public BaseBackendConfig.Network getNetwork() {
+    public BackendConfig.Network getNetwork() {
         if (getCurrentNodeInfo() == null)
-            return BaseBackendConfig.Network.UNKNOWN;
+            return BackendConfig.Network.UNKNOWN;
         return getCurrentNodeInfo().getNetwork();
     }
 
@@ -371,8 +371,8 @@ public class Wallet {
      * Gets the bitcoin network the wallet is connected to.
      * If the wallet is not fully loaded yet, this function will fall back to the saved network information from the connection config
      */
-    public BaseBackendConfig.Network getNetworkWithFallback() {
-        if (getCurrentNodeInfo() == null || getCurrentNodeInfo().getNetwork() == BaseBackendConfig.Network.UNKNOWN)
+    public BackendConfig.Network getNetworkWithFallback() {
+        if (getCurrentNodeInfo() == null || getCurrentNodeInfo().getNetwork() == BackendConfig.Network.UNKNOWN)
             return BackendManager.getCurrentBackendConfig().getNetwork();
         return getCurrentNodeInfo().getNetwork();
     }
