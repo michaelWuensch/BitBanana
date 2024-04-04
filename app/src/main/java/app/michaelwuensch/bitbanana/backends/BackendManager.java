@@ -217,7 +217,7 @@ public class BackendManager {
             }
 
             // Stop Tor
-            if (!keepTor && !PrefsUtil.isTorEnabled() && TorManager.getInstance().isProxyRunning()) {
+            if (!keepTor && !PrefsUtil.isTorEnabled() && (TorManager.getInstance().isProxyRunning() || TorManager.getInstance().isConnecting())) {
                 TorManager.getInstance().stopTor();
             }
 

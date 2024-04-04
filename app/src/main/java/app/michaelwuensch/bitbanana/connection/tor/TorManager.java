@@ -23,6 +23,8 @@ public class TorManager {
     private boolean isProxyRunning = false;
     private boolean isConnecting = false;
 
+    public boolean isConnecting() {return isConnecting;}
+
     public int getProxyPort() {
         return mProxyPort;
     }
