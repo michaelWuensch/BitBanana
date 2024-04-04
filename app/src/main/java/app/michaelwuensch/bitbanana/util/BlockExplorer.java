@@ -78,7 +78,7 @@ public class BlockExplorer {
 
         if (PrefsUtil.isTorEnabled() && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             // Ask user to confirm risking privacy issues
-            new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
+            new UserGuardian(mContext, positive -> startBlockExplorer()).privacyExternalLink();
         } else {
             startBlockExplorer();
         }
@@ -140,7 +140,7 @@ public class BlockExplorer {
 
         if (PrefsUtil.isTorEnabled() && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             // Ask user to confirm risking privacy issues
-            new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
+            new UserGuardian(mContext, positive -> startBlockExplorer()).privacyExternalLink();
         } else {
             startBlockExplorer();
         }

@@ -56,12 +56,7 @@ public class DataBackupIntroFragment extends Fragment {
             @Override
             public void onSingleClick(View v) {
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() || ContactsManager.getInstance().hasAnyContacts()) {
-                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
-                        @Override
-                        public void onGuardianConfirmed() {
-                            openOpenFileDialog();
-                        }
-                    }).securityBackupOverridesExistingData();
+                    new UserGuardian(getActivity(), positive -> openOpenFileDialog()).securityBackupOverridesExistingData();
                 } else {
                     openOpenFileDialog();
                 }

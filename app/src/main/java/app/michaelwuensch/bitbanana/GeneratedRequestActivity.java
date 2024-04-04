@@ -165,7 +165,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             @Override
             public void onClick(View v) {
                 // Ask user to confirm risks about clipboard manipulation
-                new UserGuardian(GeneratedRequestActivity.this, () -> {
+                new UserGuardian(GeneratedRequestActivity.this, positive -> {
                     // Copy data to clipboard
                     ClipBoardUtil.copyToClipboard(getApplicationContext(), "Request", mDataToCopyOrShare);
                 }).securityCopyToClipboard(mDataToCopyOrShare, mOnChain ? UserGuardian.CLIPBOARD_DATA_TYPE_ONCHAIN : UserGuardian.CLIPBOARD_DATA_TYPE_LIGHTNING);

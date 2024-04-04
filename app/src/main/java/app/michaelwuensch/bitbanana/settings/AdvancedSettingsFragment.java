@@ -88,7 +88,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (!mSwUnspecifiedAmountInvoices.isChecked()) {
                     // Ask user to confirm enabling unspecified amount invoices
-                    new UserGuardian(getActivity(), () -> mSwUnspecifiedAmountInvoices.setChecked(true)).securityAllowUnspecifiedAmountInvoices();
+                    new UserGuardian(getActivity(), positive -> mSwUnspecifiedAmountInvoices.setChecked(true)).securityAllowUnspecifiedAmountInvoices();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -110,7 +110,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScrambledPin.isChecked()) {
                     // Ask user to confirm disabling scramble
-                    new UserGuardian(getActivity(), () -> mSwScrambledPin.setChecked(false)).securityScrambledPin();
+                    new UserGuardian(getActivity(), positive -> mSwScrambledPin.setChecked(false)).securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -126,7 +126,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScreenProtection.isChecked()) {
                     // Ask user to confirm disabling screen protection
-                    new UserGuardian(getActivity(), () -> {
+                    new UserGuardian(getActivity(), positive -> {
                         mSwScreenProtection.setChecked(false);
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                     }).securityScreenProtection();

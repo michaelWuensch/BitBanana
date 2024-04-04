@@ -538,7 +538,6 @@
     <string name="confirm_node_deletion">Do you really want to delete this node connection?</string>
     <string name="no_nodes">No nodes</string>
     <string name="spinner_manage_nodes">Manage…</string>
-    <string name="node_added">Node connection data has been added.</string>
     <string name="useTor">Use Tor</string>
     <string name="verify_certificate">Certificate Verification</string>
 

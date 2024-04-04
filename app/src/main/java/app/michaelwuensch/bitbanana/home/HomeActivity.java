@@ -131,7 +131,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private NavigationView mNavigationView;
     public CustomViewPager mViewPager;
     private HomePagerAdapter mPagerAdapter;
-    private Handler mBackgroundCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,19 +226,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
 
         mUnlockDialog = buildUnlockDialog();
-        mBackgroundCloseHandler = new Handler();
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-
-
-        // Setup wallet from URI if app was started by connect uri and no node is connected yet
-        if (App.getAppContext().getUriSchemeData() != null) {
-            if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs() && UriUtil.isConnectUri(App.getAppContext().getUriSchemeData())) {
-                analyzeString(App.getAppContext().getUriSchemeData());
-                App.getAppContext().setUriSchemeData(null);
-            }
-        }
     }
 
     // This schedule keeps us up to date on exchange rates
@@ -307,7 +296,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void continueMoveToForeground() {
-        mBackgroundCloseHandler.removeCallbacksAndMessages(null);
+        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
         // start listeners and schedules
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();
@@ -324,21 +313,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
-        // We delay the actual initialization of the backend connection so that the wallet fragment has time to be loaded first
-        new Handler().postDelayed(() -> activateBackend(), 300);
+
+        // Setup wallet from URI if app was started by connect uri and no node is connected yet
+        if (App.getAppContext().getUriSchemeData() != null && UriUtil.isConnectUri(App.getAppContext().getUriSchemeData())) {
+            analyzeString(App.getAppContext().getUriSchemeData());
+            App.getAppContext().setUriSchemeData(null);
+        } else {
+            // We delay the actual initialization of the backend connection so that the wallet fragment has time to be loaded first
+            new Handler().postDelayed(() -> activateBackend(), 300);
+        }
     }
 
     public void activateBackend() {
         BackendManager.activateCurrentBackendConfig(HomeActivity.this, false);
-
-        // Check if BitBanana was started from an URI link or by NFC.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            // Only check for connecting wallets. Other operations need a wallet fully loaded.
-            if (UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
-                analyzeString(App.getAppContext().getUriSchemeData());
-                App.getAppContext().setUriSchemeData(null);
-            }
-        }
     }
 
     // This function gets called when app is moved to background.
@@ -352,7 +339,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
-        mBackgroundCloseHandler.postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
+        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
+        App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
     }
 
     @Override
@@ -522,12 +510,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                 } else {
                     // Warn about 0 sat invoices
-                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
-                        @Override
-                        public void onGuardianConfirmed() {
-                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
-                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
-                        }
+                    new UserGuardian(HomeActivity.this, positive -> {
+                        SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
+                        sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                     }).securityZeroAmountInvoice();
                 }
             }
@@ -554,14 +539,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                     sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 } else {
                                     // Warn about 0 sat invoices
-                                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
-                                        @Override
-                                        public void onGuardianConfirmed() {
-                                            String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
-                                            String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
-                                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
-                                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
-                                        }
+                                    new UserGuardian(HomeActivity.this, positive -> {
+                                        String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
+                                        String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                        SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
+                                        sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                     }).securityZeroAmountInvoice();
                                 }
                             }
@@ -715,31 +697,27 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void addWallet(BackendConfig backendConfig) {
-        new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        new UserGuardian(HomeActivity.this, positive -> {
+            if (positive) {
+                RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
-                @Override
-                public void onSaved(String id) {
-                    if (BackendConfigsManager.getInstance().getAllBackendConfigs(false).size() == 1) {
+                    @Override
+                    public void onSaved(String id) {
                         // This was the first backend that was added. Open it immediately.
-                        mPagerAdapter.getWalletFragment().showLoadingScreen();
+                        //mPagerAdapter.getWalletFragment().showLoadingScreen();
+                        BackendManager.activateBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(id), HomeActivity.this, false);
                         activateBackend();
-                    } else {
-                        new AlertDialog.Builder(HomeActivity.this)
-                                .setMessage(R.string.node_added)
-                                .setCancelable(true)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                    }
-                                }).show();
                     }
-                }
 
-                @Override
-                public void onError(String error, int duration) {
-                    showError(error, duration);
-                }
-            });
+                    @Override
+                    public void onError(String error, int duration) {
+                        showError(error, duration);
+                        activateBackend();
+                    }
+                });
+            } else {
+                activateBackend();
+            }
         }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 

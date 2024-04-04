@@ -191,7 +191,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             public void onClick(View v) {
                 if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
                     // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
-                    new UserGuardian(getActivity(), ReceiveBSDFragment.this::generateRequest)
+                    new UserGuardian(getActivity(), positive -> generateRequest())
                             .securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
                 } else {
                     generateRequest();

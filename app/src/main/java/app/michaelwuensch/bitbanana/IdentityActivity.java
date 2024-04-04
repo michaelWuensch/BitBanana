@@ -104,7 +104,7 @@ public class IdentityActivity extends BaseAppCompatActivity {
                     case R.id.action_copy:
                         // Ask user to confirm risks about clipboard manipulation
 
-                        new UserGuardian(IdentityActivity.this, () -> {
+                        new UserGuardian(IdentityActivity.this, positive -> {
                             // Copy data to clipboard
                             ClipBoardUtil.copyToClipboard(getApplicationContext(), "LightningUri", mUserAvatarView.getCurrentNodeIdentity().getAsString());
                         }).securityCopyToClipboard(mUserAvatarView.getCurrentNodeIdentity().getAsString(), UserGuardian.CLIPBOARD_DATA_TYPE_NODE_URI);

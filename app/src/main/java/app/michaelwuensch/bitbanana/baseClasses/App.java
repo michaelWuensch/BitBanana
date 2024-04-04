@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.app.Application;
+import android.os.Handler;
 
 import app.michaelwuensch.bitbanana.connection.tor.TorSetup;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -15,8 +16,11 @@ public class App extends Application {
     // keep the data from the URI Scheme in memory, so we can access it from anywhere.
     private String uriSchemeData;
 
+    private Handler mBackgroundCloseHandler;
+
     public App() {
         mContext = this;
+        mBackgroundCloseHandler = new Handler();
 
         RxJavaPlugins.setErrorHandler(e -> {
             if (e.getMessage() != null && e.getMessage().contains("shutdownNow")) {
@@ -45,5 +49,9 @@ public class App extends Application {
 
     public void setUriSchemeData(String data) {
         uriSchemeData = data;
+    }
+
+    public Handler getBackgroundCloseHandler() {
+        return mBackgroundCloseHandler;
     }
 }

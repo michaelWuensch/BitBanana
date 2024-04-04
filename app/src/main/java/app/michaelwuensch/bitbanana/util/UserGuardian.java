@@ -177,7 +177,7 @@ public class UserGuardian {
      */
     public void securityConnectToRemoteServer(String host) {
         mCurrentDialogName = DIALOG_REMOTE_CONNECT;
-        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        AlertDialog.Builder adb = createDialog(true);
         String message = mContext.getResources().getString(R.string.guardian_remoteConnect, host);
         adb.setMessage(message);
         showGuardianDialog(adb);
@@ -277,6 +277,10 @@ public class UserGuardian {
         View titleView = adbInflater.inflate(R.layout.guardian_title, null);
         adb.setView(DialogLayout);
         adb.setCustomTitle(titleView);
+        adb.setOnCancelListener(dialogInterface -> {
+            if (mListener != null)
+                mListener.onGuardianConfirmed(false);
+        });
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
 
             if (mDontShowAgain.isChecked()) {
@@ -285,11 +289,13 @@ public class UserGuardian {
 
             if (mListener != null) {
                 // Execute interface callback on "OK"
-                mListener.onGuardianConfirmed();
+                mListener.onGuardianConfirmed(true);
             }
         });
         if (hasCancelOption) {
             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                if (mListener != null)
+                    mListener.onGuardianConfirmed(false);
             });
         }
         return adb;
@@ -311,11 +317,13 @@ public class UserGuardian {
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
             if (mListener != null) {
                 // Execute interface callback on "OK"
-                mListener.onGuardianConfirmed();
+                mListener.onGuardianConfirmed(true);
             }
         });
         if (hasCancelOption) {
             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                if (mListener != null)
+                    mListener.onGuardianConfirmed(false);
             });
         }
         return adb;
@@ -338,12 +346,12 @@ public class UserGuardian {
             dlg.show();
         } else {
             if (mListener != null) {
-                mListener.onGuardianConfirmed();
+                mListener.onGuardianConfirmed(true);
             }
         }
     }
 
     public interface OnGuardianConfirmedListener {
-        void onGuardianConfirmed();
+        void onGuardianConfirmed(boolean positive);
     }
 }
