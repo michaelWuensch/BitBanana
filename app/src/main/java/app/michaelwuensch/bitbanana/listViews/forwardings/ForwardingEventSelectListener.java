@@ -1,7 +1,7 @@
 package app.michaelwuensch.bitbanana.listViews.forwardings;
 
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
 
 public interface ForwardingEventSelectListener {
-    void onForwardingEventSelect(ByteString forwardingEvent);
+    void onForwardingEventSelect(Serializable forwardingEvent);
 }

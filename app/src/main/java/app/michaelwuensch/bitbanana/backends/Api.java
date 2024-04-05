@@ -12,6 +12,7 @@ import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
@@ -109,6 +110,18 @@ public class Api {
      * @return A list of all payments
      */
     public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
+        return Single.error(unsupportedException());
+    }
+
+    /**
+     * This will fetch all forwarding events that happened
+     *
+     * @param page      Use 0 as start of the recursion to fetch all forward events
+     * @param pageSize  How many forward events are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @param startTime Starting time in seconds since UNIX epoch. All forward events that are more recent than this will be returned.
+     * @return A list of all matching forwarding events
+     */
+    public Single<List<Forward>> listForwards(int page, int pageSize, long startTime) {
         return Single.error(unsupportedException());
     }
 

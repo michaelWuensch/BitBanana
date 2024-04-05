@@ -10,6 +10,8 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
+import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
+import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Hop;
@@ -60,6 +62,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
+import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -617,6 +620,49 @@ public class LndApi extends Api {
                         return Single.just(data);
                     } else {
                         return listLnPayments(page + 1, pageSize)
+                                .flatMap(nextPageData -> {
+                                    data.addAll(nextPageData); // Combine current page data with next page data
+                                    return Single.just(data);
+                                });
+                    }
+                });
+    }
+
+    private Single<List<Forward>> getForwardPage(int page, int pageSize, long startTime) {
+        ForwardingHistoryRequest request = ForwardingHistoryRequest.newBuilder()
+                .setStartTime(startTime)
+                .setNumMaxEvents(pageSize)
+                .setIndexOffset(page * pageSize)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().forwardingHistory(request)
+                .map(response -> {
+                    List<Forward> forwardList = new ArrayList<>();
+                    for (ForwardingEvent forwardingEvent : response.getForwardingEventsList()) {
+                        forwardList.add(Forward.newBuilder()
+                                .setAmountIn(forwardingEvent.getAmtInMsat())
+                                .setAmountOut(forwardingEvent.getAmtOutMsat())
+                                .setChannelIdIn(ApiUtil.ScidFromLong(forwardingEvent.getChanIdIn()))
+                                .setChannelIdOut(ApiUtil.ScidFromLong(forwardingEvent.getChanIdOut()))
+                                .setFee(forwardingEvent.getFeeMsat())
+                                .setTimestampNs(forwardingEvent.getTimestampNs())
+                                .build());
+                    }
+                    return forwardList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching payment page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<Forward>> listForwards(int page, int pageSize, long startTime) {
+        return getForwardPage(page, pageSize, startTime)
+                .flatMap(data -> {
+                    if (data.isEmpty()) {
+                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
+                    } else if (data.size() < pageSize) {
+                        return Single.just(data);
+                    } else {
+                        return listForwards(page + 1, pageSize, startTime)
                                 .flatMap(nextPageData -> {
                                     data.addAll(nextPageData); // Combine current page data with next page data
                                     return Single.just(data);

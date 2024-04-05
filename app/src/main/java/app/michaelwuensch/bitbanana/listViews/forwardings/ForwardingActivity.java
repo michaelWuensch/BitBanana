@@ -17,10 +17,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
-import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.google.android.material.tabs.TabLayout;
-import com.google.protobuf.ByteString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
@@ -38,6 +37,7 @@ import app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivi
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingListItem;
+import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -58,7 +58,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
     private List<ForwardingListItem> mForwardingItems;
     private List<ForwardingEvent> mTempForwardingEventsList;
-    private List<ForwardingEvent> mForwardingEventsList;
+    private List<Forward> mForwardsList;
     private TextView mEmptyListText;
 
     private CustomViewPager mSummaryViewPager;
@@ -151,7 +151,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
                         mPeriod = 365 * 24 * 60 * 60;
                         break;
                     case 6:
-                        // all, achieved by setting the the period to the last 50 years
+                        // all, achieved by setting the period to the last 50 years
                         mPeriod = 50 * 365 * 24 * 60 * 60;
                         break;
                 }
@@ -190,11 +190,11 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         mEarnedMsats = 0;
         mRoutedMsats = 0;
-        if (mForwardingEventsList != null) {
+        if (mForwardsList != null) {
             // Add all relevant items the forwardingEvents list
-            for (ForwardingEvent forwardingEvent : mForwardingEventsList) {
-                mEarnedMsats += forwardingEvent.getFeeMsat();
-                mRoutedMsats += forwardingEvent.getAmtInMsat();
+            for (Forward forwardingEvent : mForwardsList) {
+                mEarnedMsats += forwardingEvent.getFee();
+                mRoutedMsats += forwardingEvent.getAmountIn();
                 ForwardingEventListItem currItem = new ForwardingEventListItem(forwardingEvent);
                 forwardingEvents.add(currItem);
             }
@@ -248,12 +248,12 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
             mSummaryPagerAdapter.getAverageVolumeFragment().setMsatPrecision(false);
             mSummaryPagerAdapter.getAverageVolumeFragment().setAmountMSat(mRoutedMsats / Math.max(mRoutingEventsCount, 1));
         }
-        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null && mForwardingEventsList != null) {
+        if (mSummaryPagerAdapter.getAverageEventsPerDayFragment() != null && mForwardsList != null) {
             long period;
             if (mTabLayoutPeriod.getSelectedTabPosition() == 6) {
                 // when "all" is selected, we use the period between the first forwarding event that occurred and now to calculate the daily average.
                 long now = System.currentTimeMillis();
-                long firstForwarding = mForwardingEventsList.get(0).getTimestampNs() / 1000000L;
+                long firstForwarding = mForwardsList.get(0).getTimestampNs() / 1000000L;
                 period = (now - firstForwarding) / 1000;
             } else {
                 period = mPeriod;
@@ -270,7 +270,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
 
     @Override
-    public void onForwardingEventSelect(ByteString forwardingEvent) {
+    public void onForwardingEventSelect(Serializable forwardingEvent) {
         // ToDo: Open details page when a forwarding event was selected.
     }
 
@@ -289,7 +289,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
                 mSummaryPagerAdapter.getAverageEventsPerDayFragment().setInProgress(true);
             mEmptyListText.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.INVISIBLE);
-            fetchForwardingHistory(10000, mPeriod);
+            fetchForwardingHistory(10000, (System.currentTimeMillis() / 1000) - mPeriod);
         } else {
             refreshFinished();
         }
@@ -310,38 +310,18 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    private void fetchForwardingHistory(int pageSize, long timeframe) {
-        mTempForwardingEventsList = new LinkedList<>();
-        fetchForwardingHistory(pageSize, 0, timeframe);
-    }
-
-    private void fetchForwardingHistory(int pageSize, int lastOffset, long timeframe) {
+    private void fetchForwardingHistory(int pageSize, long startTime) {
         CompositeDisposable compositeDisposable = new CompositeDisposable();
-        if (LndConnection.getInstance().getLightningService() != null) {
-            ForwardingHistoryRequest forwardingHistoryRequest = ForwardingHistoryRequest.newBuilder()
-                    .setStartTime((System.currentTimeMillis() / 1000) - timeframe)
-                    .setNumMaxEvents(pageSize)
-                    .setIndexOffset(lastOffset)
-                    .build();
-
-            compositeDisposable.add(LndConnection.getInstance().getLightningService().forwardingHistory(forwardingHistoryRequest)
-                    .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                    .subscribe(forwardingResponse -> {
-                                if (forwardingResponse.getForwardingEventsList().size() == pageSize) {
-                                    // The page is full, save the current list and load the next page
-                                    mTempForwardingEventsList.addAll(forwardingResponse.getForwardingEventsList());
-                                    fetchForwardingHistory(pageSize, forwardingResponse.getLastOffsetIndex(), timeframe);
-                                } else {
-                                    mTempForwardingEventsList.addAll(forwardingResponse.getForwardingEventsList());
-                                    mForwardingEventsList = mTempForwardingEventsList;
-                                    updateForwardingEventDisplayList();
-                                    compositeDisposable.dispose();
-                                }
-                            }
-                            , throwable -> {
-                                BBLog.w(LOG_TAG, "Fetching forwarding event list failed." + throwable.getMessage());
-                            }));
-        }
+        compositeDisposable.add(BackendManager.api().listForwards(0, pageSize, startTime)
+                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .subscribe(response -> {
+                            mForwardsList = response;
+                            compositeDisposable.dispose();
+                            updateForwardingEventDisplayList();
+                        }
+                        , throwable -> {
+                            BBLog.w(LOG_TAG, "Fetching forwarding event list failed." + throwable.getMessage());
+                        }));
     }
 
     @Override

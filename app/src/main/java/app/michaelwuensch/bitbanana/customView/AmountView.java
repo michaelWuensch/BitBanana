@@ -34,6 +34,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     private boolean mIsBlurred = false;
     private String mAmountText;
     private boolean mSubscribeToPrefChange;
+    private boolean mIsOverriddenWithText = false;
 
     private boolean mMsatPrecision;
 
@@ -127,6 +128,8 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
                     setUndefinedValue();
                     return;
                 }
+                if (mIsOverriddenWithText)
+                    return;
                 setAmountMsat(mValue);
             }
             if (key.equals(PrefsUtil.BALANCE_HIDE_TYPE)) {
@@ -145,6 +148,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     public void setAmountMsat(long value) {
         mValue = value;
         mIsUndefinedValue = false;
+        mIsOverriddenWithText = false;
         if (mIsWithoutUnit)
             mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(value, mMsatPrecision);
         else
@@ -206,7 +210,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
 
     public void overrideWithText(String text) {
         mTvAmount.setText(text);
-        mIsUndefinedValue = true;
+        mIsOverriddenWithText = true;
     }
 
     public void overrideWithText(int text) {
