@@ -55,7 +55,10 @@ public class CertInputView extends BBInputFieldView {
                     String tabText = String.valueOf(tab.getText());
                     switch (tabText) {
                         case "Hex":
-                            setValue(HexUtil.bytesToHex(getDataAsBytes()));
+                            if (getDataAsBytes() != null)
+                                setValue(HexUtil.bytesToHex(getDataAsBytes()));
+                            else
+                                setValue(null);
                             break;
                         case "Base64":
                             setValue(convertCurrentDataToBase64());
