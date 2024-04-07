@@ -53,6 +53,7 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -160,14 +161,18 @@ public class CoreLightningApi extends Api {
     }
 
     @Override
-    public Single<String> signMessageWithNode(String message) {
+    public Single<SignMessageResponse> signMessageWithNode(String message) {
         SignmessageRequest signMessageRequest = SignmessageRequest.newBuilder()
                 .setMessage(message)
                 .build();
 
         return CoreLightningNodeService().signMessage(signMessageRequest)
                 .map(response -> {
-                    return response.getZbase();
+                    return SignMessageResponse.newBuilder()
+                            .setSignature(ApiUtil.StringFromHexByteString(response.getSignature()))
+                            .setRecId(ApiUtil.StringFromHexByteString(response.getRecid()))
+                            .setZBase(response.getZbase())
+                            .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
     }

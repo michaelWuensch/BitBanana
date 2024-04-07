@@ -4,22 +4,20 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
 import com.google.gson.Gson;
-import com.google.protobuf.ByteString;
 
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.HexUtil;
 import fr.acinq.secp256k1.Secp256k1;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import okhttp3.Call;
@@ -31,6 +29,7 @@ import okhttp3.Response;
  * Implementation of the LNURL Auth flow.
  * Refer to:
  * https://github.com/lnurl/luds/blob/luds/04.md
+ * https://github.com/lnurl/luds/blob/luds/05.md
  * https://github.com/lnurl/luds/blob/luds/13.md
  */
 public class LnUrlAuth {
@@ -86,15 +85,22 @@ public class LnUrlAuth {
             return;
         }
 
-        SignMessageRequest request = SignMessageRequest.newBuilder()
-                .setMsg(ByteString.copyFrom(CANONICAL_PHRASE.getBytes(StandardCharsets.UTF_8)))
-                .build();
+        switch (BackendManager.getCurrentBackendType()) {
+            case LND_GRPC:
+            case CORE_LIGHTNING_GRPC:
+                signMessageBasedAuth(disposable, k1);
+                break;
+            default:
+                mListener.onError("The backend does not support LNURL Auth");
+        }
+    }
 
-        disposable.add(LndConnection.getInstance().getLightningService().signMessage(request)
-                .subscribe(signResponse -> {
+    private void signMessageBasedAuth(CompositeDisposable disposable, String k1) {
+        disposable.add(BackendManager.api().signMessageWithNode(CANONICAL_PHRASE)
+                .subscribe(response -> {
 
                     // LUD-13: 3. LN WALLET defines hashingKey sha256(obtained signature).
-                    String hashingKey = UtilFunctions.sha256Hash(signResponse.getSignature());
+                    String hashingKey = UtilFunctions.sha256Hash(response.getSignature());
 
                     // LUD-13: 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as hmacSha256(hashingKey, service domain name).
                     String linkingPrivKey = UtilFunctions.hmacSHA256(mUrl.getHost().getBytes(StandardCharsets.UTF_8), HexUtil.hexToBytes(hashingKey));
@@ -105,42 +111,69 @@ public class LnUrlAuth {
                     byte[] signed_K1 = Secp256k1.get().sign(HexUtil.hexToBytes(k1), HexUtil.hexToBytes(linkingPrivKey));
                     byte[] signed_K1_DER_encoded = Secp256k1.get().compact2der(signed_K1);
 
-                    LnUrlFinalAuthRequest lnUrlFinalAuthRequest = new LnUrlFinalAuthRequest.Builder()
-                            .setDecodedLnUrl(mUrl)
-                            .setSig(HexUtil.bytesToHex(signed_K1_DER_encoded))
-                            .setLinkingKey(HexUtil.bytesToHex(linkingKey))
-                            .build();
-
-                    BBLog.d(LOG_TAG, "Final auth request: " + lnUrlFinalAuthRequest.requestAsString());
-
-                    okhttp3.Request lnUrlRequest = new Request.Builder()
-                            .url(lnUrlFinalAuthRequest.requestAsString())
-                            .build();
-
-                    HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            BBLog.e(LOG_TAG, "LNURL: Final Auth request failed: " + e.getMessage());
-                            mListener.onError(mContext.getString(R.string.lnurl_service_not_responding, getHost()));
-                        }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                            // LUD-04: 3. LN SERVICE responds...
-                            String responseContent = response.body().string();
-                            if (responseContent != null) {
-                                validateFinalResponse(responseContent);
-                            } else {
-                                BBLog.e(LOG_TAG, "LNURL: Response content was null.");
-                                mListener.onError(mContext.getString(R.string.lnurl_invalid_response));
-                            }
-                        }
-                    });
+                    finalAuthRequest(signed_K1_DER_encoded, linkingKey);
 
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "LNURL: Signing canonical phrase failed." + throwable.getMessage());
                     mListener.onError("Signing canonical phrase failed.");
                 }));
+    }
+
+    private void bip32BasedAuth(CompositeDisposable disposable, String k1) {
+        // We do not yet support a backend that supports this. If we will in the future, we have to add the bitcoin-kmp library for key derivation.
+
+        // Implementation for some bitcoin basics (Used for LNURL Auth with Core Lightning)
+        // implementation 'fr.acinq.bitcoin:bitcoin-kmp:0.19.0'
+
+        /*
+        String domainName = "site.com";
+        String hashingPrivKey = "7d417a6a5e9a6a4a879aeaba11a11838764c8fa2b959c242d43dea682b3e409b";
+        DeterministicWallet.ExtendedPrivateKey walletMasterKey = new DeterministicWallet.ExtendedPrivateKey();  // how to create a ExtendedPrivateKey???
+        DeterministicWallet.ExtendedPrivateKey hashingPrivKey = derivePrivateKey(walletMasterKey, "m/138'/0"); // include the m/ ?
+        byte[] derivationMaterial = HexUtil.hexToBytes(UtilFunctions.hmacSHA256(domainName.getBytes(StandardCharsets.UTF_8), HexUtil.hexToBytes(hashingPrivKey.toString())));
+        String linkingPrivKeyPath = "m/138'"; // include the m/ ?
+        linkingPrivKeyPath += "/" + Integer.toUnsignedLong(UtilFunctions.intFromByteArray(Arrays.copyOfRange(derivationMaterial, 0, 4)));
+        linkingPrivKeyPath += "/" + Integer.toUnsignedLong(UtilFunctions.intFromByteArray(Arrays.copyOfRange(derivationMaterial, 4, 8)));
+        linkingPrivKeyPath += "/" + Integer.toUnsignedLong(UtilFunctions.intFromByteArray(Arrays.copyOfRange(derivationMaterial, 8, 12)));
+        linkingPrivKeyPath += "/" + Integer.toUnsignedLong(UtilFunctions.intFromByteArray(Arrays.copyOfRange(derivationMaterial, 12, 16)));
+
+        DeterministicWallet.ExtendedPrivateKey linkingPrivKey = derivePrivateKey(walletMasterKey, linkingPrivKeyPath);
+        PublicKey linkingPubKey = linkingPrivKey.getPublicKey();
+         */
+    }
+
+    private void finalAuthRequest(byte[] signature, byte[] linkingKey) {
+        LnUrlFinalAuthRequest lnUrlFinalAuthRequest = new LnUrlFinalAuthRequest.Builder()
+                .setDecodedLnUrl(mUrl)
+                .setSig(HexUtil.bytesToHex(signature))
+                .setLinkingKey(HexUtil.bytesToHex(linkingKey))
+                .build();
+
+        BBLog.d(LOG_TAG, "Final auth request: " + lnUrlFinalAuthRequest.requestAsString());
+
+        okhttp3.Request lnUrlRequest = new Request.Builder()
+                .url(lnUrlFinalAuthRequest.requestAsString())
+                .build();
+
+        HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                BBLog.e(LOG_TAG, "LNURL: Final Auth request failed: " + e.getMessage());
+                mListener.onError(mContext.getString(R.string.lnurl_service_not_responding, getHost()));
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                // LUD-04: 3. LN SERVICE responds...
+                String responseContent = response.body().string();
+                if (responseContent != null) {
+                    validateFinalResponse(responseContent);
+                } else {
+                    BBLog.e(LOG_TAG, "LNURL: Response content was null.");
+                    mListener.onError(mContext.getString(R.string.lnurl_invalid_response));
+                }
+            }
+        });
     }
 
     private void validateFinalResponse(@NonNull String finalAuthResponse) {

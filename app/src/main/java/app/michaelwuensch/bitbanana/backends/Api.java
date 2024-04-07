@@ -20,6 +20,7 @@ import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import io.reactivex.rxjava3.core.Observable;
@@ -47,7 +48,7 @@ public class Api {
         return Single.error(unsupportedException());
     }
 
-    public Single<String> signMessageWithNode(String message) {
+    public Single<SignMessageResponse> signMessageWithNode(String message) {
         return Single.error(unsupportedException());
     }
 

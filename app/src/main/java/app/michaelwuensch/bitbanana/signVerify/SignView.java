@@ -92,7 +92,7 @@ public class SignView extends LinearLayout {
                 mCompositeDisposable.add(BackendManager.api().signMessageWithNode(message)
                         .subscribe(response -> {
                             BBLog.v(LOG_TAG, "Created signature: " + response);
-                            updateSignatureInfo(response);
+                            updateSignatureInfo(response.getZBase());
                         }, throwable -> BBLog.d(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace())));
             }
         } else {

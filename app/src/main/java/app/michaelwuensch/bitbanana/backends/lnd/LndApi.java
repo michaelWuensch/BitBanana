@@ -72,6 +72,7 @@ import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -155,14 +156,17 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<String> signMessageWithNode(String message) {
+    public Single<SignMessageResponse> signMessageWithNode(String message) {
         SignMessageRequest signMessageRequest = SignMessageRequest.newBuilder()
                 .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
                 .build();
 
         return LndConnection.getInstance().getLightningService().signMessage(signMessageRequest)
                 .map(response -> {
-                    return response.getSignature();
+                    return SignMessageResponse.newBuilder()
+                            .setSignature(response.getSignature()) //This is not really correct as we use zbase encoded here, but needed for lnurl Auth to work.
+                            .setZBase(response.getSignature())
+                            .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
     }
@@ -650,7 +654,7 @@ public class LndApi extends Api {
                     }
                     return forwardList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching payment page failed: " + throwable.fillInStackTrace()));
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching forwarding events page failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
