@@ -66,6 +66,21 @@
     <string-array name="exchangeRateProvider">
         <item>Blockchain.info</item>
         <item>Coinbase</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="exchangeRateProviderDisplayValues">
+        <item>Blockchain.info</item>
+        <item>Coinbase</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>@string/settings_custom</item>
+    </string-array>
+
+    <string-array name="customExchangeRateProviderTypes">
+        <item>Mempool</item>
     </string-array>
 
     <string-array name="languageValues">

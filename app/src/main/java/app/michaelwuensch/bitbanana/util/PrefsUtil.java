@@ -47,6 +47,7 @@ public class PrefsUtil {
     public static final String BALANCE_HIDE_TYPE = "hideBalanceType";
     public static final String BLOCK_EXPLORER = "blockExplorer";
     public static final String CUSTOM_BLOCK_EXPLORER_HOST = "customBlockExplorerHost";
+    public static final String CUSTOM_EXCHANGE_RATE_PROVIDER_HOST = "customExchangeRateProviderHost";
     public static final String AVATAR_STYLE = "avatarStyle";
 
     // default values
@@ -163,8 +164,16 @@ public class PrefsUtil {
         return getPrefs().getString(BLOCK_EXPLORER, "Mempool.space");
     }
 
+    public static String getExchangeRateProvider() {
+        return getPrefs().getString(EXCHANGE_RATE_PROVIDER, "Blockchain.info");
+    }
+
     public static String getCustomBlockExplorerHost() {
         return getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
+    }
+
+    public static String getCustomExchangeRateProviderHost() {
+        return getPrefs().getString(CUSTOM_EXCHANGE_RATE_PROVIDER_HOST, "https://mempool.space");
     }
 
     public static String getCustomBlockExplorerAddressSuffix() {

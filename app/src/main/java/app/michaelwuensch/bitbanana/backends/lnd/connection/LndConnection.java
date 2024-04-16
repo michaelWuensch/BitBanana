@@ -150,7 +150,7 @@ public class LndConnection {
             if (BackendManager.getCurrentBackendConfig().getUseTor()) {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
-                        .proxyDetector(new TorProxyDetector(TorManager.getInstance().getProxyPort()))//
+                        .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
                         .build();

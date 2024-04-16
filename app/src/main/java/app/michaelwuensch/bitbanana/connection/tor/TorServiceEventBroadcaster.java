@@ -2,9 +2,9 @@ package app.michaelwuensch.bitbanana.connection.tor;
 
 import androidx.annotation.NonNull;
 
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.backends.BackendManager;
 import io.matthewnelson.topl_service_base.TorPortInfo;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
@@ -13,14 +13,19 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
 
     @Override
     public void broadcastPortInformation(TorPortInfo torPortInfo) {
-        BBLog.d(LOG_TAG, "PortInfo: " + torPortInfo.getHttpPort());
-
-        if (torPortInfo.getHttpPort() != null) {
-
-            int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
+        if (torPortInfo.getHttpPort() != null || torPortInfo.getSocksPort() != null) {
+            if (torPortInfo.getHttpPort() != null) {
+                BBLog.d(LOG_TAG, "HttpPortInfo: " + torPortInfo.getHttpPort());
+                int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
+                TorManager.getInstance().setHttpProxyPort(port);
+            }
+            if (torPortInfo.getSocksPort() != null) {
+                BBLog.d(LOG_TAG, "SocksPortInfo: " + torPortInfo.getSocksPort());
+                int port = Integer.valueOf(torPortInfo.getSocksPort().split(":")[1]);
+                TorManager.getInstance().setSocksProxyPort(port);
+            }
             TorManager.getInstance().setIsProxyRunning(true);
             TorManager.getInstance().setIsConnecting(false);
-            TorManager.getInstance().setProxyPort(port);
 
             // restart HTTP Client
             HttpClient.getInstance().restartHttpClient();

@@ -311,6 +311,10 @@
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
+    <string name="settings_custom_exchange_rate_provider">Custom Exchange Rate Provider</string>
+    <string name="settings_requires_tor_toast">This requires Tor. Enable it in settings.</string>
+    <string name="settings_custom_exchange_rate_provider_type">Provider Type</string>
+    <string name="settings_custom_exchange_rate_provider_host_description">Please provide the host address for your exchange rate provider. When you host the exchange rate provider yourself, your privacy is fully maintained.</string>
 
     <!-- Weblate does not support string arrays, therefore this workaround is used -->
     <string name="settings_receiveAddressDisplayValues_0">Compatibility SegWit (P2PSH)</string>
@@ -430,6 +434,7 @@
     <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
     <string name="error_feature_not_supported_by_backend">While connected to %1$s, BitBanana does not support the following feature: %2$s</string>
     <string name="error_reading_qrCode_in_image">Unable to scan or detect QR code in the image.</string>
+    <string name="error_exchange_rate_requires_tor_toast">Failed to fetch exchange rates. Your chosen provider requires tor.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>

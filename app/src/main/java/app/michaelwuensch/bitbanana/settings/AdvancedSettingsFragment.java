@@ -29,6 +29,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private ListPreference mListLnExpiry;
     private ListPreference mListFeeLimit;
     private Preference mPrefCustomBlockExplorer;
+    private Preference mPrefCustomExchangeRateProvider;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -43,7 +44,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
                     Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
                 }
-                updateCustomExplorerOptions(newValue.toString().equalsIgnoreCase("Custom"));
+                updateCustomBlockExplorerOptions(newValue.toString().equalsIgnoreCase("Custom"));
                 return true;
             }
         });
@@ -58,13 +59,30 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        mPrefCustomExchangeRateProvider = findPreference("goToCustomExchangeRateProviderSettings");
+        mPrefCustomExchangeRateProvider.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsCustomExchangeRateProviderActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         // Request exchange rates when the provider changed
         ListPreference listExchangeRateProvider = findPreference("exchangeRateProvider");
         listExchangeRateProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
-                ExchangeRateUtil.getInstance().getExchangeRates();
+                if (newValue != null && newValue.toString().contains("(v3 Tor)") && !PrefsUtil.isTorEnabled()) {
+                    Toast.makeText(getActivity(), R.string.settings_requires_tor_toast, Toast.LENGTH_LONG).show();
+                }
+                boolean isCustom = newValue.toString().equalsIgnoreCase("Custom");
+                if (!isCustom) {
+                    PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
+                    ExchangeRateUtil.getInstance().getExchangeRates();
+                }
+                updateCustomExchangeRateProviderOptions(isCustom);
                 return true;
             }
         });
@@ -183,13 +201,15 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
     }
 
     private void setFeeSummary(Preference preference, String value) {
@@ -213,8 +233,13 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         mListLnExpiry.setEntries(lnExpiryDisplayEntries);
     }
 
-    private void updateCustomExplorerOptions(boolean customEnabled) {
+    private void updateCustomBlockExplorerOptions(boolean customEnabled) {
         mPrefCustomBlockExplorer.setVisible(customEnabled);
         mPrefCustomBlockExplorer.setSummary(PrefsUtil.getCustomBlockExplorerHost());
+    }
+
+    private void updateCustomExchangeRateProviderOptions(boolean customEnabled) {
+        mPrefCustomExchangeRateProvider.setVisible(customEnabled);
+        mPrefCustomExchangeRateProvider.setSummary(PrefsUtil.getCustomExchangeRateProviderHost());
     }
 }

@@ -190,7 +190,7 @@ public class TorSettings extends ApplicationDefaultTorSettings {
 
     @Override
     public String getSocksPort() {
-        return PortOption.DISABLED;
+        return PortOption.AUTO;
     }
 
     @Override
@@ -217,7 +217,7 @@ public class TorSettings extends ApplicationDefaultTorSettings {
 
     @Override
     public boolean getUseSocks5() {
-        return DEFAULT__USE_SOCKS5;
+        return true;
     }
 
     @Override

@@ -27,7 +27,8 @@
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
@@ -184,6 +185,11 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomBlockExplorerActivity"
             android:label="@string/settings_custom_block_explorer"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomExchangeRateProviderActivity"
+            android:label="@string/settings_custom_exchange_rate_provider"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity

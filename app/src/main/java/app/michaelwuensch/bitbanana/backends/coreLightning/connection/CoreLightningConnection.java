@@ -61,7 +61,7 @@ public class CoreLightningConnection {
             if (BackendManager.getCurrentBackendConfig().getUseTor()) {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
-                        .proxyDetector(new TorProxyDetector(TorManager.getInstance().getProxyPort()))//
+                        .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
                         .build();

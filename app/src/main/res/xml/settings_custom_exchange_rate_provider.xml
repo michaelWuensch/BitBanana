@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        android:defaultValue="Mempool"
+        android:dialogTitle="@string/settings_custom_exchange_rate_provider_type"
+        android:entries="@array/customExchangeRateProviderTypes"
+        android:entryValues="@array/customExchangeRateProviderTypes"
+        android:key="customExchangeRateProviderType"
+        android:summary="%s"
+        android:title="@string/settings_custom_exchange_rate_provider_type"
+        app:iconSpaceReserved="false" />
+
+    <EditTextPreference
+        android:defaultValue="https://mempool.space"
+        android:dialogMessage="@string/settings_custom_exchange_rate_provider_host_description"
+        android:key="customExchangeRateProviderHost"
+        android:title="@string/host"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>
