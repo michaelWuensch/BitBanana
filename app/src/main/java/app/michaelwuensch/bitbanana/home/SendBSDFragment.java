@@ -27,11 +27,11 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
-import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
@@ -46,6 +46,7 @@ import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -333,18 +334,18 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                         switchToSendProgressScreen();
 
-                        SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
-                                .setAddr(mOnChainAddress)
-                                .setAmount(sendAmount / 1000)
-                                .setTargetConf(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
+                        SendOnChainPaymentRequest sendOnChainPaymentRequest = SendOnChainPaymentRequest.newBuilder()
+                                .setAddress(mOnChainAddress)
+                                .setAmount(sendAmount)
+                                .setBlockConfirmationTarget(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
                                 .build();
 
-                        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendCoins(sendRequest)
-                                .subscribe(sendCoinsResponse -> {
+                        getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
+                                .subscribe(() -> {
+                                    BBLog.d(LOG_TAG, "On-chain payment successful.");
+
                                     // updated the history, so it is shown the next time the user views it
                                     Wallet_TransactionHistory.getInstance().updateOnChainTransactionHistory();
-
-                                    BBLog.v(LOG_TAG, sendCoinsResponse.toString());
 
                                     // show success animation
                                     mHandler.postDelayed(() -> switchToSuccessScreen(), 500);

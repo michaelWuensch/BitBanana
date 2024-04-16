@@ -28,6 +28,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Resolution;
+import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
@@ -72,6 +73,7 @@ import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -80,6 +82,7 @@ import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Version;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -787,5 +790,19 @@ public class LndApi extends Api {
                 })
                 .firstOrError()
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+
+        SendCoinsRequest request = SendCoinsRequest.newBuilder()
+                .setAddr(sendOnChainPaymentRequest.getAddress())
+                .setAmount(sendOnChainPaymentRequest.getAmount() / 1000)
+                .setTargetConf(sendOnChainPaymentRequest.getBlockConfirmationTarget())
+                .build();
+
+        return LndConnection.getInstance().getLightningService().sendCoins(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
     }
 }

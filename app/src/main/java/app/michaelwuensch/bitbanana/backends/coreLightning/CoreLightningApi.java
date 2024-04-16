@@ -1,9 +1,11 @@
 package app.michaelwuensch.bitbanana.backends.coreLightning;
 
 import com.github.ElementsProject.lightning.cln.Amount;
+import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
+import com.github.ElementsProject.lightning.cln.Feerate;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
@@ -29,6 +31,7 @@ import com.github.ElementsProject.lightning.cln.PayRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 import com.github.ElementsProject.lightning.cln.TlvEntry;
 import com.github.ElementsProject.lightning.cln.TlvStream;
+import com.github.ElementsProject.lightning.cln.WithdrawRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,6 +64,7 @@ import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
@@ -73,6 +77,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class CoreLightningApi extends Api {
@@ -665,5 +670,44 @@ public class CoreLightningApi extends Api {
             default:
                 return Single.error(new IllegalStateException("Unknown payment type."));
         }
+    }
+
+    @Override
+    public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+        Feerate feerate;
+        if (sendOnChainPaymentRequest.getBlockConfirmationTarget() < 7)
+            feerate = Feerate.newBuilder()
+                    .setUrgent(true)
+                    .build();
+        else if (sendOnChainPaymentRequest.getBlockConfirmationTarget() < 13)
+            feerate = Feerate.newBuilder()
+                    .setNormal(true)
+                    .build();
+        else
+            feerate = Feerate.newBuilder()
+                    .setSlow(true)
+                    .build();
+
+        AmountOrAll amountOrAll = null;
+        if (sendOnChainPaymentRequest.isSendAll())
+            amountOrAll = AmountOrAll.newBuilder()
+                    .setAll(true)
+                    .build();
+        else
+            amountOrAll = AmountOrAll.newBuilder()
+                    .setAmount(Amount.newBuilder()
+                            .setMsat(sendOnChainPaymentRequest.getAmount())
+                            .build())
+                    .build();
+
+        WithdrawRequest request = WithdrawRequest.newBuilder()
+                .setDestination(sendOnChainPaymentRequest.getAddress())
+                .setSatoshi(amountOrAll)
+                .setFeerate(feerate) // ToDo: blocks is not possible as it is missing in the API, we fall back to roughly mapping it.
+                .build();
+
+        return CoreLightningNodeService().withdraw(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
     }
 }

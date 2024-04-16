@@ -20,9 +20,11 @@ import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -140,5 +142,9 @@ public class Api {
 
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
         return Single.error(unsupportedException());
+    }
+
+    public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+        return Completable.error(unsupportedException());
     }
 }
