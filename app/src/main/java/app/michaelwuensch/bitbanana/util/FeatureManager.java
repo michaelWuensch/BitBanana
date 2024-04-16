@@ -74,6 +74,10 @@ public class FeatureManager {
         return getBackend().supportsLnurlAuth();
     }
 
+    public static boolean isKeysendEnabled() {
+        return getBackend().supportsKeysend();
+    }
+
     public interface FeatureChangedListener {
         void onFeatureChanged();
     }

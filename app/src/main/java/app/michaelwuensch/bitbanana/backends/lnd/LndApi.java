@@ -727,7 +727,7 @@ public class LndApi extends Api {
                         .setAmtMsat(sendLnPaymentRequest.getAmount())
                         .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
                         .setNoInflightUpdates(true)
-                        .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
                         .setMaxParts(10)
                         .build();
                 break;
@@ -743,7 +743,7 @@ public class LndApi extends Api {
                         .setPaymentHash(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getPaymentHash()))
                         .setNoInflightUpdates(true)
                         .putAllDestCustomRecords(customRecords)
-                        .setTimeoutSeconds(RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
                         .setMaxParts(1) // KeySend does not support multi path payments
                         .build();
                 break;

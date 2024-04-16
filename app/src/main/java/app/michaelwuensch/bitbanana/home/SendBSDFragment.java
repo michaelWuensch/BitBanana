@@ -532,25 +532,29 @@ public class SendBSDFragment extends BaseBSDFragment {
             public void onError(String error, SendLnPaymentResponse sendLnPaymentResponse, int duration) {
                 String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                 String errorMessage;
-                switch (sendLnPaymentResponse.getFailureReason()) {
-                    case TIMEOUT:
-                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
-                        break;
-                    case NO_ROUTE:
-                        if (sendLnPaymentResponse.getAmount() > 0 && sendLnPaymentResponse.getAmount() < 1000L)
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route_small_amount);
-                        else
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                        break;
-                    case INSUFFICIENT_FUNDS:
-                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
-                        break;
-                    case INCORRECT_PAYMENT_DETAILS:
-                        errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
-                        break;
-                    default:
-                        errorMessage = errorPrefix + "\n\n" + error;
-                        break;
+                if (sendLnPaymentResponse != null) {
+                    switch (sendLnPaymentResponse.getFailureReason()) {
+                        case TIMEOUT:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
+                            break;
+                        case NO_ROUTE:
+                            if (sendLnPaymentResponse.getAmount() > 0 && sendLnPaymentResponse.getAmount() < 1000L)
+                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route_small_amount);
+                            else
+                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
+                            break;
+                        case INSUFFICIENT_FUNDS:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
+                            break;
+                        case INCORRECT_PAYMENT_DETAILS:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
+                            break;
+                        default:
+                            errorMessage = errorPrefix + "\n\n" + error;
+                            break;
+                    }
+                } else {
+                    errorMessage = errorPrefix + "\n\n" + error;
                 }
                 mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
             }

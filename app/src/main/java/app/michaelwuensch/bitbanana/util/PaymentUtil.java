@@ -21,7 +21,7 @@ public class PaymentUtil {
 
     private static final String LOG_TAG = PaymentUtil.class.getSimpleName();
     public static final long KEYSEND_MESSAGE_RECORD = 34349334L;
-    private static final long KEYSEND_PREIMAGE_RECORD = 5482373484L;
+    public static final long KEYSEND_PREIMAGE_RECORD = 5482373484L;
     private static final int PREIMAGE_BYTE_LENGTH = 32;
 
     /**
@@ -77,7 +77,12 @@ public class PaymentUtil {
                 BBLog.d(LOG_TAG, "Trying to pay invoice...");
                 break;
             case KEYSEND:
-                BBLog.d(LOG_TAG, "Trying to perform keysend...");
+                if (FeatureManager.isKeysendEnabled())
+                    BBLog.d(LOG_TAG, "Trying to perform keysend...");
+                else {
+                    result.onError(App.getAppContext().getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "KEYSEND"), null, RefConstants.ERROR_DURATION_MEDIUM);
+                    return;
+                }
                 break;
         }
 

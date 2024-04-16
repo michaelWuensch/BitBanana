@@ -6,6 +6,7 @@ import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
+import com.github.ElementsProject.lightning.cln.KeysendRequest;
 import com.github.ElementsProject.lightning.cln.ListchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsClosedchannels;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsRequest;
@@ -24,7 +25,10 @@ import com.github.ElementsProject.lightning.cln.ListsendpaysRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
 import com.github.ElementsProject.lightning.cln.NewaddrRequest;
+import com.github.ElementsProject.lightning.cln.PayRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
+import com.github.ElementsProject.lightning.cln.TlvEntry;
+import com.github.ElementsProject.lightning.cln.TlvStream;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +39,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
@@ -46,6 +51,7 @@ import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -53,6 +59,8 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
@@ -60,7 +68,9 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
+import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import io.reactivex.rxjava3.core.Single;
@@ -577,5 +587,83 @@ public class CoreLightningApi extends Api {
                     }
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
+        switch (sendLnPaymentRequest.getPaymentType()) {
+
+            case BOLT11_INVOICE:
+                PayRequest.Builder requestBuilder = PayRequest.newBuilder()
+                        .setBolt11(sendLnPaymentRequest.getBolt11().getBolt11String())
+                        .setMaxfee(Amount.newBuilder()
+                                .setMsat(sendLnPaymentRequest.getMaxFee())
+                                .build())
+                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier());
+
+                if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
+                    requestBuilder.setAmountMsat(Amount.newBuilder()
+                            .setMsat(sendLnPaymentRequest.getAmount()));
+
+                PayRequest request = requestBuilder.build();
+
+                return CoreLightningNodeService().pay(request)
+                        .map(response -> {
+                            switch (response.getStatus()) {
+                                case COMPLETE:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                                            .build();
+                                default:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                            .setAmount(response.getAmountMsat().getMsat())
+                                            .build();
+                            }
+                        })
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+            case KEYSEND:
+                List<TlvEntry> tlvEntries = new ArrayList<>();
+                for (CustomRecord cr : sendLnPaymentRequest.getCustomRecords()) {
+                    if (cr.getFieldNumber() != PaymentUtil.KEYSEND_PREIMAGE_RECORD) // We have to filter the preimage record out, this is already handled by the keySend api endpoint. Otherwise it will throw an error.
+                        tlvEntries.add(TlvEntry.newBuilder()
+                                .setType(cr.getFieldNumber())
+                                .setValue(ApiUtil.ByteStringFromHexString(cr.getValue()))
+                                .build());
+                }
+
+                KeysendRequest keysendRequest = KeysendRequest.newBuilder()
+                        .setDestination(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
+                        .setAmountMsat(Amount.newBuilder()
+                                .setMsat(sendLnPaymentRequest.getAmount())
+                                .build())
+                        .setMaxfeepercent((double) sendLnPaymentRequest.getMaxFee() / (double) sendLnPaymentRequest.getAmount()) // ToDo: replace with maxfee once it is available
+                        .setExemptfee(Amount.newBuilder()
+                                .setMsat(0)
+                                .build())
+                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setExtratlvs(TlvStream.newBuilder()
+                                .addAllEntries(tlvEntries)
+                                .build())
+                        .build();
+
+                return CoreLightningNodeService().keySend(keysendRequest)
+                        .map(response -> {
+                            switch (response.getStatus()) {
+                                case COMPLETE:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                                            .build();
+                                default:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                            .setAmount(response.getAmountMsat().getMsat())
+                                            .build();
+                            }
+                        })
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+            default:
+                return Single.error(new IllegalStateException("Unknown payment type."));
+        }
     }
 }
