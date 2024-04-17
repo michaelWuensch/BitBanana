@@ -6,6 +6,7 @@ import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
+import com.github.ElementsProject.lightning.cln.FeeratesPerkwEstimates;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
@@ -681,20 +682,6 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
-        Feerate feerate;
-        if (sendOnChainPaymentRequest.getBlockConfirmationTarget() < 7)
-            feerate = Feerate.newBuilder()
-                    .setUrgent(true)
-                    .build();
-        else if (sendOnChainPaymentRequest.getBlockConfirmationTarget() < 13)
-            feerate = Feerate.newBuilder()
-                    .setNormal(true)
-                    .build();
-        else
-            feerate = Feerate.newBuilder()
-                    .setSlow(true)
-                    .build();
-
         AmountOrAll amountOrAll = null;
         if (sendOnChainPaymentRequest.isSendAll())
             amountOrAll = AmountOrAll.newBuilder()
@@ -710,7 +697,11 @@ public class CoreLightningApi extends Api {
         WithdrawRequest request = WithdrawRequest.newBuilder()
                 .setDestination(sendOnChainPaymentRequest.getAddress())
                 .setSatoshi(amountOrAll)
-                .setFeerate(feerate) // ToDo: blocks is not possible as it is missing in the API, we fall back to roughly mapping it.
+                .setFeerate(Feerate.newBuilder()
+                        .setPerkw(FeeratesPerkwEstimates.newBuilder()
+                                .setBlockcount(sendOnChainPaymentRequest.getBlockConfirmationTarget())
+                                .build().getFeerate())
+                        .build())
                 .build();
 
         return CoreLightningNodeService().withdraw(request)
