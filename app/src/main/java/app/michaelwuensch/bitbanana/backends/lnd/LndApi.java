@@ -725,14 +725,17 @@ public class LndApi extends Api {
         SendPaymentRequest request = null;
         switch (sendLnPaymentRequest.getPaymentType()) {
             case BOLT11_INVOICE:
-                request = SendPaymentRequest.newBuilder()
+                SendPaymentRequest.Builder requestBuilder = SendPaymentRequest.newBuilder()
                         .setPaymentRequest(sendLnPaymentRequest.getBolt11().getBolt11String())
-                        .setAmtMsat(sendLnPaymentRequest.getAmount())
                         .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
                         .setNoInflightUpdates(true)
                         .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
-                        .setMaxParts(10)
-                        .build();
+                        .setMaxParts(10);
+
+                if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
+                    requestBuilder.setAmtMsat(sendLnPaymentRequest.getAmount());
+
+                request = requestBuilder.build();
                 break;
             case KEYSEND:
                 Map<Long, ByteString> customRecords = new HashMap<>();
