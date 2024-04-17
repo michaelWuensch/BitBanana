@@ -28,6 +28,7 @@ import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.HexUtil;
@@ -99,7 +100,7 @@ public class Wallet_Channels {
 
     public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(listPeersResponse -> {
                     boolean connected = false;
                     for (Peer node : listPeersResponse.getPeersList()) {
@@ -114,7 +115,7 @@ public class Wallet_Channels {
                         openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        Wallet_TransactionHistory.getInstance().connectPeer(nodeUri, true, amount, targetConf, isPrivate);
+                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, targetConf, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -206,7 +207,7 @@ public class Wallet_Channels {
         });
     }
 
-    public void fetchNodeInfos() {
+    private void fetchNodeInfos() {
         // Load NodeInfos for all involved nodes. This allows us to display aliases later.
         Set<String> channelNodes = new HashSet<>();
 
@@ -230,7 +231,7 @@ public class Wallet_Channels {
 
         compositeDisposable.add(Observable.range(0, channelNodesList.size())
                 .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                .doOnNext(integer -> Wallet_TransactionHistory.getInstance().fetchNodeInfo(channelNodesList.get(integer), integer == channelNodesList.size() - 1, true, null))
+                .doOnNext(integer -> Wallet_NodesAndPeers.getInstance().fetchNodeInfo(channelNodesList.get(integer), integer == channelNodesList.size() - 1, true, null))
                 .subscribe());
 
         if (channelNodesList.size() == 0) {

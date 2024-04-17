@@ -52,8 +52,7 @@ public class Wallet {
         return mInstance;
     }
 
-    // ToDo: make this private once possible
-    public void setWalletLoadState(WalletLoadState walletLoadState) {
+    private void setWalletLoadState(WalletLoadState walletLoadState) {
         if (mWalletLoadState != walletLoadState) {
             mWalletLoadState = walletLoadState;
             BBLog.v(LOG_TAG, "New wallet load state: " + walletLoadState);
@@ -72,6 +71,7 @@ public class Wallet {
         Wallet_Balance.getInstance().reset();
         Wallet_Channels.getInstance().reset();
         Wallet_TransactionHistory.getInstance().reset();
+        Wallet_NodesAndPeers.getInstance().reset();
 
         mCurrentNodeInfo = null;
         mWalletLoadState = WalletLoadState.NOT_LOADED;
@@ -84,6 +84,7 @@ public class Wallet {
         Wallet_Balance.getInstance().cancelSubscriptions();
         Wallet_Channels.getInstance().cancelSubscriptions();
         Wallet_TransactionHistory.getInstance().cancelSubscriptions();
+        Wallet_NodesAndPeers.getInstance().cancelSubscriptions();
         compositeDisposable.clear();
     }
 

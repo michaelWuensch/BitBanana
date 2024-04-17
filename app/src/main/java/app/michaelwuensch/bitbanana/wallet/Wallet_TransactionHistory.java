@@ -1,8 +1,6 @@
 package app.michaelwuensch.bitbanana.wallet;
 
 
-import android.widget.Toast;
-
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -12,16 +10,12 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Utxo;
-import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class Wallet_TransactionHistory {
@@ -33,7 +27,6 @@ public class Wallet_TransactionHistory {
     private final Set<InvoiceSubscriptionListener> mInvoiceSubscriptionListeners = new HashSet<>();
     private final Set<TransactionSubscriptionListener> mTransactionSubscriptionListeners = new HashSet<>();
     private final Set<UtxoSubscriptionListener> mUtxoSubscriptionListeners = new HashSet<>();
-    private final Set<PeerUpdateListener> mPeerUpdateListeners = new HashSet<>();
 
     private List<OnChainTransaction> mOnChainTransactionList;
     private List<LnInvoice> mInvoiceList;
@@ -190,107 +183,6 @@ public class Wallet_TransactionHistory {
                     isHistoryUpdateFinished();
                 }, throwable -> BBLog.e(LOG_TAG, "Exception in fetch payments task: " + throwable.getMessage())));
     }
-
-    public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
-        if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
-            BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, targetConf, isPrivate);
-            return;
-        }
-
-        compositeDisposable.add(BackendManager.api().connectPeer(nodeUri)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                .subscribe(() -> {
-                    BBLog.d(LOG_TAG, "Successfully connected to peer.");
-                    broadcastPeerConnectedEvent();
-                    if (openChannel) {
-                        BBLog.d(LOG_TAG, "Now that we are connected to peer, trying to open channel...");
-                        Wallet_Channels.getInstance().openChannelConnected(nodeUri, amount, targetConf, isPrivate);
-                    }
-                }, throwable -> {
-                    BBLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
-
-                    if (openChannel) {
-                        if (throwable.getMessage().toLowerCase().contains("refused")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
-                        } else if (throwable.getMessage().toLowerCase().contains("self")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
-                        } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
-                        } else {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
-                        }
-                    } else {
-                        Toast.makeText(App.getAppContext(), "Connecting peer failed!" + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }));
-    }
-
-    public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
-        compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                .subscribe(response -> {
-                    if (response.getAddresses().size() > 0) {
-                        String tempUri = nodeUri.getPubKey() + "@" + response.getAddresses().get(0);
-                        LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
-                        if (nodeUriWithHost != null) {
-                            BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, openChannel, amount, targetConf, isPrivate);
-                        } else {
-                            BBLog.d(LOG_TAG, "Failed to parse nodeUri");
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
-                        }
-                    } else {
-                        BBLog.w(LOG_TAG, "Node Info does not contain any addresses.");
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
-                    }
-                }, throwable -> {
-                    BBLog.w(LOG_TAG, "Fetching host info failed. Exception in get node info (" + nodeUri.getPubKey() + ") request task: " + throwable.getMessage());
-                    Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
-                }));
-    }
-
-    /**
-     * This will fetch the NodeInfo according to the supplied pubkey.
-     * For now we are just interested in the alias.
-     * The AliasManager takes care of the result so we can use aliases in a non async way.
-     */
-    public void fetchNodeInfo(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
-        compositeDisposable.add(BackendManager.api().getNodeInfo(pubkey)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                .subscribe(response -> {
-                    BBLog.v(LOG_TAG, "Fetched Node info from " + response.getAlias());
-                    AliasManager.getInstance().saveAlias(response.getPubKey(), response.getAlias());
-
-                    if (lastNode) {
-                        AliasManager.getInstance().saveAliasesToCache();
-                        Wallet_Channels.getInstance().broadcastChannelsUpdated();
-                    } else {
-                        if (saveAliasToCache)
-                            AliasManager.getInstance().saveAliasesToCache();
-                    }
-                    if (listener != null) {
-                        listener.onNodeInfoFetched(response.getPubKey());
-                    }
-                }, throwable -> {
-                    if (AliasManager.getInstance().hasAliasInfo(pubkey)) {
-                        // Prevents requesting nodeInfo for the unavailable node to often
-                        AliasManager.getInstance().updateTimestampForAlias(pubkey);
-                    } else {
-                        // Prevents requesting nodeInfo for the unavailable node to often
-                        AliasManager.getInstance().saveAlias(pubkey, pubkey);
-                    }
-                    if (lastNode) {
-                        AliasManager.getInstance().saveAliasesToCache();
-                        Wallet_Channels.getInstance().broadcastChannelsUpdated();
-                    } else {
-                        if (saveAliasToCache)
-                            AliasManager.getInstance().saveAliasesToCache();
-                    }
-                    BBLog.w(LOG_TAG, "Exception in get node info (" + pubkey + ") request task: " + throwable.getMessage());
-                }));
-    }
-
 
     public void fetchUTXOs() {
         if (Wallet.getInstance().isInfoFetched()) {
@@ -455,20 +347,6 @@ public class Wallet_TransactionHistory {
         mUtxoSubscriptionListeners.remove(listener);
     }
 
-    private void broadcastPeerConnectedEvent() {
-        for (PeerUpdateListener listener : mPeerUpdateListeners) {
-            listener.onConnectedToPeer();
-        }
-    }
-
-    public void registerPeerUpdateListener(PeerUpdateListener listener) {
-        mPeerUpdateListeners.add(listener);
-    }
-
-    public void unregisterPeerUpdateListener(PeerUpdateListener listener) {
-        mPeerUpdateListeners.remove(listener);
-    }
-
     public interface HistoryListener {
         void onHistoryUpdated();
     }
@@ -485,10 +363,6 @@ public class Wallet_TransactionHistory {
 
     public interface UtxoSubscriptionListener {
         void onUtxoListUpdated();
-    }
-
-    public interface NodeInfoFetchedListener {
-        void onNodeInfoFetched(String pubkey);
     }
 
     public interface PeerUpdateListener {
