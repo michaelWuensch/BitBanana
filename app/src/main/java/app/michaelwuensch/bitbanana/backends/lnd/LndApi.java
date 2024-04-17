@@ -133,6 +133,8 @@ public class LndApi extends Api {
                     return NodeInfo.newBuilder()
                             .setPubKey(response.getNode().getPubKey())
                             .setAlias(response.getNode().getAlias())
+                            .setNumChannels(response.getNumChannels())
+                            .setTotalCapacity(response.getTotalCapacity() * 1000L)
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getNodeInfo failed: " + throwable.toString()));

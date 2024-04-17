@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +12,6 @@ import androidx.appcompat.view.menu.MenuBuilder;
 
 import com.github.lightningnetwork.lnd.lnrpc.DisconnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Feature;
-import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.lnrpc.TimestampedError;
 import com.google.protobuf.ByteString;
@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -34,6 +35,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -153,18 +155,22 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
 
         // Channel count & total Capacity
-        NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
-                .setPubKey(mPeer.getPubKey())
-                .build();
-
-        mCompositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .subscribe(nodeInfo -> {
-                    mTotalChannels.setValue(String.valueOf(nodeInfo.getNumChannels()));
-                    mTotalCapacity.setAmountValueMsat(nodeInfo.getTotalCapacity() * 1000L);
-                    mTotalCapacity.setCanBlur(false);
-                    // ToDo: Check if customRecords are useful
-                    // nodeInfo.getNode().getCustomRecordsMap()
+        mCompositeDisposable.add(BackendManager.api().getNodeInfo(mPeer.getPubKey())
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(response -> {
+                    if (response.hasNumChannels()) {
+                        mTotalChannels.setVisibility(View.VISIBLE);
+                        mTotalChannels.setValue(String.valueOf(response.getNumChannels()));
+                    } else {
+                        mTotalChannels.setVisibility(View.GONE);
+                    }
+                    if (response.hasTotalCapacity()) {
+                        mTotalCapacity.setVisibility(View.VISIBLE);
+                        mTotalCapacity.setAmountValueMsat(response.getTotalCapacity());
+                        mTotalCapacity.setCanBlur(false);
+                    } else {
+                        mTotalCapacity.setVisibility(View.GONE);
+                    }
                 }, throwable -> {
                     BBLog.w(LOG_TAG, "Fetching node info failed. Exception in get node info (" + mPeer.getPubKey() + ") request task: " + throwable.getMessage());
                     mTotalChannels.setValue(getResources().getString(R.string.fee_not_available));

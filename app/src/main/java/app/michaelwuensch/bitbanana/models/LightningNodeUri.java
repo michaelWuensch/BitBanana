@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class LightningNodeUri implements Serializable {
 
-    private String mPubKey;
-    private String mHost;
-    private int mPort;
+    private final String mPubKey;
+    private final String mHost;
+    private final int mPort;
 
 
     private LightningNodeUri(@NonNull String pubKey, String host, int port) {
