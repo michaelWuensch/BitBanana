@@ -1,6 +1,5 @@
 package app.michaelwuensch.bitbanana.listViews.peers.items;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ public class PeerItemViewHolder extends RecyclerView.ViewHolder {
     private TextView mPeerName;
     private View mRootView;
     private PeerSelectListener mPeerSelectListener;
-    private Context mContext;
 
 
     public PeerItemViewHolder(View v) {
@@ -26,7 +24,6 @@ public class PeerItemViewHolder extends RecyclerView.ViewHolder {
 
         mPeerName = v.findViewById(R.id.peerName);
         mRootView = v.findViewById(R.id.peerRootView);
-        mContext = v.getContext();
     }
 
     public void bindPeerListItem(PeerListItem peerListItem) {
@@ -47,7 +44,7 @@ public class PeerItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mPeerSelectListener != null) {
-                    mPeerSelectListener.onPeerSelect(item.getPeer().toByteString());
+                    mPeerSelectListener.onPeerSelect(item.getPeer());
                 }
             }
         });

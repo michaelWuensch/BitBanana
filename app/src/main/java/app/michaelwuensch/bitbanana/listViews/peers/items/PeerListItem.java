@@ -1,11 +1,10 @@
 package app.michaelwuensch.bitbanana.listViews.peers.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Peer;
 
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 
 public class PeerListItem implements Comparable<PeerListItem> {
-
 
     private String mAlias;
     private Peer mPeer;

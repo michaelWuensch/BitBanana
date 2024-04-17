@@ -8,13 +8,17 @@ public class LightningNodeUri implements Serializable {
 
     private final String mPubKey;
     private final String mHost;
+    private final boolean hasHost;
     private final int mPort;
+    private final boolean hasPort;
 
 
-    private LightningNodeUri(@NonNull String pubKey, String host, int port) {
-        mPubKey = pubKey;
-        mHost = host;
-        mPort = port;
+    private LightningNodeUri(Builder builder) {
+        mPubKey = builder.mPubKey;
+        mHost = builder.mHost;
+        hasHost = builder.hasHost;
+        mPort = builder.mPort;
+        hasPort = builder.hasPort;
     }
 
     @NonNull
@@ -32,10 +36,11 @@ public class LightningNodeUri implements Serializable {
 
     public String getAsString() {
         String uri = mPubKey;
-        if (mHost != null)
+        if (hasHost()) {
             uri = uri + "@" + mHost;
-        if (mPort != 0)
-            uri = uri + ":" + mPort;
+            if (hasPort())
+                uri = uri + ":" + mPort;
+        }
         return uri;
     }
 
@@ -46,31 +51,40 @@ public class LightningNodeUri implements Serializable {
         return getHost().toLowerCase().contains(".onion");
     }
 
+    public boolean hasHost() {
+        return hasHost;
+    }
+
+    public boolean hasPort() {
+        return hasPort;
+    }
+
     public static class Builder {
         private String mPubKey;
         private String mHost;
+        private boolean hasHost;
         private int mPort;
+        private boolean hasPort;
 
         public Builder setPubKey(@NonNull String pubKey) {
             this.mPubKey = pubKey;
-
             return this;
         }
 
         public Builder setHost(String host) {
             this.mHost = host;
-
+            this.hasHost = true;
             return this;
         }
 
         public Builder setPort(int port) {
             this.mPort = port;
-
+            this.hasPort = true;
             return this;
         }
 
         public LightningNodeUri build() {
-            return new LightningNodeUri(mPubKey, mHost, mPort);
+            return new LightningNodeUri(this);
         }
     }
 }

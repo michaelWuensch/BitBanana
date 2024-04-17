@@ -1,13 +1,10 @@
 package app.michaelwuensch.bitbanana.wallet;
 
 
-import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
-import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
-import com.google.common.collect.Lists;
-import com.google.protobuf.ByteString;
+import android.widget.Toast;
 
-import java.nio.charset.StandardCharsets;
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +12,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -26,7 +22,6 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class Wallet_TransactionHistory {
@@ -203,44 +198,40 @@ public class Wallet_TransactionHistory {
             return;
         }
 
-        LightningAddress lightningAddress = LightningAddress.newBuilder()
-                .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
-                .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
-        ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .subscribe(connectPeerResponse -> {
-                    BBLog.d(LOG_TAG, "Successfully connected to peer, trying to open channel...");
+        compositeDisposable.add(BackendManager.api().connectPeer(nodeUri)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(() -> {
+                    BBLog.d(LOG_TAG, "Successfully connected to peer.");
                     broadcastPeerConnectedEvent();
                     if (openChannel) {
+                        BBLog.d(LOG_TAG, "Now that we are connected to peer, trying to open channel...");
                         Wallet_Channels.getInstance().openChannelConnected(nodeUri, amount, targetConf, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
-                    if (throwable.getMessage().toLowerCase().contains("refused")) {
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
-                    } else if (throwable.getMessage().toLowerCase().contains("self")) {
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
-                    } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
+                    if (openChannel) {
+                        if (throwable.getMessage().toLowerCase().contains("refused")) {
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
+                        } else if (throwable.getMessage().toLowerCase().contains("self")) {
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
+                        } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
+                        } else {
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
+                        }
                     } else {
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
+                        Toast.makeText(App.getAppContext(), "Connecting peer failed!" + " " + throwable.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }));
     }
 
     public void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
-        NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
-                .setPubKey(nodeUri.getPubKey())
-                .build();
-
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .subscribe(nodeInfo -> {
-                    if (nodeInfo.getNode().getAddressesCount() > 0) {
-                        String tempUri = nodeUri.getPubKey() + "@" + nodeInfo.getNode().getAddresses(0).getAddr();
+        compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(response -> {
+                    if (response.getAddresses().size() > 0) {
+                        String tempUri = nodeUri.getPubKey() + "@" + response.getAddresses().get(0);
                         LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
@@ -250,7 +241,7 @@ public class Wallet_TransactionHistory {
                             Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                         }
                     } else {
-                        BBLog.d(LOG_TAG, "Node Info does not contain any addresses.");
+                        BBLog.w(LOG_TAG, "Node Info does not contain any addresses.");
                         Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                     }
                 }, throwable -> {
@@ -266,7 +257,7 @@ public class Wallet_TransactionHistory {
      */
     public void fetchNodeInfo(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(pubkey)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     BBLog.v(LOG_TAG, "Fetched Node info from " + response.getAlias());
                     AliasManager.getInstance().saveAlias(response.getPubKey(), response.getAlias());

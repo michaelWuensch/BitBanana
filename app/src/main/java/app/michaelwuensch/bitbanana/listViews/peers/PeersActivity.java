@@ -15,11 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.protobuf.ByteString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,18 +25,17 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.listViews.peers.itemDetails.PeerDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.peers.items.PeerListItem;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.core.Observable;
@@ -115,15 +112,14 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (Wallet.getInstance().isConnectedToNode()) {
 
-                ListPeersRequest listPeersRequest = ListPeersRequest.newBuilder()
-                        .build();
+                BBLog.v(LOG_TAG, "Update Peer list.");
 
-                mCompositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(listPeersRequest)
-                        .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                        .subscribe(listPeersResponse -> {
+                mCompositeDisposable.add(BackendManager.api().listPeers()
+                        .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                        .subscribe(response -> {
                                     mPeersItems.clear();
                                     ArrayList<String> peersToFetchInfo = new ArrayList<>();
-                                    for (Peer peer : listPeersResponse.getPeersList()) {
+                                    for (Peer peer : response) {
                                         PeerListItem currItem = new PeerListItem(peer);
                                         mPeersItems.add(currItem);
                                         if (!AliasManager.getInstance().hasUpToDateAliasInfo(peer.getPubKey()))
@@ -154,15 +150,19 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
                                         mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
                                                 .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
-                                                .doOnNext(integer -> Wallet_TransactionHistory.getInstance().fetchNodeInfo(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, null))
+                                                .doOnNext(integer -> Wallet_TransactionHistory.getInstance().fetchNodeInfo(peersToFetchInfo.get(integer), integer == peersToFetchInfo.size() - 1, true, new Wallet_TransactionHistory.NodeInfoFetchedListener() {
+                                                    @Override
+                                                    public void onNodeInfoFetched(String pubkey) {
+                                                        if (pubkey.equals(peersToFetchInfo.get(peersToFetchInfo.size() - 1)))
+                                                            updatePeersDisplayList();
+                                                    }
+                                                }))
                                                 .subscribe());
                                     }
-
                                 }
                                 , throwable -> {
                                     BBLog.w(LOG_TAG, "Fetching peer list failed." + throwable.getMessage());
                                 }));
-
 
                 // Remove refreshing symbol
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -171,7 +171,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
     }
 
     @Override
-    public void onPeerSelect(ByteString peer) {
+    public void onPeerSelect(Serializable peer) {
         Bundle bundle = new Bundle();
 
         if (peer != null) {

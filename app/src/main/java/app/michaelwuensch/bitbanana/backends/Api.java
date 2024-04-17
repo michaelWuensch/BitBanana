@@ -13,11 +13,13 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.Forward;
+import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
@@ -132,6 +134,10 @@ public class Api {
         return Observable.error(unsupportedException());
     }
 
+    public Single<List<Peer>> listPeers() {
+        return Single.error(unsupportedException());
+    }
+
     public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
         return Single.error(unsupportedException());
     }
@@ -145,6 +151,14 @@ public class Api {
     }
 
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+        return Completable.error(unsupportedException());
+    }
+
+    public Completable connectPeer(LightningNodeUri lightningNodeUri) {
+        return Completable.error(unsupportedException());
+    }
+
+    public Completable disconnectPeer(String pubKey) {
         return Completable.error(unsupportedException());
     }
 }

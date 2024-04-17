@@ -9,7 +9,10 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceResponse;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.ClosedChannelsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
+import com.github.lightningnetwork.lnd.lnrpc.DisconnectPeerRequest;
 import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
+import com.github.lightningnetwork.lnd.lnrpc.Feature;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
@@ -18,10 +21,13 @@ import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
+import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
 import com.github.lightningnetwork.lnd.lnrpc.ListChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListInvoiceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.ListPaymentsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
+import com.github.lightningnetwork.lnd.lnrpc.NodeAddress;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
@@ -30,6 +36,7 @@ import com.github.lightningnetwork.lnd.lnrpc.PolicyUpdateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Resolution;
 import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
+import com.github.lightningnetwork.lnd.lnrpc.TimestampedError;
 import com.github.lightningnetwork.lnd.lnrpc.Transaction;
 import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
@@ -65,16 +72,19 @@ import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnFeature;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
+import app.michaelwuensch.bitbanana.models.TimestampedMessage;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -130,9 +140,13 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getLightningService().getNodeInfo(nodeInfoRequest)
                 .map(response -> {
+                    List<String> addresses = new ArrayList<>();
+                    for (NodeAddress address : response.getNode().getAddressesList())
+                        addresses.add(address.getAddr());
                     return NodeInfo.newBuilder()
                             .setPubKey(response.getNode().getPubKey())
                             .setAlias(response.getNode().getAlias())
+                            .setAddresses(addresses)
                             .setNumChannels(response.getNumChannels())
                             .setTotalCapacity(response.getTotalCapacity() * 1000L)
                             .build();
@@ -681,6 +695,43 @@ public class LndApi extends Api {
     }
 
     @Override
+    public Single<List<Peer>> listPeers() {
+        ListPeersRequest request = ListPeersRequest.newBuilder()
+                .build();
+
+        return LndConnection.getInstance().getLightningService().listPeers(request)
+                .map(response -> {
+                    List<Peer> peerList = new ArrayList<>();
+                    for (com.github.lightningnetwork.lnd.lnrpc.Peer peer : response.getPeersList()) {
+                        List<TimestampedMessage> errorMessages = new ArrayList<>();
+                        for (TimestampedError e : peer.getErrorsList())
+                            errorMessages.add(TimestampedMessage.newBuilder()
+                                    .setMessage(e.getError())
+                                    .setTimestamp(e.getTimestamp())
+                                    .build());
+                        List<LnFeature> features = new ArrayList<>();
+                        for (Map.Entry<Integer, Feature> feature : peer.getFeaturesMap().entrySet()) {
+                            features.add(LnFeature.newBuilder()
+                                    .setFeatureNumber(feature.getKey())
+                                    .setName(feature.getValue().getName())
+                                    .build());
+                        }
+                        peerList.add(Peer.newBuilder()
+                                .setPubKey(peer.getPubKey())
+                                .setAddress(peer.getAddress())
+                                .setPing(peer.getPingTime())
+                                .setFlapCount(peer.getFlapCount())
+                                .setLastFlapTimestamp(peer.getLastFlapNs())
+                                .setErrorMessages(errorMessages)
+                                .setFeatures(features)
+                                .build());
+                    }
+                    return peerList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
     public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
         Invoice request = Invoice.newBuilder()
                 .setValueMsat(createInvoiceRequest.getAmount())
@@ -809,5 +860,35 @@ public class LndApi extends Api {
         return LndConnection.getInstance().getLightningService().sendCoins(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable connectPeer(LightningNodeUri lightningNodeUri) {
+        LightningAddress.Builder lightningAddressBuilder = LightningAddress.newBuilder()
+                .setPubkey(lightningNodeUri.getPubKey());
+
+        if (lightningNodeUri.hasHost())
+            lightningAddressBuilder.setHost(lightningNodeUri.getHost());
+
+        LightningAddress lightningAddress = lightningAddressBuilder.build();
+
+        ConnectPeerRequest request = ConnectPeerRequest.newBuilder()
+                .setAddr(lightningAddress)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().connectPeer(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Connecting to peer failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable disconnectPeer(String pubKey) {
+        DisconnectPeerRequest request = DisconnectPeerRequest.newBuilder()
+                .setPubKey(pubKey)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().disconnectPeer(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Disconnecting from peer failed: " + throwable.getMessage()));
     }
 }

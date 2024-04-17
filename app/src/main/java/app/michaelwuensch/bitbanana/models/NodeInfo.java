@@ -1,9 +1,12 @@
 package app.michaelwuensch.bitbanana.models;
 
+import java.util.List;
+
 public class NodeInfo {
 
     private final String Alias;
     private final String PubKey;
+    private final List<String> Addresses;
     private final int NumChannels;
     private final boolean hasNumChannels;
     private final long TotalCapacity;
@@ -16,6 +19,7 @@ public class NodeInfo {
     private NodeInfo(Builder builder) {
         this.Alias = builder.Alias;
         this.PubKey = builder.PubKey;
+        this.Addresses = builder.Addresses;
         this.NumChannels = builder.NumChannels;
         this.hasNumChannels = builder.hasNumChannels;
         this.TotalCapacity = builder.TotalCapacity;
@@ -28,6 +32,10 @@ public class NodeInfo {
 
     public String getPubKey() {
         return PubKey;
+    }
+
+    public List<String> getAddresses() {
+        return Addresses;
     }
 
     public int getNumChannels() {
@@ -54,6 +62,7 @@ public class NodeInfo {
     public static class Builder {
         private String Alias;
         private String PubKey;
+        private List<String> Addresses;
         private int NumChannels;
         private boolean hasNumChannels;
         private long TotalCapacity;
@@ -74,6 +83,11 @@ public class NodeInfo {
 
         public Builder setPubKey(String pubKey) {
             this.PubKey = pubKey;
+            return this;
+        }
+
+        public Builder setAddresses(List<String> addresses) {
+            Addresses = addresses;
             return this;
         }
 

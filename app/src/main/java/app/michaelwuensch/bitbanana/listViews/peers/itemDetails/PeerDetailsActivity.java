@@ -10,36 +10,28 @@ import android.widget.TextView;
 
 import androidx.appcompat.view.menu.MenuBuilder;
 
-import com.github.lightningnetwork.lnd.lnrpc.DisconnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Feature;
-import com.github.lightningnetwork.lnd.lnrpc.Peer;
-import com.github.lightningnetwork.lnd.lnrpc.TimestampedError;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
+import app.michaelwuensch.bitbanana.models.LnFeature;
+import app.michaelwuensch.bitbanana.models.Peer;
+import app.michaelwuensch.bitbanana.models.TimestampedMessage;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -91,12 +83,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
-            ByteString PeerString = (ByteString) extras.getSerializable(EXTRA_PEER);
-            try {
-                mPeer = Peer.parseFrom(PeerString);
-            } catch (InvalidProtocolBufferException e) {
-                throw new RuntimeException(e);
-            }
+            mPeer = (Peer) extras.getSerializable(EXTRA_PEER);
         }
 
         setTitle(AliasManager.getInstance().getAlias(mPeer.getPubKey()));
@@ -108,26 +95,26 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         mIvAddressCopyIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(PeerDetailsActivity.this, "remoteAddress", mPeer.getAddress()));
 
         ////// Reliability section
-        mPing.setValue(mPeer.getPingTime() / 1000L + " ms");
+        mPing.setValue(mPeer.getPing() / 1000L + " ms");
         mFlapCount.setValue(String.valueOf(mPeer.getFlapCount()));
-        if (mPeer.getLastFlapNs() == 0) {
+        if (mPeer.getLastFlapTimestamp() == 0) {
             mLastFlap.setValue(getResources().getString(R.string.fee_not_available));
         } else {
-            long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapNs() / 1000000L);
+            long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapTimestamp() / 1000000L);
             String durationString = TimeFormatUtil.formattedDuration(durationSinceLastFlap / 1000L, PeerDetailsActivity.this);
             mLastFlap.setValue(durationString);
         }
 
         // Errors
-        mErrors.setValue(String.valueOf(mPeer.getErrorsCount()));
+        mErrors.setValue(String.valueOf(mPeer.getErrorMessages().size()));
         DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, getResources().getConfiguration().getLocales().get(0));
         DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT, getResources().getConfiguration().getLocales().get(0));
 
         ArrayList<String> errorsAsStrings = new ArrayList<>();
-        for (TimestampedError e : mPeer.getErrorsList()) {
-            String formattedDate = df.format(new Date(e.getTimestamp() * 1000L));
-            String formattedTime = tf.format(new Date(e.getTimestamp() * 1000L));
-            errorsAsStrings.add(formattedDate + ", " + formattedTime + ":\n" + e.getError() + "\n\n");
+        for (TimestampedMessage message : mPeer.getErrorMessages()) {
+            String formattedDate = df.format(new Date(message.getTimestamp() * 1000L));
+            String formattedTime = tf.format(new Date(message.getTimestamp() * 1000L));
+            errorsAsStrings.add(formattedDate + ", " + formattedTime + ":\n" + message.getMessage() + "\n\n");
         }
         Collections.reverse(errorsAsStrings);
         String errorsString = "";
@@ -179,19 +166,19 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
                 }));
 
         // Feature list
-        mFeatures.setValue(String.valueOf(mPeer.getFeaturesMap().size()));
+        mFeatures.setValue(String.valueOf(mPeer.getFeatures().size()));
         ArrayList<String> featuresAsStrings = new ArrayList<>();
-        for (Map.Entry<Integer, Feature> entry : mPeer.getFeaturesMap().entrySet()) {
+        for (LnFeature feature : mPeer.getFeatures()) {
             String padding = "";
-            if (entry.getKey() < 10)
+            if (feature.getFeatureNumber() < 10)
                 padding = "         ";
-            else if (entry.getKey() < 100)
+            else if (feature.getFeatureNumber() < 100)
                 padding = "       ";
-            else if (entry.getKey() < 1000)
+            else if (feature.getFeatureNumber() < 1000)
                 padding = "     ";
             else
                 padding = "  ";
-            featuresAsStrings.add(entry.getKey() + padding + entry.getValue().getName() + "\n");
+            featuresAsStrings.add(feature.getFeatureNumber() + padding + feature.getName() + "\n");
         }
         featuresAsStrings.sort(new NumericStringComparator());
         String featureList = "";
@@ -238,13 +225,9 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
     }
 
     private void disconnect() {
-        BBLog.e(LOG_TAG, "disconnect called");
-        DisconnectPeerRequest dpr = DisconnectPeerRequest.newBuilder()
-                .setPubKey(mPeer.getPubKey())
-                .build();
-        mCompositeDisposable.add(LndConnection.getInstance().getLightningService().disconnectPeer(dpr)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .subscribe(disconnectPeerResponse -> {
+        mCompositeDisposable.add(BackendManager.api().disconnectPeer(mPeer.getPubKey())
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully disconnected peer");
                     Intent intentDeletePeer = new Intent();
                     intentDeletePeer.putExtra(ScanContactActivity.EXTRA_NODE_URI, LightningNodeUriParser.parseNodeUri(mPeer.getPubKey() + "@" + mPeer.getAddress()));
@@ -278,5 +261,4 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
             return s1.compareTo(s2);
         }
     }
-
 }
