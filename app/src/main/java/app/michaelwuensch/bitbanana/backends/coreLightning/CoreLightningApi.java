@@ -70,6 +70,7 @@ import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
@@ -429,14 +430,20 @@ public class CoreLightningApi extends Api {
                         long created_at = 0;
                         if (invoice.getStatus() == ListinvoicesInvoices.ListinvoicesInvoicesStatus.PAID)
                             created_at = invoice.getPaidAt();
-                        else
-                            created_at = System.currentTimeMillis() / 1000L;
+                        else {
+                            try {
+                                created_at = InvoiceUtil.decodeBolt11(invoice.getBolt11()).getTimestamp();
+                            } catch (Exception e) {
+                                created_at = System.currentTimeMillis() / 1000L;
+                            }
+                        }
+
                         invoicesList.add(LnInvoice.newBuilder()
                                 .setBolt11(invoice.getBolt11())
                                 .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
                                 .setAmountRequested(invoice.getAmountMsat().getMsat())
                                 .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
-                                .setCreatedAt(created_at) // ToDo: Fix once the api exposes created_at
+                                .setCreatedAt(created_at) // ToDo: Simplify once the api exposes created_at
                                 .setPaidAt(invoice.getPaidAt())
                                 .setExpiresAt(invoice.getExpiresAt())
                                 .setAddIndex(invoice.getCreatedIndex())
