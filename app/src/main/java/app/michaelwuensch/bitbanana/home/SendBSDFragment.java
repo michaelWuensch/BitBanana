@@ -26,13 +26,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -280,7 +278,6 @@ public class SendBSDFragment extends BaseBSDFragment {
             mOnChainFeeView.initialSetup();
 
             mOnChainFeeView.setVisibility(View.VISIBLE);
-            mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_on_chain);
             mResultView.setTypeIcon(R.drawable.ic_onchain_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
@@ -337,7 +334,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                         SendOnChainPaymentRequest sendOnChainPaymentRequest = SendOnChainPaymentRequest.newBuilder()
                                 .setAddress(mOnChainAddress)
                                 .setAmount(sendAmount)
-                                .setBlockConfirmationTarget(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
+                                .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
                                 .build();
 
                         getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
@@ -597,14 +594,13 @@ public class SendBSDFragment extends BaseBSDFragment {
             setCalculatingFee();
 
             if (mOnChain) {
-                long sendAmountSat = 0L;
+                long sendAmount = 0L;
                 if (mFixedAmount != 0L) {
-                    sendAmountSat = mFixedAmount / 1000L;
+                    sendAmount = mFixedAmount;
                 } else {
-                    sendAmountSat = mSendAmountMsat / 1000L;
+                    sendAmount = mSendAmountMsat;
                 }
-
-                estimateOnChainFee(mOnChainAddress, sendAmountSat, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+                estimateOnChainTransactionSize(mOnChainAddress, sendAmount);
             } else {
                 setFeeFailure();
             }
@@ -629,10 +625,10 @@ public class SendBSDFragment extends BaseBSDFragment {
     /**
      * Show the calculated fee
      */
-    private void setCalculatedFeeAmountOnChain(long sats) {
+    private void setCalculatedFeeAmountOnChain(long vByte) {
         mSendButtonEnabled_feeCalculate = true;
         updateSendButtonState();
-        mOnChainFeeView.onFeeSuccess(sats);
+        mOnChainFeeView.onSizeCalculatedSuccess(vByte);
     }
 
     private void setCalculatedFeeAmountLightning(long sats, String percentString, boolean showMax) {
@@ -648,7 +644,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         mSendButtonEnabled_feeCalculate = true;
         updateSendButtonState();
         if (mOnChain) {
-            mOnChainFeeView.onFeeFailure();
+            mOnChainFeeView.onSizeCalculationFailure();
         } else {
             mLightningFeeView.onFeeFailure();
         }
@@ -667,17 +663,11 @@ public class SendBSDFragment extends BaseBSDFragment {
     /**
      * This function is used to calculate the expected on chain fee.
      */
-    private void estimateOnChainFee(String address, long amount, int targetConf) {
-        // let LND estimate fee
-        EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
-                .putAddrToAmount(address, amount)
-                .setTargetConf(targetConf)
-                .build();
-
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                .subscribe(estimateFeeResponse -> setCalculatedFeeAmountOnChain(estimateFeeResponse.getFeeSat()),
+    private void estimateOnChainTransactionSize(String address, long amount) {
+        getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
+                .subscribe(response -> setCalculatedFeeAmountOnChain((long) response.doubleValue()),
                         throwable -> {
-                            BBLog.w(LOG_TAG, "Exception in fee estimation request task.");
+                            BBLog.w(LOG_TAG, "Exception in on-chain transaction size request task.");
                             BBLog.w(LOG_TAG, throwable.getMessage());
                             setFeeFailure();
                         }));

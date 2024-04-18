@@ -16,23 +16,23 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
-public class FeePresetPref extends EditTextPreference {
-    public FeePresetPref(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+public class BlockInputPref extends EditTextPreference {
+    public BlockInputPref(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
-    public FeePresetPref(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BlockInputPref(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public FeePresetPref(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BlockInputPref(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public FeePresetPref(@NonNull Context context) {
+    public BlockInputPref(@NonNull Context context) {
         super(context);
         init();
     }
@@ -45,11 +45,11 @@ public class FeePresetPref extends EditTextPreference {
     public void init() {
 
         if (getKey().equals(PrefsUtil.FEE_PRESET_FAST))
-            setSummary(createFeeDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST))));
+            setSummary(createDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST))));
         if (getKey().equals(PrefsUtil.FEE_PRESET_MEDIUM))
-            setSummary(createFeeDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_MEDIUM))));
+            setSummary(createDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_MEDIUM))));
         if (getKey().equals(PrefsUtil.FEE_PRESET_SLOW))
-            setSummary(createFeeDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_SLOW))));
+            setSummary(createDescription(Integer.parseInt(PrefsUtil.getPrefs().getString(getKey(), PrefsUtil.DEFAULT_FEE_PRESET_VALUE_SLOW))));
 
 
         setOnBindEditTextListener(new OnBindEditTextListener() {
@@ -68,7 +68,7 @@ public class FeePresetPref extends EditTextPreference {
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
                 int newIntValue = Integer.parseInt(newValue.toString());
                 if (newIntValue > 0) {
-                    preference.setSummary(createFeeDescription(newIntValue));
+                    preference.setSummary(createDescription(newIntValue));
                     return true;
                 } else {
                     Toast.makeText(getContext(), R.string.error_invalid_fee_preset_value, Toast.LENGTH_LONG).show();
@@ -78,7 +78,7 @@ public class FeePresetPref extends EditTextPreference {
         });
     }
 
-    private String createFeeDescription(int numberOfBlocks) {
+    private String createDescription(int numberOfBlocks) {
         String blocks = getContext().getResources().getQuantityString(R.plurals.blocks, numberOfBlocks, numberOfBlocks);
         return "" + blocks + " (" + TimeFormatUtil.formattedBlockDuration(numberOfBlocks, getContext()) + ")";
     }

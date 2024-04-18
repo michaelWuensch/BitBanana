@@ -48,7 +48,15 @@ public class PrefsUtil {
     public static final String BLOCK_EXPLORER = "blockExplorer";
     public static final String CUSTOM_BLOCK_EXPLORER_HOST = "customBlockExplorerHost";
     public static final String CUSTOM_EXCHANGE_RATE_PROVIDER_HOST = "customExchangeRateProviderHost";
+    public static final String CUSTOM_FEE_ESTIMATION_PROVIDER_HOST = "customFeeEstimationProviderHost";
+    public static final String FEE_ESTIMATION_PROVIDER = "feeEstimationProvider";
     public static final String AVATAR_STYLE = "avatarStyle";
+    public static final String FEE_ESTIMATE_NEXT_BLOCK = "feeEstimateNextBlock";
+    public static final String FEE_ESTIMATE_HOUR = "feeEstimateHour";
+    public static final String FEE_ESTIMATE_DAY = "feeEstimateDay";
+    public static final String FEE_ESTIMATE_MINIMUM = "feeEstimateMinimum";
+    public static final String FEE_ESTIMATE_TIMESTAMP = "feeEstimateTimestamp";
+
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";
@@ -168,12 +176,20 @@ public class PrefsUtil {
         return getPrefs().getString(EXCHANGE_RATE_PROVIDER, "Blockchain.info");
     }
 
+    public static String getFeeEstimationProvider() {
+        return getPrefs().getString(FEE_ESTIMATION_PROVIDER, "Internal");
+    }
+
     public static String getCustomBlockExplorerHost() {
         return getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
     }
 
     public static String getCustomExchangeRateProviderHost() {
         return getPrefs().getString(CUSTOM_EXCHANGE_RATE_PROVIDER_HOST, "https://mempool.space");
+    }
+
+    public static String getCustomFeeEstimationProviderHost() {
+        return getPrefs().getString(CUSTOM_FEE_ESTIMATION_PROVIDER_HOST, "https://mempool.space");
     }
 
     public static String getCustomBlockExplorerAddressSuffix() {
@@ -190,5 +206,25 @@ public class PrefsUtil {
 
     public static AvathorFactory.AvatarSet getAvatarSet() {
         return AvathorFactory.AvatarSet.valueOf(getPrefs().getString(AVATAR_STYLE, "MIXED"));
+    }
+
+    public static int getFeeEstimate_NextBlock() {
+        return getPrefs().getInt(FEE_ESTIMATE_NEXT_BLOCK, 50);
+    }
+
+    public static int getFeeEstimate_Hour() {
+        return getPrefs().getInt(FEE_ESTIMATE_HOUR, 25);
+    }
+
+    public static int getFeeEstimate_Day() {
+        return getPrefs().getInt(FEE_ESTIMATE_DAY, 10);
+    }
+
+    public static int getFeeEstimate_Minimum() {
+        return getPrefs().getInt(FEE_ESTIMATE_NEXT_BLOCK, 1);
+    }
+
+    public static long getFeeEstimate_Timestamp() {
+        return getPrefs().getLong(FEE_ESTIMATE_TIMESTAMP, 0);
     }
 }

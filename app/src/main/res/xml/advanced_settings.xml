@@ -41,6 +41,21 @@
             android:title="@string/settings_custom_exchange_rate_provider"
             app:iconSpaceReserved="false" />
 
+        <ListPreference
+            android:defaultValue="Internal"
+            android:dialogTitle="@string/settings_feeEstimationProvider"
+            android:entries="@array/feeEstimationProviderDisplayValues"
+            android:entryValues="@array/feeEstimationProvider"
+            android:key="feeEstimationProvider"
+            android:summary="%s"
+            android:title="@string/settings_feeEstimationProvider"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="goToCustomFeeEstimationProviderSettings"
+            android:title="@string/settings_custom_fee_estimation_provider"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreference
             android:defaultValue="true"
             android:key="hapticPin"
@@ -61,11 +76,6 @@
             android:key="btcAddressType"
             android:summary="%s"
             android:title="@string/settings_addressType"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="goToOnChainFeeSettings"
-            android:title="@string/settings_onChainFeePresets"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

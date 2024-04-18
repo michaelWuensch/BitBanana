@@ -12,6 +12,7 @@ import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
+import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
@@ -160,5 +161,13 @@ public class Api {
 
     public Completable disconnectPeer(String pubKey) {
         return Completable.error(unsupportedException());
+    }
+
+    public Single<FeeEstimateResponse> getFeeEstimates() {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<Double> getTransactionSizeVByte(String address, long amount) {
+        return Single.error(unsupportedException());
     }
 }

@@ -7,7 +7,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 
 
-public class SettingsFeePresetsActivity extends BaseAppCompatActivity {
+public class SettingsCustomFeeEstimationProviderActivity extends BaseAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class SettingsFeePresetsActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_settings);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.mainContent, new SettingsFeePresetsFragment())
+                .replace(R.id.mainContent, new SettingsCustomFeeEstimationProviderFragment())
                 .commit();
     }
 }

@@ -20,12 +20,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -96,7 +95,6 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
 
         mOnChainFeeView.initialSetup();
         setFeeFailure();
-        mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
 
         Wallet_Channels.getInstance().registerChannelOpenUpdateListener(this);
 
@@ -144,7 +142,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                 // calculate fees
                 if (mAmountValid) {
                     mValueChannelCapacity = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(mEtAmount.getText().toString());
-                    calculateFee();
+                    calculateTransactionSize();
                 } else {
                     setFeeFailure();
                 }
@@ -334,9 +332,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     }
 
 
-    private void calculateFee() {
+    private void calculateTransactionSize() {
         setCalculatingFee();
-        estimateOnChainFee(mValueChannelCapacity / 1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+        estimateOnChainTransactionSize(mValueChannelCapacity);
     }
 
     /**
@@ -349,22 +347,22 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     /**
      * Show the calculated fee
      */
-    private void setCalculatedFeeAmount(long sats) {
-        mOnChainFeeView.onFeeSuccess(sats);
+    private void setCalculatedFeeAmount(long vBytes) {
+        mOnChainFeeView.onSizeCalculatedSuccess(vBytes);
     }
 
     /**
      * Show fee calculation failure
      */
     private void setFeeFailure() {
-        mOnChainFeeView.onFeeFailure();
+        mOnChainFeeView.onSizeCalculationFailure();
     }
 
 
     /**
      * This function is used to calculate the expected on chain fee.
      */
-    private void estimateOnChainFee(long amount, int targetConf) {
+    private void estimateOnChainTransactionSize(long amount) {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // We choose a dummy bech32 address. The fee amount depends only on the address type.
             String address;
@@ -379,17 +377,10 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     address = "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"; // Mainnet
             }
 
-
-            // let LND estimate fee
-            EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
-                    .putAddrToAmount(address, amount)
-                    .setTargetConf(targetConf)
-                    .build();
-
-            getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                    .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(estimateFeeResponse.getFeeSat()),
+            getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
+                    .subscribe(response -> setCalculatedFeeAmount((long) response.doubleValue()),
                             throwable -> {
-                                BBLog.w(TAG, "Exception in fee estimation request task.");
+                                BBLog.w(TAG, "Exception in on-chain transaction size request task.");
                                 BBLog.w(TAG, throwable.getMessage());
                                 setFeeFailure();
                             }));

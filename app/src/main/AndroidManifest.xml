@@ -163,11 +163,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.settings.SettingsFeePresetsActivity"
-            android:label="@string/settings_onChainFeePresets"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar" />
-        <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsPayerDataActivity"
             android:label="@string/settings_payer_data"
             android:screenOrientation="portrait"
@@ -190,6 +185,11 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomExchangeRateProviderActivity"
             android:label="@string/settings_custom_exchange_rate_provider"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomFeeEstimationProviderActivity"
+            android:label="@string/settings_custom_fee_estimation_provider"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity

@@ -19,6 +19,7 @@ public class Backend {
     protected boolean bSupportsMessageSigningByNodePrivateKey = false;
     protected boolean bSupportsLnurlAuth = false;
     protected boolean bSupportsKeysend = false;
+    protected boolean bSupportsFeeEstimation = false;
 
 
     public Backend() {
@@ -82,5 +83,9 @@ public class Backend {
 
     public boolean supportsKeysend() {
         return bSupportsKeysend;
+    }
+
+    public boolean supportsFeeEstimation() {
+        return bSupportsFeeEstimation;
     }
 }

@@ -1,12 +1,17 @@
 package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
@@ -15,22 +20,28 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.tabs.TabLayout;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.FeeEstimationUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
-public class OnChainFeeView extends ConstraintLayout {
+public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUtil.FeeEstimationListener {
 
     private AmountView mTvSendFeeAmount;
     private ProgressBar mPbCalculateFee;
     private TextView mTvSendFeeSpeed;
     private TabLayout mTabLayoutSendFeeSpeed;
-    private TextView mTvSendFeeDuration;
     private ImageView mFeeArrowUnitImage;
+    private ImageButton mModeSwitch;
+    private SeekBar mSlider;
+    private TextView mTvSlider;
+    private ViewSwitcher mModeContentSwitcher;
     private ClickableConstraintLayoutGroup mGroupSendFeeAmount;
     private Group mGroupSendFeeDuration;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
+    private long mTransactionSizeVByte;
+    private boolean mManualMode;
 
     public OnChainFeeView(Context context) {
         super(context);
@@ -54,11 +65,51 @@ public class OnChainFeeView extends ConstraintLayout {
         mPbCalculateFee = view.findViewById(R.id.sendFeeOnChainProgressBar);
         mTvSendFeeSpeed = view.findViewById(R.id.sendFeeSpeed);
         mTabLayoutSendFeeSpeed = view.findViewById(R.id.feeSpeedTabLayout);
-        mTvSendFeeDuration = view.findViewById(R.id.feeDurationText);
+        mModeSwitch = view.findViewById(R.id.modeSwitch);
+        mSlider = view.findViewById(R.id.slider);
+        mTvSlider = view.findViewById(R.id.sliderText);
+        mModeContentSwitcher = view.findViewById(R.id.modeContentSwitcher);
+
         mGroupSendFeeAmount = view.findViewById(R.id.sendFeeOnChainAmountGroup);
         mFeeArrowUnitImage = view.findViewById(R.id.feeArrowUnitImage);
 
         mGroupSendFeeDuration = view.findViewById(R.id.feeDurationGroup);
+        mModeSwitch.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mManualMode = !mManualMode;
+                mModeSwitch.setImageResource(mManualMode ? R.drawable.baseline_speed_24 : R.drawable.baseline_tune_24);
+                if (mManualMode)
+                    mModeContentSwitcher.showNext();
+                else {
+                    mModeContentSwitcher.showPrevious();
+                    setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
+                    FeeEstimationUtil.getInstance().getFeeEstimates();
+                }
+            }
+        });
+
+        mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mTvSlider.setText("" + i);
+                if (mManualMode) {
+                    setFeeDetails(0, i);
+                    if (mTransactionSizeVByte != 0)
+                        mTvSendFeeAmount.setAmountMsat((mTransactionSizeVByte * i * 1000L));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         // Toggle tier settings view on amount click
         mGroupSendFeeAmount.setOnAllClickListener(new OnSingleClickListener() {
@@ -81,6 +132,7 @@ public class OnChainFeeView extends ConstraintLayout {
                     } else if (tab.getText().equals(getResources().getString(OnChainFeeTier.FAST.getTitle()))) {
                         setFeeTier(OnChainFeeTier.FAST);
                     }
+                    FeeEstimationUtil.getInstance().getFeeEstimates();
                 }
             }
 
@@ -102,8 +154,9 @@ public class OnChainFeeView extends ConstraintLayout {
         setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
         mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
 
-        // Set initial block target time
-        setBlockTargetTime(mOnChainFeeTier.getConfirmationBlockTarget());
+        // Init fee estimation update, so we don't work with old data
+        FeeEstimationUtil.getInstance().registerFeeEstimationListener(this);
+        FeeEstimationUtil.getInstance().getFeeEstimates();
     }
 
     public OnChainFeeTier getFeeTier() {
@@ -124,8 +177,9 @@ public class OnChainFeeView extends ConstraintLayout {
      */
     private void setFeeTier(OnChainFeeTier feeTier) {
         mOnChainFeeTier = feeTier;
-        mTvSendFeeSpeed.setText(feeTier.getDescription());
-        setBlockTargetTime(feeTier.getConfirmationBlockTarget());
+        setFeeDetails(feeTier.getConfirmationBlockTarget(), feeRateFromFeeTier());
+        mSlider.setProgress((int) feeRateFromFeeTier());
+        updateAbsoluteFee();
 
         // Notify listener about changed tier
         if (mFeeTierChangedListener != null) {
@@ -140,16 +194,26 @@ public class OnChainFeeView extends ConstraintLayout {
         mFeeTierChangedListener = feeTierChangedListener;
     }
 
-    public void onFeeSuccess(long sats) {
-        mTvSendFeeAmount.setAmountMsat(sats * 1000);
-        mTvSendFeeAmount.setVisibility(View.VISIBLE);
-        mPbCalculateFee.setVisibility(View.GONE);
+    public void onSizeCalculatedSuccess(long vByte) {
+        mTransactionSizeVByte = vByte;
+        updateAbsoluteFee();
     }
 
-    public void onFeeFailure() {
-        mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
-        mTvSendFeeAmount.setVisibility(View.VISIBLE);
-        mPbCalculateFee.setVisibility(View.GONE);
+    public void onSizeCalculationFailure() {
+        mTransactionSizeVByte = 0;
+        updateAbsoluteFee();
+    }
+
+    private void updateAbsoluteFee() {
+        if (mTransactionSizeVByte == 0) {
+            mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
+            mTvSendFeeAmount.setVisibility(View.VISIBLE);
+            mPbCalculateFee.setVisibility(View.GONE);
+        } else {
+            mTvSendFeeAmount.setAmountMsat(mTransactionSizeVByte * mSlider.getProgress() * 1000);
+            mTvSendFeeAmount.setVisibility(View.VISIBLE);
+            mPbCalculateFee.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -164,9 +228,48 @@ public class OnChainFeeView extends ConstraintLayout {
     /**
      * Show estimated time of settlement
      */
-    private void setBlockTargetTime(int blockTarget) {
-        String estimatedTime = TimeFormatUtil.formattedBlockDuration((long) blockTarget, getContext());
-        mTvSendFeeDuration.setText(getContext().getString(R.string.fee_estimated_duration, estimatedTime));
+    private void setFeeDetails(int blockTarget, long satPerVByte) {
+        String details = "";
+        String separator = "";
+        if (blockTarget != 0) {
+            details = details + "~" + TimeFormatUtil.formattedBlockDuration((long) blockTarget, getContext());
+            separator = ", ";
+        }
+        if (satPerVByte != 0)
+            details = details + separator + satPerVByte + " sat/vB";
+        mTvSendFeeSpeed.setText(details);
+    }
+
+    private long feeRateFromFeeTier() {
+        switch (mOnChainFeeTier) {
+            case FAST:
+                return PrefsUtil.getFeeEstimate_NextBlock();
+            case MEDIUM:
+                return PrefsUtil.getFeeEstimate_Hour();
+            default:
+                return PrefsUtil.getFeeEstimate_Day();
+        }
+    }
+
+    @Override
+    public void onFeeEstimationUpdated() {
+        if (!mManualMode) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onFeeEstimationUpdateFailed(int error, int duration) {
+
+    }
+
+    public long getSatPerVByteFee() {
+        return mSlider.getProgress();
     }
 
     public enum OnChainFeeTier {
@@ -215,13 +318,13 @@ public class OnChainFeeView extends ConstraintLayout {
         public int getConfirmationBlockTarget() {
             switch (this) {
                 case FAST:
-                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_FAST, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST));
+                    return 1;
                 case MEDIUM:
-                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_MEDIUM, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_MEDIUM));
+                    return 6;
                 case SLOW:
-                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_SLOW, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_SLOW));
+                    return 144;
                 default:
-                    return Integer.parseInt(PrefsUtil.getPrefs().getString(PrefsUtil.FEE_PRESET_FAST, PrefsUtil.DEFAULT_FEE_PRESET_VALUE_FAST));
+                    return 1;
             }
         }
     }

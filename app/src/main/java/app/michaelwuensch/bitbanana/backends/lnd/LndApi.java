@@ -43,6 +43,8 @@ import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
+import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeRequest;
+import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
 import com.google.protobuf.ByteString;
 
@@ -70,6 +72,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
+import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnFeature;
@@ -91,6 +94,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -854,7 +858,7 @@ public class LndApi extends Api {
         SendCoinsRequest request = SendCoinsRequest.newBuilder()
                 .setAddr(sendOnChainPaymentRequest.getAddress())
                 .setAmount(sendOnChainPaymentRequest.getAmount() / 1000)
-                .setTargetConf(sendOnChainPaymentRequest.getBlockConfirmationTarget())
+                .setSatPerVbyte(sendOnChainPaymentRequest.getSatPerVByte())
                 .build();
 
         return LndConnection.getInstance().getLightningService().sendCoins(request)
@@ -890,5 +894,34 @@ public class LndApi extends Api {
         return LndConnection.getInstance().getLightningService().disconnectPeer(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Disconnecting from peer failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<FeeEstimateResponse> getFeeEstimates() {
+        Single<EstimateFeeResponse> nextBlockSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(2).build());
+        Single<EstimateFeeResponse> hourSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(6).build());
+        Single<EstimateFeeResponse> daySingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(144).build());
+        Single<EstimateFeeResponse> minimumSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(1008).build());
+        return Single.zip(nextBlockSingle, hourSingle, daySingle, minimumSingle, (nextBlockResponse, hourResponse, dayResponse, minimumResponse) -> {
+            return FeeEstimateResponse.newBuilder()
+                    .setNextBlockFee((int) (UtilFunctions.satPerKwToSatPerVByte(nextBlockResponse.getSatPerKw())))
+                    .setHourFee((int) (UtilFunctions.satPerKwToSatPerVByte(hourResponse.getSatPerKw())))
+                    .setDayFee((int) (UtilFunctions.satPerKwToSatPerVByte(dayResponse.getSatPerKw())))
+                    .setMinimumFee((int) (UtilFunctions.satPerKwToSatPerVByte(minimumResponse.getSatPerKw())))
+                    .build();
+        });
+    }
+
+    @Override
+    public Single<Double> getTransactionSizeVByte(String address, long amount) {
+        com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest request = com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest.newBuilder()
+                .setTargetConf(2)
+                .putAddrToAmount(address, amount / 1000)
+                .build();
+        return LndConnection.getInstance().getLightningService().estimateFee(request)
+                .map(response -> {
+                    return (double) response.getFeeSat() / (double) response.getSatPerVbyte();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Getting transaction size failed: " + throwable.fillInStackTrace()));
     }
 }

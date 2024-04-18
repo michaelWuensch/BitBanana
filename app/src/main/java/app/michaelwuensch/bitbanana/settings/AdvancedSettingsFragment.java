@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
+import app.michaelwuensch.bitbanana.util.FeeEstimationUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
@@ -30,6 +31,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private ListPreference mListFeeLimit;
     private Preference mPrefCustomBlockExplorer;
     private Preference mPrefCustomExchangeRateProvider;
+    private Preference mPrefCustomFeeEstimationProvider;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -83,6 +85,34 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
                     ExchangeRateUtil.getInstance().getExchangeRates();
                 }
                 updateCustomExchangeRateProviderOptions(isCustom);
+                return true;
+            }
+        });
+
+        // Request fee estimates when the provider changed
+        ListPreference listFeeEstimationProvider = findPreference("feeEstimationProvider");
+        listFeeEstimationProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (newValue != null && newValue.toString().contains("(v3 Tor)") && !PrefsUtil.isTorEnabled()) {
+                    Toast.makeText(getActivity(), R.string.settings_requires_tor_toast, Toast.LENGTH_LONG).show();
+                }
+                boolean isCustom = newValue.toString().equalsIgnoreCase("Custom");
+                if (!isCustom) {
+                    PrefsUtil.editPrefs().putString(PrefsUtil.FEE_ESTIMATION_PROVIDER, newValue.toString()).commit();
+                    FeeEstimationUtil.getInstance().getFeeEstimates();
+                }
+                updateCustomFeeEstimationProviderOptions(isCustom);
+                return true;
+            }
+        });
+
+        mPrefCustomFeeEstimationProvider = findPreference("goToCustomFeeEstimationProviderSettings");
+        mPrefCustomFeeEstimationProvider.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsCustomFeeEstimationProviderActivity.class);
+                startActivity(intent);
                 return true;
             }
         });
@@ -168,17 +198,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "On-chainFeePresets"
-        final Preference prefOnChainFeePresets = findPreference("goToOnChainFeeSettings");
-        prefOnChainFeePresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsFeePresetsActivity.class);
-                startActivity(intent);
-                return true;
-            }
-        });
-
         // Action when clicked on "Features"
         final Preference prefFeaturesPresets = findPreference("goToFeaturesSettings");
         prefFeaturesPresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -203,6 +222,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
 
         updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
         updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
+        updateCustomFeeEstimationProviderOptions(PrefsUtil.getFeeEstimationProvider().equalsIgnoreCase("Custom"));
     }
 
     @Override
@@ -210,6 +230,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         super.onResume();
         updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
         updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
+        updateCustomFeeEstimationProviderOptions(PrefsUtil.getFeeEstimationProvider().equalsIgnoreCase("Custom"));
     }
 
     private void setFeeSummary(Preference preference, String value) {
@@ -241,5 +262,10 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private void updateCustomExchangeRateProviderOptions(boolean customEnabled) {
         mPrefCustomExchangeRateProvider.setVisible(customEnabled);
         mPrefCustomExchangeRateProvider.setSummary(PrefsUtil.getCustomExchangeRateProviderHost());
+    }
+
+    private void updateCustomFeeEstimationProviderOptions(boolean customEnabled) {
+        mPrefCustomFeeEstimationProvider.setVisible(customEnabled);
+        mPrefCustomFeeEstimationProvider.setSummary(PrefsUtil.getCustomFeeEstimationProviderHost());
     }
 }

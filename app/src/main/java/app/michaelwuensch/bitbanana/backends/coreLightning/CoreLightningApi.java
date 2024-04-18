@@ -6,7 +6,6 @@ import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
-import com.github.ElementsProject.lightning.cln.FeeratesPerkwEstimates;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
@@ -77,6 +76,7 @@ import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import io.reactivex.rxjava3.core.Completable;
@@ -698,9 +698,7 @@ public class CoreLightningApi extends Api {
                 .setDestination(sendOnChainPaymentRequest.getAddress())
                 .setSatoshi(amountOrAll)
                 .setFeerate(Feerate.newBuilder()
-                        .setPerkw(FeeratesPerkwEstimates.newBuilder()
-                                .setBlockcount(sendOnChainPaymentRequest.getBlockConfirmationTarget())
-                                .build().getFeerate())
+                        .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(sendOnChainPaymentRequest.getSatPerVByte()))
                         .build())
                 .build();
 

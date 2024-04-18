@@ -6,7 +6,7 @@ public class SendOnChainPaymentRequest implements Serializable {
 
     private final String Address;
     private final long Amount;
-    private final int BlockConfirmationTarget;
+    private final long SatPerVByte;
     private final boolean SendAll;
 
     public static Builder newBuilder() {
@@ -14,7 +14,7 @@ public class SendOnChainPaymentRequest implements Serializable {
     }
 
     private SendOnChainPaymentRequest(Builder builder) {
-        this.BlockConfirmationTarget = builder.BlockConfirmationTarget;
+        this.SatPerVByte = builder.SatPerVByte;
         this.Amount = builder.Amount;
         this.Address = builder.Address;
         this.SendAll = builder.SendAll;
@@ -34,8 +34,8 @@ public class SendOnChainPaymentRequest implements Serializable {
     /**
      * Number of Blocks the payment should confirm in.
      */
-    public int getBlockConfirmationTarget() {
-        return BlockConfirmationTarget;
+    public long getSatPerVByte() {
+        return SatPerVByte;
     }
 
     /**
@@ -51,7 +51,7 @@ public class SendOnChainPaymentRequest implements Serializable {
 
         private String Address;
         private long Amount;
-        private int BlockConfirmationTarget;
+        private long SatPerVByte;
         private boolean SendAll;
 
 
@@ -79,8 +79,8 @@ public class SendOnChainPaymentRequest implements Serializable {
         /**
          * Number of Blocks the payment should confirm in.
          */
-        public Builder setBlockConfirmationTarget(int blockConfirmationTarget) {
-            BlockConfirmationTarget = blockConfirmationTarget;
+        public Builder setSatPerVByte(long satPerVByte) {
+            SatPerVByte = satPerVByte;
             return this;
         }
 

@@ -7,9 +7,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
-import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
 import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
 import com.google.protobuf.ByteString;
@@ -27,6 +25,7 @@ import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -99,11 +98,11 @@ public class Wallet_Channels {
     }
 
     public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
+        compositeDisposable.add(BackendManager.api().listPeers()
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                .subscribe(listPeersResponse -> {
+                .subscribe(response -> {
                     boolean connected = false;
-                    for (Peer node : listPeersResponse.getPeersList()) {
+                    for (Peer node : response) {
                         if (node.getPubKey().equals(nodeUri.getPubKey())) {
                             connected = true;
                             break;

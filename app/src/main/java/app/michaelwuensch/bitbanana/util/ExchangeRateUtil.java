@@ -134,7 +134,6 @@ public class ExchangeRateUtil {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 BBLog.v(LOG_TAG, "Received exchange rates from mempool instance");
                 String responseData = response.body().string();
-                BBLog.d(LOG_TAG, responseData);
                 JSONObject responseJson = null;
                 try {
                     responseJson = new JSONObject(responseData);
@@ -257,7 +256,7 @@ public class ExchangeRateUtil {
                 currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
                 sortedRates.put(fiatCode, currentCurrency);
             } catch (JSONException e) {
-                BBLog.e(LOG_TAG, "Unable to read exchange rate from blockchain.info response.");
+                BBLog.e(LOG_TAG, "Unable to read exchange rate from mempool response.");
             }
         }
 

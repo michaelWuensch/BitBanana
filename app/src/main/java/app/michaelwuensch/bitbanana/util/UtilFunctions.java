@@ -160,6 +160,30 @@ public class UtilFunctions {
         return hashHmac("HmacSHA256", data, key);
     }
 
+    public static long satPerVByteToSatPerKw(double satPerVByte) {
+        return (long) (satPerVByte * 250.0);
+    }
+
+    public static double satPerKwToSatPerVByte(long satPerKw) {
+        return satPerKw / 250.0;
+    }
+
+    public static long satPerVByteToSatPerKb(double satPerVByte) {
+        return (long) (satPerVByte * 1000.0);
+    }
+
+    public static double satPerKbToSatPerVByte(long satPerKw) {
+        return satPerKw / 1000.0;
+    }
+
+    public static long satPerKwToSatPerKb(long satPerKw) {
+        return satPerKw * 4;
+    }
+
+    public static long satPerKbToSatPerKw(long satPerKb) {
+        return satPerKb / 4;
+    }
+
     private static String hashHmac(String algorithm, byte[] data, byte[] key) {
         String result = "";
         final SecretKeySpec secretKey = new SecretKeySpec(key,
