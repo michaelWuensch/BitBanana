@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -39,6 +38,7 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -257,21 +257,21 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                     value = mFixedAmount;
                 }
 
-                Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(value)
-                        .setMemo(mWithdrawData.getDefaultDescription())
-                        .setExpiry(300L) // in seconds
-                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                CreateInvoiceRequest request = CreateInvoiceRequest.newBuilder()
+                        .setAmount(value)
+                        .setDescription(mWithdrawData.getDefaultDescription())
+                        .setExpiry(300L)
+                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
-                        .subscribe(addInvoiceResponse -> {
+                getCompositeDisposable().add(BackendManager.api().createInvoice(request)
+                        .subscribe(response -> {
 
                             // Invoice was created. Now forward it to the LNURL service to initiate withdraw.
                             LnUrlFinalWithdrawRequest lnUrlFinalWithdrawRequest = new LnUrlFinalWithdrawRequest.Builder()
                                     .setCallback(mWithdrawData.getCallback())
                                     .setK1(mWithdrawData.getK1())
-                                    .setInvoice(addInvoiceResponse.getPaymentRequest())
+                                    .setInvoice(response.getBolt11())
                                     .build();
 
                             okhttp3.Request lnUrlRequest = new Request.Builder()

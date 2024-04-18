@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.Serializable;
@@ -57,7 +56,6 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private long mPeriod = 24 * 60 * 60; // in seconds
 
     private List<ForwardingListItem> mForwardingItems;
-    private List<ForwardingEvent> mTempForwardingEventsList;
     private List<Forward> mForwardsList;
     private TextView mEmptyListText;
 
