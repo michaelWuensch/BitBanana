@@ -250,6 +250,7 @@
     <string name="guardian_backup_overrides_existing_data">Some data already exists!\nRestoring a backup will delete all following data before restoring:\n\n- Node Connection Data\n- Contacts\n\nContinue?</string>
     <string name="guardian_invoices_without_specified_amount">Invoices lacking a specific amount pose a security risk. Though highly unlikely, intermediaries along the route may exploit such invoices, causing the recipient to receive less than expected without detection. No such risk exists in payments over a direct channel.</string>
     <string name="guardian_custodial_lndhub">You are about to connect to an LNDHub account. If you are not the host of the LNDHub, this is custodial. Whoever controls the LNDHub has control over your money. Deposit only as much as you can trust to that person.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">The current fee estimation suggests that this transaction with a fee rate of %1$d sat/vB may never be confirmed. Consider increasing the fee to avoid your transaction getting stuck for a long time.\n\nDo you want to proceed anyway?</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>

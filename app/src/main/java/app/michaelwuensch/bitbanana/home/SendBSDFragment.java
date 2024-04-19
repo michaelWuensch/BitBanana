@@ -51,6 +51,7 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
@@ -90,7 +91,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     double mCalculatedFeePercent;
     private String mKeysendPubkey;
     private boolean mIsKeysend;
-    private long mSendAmountMsat;
+    private long mSendAmount;
     private boolean mBlockOnInputChanged;
     private View mRootView;
     private DebounceHandler mFeeCaclulationDebounceHandler = new DebounceHandler();
@@ -195,16 +196,16 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                 if (!mEtAmount.getText().toString().equals(".")) {
                     // make text red if input is too large
-                    long maxSendableMsat;
+                    long maxSendable;
                     if (mOnChain) {
-                        maxSendableMsat = Wallet_Balance.getInstance().getBalances().onChainConfirmed() * 1000L;
+                        maxSendable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
                     } else {
-                        maxSendableMsat = WalletUtil.getMaxLightningSendAmount();
+                        maxSendable = WalletUtil.getMaxLightningSendAmount();
                     }
 
-                    if (mSendAmountMsat > maxSendableMsat) {
+                    if (mSendAmount > maxSendable) {
                         if (mOnChain) {
-                            if (mSendAmountMsat < Wallet_Balance.getInstance().getBalances().onChainTotal() * 1000L) {
+                            if (mSendAmount < Wallet_Balance.getInstance().getBalances().onChainTotal()) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                             } else {
@@ -212,7 +213,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                                 showError(message, 4000);
                             }
                         } else {
-                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxSendableMsat, true);
+                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxSendable, true);
                             showError(message, 6000);
                         }
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
@@ -221,7 +222,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
                         mSendButtonEnabled_input = true;
                     }
-                    if (mSendAmountMsat == 0 && mFixedAmount == 0L) {
+                    if (mSendAmount == 0 && mFixedAmount == 0L) {
                         mSendButtonEnabled_input = false;
                     }
                     updateSendButtonState();
@@ -252,7 +253,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
 
                 if (mAmountValid) {
-                    mSendAmountMsat = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
+                    mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
 
                     // calculate fees
                     if (mIsKeysend || (!mOnChain && mDecodedBolt11.hasNoAmountSpecified())) {
@@ -318,42 +319,23 @@ public class SendBSDFragment extends BaseBSDFragment {
                     BBLog.d(LOG_TAG, "Trying to send on-chain payment...");
                     // Send on-chain payment
 
-                    long sendAmount = 0L;
-                    if (mFixedAmount != 0L) {
-                        sendAmount = mFixedAmount;
-                    } else {
-                        sendAmount = mSendAmountMsat;
-                    }
+                    if (getOnChainSendAmount() != 0L) {
 
-                    if (sendAmount != 0L) {
+                        if (mOnChainFeeView.isLowerThanMinimum()) {
+                            new UserGuardian(getContext(), new UserGuardian.OnGuardianConfirmedListener() {
+                                @Override
+                                public void onConfirmed() {
+                                    performOnChainSend();
+                                }
 
-                        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(sendAmount, false));
+                                @Override
+                                public void onCancelled() {
 
-                        switchToSendProgressScreen();
-
-                        SendOnChainPaymentRequest sendOnChainPaymentRequest = SendOnChainPaymentRequest.newBuilder()
-                                .setAddress(mOnChainAddress)
-                                .setAmount(sendAmount)
-                                .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
-                                .build();
-
-                        getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
-                                .subscribe(() -> {
-                                    BBLog.d(LOG_TAG, "On-chain payment successful.");
-
-                                    // updated the history, so it is shown the next time the user views it
-                                    Wallet_TransactionHistory.getInstance().updateOnChainTransactionHistory();
-
-                                    // show success animation
-                                    mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
-                                }, throwable -> {
-                                    BBLog.e(LOG_TAG, "Exception in send coins request task.");
-                                    BBLog.e(LOG_TAG, throwable.getMessage());
-
-                                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
-                                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
-                                }));
+                                }
+                            }).securityLowOnChainFee((int) mOnChainFeeView.getSatPerVByteFee());
+                        } else {
+                            performOnChainSend();
+                        }
                     } else {
                         // Send amount == 0
                         Toast.makeText(getActivity(), "Send amount is to small.", Toast.LENGTH_SHORT).show();
@@ -459,7 +441,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmountMsat, !mOnChain));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmount, !mOnChain));
                 } else {
                     mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
                 }
@@ -477,6 +459,47 @@ public class SendBSDFragment extends BaseBSDFragment {
         });
 
         return view;
+    }
+
+    private long getOnChainSendAmount() {
+        long sendAmount = 0L;
+        if (mFixedAmount != 0L) {
+            sendAmount = mFixedAmount;
+        } else {
+            sendAmount = mSendAmount;
+        }
+        return sendAmount;
+    }
+
+    private void performOnChainSend(){
+        long sendAmount = getOnChainSendAmount();
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(sendAmount, false));
+
+        switchToSendProgressScreen();
+
+        SendOnChainPaymentRequest sendOnChainPaymentRequest = SendOnChainPaymentRequest.newBuilder()
+                .setAddress(mOnChainAddress)
+                .setAmount(sendAmount)
+                .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
+                .build();
+
+        getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
+                .subscribe(() -> {
+                    BBLog.d(LOG_TAG, "On-chain payment successful.");
+
+                    // updated the history, so it is shown the next time the user views it
+                    Wallet_TransactionHistory.getInstance().updateOnChainTransactionHistory();
+
+                    // show success animation
+                    mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
+                }, throwable -> {
+                    BBLog.e(LOG_TAG, "Exception in send coins request task.");
+                    BBLog.e(LOG_TAG, throwable.getMessage());
+
+                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
+                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
+                }));
     }
 
     @Override
@@ -506,16 +529,16 @@ public class SendBSDFragment extends BaseBSDFragment {
         switchToSendProgressScreen();
 
         if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mSendAmountMsat, true));
+            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mSendAmount, true));
         } else {
             mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mDecodedBolt11.getAmountRequested(), true));
         }
 
         SendLnPaymentRequest sendLnPaymentRequest = null;
         if (mIsKeysend)
-            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, mSendAmountMsat, mPcvComment.getData());
+            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, mSendAmount, mPcvComment.getData());
         else {
-            long amount = mDecodedBolt11.hasAmountSpecified() ? mDecodedBolt11.getAmountRequested() : mSendAmountMsat;
+            long amount = mDecodedBolt11.hasAmountSpecified() ? mDecodedBolt11.getAmountRequested() : mSendAmount;
             sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, amount);
         }
 
@@ -598,7 +621,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 if (mFixedAmount != 0L) {
                     sendAmount = mFixedAmount;
                 } else {
-                    sendAmount = mSendAmountMsat;
+                    sendAmount = mSendAmount;
                 }
                 estimateOnChainTransactionSize(mOnChainAddress, sendAmount);
             } else {
@@ -675,7 +698,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private long getLightningPaymentAmountMSat() {
         if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
-            return mSendAmountMsat;
+            return mSendAmount;
         } else {
             return mDecodedBolt11.getAmountRequested();
         }

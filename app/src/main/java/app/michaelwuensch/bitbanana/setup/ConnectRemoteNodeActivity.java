@@ -94,8 +94,16 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void connectIfUserConfirms(BackendConfig backendConfig) {
         // Ask user to confirm the connection to remote host
-        new UserGuardian(this, positive -> {
-            connect(backendConfig);
+        new UserGuardian(this, new UserGuardian.OnGuardianConfirmedListener() {
+            @Override
+            public void onConfirmed() {
+                connect(backendConfig);
+            }
+
+            @Override
+            public void onCancelled() {
+
+            }
         }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 

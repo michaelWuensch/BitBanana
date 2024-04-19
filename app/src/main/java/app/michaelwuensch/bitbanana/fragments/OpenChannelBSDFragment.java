@@ -39,6 +39,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
@@ -171,7 +172,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     return;
                 }
 
-                // values from LND
+                // ToDo: values are from LND. Make it generic? Support Wumbo channels?
                 long minSendAmount = 20000 * 1000L;
                 long absoluteMaxSendAmount = 17666215 * 1000L;
                 long maxSendAmount = absoluteMaxSendAmount;
@@ -216,8 +217,21 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     return;
                 }
 
-                switchToProgressScreen();
-                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked());
+                if (mOnChainFeeView.isLowerThanMinimum()) {
+                    new UserGuardian(getContext(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            performChannelOpen();
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityLowOnChainFee((int) mOnChainFeeView.getSatPerVByteFee());
+                } else {
+                    performChannelOpen();
+                }
             }
         });
 
@@ -234,6 +248,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
         return view;
+    }
+
+    private void performChannelOpen() {
+        switchToProgressScreen();
+        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked());
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {

@@ -510,9 +510,17 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                 } else {
                     // Warn about 0 sat invoices
-                    new UserGuardian(HomeActivity.this, positive -> {
-                        SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
-                        sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
+                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
                     }).securityZeroAmountInvoice();
                 }
             }
@@ -539,11 +547,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                                     sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 } else {
                                     // Warn about 0 sat invoices
-                                    new UserGuardian(HomeActivity.this, positive -> {
-                                        String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
-                                        String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
-                                        SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
-                                        sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                    new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                                        @Override
+                                        public void onConfirmed() {
+                                            String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
+                                            String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
+                                            sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                        }
+
+                                        @Override
+                                        public void onCancelled() {
+
+                                        }
                                     }).securityZeroAmountInvoice();
                                 }
                             }
@@ -697,8 +713,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void addWallet(BackendConfig backendConfig) {
-        new UserGuardian(HomeActivity.this, positive -> {
-            if (positive) {
+        new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+            @Override
+            public void onConfirmed() {
                 RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
                     @Override
@@ -715,7 +732,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         activateBackend();
                     }
                 });
-            } else {
+            }
+
+            @Override
+            public void onCancelled() {
                 activateBackend();
             }
         }).securityConnectToRemoteServer(backendConfig.getHost());

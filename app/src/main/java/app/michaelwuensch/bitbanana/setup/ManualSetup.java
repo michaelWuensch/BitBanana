@@ -227,7 +227,17 @@ public class ManualSetup extends BaseAppCompatActivity {
                 if (!mSwVerify.isChecked()) {
                     // user wants to disable certificate verification
                     mSwVerify.setChecked(true);
-                    new UserGuardian(ManualSetup.this, positive -> mSwVerify.setChecked(false)).securityCertificateVerification();
+                    new UserGuardian(ManualSetup.this, new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            mSwVerify.setChecked(false);
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityCertificateVerification();
                 }
             }
         });

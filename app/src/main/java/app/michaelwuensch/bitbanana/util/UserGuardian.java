@@ -26,6 +26,7 @@ public class UserGuardian {
     private static final String DIALOG_PASTE_FROM_CLIPBOARD = "guardianPasteFromClipboard";
     private static final String DIALOG_DISABLE_SCRAMBLED_PIN = "guardianDisableScrambledPin";
     private static final String DIALOG_DISABLE_SCREEN_PROTECTION = "guardianDisableScreenProtection";
+    private static final String DIALOG_LOW_ON_CHAIN_FEE = "guardianLowOnChainFee";
     private static final String DIALOG_HIGH_ONCHAIN_FEE = "guardianHighOnCainFees";
     private static final String DIALOG_OLD_EXCHANGE_RATE = "guardianOldExchangeRate";
     private static final String DIALOG_REMOTE_CONNECT = "guardianRemoteConnect";
@@ -64,6 +65,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_PASTE_FROM_CLIPBOARD, true)
                 .putBoolean(DIALOG_DISABLE_SCRAMBLED_PIN, true)
                 .putBoolean(DIALOG_DISABLE_SCREEN_PROTECTION, true)
+                .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
                 .putBoolean(DIALOG_HIGH_ONCHAIN_FEE, true)
                 .putBoolean(DIALOG_OLD_EXCHANGE_RATE, true)
                 .putBoolean(DIALOG_REMOTE_CONNECT, true)
@@ -144,6 +146,17 @@ public class UserGuardian {
     }
 
     /**
+     * Warn the user about low On-Chain fees.
+     * Hopefully this prevents users from creating transactions that get stuck.
+     */
+    public void securityLowOnChainFee(int satPerVByte) {
+        mCurrentDialogName = DIALOG_LOW_ON_CHAIN_FEE;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_low_onchain_fee, satPerVByte));
+        showGuardianDialog(adb);
+    }
+
+    /**
      * Warn the user about high On-Chain fees.
      * The user will be displayed a message which shows the amount of fee compared to
      * the transactions value.
@@ -188,7 +201,7 @@ public class UserGuardian {
      */
     public void securityOldNodeSoftwareVersion(String nodeSoftwareName, String versionName) {
         mCurrentDialogName = DIALOG_OLD_NODE_SOFTWARE_VERSION;
-        AlertDialog.Builder adb = createDialog(true);
+        AlertDialog.Builder adb = createDialog(false);
         String message = mContext.getResources().getString(R.string.guardian_oldNodeSoftwareVersion, nodeSoftwareName, versionName);
         adb.setMessage(message);
         showGuardianDialog(adb);
@@ -277,9 +290,10 @@ public class UserGuardian {
         View titleView = adbInflater.inflate(R.layout.guardian_title, null);
         adb.setView(DialogLayout);
         adb.setCustomTitle(titleView);
+        adb.setCancelable(false); // prevents cancelling when tapping outside of the dialog
         adb.setOnCancelListener(dialogInterface -> {
             if (mListener != null)
-                mListener.onGuardianConfirmed(false);
+                mListener.onCancelled();
         });
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
 
@@ -289,13 +303,13 @@ public class UserGuardian {
 
             if (mListener != null) {
                 // Execute interface callback on "OK"
-                mListener.onGuardianConfirmed(true);
+                mListener.onConfirmed();
             }
         });
         if (hasCancelOption) {
             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
                 if (mListener != null)
-                    mListener.onGuardianConfirmed(false);
+                    mListener.onCancelled();
             });
         }
         return adb;
@@ -314,16 +328,17 @@ public class UserGuardian {
         LayoutInflater adbInflater = LayoutInflater.from(mContext);
         View titleView = adbInflater.inflate(R.layout.guardian_title, null);
         adb.setCustomTitle(titleView);
+        adb.setCancelable(false); // prevents cancelling when tapping outside of the dialog
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
             if (mListener != null) {
                 // Execute interface callback on "OK"
-                mListener.onGuardianConfirmed(true);
+                mListener.onConfirmed();
             }
         });
         if (hasCancelOption) {
             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
                 if (mListener != null)
-                    mListener.onGuardianConfirmed(false);
+                    mListener.onCancelled();
             });
         }
         return adb;
@@ -346,12 +361,14 @@ public class UserGuardian {
             dlg.show();
         } else {
             if (mListener != null) {
-                mListener.onGuardianConfirmed(true);
+                mListener.onConfirmed();
             }
         }
     }
 
     public interface OnGuardianConfirmedListener {
-        void onGuardianConfirmed(boolean positive);
+        void onConfirmed();
+
+        void onCancelled();
     }
 }

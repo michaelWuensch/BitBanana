@@ -221,7 +221,7 @@ public class PrefsUtil {
     }
 
     public static int getFeeEstimate_Minimum() {
-        return getPrefs().getInt(FEE_ESTIMATE_NEXT_BLOCK, 1);
+        return getPrefs().getInt(FEE_ESTIMATE_MINIMUM, 1);
     }
 
     public static long getFeeEstimate_Timestamp() {

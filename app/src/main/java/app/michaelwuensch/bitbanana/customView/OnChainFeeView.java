@@ -270,6 +270,10 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
         return mSlider.getProgress();
     }
 
+    public boolean isLowerThanMinimum() {
+        return getSatPerVByteFee() < PrefsUtil.getFeeEstimate_Minimum();
+    }
+
     public enum OnChainFeeTier {
         FAST,
         MEDIUM,
