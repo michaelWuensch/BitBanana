@@ -61,8 +61,10 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
+import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
@@ -923,5 +925,36 @@ public class LndApi extends Api {
                     return (double) response.getFeeSat() / (double) response.getSatPerVbyte();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Getting transaction size failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable openChannel(OpenChannelRequest openChannelRequest) {
+        com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request = com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.newBuilder()
+                .setNodePubkey(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
+                .setSatPerVbyte(openChannelRequest.getSatPerVByte())
+                .setPrivate(openChannelRequest.isPrivate())
+                .setLocalFundingAmount(openChannelRequest.getAmount() / 1000)
+                .build();
+
+        return LndConnection.getInstance().getLightningService().openChannel(request)
+                .firstOrError()
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error opening channel: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable closeChannel(CloseChannelRequest closeChannelRequest) {
+        com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest request = com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest.newBuilder()
+                .setChannelPoint(ChannelPoint.newBuilder()
+                        .setFundingTxidStr(closeChannelRequest.getFundingOutpoint().getTransactionID())
+                        .setOutputIndex(closeChannelRequest.getFundingOutpoint().getOutputIndex())
+                        .build())
+                .setForce(closeChannelRequest.isForceClose())
+                .build();
+
+        return LndConnection.getInstance().getLightningService().closeChannel(request)
+                .firstOrError()
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
     }
 }

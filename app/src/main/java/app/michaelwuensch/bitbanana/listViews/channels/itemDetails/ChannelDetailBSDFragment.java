@@ -162,7 +162,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
         showChannelVisibility(channel.isPrivate());
 
         if (FeatureManager.isCloseChannelEnabled()) {
-            showClosingButton(!channel.isActive(), channel.getLocalChannelConstraints().getSelfDelay());
+            showClosingButton(channel, !channel.isActive(), channel.getLocalChannelConstraints().getSelfDelay());
         }
 
         if (channel.isActive()) {
@@ -267,13 +267,13 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
         mForceClosingTxTimeText.setText(expiryText);
     }
 
-    private void showClosingButton(boolean forceClose, int csvDelay) {
+    private void showClosingButton(OpenChannel channel, boolean forceClose, int csvDelay) {
         mCloseChannelButton.setVisibility(View.VISIBLE);
         mCloseChannelButton.setText(forceClose ? getText(R.string.channel_close_force) : getText(R.string.channel_close));
-        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(forceClose, csvDelay));
+        mCloseChannelButton.setOnClickListener(view1 -> closeChannel(channel, forceClose, csvDelay));
     }
 
-    private void closeChannel(boolean force, int csvDelay) {
+    private void closeChannel(OpenChannel channel, boolean force, int csvDelay) {
         String lockUpTime = TimeFormatUtil.formattedDuration(csvDelay * 10 * 60, getContext()).toLowerCase();
         new AlertDialog.Builder(getContext())
                 .setTitle(force ? R.string.channel_close_force : R.string.channel_close)
@@ -281,7 +281,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
                     switchToProgressScreen();
-                    Wallet_Channels.getInstance().closeChannel(mChannelPoint, force);
+                    Wallet_Channels.getInstance().closeChannel(channel, force);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })

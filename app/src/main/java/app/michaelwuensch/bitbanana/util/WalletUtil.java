@@ -69,10 +69,11 @@ public class WalletUtil {
                 if (c.hasCloseTransactionId()) {
                     if (transaction.getTransactionId().equals(c.getCloseTransactionId()))
                         return c.getRemotePubKey();
-                    for (Outpoint op : transaction.getInputs()) {
-                        if (op.getTransactionID().equals(c.getCloseTransactionId()))
-                            return c.getRemotePubKey();
-                    }
+                    if (transaction.getInputs() != null)
+                        for (Outpoint op : transaction.getInputs()) {
+                            if (op.getTransactionID().equals(c.getCloseTransactionId()))
+                                return c.getRemotePubKey();
+                        }
                 }
             }
         }

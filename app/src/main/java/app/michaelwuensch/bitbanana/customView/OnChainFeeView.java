@@ -34,7 +34,6 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     private ImageView mFeeArrowUnitImage;
     private ImageButton mModeSwitch;
     private SeekBar mSlider;
-    private TextView mTvSlider;
     private ViewSwitcher mModeContentSwitcher;
     private ClickableConstraintLayoutGroup mGroupSendFeeAmount;
     private Group mGroupSendFeeDuration;
@@ -67,7 +66,6 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
         mTabLayoutSendFeeSpeed = view.findViewById(R.id.feeSpeedTabLayout);
         mModeSwitch = view.findViewById(R.id.modeSwitch);
         mSlider = view.findViewById(R.id.slider);
-        mTvSlider = view.findViewById(R.id.sliderText);
         mModeContentSwitcher = view.findViewById(R.id.modeContentSwitcher);
 
         mGroupSendFeeAmount = view.findViewById(R.id.sendFeeOnChainAmountGroup);
@@ -92,7 +90,6 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
         mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mTvSlider.setText("" + i);
                 if (mManualMode) {
                     setFeeDetails(0, i);
                     if (mTransactionSizeVByte != 0)
@@ -258,6 +255,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
                 @Override
                 public void run() {
                     setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
+                    mSlider.setMax(PrefsUtil.getFeeEstimate_NextBlock() + 50);
                 }
             });
         }

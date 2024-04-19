@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.backends;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.models.Balances;
+import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
@@ -20,6 +21,7 @@ import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
@@ -169,5 +171,13 @@ public class Api {
 
     public Single<Double> getTransactionSizeVByte(String address, long amount) {
         return Single.error(unsupportedException());
+    }
+
+    public Completable openChannel(OpenChannelRequest openChannelRequest) {
+        return Completable.error(unsupportedException());
+    }
+
+    public Completable closeChannel(CloseChannelRequest closeChannelRequest) {
+        return Completable.error(unsupportedException());
     }
 }

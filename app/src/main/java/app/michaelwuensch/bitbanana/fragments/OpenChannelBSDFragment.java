@@ -217,7 +217,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                 }
 
                 switchToProgressScreen();
-                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity / 1000, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked());
             }
         });
 
@@ -344,12 +344,6 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mOnChainFeeView.onCalculating();
     }
 
-    /**
-     * Show the calculated fee
-     */
-    private void setCalculatedFeeAmount(long vBytes) {
-        mOnChainFeeView.onSizeCalculatedSuccess(vBytes);
-    }
 
     /**
      * Show fee calculation failure
@@ -378,7 +372,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
             }
 
             getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
-                    .subscribe(response -> setCalculatedFeeAmount((long) response.doubleValue()),
+                    .subscribe(response -> mOnChainFeeView.onSizeCalculatedSuccess(((long) (response * 1.5))), // ToDo: channel open transactions are larger than normal transactions. We go with this factor until we find a better method for estimating channel opens. It will also depend on the channel type.
                             throwable -> {
                                 BBLog.w(TAG, "Exception in on-chain transaction size request task.");
                                 BBLog.w(TAG, throwable.getMessage());

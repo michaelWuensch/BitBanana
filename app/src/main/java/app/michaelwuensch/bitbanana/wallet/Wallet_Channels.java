@@ -6,11 +6,8 @@ import android.os.Handler;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
-import com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest;
-import com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
-import com.google.protobuf.ByteString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,18 +17,17 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
-import app.michaelwuensch.bitbanana.util.HexUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -97,7 +93,7 @@ public class Wallet_Channels {
         return mClosedChannelsList;
     }
 
-    public void openChannel(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
+    public void openChannel(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate) {
         compositeDisposable.add(BackendManager.api().listPeers()
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
@@ -111,10 +107,10 @@ public class Wallet_Channels {
 
                     if (connected) {
                         BBLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
-                        openChannelConnected(nodeUri, amount, targetConf, isPrivate);
+                        openChannelConnected(nodeUri, amount, satPerVByte, isPrivate);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, targetConf, isPrivate);
+                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, satPerVByte, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -126,20 +122,18 @@ public class Wallet_Channels {
                 }));
     }
 
-    public void openChannelConnected(LightningNodeUri nodeUri, long amount, int targetConf, boolean isPrivate) {
-        byte[] nodeKeyBytes = HexUtil.hexToBytes(nodeUri.getPubKey());
+    public void openChannelConnected(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate) {
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
-                .setNodePubkey(ByteString.copyFrom(nodeKeyBytes))
-                .setTargetConf(targetConf)
+                .setNodePubKey(nodeUri.getPubKey())
+                .setSatPerVByte(satPerVByte)
                 .setPrivate(isPrivate)
-                .setLocalFundingAmount(amount)
+                .setAmount(amount)
                 .build();
 
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().openChannel(openChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .firstOrError()
-                .subscribe(openStatusUpdate -> {
-                    BBLog.d(LOG_TAG, "Open channel update: " + openStatusUpdate.getUpdateCase().getNumber());
+        compositeDisposable.add(BackendManager.api().openChannel(openChannelRequest)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(() -> {
+                    BBLog.d(LOG_TAG, "Channel open successfully initiated!");
                     broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error opening channel: " + throwable.getMessage());
@@ -154,31 +148,26 @@ public class Wallet_Channels {
                 }));
     }
 
-    public void closeChannel(String channelPoint, boolean force) {
-        ChannelPoint point = ChannelPoint.newBuilder()
-                .setFundingTxidStr(channelPoint.substring(0, channelPoint.indexOf(':')))
-                .setOutputIndex(Character.getNumericValue(channelPoint.charAt(channelPoint.length() - 1)))
-                .build();
-
+    public void closeChannel(OpenChannel channel, boolean force) {
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder()
-                .setChannelPoint(point)
-                .setForce(force)
+                .setShortChannelId(channel.getShortChannelId())
+                .setFundingOutpoint(channel.getFundingOutpoint())
+                .setForceClose(force)
                 .build();
 
-        compositeDisposable.add(LndConnection.getInstance().getLightningService().closeChannel(closeChannelRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
-                .firstOrError()
-                .subscribe(closeStatusUpdate -> {
-                    BBLog.d(LOG_TAG, "Closing channel update: " + closeStatusUpdate.getUpdateCase().getNumber());
-                    broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.SUCCESS, null);
+        compositeDisposable.add(BackendManager.api().closeChannel(closeChannelRequest)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(() -> {
+                    BBLog.d(LOG_TAG, "Channel close successfully initiated!");
+                    broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.SUCCESS, null);
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error closing channel: " + throwable.getMessage());
                     if (throwable.getMessage().toLowerCase().contains("offline")) {
-                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, throwable.getMessage());
+                        broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, throwable.getMessage());
                     } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
+                        broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
                     } else {
-                        broadcastChannelCloseUpdate(channelPoint, ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, throwable.getMessage());
+                        broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, throwable.getMessage());
                     }
                 }));
     }

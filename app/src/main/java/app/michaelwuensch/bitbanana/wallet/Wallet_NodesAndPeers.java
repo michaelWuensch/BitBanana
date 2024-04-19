@@ -41,10 +41,10 @@ public class Wallet_NodesAndPeers {
         compositeDisposable.clear();
     }
 
-    public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
+    public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, long satPerVByte, boolean isPrivate) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
             BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, targetConf, isPrivate);
+            fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, satPerVByte, isPrivate);
             return;
         }
 
@@ -55,7 +55,7 @@ public class Wallet_NodesAndPeers {
                     broadcastPeerConnectedSuccess();
                     if (openChannel) {
                         BBLog.d(LOG_TAG, "Now that we are connected to peer, trying to open channel...");
-                        Wallet_Channels.getInstance().openChannelConnected(nodeUri, amount, targetConf, isPrivate);
+                        Wallet_Channels.getInstance().openChannelConnected(nodeUri, amount, satPerVByte, isPrivate);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
@@ -76,7 +76,7 @@ public class Wallet_NodesAndPeers {
                 }));
     }
 
-    private void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, int targetConf, boolean isPrivate) {
+    private void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, long satPerVByte, boolean isPrivate) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
@@ -85,7 +85,7 @@ public class Wallet_NodesAndPeers {
                         LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, openChannel, amount, targetConf, isPrivate);
+                            connectPeer(nodeUriWithHost, openChannel, amount, satPerVByte, isPrivate);
                         } else {
                             BBLog.d(LOG_TAG, "Failed to parse nodeUri");
                             Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
