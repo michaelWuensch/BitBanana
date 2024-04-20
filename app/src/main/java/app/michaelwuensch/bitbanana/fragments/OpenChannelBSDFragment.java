@@ -376,6 +376,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
      * This function is used to calculate the expected on chain fee.
      */
     private void estimateOnChainTransactionSize(long amount) {
+        if (!BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation()) {
+            setFeeFailure();
+            return;
+        }
+
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // We choose a dummy bech32 address. The fee amount depends only on the address type.
             String address;

@@ -65,7 +65,7 @@ public class FeeEstimationUtil {
 
             switch (provider) {
                 case INTERNAL:
-                    if (BackendManager.getCurrentBackend().supportsFeeEstimation())
+                    if (BackendManager.getCurrentBackend().supportsOnChainFeeEstimation())
                         sendInternalRequest();
                     else
                         sendMempoolRequest(MEMPOOL_HOST);

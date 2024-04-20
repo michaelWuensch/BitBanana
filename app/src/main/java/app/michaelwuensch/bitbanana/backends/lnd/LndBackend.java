@@ -25,6 +25,8 @@ public class LndBackend extends Backend {
         bSupportsMessageSigningByNodePrivateKey = true;
         bSupportsLnurlAuth = true;
         bSupportsKeysend = true;
-        bSupportsFeeEstimation = true;
+        bSupportsOnChainFeeEstimation = true;
+        bSupportsAbsoluteOnChainFeeEstimation = true;
+        bSupportsRoutingFeeEstimation = true;
     }
 }

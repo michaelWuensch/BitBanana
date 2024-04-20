@@ -20,6 +20,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.tabs.TabLayout;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.FeeEstimationUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -203,13 +204,18 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     }
 
     private void updateAbsoluteFee() {
-        if (mTransactionSizeVByte == 0) {
-            mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
-            mTvSendFeeAmount.setVisibility(View.VISIBLE);
-            mPbCalculateFee.setVisibility(View.GONE);
+        if (BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation()) {
+            if (mTransactionSizeVByte == 0) {
+                mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
+                mTvSendFeeAmount.setVisibility(View.VISIBLE);
+                mPbCalculateFee.setVisibility(View.GONE);
+            } else {
+                mTvSendFeeAmount.setAmountMsat(mTransactionSizeVByte * mSlider.getProgress() * 1000);
+                mTvSendFeeAmount.setVisibility(View.VISIBLE);
+                mPbCalculateFee.setVisibility(View.GONE);
+            }
         } else {
-            mTvSendFeeAmount.setAmountMsat(mTransactionSizeVByte * mSlider.getProgress() * 1000);
-            mTvSendFeeAmount.setVisibility(View.VISIBLE);
+            mTvSendFeeAmount.setVisibility(GONE);
             mPbCalculateFee.setVisibility(View.GONE);
         }
     }
@@ -277,7 +283,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
 
     private int getSliderMax() {
         int nextBlock = PrefsUtil.getFeeEstimate_NextBlock();
-        return Math.max(nextBlock + 20, nextBlock + (int)(0.2 * nextBlock));
+        return Math.max(nextBlock + 20, nextBlock + (int) (0.2 * nextBlock));
     }
 
     public enum OnChainFeeTier {

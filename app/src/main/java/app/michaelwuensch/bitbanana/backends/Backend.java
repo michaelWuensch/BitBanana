@@ -19,7 +19,18 @@ public class Backend {
     protected boolean bSupportsMessageSigningByNodePrivateKey = false;
     protected boolean bSupportsLnurlAuth = false;
     protected boolean bSupportsKeysend = false;
-    protected boolean bSupportsFeeEstimation = false;
+
+    /**
+     * If the backend has a function to get recommended on-chain fees
+     */
+    protected boolean bSupportsOnChainFeeEstimation = false;
+
+    /**
+     * If the backend has a way to calculate the on-chain transaction before actually sending it.
+     * This allows to display the absolute fee that will be payed for the transaction rather than just a sat/vB value.
+     */
+    protected boolean bSupportsAbsoluteOnChainFeeEstimation = false;
+    protected boolean bSupportsRoutingFeeEstimation = false;
 
 
     public Backend() {
@@ -85,7 +96,15 @@ public class Backend {
         return bSupportsKeysend;
     }
 
-    public boolean supportsFeeEstimation() {
-        return bSupportsFeeEstimation;
+    public boolean supportsOnChainFeeEstimation() {
+        return bSupportsOnChainFeeEstimation;
+    }
+
+    public boolean supportsAbsoluteOnChainFeeEstimation() {
+        return bSupportsAbsoluteOnChainFeeEstimation;
+    }
+
+    public boolean supportsRoutingFeeEstimation() {
+        return bSupportsRoutingFeeEstimation;
     }
 }

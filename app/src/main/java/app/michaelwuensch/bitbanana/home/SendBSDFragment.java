@@ -327,8 +327,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         } else {
 
             // Lightning Payment
-
-            mLightningFeeView.setVisibility(View.VISIBLE);
+            mLightningFeeView.setVisibility(BackendManager.getCurrentBackend().supportsRoutingFeeEstimation() ? View.VISIBLE : View.GONE);
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
             mResultView.setTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
@@ -363,6 +362,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
                 setSendButtonEnabled(false);
+                setFeeFailure();
 
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
@@ -621,6 +621,10 @@ public class SendBSDFragment extends BaseBSDFragment {
      * This function is used to calculate the expected on chain fee.
      */
     private void estimateOnChainTransactionSize(String address, long amount) {
+        if (!BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation()) {
+            setFeeFailure();
+            return;
+        }
         getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
                 .subscribe(response -> setCalculatedFeeAmountOnChain((long) response.doubleValue()),
                         throwable -> {
@@ -631,7 +635,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     }
 
     private void estimateRoutingFee() {
-        if (getLightningPaymentAmountMSat() == 0) {
+        if (getLightningPaymentAmountMSat() == 0 || !BackendManager.getCurrentBackend().supportsRoutingFeeEstimation()) {
             setFeeFailure();
             return;
         }
