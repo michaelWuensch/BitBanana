@@ -19,36 +19,30 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.ConnectPeerRequest;
-import com.github.lightningnetwork.lnd.lnrpc.LightningAddress;
-import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Peer;
 import com.google.gson.Gson;
-import com.google.protobuf.ByteString;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlResponse;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Peer;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -143,12 +137,12 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
             return;
         }
 
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().listPeers(ListPeersRequest.newBuilder().build())
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+        getCompositeDisposable().add(BackendManager.api().listPeers()
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(listPeersResponse -> {
+                .subscribe(response -> {
                     boolean connected = false;
-                    for (Peer node : listPeersResponse.getPeersList()) {
+                    for (Peer node : response) {
                         if (node.getPubKey().equals(nodeUri.getPubKey())) {
                             connected = true;
                             break;
@@ -173,15 +167,10 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
     }
 
     private void connectPeer(LightningNodeUri nodeUri) {
-        LightningAddress lightningAddress = LightningAddress.newBuilder()
-                .setHostBytes(ByteString.copyFrom(nodeUri.getHost().getBytes(StandardCharsets.UTF_8)))
-                .setPubkeyBytes(ByteString.copyFrom(nodeUri.getPubKey().getBytes(StandardCharsets.UTF_8))).build();
-        ConnectPeerRequest connectPeerRequest = ConnectPeerRequest.newBuilder().setAddr(lightningAddress).build();
-
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().connectPeer(connectPeerRequest)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+        getCompositeDisposable().add(BackendManager.api().connectPeer(nodeUri)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(connectPeerResponse -> {
+                .subscribe(() -> {
                     BBLog.v(TAG, "Successfully connected to peer");
                     sendFinalRequestToService();
                 }, throwable -> {

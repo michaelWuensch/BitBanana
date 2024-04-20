@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventSubscription;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelEventUpdate;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelPoint;
 import com.github.lightningnetwork.lnd.routerrpc.HtlcEvent;
 import com.github.lightningnetwork.lnd.routerrpc.SubscribeHtlcEventsRequest;
 
@@ -20,9 +19,9 @@ import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
