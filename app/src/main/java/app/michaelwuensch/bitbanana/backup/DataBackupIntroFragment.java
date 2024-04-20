@@ -58,8 +58,13 @@ public class DataBackupIntroFragment extends Fragment {
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() || ContactsManager.getInstance().hasAnyContacts()) {
                     new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
                         @Override
-                        public void onGuardianConfirmed() {
+                        public void onConfirmed() {
                             openOpenFileDialog();
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
                         }
                     }).securityBackupOverridesExistingData();
                 } else {

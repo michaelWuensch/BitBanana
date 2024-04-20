@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 
+import java.util.List;
+
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -108,8 +111,12 @@ public class NodeSpinner extends AppCompatSpinner {
         initFinished = false;
 
         String[] items = new String[BackendConfigsManager.getInstance().getAllBackendConfigs(true).size() + 1];
-        for (int i = 0; i < BackendConfigsManager.getInstance().getAllBackendConfigs(true).size(); i++) {
-            items[i] = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(i).getAlias();
+        List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(true);
+        for (int i = 0; i < backendConfigs.size(); i++) {
+            if (backendConfigs.get(i).getNetwork() == BackendConfig.Network.MAINNET || backendConfigs.get(i).getNetwork() == BackendConfig.Network.UNKNOWN || backendConfigs.get(i).getNetwork() == null)
+                items[i] = backendConfigs.get(i).getAlias();
+            else
+                items[i] = backendConfigs.get(i).getAlias() + " (" + backendConfigs.get(i).getNetwork().getDisplayName() + ")";
         }
         items[items.length - 1] = getContext().getResources().getString(R.string.spinner_manage_nodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.node_spinner_item, items);

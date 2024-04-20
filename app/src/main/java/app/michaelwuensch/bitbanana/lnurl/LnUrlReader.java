@@ -14,12 +14,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
@@ -109,6 +111,10 @@ public class LnUrlReader {
     }
 
     private static boolean handleLNURLAuth(Context ctx, String decodedLnUrl, OnLnUrlReadListener listener) {
+        if (!BackendManager.hasBackendConfigs()) {
+            listener.onError(ctx.getString(R.string.demo_setupNodeFirst), RefConstants.ERROR_DURATION_SHORT);
+            return true;
+        }
         try {
             URL decodedUrl = new URL(decodedLnUrl);
             String query = decodedUrl.getQuery();
@@ -117,7 +123,7 @@ public class LnUrlReader {
             // https://github.com/lnurl/luds/blob/luds/04.md
             if (query != null && query.contains("tag=login")) {
                 String k1 = UtilFunctions.getQueryParam(decodedUrl, "k1");
-                if (k1 != null && k1.length() == 64 && UtilFunctions.isHex(k1)) {
+                if (k1 != null && k1.length() == 64 && HexUtil.isHex(k1)) {
                     listener.onValidLnUrlAuth(decodedUrl);
                     return true;
                 } else {

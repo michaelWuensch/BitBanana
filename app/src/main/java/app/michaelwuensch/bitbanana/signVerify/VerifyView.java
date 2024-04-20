@@ -13,14 +13,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
-import com.google.protobuf.ByteString;
-
-import java.nio.charset.StandardCharsets;
-
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -96,24 +91,28 @@ public class VerifyView extends LinearLayout {
         super.onDetachedFromWindow();
     }
 
+    /**
+     * Verifies the message. The signature is only deemed valid if the recovered public key corresponds to a node key in the public Lightning network.
+     */
     private void verify() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             String message = mEtMessageToVerify.getText().toString();
             String signature = mEtSignatureToVerify.getText().toString();
             if (!message.isEmpty() && !signature.isEmpty()) {
-                VerifyMessageRequest verifyMessageRequest = VerifyMessageRequest.newBuilder()
-                        .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
-                        .setSignatureBytes(ByteString.copyFrom(signature, StandardCharsets.UTF_8))
-                        .build();
-
-                mCompositeDisposable.add(LndConnection.getInstance().getLightningService().verifyMessage(verifyMessageRequest)
-                        .subscribe(verifyMessageResponse -> {
-                            String pubkey = verifyMessageResponse.getPubkey();
-                            boolean valid = verifyMessageResponse.getValid();
-                            BBLog.v(LOG_TAG, "Signature is valid: " + valid);
-                            BBLog.v(LOG_TAG, "PubKey of signature: " + pubkey);
-                            updateVerificationInfo(valid, pubkey);
-                        }, throwable -> BBLog.d(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace())));
+                mCompositeDisposable.add(BackendManager.api().verifyMessageWithNode(message, signature)
+                        .subscribe(response -> {
+                            BBLog.v(LOG_TAG, "Signature is valid: " + response.isValid());
+                            BBLog.v(LOG_TAG, "PubKey of signature: " + response.getPubKey());
+                            updateVerificationInfo(response.isValid(), response.getPubKey());
+                        }, throwable -> {
+                            BBLog.d(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace());
+                            if (throwable.getMessage().contains("pubkey not found in the graph"))
+                                updateVerificationInfo(false, "none");
+                            else {
+                                mTVValidationInfo.setText(throwable.getMessage());
+                                showFailure();
+                            }
+                        }));
             }
         } else {
             Toast.makeText(getContext(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
@@ -131,10 +130,15 @@ public class VerifyView extends LinearLayout {
             mIVCopyPubkey.setVisibility(VISIBLE);
         } else {
             mTVValidationInfo.setText(R.string.signature_invalid);
-            mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-            mTVPubkeyLabel.setVisibility(GONE);
-            mTVPubkey.setVisibility(GONE);
-            mIVCopyPubkey.setVisibility(GONE);
+            showFailure();
         }
+    }
+
+    private void showFailure() {
+        mViewVerifyLayout.setVisibility(VISIBLE);
+        mTVValidationInfo.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        mTVPubkeyLabel.setVisibility(GONE);
+        mTVPubkey.setVisibility(GONE);
+        mIVCopyPubkey.setVisibility(GONE);
     }
 }

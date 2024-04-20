@@ -2,17 +2,13 @@ package app.michaelwuensch.bitbanana.backendConfigs.lndConnect;
 
 import com.google.common.io.BaseEncoding;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.CertificateUtil;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 
@@ -27,7 +23,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
-public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfig> {
+public class LndConnectStringParser extends BaseConnectionParser {
 
     public static final int ERROR_INVALID_CONNECT_STRING = 0;
     public static final int ERROR_NO_MACAROON = 1;
@@ -88,11 +84,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     try {
                         byte[] certificateBytes = BaseEncoding.base64Url().decode(cert);
                         try {
-                            // Generate the CA Certificate from the supplied byte array
-                            InputStream caInput = null;
-                            caInput = new ByteArrayInputStream(certificateBytes);
-                            Certificate ca = CertificateFactory.getInstance("X.509").generateCertificate(caInput);
-                        } catch (CertificateException e) {
+                            CertificateUtil.certificateFromDER(certificateBytes);
+                        } catch (Exception e) {
                             BBLog.e(LOG_TAG, "certificate validation failed");
                             mError = ERROR_INVALID_CERTIFICATE;
                             return this;
@@ -111,9 +104,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                     return this;
                 } else {
                     try {
-                        BaseEncoding.base64Url().decode(macaroon);
                         byte[] macaroonBytes = BaseEncoding.base64Url().decode(macaroon);
-                        macaroon = BaseEncoding.base16().encode(macaroonBytes);
+                        macaroon = HexUtil.bytesToHex(macaroonBytes);
                     } catch (IllegalArgumentException e) {
                         BBLog.e(LOG_TAG, "macaroon decoding failed");
 
@@ -123,17 +115,19 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 }
 
                 // everything is ok
-                LndConnectConfig lndConnectConfig = new LndConnectConfig();
-                lndConnectConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                lndConnectConfig.setHost(connectURI.getHost());
-                lndConnectConfig.setPort(connectURI.getPort());
-                lndConnectConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                lndConnectConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                lndConnectConfig.setCert(cert);
-                lndConnectConfig.setMacaroon(macaroon);
-                lndConnectConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                lndConnectConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
-                setConnectionConfig(lndConnectConfig);
+                BackendConfig backendConfig = new BackendConfig();
+                backendConfig.setSource(BackendConfig.Source.LND_CONNECT);
+                backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
+                backendConfig.setHost(connectURI.getHost());
+                backendConfig.setPort(connectURI.getPort());
+                backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+                if (cert != null)
+                    backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(cert)));
+                backendConfig.setAuthenticationToken(macaroon);
+                backendConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                backendConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
+                setBackendConfig(backendConfig);
                 return this;
 
             } else {
@@ -142,8 +136,8 @@ public class LndConnectStringParser extends BaseConnectionParser<LndConnectConfi
                 return this;
             }
 
-        } catch (URISyntaxException e) {
-            BBLog.e(LOG_TAG, "URI could not be parsed");
+        } catch (Exception e) {
+            BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + e.getMessage());
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }

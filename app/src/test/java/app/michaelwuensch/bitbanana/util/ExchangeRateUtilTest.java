@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.util;
 
+import static junit.framework.TestCase.assertEquals;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -8,10 +10,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
-
-import static junit.framework.TestCase.assertEquals;
-
-import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 
 public class ExchangeRateUtilTest {
 
@@ -31,6 +29,15 @@ public class ExchangeRateUtilTest {
     public void parseCoinbaseResponse() throws JSONException {
         JSONObject in = new JSONObject(readStringFromFile("exchange_rate_coinbase_response.json"));
         JSONObject out = ExchangeRateUtil.getInstance().parseCoinbaseResponse(in);
+
+        assertEquals(2, out.length());
+        assertEquals(1E-11, out.getJSONObject("USD").getDouble("rate"));
+    }
+
+    @Test
+    public void parseMempoolResponse() throws JSONException {
+        JSONObject in = new JSONObject(readStringFromFile("exchange_rate_mempool_response.json"));
+        JSONObject out = ExchangeRateUtil.getInstance().parseMempoolResponse(in);
 
         assertEquals(2, out.length());
         assertEquals(1E-11, out.getJSONObject("USD").getDouble("rate"));

@@ -69,14 +69,14 @@ public class ForwardingSummaryFragment extends Fragment {
         }
     }
 
-    public void setAmountSat(long sats) {
-        if (mAvAmount != null)
-            mAvAmount.setAmountSat(sats);
-    }
-
     public void setAmountMSat(long msats) {
         if (mAvAmount != null)
             mAvAmount.setAmountMsat(msats);
+    }
+
+    public void setMsatPrecision(boolean msatPrecision) {
+        if (mAvAmount != null)
+            mAvAmount.setMsatPrecision(msatPrecision);
     }
 
     public void overrideValue(String value) {

@@ -21,12 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.lightningnetwork.lnd.lnrpc.Hop;
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.Transaction;
-import com.google.protobuf.ByteString;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -46,18 +41,24 @@ import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.HistoryLi
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnInvoiceItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.LnPaymentItem;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.items.OnChainTransactionItem;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
+import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet.HistoryListener, Wallet.InvoiceSubscriptionListener, Wallet.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet_TransactionHistory.HistoryListener, Wallet_TransactionHistory.InvoiceSubscriptionListener, Wallet_Channels.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getSimpleName();
 
@@ -147,9 +148,9 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         mCompositeDisposable = new CompositeDisposable();
 
         // Register listeners
-        Wallet.getInstance().registerHistoryListener(this);
-        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
-        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        Wallet_TransactionHistory.getInstance().registerHistoryListener(this);
+        Wallet_TransactionHistory.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet_Channels.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
 
         // use a linear layout manager
@@ -255,11 +256,11 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
 
             // Add all payment relevant items to one of the lists above
 
-            if (Wallet.getInstance().mOnChainTransactionList != null) {
-                for (Transaction t : Wallet.getInstance().mOnChainTransactionList) {
+            if (Wallet_TransactionHistory.getInstance().getOnChainTransactionList() != null) {
+                for (OnChainTransaction t : Wallet_TransactionHistory.getInstance().getOnChainTransactionList()) {
                     OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
-                    if (Wallet.getInstance().isChannelTransaction(t)) {
+                    if (WalletUtil.isChannelTransaction(t)) {
                         internalTransactions.add(onChainTransactionItem);
                     } else {
                         if (t.getAmount() != 0) {
@@ -269,16 +270,16 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 }
             }
 
-            if (Wallet.getInstance().mInvoiceList != null) {
-                for (Invoice i : Wallet.getInstance().mInvoiceList) {
+            if (Wallet_TransactionHistory.getInstance().getInvoiceList() != null) {
+                for (LnInvoice i : Wallet_TransactionHistory.getInstance().getInvoiceList()) {
 
                     LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
 
                     // add to list according to current state of the invoice
-                    if (Wallet.getInstance().isInvoicePayed(i)) {
+                    if (i.isPaid()) {
                         normalPayments.add(lnInvoiceItem);
                     } else {
-                        if (Wallet.getInstance().isInvoiceExpired(i)) {
+                        if (i.isExpired()) {
                             expiredRequest.add(lnInvoiceItem);
                         } else {
                             normalPayments.add(lnInvoiceItem);
@@ -287,8 +288,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
                 }
             }
 
-            if (Wallet.getInstance().mPaymentsList != null) {
-                for (Payment p : Wallet.getInstance().mPaymentsList) {
+            if (Wallet_TransactionHistory.getInstance().getPaymentsList() != null) {
+                for (LnPayment p : Wallet_TransactionHistory.getInstance().getPaymentsList()) {
                     LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
                     normalPayments.add(lnPaymentItem);
                 }
@@ -382,15 +383,15 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
         super.onDestroy();
 
         // Unregister listeners
-        Wallet.getInstance().unregisterHistoryListener(this);
-        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
-        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        Wallet_TransactionHistory.getInstance().unregisterHistoryListener(this);
+        Wallet_TransactionHistory.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet_Channels.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
     }
 
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isInfoFetched()) {
-            Wallet.getInstance().fetchLNDTransactionHistory();
+            Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
             redrawHistoryList();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -398,7 +399,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     }
 
     @Override
-    public void onNewInvoiceAdded(Invoice invoice) {
+    public void onNewInvoiceAdded(LnInvoice invoice) {
         LnInvoiceItem item = new LnInvoiceItem(invoice);
         mHistoryItems.add(item);
         mAdapter.add(item);
@@ -411,7 +412,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     }
 
     @Override
-    public void onExistingInvoiceUpdated(Invoice invoice) {
+    public void onExistingInvoiceUpdated(LnInvoice invoice) {
         LnInvoiceItem item = new LnInvoiceItem(invoice);
         // Add updates the view if it already exists.
         mHistoryItems.add(item);
@@ -423,7 +424,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
     }
 
     @Override
-    public void onTransactionSelect(ByteString transaction, int type) {
+    public void onTransactionSelect(Serializable transaction, int type) {
         Bundle bundle = new Bundle();
 
         if (transaction != null) {
@@ -470,25 +471,27 @@ public class TransactionHistoryFragment extends Fragment implements Wallet.Histo
             switch (item.getType()) {
                 case HistoryListItem.TYPE_LN_INVOICE:
                     String invoiceMemo = ((LnInvoiceItem) item).getInvoice().getMemo();
-                    String invoiceAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((LnInvoiceItem) item).getInvoice().getValue());
-                    text = invoiceMemo + invoiceAmount;
+                    String invoiceKeysendMessage = ((LnInvoiceItem) item).getInvoice().getKeysendMessage();
+                    String invoiceAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(((LnInvoiceItem) item).getInvoice().getAmountRequested(), true);
+                    text = invoiceMemo + invoiceKeysendMessage + invoiceAmount;
                     break;
                 case HistoryListItem.TYPE_LN_PAYMENT:
-                    String paymentMemo = ((LnPaymentItem) item).getMemo();
-                    String paymentAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((LnPaymentItem) item).getPayment().getValueSat());
+                    String paymentMemo = ((LnPaymentItem) item).getPayment().getMemo();
+                    String paymentKeysendMessage = ((LnPaymentItem) item).getPayment().getKeysendMessage();
+                    String paymentAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(((LnPaymentItem) item).getPayment().getAmountPaid(), true);
 
-                    Hop lastHop = ((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHops(((LnPaymentItem) item).getPayment().getHtlcs(0).getRoute().getHopsCount() - 1);
-                    String payeePubKey = lastHop.getPubKey();
                     String payeeName = "";
-                    if (ContactsManager.getInstance().doesContactDataExist(payeePubKey)) {
-                        payeeName = ContactsManager.getInstance().getNameByContactData(payeePubKey);
+                    if (((LnPaymentItem) item).getPayment().hasDestinationPubKey()) {
+                        if (ContactsManager.getInstance().doesContactDataExist(((LnPaymentItem) item).getPayment().getDestinationPubKey())) {
+                            payeeName = ContactsManager.getInstance().getNameByContactData(((LnPaymentItem) item).getPayment().getDestinationPubKey());
+                        }
                     }
-                    text = paymentMemo + paymentAmount + payeeName;
+                    text = paymentMemo + paymentKeysendMessage + paymentAmount + payeeName;
                     break;
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
-                    String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount());
+                    String transactionAmount = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount(), false);
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
-                    String nodePubKey = Wallet.getInstance().getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
+                    String nodePubKey = WalletUtil.getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName = AliasManager.getInstance().getAlias(nodePubKey);
                     text = transactionAmount + nodeName;
                     break;

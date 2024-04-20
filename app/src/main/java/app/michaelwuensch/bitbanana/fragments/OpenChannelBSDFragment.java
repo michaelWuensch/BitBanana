@@ -20,12 +20,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -40,9 +39,12 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.ChannelOpenUpdateListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Channels.ChannelOpenUpdateListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
@@ -62,7 +64,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     private LightningNodeUri mLightningNodeUri;
     private OnChainFeeView mOnChainFeeView;
     private CheckBox mPrivateCheckbox;
-    private long mValueChannelCapacitySats;
+    private long mValueChannelCapacity;
     private boolean mBlockOnInputChanged;
     private long mOnChainUnconfirmed;
     private long mOnChainConfirmed;
@@ -94,9 +96,8 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
         mOnChainFeeView.initialSetup();
         setFeeFailure();
-        mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
 
-        Wallet.getInstance().registerChannelOpenUpdateListener(this);
+        Wallet_Channels.getInstance().registerChannelOpenUpdateListener(this);
 
         if (getArguments() != null) {
             mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
@@ -137,12 +138,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), false);
 
                 // calculate fees
                 if (mAmountValid) {
-                    mValueChannelCapacitySats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(mEtAmount.getText().toString());
-                    calculateFee();
+                    mValueChannelCapacity = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(mEtAmount.getText().toString());
+                    calculateTransactionSize();
                 } else {
                     setFeeFailure();
                 }
@@ -154,7 +155,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         llUnit.setOnClickListener(v -> {
             mBlockOnInputChanged = true;
             MonetaryUtil.getInstance().switchCurrencies();
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mValueChannelCapacitySats));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mValueChannelCapacity, false));
             mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
             setAvailableFunds();
             mBlockOnInputChanged = false;
@@ -171,39 +172,39 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     return;
                 }
 
-                // values from LND
-                long minSendAmount = 20000;
-                long absoluteMaxSendAmount = 17666215;
+                // ToDo: values are from LND. Make it generic? Support Wumbo channels?
+                long minSendAmount = 20000 * 1000L;
+                long absoluteMaxSendAmount = 17666215 * 1000L;
                 long maxSendAmount = absoluteMaxSendAmount;
 
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    long onChainAvailable = Wallet.getInstance().getBalances().onChainConfirmed();
-                    long onChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
+                    long onChainAvailable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
+                    long onChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
 
                     if (onChainAvailable < maxSendAmount) {
                         maxSendAmount = onChainAvailable;
                     }
 
-                    if (mValueChannelCapacitySats < minSendAmount) {
+                    if (mValueChannelCapacity < minSendAmount) {
                         // amount is to small
-                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(minSendAmount);
+                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(minSendAmount, false);
                         showError(message, Snackbar.LENGTH_LONG);
                         return;
                     }
 
-                    if (mValueChannelCapacitySats > maxSendAmount) {
+                    if (mValueChannelCapacity > maxSendAmount) {
                         // amount is to big
-                        if (mValueChannelCapacitySats > absoluteMaxSendAmount) {
-                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(absoluteMaxSendAmount);
+                        if (mValueChannelCapacity > absoluteMaxSendAmount) {
+                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(absoluteMaxSendAmount, false);
                             showError(message, Snackbar.LENGTH_LONG);
                             return;
                         } else {
-                            if (mValueChannelCapacitySats < (onChainAvailable + onChainUnconfirmed)) {
+                            if (mValueChannelCapacity < (onChainAvailable + onChainUnconfirmed)) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                                 return;
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(onChainAvailable + onChainUnconfirmed);
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(onChainAvailable + onChainUnconfirmed, false);
                                 showError(message, Snackbar.LENGTH_LONG);
                                 return;
                             }
@@ -216,8 +217,21 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     return;
                 }
 
-                switchToProgressScreen();
-                Wallet.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget(), mPrivateCheckbox.isChecked());
+                if (mOnChainFeeView.isLowerThanMinimum()) {
+                    new UserGuardian(getContext(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            performChannelOpen();
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityLowOnChainFee((int) mOnChainFeeView.getSatPerVByteFee());
+                } else {
+                    performChannelOpen();
+                }
             }
         });
 
@@ -234,6 +248,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
 
         return view;
+    }
+
+    private void performChannelOpen() {
+        switchToProgressScreen();
+        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked());
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {
@@ -270,12 +289,12 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     }
 
     private void setAvailableFunds() {
-        long available = Wallet.getInstance().getBalances().onChainConfirmed();
+        long available = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
         mOnChainConfirmed = available;
-        mOnChainUnconfirmed = Wallet.getInstance().getBalances().onChainUnconfirmed();
+        mOnChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
         mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
         mTvOnChainFunds.setLabelVisibility(true);
-        mTvOnChainFunds.setAmountSat(available);
+        mTvOnChainFunds.setAmountMsat(available);
     }
 
     private void showError(String message, int duration) {
@@ -287,7 +306,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
 
     @Override
     public void onDestroy() {
-        Wallet.getInstance().unregisterChannelOpenUpdateListener(this);
+        Wallet_Channels.getInstance().unregisterChannelOpenUpdateListener(this);
         super.onDestroy();
     }
 
@@ -295,9 +314,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
 
         if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
-            if (status == Wallet.ChannelOpenUpdateListener.SUCCESS) {
+            if (status == Wallet_Channels.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
-                Wallet.getInstance().updateLNDChannelsWithDebounce();
+                Wallet_Channels.getInstance().updateLNDChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
                 getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorMessage(status, message)));
@@ -332,9 +351,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
     }
 
 
-    private void calculateFee() {
+    private void calculateTransactionSize() {
         setCalculatingFee();
-        estimateOnChainFee(mValueChannelCapacitySats, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+        estimateOnChainTransactionSize(mValueChannelCapacity);
     }
 
     /**
@@ -344,25 +363,19 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
         mOnChainFeeView.onCalculating();
     }
 
-    /**
-     * Show the calculated fee
-     */
-    private void setCalculatedFeeAmount(long sats) {
-        mOnChainFeeView.onFeeSuccess(sats);
-    }
 
     /**
      * Show fee calculation failure
      */
     private void setFeeFailure() {
-        mOnChainFeeView.onFeeFailure();
+        mOnChainFeeView.onSizeCalculationFailure();
     }
 
 
     /**
      * This function is used to calculate the expected on chain fee.
      */
-    private void estimateOnChainFee(long amount, int targetConf) {
+    private void estimateOnChainTransactionSize(long amount) {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // We choose a dummy bech32 address. The fee amount depends only on the address type.
             String address;
@@ -377,17 +390,10 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet.Ch
                     address = "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"; // Mainnet
             }
 
-
-            // let LND estimate fee
-            EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
-                    .putAddrToAmount(address, amount)
-                    .setTargetConf(targetConf)
-                    .build();
-
-            getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                    .subscribe(estimateFeeResponse -> setCalculatedFeeAmount(estimateFeeResponse.getFeeSat()),
+            getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
+                    .subscribe(response -> mOnChainFeeView.onSizeCalculatedSuccess(((long) (response * 1.5))), // ToDo: channel open transactions are larger than normal transactions. We go with this factor until we find a better method for estimating channel opens. It will also depend on the channel type.
                             throwable -> {
-                                BBLog.w(TAG, "Exception in fee estimation request task.");
+                                BBLog.w(TAG, "Exception in on-chain transaction size request task.");
                                 BBLog.w(TAG, throwable.getMessage());
                                 setFeeFailure();
                             }));

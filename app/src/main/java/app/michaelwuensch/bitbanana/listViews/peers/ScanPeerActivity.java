@@ -8,7 +8,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
 public class ScanPeerActivity extends BaseScannerActivity {
@@ -41,7 +41,7 @@ public class ScanPeerActivity extends BaseScannerActivity {
     }
 
     private boolean processPeerData(String rawData) {
-        LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(rawData);
+        LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(rawData);
         return finishWithNode(nodeUri);
     }
 

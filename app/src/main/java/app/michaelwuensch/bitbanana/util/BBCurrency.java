@@ -43,7 +43,7 @@ public class BBCurrency {
     public static final String SYMBOL_SATOSHI = "sat";
     public static final double RATE_SATOSHI = 1e-3;
     public static final int MAX_INTEGER_DIGITS_SATOSHI = 16;
-    public static final int MAX_FRACTION_DIGITS_SATOSHI = 3;
+    public static final int MAX_FRACTION_DIGITS_SATOSHI = 0;
 
     /**
      * The currency Code. Used as display symbol if Symbol is empty.
@@ -195,28 +195,36 @@ public class BBCurrency {
         }
     }
 
-    public String formatValueAsDisplayString(long msats) {
+    public String formatValueAsDisplayString(long msats, boolean MsatPrecision) {
         NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMinimumIntegerDigits(1);
         df.setMaximumIntegerDigits(getMaxIntegerDigits());
-        df.setMaximumFractionDigits(getMaxFractionsDigits());
+
         if (mIsBitcoin) {
+            int maxFractionDigits = 0;
+            if (MsatPrecision)
+                maxFractionDigits = getMaxFractionsDigits() + 3;
+            else
+                maxFractionDigits = getMaxFractionsDigits();
+
+            df.setMaximumFractionDigits(maxFractionDigits);
             String result = df.format(msats * getRate());
 
             // If we have a fraction, then always show all fraction digits for bits and sats
             if (result.contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))) {
-                if (getCode().equals(CURRENCY_CODE_BIT)) {
-                    df.setMinimumFractionDigits(getMaxFractionsDigits());
+                if (getCode().equals(CURRENCY_CODE_BIT) || getCode().equals(CURRENCY_CODE_SATOSHI)) {
+                    df.setMinimumFractionDigits(maxFractionDigits);
                 }
             }
         } else {
             df.setMinimumFractionDigits(2);
+            df.setMaximumFractionDigits(getMaxFractionsDigits());
         }
         return df.format(msats * getRate());
     }
 
-    public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero) {
+    public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero, boolean MsatPrecision) {
         // We have to use the Locale.US here to ensure Double.parse works correctly later.
         if (msats == 0)
             if (returnEmptyForZero)
@@ -227,11 +235,11 @@ public class BBCurrency {
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
 
-        if (getCode().equals(CURRENCY_CODE_SATOSHI)) {
-            df.setMaximumFractionDigits(0);
-        } else {
+        if (isBitcoin() && MsatPrecision)
+            df.setMaximumFractionDigits(getMaxFractionsDigits() + 3);
+        else
             df.setMaximumFractionDigits(getMaxFractionsDigits());
-        }
+
         return df.format(msats * getRate());
     }
 
@@ -261,13 +269,16 @@ public class BBCurrency {
         return textInputMSatString;
     }
 
-    public boolean validateInput(String input) {
+    public boolean validateInput(String input, boolean MsatPrecision) {
 
         int numberOfDecimals = getMaxFractionsDigits();
 
         // Override decimals for sats
         if (getCode().equals(CURRENCY_CODE_SATOSHI))
             numberOfDecimals = 0;
+
+        if (isBitcoin() && MsatPrecision)
+            numberOfDecimals = numberOfDecimals + 3;
 
         if (input.equals(".")) {
             return true;

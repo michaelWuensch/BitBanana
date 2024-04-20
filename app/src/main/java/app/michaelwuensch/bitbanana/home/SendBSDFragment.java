@@ -26,20 +26,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Failure;
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.github.lightningnetwork.lnd.lnrpc.PaymentFailureReason;
-import com.github.lightningnetwork.lnd.lnrpc.Route;
-import com.github.lightningnetwork.lnd.lnrpc.SendCoinsRequest;
-import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -50,13 +41,19 @@ import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
+import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
 public class SendBSDFragment extends BaseBSDFragment {
@@ -79,8 +76,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private TextView mPayee;
     private PaymentCommentView mPcvComment;
 
-    private PayReq mLnPaymentRequest;
-    private String mLnInvoice;
+    private DecodedBolt11 mDecodedBolt11;
     private String mFallbackOnChainInvoice;
     private String mMemo;
     private String mOnChainAddress;
@@ -88,24 +84,18 @@ public class SendBSDFragment extends BaseBSDFragment {
     private long mFixedAmount;
     private Handler mHandler;
     private boolean mAmountValid = true;
-    private boolean mSendButtonEnabled_input;
-    private boolean mSendButtonEnabled_feeCalculate;
-    private Route mRoute;
-    long mCalculatedFee;
-    double mCalculatedFeePercent;
     private String mKeysendPubkey;
     private boolean mIsKeysend;
-    private long mSendAmountSat;
+    private long mSendAmount;
     private boolean mBlockOnInputChanged;
     private View mRootView;
     private DebounceHandler mFeeCaclulationDebounceHandler = new DebounceHandler();
 
-    public static SendBSDFragment createLightningDialog(PayReq paymentRequest, String invoice, String fallbackOnChainInvoice) {
+    public static SendBSDFragment createLightningDialog(DecodedBolt11 decodedBolt11, String fallbackOnChainInvoice) {
         Intent intent = new Intent();
         intent.putExtra("keysend", false);
         intent.putExtra("onChain", false);
-        intent.putExtra("lnPaymentRequest", paymentRequest.toByteArray());
-        intent.putExtra("lnInvoice", invoice);
+        intent.putExtra("lnPaymentRequest", decodedBolt11);
         intent.putExtra("fallbackOnChainInvoice", fallbackOnChainInvoice);
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
@@ -150,16 +140,8 @@ public class SendBSDFragment extends BaseBSDFragment {
             if (mIsKeysend) {
                 mKeysendPubkey = args.getString("keysendPubkey");
             } else {
-                PayReq paymentRequest;
-                try {
-                    paymentRequest = PayReq.parseFrom(args.getByteArray("lnPaymentRequest"));
-
-                    mLnPaymentRequest = paymentRequest;
-                    mLnInvoice = args.getString("lnInvoice");
-                    mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
-                } catch (InvalidProtocolBufferException e) {
-                    throw new RuntimeException("Invalid payment request forwarded." + e.getMessage());
-                }
+                mDecodedBolt11 = (DecodedBolt11) args.getSerializable("lnPaymentRequest");
+                mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
             }
         }
 
@@ -211,42 +193,33 @@ public class SendBSDFragment extends BaseBSDFragment {
                     // make text red if input is too large
                     long maxSendable;
                     if (mOnChain) {
-                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                            maxSendable = Wallet.getInstance().getBalances().onChainConfirmed();
-                        } else {
-                            maxSendable = Wallet.getInstance().getDemoBalances().onChainConfirmed();
-                        }
+                        maxSendable = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
                     } else {
-                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                            maxSendable = Wallet.getInstance().getMaxLightningSendAmount();
-                        } else {
-                            maxSendable = 750000;
-                        }
+                        maxSendable = WalletUtil.getMaxLightningSendAmount();
                     }
 
-                    if (mSendAmountSat > maxSendable) {
+                    if (mSendAmount > maxSendable) {
                         if (mOnChain) {
-                            if (mSendAmountSat < Wallet.getInstance().getBalances().onChainTotal()) {
+                            if (mSendAmount < Wallet_Balance.getInstance().getBalances().onChainTotal()) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(Wallet.getInstance().getBalances().onChainTotal());
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(Wallet_Balance.getInstance().getBalances().onChainTotal(), false);
                                 showError(message, 4000);
                             }
                         } else {
-                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxSendable);
+                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxSendable, true);
                             showError(message, 6000);
                         }
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        mSendButtonEnabled_input = false;
+                        setSendButtonEnabled(false);
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mSendButtonEnabled_input = true;
+                        setSendButtonEnabled(true);
                     }
-                    if (mSendAmountSat == 0 && mFixedAmount == 0L) {
-                        mSendButtonEnabled_input = false;
+                    if (mSendAmount == 0 && mFixedAmount == 0L) {
+                        setSendButtonEnabled(false);
                     }
-                    updateSendButtonState();
                 }
             }
 
@@ -271,23 +244,11 @@ public class SendBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
 
-                // calculate fees
                 if (mAmountValid) {
-                    mSendAmountSat = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
-
-                    if (mIsKeysend || (!mOnChain && mLnPaymentRequest.getNumSatoshis() == 0)) {
-                        mSendButtonEnabled_feeCalculate = false;
-                        mFeeCaclulationDebounceHandler.attempt(new Runnable() {
-                            @Override
-                            public void run() {
-                                calculateFee();
-                            }
-                        }, 650);
-                    } else {
-                        calculateFee();
-                    }
+                    mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
+                    calculateFee();
                 } else {
                     setFeeFailure();
                 }
@@ -300,7 +261,6 @@ public class SendBSDFragment extends BaseBSDFragment {
             mOnChainFeeView.initialSetup();
 
             mOnChainFeeView.setVisibility(View.VISIBLE);
-            mOnChainFeeView.setFeeTierChangedListener(onChainFeeTier -> calculateFee());
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_on_chain);
             mResultView.setTypeIcon(R.drawable.ic_onchain_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
@@ -316,15 +276,14 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             if (mFixedAmount != 0L) {
                 // A specific amount was requested. We are not allowed to change the amount.
-                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
                 mEtAmount.setEnabled(false);
             } else {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
-                mSendButtonEnabled_input = false;
-                updateSendButtonState();
+                setSendButtonEnabled(false);
                 setFeeFailure();
 
                 mHandler.postDelayed(() -> {
@@ -341,42 +300,23 @@ public class SendBSDFragment extends BaseBSDFragment {
                     BBLog.d(LOG_TAG, "Trying to send on-chain payment...");
                     // Send on-chain payment
 
-                    long sendAmount = 0L;
-                    if (mFixedAmount != 0L) {
-                        sendAmount = mFixedAmount;
-                    } else {
-                        sendAmount = mSendAmountSat;
-                    }
+                    if (getOnChainSendAmount() != 0L) {
 
-                    if (sendAmount != 0L) {
+                        if (mOnChainFeeView.isLowerThanMinimum()) {
+                            new UserGuardian(getContext(), new UserGuardian.OnGuardianConfirmedListener() {
+                                @Override
+                                public void onConfirmed() {
+                                    performOnChainSend();
+                                }
 
-                        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(sendAmount));
+                                @Override
+                                public void onCancelled() {
 
-                        switchToSendProgressScreen();
-
-                        SendCoinsRequest sendRequest = SendCoinsRequest.newBuilder()
-                                .setAddr(mOnChainAddress)
-                                .setAmount(sendAmount)
-                                .setTargetConf(mOnChainFeeView.getFeeTier().getConfirmationBlockTarget())
-                                .build();
-
-                        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().sendCoins(sendRequest)
-                                .subscribe(sendCoinsResponse -> {
-                                    // updated the history, so it is shown the next time the user views it
-                                    Wallet.getInstance().updateOnChainTransactionHistory();
-
-                                    BBLog.v(LOG_TAG, sendCoinsResponse.toString());
-
-                                    // show success animation
-                                    mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
-                                }, throwable -> {
-                                    BBLog.e(LOG_TAG, "Exception in send coins request task.");
-                                    BBLog.e(LOG_TAG, throwable.getMessage());
-
-                                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
-                                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
-                                }));
+                                }
+                            }).securityLowOnChainFee((int) mOnChainFeeView.getSatPerVByteFee());
+                        } else {
+                            performOnChainSend();
+                        }
                     } else {
                         // Send amount == 0
                         Toast.makeText(getActivity(), "Send amount is to small.", Toast.LENGTH_SHORT).show();
@@ -399,7 +339,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mPcvComment.setupCharLimit(200);
                 mPcvComment.setVisibility(View.VISIBLE);
             } else {
-                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mLnPaymentRequest.getDestination()));
+                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mDecodedBolt11.getDestinationPubKey()));
                 mPcvComment.setVisibility(View.GONE);
             }
 
@@ -412,18 +352,17 @@ public class SendBSDFragment extends BaseBSDFragment {
                 }
             });
 
-            if (mIsKeysend || mLnPaymentRequest.getDescription() == null || mLnPaymentRequest.getDescription().isEmpty()) {
+            if (mIsKeysend || mDecodedBolt11.hasNoDescription()) {
                 mExtvMemo.setVisibility(View.GONE);
             } else {
                 mExtvMemo.setVisibility(View.VISIBLE);
-                mExtvMemo.setContent(R.string.memo, mLnPaymentRequest.getDescription());
+                mExtvMemo.setContent(R.string.memo, mDecodedBolt11.getDescription());
             }
 
-            if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
+            if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
-                mSendButtonEnabled_input = false;
-                updateSendButtonState();
+                setSendButtonEnabled(false);
 
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
@@ -431,8 +370,8 @@ public class SendBSDFragment extends BaseBSDFragment {
                 }, 600);
             } else {
                 // A specific amount was requested. We are not allowed to change the amount
-                mFixedAmount = mLnPaymentRequest.getNumSatoshis();
-                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                mFixedAmount = mDecodedBolt11.getAmountRequested();
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
             }
@@ -442,33 +381,10 @@ public class SendBSDFragment extends BaseBSDFragment {
             mBtnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-
-                        long paymentAmount = getLightningPaymentAmountSat();
-                        
-                        // sanity check for fees
-                        if (mCalculatedFee != -1) {
-                            if (mCalculatedFeePercent >= 1f) {
-                                // fee higher or equal to payment amount
-                                String feeLimitString = getString(R.string.fee_limit_exceeded_payment, mCalculatedFee, paymentAmount);
-                                showFeeAlertDialog(feeLimitString);
-                                return;
-                            }
-                            if (paymentAmount > RefConstants.LN_PAYMENT_FEE_THRESHOLD)
-                                if (mCalculatedFeePercent > PaymentUtil.getRelativeSettingsFeeLimit()) {
-                                    // fee higher than allowed in settings
-                                    String feeLimitString = getString(R.string.fee_limit_exceeded, mCalculatedFeePercent * 100, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                                    showFeeAlertDialog(feeLimitString);
-                                    return;
-                                }
-                        }
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
                         sendLightningPayment();
-                    } else {
-                        // Demo Mode
+                    else
                         Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
-                    }
-
                 }
             });
         }
@@ -482,9 +398,9 @@ public class SendBSDFragment extends BaseBSDFragment {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mSendAmountSat));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmount, !mOnChain));
                 } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mBlockOnInputChanged = false;
@@ -500,6 +416,47 @@ public class SendBSDFragment extends BaseBSDFragment {
         });
 
         return view;
+    }
+
+    private long getOnChainSendAmount() {
+        long sendAmount = 0L;
+        if (mFixedAmount != 0L) {
+            sendAmount = mFixedAmount;
+        } else {
+            sendAmount = mSendAmount;
+        }
+        return sendAmount;
+    }
+
+    private void performOnChainSend() {
+        long sendAmount = getOnChainSendAmount();
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(sendAmount, false));
+
+        switchToSendProgressScreen();
+
+        SendOnChainPaymentRequest sendOnChainPaymentRequest = SendOnChainPaymentRequest.newBuilder()
+                .setAddress(mOnChainAddress)
+                .setAmount(sendAmount)
+                .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
+                .build();
+
+        getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
+                .subscribe(() -> {
+                    BBLog.d(LOG_TAG, "On-chain payment successful.");
+
+                    // updated the history, so it is shown the next time the user views it
+                    Wallet_TransactionHistory.getInstance().updateOnChainTransactionHistory();
+
+                    // show success animation
+                    mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
+                }, throwable -> {
+                    BBLog.e(LOG_TAG, "Exception in send coins request task.");
+                    BBLog.e(LOG_TAG, throwable.getMessage());
+
+                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
+                    String errormessage = throwable.getMessage().replace("UNKNOWN:", errorPrefix);
+                    mHandler.postDelayed(() -> switchToFailedScreen(errormessage), 300);
+                }));
     }
 
     @Override
@@ -528,159 +485,54 @@ public class SendBSDFragment extends BaseBSDFragment {
     private void sendLightningPayment() {
         switchToSendProgressScreen();
 
-        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mSendAmountSat));
+        if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
+            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mSendAmount, true));
         } else {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mLnPaymentRequest.getNumSatoshis()));
+            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mDecodedBolt11.getAmountRequested(), true));
         }
 
-        if (mIsKeysend) {
-            SendPaymentRequest keysendSendRequest = PaymentUtil.prepareKeySendPayment(mKeysendPubkey, mSendAmountSat, mPcvComment.getData());
-
-            PaymentUtil.sendPayment(keysendSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
-                @Override
-                public void onSuccess(Payment payment) {
-                    mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-                }
-
-                @SuppressLint("StringFormatInvalid")
-                @Override
-                public void onError(String error, PaymentFailureReason reason, int duration) {
-                    String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                    String errorMessage;
-                    if (reason != null) {
-                        switch (reason) {
-                            case FAILURE_REASON_TIMEOUT:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
-                                break;
-                            case FAILURE_REASON_NO_ROUTE:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                                break;
-                            case FAILURE_REASON_INSUFFICIENT_BALANCE:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
-                                break;
-                            case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
-                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
-                                break;
-                            default:
-                                errorMessage = errorPrefix + "\n\n" + error;
-                                break;
-                        }
-                    } else {
-                        errorMessage = error.replace("UNKNOWN:", errorPrefix);
-                    }
-                    mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
-                }
-            });
-        } else {
-
-            if (mRoute != null) {
-
-                PaymentUtil.sendToRoute(mLnPaymentRequest.getPaymentHash(), mRoute, getCompositeDisposable(), new PaymentUtil.OnSendToRouteResult() {
-                    @Override
-                    public void onSuccess() {
-                        mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-                    }
-
-                    @Override
-                    public void onError(String error, Failure reason, int duration) {
-                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                        String errorMessage;
-                        if (reason != null) {
-                            switch (reason.getCode()) {
-                                case INCORRECT_OR_UNKNOWN_PAYMENT_DETAILS:
-                                    sendToRouteFallback();
-                                    return;
-                                default:
-                                    errorMessage = errorPrefix + "\n\n" + error;
-                                    break;
-                            }
-                        } else {
-                            errorMessage = error.replace("UNKNOWN:", errorPrefix);
-                        }
-                        mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
-                    }
-                });
-            } else {
-                // Fallback to multi path payment as no route was found
-
-                SendPaymentRequest mppSendRequest = PaymentUtil.prepareMultiPathPayment(mLnPaymentRequest, mLnInvoice);
-
-                PaymentUtil.sendPayment(mppSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
-                    @Override
-                    public void onSuccess(Payment payment) {
-                        mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-                    }
-
-                    @Override
-                    public void onError(String error, PaymentFailureReason reason, int duration) {
-                        String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
-                        String errorMessage;
-                        if (reason != null) {
-                            switch (reason) {
-                                case FAILURE_REASON_TIMEOUT:
-                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
-                                    break;
-                                case FAILURE_REASON_NO_ROUTE:
-                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                                    break;
-                                case FAILURE_REASON_INSUFFICIENT_BALANCE:
-                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
-                                    break;
-                                case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
-                                    errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
-                                    break;
-                                default:
-                                    errorMessage = errorPrefix + "\n\n" + error;
-                                    break;
-                            }
-                        } else {
-                            errorMessage = error.replace("UNKNOWN:", errorPrefix);
-                        }
-                        mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
-                    }
-                });
-            }
+        SendLnPaymentRequest sendLnPaymentRequest = null;
+        if (mIsKeysend)
+            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, mSendAmount, mPcvComment.getData());
+        else {
+            long amount = mDecodedBolt11.hasAmountSpecified() ? mDecodedBolt11.getAmountRequested() : mSendAmount;
+            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, amount);
         }
-    }
 
-    private void sendToRouteFallback() {
-        // This fallback will be used if the sendToRoute command returns incorrect payment details.
-        // There seems to be a bug for some users where this occurs, but we were not able to reproduce this yet.
-        // So for now we use a fallback to a working method.
-
-        BBLog.w(LOG_TAG, "SendToRoute failed. Using fallback.");
-        SendPaymentRequest singlePathSendRequest = PaymentUtil.prepareSinglePathPayment(mLnInvoice, mCalculatedFee);
-        PaymentUtil.sendPayment(singlePathSendRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+        PaymentUtil.sendLnPayment(sendLnPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
             @Override
-            public void onSuccess(Payment payment) {
+            public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
             }
 
+            @SuppressLint("StringFormatInvalid")
             @Override
-            public void onError(String error, PaymentFailureReason reason, int duration) {
+            public void onError(String error, SendLnPaymentResponse sendLnPaymentResponse, int duration) {
                 String errorPrefix = getResources().getString(R.string.error).toUpperCase() + ":";
                 String errorMessage;
-                if (reason != null) {
-                    switch (reason) {
-                        case FAILURE_REASON_TIMEOUT:
+                if (sendLnPaymentResponse != null) {
+                    switch (sendLnPaymentResponse.getFailureReason()) {
+                        case TIMEOUT:
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_timeout);
                             break;
-                        case FAILURE_REASON_NO_ROUTE:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
+                        case NO_ROUTE:
+                            if (sendLnPaymentResponse.getAmount() > 0 && sendLnPaymentResponse.getAmount() < 1000L)
+                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route_small_amount);
+                            else
+                                errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_no_route, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
                             break;
-                        case FAILURE_REASON_INSUFFICIENT_BALANCE:
+                        case INSUFFICIENT_FUNDS:
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_insufficient_balance);
                             break;
-                        case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
-                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
+                        case INCORRECT_PAYMENT_DETAILS:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
                             break;
                         default:
                             errorMessage = errorPrefix + "\n\n" + error;
                             break;
                     }
                 } else {
-                    errorMessage = error.replace("UNKNOWN:", errorPrefix);
+                    errorMessage = errorPrefix + "\n\n" + error;
                 }
                 mHandler.postDelayed(() -> switchToFailedScreen(errorMessage), 300);
             }
@@ -720,29 +572,10 @@ public class SendBSDFragment extends BaseBSDFragment {
     private void calculateFee() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             setCalculatingFee();
-
             if (mOnChain) {
-                long sendAmount = 0L;
-                if (mFixedAmount != 0L) {
-                    sendAmount = mFixedAmount;
-                } else {
-                    sendAmount = mSendAmountSat;
-                }
-
-                estimateOnChainFee(mOnChainAddress, sendAmount, mOnChainFeeView.getFeeTier().getConfirmationBlockTarget());
+                estimateOnChainTransactionSize(mOnChainAddress, getOnChainSendAmount());
             } else {
-                if (mIsKeysend) {
-                    long sendAmount = mSendAmountSat;
-                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mKeysendPubkey, sendAmount, null, null, null);
-                    sendPaymentProbe(probeRequest);
-                } else if (mLnPaymentRequest.getNumSatoshis() == 0) {
-                    long sendAmount = mSendAmountSat;
-                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest.getDestination(), sendAmount, mLnPaymentRequest.getPaymentAddr(), mLnPaymentRequest.getRouteHintsList(), mLnPaymentRequest.getFeaturesMap());
-                    sendPaymentProbe(probeRequest);
-                } else {
-                    SendPaymentRequest probeRequest = PaymentUtil.preparePaymentProbe(mLnPaymentRequest);
-                    sendPaymentProbe(probeRequest);
-                }
+                estimateRoutingFee();
             }
         } else {
             setFeeFailure();
@@ -753,8 +586,6 @@ public class SendBSDFragment extends BaseBSDFragment {
      * Show progress while calculating fee
      */
     private void setCalculatingFee() {
-        mSendButtonEnabled_feeCalculate = false;
-        updateSendButtonState();
         if (mOnChain) {
             mOnChainFeeView.onCalculating();
         } else {
@@ -765,103 +596,64 @@ public class SendBSDFragment extends BaseBSDFragment {
     /**
      * Show the calculated fee
      */
-    private void setCalculatedFeeAmountOnChain(long sats) {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
-        mOnChainFeeView.onFeeSuccess(sats);
+    private void setCalculatedFeeAmountOnChain(long vByte) {
+        mOnChainFeeView.onSizeCalculatedSuccess(vByte);
     }
 
-    private void setCalculatedFeeAmountLightning(long sats, String percentString, boolean showMax) {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
-        mLightningFeeView.setAmountSat(sats, percentString, showMax);
+    private void setCalculatedFeeAmountLightning(long amount) {
+        double calculatedFeePercent = (amount / (double) getLightningPaymentAmountMSat());
+        String feePercentageString = "(" + String.format("%.1f", calculatedFeePercent * 100) + "%)";
+        mLightningFeeView.setAmountMsat(amount, feePercentageString, false);
     }
 
     /**
      * Show fee calculation failure
      */
     private void setFeeFailure() {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
         if (mOnChain) {
-            mOnChainFeeView.onFeeFailure();
+            mOnChainFeeView.onSizeCalculationFailure();
         } else {
-            mRoute = null;
             mLightningFeeView.onFeeFailure();
-        }
-    }
-
-    private void updateSendButtonState() {
-        if (mSendButtonEnabled_feeCalculate && mSendButtonEnabled_input) {
-            mBtnSend.setEnabled(true);
-            mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
-        } else {
-            mBtnSend.setEnabled(false);
-            mBtnSend.setTextColor(getResources().getColor(R.color.gray));
         }
     }
 
     /**
      * This function is used to calculate the expected on chain fee.
      */
-    private void estimateOnChainFee(String address, long amount, int targetConf) {
-        // let LND estimate fee
-        EstimateFeeRequest asyncEstimateFeeRequest = EstimateFeeRequest.newBuilder()
-                .putAddrToAmount(address, amount)
-                .setTargetConf(targetConf)
-                .build();
-
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().estimateFee(asyncEstimateFeeRequest)
-                .subscribe(estimateFeeResponse -> setCalculatedFeeAmountOnChain(estimateFeeResponse.getFeeSat()),
+    private void estimateOnChainTransactionSize(String address, long amount) {
+        getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
+                .subscribe(response -> setCalculatedFeeAmountOnChain((long) response.doubleValue()),
                         throwable -> {
-                            BBLog.w(LOG_TAG, "Exception in fee estimation request task.");
+                            BBLog.w(LOG_TAG, "Exception in on-chain transaction size request task.");
                             BBLog.w(LOG_TAG, throwable.getMessage());
                             setFeeFailure();
                         }));
     }
 
-
-    private void sendPaymentProbe(SendPaymentRequest probeRequest) {
-        PaymentUtil.sendPaymentProbe(probeRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentProbeResult() {
-
-            @Override
-            public void onSuccess(long fee, Route route, long paymentAmountSat) {
-                if (route.getTotalAmtMsat() - route.getTotalFeesMsat() == getLightningPaymentAmountSat() * 1000) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
-                    mRoute = route;
-                    mCalculatedFee = fee;
-                    mCalculatedFeePercent = (fee / (double) paymentAmountSat);
-                    String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
-                    setCalculatedFeeAmountLightning(mCalculatedFee, feePercentageString, false);
-                }
-            }
-
-            @Override
-            public void onNoRoute(long paymentAmountSat) {
-                if (paymentAmountSat == getLightningPaymentAmountSat()) { // This makes sure that no outdated probe result is used which could happen due to race conditions while typing a send amount.
-                    mRoute = null;
-                    // Display fee according to max UserSetting
-                    mCalculatedFee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
-                    mCalculatedFeePercent = PaymentUtil.calculateRelativeFeeLimit(paymentAmountSat);
-                    String feePercentageString = "(" + String.format("%.1f", mCalculatedFeePercent * 100) + "%)";
-                    long fee = PaymentUtil.calculateAbsoluteFeeLimit(paymentAmountSat);
-                    setCalculatedFeeAmountLightning(fee, feePercentageString, true);
-                }
-            }
-
-            @Override
-            public void onError(String error, int duration) {
-                mCalculatedFee = -1;
-                mCalculatedFeePercent = -1;
-                setFeeFailure();
-            }
-        });
+    private void estimateRoutingFee() {
+        if (getLightningPaymentAmountMSat() == 0) {
+            setFeeFailure();
+            return;
+        }
+        String pubKey;
+        if (mIsKeysend)
+            pubKey = mKeysendPubkey;
+        else
+            pubKey = mDecodedBolt11.getDestinationPubKey();
+        getCompositeDisposable().add(BackendManager.api().estimateRoutingFee(pubKey, getLightningPaymentAmountMSat())
+                .subscribe(response -> setCalculatedFeeAmountLightning(response),
+                        throwable -> {
+                            BBLog.w(LOG_TAG, "Exception in lightning routing fee request task.");
+                            BBLog.w(LOG_TAG, throwable.getMessage());
+                            setFeeFailure();
+                        }));
     }
 
-    private long getLightningPaymentAmountSat() {
-        if (mIsKeysend || mLnPaymentRequest.getNumSatoshis() == 0) {
-            return mSendAmountSat;
+    private long getLightningPaymentAmountMSat() {
+        if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
+            return mSendAmount;
         } else {
-            return mLnPaymentRequest.getNumSatoshis();
+            return mDecodedBolt11.getAmountRequested();
         }
     }
 
@@ -870,5 +662,15 @@ public class SendBSDFragment extends BaseBSDFragment {
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
         msg.show();
+    }
+
+    private void setSendButtonEnabled(boolean enabled) {
+        if (enabled) {
+            mBtnSend.setEnabled(true);
+            mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mBtnSend.setEnabled(false);
+            mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+        }
     }
 }

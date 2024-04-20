@@ -20,7 +20,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_NodesAndPeers;
 
 
 public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
@@ -58,7 +58,7 @@ public class ChooseNodeActionBSDFragment extends BaseBSDFragment {
         bsdScrollableMainView.setTitle(R.string.choose_action);
 
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            Wallet.getInstance().fetchNodeInfoFromLND(mNodeUri.getPubKey(), false, true, null);
+            Wallet_NodesAndPeers.getInstance().fetchNodeInfo(mNodeUri.getPubKey(), false, true, null);
         }
 
         // Check if add contact needs to be shown

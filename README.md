@@ -16,7 +16,7 @@ BitBanana forked from Zap Android. You can find more information about this on t
 
 ## Getting started
 
-The easiest way to get started is using [Start9](https://start9.com/) or [Umbrel](https://getumbrel.com/) to run LND on a raspberry pi and then connect BitBanana to that node.
+The easiest way to get started is using [Start9](https://start9.com/) or [Umbrel](https://getumbrel.com/) to run LND or Core Lightning on a raspberry pi and then connect BitBanana to that node.
 There are of course a lot more possible ways to run a node, so please refer to the [setup](https://github.com/michaelWuensch/BitBanana/wiki/Setup) section in the Wiki if you need help to get started.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
@@ -30,7 +30,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 
 ## Features
 **General**
-- [x] Connect to remote lightning nodes (Only LND supported right now)
+- [x] Connect to remote lightning nodes (LND & Core Lightning)
 - [x] Available in many languages
 - [x] Explanations and help across the app
 - [x] Convenient VPN automation
@@ -68,7 +68,9 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Stealth mode (hide app)
 - [x] Hide balances
 - [x] User guardian system (BitBanana warns you when you are about to perform a potentially dangerous or privacy leaking action)
-- [x] Support for custom (self-hosted) block explorers
+- [x] Supports self-hosted block explorers
+- [x] Supports self-hosted exchange rate providers
+- [x] Supports self-hosted fee estimation providers
 - [x] Protection against screen recording
 
 

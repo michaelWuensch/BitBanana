@@ -1,8 +1,8 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory;
 
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
 
 public interface TransactionSelectListener {
 
-    void onTransactionSelect(ByteString transaction, int type);
+    void onTransactionSelect(Serializable transaction, int type);
 }

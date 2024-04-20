@@ -17,12 +17,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.Balances;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 
 public class MainBalanceView extends MotionLayout {
     private static final String LOG_TAG = MainBalanceView.class.getSimpleName();
@@ -46,7 +47,7 @@ public class MainBalanceView extends MotionLayout {
     private AmountView mAvLighting;
     private AmountView mAvLightningPending;
     private View mBalanceDetails;
-    private View mHandle;
+    private View mVHandleFadeout;
 
     private boolean mIsExpanded;
     private boolean mIsTransitioning;
@@ -87,7 +88,7 @@ public class MainBalanceView extends MotionLayout {
         mAvLighting = view.findViewById(R.id.lightningConfirmed);
         mAvLightningPending = view.findViewById(R.id.lightningPending);
         mBalanceDetails = view.findViewById(R.id.balanceDetails);
-        mHandle = view.findViewById(R.id.handle);
+        mVHandleFadeout = view.findViewById(R.id.handleFadeOut);
 
         updateBalanceDetailsVisibility();
 
@@ -236,21 +237,21 @@ public class MainBalanceView extends MotionLayout {
 
                 Balances balances;
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    balances = Wallet.getInstance().getBalances();
+                    balances = Wallet_Balance.getInstance().getBalances();
                 } else {
-                    balances = Wallet.getInstance().getDemoBalances();
+                    balances = Wallet_Balance.getInstance().getDemoBalances();
                 }
 
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(balances.total()));
+                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(balances.total(), false));
                 mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromSats(balances.total()));
+                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromMSats(balances.total(), false));
                 mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
 
                 // Balance details
-                mAvOnChain.setAmountSat(balances.onChainConfirmed());
-                mAvOnChainPending.setAmountSat(balances.onChainUnconfirmed());
-                mAvLighting.setAmountSat(balances.channelBalance());
-                mAvLightningPending.setAmountSat(balances.channelBalancePending());
+                mAvOnChain.setAmountMsat(balances.onChainConfirmed());
+                mAvOnChainPending.setAmountMsat(balances.onChainUnconfirmed());
+                mAvLighting.setAmountMsat(balances.channelBalance());
+                mAvLightningPending.setAmountMsat(balances.channelBalancePending());
 
                 BBLog.v(LOG_TAG, "Total balance display updated");
             }
@@ -307,27 +308,26 @@ public class MainBalanceView extends MotionLayout {
         mBalanceFadeOutAnimation.reset();
         mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
         mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
-        mIvHandleIcon.startAnimation(mBalanceFadeOutAnimation);
+        mVHandleFadeout.startAnimation(mBalanceFadeOutAnimation);
         mAnimationAborted = false;
     }
 
     private void setVisibilityOfBalanceFadeoutViews(int visibility) {
         mClBalanceLayout.setVisibility(visibility);
         mIvSwitchButton.setVisibility(visibility);
-        mIvHandleIcon.setVisibility(visibility);
+        mVHandleFadeout.setVisibility(visibility);
     }
 
     private void abortAnimation() {
         mAnimationAborted = true;
         mClBalanceLayout.clearAnimation();
         mIvSwitchButton.clearAnimation();
-        mIvHandleIcon.clearAnimation();
+        mVHandleFadeout.clearAnimation();
     }
 
     private void updateBalanceDetailsVisibility() {
 
         int detailsVisibility = FeatureManager.isBalanceDetailsEnabled() ? View.VISIBLE : View.GONE;
-        mFLHandleForClick.setVisibility(detailsVisibility);
         mIvHandleIcon.setVisibility(detailsVisibility);
         mBalanceDetails.setVisibility(detailsVisibility);
 

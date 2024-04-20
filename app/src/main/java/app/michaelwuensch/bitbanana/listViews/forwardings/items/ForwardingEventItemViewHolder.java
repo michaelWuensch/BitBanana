@@ -11,20 +11,21 @@ import java.util.Date;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingEventSelectListener;
+import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 
 public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
     private static final String LOG_TAG = ForwardingEventItemViewHolder.class.getSimpleName();
 
-    private TextView mTimeOfDay;
-    private TextView mInChannel;
-    private TextView mOutChannel;
-    private AmountView mEarnedFee;
-    private AmountView mForwardingAmount;
-    private View mRootView;
+    private final TextView mTimeOfDay;
+    private final TextView mInChannel;
+    private final TextView mOutChannel;
+    private final AmountView mEarnedFee;
+    private final AmountView mForwardingAmount;
+    private final View mRootView;
     private ForwardingEventSelectListener mForwardingEventSelectListener;
 
 
@@ -41,12 +42,13 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
     public void bindForwardingEventListItem(ForwardingEventListItem forwardingEventListItem) {
 
+        Forward forward = forwardingEventListItem.getForwardingEvent();
+
         // Set time of day
         setTimeOfDay(forwardingEventListItem.getTimestampMS());
 
         // Set in channel name
-        long inChanID = forwardingEventListItem.getForwardingEvent().getChanIdIn();
-        String inChanPubKey = Wallet.getInstance().getRemotePubKeyFromChannelId(inChanID);
+        String inChanPubKey = WalletUtil.getRemotePubKeyFromChannelId(forward.getChannelIdIn());
         String inChanName = "";
         if (inChanPubKey == null) {
             inChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
@@ -56,8 +58,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
         mInChannel.setText(inChanName);
 
         // Set out channel name
-        long outChanID = forwardingEventListItem.getForwardingEvent().getChanIdOut();
-        String outChanPubKey = Wallet.getInstance().getRemotePubKeyFromChannelId(outChanID);
+        String outChanPubKey = WalletUtil.getRemotePubKeyFromChannelId(forward.getChannelIdOut());
         String outChanName = "";
         if (outChanPubKey == null) {
             outChanName = mContext.getResources().getString(R.string.forwarding_closed_channel);
@@ -69,10 +70,10 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
 
         // Set earned fee amount
         mEarnedFee.setStyleBasedOnValue(true);
-        mEarnedFee.setAmountMsat(forwardingEventListItem.getForwardingEvent().getFeeMsat());
+        mEarnedFee.setAmountMsat(forward.getFee());
 
         // Set forwarded amount
-        mForwardingAmount.setAmountSat(forwardingEventListItem.getForwardingEvent().getAmtIn());
+        mForwardingAmount.setAmountMsat(forward.getAmountIn());
 
         // Set on click listener
         setOnRootViewClickListener(forwardingEventListItem);
@@ -93,7 +94,7 @@ public class ForwardingEventItemViewHolder extends ForwardingItemViewHolder {
             @Override
             public void onSingleClick(View v) {
                 if (mForwardingEventSelectListener != null) {
-                    mForwardingEventSelectListener.onForwardingEventSelect(item.getForwardingEvent().toByteString());
+                    mForwardingEventSelectListener.onForwardingEventSelect(item.getForwardingEvent());
                 }
             }
         });

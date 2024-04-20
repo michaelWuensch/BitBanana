@@ -7,19 +7,19 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -31,7 +31,11 @@ public class ClipBoardUtil {
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText(label, data);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+
+            // On Android 13+ clipboard toasts are handled automatically. For older ones we provide it.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
+            }
 
             // Make sure the data just copied to clipboard does not trigger a clipboard scan popup
             String clipboardContentHash = UtilFunctions.sha256Hash(data.toString());
@@ -88,7 +92,7 @@ public class ClipBoardUtil {
 
         BitcoinStringAnalyzer.analyze(context, compositeDisposable, clipboardContent, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
@@ -128,17 +132,7 @@ public class ClipBoardUtil {
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+            public void onValidConnectData(BackendConfig backendConfig) {
                 showProceedQuestion(R.string.clipboard_scan_connect, context, listener);
             }
 

@@ -69,6 +69,19 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
+            android:id="@+id/scannerGalleryButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="0dp"
+            android:background="?actionBarItemBackground"
+            android:scaleType="center"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar"
+            app:layout_constraintEnd_toStartOf="@id/scannerFlashButton"
+            app:layout_constraintTop_toTopOf="@id/toolbar"
+            app:srcCompat="@drawable/outline_gallery_36"
+            app:tint="@color/white" />
+
+        <ImageButton
             android:id="@+id/scannerFlashButton"
             android:layout_width="48dp"
             android:layout_height="48dp"

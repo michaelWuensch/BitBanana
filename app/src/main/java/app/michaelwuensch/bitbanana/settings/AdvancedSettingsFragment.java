@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
+import app.michaelwuensch.bitbanana.util.FeeEstimationUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
@@ -29,6 +30,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private ListPreference mListLnExpiry;
     private ListPreference mListFeeLimit;
     private Preference mPrefCustomBlockExplorer;
+    private Preference mPrefCustomExchangeRateProvider;
+    private Preference mPrefCustomFeeEstimationProvider;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -43,7 +46,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
                 if (newValue != null && newValue.toString().equalsIgnoreCase("Blockstream (v3 Tor)")) {
                     Toast.makeText(getActivity(), R.string.settings_blockExplorer_tor_toast, Toast.LENGTH_LONG).show();
                 }
-                updateCustomExplorerOptions(newValue.toString().equalsIgnoreCase("Custom"));
+                updateCustomBlockExplorerOptions(newValue.toString().equalsIgnoreCase("Custom"));
                 return true;
             }
         });
@@ -58,13 +61,58 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        mPrefCustomExchangeRateProvider = findPreference("goToCustomExchangeRateProviderSettings");
+        mPrefCustomExchangeRateProvider.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsCustomExchangeRateProviderActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         // Request exchange rates when the provider changed
         ListPreference listExchangeRateProvider = findPreference("exchangeRateProvider");
         listExchangeRateProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
-                ExchangeRateUtil.getInstance().getExchangeRates();
+                if (newValue != null && newValue.toString().contains("(v3 Tor)") && !PrefsUtil.isTorEnabled()) {
+                    Toast.makeText(getActivity(), R.string.settings_requires_tor_toast, Toast.LENGTH_LONG).show();
+                }
+                boolean isCustom = newValue.toString().equalsIgnoreCase("Custom");
+                if (!isCustom) {
+                    PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
+                    ExchangeRateUtil.getInstance().getExchangeRates();
+                }
+                updateCustomExchangeRateProviderOptions(isCustom);
+                return true;
+            }
+        });
+
+        // Request fee estimates when the provider changed
+        ListPreference listFeeEstimationProvider = findPreference("feeEstimationProvider");
+        listFeeEstimationProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (newValue != null && newValue.toString().contains("(v3 Tor)") && !PrefsUtil.isTorEnabled()) {
+                    Toast.makeText(getActivity(), R.string.settings_requires_tor_toast, Toast.LENGTH_LONG).show();
+                }
+                boolean isCustom = newValue.toString().equalsIgnoreCase("Custom");
+                if (!isCustom) {
+                    PrefsUtil.editPrefs().putString(PrefsUtil.FEE_ESTIMATION_PROVIDER, newValue.toString()).commit();
+                    FeeEstimationUtil.getInstance().getFeeEstimates();
+                }
+                updateCustomFeeEstimationProviderOptions(isCustom);
+                return true;
+            }
+        });
+
+        mPrefCustomFeeEstimationProvider = findPreference("goToCustomFeeEstimationProviderSettings");
+        mPrefCustomFeeEstimationProvider.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsCustomFeeEstimationProviderActivity.class);
+                startActivity(intent);
                 return true;
             }
         });
@@ -88,7 +136,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (!mSwUnspecifiedAmountInvoices.isChecked()) {
                     // Ask user to confirm enabling unspecified amount invoices
-                    new UserGuardian(getActivity(), () -> mSwUnspecifiedAmountInvoices.setChecked(true)).securityAllowUnspecifiedAmountInvoices();
+                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            mSwUnspecifiedAmountInvoices.setChecked(true);
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityAllowUnspecifiedAmountInvoices();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -110,7 +168,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScrambledPin.isChecked()) {
                     // Ask user to confirm disabling scramble
-                    new UserGuardian(getActivity(), () -> mSwScrambledPin.setChecked(false)).securityScrambledPin();
+                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            mSwScrambledPin.setChecked(false);
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
@@ -126,9 +194,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (mSwScreenProtection.isChecked()) {
                     // Ask user to confirm disabling screen protection
-                    new UserGuardian(getActivity(), () -> {
-                        mSwScreenProtection.setChecked(false);
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            mSwScreenProtection.setChecked(false);
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
                     }).securityScreenProtection();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
@@ -146,17 +222,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 UserGuardian.reenableAllSecurityWarnings();
                 Toast.makeText(getActivity(), R.string.guardian_reset, Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
-
-        // Action when clicked on "On-chainFeePresets"
-        final Preference prefOnChainFeePresets = findPreference("goToOnChainFeeSettings");
-        prefOnChainFeePresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsFeePresetsActivity.class);
-                startActivity(intent);
                 return true;
             }
         });
@@ -183,13 +248,17 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
+        updateCustomFeeEstimationProviderOptions(PrefsUtil.getFeeEstimationProvider().equalsIgnoreCase("Custom"));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateCustomExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomBlockExplorerOptions(PrefsUtil.getBlockExplorer().equalsIgnoreCase("Custom"));
+        updateCustomExchangeRateProviderOptions(PrefsUtil.getExchangeRateProvider().equalsIgnoreCase("Custom"));
+        updateCustomFeeEstimationProviderOptions(PrefsUtil.getFeeEstimationProvider().equalsIgnoreCase("Custom"));
     }
 
     private void setFeeSummary(Preference preference, String value) {
@@ -213,8 +282,18 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         mListLnExpiry.setEntries(lnExpiryDisplayEntries);
     }
 
-    private void updateCustomExplorerOptions(boolean customEnabled) {
+    private void updateCustomBlockExplorerOptions(boolean customEnabled) {
         mPrefCustomBlockExplorer.setVisible(customEnabled);
         mPrefCustomBlockExplorer.setSummary(PrefsUtil.getCustomBlockExplorerHost());
+    }
+
+    private void updateCustomExchangeRateProviderOptions(boolean customEnabled) {
+        mPrefCustomExchangeRateProvider.setVisible(customEnabled);
+        mPrefCustomExchangeRateProvider.setSummary(PrefsUtil.getCustomExchangeRateProviderHost());
+    }
+
+    private void updateCustomFeeEstimationProviderOptions(boolean customEnabled) {
+        mPrefCustomFeeEstimationProvider.setVisible(customEnabled);
+        mPrefCustomFeeEstimationProvider.setSummary(PrefsUtil.getCustomFeeEstimationProviderHost());
     }
 }

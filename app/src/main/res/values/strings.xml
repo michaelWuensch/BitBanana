@@ -117,6 +117,8 @@
     <string name="network">Network</string>
     <string name="type">Type</string>
     <string name="duplicate">Duplicate</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -242,12 +244,13 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">You requested an amount as fiat value, but your exchange rate data is old (retrieved %1$s hours ago).\nMake sure you have an internet connection or consider requesting directly in Bitcoin.\n\nDo you want to continue anyway?</string>
     <string name="guardian_remoteConnect">Are you sure you want to connect to \n\n%1$s\n\nPlease check the hostname carefully.</string>
     <string name="guardian_externalLink">You are about to open a link with sensitive data in your browser. While BitBanana anonymizes all your traffic with the Tor network, your browser does not. If you want to keep this data private use a Tor browser to open the link.</string>
-    <string name="guardian_oldLndVersion_remote">Please update.\n\nThe node you are connected to runs an old version of LND. Versions below %1$s are no longer actively supported.</string>
+    <string name="guardian_oldNodeSoftwareVersion">It\'s time for an update!\n\nThe node you\'re connected to is operating on an outdated version of %1$s. Versions preceding %2$s are no longer supported by BitBanana.</string>
     <string name="guardian_zero_amount_invoice">This invoice does not specify an amount. Though very unlikely, invoices without a specific amount can be exploited and the recipient will receive less than expected in that case. If possible use an invoice with a specific amount.</string>
     <string name="guardian_certificate_verification">If certificate verification is disabled, you are vulnerable to a man-in-the-middle attack. Only do this if you know what you are doing.\n\nIt is advised to get the certificate setup correct instead.\nThis means the certificate from your node has to have the hostname included that you are using in this connection setting. Add the hostname to tlsextradomain in the lnd.conf before recreating the certificate.</string>
     <string name="guardian_backup_overrides_existing_data">Some data already exists!\nRestoring a backup will delete all following data before restoring:\n\n- Node Connection Data\n- Contacts\n\nContinue?</string>
     <string name="guardian_invoices_without_specified_amount">Invoices lacking a specific amount pose a security risk. Though highly unlikely, intermediaries along the route may exploit such invoices, causing the recipient to receive less than expected without detection. No such risk exists in payments over a direct channel.</string>
     <string name="guardian_custodial_lndhub">You are about to connect to an LNDHub account. If you are not the host of the LNDHub, this is custodial. Whoever controls the LNDHub has control over your money. Deposit only as much as you can trust to that person.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">The current fee estimation suggests that this transaction with a fee rate of %1$d sat/vB may never be confirmed. Consider increasing the fee to avoid your transaction getting stuck for a long time.\n\nDo you want to proceed anyway?</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>
@@ -309,11 +312,27 @@
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
+    <string name="settings_custom_exchange_rate_provider">Custom Exchange Rate Provider</string>
+    <string name="settings_requires_tor_toast">This requires Tor. Enable it in settings.</string>
+    <string name="settings_custom_exchange_rate_provider_type">Provider Type</string>
+    <string name="settings_custom_exchange_rate_provider_host_description">Please provide the host address for your exchange rate provider. When you host the exchange rate provider yourself, your privacy is fully maintained.</string>
+
+    <string name="settings_feeEstimationProvider">Fee Estimation</string>
+    <string name="settings_node_fee_estimates">Internal node fee estimates</string>
+    <string name="settings_custom_fee_estimation_provider_host_description">Please provide the host address for your fee estimation provider. When you host the fee estimation provider yourself, your privacy is fully maintained.</string>
+    <string name="settings_custom_fee_estimation_provider">Custom Fee Estimation</string>
 
     <!-- Weblate does not support string arrays, therefore this workaround is used -->
     <string name="settings_receiveAddressDisplayValues_0">Compatibility SegWit (P2PSH)</string>
     <string name="settings_receiveAddressDisplayValues_1">Native SegWit (Bech32)</string>
     <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
+
+    <string name="settings_avatarStyle">Avatar Style</string>
+    <string name="settings_avatarStyleDisplayValues_0">Mixed</string>
+    <string name="settings_avatarStyleDisplayValues_1">Robots</string>
+    <string name="settings_avatarStyleDisplayValues_2">Aliens</string>
+    <string name="settings_avatarStyleDisplayValues_3">Humans</string>
+    <string name="settings_avatarStyleDisplayValues_4">Animals</string>
 
     <string name="settings_lnRequestExpiryTitle">Lightning Request Expiry</string>
     <string name="settings_lnFeeLimitTitle">Lightning Payment Fee Limit</string>
@@ -363,6 +382,12 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the nodes connection settings might also solve your problem.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Connecting BitBanana to Core Lightning via C-Lightning-Rest is not supported. Please check if your node shares cln-grpc connection details and use those for connection instead.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Invalid cln-grpc connect string.\nPlease make sure you used the following format:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidCertificateOrKey">A provided certificate or key is invalid.</string>
+    <string name="error_connection_clngrpc_missingClientCert">The mandatory client certificate is missing.</string>
+    <string name="error_connection_clngrpc_missingClientKey">The mandatory client key is missing.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for cln-grpc is invalid as the parameters are not encoded in base64url format.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
@@ -386,6 +411,7 @@
     <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
     <string name="error_payment_timeout">Timeout. No route could be found.</string>
     <string name="error_payment_no_route">No route was found that respects your fee limit of %1$.1f%%. Increasing your fee limit in the settings or opening new channels might solve the problem.</string>
+    <string name="error_payment_no_route_small_amount">No route was found. You are trying to send an amount that is so small, that many channels might not route it. Please check your the routing settings for your own channels and adapt the MinHTLC value if necessary.</string>
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
@@ -408,8 +434,14 @@
     <string name="error_tor_bootstrapping_failed">Tor bootstrapping failed.</string>
     <string name="error_unknown_backend">Unknown backend type.</string>
     <string name="error_input_field_empty">The %1$s input field must not be empty.</string>
+    <string name="error_input_invalid_data">The %1$s input field contains invalid data.</string>
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
     <string name="error_duplication">Duplication failed.</string>
+    <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
+    <string name="error_feature_not_supported_by_backend">While connected to %1$s, BitBanana does not support the following feature: %2$s</string>
+    <string name="error_reading_qrCode_in_image">Unable to scan or detect QR code in the image.</string>
+    <string name="error_exchange_rate_requires_tor_toast">Failed to fetch exchange rates. Your chosen provider requires tor.</string>
+    <string name="error_fee_estimation_requires_tor_toast">Failed to fetch fee estimates. Your chosen provider requires tor.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -512,10 +544,12 @@
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
+    <string name="server_certificate">Server Certificate</string>
+    <string name="client_certificate">Client Certificate</string>
+    <string name="client_key">Client Key</string>
     <string name="confirm_node_deletion">Do you really want to delete this node connection?</string>
     <string name="no_nodes">No nodes</string>
     <string name="spinner_manage_nodes">Manage…</string>
-    <string name="node_added">Node connection data has been added.</string>
     <string name="useTor">Use Tor</string>
     <string name="verify_certificate">Certificate Verification</string>
 
@@ -646,6 +680,7 @@
     <string name="backup_data_open_backupfile_error">Unable to open the selected file.</string>
     <string name="backup_data_no_data">No data to backup.</string>
     <string name="backup_data_version_too_old">The backup was made with a newer version. Please update the app before importing the backup.</string>
+    <string name="backup_data_backupVersion_too_old">This version was made with a very old version of BitBanana. Unfortunately it is no longer supported.</string>
     <string name="backup_data_invalid_file_chosen">This is not a valid backup file. Please chose a file that was created with this app.</string>
 
     <string name="dialog_open_url">The data links to a webpage. Do you want to open the following webpage?\n\n%1$s</string>
@@ -743,10 +778,13 @@
     <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Ensure that the %1$s app is running in the background. If it does, make sure all android battery optimizations are deactivated for %1$s and then restart the %1$s app. Use the button below to go to the settings.\n\nIf that doesn\'t help either, open the %1$s app and start the VPN manually to resolve the issue.</string>
     <string name="vpn_change_battery_settings">Change battery settings</string>
 
-    <string name="connection_state_disconnecting">Purge existing connections…</string>
+    <string name="connection_state_disconnecting">Clear last connection…</string>
     <string name="connection_state_starting_vpn">Starting VPN…</string>
     <string name="connection_state_starting_tor">Starting Tor…</string>
     <string name="connection_state_connecting">Connecting…</string>
+    <string name="wallet_load_sate_testing_connection">Testing connection…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Reconnect after unlocking…</string>
+    <string name="wallet_load_state_fetching_data">Fetching data…</string>
 
     <string name="unsaved_changes">There are unsaved changes.</string>
     <string name="discard">Discard</string>

@@ -11,12 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -25,13 +19,11 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
 
 public class InvoiceDetailBSDFragment extends BaseBSDFragment {
 
@@ -69,22 +61,14 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
-            ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
-            try {
-                bindInvoice(transactionString);
-            } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                BBLog.d(TAG, "Failed to parse invoice.");
-                dismiss();
-            }
+            bindInvoice((LnInvoice) getArguments().getSerializable(ARGS_TRANSACTION));
         }
 
         return view;
     }
 
 
-    private void bindInvoice(ByteString transactionString) throws InvalidProtocolBufferException {
-
-        Invoice invoice = Invoice.parseFrom(transactionString);
+    private void bindInvoice(LnInvoice invoice) {
 
         String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
@@ -95,72 +79,38 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         String expiryLabel = getString(R.string.expiry) + ":";
         mExpiryLabel.setText(expiryLabel);
 
-        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(invoice.getCreationDate(), getActivity()));
+        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(invoice.getCreatedAt(), getActivity()));
 
-        if (invoice.getMemo().isEmpty()) {
-            // See if we have a message in custom records
-            boolean customRecordMessage = false;
-            try {
-                Map<Long, ByteString> customRecords = invoice.getHtlcs(0).getCustomRecordsMap();
-                for (Long key : customRecords.keySet()) {
-                    if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
-                        mMemo.setText(customRecords.get(key).toString(StandardCharsets.UTF_8));
-                        customRecordMessage = true;
-                        break;
-                    }
-                }
-            } catch (Exception ignored) {
 
-            }
-            if (!customRecordMessage) {
+        // Set description
+        if (invoice.hasMemo()) {
+            mMemo.setText(invoice.getMemo());
+        } else {
+            if (invoice.hasKeysendMessage())
+                mMemo.setText(invoice.getKeysendMessage());
+            else {
                 mMemo.setVisibility(View.GONE);
                 mMemoLabel.setVisibility(View.GONE);
             }
-        } else {
-            mMemo.setText(invoice.getMemo());
         }
 
-        Long invoiceAmount = invoice.getValue();
-        Long amountPayed = invoice.getAmtPaidSat();
-
-        if (invoiceAmount.equals(0L)) {
-            // if no specific value was requested
-            if (!amountPayed.equals(0L)) {
-                // The invoice has been payed
-                bindPayedInvoice(invoice);
-            } else {
-                // The invoice has not been payed yet
-                if (Wallet.getInstance().isInvoiceExpired(invoice)) {
-                    bindExpiredInvoice(invoice);
-                } else {
-                    // The invoice has not yet expired
-                    bindOpenInvoice(invoice);
-                }
-            }
+        if (invoice.isPaid()) {
+            bindPayedInvoice(invoice);
         } else {
-            // if a specific value was requested
-            if (Wallet.getInstance().isInvoicePayed(invoice)) {
-                // The invoice has been payed
-                bindPayedInvoice(invoice);
+            if (invoice.isExpired()) {
+                bindExpiredInvoice(invoice);
             } else {
-                // The invoice has not been payed yet
-                if (Wallet.getInstance().isInvoiceExpired(invoice)) {
-                    // The invoice has expired
-                    bindExpiredInvoice(invoice);
-                } else {
-                    // The invoice has not yet expired
-                    bindOpenInvoice(invoice);
-                }
+                bindOpenInvoice(invoice);
             }
         }
     }
 
-    private void bindOpenInvoice(Invoice invoice) {
+    private void bindOpenInvoice(LnInvoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
 
-        mAmount.setAmountSat(invoice.getValue());
+        mAmount.setAmountMsat(invoice.getAmountRequested());
 
-        String lightningUri = UriUtil.generateLightningUri(invoice.getPaymentRequest());
+        String lightningUri = UriUtil.generateLightningUri(invoice.getBolt11());
         // Generate "QR-Code"
         Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(lightningUri, 500);
         mQRCodeView.setImageBitmap(bmpQRCode);
@@ -174,7 +124,7 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         expiryUpdateSchedule.scheduleAtFixedRate
                 (new Runnable() {
                     public void run() {
-                        long timeLeft = (invoice.getCreationDate() + invoice.getExpiry()) - (System.currentTimeMillis() / 1000);
+                        long timeLeft = invoice.getExpiresAt() - (System.currentTimeMillis() / 1000);
                         String expiryText = TimeFormatUtil.formattedDuration(timeLeft, getActivity()) + " " + getActivity().getResources().getString(R.string.remaining);
 
                         mExpiry.setText(expiryText);
@@ -182,17 +132,17 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
                 }, 0, 1, TimeUnit.SECONDS);
     }
 
-    private void bindPayedInvoice(Invoice invoice) {
+    private void bindPayedInvoice(LnInvoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
         mExpiryLabel.setVisibility(View.GONE);
         mExpiry.setVisibility(View.GONE);
-        mAmount.setAmountSat(invoice.getAmtPaidSat());
+        mAmount.setAmountMsat(invoice.getAmountPaid());
         mQRCodeView.setVisibility(View.GONE);
     }
 
-    private void bindExpiredInvoice(Invoice invoice) {
+    private void bindExpiredInvoice(LnInvoice invoice) {
         mBSDScrollableMainView.setTitle(R.string.invoice_detail);
-        mAmount.setAmountSat(invoice.getValue());
+        mAmount.setAmountMsat(invoice.getAmountRequested());
         mExpiry.setText(R.string.expired);
         mQRCodeView.setVisibility(View.GONE);
     }

@@ -115,9 +115,16 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
                         switch (mContact.getContactType()) {
                             case NODEPUBKEY:
                                 // Ask user to confirm risks about clipboard manipulation
-                                new UserGuardian(ContactDetailsActivity.this, () -> {
-                                    // Copy data to clipboard
-                                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "NodePubKey", mDataToEncode);
+                                new UserGuardian(ContactDetailsActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                                    @Override
+                                    public void onConfirmed() {
+                                        ClipBoardUtil.copyToClipboard(getApplicationContext(), "NodePubKey", mDataToEncode);
+                                    }
+
+                                    @Override
+                                    public void onCancelled() {
+
+                                    }
                                 }).securityCopyToClipboard(mDataToEncode, UserGuardian.CLIPBOARD_DATA_TYPE_NODE_URI);
                                 break;
                             case LNADDRESS:

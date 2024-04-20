@@ -10,16 +10,15 @@ import android.widget.ProgressBar;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -75,7 +74,7 @@ public class ManualSendInputView extends ConstraintLayout {
                 }
                 BitcoinStringAnalyzer.analyze(getContext(), mCompositeDisposable, mData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
                     @Override
-                    public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+                    public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                         mListener.onValid(mData);
                     }
 
@@ -115,17 +114,7 @@ public class ManualSendInputView extends ConstraintLayout {
                     }
 
                     @Override
-                    public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                        invalidInput();
-                    }
-
-                    @Override
-                    public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                        invalidInput();
-                    }
-
-                    @Override
-                    public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+                    public void onValidConnectData(BackendConfig backendConfig) {
                         invalidInput();
                     }
 

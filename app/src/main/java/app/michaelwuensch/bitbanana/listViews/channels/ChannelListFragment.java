@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.protobuf.ByteString;
 
+import java.io.Serializable;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
@@ -60,7 +61,7 @@ public class ChannelListFragment extends Fragment implements ChannelSelectListen
     }
 
     @Override
-    public void onChannelSelect(ByteString channel, int type) {
+    public void onChannelSelect(Serializable channel, int type) {
         if (mChannelSelectListener != null) {
             mChannelSelectListener.onChannelSelect(channel, type);
         }

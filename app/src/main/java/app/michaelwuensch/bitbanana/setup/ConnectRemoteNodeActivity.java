@@ -1,13 +1,10 @@
 package app.michaelwuensch.bitbanana.setup;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
@@ -18,11 +15,9 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class ConnectRemoteNodeActivity extends BaseScannerActivity {
-
-    public static final String EXTRA_STARTED_FROM_URI = "startedFromURI";
 
     private static final String LOG_TAG = ConnectRemoteNodeActivity.class.getSimpleName();
     private String mWalletUUID;
@@ -36,11 +31,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
         if (extras != null) {
             if (extras.containsKey(ManageBackendConfigsActivity.NODE_ID)) {
                 mWalletUUID = extras.getString(ManageBackendConfigsActivity.NODE_ID);
-            }
-            if (extras.getBoolean(EXTRA_STARTED_FROM_URI, false)) {
-                String connectString = App.getAppContext().getUriSchemeData();
-                App.getAppContext().setUriSchemeData(null);
-                verifyDesiredConnection(connectString);
             }
         }
 
@@ -85,18 +75,8 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
         RemoteConnectUtil.decodeConnectionString(this, connectString, new RemoteConnectUtil.OnRemoteConnectDecodedListener() {
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                connectIfUserConfirms(baseBackendConfig);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                connectIfUserConfirms(backendConfig);
             }
 
             @Override
@@ -112,16 +92,24 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     }
 
 
-    private void connectIfUserConfirms(BaseBackendConfig baseBackendConfig) {
+    private void connectIfUserConfirms(BackendConfig backendConfig) {
         // Ask user to confirm the connection to remote host
-        new UserGuardian(this, () -> {
-            connect(baseBackendConfig);
-        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
+        new UserGuardian(this, new UserGuardian.OnGuardianConfirmedListener() {
+            @Override
+            public void onConfirmed() {
+                connect(backendConfig);
+            }
+
+            @Override
+            public void onCancelled() {
+
+            }
+        }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 
-    private void connect(BaseBackendConfig baseBackendConfig) {
+    private void connect(BackendConfig backendConfig) {
         // Connect using the supplied configuration
-        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, baseBackendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+        RemoteConnectUtil.saveRemoteConfiguration(ConnectRemoteNodeActivity.this, backendConfig, mWalletUUID, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
             @Override
             public void onSaved(String id) {

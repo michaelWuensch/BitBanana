@@ -60,6 +60,11 @@ public class VPNConfig {
         return (vpnConfig.getVpnType() == this.getVpnType() && vpnConfig.getTunnelName() == this.getTunnelName());
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return isSameVPN(obj);
+    }
+
     public enum VPNType {
         NONE,
         TAILSCALE,

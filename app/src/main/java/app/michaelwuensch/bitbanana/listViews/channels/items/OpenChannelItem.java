@@ -1,12 +1,13 @@
 package app.michaelwuensch.bitbanana.listViews.channels.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.Channel;
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
+
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 
 public class OpenChannelItem extends ChannelListItem {
-    private Channel mChannel;
+    private OpenChannel mChannel;
 
-    public OpenChannelItem(Channel channel) {
+    public OpenChannelItem(OpenChannel channel) {
         mChannel = channel;
     }
 
@@ -16,11 +17,11 @@ public class OpenChannelItem extends ChannelListItem {
     }
 
     @Override
-    public ByteString getChannelByteString() {
-        return mChannel.toByteString();
+    public Serializable getSerializedChannel() {
+        return (Serializable) mChannel;
     }
 
-    public Channel getChannel() {
+    public OpenChannel getChannel() {
         return mChannel;
     }
 }

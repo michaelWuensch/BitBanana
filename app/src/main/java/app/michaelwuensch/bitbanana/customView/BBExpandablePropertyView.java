@@ -112,10 +112,6 @@ public class BBExpandablePropertyView extends ConstraintLayout {
         mTvDetailValue.setText(value);
     }
 
-    public void setAmountValueSat(long value) {
-        mDetailAmountValue.setAmountSat(value);
-    }
-
     public void setAmountValueMsat(long value) {
         mDetailAmountValue.setAmountMsat(value);
     }

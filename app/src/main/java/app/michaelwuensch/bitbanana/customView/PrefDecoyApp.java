@@ -46,11 +46,10 @@ public class PrefDecoyApp extends Preference {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         holder.itemView.setClickable(false); // disable parent click
-
         holder.itemView.setPadding(0, 0, 0, 0);
 
         // Converts dip into its equivalent px
-        float dip = 400f;
+        float dip = 500f;
         Resources r = mContext.getResources();
         float px = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,

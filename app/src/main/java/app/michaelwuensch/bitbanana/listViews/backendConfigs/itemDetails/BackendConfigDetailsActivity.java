@@ -25,11 +25,12 @@ import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -100,42 +101,77 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             vConnectionData.setVisibility(View.GONE);
         } else {
             vConnectionData.setVisibility(View.VISIBLE);
-            TextView tvTypeLabel = findViewById(R.id.typeLabel);
-            tvTypeLabel.setText(getResources().getString(R.string.type) + ":");
-            TextView tvType = findViewById(R.id.type);
-            tvType.setText(getWalletConfig().getBackendType().getDisplayName());
-            TextView tvHostLabel = findViewById(R.id.hostLabel);
-            tvHostLabel.setText(getResources().getString(R.string.host) + ":");
-            TextView tvHost = findViewById(R.id.host);
-            tvHost.setText(getWalletConfig().getHost());
-            TextView tvPortLabel = findViewById(R.id.portLabel);
-            tvPortLabel.setText(getResources().getString(R.string.port) + ":");
-            TextView tvPort = findViewById(R.id.port);
-            tvPort.setText(String.valueOf(getWalletConfig().getPort()));
-            TextView tvMacaroonLabel = findViewById(R.id.macaroonLabel);
-            tvMacaroonLabel.setText(getResources().getString(R.string.macaroon) + ":");
-            TextView tvMacaroon = findViewById(R.id.macaroon);
-            tvMacaroon.setText(getWalletConfig().getMacaroon());
-            TextView tvCertificateLabel = findViewById(R.id.certLabel);
-            if (getWalletConfig().getCert() != null) {
-                tvCertificateLabel.setText(getResources().getString(R.string.certificate) + ":");
-                tvCertificateLabel.setVisibility(View.VISIBLE);
-                TextView tvCertificate = findViewById(R.id.cert);
-                tvCertificate.setVisibility(View.VISIBLE);
-                tvCertificate.setText(getWalletConfig().getCert());
+
+            // Type
+            BBInfoLineView ilType = findViewById(R.id.type);
+            ilType.setData(getWalletConfig().getBackendType().getDisplayName());
+
+            // Host
+            BBInfoLineView ilHost = findViewById(R.id.host);
+            ilHost.setData(getWalletConfig().getHost());
+
+            // Port
+            BBInfoLineView ilPort = findViewById(R.id.port);
+            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.LND_HUB) {
+                ilPort.setVisibility(View.VISIBLE);
+                ilPort.setData(String.valueOf(getWalletConfig().getPort()));
             } else {
-                tvCertificateLabel.setVisibility(View.GONE);
-                TextView tvCertificate = findViewById(R.id.cert);
-                tvCertificate.setVisibility(View.GONE);
+                ilPort.setVisibility(View.GONE);
             }
-            TextView tvVpnLabel = findViewById(R.id.vpnLabel);
-            tvVpnLabel.setText(getResources().getString(R.string.vpn) + ":");
-            TextView tvVpn = findViewById(R.id.vpn);
-            tvVpn.setText(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
-            TextView tvTorLabel = findViewById(R.id.torLabel);
-            tvTorLabel.setText(getResources().getString(R.string.settings_tor) + ":");
-            TextView tvTor = findViewById(R.id.tor);
-            tvTor.setText(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+
+            // Macaroon
+            BBInfoLineView ilMacaroon = findViewById(R.id.macaroon);
+            if (getWalletConfig().getAuthenticationToken() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.LND_GRPC) {
+                ilMacaroon.setVisibility(View.VISIBLE);
+                ilMacaroon.setData(getWalletConfig().getAuthenticationToken());
+            } else {
+                ilMacaroon.setVisibility(View.GONE);
+            }
+
+            // Server Certificate
+            BBInfoLineView ilServerCertificate = findViewById(R.id.serverCert);
+            if (getWalletConfig().getServerCert() != null) {
+                ilServerCertificate.setVisibility(View.VISIBLE);
+                ilServerCertificate.setData(getWalletConfig().getServerCert());
+            } else {
+                ilServerCertificate.setVisibility(View.GONE);
+            }
+
+            // Client Certificate
+            BBInfoLineView ilClientCertificate = findViewById(R.id.clientCert);
+            if (getWalletConfig().getClientCert() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                ilClientCertificate.setVisibility(View.VISIBLE);
+                ilClientCertificate.setData(getWalletConfig().getClientCert());
+            } else {
+                ilClientCertificate.setVisibility(View.GONE);
+            }
+
+            // Client private key
+            BBInfoLineView ilClientPrivateKey = findViewById(R.id.clientPrivateKey);
+            if (getWalletConfig().getClientKey() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                ilClientPrivateKey.setVisibility(View.VISIBLE);
+                ilClientPrivateKey.setData(getWalletConfig().getClientKey());
+            } else {
+                ilClientPrivateKey.setVisibility(View.GONE);
+            }
+
+            // Username
+            BBInfoLineView ilUsername = findViewById(R.id.user);
+            if (getWalletConfig().getUser() != null && getWalletConfig().getBackendType() == BackendConfig.BackendType.LND_HUB) {
+                ilUsername.setVisibility(View.VISIBLE);
+                ilUsername.setData(getWalletConfig().getUser());
+            } else {
+                ilUsername.setVisibility(View.GONE);
+            }
+
+            // VPN
+            BBInfoLineView ilVpn = findViewById(R.id.vpn);
+            ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
+
+            // Tor
+            BBInfoLineView ilTor = findViewById(R.id.tor);
+            String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+            ilTor.setData(torData);
 
             Button changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +179,6 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(BackendConfigDetailsActivity.this, ManualSetup.class);
                     intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mId);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 }
             });
@@ -276,7 +311,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
         if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {
             // Current active backend is deleted...
-            BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
+            BackendManager.deactivateCurrentBackendConfig(this, false, false);
             PrefsUtil.editPrefs().remove(PrefsUtil.CURRENT_BACKEND_CONFIG).commit();
             Intent intent = new Intent(BackendConfigDetailsActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

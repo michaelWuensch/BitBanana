@@ -1,8 +1,6 @@
 package app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.google.gson.Gson;
 
@@ -13,7 +11,7 @@ import java.io.IOException;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import okhttp3.Call;
@@ -31,11 +29,12 @@ public class StaticInternetIdentifier {
     private static final String LOG_TAG = StaticInternetIdentifier.class.getSimpleName();
 
     public static void checkIfValidStaticInternetIdentifier(Context ctx, String address, OnStaticIdentifierChecked listener) {
-        LNAddress lnAddress = new LNAddress(address);
+        LnAddress lnAddress = new LnAddress(address);
         if (!lnAddress.isValid()) {
             listener.onNoStaticInternetIdentifierData();
             return;
         }
+
         String requestUrl = IdentifierToRequest(lnAddress);
 
         okhttp3.Request lightningAddressRequest = new okhttp3.Request.Builder()
@@ -43,9 +42,6 @@ public class StaticInternetIdentifier {
                 .build();
 
         HttpClient.getInstance().getClient().newCall(lightningAddressRequest).enqueue(new Callback() {
-            // We need to make sure the results are executed on the UI Thread to prevent crashes.
-            Handler threadHandler = new Handler(Looper.getMainLooper());
-
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 BBLog.e(LOG_TAG, e.getMessage());
@@ -54,35 +50,30 @@ public class StaticInternetIdentifier {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                threadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean isBlockedByCloudflare = false;
-                        try {
-                            String responseAsString = response.body().string();
-                            isBlockedByCloudflare = responseAsString.toLowerCase().contains("cloudflare") && responseAsString.toLowerCase().contains("captcha-bypass");
-                            BBLog.d(LOG_TAG, responseAsString);
-                            LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(responseAsString, LnUrlPayResponse.class);
-                            if (lnUrlPayResponse.hasError()) {
-                                listener.onError(lnUrlPayResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
-                                return;
-                            }
-                            listener.onValidInternetIdentifier(lnUrlPayResponse);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            if (isBlockedByCloudflare) {
-                                listener.onError(ctx.getResources().getString(R.string.error_tor_blocked_lnurl, address.split("@")[1]), RefConstants.ERROR_DURATION_VERY_LONG);
-                            } else {
-                                listener.onError(ctx.getResources().getString(R.string.error_static_identifier_response_unknown, address.split("@")[1]), RefConstants.ERROR_DURATION_MEDIUM);
-                            }
-                        }
+                boolean isBlockedByCloudflare = false;
+                try {
+                    String responseAsString = response.body().string();
+                    isBlockedByCloudflare = responseAsString.toLowerCase().contains("cloudflare") && responseAsString.toLowerCase().contains("captcha-bypass");
+                    BBLog.d(LOG_TAG, responseAsString);
+                    LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(responseAsString, LnUrlPayResponse.class);
+                    if (lnUrlPayResponse.hasError()) {
+                        listener.onError(lnUrlPayResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
+                        return;
                     }
-                });
+                    listener.onValidInternetIdentifier(lnUrlPayResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (isBlockedByCloudflare) {
+                        listener.onError(ctx.getResources().getString(R.string.error_tor_blocked_lnurl, address.split("@")[1]), RefConstants.ERROR_DURATION_VERY_LONG);
+                    } else {
+                        listener.onError(ctx.getResources().getString(R.string.error_static_identifier_response_unknown, address.split("@")[1]), RefConstants.ERROR_DURATION_MEDIUM);
+                    }
+                }
             }
         });
     }
 
-    private static String IdentifierToRequest(LNAddress lnAddress) {
+    private static String IdentifierToRequest(LnAddress lnAddress) {
         if (lnAddress.isTor()) {
             return "http://" + lnAddress.getDomain() + "/.well-known/lnurlp/" + lnAddress.getUsername();
         } else {

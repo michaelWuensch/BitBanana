@@ -3,17 +3,16 @@ package app.michaelwuensch.bitbanana.listViews.channels;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -69,7 +68,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
     private void processUserData(String rawData) {
         BitcoinStringAnalyzer.analyze(ScanNodePubKeyActivity.this, mCompositeDisposable, rawData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
@@ -109,17 +108,7 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
+            public void onValidConnectData(BackendConfig backendConfig) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 

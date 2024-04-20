@@ -7,30 +7,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest;
-import com.github.lightningnetwork.lnd.lnrpc.Channel;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
-import com.github.lightningnetwork.lnd.lnrpc.Initiator;
-import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
-import com.github.lightningnetwork.lnd.lnrpc.RoutingPolicy;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import java.math.BigDecimal;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
+import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
+import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
+import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
@@ -41,7 +37,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     private BBExpandablePropertyView mDetailActivity;
     private BBExpandablePropertyView mDetailChannelLifetime;
     private BBExpandablePropertyView mDetailVisibility;
-    private BBExpandablePropertyView mDetailCommitmentType;
+    private BBExpandablePropertyView mDetailChannelType;
     private BBExpandablePropertyView mDetailInitiator;
     private BBExpandablePropertyView mDetailCloseInitiator;
     private BBExpandablePropertyView mDetailCloseType;
@@ -60,7 +56,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     private TextView mTvLocalRoutingPolicyHeading;
     private TextView mTvRemoteRoutingPolicyHeading;
     private int mChannelType;
-    private long mChanId;
+    private ShortChannelId mShortChannelId;
     private RoutingPolicy mLocalRoutingPolicy;
 
 
@@ -75,7 +71,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailActivity = findViewById(R.id.activity);
         mDetailChannelLifetime = findViewById(R.id.channelLifetime);
         mDetailVisibility = findViewById(R.id.visibility);
-        mDetailCommitmentType = findViewById(R.id.commitmentType);
+        mDetailChannelType = findViewById(R.id.commitmentType);
         mDetailInitiator = findViewById(R.id.initiator);
         mDetailCloseInitiator = findViewById(R.id.closeInitiator);
         mDetailCloseType = findViewById(R.id.closeType);
@@ -98,31 +94,21 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
-            ByteString channelString = (ByteString) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL);
             mChannelType = extras.getInt(ChannelDetailBSDFragment.ARGS_TYPE);
 
             try {
                 switch (mChannelType) {
                     case ChannelListItem.TYPE_OPEN_CHANNEL:
-                        bindOpenChannel(channelString);
+                        bindOpenChannel((OpenChannel) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL));
                         break;
-                    case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
-                        bindPendingOpenChannel(channelString);
-                        break;
-                    case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
-                        bindWaitingCloseChannel(channelString);
-                        break;
-                    case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
-                        bindPendingCloseChannel(channelString);
-                        break;
-                    case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                        bindForceClosingChannel(channelString);
+                    case ChannelListItem.TYPE_PENDING_CHANNEL:
+                        bindPendingChannel((PendingChannel) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL));
                         break;
                     case ChannelListItem.TYPE_CLOSED_CHANNEL:
-                        bindClosedChannel(channelString);
+                        bindClosedChannel((ClosedChannel) extras.getSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL));
                         break;
                 }
-            } catch (InvalidProtocolBufferException | NullPointerException exception) {
+            } catch (NullPointerException exception) {
                 BBLog.e(LOG_TAG, "Failed to parse channel.", exception);
                 finish();
             }
@@ -133,7 +119,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mChannelType == ChannelListItem.TYPE_OPEN_CHANNEL)
-            fetchChannelInfo(mChanId);
+            fetchChannelInfo(mShortChannelId);
     }
 
     @Override
@@ -159,7 +145,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                 Intent intentUpdateRoutingPolicy = new Intent(this, UpdateRoutingPolicyActivity.class);
                 if (getIntent().getExtras() != null)
                     intentUpdateRoutingPolicy.putExtras(getIntent().getExtras());
-                intentUpdateRoutingPolicy.putExtra(UpdateRoutingPolicyActivity.EXTRA_ROUTING_POLICY, mLocalRoutingPolicy.toByteString());
+                intentUpdateRoutingPolicy.putExtra(UpdateRoutingPolicyActivity.EXTRA_ROUTING_POLICY, mLocalRoutingPolicy);
                 startActivity(intentUpdateRoutingPolicy);
             }
             return true;
@@ -168,23 +154,22 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void bindOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        Channel channel = Channel.parseFrom(channelString);
-        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubkey());
+    private void bindOpenChannel(OpenChannel channel) {
+        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubKey());
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValueSat(channel.getCapacity());
+        mDetailCapacity.setAmountValueMsat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // activity
-        String activity = UtilFunctions.roundDouble(((double) (channel.getTotalSatoshisSent() + channel.getTotalSatoshisReceived()) / channel.getCapacity() * 100), 2) + "%";
+        String activity = UtilFunctions.roundDouble((channel.getActivity() * 100), 2) + "%";
         mDetailActivity.setValue(activity);
         mDetailActivity.setVisibility(View.VISIBLE);
 
         // channel lifetime
-        int openHeight = UtilFunctions.getBlockHeightFromChanID(channel.getChanId());
-        int currentHeight = Wallet.getInstance().getSyncedBlockHeight();
+        int openHeight = channel.getShortChannelId().getBlockHeight();
+        int currentHeight = Wallet.getInstance().getCurrentNodeInfo().getBlockHeight();
         int ageInBlocks = currentHeight - openHeight;
         String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
         mDetailChannelLifetime.setValue(duration);
@@ -192,7 +177,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // visibility
         String visibility;
-        if (channel.getPrivate()) {
+        if (channel.isPrivate()) {
             visibility = getString(R.string.channel_visibility_private);
         } else {
             visibility = getString(R.string.channel_visibility_public);
@@ -200,13 +185,16 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailVisibility.setValue(visibility);
         mDetailVisibility.setVisibility(View.VISIBLE);
 
-        // commitment type
-        mDetailCommitmentType.setValue(channel.getCommitmentType().name());
-        mDetailCommitmentType.setVisibility(View.VISIBLE);
+        // channel type
+        // ToDo: Improve channel types, to work with CoreLightning as well.
+        if (channel.hasChannelType()) {
+            mDetailChannelType.setValue(channel.getChannelType());
+            mDetailChannelType.setVisibility(View.VISIBLE);
+        }
 
         // initiator
         String initiator;
-        if (channel.getInitiator()) {
+        if (channel.isInitiator()) {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_you);
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
@@ -215,22 +203,24 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailInitiator.setVisibility(View.VISIBLE);
 
         // commit fee
-        mDetailCommitFee.setCanBlur(false);
-        mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
-        mDetailCommitFee.setVisibility(View.VISIBLE);
+        if (channel.hasCommitFee()) {
+            mDetailCommitFee.setCanBlur(false);
+            mDetailCommitFee.setAmountValueMsat(channel.getCommitFee());
+            mDetailCommitFee.setVisibility(View.VISIBLE);
+        }
 
         // time lock
-        long timeLockInSeconds = channel.getLocalConstraints().getCsvDelay() * 10 * 60;
-        String timeLock = channel.getLocalConstraints().getCsvDelay() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+        long timeLockInSeconds = (long) channel.getLocalChannelConstraints().getSelfDelay() * 10 * 60;
+        String timeLock = channel.getLocalChannelConstraints().getSelfDelay() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
         mDetailTimeLock.setValue(timeLock);
         mDetailTimeLock.setVisibility(View.VISIBLE);
 
         // local reserve amount
-        mDetailLocalReserve.setAmountValueSat(channel.getLocalConstraints().getChanReserveSat());
+        mDetailLocalReserve.setAmountValueMsat(channel.getLocalChannelConstraints().getChannelReserve());
         mDetailLocalReserve.setVisibility(View.VISIBLE);
 
         // remote reserve amount
-        mDetailRemoteReserve.setAmountValueSat(channel.getRemoteConstraints().getChanReserveSat());
+        mDetailRemoteReserve.setAmountValueMsat(channel.getRemoteChannelConstraints().getChannelReserve());
         mDetailRemoteReserve.setVisibility(View.VISIBLE);
 
         // local routing policy heading
@@ -267,68 +257,25 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         // remote max HTLC
         mDetailRemoteMaxHTLC.setVisibility(View.VISIBLE);
 
-        mChanId = channel.getChanId();
-        fetchChannelInfo(mChanId);
+        mShortChannelId = channel.getShortChannelId();
+        fetchChannelInfo(mShortChannelId);
     }
 
-    private void bindPendingOpenChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        PendingChannelsResponse.PendingOpenChannel channel = PendingChannelsResponse.PendingOpenChannel.parseFrom(channelString);
-
-        bindPendingChannel(channel.getChannel());
-
-        // visibility
-        String visibility;
-        if (channel.getChannel().getPrivate()) {
-            visibility = getString(R.string.channel_visibility_private);
-        } else {
-            visibility = getString(R.string.channel_visibility_public);
-        }
-        mDetailVisibility.setValue(visibility);
-        mDetailVisibility.setVisibility(View.VISIBLE);
-
-        // commit fee
-        mDetailCommitFee.setAmountValueSat(channel.getCommitFee());
-        mDetailCommitFee.setVisibility(View.VISIBLE);
-
-        // local reserve amount
-        mDetailLocalReserve.setAmountValueSat(channel.getChannel().getLocalChanReserveSat());
-        mDetailCommitFee.setVisibility(View.VISIBLE);
-
-        // remote reserve amount
-        mDetailRemoteReserve.setAmountValueSat(channel.getChannel().getRemoteChanReserveSat());
-        mDetailCommitFee.setVisibility(View.VISIBLE);
-    }
-
-    private void bindWaitingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        PendingChannelsResponse.WaitingCloseChannel channel = PendingChannelsResponse.WaitingCloseChannel.parseFrom(channelString);
-        bindPendingChannel(channel.getChannel());
-    }
-
-    private void bindPendingCloseChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        PendingChannelsResponse.ClosedChannel channel = PendingChannelsResponse.ClosedChannel.parseFrom(channelString);
-        bindPendingChannel(channel.getChannel());
-    }
-
-    private void bindForceClosingChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        PendingChannelsResponse.ForceClosedChannel channel = PendingChannelsResponse.ForceClosedChannel.parseFrom(channelString);
-        bindPendingChannel(channel.getChannel());
-    }
-
-    private void bindPendingChannel(PendingChannelsResponse.PendingChannel channel) {
-        mAlias = AliasManager.getInstance().getAlias(channel.getRemoteNodePub());
+    private void bindPendingChannel(PendingChannel channel) {
+        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubKey());
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValueSat(channel.getCapacity());
+        mDetailCapacity.setAmountValueMsat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // commitment type
-        mDetailCommitmentType.setValue(channel.getCommitmentType().name());
-        mDetailCommitmentType.setVisibility(View.VISIBLE);
+        mDetailChannelType.setValue(channel.getChannelType());
+        mDetailChannelType.setVisibility(View.VISIBLE);
 
         // initiator
         String initiator;
-        if (channel.getInitiator() == Initiator.INITIATOR_LOCAL) {
+        if (channel.isInitiator()) {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_you);
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
@@ -336,30 +283,47 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailInitiator.setValue(initiator);
         mDetailInitiator.setVisibility(View.VISIBLE);
 
+        // visibility
+        String visibility;
+        if (channel.isPrivate()) {
+            visibility = getString(R.string.channel_visibility_private);
+        } else {
+            visibility = getString(R.string.channel_visibility_public);
+        }
+        mDetailVisibility.setValue(visibility);
+        mDetailVisibility.setVisibility(View.VISIBLE);
+
         mTvLocalRoutingPolicyHeading.setVisibility(View.GONE);
         mTvRemoteRoutingPolicyHeading.setVisibility(View.GONE);
+
+        // commit fee
+        if (channel.hasCommitFee()) {
+            mDetailCommitFee.setAmountValueMsat(channel.getCommitFee());
+            mDetailCommitFee.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void bindClosedChannel(ByteString channelString) throws InvalidProtocolBufferException {
-        ChannelCloseSummary channel = ChannelCloseSummary.parseFrom(channelString);
-        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubkey());
+    private void bindClosedChannel(ClosedChannel channel) {
+        mAlias = AliasManager.getInstance().getAlias(channel.getRemotePubKey());
         setTitle(mAlias);
 
         // capacity
-        mDetailCapacity.setAmountValueSat(channel.getCapacity());
+        mDetailCapacity.setAmountValueMsat(channel.getCapacity());
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
-        int openHeight = UtilFunctions.getBlockHeightFromChanID(channel.getChanId());
-        int closeHeight = channel.getCloseHeight();
-        int ageInBlocks = closeHeight - openHeight;
-        String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
-        mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime_closed, duration, R.string.advanced_channel_details_explanation_lifetime_closed);
-        mDetailChannelLifetime.setVisibility(View.VISIBLE);
+        if (channel.hasCloseHeight()) {
+            int openHeight = channel.getShortChannelId().getBlockHeight();
+            int closeHeight = channel.getCloseHeight();
+            int ageInBlocks = closeHeight - openHeight;
+            String duration = TimeFormatUtil.formattedBlockDuration(ageInBlocks, AdvancedChannelDetailsActivity.this);
+            mDetailChannelLifetime.setContent(R.string.advanced_channel_details_lifetime_closed, duration, R.string.advanced_channel_details_explanation_lifetime_closed);
+            mDetailChannelLifetime.setVisibility(View.VISIBLE);
+        }
 
         // initiator
         String initiator;
-        if (channel.getOpenInitiator() == Initiator.INITIATOR_LOCAL) {
+        if (channel.isOpenInitiator()) {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_you);
         } else {
             initiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
@@ -369,7 +333,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
 
         // close initiator
         String closeInitiator;
-        if (channel.getCloseInitiator() == Initiator.INITIATOR_LOCAL) {
+        if (channel.isCloseInitiator()) {
             closeInitiator = getResources().getString(R.string.advanced_channel_details_initiator_you);
         } else {
             closeInitiator = getResources().getString(R.string.advanced_channel_details_initiator_peer);
@@ -377,60 +341,73 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailCloseInitiator.setValue(closeInitiator);
         mDetailCloseInitiator.setVisibility(View.VISIBLE);
 
-        // close type
-        String closeTypeLabel = "";
-        if (channel.getCloseType() == ChannelCloseSummary.ClosureType.COOPERATIVE_CLOSE) {
-            closeTypeLabel = getResources().getString(R.string.channel_close_type_coop);
-        } else if (channel.getCloseType() == ChannelCloseSummary.ClosureType.LOCAL_FORCE_CLOSE || channel.getCloseType() == ChannelCloseSummary.ClosureType.REMOTE_FORCE_CLOSE) {
-            closeTypeLabel = getResources().getString(R.string.channel_close_type_force_close);
-        } else if (channel.getCloseType() == ChannelCloseSummary.ClosureType.BREACH_CLOSE) {
-            closeTypeLabel = getResources().getString(R.string.channel_close_type_breach);
-        } else {
-            closeTypeLabel = channel.getCloseType().name();
+        // visibility
+        if (channel.hasPrivate()) {
+            String visibility;
+            if (channel.isPrivate()) {
+                visibility = getString(R.string.channel_visibility_private);
+            } else {
+                visibility = getString(R.string.channel_visibility_public);
+            }
+            mDetailVisibility.setValue(visibility);
+            mDetailVisibility.setVisibility(View.VISIBLE);
         }
-        mDetailCloseType.setValue(closeTypeLabel);
-        mDetailCloseType.setVisibility(View.VISIBLE);
+
+        // close type
+        if (channel.isHasCloseType()) {
+            String closeTypeLabel = "";
+            if (channel.getCloseType() == ClosedChannel.CloseType.COOPERATIVE_CLOSE) {
+                closeTypeLabel = getResources().getString(R.string.channel_close_type_coop);
+            } else if (channel.getCloseType() == ClosedChannel.CloseType.FORCE_CLOSE) {
+                closeTypeLabel = getResources().getString(R.string.channel_close_type_force_close);
+            } else if (channel.getCloseType() == ClosedChannel.CloseType.BREACH_CLOSE) {
+                closeTypeLabel = getResources().getString(R.string.channel_close_type_breach);
+            } else {
+                closeTypeLabel = channel.getCloseType().name();
+            }
+            mDetailCloseType.setValue(closeTypeLabel);
+            mDetailCloseType.setVisibility(View.VISIBLE);
+        }
+
 
         mTvLocalRoutingPolicyHeading.setVisibility(View.GONE);
         mTvRemoteRoutingPolicyHeading.setVisibility(View.GONE);
     }
 
-    public void fetchChannelInfo(long chanID) {
+    public void fetchChannelInfo(ShortChannelId chanID) {
         // Retrieve channel info from LND with gRPC (async)
-        if (LndConnection.getInstance().getLightningService() != null) {
-            mCompositeDisposable.add(LndConnection.getInstance().getLightningService().getChanInfo(ChanInfoRequest.newBuilder().setChanId(chanID).build())
-                    .subscribe(chanInfoResponse -> {
+        if (Wallet.getInstance().isConnectedToNode()) {
+            mCompositeDisposable.add(BackendManager.api().getPublicChannelInfo(chanID)
+                    .subscribe(response -> {
                         RoutingPolicy localPolicy;
                         RoutingPolicy remotePolicy;
-                        if (chanInfoResponse.getNode1Pub().equals(Wallet.getInstance().getNodeUris()[0].getPubKey())) {
-                            localPolicy = chanInfoResponse.getNode1Policy();
-                            remotePolicy = chanInfoResponse.getNode2Policy();
+                        if (response.getNode1PubKey().equals(Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris()[0].getPubKey())) {
+                            localPolicy = response.getNode1RoutingPolicy();
+                            remotePolicy = response.getNode2RoutingPolicy();
                         } else {
-                            localPolicy = chanInfoResponse.getNode2Policy();
-                            remotePolicy = chanInfoResponse.getNode1Policy();
+                            localPolicy = response.getNode2RoutingPolicy();
+                            remotePolicy = response.getNode1RoutingPolicy();
                         }
                         mLocalRoutingPolicy = localPolicy;
-                        if (chanInfoResponse.hasNode1Policy()) {
-                            BigDecimal localFeeRate = BigDecimal.valueOf((double) (localPolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                            String localFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getFeeBaseMsat()) + "\n+ " + localFeeRate.toPlainString() + " %";
-                            mDetailLocalRoutingFee.setValue(localFee);
-                            mDetailLocalMinHTLC.setAmountValueMsat(localPolicy.getMinHtlc());
-                            mDetailLocalMaxHTLC.setAmountValueMsat(localPolicy.getMaxHtlcMsat());
-                            long timeLockInSeconds = localPolicy.getTimeLockDelta() * 10 * 60;
-                            String timeLock = localPolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
-                            mDetailLocalTimelockDelta.setValue(timeLock);
 
-                        }
-                        if (chanInfoResponse.hasNode2Policy()) {
-                            BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (remotePolicy.getFeeRateMilliMsat()) / 10000.0).stripTrailingZeros();
-                            String remoteFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getFeeBaseMsat()) + "\n+ " + remoteFeeRate.toPlainString() + " %";
-                            mDetailRemoteRoutingFee.setValue(remoteFee);
-                            mDetailRemoteMinHTLC.setAmountValueMsat(remotePolicy.getMinHtlc());
-                            mDetailRemoteMaxHTLC.setAmountValueMsat(remotePolicy.getMaxHtlcMsat());
-                            long timeLockInSeconds = remotePolicy.getTimeLockDelta() * 10 * 60;
-                            String timeLock = remotePolicy.getTimeLockDelta() + " (" + TimeFormatUtil.formattedDurationShort(timeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
-                            mDetailRemoteTimelockDelta.setValue(timeLock);
-                        }
+                        BigDecimal localFeeRate = BigDecimal.valueOf((double) (localPolicy.getFeeRate()) / 10000.0).stripTrailingZeros();
+                        String localFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getFeeBase()) + "\n+ " + localFeeRate.toPlainString() + " %";
+                        mDetailLocalRoutingFee.setValue(localFee);
+                        mDetailLocalMinHTLC.setAmountValueMsat(localPolicy.getMinHTLC());
+                        mDetailLocalMaxHTLC.setAmountValueMsat(localPolicy.getMaxHTLC());
+                        long localTimeLockInSeconds = (long) localPolicy.getDelay() * 10 * 60;
+                        String localTimeLock = localPolicy.getDelay() + " (" + TimeFormatUtil.formattedDurationShort(localTimeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+                        mDetailLocalTimelockDelta.setValue(localTimeLock);
+
+                        BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (remotePolicy.getFeeRate()) / 10000.0).stripTrailingZeros();
+                        String remoteFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getFeeBase()) + "\n+ " + remoteFeeRate.toPlainString() + " %";
+                        mDetailRemoteRoutingFee.setValue(remoteFee);
+                        mDetailRemoteMinHTLC.setAmountValueMsat(remotePolicy.getMinHTLC());
+                        mDetailRemoteMaxHTLC.setAmountValueMsat(remotePolicy.getMaxHTLC());
+                        long remoteTimeLockInSeconds = (long) remotePolicy.getDelay() * 10 * 60;
+                        String remoteTimeLock = remotePolicy.getDelay() + " (" + TimeFormatUtil.formattedDurationShort(remoteTimeLockInSeconds, AdvancedChannelDetailsActivity.this) + ")";
+                        mDetailRemoteTimelockDelta.setValue(remoteTimeLock);
+
                     }, throwable -> {
                         BBLog.w(LOG_TAG, "Exception in fetch chanInfo task: " + throwable.getMessage());
                     }));

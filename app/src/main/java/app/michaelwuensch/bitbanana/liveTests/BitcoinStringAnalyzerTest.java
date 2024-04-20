@@ -1,15 +1,14 @@
 package app.michaelwuensch.bitbanana.liveTests;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
-
 import java.net.URL;
 
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -29,11 +28,10 @@ public class BitcoinStringAnalyzerTest {
     public static final int RESULT_LNURL_PAY = 6;
     public static final int RESULT_LNURL_AUTH = 7;
     public static final int RESULT_LNADDRESS = 8;
-    public static final int RESULT_LND_CONNECT = 9;
-    public static final int RESULT_BTCPAY_CONNECT = 10;
+    public static final int RESULT_CONNECT_DATA = 9;
     public static final int RESULT_NODE_URI = 11;
     public static final int RESULT_URL = 12;
-    public static final int RESULT_LNDHUB_CONNECT = 13;
+
     private static final String ERROR_LNURL_CHECK_FAILED = "The end result was a lnurl, but BitcoinStringAnalyzer.isLnUrl() did not recognize it.";
 
     CompositeDisposable mCompositeDisposable;
@@ -47,7 +45,7 @@ public class BitcoinStringAnalyzerTest {
     public void execute(String input, int expected) {
         BitcoinStringAnalyzer.analyze(App.getAppContext(), mCompositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                 if (expected == RESULT_LIGHTNING_INVOICE)
                     mResultListener.onSuccess(input, RESULT_LIGHTNING_INVOICE, null);
                 else
@@ -121,27 +119,11 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                if (expected == RESULT_LND_CONNECT)
-                    mResultListener.onSuccess(input, RESULT_LND_CONNECT, null);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                if (expected == RESULT_CONNECT_DATA)
+                    mResultListener.onSuccess(input, RESULT_CONNECT_DATA, null);
                 else
-                    mResultListener.onFailed(input, expected, RESULT_LND_CONNECT, null);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                if (expected == RESULT_LNDHUB_CONNECT)
-                    mResultListener.onSuccess(input, RESULT_LNDHUB_CONNECT, null);
-                else
-                    mResultListener.onFailed(input, expected, RESULT_LNDHUB_CONNECT, null);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                if (expected == RESULT_BTCPAY_CONNECT)
-                    mResultListener.onSuccess(input, RESULT_BTCPAY_CONNECT, null);
-                else
-                    mResultListener.onFailed(input, expected, RESULT_BTCPAY_CONNECT, null);
+                    mResultListener.onFailed(input, expected, RESULT_CONNECT_DATA, null);
             }
 
             @Override

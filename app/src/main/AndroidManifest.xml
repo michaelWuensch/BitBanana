@@ -27,7 +27,8 @@
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
@@ -71,6 +72,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
+                <data android:scheme="cln-grpc" />
             </intent-filter>
             <intent-filter>
 
@@ -86,6 +88,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
+                <data android:scheme="cln-grpc" />
             </intent-filter>
         </activity>
 
@@ -160,11 +163,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.settings.SettingsFeePresetsActivity"
-            android:label="@string/settings_onChainFeePresets"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeWithActionBar" />
-        <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsPayerDataActivity"
             android:label="@string/settings_payer_data"
             android:screenOrientation="portrait"
@@ -182,6 +180,16 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomBlockExplorerActivity"
             android:label="@string/settings_custom_block_explorer"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomExchangeRateProviderActivity"
+            android:label="@string/settings_custom_exchange_rate_provider"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCustomFeeEstimationProviderActivity"
+            android:label="@string/settings_custom_fee_estimation_provider"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity

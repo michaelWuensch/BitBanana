@@ -42,7 +42,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_NodesAndPeers;
 
 /**
  * This SINGLETON class is used to load and save contacts.
@@ -189,7 +189,7 @@ public class ContactsManager {
      * Returns the contact alias for a given node pubkey. Returns the node pubkey if no contact with that key exists.
      *
      * @param contactData pubkey of the contact
-     * @return Name if it exist, pubkey if it doesn exist
+     * @return Name if it exist, pubkey if it doesn't exist
      */
     public String getNameByContactData(@NonNull String contactData) {
         Contact contact = getContactByContactData(contactData);
@@ -281,7 +281,7 @@ public class ContactsManager {
                     input.setText(AliasManager.getInstance().getAlias(contactData));
                 else {
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                        Wallet.getInstance().fetchNodeInfoFromLND(contactData, false, true, new Wallet.NodeInfoFetchedListener() {
+                        Wallet_NodesAndPeers.getInstance().fetchNodeInfo(contactData, false, true, new Wallet_NodesAndPeers.NodeInfoFetchedListener() {
                             @Override
                             public void onNodeInfoFetched(String pubkey) {
                                 if (AliasManager.getInstance().hasAliasInfo(pubkey)) {

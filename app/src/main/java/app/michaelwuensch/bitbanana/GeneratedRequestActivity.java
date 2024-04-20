@@ -15,9 +15,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
@@ -25,10 +24,10 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
-public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet.InvoiceSubscriptionListener {
+public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet_TransactionHistory.InvoiceSubscriptionListener {
 
     private static final String LOG_TAG = GeneratedRequestActivity.class.getSimpleName();
 
@@ -42,7 +41,6 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
     private ConstraintLayout mClRequestView;
     private ConstraintLayout mClPaymentReceivedView;
     private TextView mFinishedAmount;
-    private long mLnInvoiceAddIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +54,13 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             mAmount = extras.getString("amount");
             mMemo = extras.getString("memo");
             mLnInvoice = extras.getString("lnInvoice");
-            mLnInvoiceAddIndex = extras.getLong("lnInvoiceAddIndex");
         }
 
         setContentView(R.layout.activity_generate_request);
 
 
         // Register listeners
-        Wallet.getInstance().registerInvoiceSubscriptionListener(this);
+        Wallet_TransactionHistory.getInstance().registerInvoiceSubscriptionListener(this);
 
         mClRequestView = findViewById(R.id.requestView);
         mClPaymentReceivedView = findViewById(R.id.paymentReceivedView);
@@ -168,9 +165,16 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             @Override
             public void onClick(View v) {
                 // Ask user to confirm risks about clipboard manipulation
-                new UserGuardian(GeneratedRequestActivity.this, () -> {
-                    // Copy data to clipboard
-                    ClipBoardUtil.copyToClipboard(getApplicationContext(), "Request", mDataToCopyOrShare);
+                new UserGuardian(GeneratedRequestActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                    @Override
+                    public void onConfirmed() {
+                        ClipBoardUtil.copyToClipboard(getApplicationContext(), "Request", mDataToCopyOrShare);
+                    }
+
+                    @Override
+                    public void onCancelled() {
+
+                    }
                 }).securityCopyToClipboard(mDataToCopyOrShare, mOnChain ? UserGuardian.CLIPBOARD_DATA_TYPE_ONCHAIN : UserGuardian.CLIPBOARD_DATA_TYPE_LIGHTNING);
             }
         });
@@ -191,35 +195,31 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         super.onDestroy();
 
         // Unregister listeners
-        Wallet.getInstance().unregisterInvoiceSubscriptionListener(this);
+        Wallet_TransactionHistory.getInstance().unregisterInvoiceSubscriptionListener(this);
     }
 
     @Override
-    public void onNewInvoiceAdded(Invoice invoice) {
+    public void onNewInvoiceAdded(LnInvoice invoice) {
 
     }
 
     @Override
-    public void onExistingInvoiceUpdated(Invoice invoice) {
-
+    public void onExistingInvoiceUpdated(LnInvoice invoice) {
         // This has to happen on the UI thread. Only this thread can change the UI.
         runOnUiThread(new Runnable() {
             public void run() {
                 // Check if the invoice was payed
-                if (Wallet.getInstance().isInvoicePayed(invoice)) {
-                    // The updated invoice is payed, now check if it is the invoice whe currently have opened.
-                    if (invoice.getAddIndex() == mLnInvoiceAddIndex) {
+                if (invoice.isPaid()) {
+                    // The updated invoice is payed, now check if it is the invoice we currently have opened.
+                    if (invoice.getBolt11().equals(mLnInvoice)) {
 
                         // It was payed, show success screen
-
-                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(invoice.getAmtPaidSat()));
+                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(invoice.getAmountPaid(), true));
                         mClPaymentReceivedView.setVisibility(View.VISIBLE);
                         mClRequestView.setVisibility(View.GONE);
-
                     }
                 }
             }
         });
-
     }
 }

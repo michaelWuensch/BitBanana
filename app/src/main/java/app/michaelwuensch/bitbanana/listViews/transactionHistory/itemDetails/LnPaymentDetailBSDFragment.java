@@ -1,7 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.Hop;
-import com.github.lightningnetwork.lnd.lnrpc.PayReqString;
-import com.github.lightningnetwork.lnd.lnrpc.Payment;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
 public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
@@ -77,20 +65,12 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
-            ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_TRANSACTION);
-            try {
-                bindPayment(transactionString);
-            } catch (InvalidProtocolBufferException | NullPointerException exception) {
-                Log.e(TAG, "Failed to parse payment.", exception);
-                dismiss();
-            }
+            bindPayment((LnPayment) getArguments().getSerializable(ARGS_TRANSACTION));
         }
         return view;
     }
 
-    private void bindPayment(ByteString transactionString) throws InvalidProtocolBufferException {
-
-        Payment payment = Payment.parseFrom(transactionString);
+    private void bindPayment(LnPayment payment) {
 
         String payeeLabel = getString(R.string.payee) + ":";
         mPayeeLabel.setText(payeeLabel);
@@ -107,58 +87,33 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
 
-        Hop lastHop = payment.getHtlcs(0).getRoute().getHops(payment.getHtlcs(0).getRoute().getHopsCount() - 1);
-        String payee = lastHop.getPubKey();
 
-        mPayee.setText(ContactsManager.getInstance().getNameByContactData(payee));
-        mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payee));
-        mAmount.setAmountSat(payment.getValue());
-        mFee.setAmountSat(payment.getFee());
+        if (payment.hasDestinationPubKey()) {
+            mPayee.setText(ContactsManager.getInstance().getNameByContactData(payment.getDestinationPubKey()));
+            mPayeeCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payee", payment.getDestinationPubKey()));
+        } else {
+            mPayeeLabel.setVisibility(View.GONE);
+            mPayee.setVisibility(View.GONE);
+            mPayeeCopyIcon.setVisibility(View.GONE);
+        }
+
+        mAmount.setAmountMsat(payment.getAmountPaid());
+        mFee.setAmountMsat(payment.getFee());
         mPreimage.setText(payment.getPaymentPreimage());
         mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
-        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreationDate(), getActivity()));
+        mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreatedAt(), getActivity()));
 
 
-        if (!payment.getPaymentRequest().isEmpty()) {
-            // This will only be true for payments done with LND 0.7.0-beta and later
-            decodeLightningInvoice(payment.getPaymentRequest());
+        if (payment.hasMemo()) {
+            mMemo.setText(payment.getMemo());
         } else {
-            // See if we have a message in custom records
-            boolean customRecordMessage = false;
-            try {
-                Map<Long, ByteString> customRecords = lastHop.getCustomRecordsMap();
-                for (Long key : customRecords.keySet()) {
-                    if (key == PaymentUtil.KEYSEND_MESSAGE_RECORD) {
-                        mMemo.setText(customRecords.get(key).toString(StandardCharsets.UTF_8));
-                        customRecordMessage = true;
-                        break;
-                    }
-                }
-            } catch (Exception ignored) {
-
-            }
-            if (!customRecordMessage) {
+            if (payment.hasKeysendMessage())
+                mMemo.setText(payment.getKeysendMessage());
+            else {
                 // Nothing there, hide the view
                 mMemo.setVisibility(View.GONE);
                 mMemoLabel.setVisibility(View.GONE);
             }
         }
-    }
-
-    private void decodeLightningInvoice(String invoice) {
-        PayReqString decodePaymentRequest = PayReqString.newBuilder()
-                .setPayReq(invoice)
-                .build();
-
-        getCompositeDisposable().add(LndConnection.getInstance().getLightningService().decodePayReq(decodePaymentRequest)
-                .subscribe(paymentRequest -> {
-                    if (paymentRequest.getDescription().isEmpty()) {
-                        mMemo.setVisibility(View.GONE);
-                        mMemoLabel.setVisibility(View.GONE);
-                    } else {
-                        // Set description
-                        mMemo.setText(paymentRequest.getDescription());
-                    }
-                }, throwable -> BBLog.d(TAG, "Decode payment request failed: " + throwable.fillInStackTrace())));
     }
 }

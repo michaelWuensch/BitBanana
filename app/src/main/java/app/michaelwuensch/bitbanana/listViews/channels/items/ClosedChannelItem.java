@@ -1,12 +1,13 @@
 package app.michaelwuensch.bitbanana.listViews.channels.items;
 
-import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
+
+import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 
 public class ClosedChannelItem extends ChannelListItem {
-    private ChannelCloseSummary mChannel;
+    private ClosedChannel mChannel;
 
-    public ClosedChannelItem(ChannelCloseSummary channel) {
+    public ClosedChannelItem(ClosedChannel channel) {
         mChannel = channel;
     }
 
@@ -16,11 +17,11 @@ public class ClosedChannelItem extends ChannelListItem {
     }
 
     @Override
-    public ByteString getChannelByteString() {
-        return mChannel.toByteString();
+    public Serializable getSerializedChannel() {
+        return (Serializable) mChannel;
     }
 
-    public ChannelCloseSummary getChannel() {
+    public ClosedChannel getChannel() {
         return mChannel;
     }
 }

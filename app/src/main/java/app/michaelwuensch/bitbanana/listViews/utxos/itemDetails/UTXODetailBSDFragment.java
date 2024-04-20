@@ -10,14 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.lightningnetwork.lnd.lnrpc.Utxo;
-import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -61,10 +60,10 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
-            ByteString transactionString = (ByteString) getArguments().getSerializable(ARGS_UTXO);
+            mUTXO = (Utxo) getArguments().getSerializable(ARGS_UTXO);
 
             try {
-                bindUTXO(transactionString);
+                bindUTXO();
 
             } catch (InvalidProtocolBufferException | NullPointerException exception) {
                 BBLog.d(TAG, "Failed to parse utxo.");
@@ -76,8 +75,8 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
     }
 
 
-    private void bindUTXO(ByteString utxoString) throws InvalidProtocolBufferException {
-        mUTXO = Utxo.parseFrom(utxoString);
+    private void bindUTXO() throws InvalidProtocolBufferException {
+        // mUTXO = Utxo.parseFrom(utxoString);
 
         mBSDScrollableMainView.setTitle("UTXO");
 
@@ -90,14 +89,14 @@ public class UTXODetailBSDFragment extends BaseBSDFragment {
         String confirmationsLabel = getString(R.string.confirmations) + ":";
         mConfirmationsLabel.setText(confirmationsLabel);
 
-        mAmount.setAmountSat(mUTXO.getAmountSat());
+        mAmount.setAmountMsat(mUTXO.getAmount());
 
         mAddress.setText(mUTXO.getAddress());
-        mTransactionID.setText(mUTXO.getOutpoint().getTxidStr());
+        mTransactionID.setText(mUTXO.getOutpoint().getTransactionID());
 
-        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mUTXO.getOutpoint().getTxidStr(), getActivity()));
+        mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mUTXO.getOutpoint().getTransactionID(), getActivity()));
         mAddress.setOnClickListener(view -> new BlockExplorer().showAddress(mUTXO.getAddress(), getActivity()));
-        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mUTXO.getOutpoint().getTxidStr()));
+        mTransactionIDCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "TransactionID", mUTXO.getOutpoint().getTransactionID()));
         mAddressCopyButton.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Address", mUTXO.getAddress()));
 
         mConfirmations.setText(String.valueOf(mUTXO.getConfirmations()));

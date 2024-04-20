@@ -19,16 +19,29 @@ public class TorManager {
 
     private final Set<TorErrorListener> mTorErrorListeners = new HashSet<>();
 
-    private int mProxyPort;
+    private int mHttpProxyPort;
+    private int mSocksProxyPort;
     private boolean isProxyRunning = false;
     private boolean isConnecting = false;
 
-    public int getProxyPort() {
-        return mProxyPort;
+    public boolean isConnecting() {
+        return isConnecting;
     }
 
-    public void setProxyPort(int mProxyPort) {
-        this.mProxyPort = mProxyPort;
+    public int getHttpProxyPort() {
+        return mHttpProxyPort;
+    }
+
+    public void setHttpProxyPort(int httpProxyPort) {
+        this.mHttpProxyPort = httpProxyPort;
+    }
+
+    public int getSocksProxyPort() {
+        return mSocksProxyPort;
+    }
+
+    public void setSocksProxyPort(int socksProxyPort) {
+        this.mSocksProxyPort = socksProxyPort;
     }
 
     public boolean isProxyRunning() {

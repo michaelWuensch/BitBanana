@@ -23,10 +23,10 @@ public class HttpClient {
 
     private OkHttpClient createHttpClient() {
         if (PrefsUtil.isTorEnabled()) {
-            Proxy proxyTest = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", TorManager.getInstance().getProxyPort()));
+            Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorManager.getInstance().getSocksProxyPort()));
 
             return new OkHttpClient.Builder()
-                    .proxy(proxyTest)
+                    .proxy(torProxy)
                     .build();
         } else {
             return new OkHttpClient();
@@ -35,7 +35,7 @@ public class HttpClient {
 
     public void restartHttpClient() {
         if (PrefsUtil.isTorEnabled()) {
-            BBLog.d(LOG_TAG, "HttpClient restarted. Proxy Port: " + TorManager.getInstance().getProxyPort());
+            BBLog.d(LOG_TAG, "HttpClient restarted. Socks Proxy Port: " + TorManager.getInstance().getSocksProxyPort());
         } else {
             BBLog.d(LOG_TAG, "HttpClient restarted.");
         }

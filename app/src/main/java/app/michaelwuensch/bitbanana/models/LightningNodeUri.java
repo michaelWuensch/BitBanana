@@ -6,18 +6,19 @@ import java.io.Serializable;
 
 public class LightningNodeUri implements Serializable {
 
-    private String mPubKey;
-    private String mHost;
-    private String mNickname;
-    private String mDescription;
-    private String mImage;
+    private final String mPubKey;
+    private final String mHost;
+    private final boolean hasHost;
+    private final int mPort;
+    private final boolean hasPort;
 
-    private LightningNodeUri(@NonNull String pubKey, String host, String nickname, String description, String image) {
-        mPubKey = pubKey;
-        mHost = host;
-        mNickname = nickname;
-        mDescription = description;
-        mImage = image;
+
+    private LightningNodeUri(Builder builder) {
+        mPubKey = builder.mPubKey;
+        mHost = builder.mHost;
+        hasHost = builder.hasHost;
+        mPort = builder.mPort;
+        hasPort = builder.hasPort;
     }
 
     @NonNull
@@ -29,22 +30,16 @@ public class LightningNodeUri implements Serializable {
         return mHost;
     }
 
-    public String getNickname() {
-        return mNickname;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public String getImage() {
-        return mImage;
+    public int getPort() {
+        return mPort;
     }
 
     public String getAsString() {
         String uri = mPubKey;
-        if (mHost != null) {
+        if (hasHost()) {
             uri = uri + "@" + mHost;
+            if (hasPort())
+                uri = uri + ":" + mPort;
         }
         return uri;
     }
@@ -53,48 +48,43 @@ public class LightningNodeUri implements Serializable {
         if (getHost() == null) {
             return false;
         }
-        return getHost().toLowerCase().contains("onion");
+        return getHost().toLowerCase().contains(".onion");
+    }
+
+    public boolean hasHost() {
+        return hasHost;
+    }
+
+    public boolean hasPort() {
+        return hasPort;
     }
 
     public static class Builder {
         private String mPubKey;
         private String mHost;
-        private String mNickname;
-        private String mDescription;
-        private String mImage;
+        private boolean hasHost;
+        private int mPort;
+        private boolean hasPort;
 
         public Builder setPubKey(@NonNull String pubKey) {
             this.mPubKey = pubKey;
-
             return this;
         }
 
         public Builder setHost(String host) {
             this.mHost = host;
-
+            this.hasHost = true;
             return this;
         }
 
-        public Builder setNickname(String nickname) {
-            this.mNickname = nickname;
-
-            return this;
-        }
-
-        public Builder setDescription(String description) {
-            this.mDescription = description;
-
-            return this;
-        }
-
-        public Builder setImage(String image) {
-            this.mImage = image;
-
+        public Builder setPort(int port) {
+            this.mPort = port;
+            this.hasPort = true;
             return this;
         }
 
         public LightningNodeUri build() {
-            return new LightningNodeUri(mPubKey, mHost, mNickname, mDescription, mImage);
+            return new LightningNodeUri(this);
         }
     }
 }

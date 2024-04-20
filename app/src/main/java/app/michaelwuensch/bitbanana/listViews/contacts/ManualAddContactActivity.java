@@ -22,10 +22,11 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.LightningNodeUirParser;
+import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterHex;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterLowerCase;
@@ -104,7 +105,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                 if (mEtData.getText().toString().isEmpty())
                     mUserAvatarView.setImageResource(R.drawable.unknown_avatar);
                 else
-                    mUserAvatarView.setImageBitmap(AvathorFactory.getAvathor(ManualAddContactActivity.this, mEtData.getText().toString()));
+                    mUserAvatarView.setImageBitmap(AvathorFactory.getAvathor(ManualAddContactActivity.this, mEtData.getText().toString(), PrefsUtil.getAvatarSet()));
             }
         });
 
@@ -126,7 +127,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
 
         switch (mType) {
             case NODEPUBKEY:
-                LightningNodeUri nodeUri = LightningNodeUirParser.parseNodeUri(data);
+                LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(data);
 
                 if (nodeUri != null) {
                     addContact(Contact.ContactType.NODEPUBKEY, name, data);
@@ -135,7 +136,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                 }
                 break;
             case LNADDRESS:
-                LNAddress lnAddress = new LNAddress(data);
+                LnAddress lnAddress = new LnAddress(data);
                 if (lnAddress.isValid()) {
                     addContact(Contact.ContactType.LNADDRESS, name, data);
                 } else {

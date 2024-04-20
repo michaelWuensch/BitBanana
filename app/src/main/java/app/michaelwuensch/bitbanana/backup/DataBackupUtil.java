@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.backup;
 
+import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -21,7 +22,6 @@ import javax.crypto.NoSuchPaddingException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
@@ -82,7 +82,7 @@ public class DataBackupUtil {
 
     public static boolean restoreBackup(String backup, int backupVersion) {
 
-        if (backupVersion < 3) {
+        if (backupVersion < 4) {
             DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
 
             // restore backend configs
@@ -100,16 +100,43 @@ public class DataBackupUtil {
                 }
             }
 
+            if (backupVersion == 2) {
+                // This is an old backup that did not contain info for network. Apply defaults. Moreover backend values changed therefore, set it to default.
+                BBLog.d(LOG_TAG, "Updating connections from old backup version (1) ...");
+                List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
+                for (BackendConfig backendConfig : backendConfigs) {
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
+                    }
+                    if (backendConfig.getServerCert() != null)
+                        backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
+                    BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
+                }
+                try {
+                    BackendConfigsManager.getInstance().apply();
+                    BBLog.d(LOG_TAG, "Connections restored.");
+                } catch (GeneralSecurityException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             if (backupVersion == 1) {
                 // This is an old backup that did not contain info for network. Apply defaults. Moreover backend values changed therefore, set it to default.
                 BBLog.d(LOG_TAG, "Updating connections from old backup version (1) ...");
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
                     // Adds the defaults to the newly introduced or renamed config properties.
-                    backendConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                    backendConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                    backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                    backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+                    backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
                     backendConfig.setVpnConfig(new VPNConfig());
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
+                    }
+                    if (backendConfig.getServerCert() != null)
+                        backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
                 try {
@@ -126,12 +153,18 @@ public class DataBackupUtil {
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
                     // Adds the defaults to the newly introduced or renamed config properties.
-                    backendConfig.setLocation(BaseBackendConfig.Location.REMOTE);
-                    backendConfig.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                    backendConfig.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
+                    backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                    backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+                    backendConfig.setBackendType(BackendConfig.BackendType.LND_GRPC);
                     backendConfig.setUseTor(backendConfig.isTorHostAddress());
                     backendConfig.setVerifyCertificate(!backendConfig.isTorHostAddress());
                     backendConfig.setVpnConfig(new VPNConfig());
+                    if (backendConfig.getMacaroon() != null) {
+                        backendConfig.setAuthenticationToken(backendConfig.getMacaroon().toLowerCase());
+                        backendConfig.setMacaroon(null);
+                    }
+                    if (backendConfig.getServerCert() != null)
+                        backendConfig.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(backendConfig.getServerCert())));
                     BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
                 }
                 try {

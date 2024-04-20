@@ -64,6 +64,18 @@
             android:textSize="16sp"
             tools:text="Name" />
 
+        <TextView
+            android:id="@+id/networkName"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="Testnet" />
+
     </LinearLayout>
 
     <LinearLayout

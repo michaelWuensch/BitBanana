@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
@@ -39,10 +38,11 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -72,7 +72,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     private String mServiceURLString;
     private Handler mHandler;
     private LnUrlWithdrawResponse mWithdrawData;
-    private long mWithdrawAmountSats;
+    private long mWithdrawAmount;
     private boolean mBlockOnInputChanged;
 
     public static LnUrlWithdrawBSDFragment createWithdrawDialog(LnUrlWithdrawResponse response) {
@@ -93,9 +93,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdrawal value for LNURL. BitBanana limits withdrawal to full satoshis.
-        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable() / 1000), Wallet.getInstance().getMaxLightningReceiveAmount());
-        mMinWithdrawable = mWithdrawData.getMinWithdrawable() % 1000 == 0 ? Math.max((mWithdrawData.getMinWithdrawable() / 1000), 1L) : Math.max((mWithdrawData.getMinWithdrawable() / 1000) + 1L, 1L);
+        // Calculate correct min and max withdrawal value for LNURL.
+        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable()), WalletUtil.getMaxLightningReceiveAmount());
+        mMinWithdrawable = mWithdrawData.getMinWithdrawable();
 
         // Extract the URL from the Withdraw service
         try {
@@ -159,15 +159,15 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                     }
 
                     // make text red if input is too large or too small
-                    if (mWithdrawAmountSats > mMaxWithdrawable) {
+                    if (mWithdrawAmount > mMaxWithdrawable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMaxWithdrawable);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMaxWithdrawable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
-                    } else if (mWithdrawAmountSats < mMinWithdrawable) {
+                    } else if (mWithdrawAmount < mMinWithdrawable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mMinWithdrawable);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMinWithdrawable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
@@ -176,7 +176,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                         mBtnWithdraw.setEnabled(true);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.banana_yellow));
                     }
-                    if (mWithdrawAmountSats == 0) {
+                    if (mWithdrawAmount == 0) {
                         mBtnWithdraw.setEnabled(false);
                         mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
                     }
@@ -197,9 +197,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), false);
                 if (mAmountValid) {
-                    mWithdrawAmountSats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                    mWithdrawAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -219,17 +219,17 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
 
         if (mWithdrawData.getMinWithdrawable() == mWithdrawData.getMaxWithdrawable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mWithdrawData.getMaxWithdrawable() / 1000;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+            mFixedAmount = mWithdrawData.getMaxWithdrawable();
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
             mEtAmount.setEnabled(false);
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
             mNumpad.setVisibility(View.VISIBLE);
-            mWithdrawAmountSats = mMaxWithdrawable;
+            mWithdrawAmount = mMaxWithdrawable;
             mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mMaxWithdrawable));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mMaxWithdrawable, true));
             mBlockOnInputChanged = false;
 
             mHandler.postDelayed(() -> {
@@ -252,26 +252,26 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 // Create ln-invoice
                 long value;
                 if (mFixedAmount == 0L) {
-                    value = mWithdrawAmountSats;
+                    value = mWithdrawAmount;
                 } else {
                     value = mFixedAmount;
                 }
 
-                Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(value)
-                        .setMemo(mWithdrawData.getDefaultDescription())
-                        .setExpiry(300L) // in seconds
-                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                CreateInvoiceRequest request = CreateInvoiceRequest.newBuilder()
+                        .setAmount(value)
+                        .setDescription(mWithdrawData.getDefaultDescription())
+                        .setExpiry(300L)
+                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
-                        .subscribe(addInvoiceResponse -> {
+                getCompositeDisposable().add(BackendManager.api().createInvoice(request)
+                        .subscribe(response -> {
 
                             // Invoice was created. Now forward it to the LNURL service to initiate withdraw.
                             LnUrlFinalWithdrawRequest lnUrlFinalWithdrawRequest = new LnUrlFinalWithdrawRequest.Builder()
                                     .setCallback(mWithdrawData.getCallback())
                                     .setK1(mWithdrawData.getK1())
-                                    .setInvoice(addInvoiceResponse.getPaymentRequest())
+                                    .setInvoice(response.getBolt11())
                                     .build();
 
                             okhttp3.Request lnUrlRequest = new Request.Builder()
@@ -279,36 +279,23 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                                     .build();
 
                             HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
-                                // We need to make sure the results are executed on the UI Thread to prevent crashes.
-                                Handler threadHandler = new Handler(Looper.getMainLooper());
-
                                 @Override
                                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                    threadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (mServiceURLString != null) {
-                                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
-                                            } else {
-                                                String host = getResources().getString(R.string.host);
-                                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
-                                            }
-                                        }
-                                    });
+                                    if (mServiceURLString != null) {
+                                        switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
+                                    } else {
+                                        String host = getResources().getString(R.string.host);
+                                        switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
+                                    }
                                 }
 
                                 @Override
                                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                    threadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                validateSecondResponse(response.body().string());
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
+                                    try {
+                                        validateSecondResponse(response.body().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 
@@ -328,9 +315,9 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
                 if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mWithdrawAmountSats));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mWithdrawAmount, false));
                 } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mFixedAmount));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, false));
                 }
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mBlockOnInputChanged = false;
@@ -370,29 +357,48 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     }
 
     private void switchToWithdrawProgressScreen() {
-        mProgressView.setVisibility(View.VISIBLE);
-        mWithdrawInputs.setVisibility(View.INVISIBLE);
-        mProgressView.startSpinning();
-        mBSDScrollableMainView.animateTitleOut();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.setVisibility(View.VISIBLE);
+                mWithdrawInputs.setVisibility(View.INVISIBLE);
+                mProgressView.startSpinning();
+                mBSDScrollableMainView.animateTitleOut();
+            }
+        });
     }
 
     private void switchToSuccessScreen() {
-        mProgressView.spinningFinished(true);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mWithdrawInputs.setVisibility(View.GONE);
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(mWithdrawAmountSats));
-        mResultView.setVisibility(View.VISIBLE);
-        mResultView.setHeading(R.string.lnurl_withdraw_success, true);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.spinningFinished(true);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mWithdrawInputs.setVisibility(View.GONE);
+                mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mWithdrawAmount, true));
+                mResultView.setVisibility(View.VISIBLE);
+                mResultView.setHeading(R.string.lnurl_withdraw_success, true);
+            }
+        });
     }
 
     private void switchToFailedScreen(String error) {
-        mProgressView.spinningFinished(false);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mWithdrawInputs.setVisibility(View.GONE);
-        mResultView.setVisibility(View.VISIBLE);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
 
-        // Set failed states
-        mResultView.setHeading(R.string.lnurl_withdraw_fail, false);
-        mResultView.setDetailsText(error);
+                mProgressView.spinningFinished(false);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mWithdrawInputs.setVisibility(View.GONE);
+                mResultView.setVisibility(View.VISIBLE);
+
+                // Set failed states
+                mResultView.setHeading(R.string.lnurl_withdraw_fail, false);
+                mResultView.setDetailsText(error);
+            }
+        });
     }
 }

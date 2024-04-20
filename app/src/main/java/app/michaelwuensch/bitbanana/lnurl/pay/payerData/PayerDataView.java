@@ -11,7 +11,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class PayerDataView extends LinearLayout {
 
@@ -104,7 +104,7 @@ public class PayerDataView extends LinearLayout {
         mPayerDataName.setValue(PrefsUtil.getPrefs().getString("payerDataName", ""));
         mPayerDataIdentifier.setValue(PrefsUtil.getPrefs().getString("payerDataIdentifier", ""));
         mPayerDataEmail.setValue(PrefsUtil.getPrefs().getString("payerDataEmail", ""));
-        mPayerDataPubkey.setValue(Wallet.getInstance().getIdentityPubKey());
+        mPayerDataPubkey.setValue(Wallet.getInstance().getCurrentNodeInfo().getPubKey());
     }
 
     public LnUrlpPayerData getData() {

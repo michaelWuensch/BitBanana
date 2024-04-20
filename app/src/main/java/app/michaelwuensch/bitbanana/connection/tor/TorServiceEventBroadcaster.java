@@ -2,9 +2,9 @@ package app.michaelwuensch.bitbanana.connection.tor;
 
 import androidx.annotation.NonNull;
 
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import io.matthewnelson.topl_service_base.TorPortInfo;
 
 public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_base.TorServiceEventBroadcaster {
@@ -13,21 +13,26 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
 
     @Override
     public void broadcastPortInformation(TorPortInfo torPortInfo) {
-        BBLog.d(LOG_TAG, "PortInfo: " + torPortInfo.getHttpPort());
-
-        if (torPortInfo.getHttpPort() != null) {
-
-            int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
+        if (torPortInfo.getHttpPort() != null || torPortInfo.getSocksPort() != null) {
+            if (torPortInfo.getHttpPort() != null) {
+                BBLog.d(LOG_TAG, "HttpPortInfo: " + torPortInfo.getHttpPort());
+                int port = Integer.valueOf(torPortInfo.getHttpPort().split(":")[1]);
+                TorManager.getInstance().setHttpProxyPort(port);
+            }
+            if (torPortInfo.getSocksPort() != null) {
+                BBLog.d(LOG_TAG, "SocksPortInfo: " + torPortInfo.getSocksPort());
+                int port = Integer.valueOf(torPortInfo.getSocksPort().split(":")[1]);
+                TorManager.getInstance().setSocksProxyPort(port);
+            }
             TorManager.getInstance().setIsProxyRunning(true);
             TorManager.getInstance().setIsConnecting(false);
-            TorManager.getInstance().setProxyPort(port);
 
             // restart HTTP Client
             HttpClient.getInstance().restartHttpClient();
 
             // Continue backend connection process if it waited for Tor connection to be established
-            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
-                BackendSwitcher.activateBackendConfig4();
+            if (BackendManager.getCurrentBackendConfig() != null && BackendManager.getCurrentBackendConfig().getUseTor() && BackendManager.getBackendState() == BackendManager.BackendState.STARTING_TOR) {
+                BackendManager.activateBackendConfig4();
             }
         } else {
             TorManager.getInstance().setIsProxyRunning(false);
@@ -60,8 +65,8 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
         if (notice.startsWith("WARN|BaseEventListener|Problem bootstrapping.")) {
             TorManager.getInstance().broadcastTorError();
             // Show error message on connection screen
-            if (BackendSwitcher.getCurrentBackendConfig() != null && BackendSwitcher.getCurrentBackendConfig().getUseTor() && BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.STARTING_TOR) {
-                BackendSwitcher.setError(BackendSwitcher.ERROR_TOR_BOOTSTRAPPING_FAILED);
+            if (BackendManager.getCurrentBackendConfig() != null && BackendManager.getCurrentBackendConfig().getUseTor() && BackendManager.getBackendState() == BackendManager.BackendState.STARTING_TOR) {
+                BackendManager.setError(BackendManager.ERROR_TOR_BOOTSTRAPPING_FAILED);
             }
         }
     }

@@ -120,7 +120,6 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case HistoryListItem.TYPE_LN_PAYMENT:
                 LnPaymentViewHolder lnPaymentHolder = (LnPaymentViewHolder) holder;
                 LnPaymentItem lnPaymentItem = (LnPaymentItem) mSortedList.get(position);
-                lnPaymentHolder.setCompositeDisposable(mCompositeDisposable);
                 lnPaymentHolder.bindLnPaymentItem(lnPaymentItem);
                 lnPaymentHolder.addOnTransactionSelectListener(mTransactionSelectListener);
                 break;

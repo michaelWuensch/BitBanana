@@ -8,23 +8,21 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
+import com.google.common.io.BaseEncoding;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
-import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
-import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.UriUtil;
 
 public class LandingActivity extends BaseAppCompatActivity {
 
@@ -37,14 +35,6 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Keep in app language picker in sync with system per app language setting.
         updateLanguageSetting();
 
-        // BitBanana was started from an URI link.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs() && UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
-                setupWalletFromUri();
-                return;
-            }
-        }
-
         // support for clearing shared preferences, on breaking changes
         if (PrefsUtil.getPrefs().contains(PrefsUtil.SETTINGS_VERSION)) {
             int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
@@ -54,18 +44,25 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else if (ver == 22) {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 } else if (ver == 23) {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
-                } else { // ver == 24
+                } else if (ver == 24) {
                     migrateBackendConfigs();
+                    migrateCertificateEncodingAndMacaroon();
+                    enterWallet();
+                } else { // ver == 25
+                    migrateCertificateEncodingAndMacaroon();
                     enterWallet();
                 }
             } else {
@@ -128,11 +125,24 @@ public class LandingActivity extends BaseAppCompatActivity {
         }
     }
 
-    private void setupWalletFromUri() {
-        Intent connectIntent = new Intent(this, ConnectRemoteNodeActivity.class);
-        connectIntent.putExtra(ConnectRemoteNodeActivity.EXTRA_STARTED_FROM_URI, true);
-        connectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(connectIntent);
+    private void migrateCertificateEncodingAndMacaroon() {
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
+                if (config.getMacaroon() != null) {
+                    config.setAuthenticationToken(config.getMacaroon().toLowerCase());
+                    config.setMacaroon(null);
+                }
+                if (config.getServerCert() != null)
+                    config.setServerCert(BaseEncoding.base64().encode(BaseEncoding.base64Url().decode(config.getServerCert())));
+                BackendConfigsManager.getInstance().updateBackendConfig(config);
+            }
+            try {
+                BackendConfigsManager.getInstance().apply();
+            } catch (GeneralSecurityException | IOException e) {
+                BBLog.w(LOG_TAG, "Certificate encoding migration failed");
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void migrateLanguageSetting() {
@@ -147,9 +157,9 @@ public class LandingActivity extends BaseAppCompatActivity {
     private void migrateBackendConfigs() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(false)) {
-                config.setBackendType(BaseBackendConfig.BackendType.LND_GRPC);
-                config.setNetwork(BaseBackendConfig.Network.UNKNOWN);
-                config.setLocation(BaseBackendConfig.Location.REMOTE);
+                config.setBackendType(BackendConfig.BackendType.LND_GRPC);
+                config.setNetwork(BackendConfig.Network.UNKNOWN);
+                config.setLocation(BackendConfig.Location.REMOTE);
                 config.setVpnConfig(new VPNConfig());
                 BackendConfigsManager.getInstance().updateBackendConfig(config);
             }

@@ -1,7 +1,7 @@
 package app.michaelwuensch.bitbanana.listViews.peers;
 
-import com.google.protobuf.ByteString;
+import java.io.Serializable;
 
 public interface PeerSelectListener {
-    void onPeerSelect(ByteString peer);
+    void onPeerSelect(Serializable peer);
 }

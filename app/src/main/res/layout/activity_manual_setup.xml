@@ -35,7 +35,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingTop="10dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/vpnAutomationLabel">
@@ -77,27 +76,85 @@
                 app:inputLabel="@string/port"
                 app:inputLabelDetails="" />
 
-            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
-                android:id="@+id/inputMacaroon"
+            <app.michaelwuensch.bitbanana.setup.AccessTokenInputView
+                android:id="@+id/inputAuthenticationToken"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="122dp"
                 android:layout_marginTop="10dp"
                 app:inputLabel="@string/macaroon"
-                app:inputLabelDetails="(Hex)"
+                app:inputLabelDetails=""
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
+
+            <app.michaelwuensch.bitbanana.setup.CertInputView
+                android:id="@+id/inputServerCertificate"
+                android:layout_width="match_parent"
+                android:layout_height="122dp"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/server_certificate"
+                app:inputLabelDetails=""
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
+
+            <app.michaelwuensch.bitbanana.setup.CertInputView
+                android:id="@+id/inputClientCertificate"
+                android:layout_width="match_parent"
+                android:layout_height="122dp"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/client_certificate"
+                app:inputLabelDetails=""
+                app:maxLines="3"
+                app:maxLinesFocused="5"
+                app:minLines="3" />
+
+            <app.michaelwuensch.bitbanana.setup.CertInputView
+                android:id="@+id/inputClientKey"
+                android:layout_width="match_parent"
+                android:layout_height="122dp"
+                android:layout_marginTop="10dp"
+                app:inputLabel="@string/client_key"
+                app:inputLabelDetails=""
                 app:maxLines="3"
                 app:maxLinesFocused="5"
                 app:minLines="3" />
 
             <app.michaelwuensch.bitbanana.customView.BBInputFieldView
-                android:id="@+id/inputCertificate"
+                android:id="@+id/inputUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:inputLabel="@string/certificate"
-                app:inputLabelDetails="(Base64URL)"
-                app:maxLines="3"
-                app:maxLinesFocused="5"
-                app:minLines="3" />
+                app:inputLabel="@string/username"
+                app:inputLabelDetails="" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inputPasswordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                    android:id="@+id/inputPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:inputLabel="@string/password"
+                    app:inputLabelDetails=""
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/passwordVisibilityToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:padding="10dp"
+                    android:src="@drawable/outline_visibility_off_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/gray" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,7 +189,7 @@
             </LinearLayout>
 
 
-            <app.michaelwuensch.bitbanana.customView.VPNConfigView
+            <app.michaelwuensch.bitbanana.setup.VPNConfigView
                 android:id="@+id/vpnConfigView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

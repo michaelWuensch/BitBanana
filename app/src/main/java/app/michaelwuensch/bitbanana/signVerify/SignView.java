@@ -12,14 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.lightningnetwork.lnd.lnrpc.SignMessageRequest;
-import com.google.protobuf.ByteString;
-
-import java.nio.charset.StandardCharsets;
-
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -92,18 +86,13 @@ public class SignView extends LinearLayout {
     }
 
     private void sign() {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+        if (BackendManager.hasBackendConfigs()) {
             String message = mEtMessageToSign.getText().toString();
             if (!message.isEmpty()) {
-                SignMessageRequest signMessageRequest = SignMessageRequest.newBuilder()
-                        .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
-                        .build();
-
-                mCompositeDisposable.add(LndConnection.getInstance().getLightningService().signMessage(signMessageRequest)
-                        .subscribe(signMessageResponse -> {
-                            String signature = signMessageResponse.getSignature();
-                            BBLog.v(LOG_TAG, "Created signature: " + signature);
-                            updateSignatureInfo(signature);
+                mCompositeDisposable.add(BackendManager.api().signMessageWithNode(message)
+                        .subscribe(response -> {
+                            BBLog.v(LOG_TAG, "Created signature: " + response);
+                            updateSignatureInfo(response.getZBase());
                         }, throwable -> BBLog.d(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace())));
             }
         } else {

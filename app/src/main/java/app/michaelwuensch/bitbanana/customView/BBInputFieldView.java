@@ -20,9 +20,10 @@ public class BBInputFieldView extends LinearLayout {
 
     private TextView mTvLabel;
     private TextView mTvDetails;
-    private EditText mEtInput;
+    protected EditText mEtInput;
     private ImageButton mIbtnHelp;
     private String mHelpStringResource;
+    protected View mView;
 
     private int mMinLines = 1;
     private int mMaxLines = 1;
@@ -44,13 +45,13 @@ public class BBInputFieldView extends LinearLayout {
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        View view = inflate(context, R.layout.view_input_field, this);
+    protected void init(Context context, AttributeSet attrs) {
+        mView = inflate(context, R.layout.view_input_field, this);
 
-        mTvLabel = view.findViewById(R.id.inputLabel);
-        mTvDetails = view.findViewById(R.id.inputDetails);
-        mEtInput = view.findViewById(R.id.inputEditText);
-        mIbtnHelp = view.findViewById(R.id.helpButton);
+        mTvLabel = mView.findViewById(R.id.inputLabel);
+        mTvDetails = mView.findViewById(R.id.inputDetails);
+        mEtInput = mView.findViewById(R.id.inputEditText);
+        mIbtnHelp = mView.findViewById(R.id.helpButton);
 
         mIbtnHelp.setOnClickListener(new OnClickListener() {
             @Override
@@ -114,11 +115,11 @@ public class BBInputFieldView extends LinearLayout {
     public void setShowHelpButton(boolean showHelpButton) {
         if (!isInEditMode()) {
             if (!FeatureManager.isHelpButtonsEnabled()) {
-                mIbtnHelp.setVisibility(INVISIBLE);
+                mIbtnHelp.setVisibility(GONE);
                 return;
             }
         }
-        mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : INVISIBLE);
+        mIbtnHelp.setVisibility(showHelpButton ? VISIBLE : GONE);
     }
 
     public void setValue(String value) {

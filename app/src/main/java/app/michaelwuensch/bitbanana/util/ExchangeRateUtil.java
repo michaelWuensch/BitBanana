@@ -1,6 +1,10 @@
 package app.michaelwuensch.bitbanana.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -10,13 +14,18 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
+import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
+
 
 public class ExchangeRateUtil {
 
@@ -24,6 +33,10 @@ public class ExchangeRateUtil {
 
     private static final String BLOCKCHAIN_INFO = "Blockchain.info";
     private static final String COINBASE = "Coinbase";
+    private static final String MEMPOOL = "Mempool.space";
+    private static final String MEMPOOL_TOR = "Mempool (v3 Tor)";
+    private static final String MEMPOOL_HOST = "https://mempool.space";
+    private static final String MEMPOOL_TOR_HOST = "http://mempoolhqx4isw62xs7abwphsq7ldayuidyx2v2oethdhhj6mlo2r6ad.onion";
     private static final String RATE = "rate";
     private static final String SYMBOL = "symbol";
     private static final String TIMESTAMP = "timestamp";
@@ -48,9 +61,8 @@ public class ExchangeRateUtil {
 
         if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
                 !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
-
-            String provider = PrefsUtil.getPrefs().getString(PrefsUtil.EXCHANGE_RATE_PROVIDER, BLOCKCHAIN_INFO);
-
+            
+            String provider = PrefsUtil.getExchangeRateProvider();
 
             switch (provider) {
                 case BLOCKCHAIN_INFO:
@@ -59,12 +71,85 @@ public class ExchangeRateUtil {
                 case COINBASE:
                     sendCoinbaseRequest();
                     break;
+                case MEMPOOL:
+                    sendMempoolRequest(MEMPOOL_HOST);
+                    break;
+                case MEMPOOL_TOR:
+                    sendMempoolRequest(MEMPOOL_TOR_HOST);
+                    break;
+                case "Custom":
+                    sendMempoolRequest(PrefsUtil.getCustomExchangeRateProviderHost());
+                    break;
                 default:
                     sendBlockchainInfoRequest();
             }
 
             BBLog.v(LOG_TAG, "Exchange rate request initiated");
         }
+    }
+
+    /**
+     * Creates and sends a request that fetches fiat exchange rate data from a mempool instance.
+     * When executed this request saves the result in shared preferences and
+     * updates the currentCurrency of the MonetaryUtil Singleton.
+     */
+    private void sendMempoolRequest(String host) {
+        if (host == null || host.isEmpty()) {
+            BBLog.w(LOG_TAG, "Custom exchange rate provider host is empty.");
+            return;
+        }
+
+        if (host.endsWith("/"))
+            host = host.substring(0, host.length() - 1);
+
+        if (!(host.startsWith("https://") || host.startsWith("http://")))
+            if (host.toLowerCase().contains(".onion"))
+                host = "http://" + host;
+            else
+                host = "https://" + host;
+
+        Request rateRequest = new Request.Builder()
+                .url(host + "/api/v1/prices")
+                .build();
+
+        HttpClient.getInstance().getClient().newCall(rateRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                BBLog.w(LOG_TAG, "Fetching exchange rates from mempool instance failed");
+                BBLog.w(LOG_TAG, e.getMessage());
+                if (e.getMessage() != null)
+                    if (e.getMessage().startsWith("Unable to resolve host") && e.getMessage().contains(".onion"))
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Context context = App.getAppContext();
+                                if (context != null) {
+                                    Toast.makeText(context, R.string.error_exchange_rate_requires_tor_toast, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                BBLog.v(LOG_TAG, "Received exchange rates from mempool instance");
+                String responseData = response.body().string();
+                JSONObject responseJson = null;
+                try {
+                    responseJson = new JSONObject(responseData);
+                } catch (JSONException e) {
+                    BBLog.w(LOG_TAG, "mempool response could not be parsed as json");
+                    e.printStackTrace();
+                    if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
+                        broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
+                    }
+                }
+                if (responseJson != null) {
+                    JSONObject responseRates = parseMempoolResponse(responseJson);
+                    applyExchangeRatesAndSaveInPreferences(responseRates);
+                }
+            }
+        });
     }
 
 
@@ -144,6 +229,47 @@ public class ExchangeRateUtil {
                 }
             }
         });
+    }
+
+    /**
+     * This function parses a mempool exchange rate response.
+     * All the response parser functions return a similar formatted JSON Object
+     * {"USD":{"rate":0.1231, "timestamp":...},"EUR":{...}}
+     *
+     * @param response a JSON response that comes from a mempool instance
+     * @return
+     */
+    public JSONObject parseMempoolResponse(JSONObject response) {
+
+        JSONObject formattedRates = new JSONObject();
+        TreeMap<String, JSONObject> sortedRates = new TreeMap<>(); // TreeMap to sort the keys
+
+        // loop through all returned currencies
+        Iterator<String> iter = response.keys();
+        while (iter.hasNext()) {
+            String fiatCode = iter.next();
+            if (fiatCode.equals("time"))
+                continue;
+            try {
+                JSONObject currentCurrency = new JSONObject();
+                currentCurrency.put(RATE, response.getInt(fiatCode) * BBCurrency.RATE_BTC);
+                currentCurrency.put(TIMESTAMP, System.currentTimeMillis() / 1000);
+                sortedRates.put(fiatCode, currentCurrency);
+            } catch (JSONException e) {
+                BBLog.e(LOG_TAG, "Unable to read exchange rate from mempool response.");
+            }
+        }
+
+        // Convert the sorted TreeMap back to JSONObject if necessary
+        for (Map.Entry<String, JSONObject> entry : sortedRates.entrySet()) {
+            try {
+                formattedRates.put(entry.getKey(), entry.getValue());
+            } catch (JSONException ignored) {
+
+            }
+        }
+
+        return formattedRates;
     }
 
     /**

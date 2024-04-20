@@ -4,26 +4,27 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import app.michaelwuensch.bitbanana.util.Balances;
+import app.michaelwuensch.bitbanana.models.Balances;
 
 public class BalancesTest {
 
     @Test
     public void testBalanceTotal() {
-        long onChainBalanceTotal = 200;
-        long onChainBalanceConfirmed = 100;
-        long onChainBalanceUnconfirmed = 100;
+        long onChainBalanceConfirmed = 200;
+        long onChainBalanceUnconfirmed = 200;
         long channelBalance = 100;
         long channelBalancePendingOpen = 100;
         long channelBalanceLimbo = 100;
 
-        Balances balances = new Balances(onChainBalanceTotal,
-                onChainBalanceConfirmed,
-                onChainBalanceUnconfirmed,
-                channelBalance,
-                channelBalancePendingOpen,
-                channelBalanceLimbo);
+        Balances balances = Balances.newBuilder()
+                .setOnChainConfirmed(onChainBalanceConfirmed)
+                .setOnChainUnconfirmed(onChainBalanceUnconfirmed)
+                .setChannelBalance(channelBalance)
+                .setChannelBalancePendingOpen(channelBalancePendingOpen)
+                .setChannelBalanceLimbo(channelBalanceLimbo)
+                .build();
 
-        assertEquals(500, balances.total());
+        assertEquals(700, balances.total());
+        assertEquals(400, balances.onChainTotal());
     }
 }

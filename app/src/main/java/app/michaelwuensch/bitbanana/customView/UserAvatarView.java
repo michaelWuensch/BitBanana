@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,12 +12,13 @@ import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.models.LNAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.AvathorUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
-public class UserAvatarView extends ConstraintLayout {
+public class UserAvatarView extends ConstraintLayout implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ImageView mIvQRCode;
     private ImageFilterView mIvUserAvatar;
@@ -25,7 +27,7 @@ public class UserAvatarView extends ConstraintLayout {
     private int mCurrentUriId = 0;
     private boolean mIsQRCodeIncluded;
 
-    private LNAddress mLnAddress;
+    private LnAddress mLnAddress;
 
     public UserAvatarView(Context context) {
         super(context);
@@ -50,9 +52,10 @@ public class UserAvatarView extends ConstraintLayout {
         mIvUserAvatar = findViewById(R.id.userAvatar);
 
         showAvatar();
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
     }
 
-    public void setupWithLNAddress(LNAddress lnAddress, boolean includeQRCode) {
+    public void setupWithLNAddress(LnAddress lnAddress, boolean includeQRCode) {
         reset();
         mLnAddress = lnAddress;
         mIsQRCodeIncluded = includeQRCode;
@@ -125,7 +128,7 @@ public class UserAvatarView extends ConstraintLayout {
         }
     }
 
-    private void showIdentity(LNAddress lnAddress) {
+    private void showIdentity(LnAddress lnAddress) {
         if (mIsQRCodeIncluded) {
             // Generate "QR-Code"
             Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(lnAddress.toString(), 750);
@@ -173,6 +176,16 @@ public class UserAvatarView extends ConstraintLayout {
 
     public void setOnStateChangedListener(OnStateChangedListener listener) {
         mListener = listener;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key != null) {
+            // Update the image
+            if (key.equals(PrefsUtil.AVATAR_STYLE) && mNodeUris != null) {
+                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
+            }
+        }
     }
 
     public interface OnStateChangedListener {

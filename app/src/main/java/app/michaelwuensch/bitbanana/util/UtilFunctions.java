@@ -18,14 +18,13 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class UtilFunctions {
-    private final static char[] hexArray = "0123456789abcdef".toCharArray();
     private static final String LOG_TAG = UtilFunctions.class.getSimpleName();
 
     public static String sha256Hash(String data) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(hash);
+            return HexUtil.bytesToHex(hash);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -55,7 +54,7 @@ public class UtilFunctions {
             throw new RuntimeException("Couldn't encode pin with PBKDF2", e);
         }
 
-        return bytesToHex(hash);
+        return HexUtil.bytesToHex(hash);
     }
 
     public static String getAppSalt() {
@@ -88,27 +87,6 @@ public class UtilFunctions {
         }
     }
 
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        int v;
-        for (int j = 0; j < bytes.length; j++) {
-            v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
-    public static byte[] hexToBytes(String hex) {
-        int l = hex.length();
-        byte[] data = new byte[l / 2];
-        for (int i = 0; i < l; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
-        }
-        return data;
-    }
-
     private static byte[] encodePbkdf2(char[] password, byte[] salt, int iterations, int bytes)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, iterations, bytes * 8);
@@ -127,10 +105,6 @@ public class UtilFunctions {
             }
         }
         return null;
-    }
-
-    public static boolean isHex(String input) {
-        return input.matches("^[0-9a-f]+$|^[0-9A-F]+$");
     }
 
     public static double roundDouble(double value, int places) {
@@ -186,6 +160,30 @@ public class UtilFunctions {
         return hashHmac("HmacSHA256", data, key);
     }
 
+    public static long satPerVByteToSatPerKw(double satPerVByte) {
+        return (long) (satPerVByte * 250.0);
+    }
+
+    public static double satPerKwToSatPerVByte(long satPerKw) {
+        return satPerKw / 250.0;
+    }
+
+    public static long satPerVByteToSatPerKb(double satPerVByte) {
+        return (long) (satPerVByte * 1000.0);
+    }
+
+    public static double satPerKbToSatPerVByte(long satPerKw) {
+        return satPerKw / 1000.0;
+    }
+
+    public static long satPerKwToSatPerKb(long satPerKw) {
+        return satPerKw * 4;
+    }
+
+    public static long satPerKbToSatPerKw(long satPerKb) {
+        return satPerKb / 4;
+    }
+
     private static String hashHmac(String algorithm, byte[] data, byte[] key) {
         String result = "";
         final SecretKeySpec secretKey = new SecretKeySpec(key,
@@ -194,7 +192,7 @@ public class UtilFunctions {
             Mac mac = Mac.getInstance(algorithm);
             mac.init(secretKey);
             byte[] macData = mac.doFinal(data);
-            result = bytesToHex(macData);
+            result = HexUtil.bytesToHex(macData);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {

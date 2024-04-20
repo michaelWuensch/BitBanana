@@ -23,17 +23,37 @@
 
         <Preference
             android:key="goToCustomBlockExplorerSettings"
-            android:title="Custom Block Explorer"
+            android:title="@string/settings_custom_block_explorer"
             app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="Blockchain.info"
             android:dialogTitle="@string/settings_exchangeRateProvider"
-            android:entries="@array/exchangeRateProvider"
+            android:entries="@array/exchangeRateProviderDisplayValues"
             android:entryValues="@array/exchangeRateProvider"
             android:key="exchangeRateProvider"
             android:summary="%s"
             android:title="@string/settings_exchangeRateProvider"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="goToCustomExchangeRateProviderSettings"
+            android:title="@string/settings_custom_exchange_rate_provider"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="Internal"
+            android:dialogTitle="@string/settings_feeEstimationProvider"
+            android:entries="@array/feeEstimationProviderDisplayValues"
+            android:entryValues="@array/feeEstimationProvider"
+            android:key="feeEstimationProvider"
+            android:summary="%s"
+            android:title="@string/settings_feeEstimationProvider"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="goToCustomFeeEstimationProviderSettings"
+            android:title="@string/settings_custom_fee_estimation_provider"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
@@ -56,11 +76,6 @@
             android:key="btcAddressType"
             android:summary="%s"
             android:title="@string/settings_addressType"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            android:key="goToOnChainFeeSettings"
-            android:title="@string/settings_onChainFeePresets"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

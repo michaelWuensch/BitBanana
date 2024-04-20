@@ -164,6 +164,7 @@
                     android:id="@+id/localBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:amountView_msatPrecision="false"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:textSize="12sp" />
@@ -185,6 +186,7 @@
                     android:id="@+id/remoteBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:amountView_msatPrecision="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:textSize="12sp" />

@@ -22,23 +22,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.github.lightningnetwork.lnd.lnrpc.Invoice;
-import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
-
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
+import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
 
 
 public class ReceiveBSDFragment extends BaseBSDFragment {
@@ -63,7 +62,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private Button mBtnManageChannels;
     private View mViewNoIncomingBalance;
     private boolean mAmountValid = true;
-    private long mReceiveAmountSats;
+    private long mReceiveAmount;
     private boolean mBlockOnInputChanged;
 
     @Nullable
@@ -192,8 +191,17 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             public void onClick(View v) {
                 if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
                     // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
-                    new UserGuardian(getActivity(), ReceiveBSDFragment.this::generateRequest)
-                            .securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                        @Override
+                        public void onConfirmed() {
+                            generateRequest();
+                        }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
+                    }).securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
                 } else {
                     generateRequest();
                 }
@@ -218,7 +226,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             public void onClick(View v) {
                 mBlockOnInputChanged = true;
                 MonetaryUtil.getInstance().switchCurrencies();
-                mEtAmount.setText(MonetaryUtil.getInstance().satsToPrimaryTextInputString(mReceiveAmountSats));
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mReceiveAmount, !mOnChain));
                 mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
                 mBlockOnInputChanged = false;
             }
@@ -243,18 +251,18 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 } else {
                     long maxReceivable;
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                        maxReceivable = Wallet.getInstance().getMaxLightningReceiveAmount();
+                        maxReceivable = WalletUtil.getMaxLightningReceiveAmount();
                     } else {
-                        maxReceivable = 500000000000L;
+                        maxReceivable = 500000000000000L;
                     }
                     if (!mEtAmount.getText().toString().equals(".")) {
-                        if (mReceiveAmountSats > maxReceivable) {
+                        if (mReceiveAmount > maxReceivable) {
                             mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromSats(maxReceivable);
+                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxReceivable, true);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                        } else if (mReceiveAmountSats == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
+                        } else if (mReceiveAmount == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
                             // Disable 0 sat ln invoices
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
@@ -288,9 +296,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString());
+                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
                 if (mAmountValid) {
-                    mReceiveAmountSats = MonetaryUtil.getInstance().convertPrimaryTextInputToSatoshi(arg0.toString());
+                    mReceiveAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -311,29 +319,30 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
                 // generate onChain request
 
-                int addressType;
+                NewOnChainAddressRequest.Type addressType;
                 String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
                 if (addressTypeString.equals("bech32")) {
-                    addressType = 2;
+                    addressType = NewOnChainAddressRequest.Type.SEGWIT;
                 } else {
                     if (addressTypeString.equals("bech32m")) {
-                        addressType = 5;
+                        addressType = NewOnChainAddressRequest.Type.TAPROOT;
                     } else {
-                        addressType = 3;
+                        addressType = NewOnChainAddressRequest.Type.SEGWIT_COMPATIBILITY;
                     }
                 }
 
-                NewAddressRequest asyncNewAddressRequest = NewAddressRequest.newBuilder()
-                        .setTypeValue(addressType) // 2 = unused bech32 (native segwit) , 3 = unused Segwit compatibility address, 5 = unused Taproot (bech32m)
+                NewOnChainAddressRequest newOnChainAddressRequest = NewOnChainAddressRequest.newBuilder()
+                        .setType(addressType)
+                        .setUnused(true)
                         .build();
 
                 BBLog.d(LOG_TAG, "OnChain generating...");
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().newAddress(asyncNewAddressRequest)
-                        .subscribe(newAddressResponse -> {
-                            String value = MonetaryUtil.getInstance().satsToBitcoinString(mReceiveAmountSats);
+                getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
+                        .subscribe(response -> {
+                            String value = MonetaryUtil.getInstance().msatsToBitcoinString(mReceiveAmount);
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("address", newAddressResponse.getAddress());
+                            intent.putExtra("address", response);
                             intent.putExtra("amount", value);
                             intent.putExtra("memo", mEtMemo.getText().toString());
                             startActivity(intent);
@@ -345,22 +354,19 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
             } else {
                 // generate lightning request
-
-                Invoice asyncInvoiceRequest = Invoice.newBuilder()
-                        .setValue(mReceiveAmountSats)
-                        .setMemo(mEtMemo.getText().toString())
+                CreateInvoiceRequest invoiceRequest = CreateInvoiceRequest.newBuilder()
+                        .setAmount(mReceiveAmount)
+                        .setDescription(mEtMemo.getText().toString())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
-                        .setPrivate(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
                         .build();
 
-                getCompositeDisposable().add(LndConnection.getInstance().getLightningService().addInvoice(asyncInvoiceRequest)
-                        .subscribe(addInvoiceResponse -> {
-                            BBLog.v(LOG_TAG, addInvoiceResponse.toString());
-
+                getCompositeDisposable().add(BackendManager.api().createInvoice(invoiceRequest)
+                        .subscribe(response -> {
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("lnInvoice", addInvoiceResponse.getPaymentRequest());
-                            intent.putExtra("lnInvoiceAddIndex", addInvoiceResponse.getAddIndex());
+                            intent.putExtra("lnInvoice", response.getBolt11());
+                            //intent.putExtra("lnInvoiceAddIndex", response.getAddIndex());
                             startActivity(intent);
                             dismiss();
                         }, throwable -> {
@@ -375,10 +381,10 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     }
 
     private boolean hasLightningIncomeBalance() {
-        boolean hasActiveChannels = Wallet.getInstance().hasOpenActiveChannels();
+        boolean hasActiveChannels = WalletUtil.hasOpenActiveChannels();
 
         if (hasActiveChannels) {
-            if (Wallet.getInstance().getMaxLightningReceiveAmount() > 0L) {
+            if (WalletUtil.getMaxLightningReceiveAmount() > 0L) {
                 // We have remote balances on at least one channel, so we can receive a lightning payment!
                 return true;
             } else {

@@ -18,8 +18,9 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
@@ -27,20 +28,20 @@ import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class WalletFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.BalanceListener, Wallet.InfoListener, Wallet.LndConnectionTestListener,
-        Wallet.WalletLoadedListener, ExchangeRateUtil.ExchangeRateListener, TorManager.TorErrorListener, BackendSwitcher.BackendStateChangedListener {
+        Wallet_Balance.BalanceListener, Wallet.InfoListener, Wallet.ConnectionTestListener,
+        Wallet.WalletLoadStateListener, ExchangeRateUtil.ExchangeRateListener, TorManager.TorErrorListener, BackendManager.BackendStateChangedListener {
 
     private static final String LOG_TAG = WalletFragment.class.getSimpleName();
 
@@ -61,7 +62,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private boolean mBalanceChangeListenerRegistered = false;
     private boolean mInfoChangeListenerRegistered = false;
     private boolean mExchangeRateListenerRegistered = false;
-    private boolean mLndConnectionTestListenerRegistered = false;
+    private boolean mConnectionTestListenerRegistered = false;
     private boolean mWalletLoadedListenerRegistered = false;
     private boolean mTorErrorListenerRegistered = false;
     private boolean mBackendStateListenerRegistered = false;
@@ -92,12 +93,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mBtnVpnSettings = view.findViewById(R.id.vpnSettingsButton);
 
         // Show loading screen
-        showLoading();
+        showLoadingScreen();
 
         mNodeSpinner.setOnNodeSpinnerChangedListener(new NodeSpinner.OnNodeSpinnerChangedListener() {
             @Override
             public void onNodeChanged(String id) {
-                BackendSwitcher.activateBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(id), getActivity(), false);
+                BackendManager.activateBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(id), getActivity(), false);
             }
         });
 
@@ -131,7 +132,6 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), ScanActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivityForResult(intent, HomeActivity.REQUEST_CODE_GENERIC_SCAN);
             }
         });
@@ -175,7 +175,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mBtnVpnSettings.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                VPNUtil.openVpnAppSettings(BackendSwitcher.getCurrentBackendConfig().getVpnConfig(), getContext());
+                VPNUtil.openVpnAppSettings(BackendManager.getCurrentBackendConfig().getVpnConfig(), getContext());
             }
         });
 
@@ -186,30 +186,24 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 mTvLoadingText.setText("");
-                showLoading();
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
-                BackendSwitcher.activateCurrentBackendConfig(getActivity(), true);
+                showLoadingScreen();
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
+                BackendManager.activateCurrentBackendConfig(getActivity(), true);
             }
         });
 
-
         updateTotalBalanceDisplay();
-
-
-        if (App.getAppContext().connectionToLNDEstablished) {
-            walletLoadingCompleted();
-        }
 
         return view;
     }
 
     private void walletLoadingCompleted() {
-
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-
-            // Show info about mode (offline, connected, error, testnet or mainnet, ...)
-            onInfoUpdated(Wallet.getInstance().isInfoFetched());
-        }
+        showWalletScreen();
+        mNodeSpinner.updateList();
+        mNodeSpinner.setVisibility(View.VISIBLE);
+        mStatusDot.setVisibility(View.VISIBLE);
+        updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
+        mBtnSetup.setVisibility(View.INVISIBLE);
     }
 
     private void updateTotalBalanceDisplay() {
@@ -254,20 +248,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
-    public void onInfoUpdated(boolean connected) {
-        if (connected) {
-            mWalletConnectedLayout.setVisibility(View.VISIBLE);
-            mLoadingWalletLayout.setVisibility(View.GONE);
-            mWalletNotConnectedLayout.setVisibility(View.GONE);
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
-            mMainBalanceView.updateNetworkInfo();
-        } else {
-            mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
-            mWalletConnectedLayout.setVisibility(View.GONE);
-            mLoadingWalletLayout.setVisibility(View.GONE);
-            mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
-            mBtnVpnSettings.setVisibility(View.GONE);
-        }
+    public void onInfoUpdated() {
 
     }
 
@@ -282,7 +263,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         // Update status dot
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             mStatusDot.setVisibility(View.VISIBLE);
-            updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+            updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
         } else {
             mStatusDot.setVisibility(View.GONE);
         }
@@ -293,23 +274,23 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mPreferenceChangeListenerRegistered = true;
         }
         if (!mBalanceChangeListenerRegistered) {
-            Wallet.getInstance().registerBalanceListener(this);
+            Wallet_Balance.getInstance().registerBalanceListener(this);
             mBalanceChangeListenerRegistered = true;
         }
         if (!mInfoChangeListenerRegistered) {
             Wallet.getInstance().registerInfoListener(this);
             mInfoChangeListenerRegistered = true;
         }
-        if (!mLndConnectionTestListenerRegistered) {
-            Wallet.getInstance().registerLndConnectionTestListener(this);
-            mLndConnectionTestListenerRegistered = true;
+        if (!mConnectionTestListenerRegistered) {
+            Wallet.getInstance().registerConnectionTestListener(this);
+            mConnectionTestListenerRegistered = true;
         }
         if (!mExchangeRateListenerRegistered) {
             ExchangeRateUtil.getInstance().registerExchangeRateListener(this);
             mExchangeRateListenerRegistered = true;
         }
         if (!mWalletLoadedListenerRegistered) {
-            Wallet.getInstance().registerWalletLoadedListener(this);
+            Wallet.getInstance().registerWalletLoadStateListener(this);
             mWalletLoadedListenerRegistered = true;
         }
         if (!mTorErrorListenerRegistered) {
@@ -317,16 +298,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mTorErrorListenerRegistered = true;
         }
         if (!mBackendStateListenerRegistered) {
-            BackendSwitcher.registerBackendStateChangedListener(this);
+            BackendManager.registerBackendStateChangedListener(this);
             mBackendStateListenerRegistered = true;
         }
 
         updateSpinnerVisibility();
 
         if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            // If the App is not setup yet,
-            // this will cause to get the status text updated. Otherwise it would be empty.
-            Wallet.getInstance().simulateFetchInfoForDemo();
+            // if nothing is connected we want to always show the wallet screen
+            showWalletScreen();
         }
     }
 
@@ -335,13 +315,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         super.onDestroy();
         // Unregister listeners
         PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
-        Wallet.getInstance().unregisterBalanceListener(this);
+        Wallet_Balance.getInstance().unregisterBalanceListener(this);
         Wallet.getInstance().unregisterInfoListener(this);
-        Wallet.getInstance().unregisterLndConnectionTestListener(this);
+        Wallet.getInstance().unregisterConnectionTestListener(this);
         ExchangeRateUtil.getInstance().unregisterExchangeRateListener(this);
-        Wallet.getInstance().unregisterWalletLoadedListener(this);
+        Wallet.getInstance().unregisterWalletLoadStateListener(this);
         TorManager.getInstance().unregisterTorErrorListener(this);
-        BackendSwitcher.unregisterBackendStateChangedListener(this);
+        BackendManager.unregisterBackendStateChangedListener(this);
     }
 
     public void updateSpinnerVisibility() {
@@ -353,26 +333,37 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
     }
 
-    public void showErrorAfterNotUnlocked() {
+    public void showConnectionErrorScreen() {
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
         mWalletConnectedLayout.setVisibility(View.GONE);
-        mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
         mLoadingWalletLayout.setVisibility(View.GONE);
+        mWalletNotConnectedLayout.setVisibility(View.VISIBLE);
         mBtnVpnSettings.setVisibility(View.GONE);
+    }
 
+    public void showErrorAfterNotUnlockedScreen() {
+        showConnectionErrorScreen();
         mTvConnectError.setText(R.string.error_connection_wallet_locked);
     }
 
-    public void showBackgroundForWalletUnlock() {
+    public void showBackgroundForWalletUnlockScreen() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.GONE);
     }
 
-    public void showLoading() {
+    public void showLoadingScreen() {
         mWalletConnectedLayout.setVisibility(View.GONE);
         mWalletNotConnectedLayout.setVisibility(View.GONE);
         mLoadingWalletLayout.setVisibility(View.VISIBLE);
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.banana_yellow)));
+    }
+
+    public void showWalletScreen() {
+        mWalletConnectedLayout.setVisibility(View.VISIBLE);
+        mLoadingWalletLayout.setVisibility(View.GONE);
+        mWalletNotConnectedLayout.setVisibility(View.GONE);
+        mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
     }
 
     private void hideBalance() {
@@ -383,7 +374,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mMainBalanceView.showBalance();
     }
 
-    private void updateStatusDot(String walletAlias) {
+    private void updateStatusDot(BackendConfig backendConfig) {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         if (BackendConfigsManager.getInstance().getCurrentBackendConfig().getUseTor() && TorManager.getInstance().isProxyRunning()) {
             mStatusDot.setImageResource(R.drawable.tor_icon);
@@ -396,11 +387,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         }
         mStatusDot.requestLayout();
 
+        String walletAlias;
+        if (backendConfig.getNetwork() == BackendConfig.Network.MAINNET || backendConfig.getNetwork() == BackendConfig.Network.UNKNOWN || backendConfig.getNetwork() == null)
+            walletAlias = backendConfig.getAlias();
+        else
+            walletAlias = backendConfig.getAlias() + " (" + backendConfig.getNetwork().getDisplayName() + ")";
         mWalletNameWidthDummy.setText(walletAlias);
         if (NetworkUtil.getConnectivityStatus(getActivity()) == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
             mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.red)));
         } else {
-            if (Wallet.getInstance().isConnectedToLND()) {
+            if (Wallet.getInstance().isConnectedToNode()) {
                 mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
             }
         }
@@ -413,42 +409,44 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     @Override
-    public void onLndConnectError(int error) {
+    public void onConnectionTestError(int error) {
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            showWalletScreen();
+            return;
+        }
+
         mBtnVpnSettings.setVisibility(View.GONE);
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            if (error != Wallet.LndConnectionTestListener.ERROR_LOCKED) {
-                onInfoUpdated(false);
-                if (error == Wallet.LndConnectionTestListener.ERROR_AUTHENTICATION) {
-                    mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_TIMEOUT) {
-                    mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, BackendSwitcher.getCurrentBackendConfig().getHost()));
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_UNAVAILABLE) {
-                    mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(BackendSwitcher.getCurrentBackendConfig().getPort())));
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_TOR) {
-                    mTvConnectError.setText(R.string.error_connection_tor_unreachable);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_HOST_VERIFICATION) {
-                    mTvConnectError.setText(R.string.error_connection_host_verification_failed);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_HOST_UNRESOLVABLE) {
-                    mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, BackendSwitcher.getCurrentBackendConfig().getHost()));
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {
-                    mTvConnectError.setText(R.string.error_connection_network_unreachable);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED) {
-                    mTvConnectError.setText(R.string.error_connection_invalid_certificate);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_INTERNAL) {
-                    mTvConnectError.setText(R.string.error_connection_internal_server);
-                } else if (error == Wallet.LndConnectionTestListener.ERROR_INTERNAL_CLEARNET) {
-                    mTvConnectError.setText(R.string.error_connection_internal_server_clearnet);
-                }
+
+        if (error != Wallet.ConnectionTestListener.ERROR_LOCKED) {
+            showConnectionErrorScreen();
+            if (error == Wallet.ConnectionTestListener.ERROR_AUTHENTICATION) {
+                mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_TIMEOUT) {
+                mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, BackendManager.getCurrentBackendConfig().getHost()));
+            } else if (error == Wallet.ConnectionTestListener.ERROR_UNAVAILABLE) {
+                mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(BackendManager.getCurrentBackendConfig().getPort())));
+            } else if (error == Wallet.ConnectionTestListener.ERROR_TOR) {
+                mTvConnectError.setText(R.string.error_connection_tor_unreachable);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_HOST_VERIFICATION) {
+                mTvConnectError.setText(R.string.error_connection_host_verification_failed);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_HOST_UNRESOLVABLE) {
+                mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, BackendManager.getCurrentBackendConfig().getHost()));
+            } else if (error == Wallet.ConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {
+                mTvConnectError.setText(R.string.error_connection_network_unreachable);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED) {
+                mTvConnectError.setText(R.string.error_connection_invalid_certificate);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_INTERNAL) {
+                mTvConnectError.setText(R.string.error_connection_internal_server);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_INTERNAL_CLEARNET) {
+                mTvConnectError.setText(R.string.error_connection_internal_server_clearnet);
             }
-        } else {
-            onInfoUpdated(true);
         }
     }
 
     @Override
-    public void onLndConnectError(String error) {
+    public void onConnectionTestError(String error) {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            onInfoUpdated(false);
+            showConnectionErrorScreen();
             String errorMessage;
             if (error.toLowerCase().contains("shutdown") && error.toLowerCase().contains("channel")) {
                 // We explicitly filter this error message out, as it is confusing for users.
@@ -458,49 +456,63 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 errorMessage = getString(R.string.error_connection_unknown) + "\n\n" + error;
             }
             mTvConnectError.setText(errorMessage);
-            mBtnVpnSettings.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void onLndConnectSuccess() {
+    public void onConnectionTestSuccess() {
+        mMainBalanceView.updateNetworkInfo();
+        if (Wallet.getInstance().getCurrentWalletLoadState() == Wallet.WalletLoadState.WALLET_LOADED) {
+            showWalletScreen();
+        }
     }
 
     @Override
-    public void onLndConnectionTestStarted() {
-        showLoading();
-    }
-
-    @Override
-    public void onWalletLoaded() {
-        walletLoadingCompleted();
-        mNodeSpinner.updateList();
-        mNodeSpinner.setVisibility(View.VISIBLE);
-        mStatusDot.setVisibility(View.VISIBLE);
-        updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
-        mBtnSetup.setVisibility(View.INVISIBLE);
+    public void onWalletLoadStateChanged(Wallet.WalletLoadState walletLoadState) {
+        switch (walletLoadState) {
+            case NOT_LOADED:
+                break;
+            case TESTING_CONNECTION_BEFORE_UNLOCK:
+                mTvLoadingText.setText(R.string.wallet_load_sate_testing_connection);
+                break;
+            case LOCKED:
+                break;
+            case UNLOCKED:
+                break;
+            case RECONNECT_AFTER_UNLOCK:
+                mTvLoadingText.setText(R.string.wallet_load_state_reconnect_after_unlock);
+                break;
+            case TESTING_CONNECTION:
+                mTvLoadingText.setText(R.string.wallet_load_sate_testing_connection);
+                break;
+            case CONNECTION_SUCCESS:
+                break;
+            case FETCHING_DATA:
+                mTvLoadingText.setText(R.string.wallet_load_state_fetching_data);
+                break;
+            case WALLET_LOADED:
+                walletLoadingCompleted();
+        }
     }
 
     @Override
     public void onTorBootstrappingFailed() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            onInfoUpdated(false);
+            showConnectionErrorScreen();
             mTvConnectError.setText(R.string.error_connection_tor_bootstrapping);
-            mBtnVpnSettings.setVisibility(View.GONE);
-        } else {
-            onInfoUpdated(true);
         }
     }
 
     @Override
-    public void onBackendStateChanged(BackendSwitcher.BackendState backendState) {
+    public void onBackendStateChanged(BackendManager.BackendState backendState) {
         switch (backendState) {
             case DISCONNECTING:
                 mTvLoadingText.setText(R.string.connection_state_disconnecting);
                 if (BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()) != null)
-                    updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()).getAlias());
+                    updateStatusDot(BackendConfigsManager.getInstance().getBackendConfigById(mNodeSpinner.getSelectedNodeId()));
+
                 // Show loading screen
-                showLoading();
+                showLoadingScreen();
                 break;
             case NO_BACKEND_SELECTED:
                 updateTotalBalanceDisplay();
@@ -508,7 +520,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
                 break;
             case ACTIVATING_BACKEND:
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                if (BackendManager.hasBackendConfigs())
+                    updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
                 break;
             case STARTING_VPN:
                 mTvLoadingText.setText(R.string.connection_state_starting_vpn);
@@ -517,7 +530,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvLoadingText.setText(R.string.connection_state_starting_tor);
                 break;
             case TOR_CONNECTED:
-                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
+                updateStatusDot(BackendConfigsManager.getInstance().getCurrentBackendConfig());
                 break;
             case CONNECTING_TO_BACKEND:
                 mTvLoadingText.setText(R.string.connection_state_connecting);
@@ -531,11 +544,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     @Override
     public void onBackendStateError(String message, int errorCode) {
-        onInfoUpdated(false);
+        showConnectionErrorScreen();
         mTvConnectError.setText(message);
 
         switch (errorCode) {
-            case BackendSwitcher.ERROR_VPN_UNKNOWN_START_ISSUE:
+            case BackendManager.ERROR_VPN_UNKNOWN_START_ISSUE:
                 mBtnVpnSettings.setVisibility(View.VISIBLE);
                 break;
             default:

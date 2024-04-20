@@ -10,6 +10,7 @@
         <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />
         <attr name="subscribeToPrefChange" format="boolean" />
+        <attr name="amountView_msatPrecision" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BBInputFieldView">
@@ -21,7 +22,7 @@
         <attr name="minLines" format="integer" />
         <attr name="maxLines" format="integer" />
         <attr name="maxLinesFocused" format="integer" />
-        <attr name="inputAreaBgDrawable" format="integer"/>
+        <attr name="inputAreaBgDrawable" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="BBExpandablePropertyView">
@@ -30,5 +31,14 @@
         <attr name="explanation" format="string" />
         <attr name="hasLine" format="boolean" />
         <attr name="isAmountDetail" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BBInfoLineView">
+        <attr name="infoLine_label" format="string" />
+        <attr name="infoLine_data" format="string" />
+        <attr name="infoLine_textSize" format="dimension" />
+        <attr name="infoLine_dataWidth" format="dimension" />
+        <attr name="infoLine_ellipsizeEnd" format="boolean" />
+        <attr name="infoLine_ellipsizeMiddle" format="boolean" />
     </declare-styleable>
 </resources>

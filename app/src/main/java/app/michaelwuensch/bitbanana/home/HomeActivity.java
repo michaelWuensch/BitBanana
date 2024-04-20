@@ -33,7 +33,6 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.lightningnetwork.lnd.lnrpc.PayReq;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -46,8 +45,9 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.IdentityActivity;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backendConfigs.BaseBackendConfig;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
@@ -73,13 +73,13 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
-import app.michaelwuensch.bitbanana.models.LNAddress;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.settings.SettingsActivity;
 import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
 import app.michaelwuensch.bitbanana.support.SupportActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
-import app.michaelwuensch.bitbanana.util.BackendSwitcher;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
@@ -95,14 +95,14 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
-import app.michaelwuensch.bitbanana.util.Version;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class HomeActivity extends BaseAppCompatActivity implements LifecycleObserver,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        Wallet.InfoListener, Wallet.LndConnectionTestListener,
-        Wallet.WalletLoadedListener, NavigationView.OnNavigationItemSelectedListener, FeatureManager.FeatureChangedListener {
+        Wallet.WalletLoadStateListener, NavigationView.OnNavigationItemSelectedListener,
+        FeatureManager.FeatureChangedListener, BackendManager.BackendStateChangedListener {
 
     // Activity Result codes
     public static final int REQUEST_CODE_PAYMENT = 101;
@@ -116,14 +116,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private Handler mHandler;
     private InputMethodManager mInputMethodManager;
     private ScheduledExecutorService mExchangeRateScheduler;
-    private ScheduledExecutorService mLNDInfoScheduler;
+    private ScheduledExecutorService mNodeInfoScheduler;
     private NetworkChangeReceiver mNetworkChangeReceiver;
     private boolean mIsExchangeRateSchedulerRunning = false;
-    private boolean mIsLNDInfoSchedulerRunning = false;
+    private boolean mIsNodeInfoSchedulerRunning = false;
     private boolean mIsNetworkChangeReceiverRunning = false;
-
-    private boolean mInfoChangeListenerRegistered;
-    private boolean mLndConnectionTestListenerRegistered;
+    private boolean mBackendChangedListenerRegistred;
     private boolean mWalletLoadedListener;
     private boolean mIsFirstUnlockAttempt = true;
     private AlertDialog mUnlockDialog;
@@ -133,7 +131,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private NavigationView mNavigationView;
     public CustomViewPager mViewPager;
     private HomePagerAdapter mPagerAdapter;
-    private Handler mBackgroundCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +152,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             @Override
             public void onSingleClick(View v) {
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    if (Wallet.getInstance().isConnectedToLND()) {
-                        if (Wallet.getInstance().getNodeUris().length > 0) {
+                    if (Wallet.getInstance().isInfoFetched()) {
+                        if (Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris().length > 0) {
                             Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
                             startActivity(intent);
                         } else {
@@ -181,10 +178,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView appVersion = findViewById(R.id.appVersion);
         String appVersionString = "BitBanana version:  " + BuildConfig.VERSION_NAME + ", build: " + BuildConfig.VERSION_CODE;
         appVersion.setText(appVersionString);
-        TextView lndVersion = findViewById(R.id.lndVersion);
-        String lndVersionString = "LND version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
-        lndVersion.setText(lndVersionString);
-
+        updateDrawerBackendVersion();
 
         // Setup view pager
         mViewPager = findViewById(R.id.viewPager);
@@ -232,7 +226,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
 
         mUnlockDialog = buildUnlockDialog();
-        mBackgroundCloseHandler = new Handler();
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -257,24 +250,24 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     }
 
-    // This scheduled LND info request lets us know
-    // if we have a working connection to LND and if we are still in sync with the network
-    private void setupLNDInfoSchedule() {
+    // This scheduled node info request lets us know
+    // if we have a working connection to the node and if we are still in sync with the network
+    private void setupNodeInfoSchedule() {
 
-        if (!mIsLNDInfoSchedulerRunning) {
-            mIsLNDInfoSchedulerRunning = true;
-            mLNDInfoScheduler =
+        if (!mIsNodeInfoSchedulerRunning) {
+            mIsNodeInfoSchedulerRunning = true;
+            mNodeInfoScheduler =
                     Executors.newSingleThreadScheduledExecutor();
 
-            mLNDInfoScheduler.scheduleAtFixedRate
+            mNodeInfoScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            if (BackendSwitcher.getBackendState() == BackendSwitcher.BackendState.BACKEND_CONNECTED) {
-                                BBLog.v(LOG_TAG, "Scheduled LND info check initiated.");
-                                Wallet.getInstance().fetchInfoFromLND();
+                            if (BackendManager.getBackendState() == BackendManager.BackendState.BACKEND_CONNECTED) {
+                                BBLog.v(LOG_TAG, "Scheduled node info check initiated.");
+                                Wallet.getInstance().connectionTest(false);
                             }
                         }
-                    }, 0, 30, TimeUnit.SECONDS);
+                    }, 0, 15, TimeUnit.SECONDS);
         }
 
     }
@@ -303,46 +296,36 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void continueMoveToForeground() {
-        mBackgroundCloseHandler.removeCallbacksAndMessages(null);
+        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
         // start listeners and schedules
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();
 
-        if (!mLndConnectionTestListenerRegistered) {
-            Wallet.getInstance().registerLndConnectionTestListener(this);
-            mLndConnectionTestListenerRegistered = true;
-        }
-
         if (!mWalletLoadedListener) {
-            Wallet.getInstance().registerWalletLoadedListener(this);
+            Wallet.getInstance().registerWalletLoadStateListener(this);
         }
 
-        if (!mInfoChangeListenerRegistered) {
-            Wallet.getInstance().registerInfoListener(this);
-            mInfoChangeListenerRegistered = true;
+        if (!mBackendChangedListenerRegistred) {
+            BackendManager.registerBackendStateChangedListener(this);
+            mBackendChangedListenerRegistred = true;
         }
         FeatureManager.registerFeatureChangedListener(this);
 
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
-        // We delay the actual opening of the wallet so that the wallet fragment has time to be loaded first
-        new Handler().postDelayed(() -> openWallet(), 300);
+
+        // Setup wallet from URI if app was started by connect uri and no node is connected yet
+        if (App.getAppContext().getUriSchemeData() != null && UriUtil.isConnectUri(App.getAppContext().getUriSchemeData())) {
+            analyzeString(App.getAppContext().getUriSchemeData());
+            App.getAppContext().setUriSchemeData(null);
+        } else {
+            // We delay the actual initialization of the backend connection so that the wallet fragment has time to be loaded first
+            new Handler().postDelayed(() -> activateBackend(), 300);
+        }
     }
 
-    public void openWallet() {
-        BackendSwitcher.activateCurrentBackendConfig(HomeActivity.this, false);
-
-        // ToDo: move to state events
-        updateDrawerNavigationMenuVisibilities();
-
-        // Check if BitBanana was started from an URI link or by NFC.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            // Only check for connecting wallets. Other operations need a wallet fully loaded.
-            if (UriUtil.isLNDConnectUri(App.getAppContext().getUriSchemeData())) {
-                analyzeString(App.getAppContext().getUriSchemeData());
-                App.getAppContext().setUriSchemeData(null);
-            }
-        }
+    public void activateBackend() {
+        BackendManager.activateCurrentBackendConfig(HomeActivity.this, false);
     }
 
     // This function gets called when app is moved to background.
@@ -356,9 +339,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
-        App.getAppContext().connectionToLNDEstablished = false;
-
-        mBackgroundCloseHandler.postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
+        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
+        App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
     }
 
     @Override
@@ -373,13 +355,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     private void stopListenersAndSchedules() {
 
         // Unregister Handler, Wallet Loaded & Info Listener
-        Wallet.getInstance().unregisterLndConnectionTestListener(this);
-        mLndConnectionTestListenerRegistered = false;
-        Wallet.getInstance().unregisterWalletLoadedListener(this);
+        Wallet.getInstance().unregisterWalletLoadStateListener(this);
         mWalletLoadedListener = false;
-        Wallet.getInstance().unregisterInfoListener(this);
-        mInfoChangeListenerRegistered = false;
         FeatureManager.unregisterFeatureChangedListener(this);
+        BackendManager.unregisterBackendStateChangedListener(this);
+        mBackendChangedListenerRegistred = false;
 
         mHandler.removeCallbacksAndMessages(null);
 
@@ -391,10 +371,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mIsExchangeRateSchedulerRunning = false;
         }
 
-        if (mIsLNDInfoSchedulerRunning) {
-            // Kill the LND info requests to go easy on the battery.
-            mLNDInfoScheduler.shutdownNow();
-            mIsLNDInfoSchedulerRunning = false;
+        if (mIsNodeInfoSchedulerRunning) {
+            // Kill the node info requests to go easy on the battery.
+            mNodeInfoScheduler.shutdownNow();
+            mIsNodeInfoSchedulerRunning = false;
         }
 
         if (mIsNetworkChangeReceiverRunning) {
@@ -406,7 +386,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         // Kill Server Streams
         Wallet.getInstance().cancelSubscriptions();
 
-        BackendSwitcher.deactivateCurrentBackendConfig(this, false, false);
+        BackendManager.deactivateCurrentBackendConfig(this, false, false);
     }
 
     @Override
@@ -435,72 +415,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     }
 
-    @Override
-    public void onInfoUpdated(boolean connected) {
-
-    }
-
-    @Override
-    public void onLndConnectError(int error) {
-        if (error == Wallet.LndConnectionTestListener.ERROR_LOCKED) {
-
-            if (mUnlockDialog != null && !mUnlockDialog.isShowing()) {
-                mUnlockDialog.show();
-            }
-
-            mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlock();
-
-            if (!mIsFirstUnlockAttempt) {
-                Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    @Override
-    public void onLndConnectError(String error) {
-
-    }
-
-    @Override
-    public void onLndConnectSuccess() {
-        // We managed to establish a connection to LND.
-        // Now we can start to fetch all information needed from LND
-        App.getAppContext().connectionToLNDEstablished = true;
-
-        // Warn the user if an old LND version is used.
-        if (Wallet.getInstance().getLNDVersion().compareTo(new Version("0.17.0")) < 0) {
-            new UserGuardian(this).securityOldLndVersion("v0.17.0-beta");
-        }
-
-        // Fetch the transaction history
-        Wallet.getInstance().fetchLNDTransactionHistory();
-        Wallet.getInstance().fetchBalanceFromLND();
-        Wallet.getInstance().fetchChannelsFromLND();
-
-        // Fetch UTXOs
-        Wallet.getInstance().fetchUTXOs();
-        Wallet.getInstance().fetchLockedUTXOs();
-
-        // Subscribe to Transaction Events
-        Wallet.getInstance().subscribeToTransactions();
-        Wallet.getInstance().subscribeToHtlcEvents();
-        Wallet.getInstance().subscribeToInvoices();
-
-        if (mHandler != null) {
-            mHandler.postDelayed(() -> Wallet.getInstance().subscribeToChannelEvents(), 3000);
-        }
-
-        updateDrawerNavigationMenu();
-
-        setupLNDInfoSchedule();
-    }
-
-    @Override
-    public void onLndConnectionTestStarted() {
-
-    }
-
     private AlertDialog buildUnlockDialog() {
         // Show unlock dialog
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -515,7 +429,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setView(viewInflated);
 
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-            mPagerAdapter.getWalletFragment().showLoading();
+            mPagerAdapter.getWalletFragment().showLoadingScreen();
             Wallet.getInstance().unlockWallet(input.getText().toString());
             mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             mIsFirstUnlockAttempt = false;
@@ -524,7 +438,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
             InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-            mPagerAdapter.getWalletFragment().showErrorAfterNotUnlocked();
+            mPagerAdapter.getWalletFragment().showErrorAfterNotUnlockedScreen();
             mIsFirstUnlockAttempt = true;
             dialog.cancel();
         });
@@ -590,19 +504,24 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void analyzeString(String input) {
         BitcoinStringAnalyzer.analyze(HomeActivity.this, compositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                if (paymentRequest.getNumSatoshis() == 0) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+                if (decodedBolt11.hasAmountSpecified()) {
+                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
+                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                } else {
                     // Warn about 0 sat invoices
                     new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
                         @Override
-                        public void onGuardianConfirmed() {
-                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
+                        public void onConfirmed() {
+                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, null);
                             sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                         }
+
+                        @Override
+                        public void onCancelled() {
+
+                        }
                     }).securityZeroAmountInvoice();
-                } else {
-                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, null);
-                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                 }
             }
 
@@ -612,31 +531,36 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                     sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                 } else {
-                    InvoiceUtil.readInvoice(HomeActivity.this, compositeDisposable, lightningInvoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+                    InvoiceUtil.readInvoice(HomeActivity.this, lightningInvoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
                         @Override
-                        public void onValidLightningInvoice(PayReq paymentRequest, String invoice) {
-                            if (Wallet.getInstance().getMaxLightningSendAmount() < paymentRequest.getNumSatoshis()) {
+                        public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+                            if (WalletUtil.getMaxLightningSendAmount() < decodedBolt11.getAmountRequested()) {
                                 // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
                                 SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
                                 sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
                             } else {
-                                if (paymentRequest.getNumSatoshis() == 0) {
+                                if (decodedBolt11.hasAmountSpecified()) {
+                                    String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
+                                    String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
+                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
+                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                } else {
                                     // Warn about 0 sat invoices
                                     new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
                                         @Override
-                                        public void onGuardianConfirmed() {
-                                            String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
+                                        public void onConfirmed() {
+                                            String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
                                             String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
-                                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
+                                            SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(decodedBolt11, onChainInvoice);
                                             sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                         }
+
+                                        @Override
+                                        public void onCancelled() {
+
+                                        }
                                     }).securityZeroAmountInvoice();
-                                } else {
-                                    String amountString = MonetaryUtil.getInstance().satsToBitcoinString(amount);
-                                    String onChainInvoice = InvoiceUtil.generateBitcoinInvoice(address, amountString, message, null);
-                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createLightningDialog(paymentRequest, invoice, onChainInvoice);
-                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
                                 }
                             }
                         }
@@ -705,18 +629,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
-            public void onValidLndConnectString(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidLndHubConnectString(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
-            }
-
-            @Override
-            public void onValidBTCPayConnectData(BaseBackendConfig baseBackendConfig) {
-                addWallet(baseBackendConfig);
+            public void onValidConnectData(BackendConfig backendConfig) {
+                addWallet(backendConfig);
             }
 
             @Override
@@ -787,7 +701,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
                         sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
                     } else {
-                        LNAddress lnAddress = (LNAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                        LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
                         analyzeString(lnAddress.toString());
                     }
                     if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -798,33 +712,33 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     }
 
-    private void addWallet(BaseBackendConfig baseBackendConfig) {
-        new UserGuardian(HomeActivity.this, () -> {
-            RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, baseBackendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
+    private void addWallet(BackendConfig backendConfig) {
+        new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+            @Override
+            public void onConfirmed() {
+                RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
 
-                @Override
-                public void onSaved(String id) {
-                    if (BackendConfigsManager.getInstance().getAllBackendConfigs(false).size() == 1) {
-                        // This was the first wallet that was added. Open it immediately.
-                        mPagerAdapter.getWalletFragment().showLoading();
-                        openWallet();
-                    } else {
-                        new AlertDialog.Builder(HomeActivity.this)
-                                .setMessage(R.string.node_added)
-                                .setCancelable(true)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                    }
-                                }).show();
+                    @Override
+                    public void onSaved(String id) {
+                        // This was the first backend that was added. Open it immediately.
+                        //mPagerAdapter.getWalletFragment().showLoadingScreen();
+                        BackendManager.activateBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(id), HomeActivity.this, false);
+                        activateBackend();
                     }
-                }
 
-                @Override
-                public void onError(String error, int duration) {
-                    showError(error, duration);
-                }
-            });
-        }).securityConnectToRemoteServer(baseBackendConfig.getHost());
+                    @Override
+                    public void onError(String error, int duration) {
+                        showError(error, duration);
+                        activateBackend();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled() {
+                activateBackend();
+            }
+        }).securityConnectToRemoteServer(backendConfig.getHost());
     }
 
     @Override
@@ -867,12 +781,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void updateDrawerNavigationMenu() {
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
-        userAvatarView.setupWithNodeUri(Wallet.getInstance().getNodeUris()[0], false);
+        userAvatarView.setupWithNodeUri(Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris()[0], false);
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
         userWalletName.setText(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
-        TextView lndVersion = findViewById(R.id.lndVersion);
-        String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
-        lndVersion.setText(lndVersionString);
+        updateDrawerBackendVersion();
         updateDrawerNavigationMenuVisibilities();
     }
 
@@ -881,10 +793,19 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
         userWalletName.setText(getResources().getString(R.string.notConnected));
-        TextView lndVersion = findViewById(R.id.lndVersion);
-        String lndVersionString = "lnd version: " + Wallet.getInstance().getLNDVersionString().split(" commit")[0];
-        lndVersion.setText(lndVersionString);
+        updateDrawerBackendVersion();
         updateDrawerNavigationMenuVisibilities();
+    }
+
+    public void updateDrawerBackendVersion() {
+        TextView backendVersion = findViewById(R.id.backendVersion);
+        String versionString;
+        if (Wallet.getInstance().isInfoFetched()) {
+            versionString = BackendManager.getCurrentBackend().getNodeImplementationName() + " version: " + Wallet.getInstance().getCurrentNodeInfo().getFullVersionString().split(" commit")[0];
+        } else {
+            versionString = "Backend version: " + getString(R.string.notConnected);
+        }
+        backendVersion.setText(versionString);
     }
 
     public void updateDrawerNavigationMenuVisibilities() {
@@ -903,32 +824,91 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     @Override
-    public void onWalletLoaded() {
-        BBLog.d(LOG_TAG, "Wallet loaded");
+    public void onFeatureChanged() {
+        updateDrawerNavigationMenuVisibilities();
+    }
 
-        // Check if BitBanana was started from an URI link or by NFC.
-        if (App.getAppContext().getUriSchemeData() != null) {
-            analyzeString(App.getAppContext().getUriSchemeData());
-            App.getAppContext().setUriSchemeData(null);
-        } else {
-            // Do we have any clipboard data that BitBanana can read?
-            ClipBoardUtil.performClipboardScan(HomeActivity.this, compositeDisposable, new ClipBoardUtil.OnClipboardScanProceedListener() {
-                @Override
-                public void onProceed(String content) {
-                    analyzeString(content);
+    @Override
+    public void onBackendStateChanged(BackendManager.BackendState backendState) {
+        switch (backendState) {
+            case DISCONNECTING:
+                break;
+            case NO_BACKEND_SELECTED:
+                updateDrawerNavigationMenuVisibilities();
+                if (mNodeInfoScheduler != null) {
+                    mNodeInfoScheduler.shutdownNow();
+                    mIsNodeInfoSchedulerRunning = false;
                 }
-
-                @Override
-                public void onError(String error, int duration) {
-                    showError(error, duration);
-                }
-            });
+                break;
+            case ACTIVATING_BACKEND:
+                updateDrawerNavigationMenuVisibilities();
+                break;
+            case STARTING_VPN:
+                break;
+            case STARTING_TOR:
+                break;
+            case TOR_CONNECTED:
+                break;
+            case CONNECTING_TO_BACKEND:
+                break;
+            case BACKEND_CONNECTED:
+                break;
+            case ERROR:
+                break;
         }
     }
 
     @Override
-    public void onFeatureChanged() {
-        updateDrawerNavigationMenuVisibilities();
+    public void onBackendStateError(String message, int errorCode) {
+
+    }
+
+    @Override
+    public void onWalletLoadStateChanged(Wallet.WalletLoadState walletLoadState) {
+
+        switch (walletLoadState) {
+            case LOCKED:
+                if (mUnlockDialog != null && !mUnlockDialog.isShowing()) {
+                    mUnlockDialog.show();
+                }
+
+                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlockScreen();
+
+                if (!mIsFirstUnlockAttempt) {
+                    Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case CONNECTION_SUCCESS:
+                // Warn the user if the connect node runs old software version that is no longer supported.
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(BackendManager.getCurrentBackend().getMinRequiredVersion()) < 0) {
+                    BBLog.e(LOG_TAG, Wallet.getInstance().getCurrentNodeInfo().getFullVersionString());
+                    new UserGuardian(this).securityOldNodeSoftwareVersion(BackendManager.getCurrentBackend().getNodeImplementationName(), BackendManager.getCurrentBackend().getMinRequiredVersionName());
+                }
+                break;
+            case WALLET_LOADED:
+                updateDrawerNavigationMenu();
+                setupNodeInfoSchedule();
+
+                // Check if BitBanana was started from an URI link or by NFC.
+                if (App.getAppContext().getUriSchemeData() != null) {
+                    analyzeString(App.getAppContext().getUriSchemeData());
+                    App.getAppContext().setUriSchemeData(null);
+                } else {
+                    // Do we have any clipboard data that BitBanana can read?
+                    ClipBoardUtil.performClipboardScan(HomeActivity.this, compositeDisposable, new ClipBoardUtil.OnClipboardScanProceedListener() {
+                        @Override
+                        public void onProceed(String content) {
+                            analyzeString(content);
+                        }
+
+                        @Override
+                        public void onError(String error, int duration) {
+                            showError(error, duration);
+                        }
+                    });
+                }
+        }
     }
 
 

@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
+import app.michaelwuensch.bitbanana.util.HexUtil;
 
 public class QRCodeGenerator {
 
@@ -41,7 +41,7 @@ public class QRCodeGenerator {
     }
 
     public static Drawable drawableFromText(String data) {
-        if (UtilFunctions.isHex(data)) {
+        if (HexUtil.isHex(data)) {
             // If we have a hex string, uppercase it so Alphanumeric encoding is used instead of binary, which produces smaller codes
             data = data.toUpperCase();
         }

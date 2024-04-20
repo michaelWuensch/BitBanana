@@ -108,6 +108,12 @@
         <item name="android:typeface">sans</item>
     </style>
 
+    <style name="InputViewTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">10sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
 
     <!-- Decoy app: Calculator -->
     <style name="CalcACButton">

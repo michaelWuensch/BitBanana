@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -15,19 +16,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.github.lightningnetwork.lnd.lnrpc.Channel;
-import com.github.lightningnetwork.lnd.lnrpc.ChannelCloseSummary;
-import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.protobuf.ByteString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
@@ -35,21 +33,22 @@ import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetail
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ClosedChannelItem;
 import app.michaelwuensch.bitbanana.listViews.channels.items.OpenChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingForceClosingChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.PendingOpenChannelItem;
-import app.michaelwuensch.bitbanana.listViews.channels.items.WaitingCloseChannelItem;
+import app.michaelwuensch.bitbanana.listViews.channels.items.PendingChannelItem;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
+import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet.ChannelsUpdatedSubscriptionListener {
+public class ManageChannelsActivity extends BaseAppCompatActivity implements ChannelSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Channels.ChannelsUpdatedSubscriptionListener {
 
     private static final String LOG_TAG = ManageChannelsActivity.class.getSimpleName();
 
@@ -70,7 +69,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channels);
 
-        Wallet.getInstance().registerChannelsUpdatedSubscriptionListener(this);
+        Wallet_Channels.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
         mChannelSummaryView = findViewById(R.id.channelSummary);
         mEmptyListText = findViewById(R.id.listEmpty);
@@ -92,10 +91,19 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mClosedChannelItems = new ArrayList<>();
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
-        });
+
+        if (FeatureManager.isOpenChannelEnabled()) {
+            fab.setOnClickListener(view -> {
+                if (BackendManager.hasBackendConfigs()) {
+                    Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
+                } else {
+                    Toast.makeText(ManageChannelsActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            fab.setVisibility(View.GONE);
+        }
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -119,11 +127,11 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         // Display the current state of channels
         updateChannelsView();
 
-        // Fetch channels from LND. This will automatically update the view when finished.
+        // Fetch channels from Node. This will automatically update the view when finished.
         // This is necessary, as we might display outdated data otherwise.
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            if (LndConnection.getInstance().isConnected()) {
-                Wallet.getInstance().fetchChannelsFromLND();
+            if (Wallet.getInstance().isConnectedToNode()) {
+                Wallet_Channels.getInstance().fetchChannels();
             }
         }
     }
@@ -139,11 +147,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         long unavailable = 0;
 
         // Add all open channel items
-
-        if (Wallet.getInstance().mOpenChannelsList != null) {
-            for (Channel c : Wallet.getInstance().mOpenChannelsList) {
+        if (Wallet_Channels.getInstance().getOpenChannelsList() != null) {
+            for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList()) {
                 OpenChannelItem openChannelItem = new OpenChannelItem(c);
-                if (c.getActive()) {
+                if (c.isActive()) {
                     outbound += openChannelItem.getChannel().getLocalBalance();
                     inbound += openChannelItem.getChannel().getRemoteBalance();
                 } else {
@@ -154,42 +161,24 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
 
         // Add all pending channel items
-
-        // Add open pending
-        if (Wallet.getInstance().mPendingOpenChannelsList != null) {
-            for (PendingChannelsResponse.PendingOpenChannel c : Wallet.getInstance().mPendingOpenChannelsList) {
-                PendingOpenChannelItem pendingOpenChannelItem = new PendingOpenChannelItem(c);
-                mChannelItems.add(pendingOpenChannelItem);
+        if (Wallet_Channels.getInstance().getPendingChannelsList() != null) {
+            for (PendingChannel c : Wallet_Channels.getInstance().getPendingChannelsList()) {
+                PendingChannelItem pendingChannelItem = new PendingChannelItem(c);
+                switch (c.getPendingType()) {
+                    case PENDING_OPEN:
+                        mChannelItems.add(pendingChannelItem);
+                        break;
+                    case PENDING_CLOSE:
+                    case PENDING_FORCE_CLOSE:
+                        mClosedChannelItems.add(pendingChannelItem);
+                        break;
+                }
             }
         }
 
-        // Add closing pending
-        if (Wallet.getInstance().mPendingClosedChannelsList != null) {
-            for (PendingChannelsResponse.ClosedChannel c : Wallet.getInstance().mPendingClosedChannelsList) {
-                PendingClosingChannelItem pendingClosingChannelItem = new PendingClosingChannelItem(c);
-                mClosedChannelItems.add(pendingClosingChannelItem);
-            }
-        }
-
-        // Add force closing pending
-        if (Wallet.getInstance().mPendingForceClosedChannelsList != null) {
-            for (PendingChannelsResponse.ForceClosedChannel c : Wallet.getInstance().mPendingForceClosedChannelsList) {
-                PendingForceClosingChannelItem pendingForceClosingChannelItem = new PendingForceClosingChannelItem(c);
-                mClosedChannelItems.add(pendingForceClosingChannelItem);
-            }
-        }
-
-        // Add waiting for close
-        if (Wallet.getInstance().mPendingWaitingCloseChannelsList != null) {
-            for (PendingChannelsResponse.WaitingCloseChannel c : Wallet.getInstance().mPendingWaitingCloseChannelsList) {
-                WaitingCloseChannelItem waitingCloseChannelItem = new WaitingCloseChannelItem(c);
-                mClosedChannelItems.add(waitingCloseChannelItem);
-            }
-        }
-
-        // Add closed channel items
-        if (Wallet.getInstance().mClosedChannelsList != null) {
-            for (ChannelCloseSummary c : Wallet.getInstance().mClosedChannelsList) {
+        // Add all closed channel items
+        if (Wallet_Channels.getInstance().getClosedChannelsList() != null) {
+            for (ClosedChannel c : Wallet_Channels.getInstance().getClosedChannelsList()) {
                 ClosedChannelItem closedChannelItem = new ClosedChannelItem(c);
                 mClosedChannelItems.add(closedChannelItem);
             }
@@ -236,7 +225,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     }
 
     @Override
-    public void onChannelSelect(ByteString channel, int type) {
+    public void onChannelSelect(Serializable channel, int type) {
         if (channel != null) {
             ChannelDetailBSDFragment channelDetailBSDFragment = new ChannelDetailBSDFragment();
             Bundle bundle = new Bundle();
@@ -274,7 +263,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     protected void onDestroy() {
-        Wallet.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
+        Wallet_Channels.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
 
         super.onDestroy();
     }
@@ -288,8 +277,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onRefresh() {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && LndConnection.getInstance().isConnected()) {
-            Wallet.getInstance().fetchChannelsFromLND();
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isConnectedToNode()) {
+            Wallet_Channels.getInstance().fetchChannels();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -337,27 +326,15 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
             switch (item.getType()) {
                 case ChannelListItem.TYPE_OPEN_CHANNEL:
-                    pubkey = ((OpenChannelItem) item).getChannel().getRemotePubkey();
+                    pubkey = ((OpenChannelItem) item).getChannel().getRemotePubKey();
                     text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
-                case ChannelListItem.TYPE_PENDING_OPEN_CHANNEL:
-                    pubkey = ((PendingOpenChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
-                    break;
-                case ChannelListItem.TYPE_PENDING_CLOSING_CHANNEL:
-                    pubkey = ((PendingClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
-                    break;
-                case ChannelListItem.TYPE_PENDING_FORCE_CLOSING_CHANNEL:
-                    pubkey = ((PendingForceClosingChannelItem) item).getChannel().getChannel().getRemoteNodePub();
-                    text = pubkey + AliasManager.getInstance().getAlias(pubkey);
-                    break;
-                case ChannelListItem.TYPE_WAITING_CLOSE_CHANNEL:
-                    pubkey = ((WaitingCloseChannelItem) item).getChannel().getChannel().getRemoteNodePub();
+                case ChannelListItem.TYPE_PENDING_CHANNEL:
+                    pubkey = ((PendingChannelItem) item).getChannel().getRemotePubKey();
                     text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 case ChannelListItem.TYPE_CLOSED_CHANNEL:
-                    pubkey = ((ClosedChannelItem) item).getChannel().getRemotePubkey();
+                    pubkey = ((ClosedChannelItem) item).getChannel().getRemotePubKey();
                     text = pubkey + AliasManager.getInstance().getAlias(pubkey);
                     break;
                 default:
@@ -400,7 +377,6 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         @Override
         public Fragment getItem(int pos) {
             switch (pos) {
-
                 case 0:
                     return mOpenChannelsList;
                 case 1:

@@ -66,6 +66,43 @@
     <string-array name="exchangeRateProvider">
         <item>Blockchain.info</item>
         <item>Coinbase</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="exchangeRateProviderDisplayValues">
+        <item>Blockchain.info</item>
+        <item>Coinbase</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>@string/settings_custom</item>
+    </string-array>
+
+    <string-array name="customExchangeRateProviderTypes">
+        <item>Mempool</item>
+    </string-array>
+
+    <string-array name="feeEstimationProviderDisplayValues">
+        <item>@string/settings_node_fee_estimates</item>
+        <item>Blockstream</item>
+        <item>Blockstream (v3 Tor)</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>@string/settings_custom</item>
+    </string-array>
+
+    <string-array name="feeEstimationProvider">
+        <item>Internal</item>
+        <item>Blockstream</item>
+        <item>Blockstream (v3 Tor)</item>
+        <item>Mempool.space</item>
+        <item>Mempool (v3 Tor)</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="customFeeEstimationProviderTypes">
+        <item>Mempool</item>
     </string-array>
 
     <string-array name="languageValues">
@@ -96,6 +133,22 @@
         <item>Portuguese (Brazil)</item>
         <item>Portuguese (Portugal)</item>
         <item>Ukrainian</item>
+    </string-array>
+
+    <string-array name="avatarStyleValues">
+        <item>MIXED</item>
+        <item>ROBOTS</item>
+        <item>ALIENS</item>
+        <item>HUMANS</item>
+        <item>ANIMALS</item>
+    </string-array>
+
+    <string-array name="avatarStyleDisplayValues">
+        <item>@string/settings_avatarStyleDisplayValues_0</item>
+        <item>@string/settings_avatarStyleDisplayValues_1</item>
+        <item>@string/settings_avatarStyleDisplayValues_2</item>
+        <item>@string/settings_avatarStyleDisplayValues_3</item>
+        <item>@string/settings_avatarStyleDisplayValues_4</item>
     </string-array>
 
     <string-array name="lnRequestExpiry">
