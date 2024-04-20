@@ -148,6 +148,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     // This stuff has to be outside of init(), otherwise the preview does not work in Android Studio
     public void initialSetup() {
         // Set tier from shared preferences
+        mSlider.setMax(getSliderMax());
         setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
         mTabLayoutSendFeeSpeed.getTabAt(mOnChainFeeTier.ordinal()).select();
 
@@ -254,8 +255,8 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
+                    mSlider.setMax(getSliderMax());
                     setFeeTier(OnChainFeeTier.parseFromString(PrefsUtil.getOnChainFeeTier()));
-                    mSlider.setMax(PrefsUtil.getFeeEstimate_NextBlock() + 50);
                 }
             });
         }
@@ -272,6 +273,11 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
 
     public boolean isLowerThanMinimum() {
         return getSatPerVByteFee() < PrefsUtil.getFeeEstimate_Minimum();
+    }
+
+    private int getSliderMax() {
+        int nextBlock = PrefsUtil.getFeeEstimate_NextBlock();
+        return Math.max(nextBlock + 20, nextBlock + (int)(0.2 * nextBlock));
     }
 
     public enum OnChainFeeTier {
