@@ -50,7 +50,6 @@ import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
@@ -85,10 +84,6 @@ public class SendBSDFragment extends BaseBSDFragment {
     private long mFixedAmount;
     private Handler mHandler;
     private boolean mAmountValid = true;
-    private boolean mSendButtonEnabled_input;
-    private boolean mSendButtonEnabled_feeCalculate;
-    long mCalculatedFee;
-    double mCalculatedFeePercent;
     private String mKeysendPubkey;
     private boolean mIsKeysend;
     private long mSendAmount;
@@ -217,15 +212,14 @@ public class SendBSDFragment extends BaseBSDFragment {
                             showError(message, 6000);
                         }
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        mSendButtonEnabled_input = false;
+                        setSendButtonEnabled(false);
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mSendButtonEnabled_input = true;
+                        setSendButtonEnabled(true);
                     }
                     if (mSendAmount == 0 && mFixedAmount == 0L) {
-                        mSendButtonEnabled_input = false;
+                        setSendButtonEnabled(false);
                     }
-                    updateSendButtonState();
                 }
             }
 
@@ -254,19 +248,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                 if (mAmountValid) {
                     mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
-
-                    // calculate fees
-                    if (mIsKeysend || (!mOnChain && mDecodedBolt11.hasNoAmountSpecified())) {
-                        mSendButtonEnabled_feeCalculate = false;
-                        mFeeCaclulationDebounceHandler.attempt(new Runnable() {
-                            @Override
-                            public void run() {
-                                calculateFee();
-                            }
-                        }, 650);
-                    } else {
-                        calculateFee();
-                    }
+                    calculateFee();
                 } else {
                     setFeeFailure();
                 }
@@ -301,8 +283,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             } else {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
-                mSendButtonEnabled_input = false;
-                updateSendButtonState();
+                setSendButtonEnabled(false);
                 setFeeFailure();
 
                 mHandler.postDelayed(() -> {
@@ -381,8 +362,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
                 // No specific amount was requested. Let User input an amount.
                 mNumpad.setVisibility(View.VISIBLE);
-                mSendButtonEnabled_input = false;
-                updateSendButtonState();
+                setSendButtonEnabled(false);
 
                 mHandler.postDelayed(() -> {
                     // We have to call this delayed, as otherwise it will still bring up the softKeyboard
@@ -401,33 +381,10 @@ public class SendBSDFragment extends BaseBSDFragment {
             mBtnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-
-                        long paymentAmount = getLightningPaymentAmountMSat();
-
-                        // sanity check for fees
-                        if (mCalculatedFee != -1) {
-                            if (mCalculatedFeePercent >= 1f) {
-                                // fee higher or equal to payment amount
-                                String feeLimitString = getString(R.string.fee_limit_exceeded_payment, mCalculatedFee, paymentAmount);
-                                showFeeAlertDialog(feeLimitString);
-                                return;
-                            }
-                            if (paymentAmount > RefConstants.LN_PAYMENT_FEE_THRESHOLD)
-                                if (mCalculatedFeePercent > PaymentUtil.getRelativeSettingsFeeLimit()) {
-                                    // fee higher than allowed in settings
-                                    String feeLimitString = getString(R.string.fee_limit_exceeded, mCalculatedFeePercent * 100, PaymentUtil.getRelativeSettingsFeeLimit() * 100);
-                                    showFeeAlertDialog(feeLimitString);
-                                    return;
-                                }
-                        }
+                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
                         sendLightningPayment();
-                    } else {
-                        // Demo Mode
+                    else
                         Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
-                    }
-
                 }
             });
         }
@@ -471,7 +428,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         return sendAmount;
     }
 
-    private void performOnChainSend(){
+    private void performOnChainSend() {
         long sendAmount = getOnChainSendAmount();
         mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(sendAmount, false));
 
@@ -615,17 +572,10 @@ public class SendBSDFragment extends BaseBSDFragment {
     private void calculateFee() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             setCalculatingFee();
-
             if (mOnChain) {
-                long sendAmount = 0L;
-                if (mFixedAmount != 0L) {
-                    sendAmount = mFixedAmount;
-                } else {
-                    sendAmount = mSendAmount;
-                }
-                estimateOnChainTransactionSize(mOnChainAddress, sendAmount);
+                estimateOnChainTransactionSize(mOnChainAddress, getOnChainSendAmount());
             } else {
-                setFeeFailure();
+                estimateRoutingFee();
             }
         } else {
             setFeeFailure();
@@ -636,8 +586,6 @@ public class SendBSDFragment extends BaseBSDFragment {
      * Show progress while calculating fee
      */
     private void setCalculatingFee() {
-        mSendButtonEnabled_feeCalculate = false;
-        updateSendButtonState();
         if (mOnChain) {
             mOnChainFeeView.onCalculating();
         } else {
@@ -649,37 +597,23 @@ public class SendBSDFragment extends BaseBSDFragment {
      * Show the calculated fee
      */
     private void setCalculatedFeeAmountOnChain(long vByte) {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
         mOnChainFeeView.onSizeCalculatedSuccess(vByte);
     }
 
-    private void setCalculatedFeeAmountLightning(long sats, String percentString, boolean showMax) {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
-        mLightningFeeView.setAmountMsat(sats, percentString, showMax);
+    private void setCalculatedFeeAmountLightning(long amount) {
+        double calculatedFeePercent = (amount / (double) getLightningPaymentAmountMSat());
+        String feePercentageString = "(" + String.format("%.1f", calculatedFeePercent * 100) + "%)";
+        mLightningFeeView.setAmountMsat(amount, feePercentageString, false);
     }
 
     /**
      * Show fee calculation failure
      */
     private void setFeeFailure() {
-        mSendButtonEnabled_feeCalculate = true;
-        updateSendButtonState();
         if (mOnChain) {
             mOnChainFeeView.onSizeCalculationFailure();
         } else {
             mLightningFeeView.onFeeFailure();
-        }
-    }
-
-    private void updateSendButtonState() {
-        if (mSendButtonEnabled_feeCalculate && mSendButtonEnabled_input) {
-            mBtnSend.setEnabled(true);
-            mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
-        } else {
-            mBtnSend.setEnabled(false);
-            mBtnSend.setTextColor(getResources().getColor(R.color.gray));
         }
     }
 
@@ -691,6 +625,25 @@ public class SendBSDFragment extends BaseBSDFragment {
                 .subscribe(response -> setCalculatedFeeAmountOnChain((long) response.doubleValue()),
                         throwable -> {
                             BBLog.w(LOG_TAG, "Exception in on-chain transaction size request task.");
+                            BBLog.w(LOG_TAG, throwable.getMessage());
+                            setFeeFailure();
+                        }));
+    }
+
+    private void estimateRoutingFee() {
+        if (getLightningPaymentAmountMSat() == 0) {
+            setFeeFailure();
+            return;
+        }
+        String pubKey;
+        if (mIsKeysend)
+            pubKey = mKeysendPubkey;
+        else
+            pubKey = mDecodedBolt11.getDestinationPubKey();
+        getCompositeDisposable().add(BackendManager.api().estimateRoutingFee(pubKey, getLightningPaymentAmountMSat())
+                .subscribe(response -> setCalculatedFeeAmountLightning(response),
+                        throwable -> {
+                            BBLog.w(LOG_TAG, "Exception in lightning routing fee request task.");
                             BBLog.w(LOG_TAG, throwable.getMessage());
                             setFeeFailure();
                         }));
@@ -709,5 +662,15 @@ public class SendBSDFragment extends BaseBSDFragment {
         View sbView = msg.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
         msg.show();
+    }
+
+    private void setSendButtonEnabled(boolean enabled) {
+        if (enabled) {
+            mBtnSend.setEnabled(true);
+            mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mBtnSend.setEnabled(false);
+            mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+        }
     }
 }

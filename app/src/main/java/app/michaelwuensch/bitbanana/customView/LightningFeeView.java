@@ -59,14 +59,17 @@ public class LightningFeeView extends ConstraintLayout {
             mTvSendFeeAmount.setLabelVisibility(true);
             mTvSendFeeAmount.setLabelText(getResources().getString(R.string.maximum_abbreviation) + " ");
         } else {
-            mTvSendFeeAmount.setLabelVisibility(false);
+            mTvSendFeeAmount.setLabelVisibility(true);
+            mTvSendFeeAmount.setLabelText("~ ");
         }
     }
 
     public void onFeeFailure() {
         mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
         mTvSendFeeAmountPercent.setText(null);
+        mVFeeAmountLayout.setVisibility(View.VISIBLE);
         mTvSendFeeAmount.setVisibility(View.VISIBLE);
         mPbCalculateFee.setVisibility(View.GONE);
+        mTvSendFeeAmount.setLabelVisibility(false);
     }
 }

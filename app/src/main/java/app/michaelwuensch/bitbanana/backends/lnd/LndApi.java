@@ -42,6 +42,7 @@ import com.github.lightningnetwork.lnd.lnrpc.Utxo;
 import com.github.lightningnetwork.lnd.lnrpc.VerifyMessageRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceRequest;
 import com.github.lightningnetwork.lnd.lnrpc.WalletBalanceResponse;
+import com.github.lightningnetwork.lnd.routerrpc.RouteFeeRequest;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeResponse;
@@ -956,5 +957,18 @@ public class LndApi extends Api {
                 .firstOrError()
                 .ignoreElement()
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<Long> estimateRoutingFee(String PubKey, long amount) {
+        RouteFeeRequest request = RouteFeeRequest.newBuilder()
+                .setDest(ApiUtil.ByteStringFromHexString(PubKey))
+                .setAmtSat(Math.max(amount / 1000L, 1))
+                .build();
+        return LndConnection.getInstance().getRouterService().estimateRouteFee(request)
+                .map(response -> {
+                    return response.getRoutingFeeMsat();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Routing fee estimation failed: " + throwable.fillInStackTrace()));
     }
 }
