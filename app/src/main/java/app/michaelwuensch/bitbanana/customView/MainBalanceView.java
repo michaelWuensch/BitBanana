@@ -47,7 +47,7 @@ public class MainBalanceView extends MotionLayout {
     private AmountView mAvLighting;
     private AmountView mAvLightningPending;
     private View mBalanceDetails;
-    private View mHandle;
+    private View mVHandleFadeout;
 
     private boolean mIsExpanded;
     private boolean mIsTransitioning;
@@ -88,7 +88,7 @@ public class MainBalanceView extends MotionLayout {
         mAvLighting = view.findViewById(R.id.lightningConfirmed);
         mAvLightningPending = view.findViewById(R.id.lightningPending);
         mBalanceDetails = view.findViewById(R.id.balanceDetails);
-        mHandle = view.findViewById(R.id.handle);
+        mVHandleFadeout = view.findViewById(R.id.handleFadeOut);
 
         updateBalanceDetailsVisibility();
 
@@ -308,21 +308,21 @@ public class MainBalanceView extends MotionLayout {
         mBalanceFadeOutAnimation.reset();
         mClBalanceLayout.startAnimation(mBalanceFadeOutAnimation);
         mIvSwitchButton.startAnimation(mBalanceFadeOutAnimation);
-        mIvHandleIcon.startAnimation(mBalanceFadeOutAnimation);
+        mVHandleFadeout.startAnimation(mBalanceFadeOutAnimation);
         mAnimationAborted = false;
     }
 
     private void setVisibilityOfBalanceFadeoutViews(int visibility) {
         mClBalanceLayout.setVisibility(visibility);
         mIvSwitchButton.setVisibility(visibility);
-        mIvHandleIcon.setVisibility(visibility);
+        mVHandleFadeout.setVisibility(visibility);
     }
 
     private void abortAnimation() {
         mAnimationAborted = true;
         mClBalanceLayout.clearAnimation();
         mIvSwitchButton.clearAnimation();
-        mIvHandleIcon.clearAnimation();
+        mVHandleFadeout.clearAnimation();
     }
 
     private void updateBalanceDetailsVisibility() {

@@ -279,12 +279,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6">
 
-        <ImageView
-            android:id="@+id/handleIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_arrow_down_24dp"
-            app:tint="@color/banana_yellow" />
+        <FrameLayout
+            android:id="@+id/handleFadeOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/handleIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_arrow_down_24dp"
+                app:tint="@color/banana_yellow" />
+        </FrameLayout>
     </FrameLayout>
 
 
