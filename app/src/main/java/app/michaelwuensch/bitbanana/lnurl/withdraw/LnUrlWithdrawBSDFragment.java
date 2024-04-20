@@ -279,36 +279,23 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                                     .build();
 
                             HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
-                                // We need to make sure the results are executed on the UI Thread to prevent crashes.
-                                Handler threadHandler = new Handler(Looper.getMainLooper());
-
                                 @Override
                                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                    threadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (mServiceURLString != null) {
-                                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
-                                            } else {
-                                                String host = getResources().getString(R.string.host);
-                                                switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
-                                            }
-                                        }
-                                    });
+                                    if (mServiceURLString != null) {
+                                        switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, mServiceURLString));
+                                    } else {
+                                        String host = getResources().getString(R.string.host);
+                                        switchToFailedScreen(getResources().getString(R.string.lnurl_service_not_responding, host));
+                                    }
                                 }
 
                                 @Override
                                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                    threadHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                validateSecondResponse(response.body().string());
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
+                                    try {
+                                        validateSecondResponse(response.body().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 
@@ -370,29 +357,48 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     }
 
     private void switchToWithdrawProgressScreen() {
-        mProgressView.setVisibility(View.VISIBLE);
-        mWithdrawInputs.setVisibility(View.INVISIBLE);
-        mProgressView.startSpinning();
-        mBSDScrollableMainView.animateTitleOut();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.setVisibility(View.VISIBLE);
+                mWithdrawInputs.setVisibility(View.INVISIBLE);
+                mProgressView.startSpinning();
+                mBSDScrollableMainView.animateTitleOut();
+            }
+        });
     }
 
     private void switchToSuccessScreen() {
-        mProgressView.spinningFinished(true);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mWithdrawInputs.setVisibility(View.GONE);
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mWithdrawAmount, true));
-        mResultView.setVisibility(View.VISIBLE);
-        mResultView.setHeading(R.string.lnurl_withdraw_success, true);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.spinningFinished(true);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mWithdrawInputs.setVisibility(View.GONE);
+                mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mWithdrawAmount, true));
+                mResultView.setVisibility(View.VISIBLE);
+                mResultView.setHeading(R.string.lnurl_withdraw_success, true);
+            }
+        });
     }
 
     private void switchToFailedScreen(String error) {
-        mProgressView.spinningFinished(false);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mWithdrawInputs.setVisibility(View.GONE);
-        mResultView.setVisibility(View.VISIBLE);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
 
-        // Set failed states
-        mResultView.setHeading(R.string.lnurl_withdraw_fail, false);
-        mResultView.setDetailsText(error);
+                mProgressView.spinningFinished(false);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mWithdrawInputs.setVisibility(View.GONE);
+                mResultView.setVisibility(View.VISIBLE);
+
+                // Set failed states
+                mResultView.setHeading(R.string.lnurl_withdraw_fail, false);
+                mResultView.setDetailsText(error);
+            }
+        });
     }
 }

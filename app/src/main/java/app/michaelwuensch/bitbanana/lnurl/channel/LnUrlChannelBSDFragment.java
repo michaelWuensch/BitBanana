@@ -204,34 +204,22 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
                 .build();
 
         HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
-            // We need to make sure the results are executed on the UI Thread to prevent crashes.
-            Handler threadHandler = new Handler(Looper.getMainLooper());
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                threadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        BBLog.e(TAG, "Final request failed");
-                        switchToFailedScreen("Final request failed");
-                    }
-                });
+                BBLog.e(TAG, "Final request failed");
+                switchToFailedScreen("Final request failed");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                threadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String responseData = response.body().string();
-                            BBLog.v(TAG, responseData);
-                            validateFinalResponse(responseData);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                try {
+                    String responseData = response.body().string();
+                    BBLog.v(TAG, responseData);
+                    validateFinalResponse(responseData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -249,27 +237,46 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
     }
 
     private void switchToProgressScreen() {
-        mProgressView.setVisibility(View.VISIBLE);
-        mInfoView.setVisibility(View.INVISIBLE);
-        mProgressView.startSpinning();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.setVisibility(View.VISIBLE);
+                mInfoView.setVisibility(View.INVISIBLE);
+                mProgressView.startSpinning();
+            }
+        });
     }
 
     private void switchToSuccessScreen() {
-        mProgressView.spinningFinished(true);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mInfoView.setVisibility(View.GONE);
-        mResultView.setVisibility(View.VISIBLE);
-        mResultView.setHeading(R.string.opened_channel, true);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
+                mProgressView.spinningFinished(true);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mInfoView.setVisibility(View.GONE);
+                mResultView.setVisibility(View.VISIBLE);
+                mResultView.setHeading(R.string.opened_channel, true);
+            }
+        });
     }
 
     private void switchToFailedScreen(String error) {
-        mProgressView.spinningFinished(false);
-        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
-        mInfoView.setVisibility(View.GONE);
-        mResultView.setVisibility(View.VISIBLE);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // Code to be executed on the main thread
 
-        // Set failed states
-        mResultView.setHeading(R.string.error, false);
-        mResultView.setDetailsText(error);
+                mProgressView.spinningFinished(false);
+                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
+                mInfoView.setVisibility(View.GONE);
+                mResultView.setVisibility(View.VISIBLE);
+
+                // Set failed states
+                mResultView.setHeading(R.string.error, false);
+                mResultView.setDetailsText(error);
+            }
+        });
     }
 }
