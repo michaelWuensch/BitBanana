@@ -63,6 +63,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private String mWalletUUID;
     private BackendConfig mOriginalBackendConfig;
     private Spinner mSpType;
+    private View mVerifyCertVisibilityLayout;
     private boolean pwVisible = false;
 
     @Override
@@ -96,6 +97,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         mBtnSave = findViewById(R.id.saveButton);
         mVpnHelpButton = findViewById(R.id.vpnHelpButton);
         mSpType = findViewById(R.id.typeSpinner);
+        mVerifyCertVisibilityLayout = findViewById(R.id.verifyCertVisibilityLayout);
 
         mEtName.setSingleLine(true);
         mEtHost.setSingleLine(true);
@@ -116,10 +118,10 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
-        String[] items = new String[2];
+        String[] items = new String[3];
         items[0] = BackendConfig.BackendType.LND_GRPC.getDisplayName();
         items[1] = BackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
-        //items[2] = BaseBackendConfig.BackendType.LND_HUB.getDisplayName();
+        items[2] = BackendConfig.BackendType.LND_HUB.getDisplayName();
 
         mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
         mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -135,6 +137,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.GONE);
                         mViewPasswordLayout.setVisibility(View.GONE);
+                        mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         // Core Lightning gRPC
@@ -145,6 +148,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.VISIBLE);
                         mEtUser.setVisibility(View.GONE);
                         mViewPasswordLayout.setVisibility(View.GONE);
+                        mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         // Lnd Hub
@@ -155,6 +159,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.VISIBLE);
                         mViewPasswordLayout.setVisibility(View.VISIBLE);
+                        mVerifyCertVisibilityLayout.setVisibility(View.GONE);
                         break;
                 }
             }

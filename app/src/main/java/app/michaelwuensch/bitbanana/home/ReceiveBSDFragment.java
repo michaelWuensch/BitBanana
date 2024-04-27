@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -24,6 +25,7 @@ import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
@@ -33,6 +35,7 @@ import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -109,39 +112,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBtnLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnChain = false;
-                boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !BackendConfigsManager.getInstance().hasAnyBackendConfigs();
-
-                // Manage visibilities and animation
-                AutoTransition autoTransition = new AutoTransition();
-                autoTransition.setDuration(200);
-                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView(), autoTransition);
-                mBSDScrollableMainView.setHelpButtonVisibility(false);
-                mBSDScrollableMainView.setTitleIconVisibility(true);
-                mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
-                mBSDScrollableMainView.setTitle(R.string.receive_lightning_request);
-
-                mChooseTypeView.setVisibility(View.GONE);
-                mMemoView.setVisibility(View.GONE);
-                if (PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
-                    mBtnNext.setEnabled(true);
-                    mBtnNext.setTextColor(getResources().getColor(R.color.banana_yellow));
-                } else {
-                    mBtnNext.setEnabled(false);
-                    mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                }
-                mEtAmount.setHint(getResources().getString(R.string.amount));
-
-                if (canReceiveLightningPayment) {
-                    mTvNoIncomingBalance.setVisibility(View.GONE);
-                    mReceiveAmountView.setVisibility(View.VISIBLE);
-                    mNumpad.setVisibility(View.VISIBLE);
-                    mBtnNext.setVisibility(View.VISIBLE);
-                    // Request focus on amount input
-                    mEtAmount.requestFocus();
-                } else {
-                    mViewNoIncomingBalance.setVisibility(View.VISIBLE);
-                }
+                switchToLightning();
             }
         });
 
@@ -149,24 +120,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBtnOnChain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnChain = true;
-
-                // Manage visibilities and animation
-                AutoTransition autoTransition = new AutoTransition();
-                autoTransition.setDuration(200);
-                TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView(), autoTransition);
-                mBSDScrollableMainView.setHelpButtonVisibility(false);
-                mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_on_chain);
-                mBSDScrollableMainView.setTitle(R.string.receive_on_chain_request);
-                mBSDScrollableMainView.setTitleIconVisibility(true);
-                mReceiveAmountView.setVisibility(View.VISIBLE);
-                mNumpad.setVisibility(View.VISIBLE);
-                mChooseTypeView.setVisibility(View.GONE);
-                mBtnNext.setVisibility(View.VISIBLE);
-                mMemoView.setVisibility(View.GONE);
-
-                // Request focus on amount input
-                mEtAmount.requestFocus();
+                switchToOnChain();
             }
         });
 
@@ -189,22 +143,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBtnGenerateRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
-                    // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
-                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
-                        @Override
-                        public void onConfirmed() {
-                            generateRequest();
-                        }
-
-                        @Override
-                        public void onCancelled() {
-
-                        }
-                    }).securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
-                } else {
-                    generateRequest();
-                }
+                onGenerateRequestClicked();
             }
         });
 
@@ -262,7 +201,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
-                        } else if (mReceiveAmount == 0 && !PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed()) {
+                        } else if (mReceiveAmount == 0 && !FeatureManager.isBolt11WithoutAmountEnabled()) {
                             // Disable 0 sat ln invoices
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
@@ -303,8 +242,99 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             }
         });
 
+        if (!(BackendManager.getCurrentBackend().supportsOnChainReceive() && BackendManager.getCurrentBackend().supportsBolt11Receive())) {
+            if (BackendManager.getCurrentBackend().supportsOnChainReceive())
+                switchToOnChain();
+            if (BackendManager.getCurrentBackend().supportsBolt11Receive())
+                switchToLightning();
+        }
 
         return view;
+    }
+
+    private void switchToOnChain() {
+        mOnChain = true;
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB) {
+            onGenerateRequestClicked();
+            return;
+        }
+
+        // Manage visibilities and animation
+        AutoTransition autoTransition = new AutoTransition();
+        autoTransition.setDuration(200);
+        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView(), autoTransition);
+        mBSDScrollableMainView.setHelpButtonVisibility(false);
+        mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_on_chain);
+        mBSDScrollableMainView.setTitle(R.string.receive_on_chain_request);
+        mBSDScrollableMainView.setTitleIconVisibility(true);
+        mReceiveAmountView.setVisibility(View.VISIBLE);
+        mNumpad.setVisibility(View.VISIBLE);
+        mChooseTypeView.setVisibility(View.GONE);
+        mBtnNext.setVisibility(View.VISIBLE);
+        mMemoView.setVisibility(View.GONE);
+
+        // Request focus on amount input
+        mEtAmount.requestFocus();
+    }
+
+    private void switchToLightning() {
+        mOnChain = false;
+        boolean canReceiveLightningPayment = hasLightningIncomeBalance() || !BackendConfigsManager.getInstance().hasAnyBackendConfigs();
+
+        // Manage visibilities and animation
+        AutoTransition autoTransition = new AutoTransition();
+        autoTransition.setDuration(200);
+        TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView(), autoTransition);
+        mBSDScrollableMainView.setHelpButtonVisibility(false);
+        mBSDScrollableMainView.setTitleIconVisibility(true);
+        mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
+        mBSDScrollableMainView.setTitle(R.string.receive_lightning_request);
+
+        mChooseTypeView.setVisibility(View.GONE);
+        mMemoView.setVisibility(View.GONE);
+        if (FeatureManager.isBolt11WithoutAmountEnabled()) {
+            mBtnNext.setEnabled(true);
+            mBtnNext.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mBtnNext.setEnabled(false);
+            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+        }
+        mEtAmount.setHint(getResources().getString(R.string.amount));
+
+        if (canReceiveLightningPayment) {
+            mTvNoIncomingBalance.setVisibility(View.GONE);
+            mReceiveAmountView.setVisibility(View.VISIBLE);
+            mNumpad.setVisibility(View.VISIBLE);
+            mBtnNext.setVisibility(View.VISIBLE);
+            // Request focus on amount input, delayed to prevent system keyboard from popping up
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mEtAmount.requestFocus();
+                }
+            }, 500);
+        } else {
+            mViewNoIncomingBalance.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void onGenerateRequestClicked() {
+        if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
+            // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
+            new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
+                @Override
+                public void onConfirmed() {
+                    generateRequest();
+                }
+
+                @Override
+                public void onCancelled() {
+
+                }
+            }).securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+        } else {
+            generateRequest();
+        }
     }
 
     private void showKeyboard() {

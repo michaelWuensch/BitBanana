@@ -1,11 +1,12 @@
 package app.michaelwuensch.bitbanana.backends.lnd;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Backend;
 import app.michaelwuensch.bitbanana.util.Version;
 
 public class LndBackend extends Backend {
 
-    public LndBackend() {
+    public LndBackend(BackendConfig backendConfig) {
 
         // General
         mApi = new LndApi();
@@ -14,6 +15,10 @@ public class LndBackend extends Backend {
         mMinRequiredVersionName = "v0.17.0-beta";
 
         // Features
+        bSupportsBolt11Receive = true;
+        bSupportsBolt11Sending = true;
+        bSupportsOnChainReceive = true;
+        bSupportsOnChainSending = true;
         bSupportsChannelManagement = true;
         bSupportsOpenChannel = true;
         bSupportsCloseChannel = true;
@@ -28,5 +33,7 @@ public class LndBackend extends Backend {
         bSupportsOnChainFeeEstimation = true;
         bSupportsAbsoluteOnChainFeeEstimation = true;
         bSupportsRoutingFeeEstimation = true;
+        bSupportsIdentityScreen = true;
+        bSupportsBolt11WithoutAmount = true;
     }
 }

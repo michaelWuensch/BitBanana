@@ -153,11 +153,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onSingleClick(View v) {
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     if (Wallet.getInstance().isInfoFetched()) {
-                        if (Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris().length > 0) {
-                            Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(HomeActivity.this, R.string.error_node_not_yet_ready, Toast.LENGTH_LONG).show();
+                        if (BackendManager.getCurrentBackend().supportsIdentityScreen()) {
+                            if (Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris().length > 0) {
+                                Intent intent = new Intent(HomeActivity.this, IdentityActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(HomeActivity.this, R.string.error_node_not_yet_ready, Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
                 } else {
@@ -528,17 +530,24 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                 if (lightningInvoice == null) {
-                    SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                    sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
+                        SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                        sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
+                    } else
+                        showError(getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "SENDING_ON_CHAIN"), RefConstants.ERROR_DURATION_MEDIUM);
                 } else {
                     InvoiceUtil.readInvoice(HomeActivity.this, lightningInvoice, new InvoiceUtil.OnReadInvoiceCompletedListener() {
                         @Override
                         public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
                             if (WalletUtil.getMaxLightningSendAmount() < decodedBolt11.getAmountRequested()) {
-                                // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
-                                SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
-                                sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
-                                Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
+                                if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
+                                    // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
+                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                    Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
+                                } else {
+                                    showError(getString(R.string.error_insufficient_funds), RefConstants.ERROR_DURATION_MEDIUM);
+                                }
                             } else {
                                 if (decodedBolt11.hasAmountSpecified()) {
                                     String amountString = MonetaryUtil.getInstance().msatsToBitcoinString(amount);
@@ -720,10 +729,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
                     @Override
                     public void onSaved(String id) {
-                        // This was the first backend that was added. Open it immediately.
-                        //mPagerAdapter.getWalletFragment().showLoadingScreen();
                         BackendManager.activateBackendConfig(BackendConfigsManager.getInstance().getBackendConfigById(id), HomeActivity.this, false);
-                        activateBackend();
                     }
 
                     @Override
@@ -781,7 +787,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void updateDrawerNavigationMenu() {
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
-        userAvatarView.setupWithNodeUri(Wallet.getInstance().getCurrentNodeInfo().getLightningNodeUris()[0], false);
+        if (BackendManager.getCurrentBackendConfig().getAvatarMaterial() != null)
+            userAvatarView.setupWithArbitraryString(BackendManager.getCurrentBackendConfig().getAvatarMaterial());
+        else
+            userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);
         userWalletName.setText(BackendConfigsManager.getInstance().getCurrentBackendConfig().getAlias());
         updateDrawerBackendVersion();
@@ -801,9 +810,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TextView backendVersion = findViewById(R.id.backendVersion);
         String versionString;
         if (Wallet.getInstance().isInfoFetched()) {
-            versionString = BackendManager.getCurrentBackend().getNodeImplementationName() + " version: " + Wallet.getInstance().getCurrentNodeInfo().getFullVersionString().split(" commit")[0];
+            versionString = getString(R.string.backend) + ": " + BackendManager.getCurrentBackend().getNodeImplementationName() + " " + Wallet.getInstance().getCurrentNodeInfo().getFullVersionString().split(" commit")[0];
         } else {
-            versionString = "Backend version: " + getString(R.string.notConnected);
+            versionString = getString(R.string.backend) + ": " + getString(R.string.notConnected);
         }
         backendVersion.setText(versionString);
     }

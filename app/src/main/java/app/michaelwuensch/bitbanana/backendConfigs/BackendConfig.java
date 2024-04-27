@@ -115,6 +115,21 @@ public class BackendConfig implements Comparable<BackendConfig> {
      */
     private boolean VerifyCertificate;
 
+    /**
+     * A place to save the accessToken for a connection that have an authentication flow with tokens.
+     */
+    private String tempAccessToken;
+
+    /**
+     * A place to save the refreshToken for a connection that have an authentication flow with tokens.
+     */
+    private String tempRefreshToken;
+
+    /**
+     * This allows us to display avatars on the node management screen. We fill this information after getting the GetCurrentNodeInfo information.
+     */
+    private String avatarMaterial;
+
 
     public BackendConfig() {
 
@@ -267,6 +282,30 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.VerifyCertificate = verifyCertificate;
     }
 
+    public String getTempAccessToken() {
+        return tempAccessToken;
+    }
+
+    public void setTempAccessToken(String tempAccessToken) {
+        this.tempAccessToken = tempAccessToken;
+    }
+
+    public String getTempRefreshToken() {
+        return tempRefreshToken;
+    }
+
+    public void setTempRefreshToken(String tempRefreshToken) {
+        this.tempRefreshToken = tempRefreshToken;
+    }
+
+    public String getAvatarMaterial() {
+        return avatarMaterial;
+    }
+
+    public void setAvatarMaterial(String avatarMaterial) {
+        this.avatarMaterial = avatarMaterial;
+    }
+
     public boolean isLocal() {
         if (this.location != null)
             return this.location == Location.LOCAL;
@@ -301,13 +340,16 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setBackendType(getBackendType());
         copy.setClientCert(getClientCert());
         copy.setClientKey(getClientKey());
+        copy.setTempAccessToken(getTempAccessToken());
+        copy.setTempRefreshToken(getTempRefreshToken());
+        copy.setAvatarMaterial(getAvatarMaterial());
         return copy;
     }
 
     @Override
     public int compareTo(BackendConfig BackendConfig) {
         BackendConfig other = BackendConfig;
-        return this.getAlias().compareTo(other.getAlias());
+        return this.getAlias().toLowerCase().compareTo(other.getAlias().toLowerCase());
     }
 
     @Override

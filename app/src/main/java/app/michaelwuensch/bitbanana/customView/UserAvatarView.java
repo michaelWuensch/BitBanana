@@ -26,8 +26,7 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
     private OnStateChangedListener mListener;
     private int mCurrentUriId = 0;
     private boolean mIsQRCodeIncluded;
-
-    private LnAddress mLnAddress;
+    private String mCurrentAvatarCreationString;
 
     public UserAvatarView(Context context) {
         super(context);
@@ -55,15 +54,22 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
     }
 
+    public void setupWithArbitraryString(String string) {
+        reset();
+        mCurrentAvatarCreationString = string;
+        mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mCurrentAvatarCreationString));
+        mIsQRCodeIncluded = false;
+        showAvatar();
+    }
+
     public void setupWithLNAddress(LnAddress lnAddress, boolean includeQRCode) {
         reset();
-        mLnAddress = lnAddress;
         mIsQRCodeIncluded = includeQRCode;
         if (mIsQRCodeIncluded) {
             setupSwitchListeners();
         }
         showAvatar();
-        showIdentity(mLnAddress);
+        showIdentity(lnAddress);
     }
 
     public void setupWithNodeUri(LightningNodeUri nodeUri, boolean includeQRCode) {
@@ -135,7 +141,8 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
             mIvQRCode.setImageBitmap(bmpQRCode);
         }
         // Load user Avatar
-        mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), lnAddress.toString()));
+        mCurrentAvatarCreationString = lnAddress.toString();
+        mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mCurrentAvatarCreationString));
     }
 
     private void showIdentity(int id) {
@@ -150,13 +157,15 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
                 }
 
                 // Load user Avatar
-                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
+                mCurrentAvatarCreationString = mNodeUris[mCurrentUriId].getPubKey();
+                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mCurrentAvatarCreationString));
             }
         }
     }
 
     public void reset() {
         mNodeUris = null;
+        mCurrentAvatarCreationString = null;
         mIsQRCodeIncluded = false;
         mCurrentUriId = 0;
         mIvUserAvatar.setOnClickListener(null);
@@ -182,8 +191,8 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key != null) {
             // Update the image
-            if (key.equals(PrefsUtil.AVATAR_STYLE) && mNodeUris != null) {
-                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mNodeUris[mCurrentUriId].getPubKey()));
+            if (key.equals(PrefsUtil.AVATAR_STYLE) && mCurrentAvatarCreationString != null) {
+                mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mCurrentAvatarCreationString));
             }
         }
     }

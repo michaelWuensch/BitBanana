@@ -43,9 +43,7 @@ public class RemoteConnectUtil {
         } else if (UriUtil.isCLightningRestUri(data)) {
             listener.onError(ctx.getResources().getString(R.string.error_connection_no_c_lightning_rest_support), RefConstants.ERROR_DURATION_LONG);
         } else if (UriUtil.isLNDHUBUri(data)) {
-            listener.onNoConnectData();
-            // ToDo: replace the above line with the following to enable scanning for lndhub strings
-            // decodeLndHubConnectString(ctx, data, listener);
+            decodeLndHubConnectString(ctx, data, listener);
         } else if (data.startsWith("config=")) {
             // URL to BTCPayConfigJson
             String configUrl = data.replace("config=", "");
@@ -270,7 +268,7 @@ public class RemoteConnectUtil {
                     }
                 if (backendConfig.getVpnConfig() == null)
                     backendConfig.setVpnConfig(new VPNConfig());
-                backendConfigsManager.updateBackendConfig(config);
+                backendConfigsManager.updateBackendConfig(backendConfig);
             }
             backendConfigsManager.apply();
             listener.onSaved(id);

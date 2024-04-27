@@ -202,12 +202,18 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/useTor" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/verifyCertSwitch"
+            <FrameLayout
+                android:id="@+id/verifyCertVisibilityLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="@string/verify_certificate" />
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/verifyCertSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/verify_certificate" />
+            </FrameLayout>
 
             <Button
                 android:id="@+id/saveButton"

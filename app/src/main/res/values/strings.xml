@@ -119,6 +119,7 @@
     <string name="duplicate">Duplicate</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="backend">Backend</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -442,6 +443,7 @@
     <string name="error_reading_qrCode_in_image">Unable to scan or detect QR code in the image.</string>
     <string name="error_exchange_rate_requires_tor_toast">Failed to fetch exchange rates. Your chosen provider requires tor.</string>
     <string name="error_fee_estimation_requires_tor_toast">Failed to fetch fee estimates. Your chosen provider requires tor.</string>
+    <string name="error_insufficient_funds">This payment exceeds your available balance.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>

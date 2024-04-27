@@ -1,8 +1,10 @@
 package app.michaelwuensch.bitbanana.backends;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.util.Version;
 
 public class Backend {
+    protected BackendConfig mBackendConfig;
 
     protected Api mApi = new Api();
     protected Version mMinRequiredVersion = new Version("0.0.0");
@@ -18,7 +20,6 @@ public class Backend {
     protected boolean bSupportsBalanceDetails = false;
     protected boolean bSupportsMessageSigningByNodePrivateKey = false;
     protected boolean bSupportsLnurlAuth = false;
-    protected boolean bSupportsKeysend = false;
 
     /**
      * If the backend has a function to get recommended on-chain fees
@@ -31,9 +32,20 @@ public class Backend {
      */
     protected boolean bSupportsAbsoluteOnChainFeeEstimation = false;
     protected boolean bSupportsRoutingFeeEstimation = false;
-
+    protected boolean bSupportsOnChainSending = false;
+    protected boolean bSupportsKeysend = false;
+    protected boolean bSupportsBolt11Sending = false;
+    protected boolean bSupportsBolt12Sending = false;
+    protected boolean bSupportsOnChainReceive = false;
+    protected boolean bSupportsBolt11Receive = false;
+    protected boolean bSupportsBolt11WithoutAmount = false;
+    protected boolean bSupportsIdentityScreen = false;
 
     public Backend() {
+        this(null);
+    }
+
+    public Backend(BackendConfig backendConfig) {
     }
 
     public Api api() {
@@ -104,7 +116,36 @@ public class Backend {
         return bSupportsAbsoluteOnChainFeeEstimation;
     }
 
+
     public boolean supportsRoutingFeeEstimation() {
         return bSupportsRoutingFeeEstimation;
+    }
+
+    public boolean supportsOnChainSending() {
+        return bSupportsOnChainSending;
+    }
+
+    public boolean supportsBolt11Sending() {
+        return bSupportsBolt11Sending;
+    }
+
+    public boolean supportsBolt12Sending() {
+        return bSupportsBolt12Sending;
+    }
+
+    public boolean supportsOnChainReceive() {
+        return bSupportsOnChainReceive;
+    }
+
+    public boolean supportsBolt11Receive() {
+        return bSupportsBolt11Receive;
+    }
+
+    public boolean supportsIdentityScreen() {
+        return bSupportsIdentityScreen;
+    }
+
+    public boolean supportsBolt11WithoutAmount() {
+        return bSupportsBolt11WithoutAmount;
     }
 }

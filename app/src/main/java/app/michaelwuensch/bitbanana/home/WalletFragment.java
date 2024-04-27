@@ -29,6 +29,7 @@ import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.setup.SetupActivity;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -57,6 +58,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mStatusDot;
     private Button mBtnSetup;
     private Button mBtnVpnSettings;
+    private Button mSendButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -137,8 +139,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         // Action when clicked on "send"
-        Button btnSend = view.findViewById(R.id.sendButton);
-        btnSend.setOnClickListener(new OnSingleClickListener() {
+        mSendButton = view.findViewById(R.id.sendButton);
+
+        mSendButton.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), ManageContactsActivity.class);
@@ -307,6 +310,16 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // if nothing is connected we want to always show the wallet screen
             showWalletScreen();
+        }
+    }
+
+    public void updateToFeatures() {
+        if (FeatureManager.isSendingEnabled()) {
+            mSendButton.setEnabled(true);
+            mSendButton.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mSendButton.setEnabled(false);
+            mSendButton.setTextColor(getResources().getColor(R.color.gray));
         }
     }
 
@@ -491,6 +504,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvLoadingText.setText(R.string.wallet_load_state_fetching_data);
                 break;
             case WALLET_LOADED:
+                updateToFeatures();
                 walletLoadingCompleted();
         }
     }

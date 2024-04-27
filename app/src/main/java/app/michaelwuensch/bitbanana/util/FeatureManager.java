@@ -70,6 +70,16 @@ public class FeatureManager {
         return getBackend().supportsBalanceDetails();
     }
 
+    public static boolean isSendingEnabled() {
+        return getBackend().supportsBolt11Sending() || getBackend().supportsOnChainSending() || getBackend().supportsBolt12Sending() || getBackend().supportsKeysend();
+    }
+
+    public static boolean isBolt11WithoutAmountEnabled() {
+        boolean backendSupported = getBackend().supportsBolt11WithoutAmount();
+        boolean settingEnabled = PrefsUtil.getAreInvoicesWithoutSpecifiedAmountAllowed();
+        return settingEnabled && backendSupported;
+    }
+
     public static boolean isLnurlAuthEnabled() {
         return getBackend().supportsLnurlAuth();
     }

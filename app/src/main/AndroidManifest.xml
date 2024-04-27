@@ -73,6 +73,7 @@
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
                 <data android:scheme="cln-grpc" />
+                <data android:scheme="lndhub" />
             </intent-filter>
             <intent-filter>
 
@@ -89,6 +90,7 @@
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
                 <data android:scheme="cln-grpc" />
+                <data android:scheme="lndhub" />
             </intent-filter>
         </activity>
 

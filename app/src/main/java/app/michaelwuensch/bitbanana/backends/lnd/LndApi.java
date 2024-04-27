@@ -134,6 +134,7 @@ public class LndApi extends Api {
                             .setLightningNodeUris(lnUris)
                             .setNetwork(BackendConfig.Network.parseFromString(response.getChains(0).getNetwork()))
                             .setSynced(response.getSyncedToChain())
+                            .setAvatarMaterial(response.getIdentityPubkey())
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getInfo failed: " + throwable.toString()));

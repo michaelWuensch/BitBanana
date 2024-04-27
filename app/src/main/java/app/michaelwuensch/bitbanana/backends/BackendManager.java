@@ -15,6 +15,7 @@ import app.michaelwuensch.bitbanana.backends.demo.DemoBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.backends.lndHub.LndHubBackend;
+import app.michaelwuensch.bitbanana.backends.lndHub.LndHubHttpClient;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -187,6 +188,9 @@ public class BackendManager {
             case CORE_LIGHTNING_GRPC:
                 CoreLightningConnection.getInstance().openConnection();
                 break;
+            case LND_HUB:
+                LndHubHttpClient.getInstance().createHttpClient();
+                break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
@@ -209,6 +213,9 @@ public class BackendManager {
                 case CORE_LIGHTNING_GRPC:
                     CoreLightningConnection.getInstance().closeConnection();
                     break;
+                case LND_HUB:
+                    LndHubHttpClient.getInstance().cancelAllRequests();
+                    break;
             }
 
             // Stop VPN
@@ -223,7 +230,7 @@ public class BackendManager {
 
             Wallet.getInstance().reset();
             currentBackendConfig = null;
-            currentBackend = new Backend();
+            currentBackend = new Backend(null);
             BBLog.d(LOG_TAG, backendConfigAlias + " deactivated.");
             setBackendState(BackendState.NO_BACKEND_SELECTED);
         }
@@ -245,14 +252,14 @@ public class BackendManager {
                 case NONE:
                     return new Backend();
                 case LND_GRPC:
-                    return new LndBackend();
+                    return new LndBackend(getCurrentBackendConfig());
                 case CORE_LIGHTNING_GRPC:
-                    return new CoreLightningBackend();
+                    return new CoreLightningBackend(getCurrentBackendConfig());
                 case LND_HUB:
-                    return new LndHubBackend();
+                    return new LndHubBackend(getCurrentBackendConfig());
             }
         }
-        return new DemoBackend();
+        return new DemoBackend(null);
     }
 
     public static Backend getCurrentBackend() {

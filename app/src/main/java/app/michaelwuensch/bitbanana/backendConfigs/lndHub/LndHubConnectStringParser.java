@@ -55,7 +55,7 @@ public class LndHubConnectStringParser extends BaseConnectionParser {
 
         String username = mConnectionString.split(":")[0];
         String password = mConnectionString.split(":")[1].split("@")[0];
-        String host = mConnectionString.split(":")[1].split("@")[1];
+        String host = mConnectionString.split("@")[1];
 
         // validate HOST
         URI hostURI = null;
@@ -71,14 +71,14 @@ public class LndHubConnectStringParser extends BaseConnectionParser {
         BackendConfig backendConfig = new BackendConfig();
         backendConfig.setSource(BackendConfig.Source.LND_HUB_CONNECT);
         backendConfig.setBackendType(BackendConfig.BackendType.LND_HUB);
-        backendConfig.setHost(hostURI.getHost());
+        backendConfig.setHost(host);
         backendConfig.setUser(username);
         backendConfig.setPassword(password);
         backendConfig.setLocation(BackendConfig.Location.REMOTE);
         backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
+        backendConfig.setUseTor(host.contains(".onion"));
         setBackendConfig(backendConfig);
         return this;
-
     }
 
     private static boolean validateFormat(String connectString) {

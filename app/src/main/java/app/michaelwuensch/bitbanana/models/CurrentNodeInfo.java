@@ -13,6 +13,7 @@ public class CurrentNodeInfo {
     private final int BlockHeight;
     private final BackendConfig.Network Network;
     private final boolean Synced;
+    private final String AvatarMaterial;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -27,6 +28,7 @@ public class CurrentNodeInfo {
         this.Network = builder.Network;
         this.FullVersionString = builder.FullVersionString;
         this.Synced = builder.Synced;
+        this.AvatarMaterial = builder.AvatarMaterial;
     }
 
     public String getAlias() {
@@ -61,6 +63,13 @@ public class CurrentNodeInfo {
         return Synced;
     }
 
+    /**
+     * For backends that do not give access to a sharable identity. With this field we can get a string with unique data that is then used to create a nice avatar.
+     */
+    public String getAvatarMaterial() {
+        return AvatarMaterial;
+    }
+
     //Builder Class
     public static class Builder {
 
@@ -72,6 +81,7 @@ public class CurrentNodeInfo {
         private int BlockHeight;
         private BackendConfig.Network Network;
         private boolean Synced;
+        private String AvatarMaterial;
 
         private Builder() {
             // required parameters
@@ -118,6 +128,14 @@ public class CurrentNodeInfo {
 
         public Builder setSynced(boolean synced) {
             Synced = synced;
+            return this;
+        }
+
+        /**
+         * For backends that do not give access to a sharable identity. With this field we can set a string with unique data that is then used to create a nice avatar.
+         */
+        public Builder setAvatarMaterial(String avatarMaterial) {
+            AvatarMaterial = avatarMaterial;
             return this;
         }
     }

@@ -188,8 +188,10 @@ public class Wallet {
                     mCurrentNodeInfo = response;
 
                     // Save the network info to our backend configuration if it is different
-                    if (response.getNetwork() != BackendManager.getCurrentBackendConfig().getNetwork()) {
+                    if (response.getNetwork() != BackendManager.getCurrentBackendConfig().getNetwork() ||
+                            !response.getAvatarMaterial().equals(BackendManager.getCurrentBackendConfig().getAvatarMaterial())) {
                         BackendManager.getCurrentBackendConfig().setNetwork(response.getNetwork());
+                        BackendManager.getCurrentBackendConfig().setAvatarMaterial(response.getAvatarMaterial());
                         BackendConfigsManager.getInstance().updateBackendConfig(BackendManager.getCurrentBackendConfig());
                         BackendConfigsManager.getInstance().apply();
                     }
@@ -338,6 +340,19 @@ public class Wallet {
 
                 // Fetch the transaction history
                 Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                break;
+            case LND_HUB:
+                compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()
+                        .subscribe(response -> {
+                            // Everything fetched, now show the wallet!
+                            setWalletLoadState(WalletLoadState.WALLET_LOADED);
+                        }, throwable -> {
+                            BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
+                        }));
+
+                // Fetch the transaction history
+                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                break;
         }
     }
 

@@ -152,6 +152,13 @@ public class Wallet_TransactionHistory {
      * This will fetch all On-Chain transactions involved with the current wallet from the node.
      */
     public void fetchOnChainTransactions() {
+        if (!(BackendManager.getCurrentBackend().supportsOnChainSending() && BackendManager.getCurrentBackend().supportsOnChainReceive())) {
+            // Backend has no on-chain functionality
+            mTransactionUpdated = true;
+            isHistoryUpdateFinished();
+            return;
+        }
+
         compositeDisposable.add(BackendManager.api().listOnChainTransactions()
                 .subscribe(response -> {
                     mOnChainTransactionList = response;

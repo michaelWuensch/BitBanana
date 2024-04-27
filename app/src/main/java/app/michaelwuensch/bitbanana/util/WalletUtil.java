@@ -9,6 +9,7 @@ import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
 public class WalletUtil {
@@ -130,19 +131,23 @@ public class WalletUtil {
      * Returns if the wallet has at least one active channel.
      */
     public static boolean hasOpenActiveChannels() {
-        if (Wallet_Channels.getInstance().getOpenChannelsList() != null) {
-            if (Wallet_Channels.getInstance().getOpenChannelsList().size() != 0) {
-                for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList()) {
-                    if (c.isActive()) {
-                        return true;
+        if (FeatureManager.isChannelManagementEnabled()) {
+            if (Wallet_Channels.getInstance().getOpenChannelsList() != null) {
+                if (Wallet_Channels.getInstance().getOpenChannelsList().size() != 0) {
+                    for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList()) {
+                        if (c.isActive()) {
+                            return true;
+                        }
                     }
+                    return false;
+                } else {
+                    return false;
                 }
-                return false;
             } else {
                 return false;
             }
         } else {
-            return false;
+            return Wallet_Balance.getInstance().getBalances().channelBalance() > 0;
         }
     }
 
@@ -152,12 +157,17 @@ public class WalletUtil {
      * @return amount in msat
      */
     public static long getMaxLightningReceiveAmount() {
-        long tempMax = 0L;
-        if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
-            for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
-                if (c.isActive())
-                    tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteChannelConstraints().getChannelReserve(), 0);
-        return tempMax;
+        if (FeatureManager.isChannelManagementEnabled()) {
+            long tempMax = 0L;
+            if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
+                for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
+                    if (c.isActive())
+                        tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteChannelConstraints().getChannelReserve(), 0);
+            return tempMax;
+        } else {
+            // This is the case for LNDHub connections for example. We don't know how much can be received. Return a high number (10 BTC).
+            return 1000000000L;
+        }
     }
 
     /**
@@ -166,12 +176,16 @@ public class WalletUtil {
      * @return amount in msat
      */
     public static long getMaxLightningSendAmount() {
-        long tempMax = 0L;
-        if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
-            for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
-                if (c.isActive())
-                    tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalChannelConstraints().getChannelReserve(), 0);
-        return tempMax;
+        if (FeatureManager.isChannelManagementEnabled()) {
+            long tempMax = 0L;
+            if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
+                for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
+                    if (c.isActive())
+                        tempMax = tempMax + Math.max(c.getLocalBalance() - c.getLocalChannelConstraints().getChannelReserve(), 0);
+            return tempMax;
+        } else {
+            return Wallet_Balance.getInstance().getBalances().channelBalance();
+        }
     }
 
     public static int getBlockHeight() {

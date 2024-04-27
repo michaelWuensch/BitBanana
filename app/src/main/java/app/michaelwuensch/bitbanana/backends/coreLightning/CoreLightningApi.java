@@ -117,6 +117,7 @@ public class CoreLightningApi extends Api {
                             .setLightningNodeUris(lnUris)
                             .setNetwork(BackendConfig.Network.parseFromString(response.getNetwork()))
                             .setSynced(!(response.hasWarningBitcoindSync() || response.hasWarningLightningdSync()))
+                            .setAvatarMaterial(pubkey)
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "CoreLightning getInfo failed! " + throwable.toString()));
