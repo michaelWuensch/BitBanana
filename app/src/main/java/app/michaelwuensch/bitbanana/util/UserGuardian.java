@@ -253,14 +253,25 @@ public class UserGuardian {
     }
 
     /**
-     * Warn the user before connecting to a LNDhub account as this might be custodial and the user might risk funds.
+     * Warn the user before connecting to a LndHub account as this might be custodial and the user might risk funds.
      */
     public void securityCustodialLndHub() {
         mCurrentDialogName = DIALOG_CUSTODIAL_LNDHUB;
-        AlertDialog.Builder adb = createDialog(true);
+        AlertDialog.Builder adb = createDontShowAgainDialog(false);
         String message = mContext.getResources().getString(R.string.guardian_custodial_lndhub);
         adb.setMessage(message);
         showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user before connecting to a LndHub account as this might be custodial and the user might risk funds.
+     */
+    public void securityCustodialLndHubInfoButton() {
+        mCurrentDialogName = DIALOG_CUSTODIAL_LNDHUB;
+        AlertDialog.Builder adb = createDialog(false);
+        String message = mContext.getResources().getString(R.string.guardian_custodial_lndhub);
+        adb.setMessage(message);
+        showGuardianDialog(adb, true);
     }
 
     /**
@@ -351,8 +362,11 @@ public class UserGuardian {
      * @param adb The AlertDialog.Builder which should be shown.
      */
     private void showGuardianDialog(AlertDialog.Builder adb) {
+        showGuardianDialog(adb, false);
+    }
 
-        if (PrefsUtil.getPrefs().getBoolean(mCurrentDialogName, true)) {
+    private void showGuardianDialog(AlertDialog.Builder adb, boolean alwaysShow) {
+        if (PrefsUtil.getPrefs().getBoolean(mCurrentDialogName, true) || alwaysShow) {
             Dialog dlg = adb.create();
             // Apply FLAG_SECURE to dialog to prevent screen recording
             if (PrefsUtil.isScreenRecordingPrevented()) {

@@ -102,7 +102,7 @@ public class DataBackupUtil {
 
             if (backupVersion == 2) {
                 // This is an old backup that did not contain info for network. Apply defaults. Moreover backend values changed therefore, set it to default.
-                BBLog.d(LOG_TAG, "Updating connections from old backup version (1) ...");
+                BBLog.d(LOG_TAG, "Updating connections from old backup version (2) ...");
                 List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
                 for (BackendConfig backendConfig : backendConfigs) {
                     if (backendConfig.getMacaroon() != null) {

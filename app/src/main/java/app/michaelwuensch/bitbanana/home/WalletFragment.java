@@ -33,6 +33,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 
@@ -59,6 +60,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private Button mBtnSetup;
     private Button mBtnVpnSettings;
     private Button mSendButton;
+    private ImageView mCustodialButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -93,6 +95,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mWalletNameWidthDummy = view.findViewById(R.id.walletNameWidthDummy);
         mBtnSetup = view.findViewById(R.id.setupWallet);
         mBtnVpnSettings = view.findViewById(R.id.vpnSettingsButton);
+        mCustodialButton = view.findViewById(R.id.custodialButton);
 
         // Show loading screen
         showLoadingScreen();
@@ -124,6 +127,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onSingleClick(View v) {
                 ((HomeActivity) getActivity()).mViewPager.setCurrentItem(1);
+            }
+        });
+
+        mCustodialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new UserGuardian(getContext()).securityCustodialLndHubInfoButton();
             }
         });
 
@@ -379,6 +389,18 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mStatusDot.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.green)));
     }
 
+    private void updateCustodialWarningVisibility() {
+        mCustodialButton.setVisibility(BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB ? View.VISIBLE : View.GONE);
+    }
+
+    private void showCustodialWarning() {
+        switch (BackendManager.getCurrentBackendType()) {
+            case LND_HUB:
+                new UserGuardian(getContext()).securityCustodialLndHub();
+                break;
+        }
+    }
+
     private void hideBalance() {
         mMainBalanceView.hideBalance();
     }
@@ -505,6 +527,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 break;
             case WALLET_LOADED:
                 updateToFeatures();
+                updateCustodialWarningVisibility();
+                showCustodialWarning();
                 walletLoadingCompleted();
         }
     }
@@ -530,6 +554,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 break;
             case NO_BACKEND_SELECTED:
                 updateTotalBalanceDisplay();
+                updateCustodialWarningVisibility();
                 // Clear history list
                 ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
                 break;

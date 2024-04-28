@@ -102,6 +102,10 @@ public class Api {
         return Observable.error(unsupportedException());
     }
 
+    public Single<LnInvoice> getInvoice(String paymentHash) {
+        return Single.error(unsupportedException());
+    }
+
     public Single<List<OnChainTransaction>> listOnChainTransactions() {
         return Single.error(unsupportedException());
     }

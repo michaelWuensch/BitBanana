@@ -449,6 +449,10 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                     // show success animation
                     mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
+                    if(!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                        Wallet_Balance.getInstance().fetchBalances();
+                        Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                    }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Exception in send coins request task.");
                     BBLog.e(LOG_TAG, throwable.getMessage());
@@ -503,6 +507,10 @@ public class SendBSDFragment extends BaseBSDFragment {
             @Override
             public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
+                if(!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                    Wallet_Balance.getInstance().fetchBalances();
+                    Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                }
             }
 
             @SuppressLint("StringFormatInvalid")

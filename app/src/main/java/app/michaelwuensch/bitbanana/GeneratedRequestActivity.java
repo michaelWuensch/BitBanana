@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,16 +16,22 @@ import android.widget.TextView;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 
 public class GeneratedRequestActivity extends BaseAppCompatActivity implements Wallet_TransactionHistory.InvoiceSubscriptionListener {
@@ -37,10 +44,12 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
     private String mAddress;
     private String mMemo;
     private String mAmount;
-    private String mLnInvoice;
+    private DecodedBolt11 mLnInvoice;
     private ConstraintLayout mClRequestView;
     private ConstraintLayout mClPaymentReceivedView;
     private TextView mFinishedAmount;
+    private CompositeDisposable mCompositeDisposable;
+    private Vibrator mVibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +62,11 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             mAddress = extras.getString("address");
             mAmount = extras.getString("amount");
             mMemo = extras.getString("memo");
-            mLnInvoice = extras.getString("lnInvoice");
+            mLnInvoice = (DecodedBolt11) extras.getSerializable("lnInvoice");
         }
+
+        mCompositeDisposable = new CompositeDisposable();
+        mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
         setContentView(R.layout.activity_generate_request);
 
@@ -90,7 +102,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
         } else {
             // Generate lightning request data to encode
-            mDataToEncodeInQRCode = UriUtil.generateLightningUri(mLnInvoice);
+            mDataToEncodeInQRCode = UriUtil.generateLightningUri(mLnInvoice.getBolt11String());
             mDataToCopyOrShare = mDataToEncodeInQRCode;
         }
 
@@ -188,11 +200,14 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             }
         });
 
+        if (!BackendManager.getCurrentBackend().supportsEventSubscriptions())
+            pollBackendToCheckIfPaid();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mCompositeDisposable.dispose();
 
         // Unregister listeners
         Wallet_TransactionHistory.getInstance().unregisterInvoiceSubscriptionListener(this);
@@ -208,18 +223,49 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         // This has to happen on the UI thread. Only this thread can change the UI.
         runOnUiThread(new Runnable() {
             public void run() {
-                // Check if the invoice was payed
+                // Check if the invoice was paid
                 if (invoice.isPaid()) {
-                    // The updated invoice is payed, now check if it is the invoice we currently have opened.
-                    if (invoice.getBolt11().equals(mLnInvoice)) {
-
-                        // It was payed, show success screen
-                        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(invoice.getAmountPaid(), true));
-                        mClPaymentReceivedView.setVisibility(View.VISIBLE);
-                        mClRequestView.setVisibility(View.GONE);
+                    // The updated invoice is paid, now check if it is the invoice we currently have opened.
+                    if (invoice.getBolt11().equals(mLnInvoice.getBolt11String())) {
+                        showPaidScreen(invoice.getAmountPaid());
                     }
                 }
             }
         });
+    }
+
+    private void pollBackendToCheckIfPaid() {
+        BBLog.v(LOG_TAG, "Poll backend to check if requested payment is paid.");
+        if (mOnChain) {
+            // ToDo: Implement checking for on-chain payments
+        } else {
+            mCompositeDisposable.add(BackendManager.api().getInvoice(mLnInvoice.getPaymentHash())
+                    .subscribe(response -> {
+                        if (response == null) {
+                            BBLog.i(LOG_TAG, "The requested invoice does not exist.");
+                            pollBackendToCheckIfPaid();
+                            return;
+                        }
+                        if (response.isPaid())
+                            showPaidScreen(response.getAmountPaid());
+                        else
+                            pollBackendToCheckIfPaid();
+                    }, throwable -> {
+                        BBLog.e(LOG_TAG, "Error fetching invoice request: " + throwable.getMessage());
+                        pollBackendToCheckIfPaid();
+                    }));
+        }
+    }
+
+    private void showPaidScreen(long amount) {
+        // It was paid, show success screen
+        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(amount, true));
+        mClPaymentReceivedView.setVisibility(View.VISIBLE);
+        mClRequestView.setVisibility(View.GONE);
+        mVibrator.vibrate(RefConstants.VIBRATE_LONG);
+        if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+            Wallet_Balance.getInstance().fetchBalances();
+            Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+        }
     }
 }

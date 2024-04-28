@@ -36,6 +36,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -393,10 +394,10 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
                 getCompositeDisposable().add(BackendManager.api().createInvoice(invoiceRequest)
                         .subscribe(response -> {
+
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("lnInvoice", response.getBolt11());
-                            //intent.putExtra("lnInvoiceAddIndex", response.getAddIndex());
+                            intent.putExtra("lnInvoice", InvoiceUtil.decodeBolt11(response.getBolt11()));
                             startActivity(intent);
                             dismiss();
                         }, throwable -> {
@@ -411,6 +412,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     }
 
     private boolean hasLightningIncomeBalance() {
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB)
+            return true;
+
         boolean hasActiveChannels = WalletUtil.hasOpenActiveChannels();
 
         if (hasActiveChannels) {

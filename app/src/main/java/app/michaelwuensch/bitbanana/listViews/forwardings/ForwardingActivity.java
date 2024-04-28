@@ -65,7 +65,6 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private long mEarnedMsats = 0;
     private long mRoutedMsats = 0;
     private int mRoutingEventsCount = 0;
-    private boolean mIsVolume = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

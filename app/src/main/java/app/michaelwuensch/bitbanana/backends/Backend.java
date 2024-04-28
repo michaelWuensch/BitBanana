@@ -41,6 +41,12 @@ public class Backend {
     protected boolean bSupportsBolt11WithoutAmount = false;
     protected boolean bSupportsIdentityScreen = false;
 
+    /**
+     * Whether or not it is possible to subscribe to events that happen on the backend.
+     * If this is not possible BitBanana needs to poll for new information in some situations like after executing a payment or while waiting for a invoice to be paid.
+     */
+    protected boolean bSupportsEventSubscription = false;
+
     public Backend() {
         this(null);
     }
@@ -147,5 +153,9 @@ public class Backend {
 
     public boolean supportsBolt11WithoutAmount() {
         return bSupportsBolt11WithoutAmount;
+    }
+
+    public boolean supportsEventSubscriptions() {
+        return bSupportsEventSubscription;
     }
 }

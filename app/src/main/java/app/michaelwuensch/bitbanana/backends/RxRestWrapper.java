@@ -61,7 +61,8 @@ public class RxRestWrapper {
                                             emitter.onSuccess(mappedData);
                                         }
                                     } catch (Exception e) {
-                                        BBLog.w(LOG_TAG, e.getMessage());
+                                        if (e.getMessage() != null && !e.getMessage().isEmpty())
+                                            BBLog.w(LOG_TAG, e.getMessage());
                                         emitter.onError(e);
                                     } finally {
                                         response.body().close();

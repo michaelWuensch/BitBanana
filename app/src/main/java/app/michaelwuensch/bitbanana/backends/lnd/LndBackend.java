@@ -35,5 +35,6 @@ public class LndBackend extends Backend {
         bSupportsRoutingFeeEstimation = true;
         bSupportsIdentityScreen = true;
         bSupportsBolt11WithoutAmount = true;
+        bSupportsEventSubscription = true;
     }
 }

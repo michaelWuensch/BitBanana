@@ -254,6 +254,8 @@ public class RemoteConnectUtil {
                             backendConfig.setHost(config.getHost());
                             backendConfig.setUser(config.getUser());
                             backendConfig.setPassword(config.getPassword());
+                            backendConfig.setTempAccessToken(null);
+                            backendConfig.setTempRefreshToken(null);
                             break;
                         case BTC_PAY_DATA:
                             backendConfig.setBackendType(config.getBackendType());

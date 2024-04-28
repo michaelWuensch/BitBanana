@@ -117,15 +117,41 @@ public class LndHubApi extends Api {
                         .setBolt11(invoice.getPaymentRequest())
                         .setAmountRequested(invoice.getAmt() * 1000L)
                         .setPaymentHash(invoice.getPaymentHash());
-
                 if (invoice.isPaid()) {
                     builder.setAmountPaid(invoice.getAmt() * 1000L);
                 }
 
                 invoiceList.add(builder.build());
             }
-
             return invoiceList;
+        });
+    }
+
+    @Override
+    public Single<LnInvoice> getInvoice(String paymentHash) {
+        okhttp3.Request request = new Request.Builder()
+                .url(getBaseUrl() + "getuserinvoices")
+                .build();
+        return RxRestWrapper.makeRxCall(getClient(), request, LndHubUserInvoice[].class, response -> {
+            for (LndHubUserInvoice invoice : response) {
+                if (invoice.getPaymentHash().equals(paymentHash)) {
+                    LnInvoice.Builder builder = LnInvoice.newBuilder()
+                            .setCreatedAt(invoice.getTimestamp())
+                            .setPaidAt(invoice.getTimestamp())
+                            .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
+                            .setMemo(invoice.getDescription())
+                            .setBolt11(invoice.getPaymentRequest())
+                            .setAmountRequested(invoice.getAmt() * 1000L)
+                            .setPaymentHash(invoice.getPaymentHash());
+
+                    if (invoice.isPaid()) {
+                        builder.setAmountPaid(invoice.getAmt() * 1000L);
+                    }
+
+                    return builder.build();
+                }
+            }
+            return null;
         });
     }
 

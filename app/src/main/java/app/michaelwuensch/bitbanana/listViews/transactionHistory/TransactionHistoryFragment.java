@@ -51,6 +51,7 @@ import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -393,6 +394,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isInfoFetched()) {
             Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
             redrawHistoryList();
+            Wallet_Balance.getInstance().fetchBalances();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }

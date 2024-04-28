@@ -84,6 +84,20 @@
             app:srcCompat="@drawable/ic_baseline_history_24"
             app:tint="@color/white" />
 
+        <ImageView
+            android:id="@+id/custodialButton"
+            android:layout_width="36dp"
+            android:layout_height="48dp"
+            android:background="?actionBarItemBackground"
+            android:scaleType="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/historyButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_error_24"
+            app:tint="@color/red" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

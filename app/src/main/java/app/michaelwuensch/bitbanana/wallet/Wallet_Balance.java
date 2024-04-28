@@ -85,7 +85,9 @@ public class Wallet_Balance {
     public void fetchBalances() {
         compositeDisposable.add(BackendManager.api().getBalances()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(response -> {
-
+                    mBalances = response;
+                    BBLog.d(LOG_TAG, "Balances Fetched!");
+                    broadcastBalanceUpdate();
                 }, throwable -> BBLog.e(LOG_TAG, "Exception in fetch balance task: " + throwable.getMessage())));
     }
 
