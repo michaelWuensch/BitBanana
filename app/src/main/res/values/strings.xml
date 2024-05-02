@@ -389,6 +389,7 @@
     <string name="error_connection_clngrpc_missingClientCert">The mandatory client certificate is missing.</string>
     <string name="error_connection_clngrpc_missingClientKey">The mandatory client key is missing.</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for cln-grpc is invalid as the parameters are not encoded in base64url format.</string>
+    <string name="error_connection_rest_authentication">Failed to authenticate with the Rest API.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>

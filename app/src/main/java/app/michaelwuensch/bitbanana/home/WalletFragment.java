@@ -474,6 +474,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvConnectError.setText(R.string.error_connection_internal_server);
             } else if (error == Wallet.ConnectionTestListener.ERROR_INTERNAL_CLEARNET) {
                 mTvConnectError.setText(R.string.error_connection_internal_server_clearnet);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_AUTHENTICATION_TOKEN) {
+                mTvConnectError.setText(R.string.error_connection_rest_authentication);
             }
         }
     }

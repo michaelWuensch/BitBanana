@@ -96,10 +96,27 @@ public class Wallet {
             case LND_GRPC:
                 checkIfLndIsLocked();
                 break;
+            case LND_HUB:
+                authLndHub();
+                break;
             default:
                 setWalletLoadState(WalletLoadState.UNLOCKED);
                 connectionTest(true);
         }
+    }
+
+    private void authLndHub(){
+        setWalletLoadState(WalletLoadState.TESTING_CONNECTION_BEFORE_UNLOCK);
+        // The info request works without authentication. Therefore we need another call and use balances.
+        // Without doing this here we would end up with a multicall, that tries to authenticate multiple times.
+        compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()
+                .subscribe(response -> {
+                    setWalletLoadState(WalletLoadState.UNLOCKED);
+                    connectionTest(true);
+                }, throwable -> {
+                    BBLog.e(LOG_TAG, "Exception authenticating for LndHub instance: " + throwable.getMessage());
+                    broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_AUTHENTICATION_TOKEN);
+                }));
     }
 
     public void checkIfLndIsLocked() {
@@ -472,6 +489,7 @@ public class Wallet {
         int ERROR_CERTIFICATE_NOT_TRUSTED = 9;
         int ERROR_INTERNAL = 10;
         int ERROR_INTERNAL_CLEARNET = 11;
+        int ERROR_AUTHENTICATION_TOKEN = 12;
 
         void onConnectionTestError(int error);
 

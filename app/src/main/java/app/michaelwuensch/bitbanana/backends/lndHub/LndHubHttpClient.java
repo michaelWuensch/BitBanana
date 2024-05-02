@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
@@ -114,7 +113,7 @@ public class LndHubHttpClient {
                 BackendConfigsManager.getInstance().updateBackendConfig(BackendManager.getCurrentBackendConfig());
                 try {
                     BackendConfigsManager.getInstance().apply();
-                } catch (GeneralSecurityException e) {
+                } catch (Exception e) {
                     BBLog.e(LOG_TAG, "Failed to save access and refresh token in backend config");
                 }
 
@@ -136,9 +135,10 @@ public class LndHubHttpClient {
         }
 
         private LndHubAuthResponse authWithRefreshToken() {
-            BBLog.i(LOG_TAG, "New authentication with refresh token requested.");
             if (BackendManager.getCurrentBackendConfig().getTempRefreshToken() == null)
                 return null;
+
+            BBLog.i(LOG_TAG, "New authentication with refresh token requested.");
 
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
             JSONObject json = new JSONObject();
