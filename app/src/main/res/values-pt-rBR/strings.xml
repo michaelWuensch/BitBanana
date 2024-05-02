@@ -775,7 +775,7 @@
     <string name="lnurl_auth_login_info">Deseja usar seu nó para fazer login neste serviço?</string>
     <string name="lnurl_auth_auth_info">Deseja usar seu nó para autenticar com este serviço?</string>
     <string name="lnurl_auth_register_info">Deseja usar seu nó para registrar uma conta neste serviço?</string>
-    <string name="connection_state_disconnecting">Limpar conexões existentes…</string>
+    <string name="connection_state_disconnecting">Limpar última conexão…</string>
     <string name="connection_state_starting_vpn">Iniciando VPN…</string>
     <string name="type">Tipo</string>
     <string name="duplicate">Duplicar</string>
@@ -817,4 +817,52 @@
     <string name="on_chain_fallback_insufficient_funds">Fundos Lightning insuficientes. Recorrendo a pagamento on-chain.</string>
     <string name="on_chain_fallback_expired">Pedido Lightning expirado. Recorrendo a pagamento on-chain.</string>
     <string name="on_chain_fallback_invalid_data">Pedido Lightning inválido. Recorrendo a pagamento on-chain.</string>
+    <string name="username">Nome de usuário</string>
+    <string name="password">Senha</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">A estimativa atual de taxa sugere que esta transação com uma taxa de %1$d sat/vB pode nunca ser confirmada. Considere aumentar a taxa para evitar que sua transação fique presa por muito tempo.
+\n
+\n
+\nDeseja proceder mesmo assim?</string>
+    <string name="settings_custom_exchange_rate_provider">Provedor Personalizado de Taxa de Câmbio</string>
+    <string name="settings_avatarStyleDisplayValues_0">Misto</string>
+    <string name="settings_avatarStyleDisplayValues_1">Robôs</string>
+    <string name="settings_avatarStyleDisplayValues_2">Alienígenas</string>
+    <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
+    <string name="settings_avatarStyleDisplayValues_4">Animais</string>
+    <string name="error_connection_clngrpc_invalidCertificateOrKey">O certificado ou chave providenciado é inválido.</string>
+    <string name="error_connection_clngrpc_missingClientCert">O certificado mandatório de cliente está faltando.</string>
+    <string name="error_connection_clngrpc_missingClientKey">A chave mandatária de cliente está faltando.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">A string de conexão providenciada para cln-grpc é inválida já que os parâmetros não estão codificados no formato base64url.</string>
+    <string name="error_reading_qrCode_in_image">Incapaz de escanear ou detectar o código QR da imagem.</string>
+    <string name="wallet_load_state_fetching_data">Obtendo dados…</string>
+    <string name="server_certificate">Certificado do Servidor</string>
+    <string name="client_key">Chave do Cliente</string>
+    <string name="settings_custom_exchange_rate_provider_host_description">Por favor ponha o endereço de host para seu provedor de taxa de câmbio. Quando você hospeda o provedor de taxa de câmbio você mesmo, sua privacidade é totalmente mantida.</string>
+    <string name="settings_node_fee_estimates">Estimativas internas de taxa de nó</string>
+    <string name="settings_feeEstimationProvider">Estimativa de Taxa</string>
+    <string name="settings_custom_fee_estimation_provider_host_description">Por favor ponha o endereço de host para seu provedor de estimativa de taxa. Quando você hospeda o provedor de estimativa de taxa você mesmo, sua privacidade é totalmente mantida.</string>
+    <string name="guardian_oldNodeSoftwareVersion">É hora de atualizar!
+\n
+\nO nó ao qual você está conectado está operando em uma versão desatualizada de %1$s. Versões anteriores a %2$s não são mais suportadas pelo BitBanana.</string>
+    <string name="settings_custom_fee_estimation_provider">Estimativa de Taxa Personalizada</string>
+    <string name="settings_avatarStyle">Estilo de Avatar</string>
+    <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor cheque se seu nó compartilha detalhes de conexão cln-grpc e use estes para conexão.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">String de conexão cln-grpc inválida.
+\nPor favor certifique-se que usou o seguinte formato:
+\n
+\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_payment_no_route_small_amount">Nenhuma rota foi encontrada. Você está tentando enviar uma quantia tão pequena que muitos canais podem não rotear. Por favor que as configurações de roteamento para seus próprios canais e adapte o valor MinHTLC se necessário.</string>
+    <string name="error_input_invalid_data">O campo de entrada %1$s contém dados inválidos.</string>
+    <string name="error_unsupported_network">A rede Bitcoin à qual você está conectado não é suportada.</string>
+    <string name="error_feature_not_supported_by_backend">Enquanto conectado a %1$s, BitBanana não suportará a seguinte função: %2$s</string>
+    <string name="error_exchange_rate_requires_tor_toast">Falha ao obter as taxas de câmbio. O seu provedor escolhido requer Tor.</string>
+    <string name="error_fee_estimation_requires_tor_toast">Falha ao o ter as estimativas de taxa. Seu provedor escolhido requer Tor.</string>
+    <string name="client_certificate">Certificado do Cliente</string>
+    <string name="backup_data_backupVersion_too_old">Esta versão foi feita com uma versão muito antiga do BitBanana. Infelizmente ela não é mais suportada.</string>
+    <string name="wallet_load_sate_testing_connection">Testando conexão…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Reconectar depois de desbloquear…</string>
+    <string name="settings_requires_tor_toast">Isto requer Tor. Ative-o nas configurações.</string>
+    <string name="settings_custom_exchange_rate_provider_type">Tipo de Provedor</string>
+    <string name="backend">Backend</string>
+    <string name="error_insufficient_funds">Este pagamento excede seu balanço disponível.</string>
 </resources>
