@@ -449,9 +449,15 @@ public class SendBSDFragment extends BaseBSDFragment {
 
                     // show success animation
                     mHandler.postDelayed(() -> switchToSuccessScreen(), 500);
-                    if(!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
-                        Wallet_Balance.getInstance().fetchBalances();
-                        Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                    if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                // We delay it as the node might not return the correct results if we call this to early (CoreLightning)
+                                Wallet_Balance.getInstance().fetchBalances();
+                                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                            }
+                        }, 250);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Exception in send coins request task.");
@@ -507,9 +513,15 @@ public class SendBSDFragment extends BaseBSDFragment {
             @Override
             public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
-                if(!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
-                    Wallet_Balance.getInstance().fetchBalances();
-                    Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // We delay it as the node might not return the correct results if we call this to early (CoreLightning)
+                            Wallet_Balance.getInstance().fetchBalances();
+                            Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                        }
+                    }, 250);
                 }
             }
 

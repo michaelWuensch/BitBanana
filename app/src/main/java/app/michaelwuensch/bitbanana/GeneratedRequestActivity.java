@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.WindowManager;
@@ -264,8 +265,14 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         mClRequestView.setVisibility(View.GONE);
         mVibrator.vibrate(RefConstants.VIBRATE_LONG);
         if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
-            Wallet_Balance.getInstance().fetchBalances();
-            Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // We delay it as the node might not return the correct results if we call this to early (CoreLightning)
+                    Wallet_Balance.getInstance().fetchBalances();
+                    Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                }
+            }, 250);
         }
     }
 }

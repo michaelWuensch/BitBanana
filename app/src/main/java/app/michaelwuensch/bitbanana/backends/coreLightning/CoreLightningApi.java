@@ -416,6 +416,32 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
     }
 
+    private LnInvoice getInvoiceFromCoreLightningInvoice(ListinvoicesInvoices invoice) {
+        long created_at = 0;
+        if (invoice.getStatus() == ListinvoicesInvoices.ListinvoicesInvoicesStatus.PAID)
+            created_at = invoice.getPaidAt();
+        else {
+            try {
+                created_at = InvoiceUtil.decodeBolt11(invoice.getBolt11()).getTimestamp();
+            } catch (Exception e) {
+                created_at = System.currentTimeMillis() / 1000L;
+            }
+        }
+
+        return LnInvoice.newBuilder()
+                .setBolt11(invoice.getBolt11())
+                .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
+                .setAmountRequested(invoice.getAmountMsat().getMsat())
+                .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
+                .setCreatedAt(created_at) // ToDo: Simplify once the api exposes created_at
+                .setPaidAt(invoice.getPaidAt())
+                .setExpiresAt(invoice.getExpiresAt())
+                .setAddIndex(invoice.getCreatedIndex())
+                .setMemo(invoice.getDescription())
+                //.setKeysendMessage(???)
+                .build();
+    }
+
     private Single<List<LnInvoice>> getInvoicesPage(int page, int pageSize) {
         ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
                 .setLimit(pageSize)
@@ -429,29 +455,8 @@ public class CoreLightningApi extends Api {
                     for (ListinvoicesInvoices invoice : response.getInvoicesList()) {
                         if (!invoice.hasBolt11())
                             continue;
-                        long created_at = 0;
-                        if (invoice.getStatus() == ListinvoicesInvoices.ListinvoicesInvoicesStatus.PAID)
-                            created_at = invoice.getPaidAt();
-                        else {
-                            try {
-                                created_at = InvoiceUtil.decodeBolt11(invoice.getBolt11()).getTimestamp();
-                            } catch (Exception e) {
-                                created_at = System.currentTimeMillis() / 1000L;
-                            }
-                        }
 
-                        invoicesList.add(LnInvoice.newBuilder()
-                                .setBolt11(invoice.getBolt11())
-                                .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
-                                .setAmountRequested(invoice.getAmountMsat().getMsat())
-                                .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
-                                .setCreatedAt(created_at) // ToDo: Simplify once the api exposes created_at
-                                .setPaidAt(invoice.getPaidAt())
-                                .setExpiresAt(invoice.getExpiresAt())
-                                .setAddIndex(invoice.getCreatedIndex())
-                                .setMemo(invoice.getDescription())
-                                //.setKeysendMessage(???)
-                                .build());
+                        invoicesList.add(getInvoiceFromCoreLightningInvoice(invoice));
                     }
                     return invoicesList;
                 })
@@ -474,6 +479,22 @@ public class CoreLightningApi extends Api {
                                 });
                     }
                 });
+    }
+
+    @Override
+    public Single<LnInvoice> getInvoice(String paymentHash) {
+        ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
+                .setPaymentHash(ApiUtil.ByteStringFromHexString(paymentHash))
+                .build();
+
+        return CoreLightningNodeService().listInvoices(invoiceRequest)
+                .map(response -> {
+                    if (response.getInvoicesCount() == 1)
+                        return getInvoiceFromCoreLightningInvoice(response.getInvoices(0));
+                    else
+                        throw new RuntimeException("Invoice not found.");
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching Invoice page failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
