@@ -170,7 +170,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
     <string name="guardian_externalLink">Du bist dabei, einen Link mit sensiblen Informationen in deinem Browser zu öffnen. Während BitBanana den kompletten Netzwerkverkehr mit Hilfe des Tor Netzwerks anonymisiert, tut das dein Browser nicht. Wenn du diese Daten privat halten möchtest, benutze einen Tor Browser um den Link zu öffnen.</string>
-    <string name="guardian_oldLndVersion_remote">Bitte aktualisieren.\n\nDie Node mit der du verbunden bist, führt eine alte Version von LND aus. Versionen, die älter sind als %1$s, werden nicht mehr aktiv unterstützt.</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
@@ -361,7 +360,6 @@
     <string name="confirm_node_deletion">Möchtest du diese Verbindungsdaten der Node wirklich löschen?</string>
     <string name="no_nodes">Keine Nodes</string>
     <string name="spinner_manage_nodes">Verwalten…</string>
-    <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
     <string name="useTor">Tor verwenden</string>
     <string name="verify_certificate">Zertifikat verifizieren</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>

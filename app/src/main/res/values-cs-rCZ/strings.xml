@@ -162,7 +162,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Částku jste požadovali jako hodnotu fiat, ale vaše data směnného kurzu jsou stará (načtena před%1$s hodinami).\nUjistěte se, že máte připojení k internetu nebo zvažte žádost přímo v bitcoinech.\n\nChcete přesto pokračovat?</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_externalLink">V prohlížeči se chystáte otevřít odkaz s citlivými údaji. Zatímco BitBanana anonymizuje veškerý váš provoz pomocí sítě Tor, váš prohlížeč tak nečiní. Pokud chcete zachovat soukromí těchto údajů, použijte k otevření odkazu prohlížeč Tor.</string>
-    <string name="guardian_oldLndVersion_remote">Aktualizujte prosím.\n\nUzel, ke kterému jste připojeni, používá starou verzi LND. Verze pod %1$s již nejsou aktivně podporovány.</string>
     <string name="settings_category_general">Obecné</string>
     <string name="settings_category_security">Zabezpečení</string>
     <string name="settings_category_help">Pomoc</string>
@@ -466,7 +465,6 @@
     <string name="activity_manage_channels_closed">Zavřené kanály</string>
     <string name="activity_manage_nodes">Spravovat uzly</string>
     <string name="settings_showHelpButtons">Zobrazovat tlačítka nápovědy</string>
-    <string name="node_added">Data pro připojení k uzlu byla přidána.</string>
     <string name="advanced_channel_details_initiator_peer">Protistrana</string>
     <string name="generated_signature">Vygenerovaný podpis:</string>
     <string name="documentation">Dokumentace</string>

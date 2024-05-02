@@ -405,9 +405,6 @@
 \n%1$s
 \n
 \nPor favor verifique o nome do host cuidadosamente.</string>
-    <string name="guardian_oldLndVersion_remote">Por favor atualize.
-\n
-\nO nó ao qual você está conectado funciona em uma versão antiga do LND. Versões abaixo de %1$s não são mais ativamente suportadas.</string>
     <string name="settings_changePin">Alterar/Remover PIN</string>
     <string name="settings_addPin">Proteger com PIN</string>
     <string name="settings_blockExplorer_tor_toast">O navegador Tor para Android é necessário.</string>
@@ -508,7 +505,6 @@
     <string name="signature_valid">Assinatura é válida!</string>
     <string name="support_privacy_description">Nós nos importamos com sua privacidade.</string>
     <string name="advanced_channel_details_local_channel_reserve">Reserva do Canal Local</string>
-    <string name="node_added">Dados de conexão de nó foram adicionados.</string>
     <string name="error_connect_peer_timeout">Não foi possível conectar ao par dentro do prazo.</string>
     <plurals name="duration_hour">
         <item quantity="one">%d Hora</item>

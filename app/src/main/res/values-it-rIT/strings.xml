@@ -144,7 +144,6 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Stai per pagare %1$s%% in tasse di network.\n\nSoluzioni possibili:\n\n- prova un pagamento lightning\n- seleziona tasse minori, attendi di più\n- prova di nuovo più tardi\n- effettua una transazione maggiore\n\nVuoi continuare comunque?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Hai richiesto un importo in valuta fiat, ma i dati sul tasso di cambio non sono aggiornati (recuperate %1$s ore fa).\nAssicurati di essere connesso ad internet o considera di richiedere direttamente in Bitcoin.\n\nVuoi continuare comunque?</string>
     <string name="guardian_remoteConnect">Sei sicuro di voler connetterti a \n\n%1$s\n\n Controlla attentamente il nome host.</string>
-    <string name="guardian_oldLndVersion_remote">Per favore Aggiornare.\n\nIl nodo a cui sei connesso esegue una vecchia versione di LND. Le versioni sotto %1$s non sono più supportate.</string>
     <string name="settings_category_general">Generale</string>
     <string name="settings_category_security">Sicurezza</string>
     <string name="settings_category_help">Aiuto</string>

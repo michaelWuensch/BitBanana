@@ -285,9 +285,6 @@
     <string name="notConnected">No conectado</string>
     <string name="confirmations">Confirmaciones</string>
     <string name="settings_category_general">General</string>
-    <string name="guardian_oldLndVersion_remote">Por favor actualiza.
-\n
-\nEl nodo al que estás conectado y ejecuta una versión antigua de LND. Las versiones a continuación %1$s están descontinuadas.</string>
     <string name="activity_forwarding">Enrutamiento</string>
     <string name="open">Abrir</string>
     <string name="settings_features">Características</string>
@@ -612,7 +609,6 @@
     <string name="advanced_channel_details_explanation_local_channel_reserve">La cantidad mínima que este nodo debe reservar en el saldo de este canal. No podrás gastar esta cantidad. Esto asegura que siempre tendrás algo que perder si intentas engañar a tu socio de canal.</string>
     <string name="certificate">Certificado</string>
     <string name="spinner_manage_nodes">Gestionar…</string>
-    <string name="node_added">Se han añadido los datos para la conexión a los nodos.</string>
     <string name="lnurl_withdraw_success">Retirar
 \nexitoso</string>
     <string name="lnurl_unsupported_type">Tipo de LNURL no soportada</string>

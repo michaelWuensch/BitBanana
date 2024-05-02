@@ -138,7 +138,6 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">На път сте да платите %1$s%% в такси към копачите.\n\nВъзможни решения:\n- опитайте lightning плащане вместо това\n- изберете по-ниска такса и чакайте по-дълго\n- опитайте по-късно\n- транзактирайте с по-голямо кол-во\n\nИскате ли да продължите въпреки това?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Вие сте заявили кол-во във фиат, но данните за курса са стари (получени преди %1$s часа).\nУверете се, че имате Интернет връзка или обмислете възможността да заявите сумата директно в Биткойн.\n\nИскате ли да продължите въпреки това?</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
-    <string name="guardian_oldLndVersion_remote">Моля ъпдейтнете. \n\nНодът, към който сте свързани, използва стара версия на LND. Версиите под %1$s вече не са активно поддържани.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>

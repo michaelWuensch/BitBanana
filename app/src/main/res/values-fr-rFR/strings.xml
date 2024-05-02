@@ -148,7 +148,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Vous avez demandé un montant en valeur fiduciaire, mais votre taux de change est ancien (récupéré il y a %1$s heures).\nAssurez-vous d\'être connecté à Internet ou essayez de demander un montant en Bitcoin.\n\nVoulez-vous continuer malgré cela ?</string>
     <string name="guardian_remoteConnect">Êtes-vous sûr de vouloir vous connecter à \n\n%1$s\n\nVeuillez vérifier cet hôte avec prudence.</string>
     <string name="guardian_externalLink">Vous êtes sur le point d\'ouvrir un lien avec des données sensibles dans votre navigateur. Alors que BitBanana anonymise tout votre trafic avec le réseau Tor, votre navigateur ne le fait pas. Si vous souhaitez garder ces données privées, utilisez le navigateur Tor pour ouvrir le lien.</string>
-    <string name="guardian_oldLndVersion_remote">Veuillez mettre à jour.\n\nLe nœud auquel vous êtes connecté exécute une ancienne version de LND. Les versions inférieures à %1$s ne sont plus activement prises en charge.</string>
     <string name="settings_category_general">Réglages généraux</string>
     <string name="settings_category_security">Sécurité</string>
     <string name="settings_category_help">Aide</string>

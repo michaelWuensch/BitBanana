@@ -146,7 +146,6 @@
     <string name="guardian_disableScreenProtection">画面記録を許可すると、BitBananaの使用中に悪意のあるアプリがビデオ録画したり、スクリーンショットを撮ったりする可能性があります。 ビデオ録画やスクリーンショットを撮る時のみ、無効にすることをお勧めします。</string>
     <string name="guardian_remoteConnect">%1$sに接続してよろしいですか？\n
 ホスト名をよく確認してください。</string>
-    <string name="guardian_oldLndVersion_remote">更新してください。\n\n接続しているノードは古いバージョンのLNDを使用しています。 %1$s未満のバージョンはサポートしていません。</string>
     <string name="settings_category_general">一般</string>
     <string name="settings_category_security">セキュリティ</string>
     <string name="settings_category_help">ヘルプ</string>

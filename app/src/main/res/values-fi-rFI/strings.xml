@@ -149,7 +149,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
     <string name="guardian_remoteConnect">Oletko varma että haluat yhdistää \n\n%1$s\n\nVarmista palvelimen osoite huolellisesti.</string>
     <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. BitBanana suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
-    <string name="guardian_oldLndVersion_remote">Ole hyvä ja päivitä sovellus.\n\nSolmu johon olet yhteydessä käyttää vanhaa LND-versiota. Versiota %1$s aikaisemmat eivät ole aktiivisesti tuettuja.</string>
     <string name="settings_category_general">Yleiset</string>
     <string name="settings_category_security">Turvallisuus</string>
     <string name="settings_category_help">Apua</string>
