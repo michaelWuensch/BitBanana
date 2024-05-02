@@ -157,17 +157,19 @@
     <string name="error_emptyClipboardPayment">Su portapapeles no contiene ningún dato de pago.</string>
     <string name="error_emptyClipboardConnect">Su portapapeles no contiene ningún dato de conexión.</string>
     <string name="error_qr_code_result_null">Ocurrió un error al leer Código de QR, por favor vuelve a intentar.</string>
-    <string name="error_connection_unsupported_format">Formato de conexión no soportada.
-\n Por favor usa uno de los siguientes formatos:
+    <string name="error_connection_unsupported_format">Formato de conexión no admitido.
+\nUtilice uno de los siguientes formatos:
 \n
-\n- Lndconnect string (lndconnect://...)
-\n- BtcPay Server connection (config=...)
-\n- Full content of your BTCPay Server config file</string>
+\n- Cadena Lndconnect (lndconnect://...)
+\n- Core Lightning grpc (cln-grpc://...) (
+\n- LndHub (lndhub://...)
+\n- Conexión al servidor BtcPay (config=...)
+\n- Contenido completo de su fichero de configuración de BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Cadena lndconnect no válida.
-\nAsegúrese de haber utilizado el siguiente formato:
+    <string name="error_connection_invalidLndConnectString">Cadena inválida lndconnect.
+\nPor favor, asegúrese de utilizar el siguiente formato:
 \n
-\nlndconnect://[ip]:[puerto]?cert=[...]&amp;macaroon=[...]</string>
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">El certificado es inválido.</string>
     <string name="error_connection_no_macaroon">Su información de conexión no contiene un macaroon. Esto es obligatorio.</string>
     <string name="error_connection_invalid_macaroon">El macaroon no es válido.</string>
@@ -568,10 +570,10 @@
     <string name="advanced_channel_details_local_channel_reserve">Reserva del canal local</string>
     <string name="type">Tipo</string>
     <string name="duplicate">Duplicar</string>
-    <string name="error_connection_invalidLndHubConnectString">Datos de conexión LNDHub no válidos.
-\nPor favor, asegúrese de haber utilizado el siguiente formato
+    <string name="error_connection_invalidLndHubConnectString">Datos de conexión de LndHub no válidos.
+\nPor favor, asegúrese de utilizar el siguiente formato:
 \n
-\nlndhub://[user]:[password]@[host]</string>
+\nlndhub://[usuario]:[contraseña]@[host]</string>
     <string name="error_grpc_setup_failed">Error al iniciar la conexión gRPC.</string>
     <string name="lnurl_service">Servicio</string>
     <string name="error_input_field_empty">El campo de entrada %1$s no debe estar vacío.</string>
@@ -675,7 +677,7 @@
 \nPuedes comprobar el estado de los canales en la vista general de canales.</string>
     <string name="lnurl_pay_save_secret">IMPORTANTE:
 \nEl código se ha copiado en su portapapeles. Por favor, guárdelo por si lo necesita más adelante. Este cuadro de diálogo no se volverá a mostrar.</string>
-    <string name="guardian_custodial_lndhub">Está a punto de conectarse a una cuenta de LNDHub. Si usted no es el anfitrión del LNDHub, esto es custodia. Quien controle el LNDHub tiene el control sobre su dinero. Deposite sólo lo que pueda confiar a esa persona.</string>
+    <string name="guardian_custodial_lndhub">Estás utilizando una cuenta LndHub. A menos que usted sea el anfitrión del servicio LndHub, este acuerdo es de custodia. La entidad que gestiona el servicio tiene autoridad sobre su dinero y puede ver su historial de transacciones. Deposite únicamente lo que esté dispuesto a confiarles.</string>
     <string name="peer_ping">Ping</string>
     <string name="peer_last_flap">Última conexión perdida</string>
     <string name="backup_data_confirm_headline">Por favor, confirme</string>
