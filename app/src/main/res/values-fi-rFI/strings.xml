@@ -192,7 +192,12 @@
     <string name="error_emptyClipboardPayment">Leikepöydällä ei ole maksutietoa.</string>
     <string name="error_emptyClipboardConnect">Leikepöydällä ei ole yhteystietoa.</string>
     <string name="error_qr_code_result_null">QR-koodi ei luettavissa, ole hyvä ja yritä uudelleen.</string>
-    <string name="error_connection_unsupported_format">Tuntematon yhteyden avauksen muoto.\nKäytä jotain seuraavista muodoista:\n\n- Lndconnect-merkkijono (lndconnect://...)\n- BtcPay -palvelimen konfiguraatio (config=...)\n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
+    <string name="error_connection_unsupported_format">Tuntematon yhteyden avauksen muoto.
+\nKäytä jotain seuraavista muodoista:
+\n
+\n- Lndconnect-merkkijono (lndconnect://...)
+\n- BtcPay -palvelimen konfiguraatio (config=...)
+\n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguraation hakeminen BTCPay-palvelimelta epäonnistui.</string>
     <string name="error_connection_invalidLndConnectString">Virheellinen lndconnect-merkkijono.
 \nVarmista että käyttämäsi merkkijono on muotoa:

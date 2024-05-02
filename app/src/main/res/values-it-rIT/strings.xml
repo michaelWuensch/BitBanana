@@ -187,7 +187,12 @@
     <string name="error_emptyClipboardPayment">I tuoi appunti non contengono dati di pagamento.</string>
     <string name="error_emptyClipboardConnect">I tuoi appunti non contengono dati di connessione.</string>
     <string name="error_qr_code_result_null">Impossibile scansionare il codice QR, prova di nuovo.</string>
-    <string name="error_connection_unsupported_format">Formato di connessione non supportato.\nUtilizza uno dei seguenti formati:\n\n- Stringa Lndconnect (lndconnect://...)\n- Connessione server BtcPay (config=...)\n- Contenuto completo del BTCPay File di configurazione del server</string>
+    <string name="error_connection_unsupported_format">Formato di connessione non supportato.
+\nUtilizza uno dei seguenti formati:
+\n
+\n- Stringa Lndconnect (lndconnect://...)
+\n- Connessione server BtcPay (config=...)
+\n- Contenuto completo del BTCPay File di configurazione del server</string>
     <string name="error_unableToFetchBTCPayConfig">Impossibile recuperare la configurazione dal server BTCPay.</string>
     <string name="error_connection_invalidLndConnectString">Stringa lndconnect non valida.
 \nAssicurati di aver utilizzato il seguente formato:

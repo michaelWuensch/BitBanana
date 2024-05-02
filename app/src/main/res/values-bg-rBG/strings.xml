@@ -179,7 +179,12 @@
     <string name="error_emptyClipboardPayment">Клипбордът Ви не съдържа никакви данни за плащания.</string>
     <string name="error_emptyClipboardConnect">Клипбордът Ви не съдържа никакви данни за свързване.</string>
     <string name="error_qr_code_result_null">Неуспешно четене на QR-Код, моля опитайте отново.</string>
-    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.\nМоля използвайте някой от следните формати:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Сървър връзка (config=...)\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
+    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.
+\nМоля използвайте някой от следните формати:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Сървър връзка (config=...)
+\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
     <string name="error_unableToFetchBTCPayConfig">Неуспешно извеждане на конфигурация от BTCPay Сървър.</string>
     <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.
 \nМоля уверете се, че използвате следния формат:

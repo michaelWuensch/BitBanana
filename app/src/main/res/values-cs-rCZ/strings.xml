@@ -212,7 +212,12 @@
     <string name="error_emptyClipboardPayment">Schránka neobsahuje žádné platební údaje.</string>
     <string name="error_emptyClipboardConnect">Schránka neobsahuje žádná data připojení.</string>
     <string name="error_qr_code_result_null">Nelze přečíst QR-kód, zkuste to znovu.</string>
-    <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.\nPoužijte jeden z následujících formátů:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Úplný obsah vašeho BTCPay Server config souboru</string>
+    <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.
+\nPoužijte jeden z následujících formátů:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Server connection (config=...)
+\n- Úplný obsah vašeho BTCPay Server config souboru</string>
     <string name="error_unableToFetchBTCPayConfig">Nelze načíst konfiguraci z BTCPay Serveru.</string>
     <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.
 \nUjistěte se, že jste použili následující formát:
