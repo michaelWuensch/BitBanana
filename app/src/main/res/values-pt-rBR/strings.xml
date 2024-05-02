@@ -156,10 +156,12 @@
     <string name="error_emptyClipboardPayment">Sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_emptyClipboardConnect">Sua área de transferência não contém nenhum dado de conexão.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Unsupported connection format.
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado.
 \nPor favor, use um dos seguintes formatos:
 \n
 \n- String Lndconnect (lndconnect://...)
+\n- grpc Core Lightning (cln-grpc://…)
+\n- LndHub (lndhub://…)
 \n- Conexão de BtcPay Server (config=...)
 \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
@@ -784,7 +786,7 @@
     <string name="connection_state_starting_vpn">Iniciando VPN…</string>
     <string name="type">Tipo</string>
     <string name="duplicate">Duplicar</string>
-    <string name="guardian_custodial_lndhub">Você está prestes a se conectar a uma conta LNDHub. Se você não for o host do LNDHub, isso é tutelar. Quem controla o LNDhub tem controle sobre seu dinheiro. Deposite apenas o quanto confiar a esta pessoa.</string>
+    <string name="guardian_custodial_lndhub">Você está usando uma conta LndHub. A não ser que seja o host deste serviço LndHub, este arranjo é custodial. A entidade gerenciando este serviço tem autoridade sobre seu dinheiro e pode ver seu histórico de transações. Apenas deposite o quanto confiar a eles.</string>
     <string name="error_tor_bootstrapping_failed">Inicialização do Tor falhou.</string>
     <string name="error_unknown_backend">Tipo de backend desconhecido.</string>
     <string name="error_duplication">Duplicação falhou.</string>
@@ -798,7 +800,7 @@
     <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Você terá de dar permissão ao BitBanana para controlar %1$s.</string>
     <string name="connection_state_starting_tor">Iniciando o Tor…</string>
     <string name="discard">Descartar</string>
-    <string name="error_connection_invalidLndHubConnectString">String de conexão lndhub inválida.
+    <string name="error_connection_invalidLndHubConnectString">String de conexão LndBub inválida.
 \nPor favor certifique-se que tenha usado o seguinte formato:
 \n
 \nlndhub://[user]:[password]@[host]</string>
@@ -870,4 +872,5 @@
     <string name="settings_custom_exchange_rate_provider_type">Tipo de Provedor</string>
     <string name="backend">Backend</string>
     <string name="error_insufficient_funds">Este pagamento excede seu balanço disponível.</string>
+    <string name="error_connection_rest_authentication">Falha ao autenticar com a API Rest.</string>
 </resources>
