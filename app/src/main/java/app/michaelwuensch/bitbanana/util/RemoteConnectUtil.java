@@ -210,6 +210,8 @@ public class RemoteConnectUtil {
                 config.setPort(port);
                 if (config.getAlias() == null)
                     config.setAlias(config.getHost());
+                if (!config.hasVpnConfig())
+                    config.setVpnConfig(new VPNConfig());
                 id = backendConfigsManager.addBackendConfig(config).getId();
             } else {
                 id = walletUUID;
@@ -268,7 +270,7 @@ public class RemoteConnectUtil {
                             backendConfig = config;
                             backendConfig.setId(id);
                     }
-                if (backendConfig.getVpnConfig() == null)
+                if (!backendConfig.hasVpnConfig())
                     backendConfig.setVpnConfig(new VPNConfig());
                 backendConfigsManager.updateBackendConfig(backendConfig);
             }

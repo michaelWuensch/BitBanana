@@ -293,9 +293,13 @@ public class ManualSetup extends BaseAppCompatActivity {
         backendConfig.setUser(mEtUser.getData());
         backendConfig.setPassword(mEtPassword.getData());
         if (mOriginalBackendConfig != null) {
+            // Add all data that cannot be set manually
             backendConfig.setId(mOriginalBackendConfig.getId());
             backendConfig.setNetwork(mOriginalBackendConfig.getNetwork());
             backendConfig.setLocation(mOriginalBackendConfig.getLocation());
+            backendConfig.setTempAccessToken(mOriginalBackendConfig.getTempAccessToken());
+            backendConfig.setTempRefreshToken(mOriginalBackendConfig.getTempRefreshToken());
+            backendConfig.setAvatarMaterial(mOriginalBackendConfig.getAvatarMaterial());
         }
         return backendConfig;
     }

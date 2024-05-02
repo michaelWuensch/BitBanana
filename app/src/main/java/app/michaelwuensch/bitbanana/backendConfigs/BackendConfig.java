@@ -262,6 +262,10 @@ public class BackendConfig implements Comparable<BackendConfig> {
             return this.vpnConfig;
     }
 
+    public boolean hasVpnConfig() {
+        return this.vpnConfig != null;
+    }
+
     public void setVpnConfig(VPNConfig vpnConfig) {
         this.vpnConfig = vpnConfig;
     }
