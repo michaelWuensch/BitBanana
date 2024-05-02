@@ -3,17 +3,25 @@ package app.michaelwuensch.bitbanana.listViews.backendConfigs.items;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity;
+import app.michaelwuensch.bitbanana.util.AvathorUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
@@ -29,6 +37,8 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private ImageView mCurrentActiveIcon;
 
+    private ImageFilterView mAvatar;
+
     public BackendConfigItemViewHolder(View v) {
         super(v);
 
@@ -38,6 +48,7 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         mNetworkName = v.findViewById(R.id.networkName);
         mRootView = v.findViewById(R.id.transactionRootView);
         mCurrentActiveIcon = v.findViewById(R.id.currentlyActiveIcon);
+        mAvatar = v.findViewById(R.id.avatar);
         mContext = v.getContext();
     }
 
@@ -50,6 +61,22 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
             mIcon.setImageResource(R.drawable.ic_remote_black_24dp);
         }
         mIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.banana_yellow)));
+
+        // Set User Avatar in background thread to ensure fluent scrolling
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
+            // Background
+            if (BackendConfig.getAvatarMaterial() != null) {
+                Bitmap avatar = AvathorUtil.getAvathorWithCache(mContext, BackendConfig.getAvatarMaterial(), 150);
+                handler.post(() -> {
+                    // UI Thread work
+                    mAvatar.setImageBitmap(avatar);
+                });
+            } else {
+                mAvatar.setImageResource(R.drawable.unknown_avatar);
+            }
+        });
 
         // Set current active icon visibility
         if (BackendConfig.getId().equals(PrefsUtil.getCurrentBackendConfig())) {
