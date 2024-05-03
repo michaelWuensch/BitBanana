@@ -30,6 +30,7 @@ import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
 import com.github.ElementsProject.lightning.cln.NewaddrRequest;
 import com.github.ElementsProject.lightning.cln.PayRequest;
+import com.github.ElementsProject.lightning.cln.SetchannelRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 import com.github.ElementsProject.lightning.cln.TlvEntry;
 import com.github.ElementsProject.lightning.cln.TlvStream;
@@ -53,6 +54,7 @@ import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
@@ -775,5 +777,32 @@ public class CoreLightningApi extends Api {
         return CoreLightningNodeService().withdraw(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest updateRoutingPolicyRequest) {
+        String target = updateRoutingPolicyRequest.hasChannel() ? updateRoutingPolicyRequest.getChannel().getShortChannelId().toString() : "all";
+        SetchannelRequest.Builder requestBuilder = SetchannelRequest.newBuilder()
+                .setId(target);
+
+        if (updateRoutingPolicyRequest.hasFeeBase())
+            requestBuilder.setFeebase(amountFromMsat(updateRoutingPolicyRequest.getFeeBase()));
+        if (updateRoutingPolicyRequest.hasFeeRate())
+            requestBuilder.setFeeppm(((int) updateRoutingPolicyRequest.getFeeRate()));
+        if (updateRoutingPolicyRequest.hasMinHTLC())
+            requestBuilder.setHtlcmin(amountFromMsat(updateRoutingPolicyRequest.getMinHTLC()));
+        if (updateRoutingPolicyRequest.hasMaxHTLC())
+            requestBuilder.setHtlcmax(amountFromMsat(updateRoutingPolicyRequest.getMaxHTLC()));
+
+        return CoreLightningNodeService().setChannel(requestBuilder.build())
+                .map(response -> {
+                    List<String> errorList = new ArrayList<>();
+                    return errorList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Updating channel policy failed: " + throwable.fillInStackTrace()));
+    }
+
+    private Amount amountFromMsat(long msat) {
+        return Amount.newBuilder().setMsat(msat).build();
     }
 }

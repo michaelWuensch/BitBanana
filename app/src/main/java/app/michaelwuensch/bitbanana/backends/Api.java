@@ -83,7 +83,7 @@ public class Api {
         return Single.error(unsupportedException());
     }
 
-    public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest request) {
+    public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest updateRoutingPolicyRequest) {
         return Single.error(unsupportedException());
     }
 
