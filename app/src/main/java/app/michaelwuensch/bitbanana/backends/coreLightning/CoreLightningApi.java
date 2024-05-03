@@ -5,6 +5,8 @@ import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
+import com.github.ElementsProject.lightning.cln.ConnectRequest;
+import com.github.ElementsProject.lightning.cln.DisconnectRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
@@ -20,10 +22,14 @@ import com.github.ElementsProject.lightning.cln.ListfundsOutputs;
 import com.github.ElementsProject.lightning.cln.ListfundsRequest;
 import com.github.ElementsProject.lightning.cln.ListinvoicesInvoices;
 import com.github.ElementsProject.lightning.cln.ListinvoicesRequest;
+import com.github.ElementsProject.lightning.cln.ListnodesNodesAddresses;
 import com.github.ElementsProject.lightning.cln.ListnodesRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsChannels;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsResponse;
+import com.github.ElementsProject.lightning.cln.ListpeersPeers;
+import com.github.ElementsProject.lightning.cln.ListpeersPeersLog;
+import com.github.ElementsProject.lightning.cln.ListpeersRequest;
 import com.github.ElementsProject.lightning.cln.ListsendpaysPayments;
 import com.github.ElementsProject.lightning.cln.ListsendpaysRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
@@ -67,10 +73,12 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
+import app.michaelwuensch.bitbanana.models.TimestampedMessage;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -136,9 +144,13 @@ public class CoreLightningApi extends Api {
 
         return CoreLightningNodeService().listNodes(listnodesRequest)
                 .map(response -> {
+                    List<String> addresses = new ArrayList<>();
+                    for (ListnodesNodesAddresses address : response.getNodes(0).getAddressesList())
+                        addresses.add(address.getAddress());
                     return NodeInfo.newBuilder()
                             .setPubKey(ApiUtil.StringFromHexByteString(response.getNodes(0).getNodeid()))
                             .setAlias(response.getNodes(0).getAlias())
+                            .setAddresses(addresses)
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "CoreLightning getNodeInfo failed! " + throwable.toString()));
@@ -613,6 +625,60 @@ public class CoreLightningApi extends Api {
                                 });
                     }
                 });
+    }
+
+    @Override
+    public Single<List<Peer>> listPeers() {
+        ListpeersRequest request = ListpeersRequest.newBuilder()
+                .build();
+
+        return CoreLightningNodeService().listPeers(request)
+                .map(response -> {
+                    List<Peer> peerList = new ArrayList<>();
+                    for (ListpeersPeers peer : response.getPeersList()) {
+                        List<TimestampedMessage> errorMessages = new ArrayList<>();
+                        for (ListpeersPeersLog log : peer.getLogList())
+                            if (log.getItemType() == ListpeersPeersLog.ListpeersPeersLogType.BROKEN || log.getItemType() == ListpeersPeersLog.ListpeersPeersLogType.UNUSUAL)
+                                errorMessages.add(TimestampedMessage.newBuilder()
+                                        .setMessage(log.getLog())
+                                        .setTimestamp(Long.parseLong(log.getTime()))
+                                        .build());
+
+                        if (peer.getConnected())
+                            peerList.add(Peer.newBuilder()
+                                    .setPubKey(ApiUtil.StringFromHexByteString(peer.getId()))
+                                    .setAddress(peer.getNetaddr(0)) // show multiple?
+                                    //.setPing(???) // There is an extra "ping" endpoint, but that would lead to many RPC calls for just that info.
+                                    //.setFlapCount(???)
+                                    //.setLastFlapTimestamp(???)
+                                    .setErrorMessages(errorMessages)
+                                    //.setFeatures(???)  // Features are available, but just the numbers without names.
+                                    .build());
+                    }
+                    return peerList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable connectPeer(LightningNodeUri lightningNodeUri) {
+        ConnectRequest request = ConnectRequest.newBuilder()
+                .setId(lightningNodeUri.getAsString())
+                .build();
+        return CoreLightningNodeService().connectPeer(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Connecting to peer failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable disconnectPeer(String pubKey) {
+        DisconnectRequest request = DisconnectRequest.newBuilder()
+                .setId(ApiUtil.ByteStringFromHexString(pubKey))
+                .setForce(false)
+                .build();
+        return CoreLightningNodeService().disconnect(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Disconnecting from peer failed: " + throwable.getMessage()));
     }
 
     @Override

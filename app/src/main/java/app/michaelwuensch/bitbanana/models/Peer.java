@@ -14,6 +14,7 @@ public class Peer implements Serializable {
     private final int FlapCount;
     private final boolean hasFlapCount;
     private final long LastFlapTimestamp;
+    private final boolean hasLastFlap;
     private final List<TimestampedMessage> ErrorMessages;
     private final boolean hasErrorMessages;
     private final List<LnFeature> Features;
@@ -31,6 +32,7 @@ public class Peer implements Serializable {
         FlapCount = builder.FlapCount;
         hasFlapCount = builder.hasFlapCount;
         LastFlapTimestamp = builder.LastFlapTimestamp;
+        hasLastFlap = builder.hasLastFlap;
         ErrorMessages = builder.ErrorMessages;
         hasErrorMessages = builder.hasErrorMessages;
         Features = builder.Features;
@@ -66,6 +68,10 @@ public class Peer implements Serializable {
         return LastFlapTimestamp;
     }
 
+    public boolean hasLastFlap() {
+        return hasLastFlap;
+    }
+
     public List<TimestampedMessage> getErrorMessages() {
         return ErrorMessages;
     }
@@ -90,6 +96,7 @@ public class Peer implements Serializable {
         private int FlapCount;
         private boolean hasFlapCount;
         private long LastFlapTimestamp;
+        private boolean hasLastFlap;
         private List<TimestampedMessage> ErrorMessages;
         private boolean hasErrorMessages;
         private List<LnFeature> Features;
@@ -123,6 +130,7 @@ public class Peer implements Serializable {
 
         public Builder setLastFlapTimestamp(long lastFlapTimestamp) {
             LastFlapTimestamp = lastFlapTimestamp;
+            hasLastFlap = true;
             return this;
         }
 

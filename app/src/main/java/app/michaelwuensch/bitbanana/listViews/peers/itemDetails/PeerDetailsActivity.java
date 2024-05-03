@@ -32,6 +32,7 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -95,14 +96,25 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         mIvAddressCopyIcon.setOnClickListener(view1 -> ClipBoardUtil.copyToClipboard(PeerDetailsActivity.this, "remoteAddress", mPeer.getAddress()));
 
         ////// Reliability section
-        mPing.setValue(mPeer.getPing() / 1000L + " ms");
-        mFlapCount.setValue(String.valueOf(mPeer.getFlapCount()));
-        if (mPeer.getLastFlapTimestamp() == 0) {
-            mLastFlap.setValue(getResources().getString(R.string.fee_not_available));
+        if (mPeer.hasPing())
+            mPing.setValue(mPeer.getPing() / 1000L + " ms");
+        else
+            mPing.setVisibility(View.GONE);
+        if (mPeer.hasFlapCount())
+            mFlapCount.setValue(String.valueOf(mPeer.getFlapCount()));
+        else
+            mFlapCount.setVisibility(View.GONE);
+
+        if (mPeer.hasLastFlap()) {
+            if (mPeer.getLastFlapTimestamp() == 0) {
+                mLastFlap.setValue(getResources().getString(R.string.fee_not_available));
+            } else {
+                long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapTimestamp() / 1000000L);
+                String durationString = TimeFormatUtil.formattedDuration(durationSinceLastFlap / 1000L, PeerDetailsActivity.this);
+                mLastFlap.setValue(durationString);
+            }
         } else {
-            long durationSinceLastFlap = System.currentTimeMillis() - (mPeer.getLastFlapTimestamp() / 1000000L);
-            String durationString = TimeFormatUtil.formattedDuration(durationSinceLastFlap / 1000L, PeerDetailsActivity.this);
-            mLastFlap.setValue(durationString);
+            mLastFlap.setVisibility(View.GONE);
         }
 
         // Errors
@@ -166,26 +178,30 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
                 }));
 
         // Feature list
-        mFeatures.setValue(String.valueOf(mPeer.getFeatures().size()));
-        ArrayList<String> featuresAsStrings = new ArrayList<>();
-        for (LnFeature feature : mPeer.getFeatures()) {
-            String padding = "";
-            if (feature.getFeatureNumber() < 10)
-                padding = "         ";
-            else if (feature.getFeatureNumber() < 100)
-                padding = "       ";
-            else if (feature.getFeatureNumber() < 1000)
-                padding = "     ";
-            else
-                padding = "  ";
-            featuresAsStrings.add(feature.getFeatureNumber() + padding + feature.getName() + "\n");
+        if (mPeer.hasFeatures()) {
+            mFeatures.setValue(String.valueOf(mPeer.getFeatures().size()));
+            ArrayList<String> featuresAsStrings = new ArrayList<>();
+            for (LnFeature feature : mPeer.getFeatures()) {
+                String padding = "";
+                if (feature.getFeatureNumber() < 10)
+                    padding = "         ";
+                else if (feature.getFeatureNumber() < 100)
+                    padding = "       ";
+                else if (feature.getFeatureNumber() < 1000)
+                    padding = "     ";
+                else
+                    padding = "  ";
+                featuresAsStrings.add(feature.getFeatureNumber() + padding + feature.getName() + "\n");
+            }
+            featuresAsStrings.sort(new NumericStringComparator());
+            String featureList = "";
+            for (String entry : featuresAsStrings) {
+                featureList = featureList + entry;
+            }
+            mFeatures.setExplanation(featureList);
+        } else {
+            mFeatures.setVisibility(View.GONE);
         }
-        featuresAsStrings.sort(new NumericStringComparator());
-        String featureList = "";
-        for (String entry : featuresAsStrings) {
-            featureList = featureList + entry;
-        }
-        mFeatures.setExplanation(featureList);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -235,6 +251,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
                     finish();
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error disconnecting peer: " + throwable.getMessage());
+                    showError(throwable.getMessage(), RefConstants.ERROR_DURATION_MEDIUM);
                 }));
     }
 
