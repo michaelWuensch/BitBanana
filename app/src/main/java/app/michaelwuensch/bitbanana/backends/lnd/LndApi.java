@@ -435,29 +435,28 @@ public class LndApi extends Api {
     }
 
     @Override
-    public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest request) {
+    public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest updateRoutingPolicyRequest) {
         PolicyUpdateRequest.Builder LNDRequest = PolicyUpdateRequest.newBuilder();
-        if (request.hasChannel()) {
+        if (updateRoutingPolicyRequest.hasChannel()) {
             LNDRequest.setChanPoint(ChannelPoint.newBuilder()
-                    .setFundingTxidStr(request.getChannel().getFundingOutpoint().getTransactionID())
-                    .setOutputIndex(request.getChannel().getFundingOutpoint().getOutputIndex())
+                    .setFundingTxidStr(updateRoutingPolicyRequest.getChannel().getFundingOutpoint().getTransactionID())
+                    .setOutputIndex(updateRoutingPolicyRequest.getChannel().getFundingOutpoint().getOutputIndex())
                     .build());
         } else {
             LNDRequest.setGlobal(true);
         }
-        if (request.hasFeeBase())
-            LNDRequest.setBaseFeeMsat(request.getFeeBase());
-        if (request.hasFeeRate())
-            LNDRequest.setFeeRatePpm((int) request.getFeeRate());
-        if (request.hasDelay())
-            LNDRequest.setTimeLockDelta(request.getDelay());
-        if (request.hasMaxHTLC()) {
-            LNDRequest.setMinHtlcMsat(request.getMinHTLC());
+        if (updateRoutingPolicyRequest.hasFeeBase())
+            LNDRequest.setBaseFeeMsat(updateRoutingPolicyRequest.getFeeBase());
+        if (updateRoutingPolicyRequest.hasFeeRate())
+            LNDRequest.setFeeRatePpm((int) updateRoutingPolicyRequest.getFeeRate());
+        if (updateRoutingPolicyRequest.hasDelay())
+            LNDRequest.setTimeLockDelta(updateRoutingPolicyRequest.getDelay());
+        if (updateRoutingPolicyRequest.hasMinHTLC()) {
+            LNDRequest.setMinHtlcMsat(updateRoutingPolicyRequest.getMinHTLC());
             LNDRequest.setMinHtlcMsatSpecified(true);
         }
-
-        if (request.hasMaxHTLC())
-            LNDRequest.setMaxHtlcMsat(request.getMaxHTLC());
+        if (updateRoutingPolicyRequest.hasMaxHTLC())
+            LNDRequest.setMaxHtlcMsat(updateRoutingPolicyRequest.getMaxHTLC());
 
         return LndConnection.getInstance().getLightningService().updateChannelPolicy(LNDRequest.build())
                 .map(response -> {

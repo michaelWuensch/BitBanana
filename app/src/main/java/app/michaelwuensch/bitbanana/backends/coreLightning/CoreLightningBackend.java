@@ -23,6 +23,7 @@ public class CoreLightningBackend extends Backend {
         bSupportsChannelManagement = true;
         bSupportsMessageSigningByNodePrivateKey = true;
         bSupportsRouting = true;
+        bSupportsRoutingPolicyManagement = true;
         bSupportsCoinControl = true;
         bSupportsLnurlAuth = true;
         bSupportsKeysend = true;

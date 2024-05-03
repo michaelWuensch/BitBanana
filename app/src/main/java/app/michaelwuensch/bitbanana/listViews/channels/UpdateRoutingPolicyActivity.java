@@ -8,9 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetailBSDFragment;
@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
@@ -62,6 +63,10 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         mMinHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
         mMaxHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
 
+        // hide input fields based on backend
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC)
+            mTimelock.setVisibility(View.GONE);
+
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -88,13 +93,13 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
                 if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     // Validate input
                     if (mFeeRate.getData() != null) {
-                        if (Double.valueOf(mFeeRate.getData()) > 25.0) {
+                        if (Double.parseDouble(mFeeRate.getData()) > 25.0) {
                             showError(getResources().getString(R.string.error_routing_policy_fee_rate_too_high, 25.0), RefConstants.ERROR_DURATION_MEDIUM);
                             return;
                         }
                     }
 
-                    if (LndConnection.getInstance().getLightningService() != null) {
+                    if (Wallet.getInstance().isConnectedToNode()) {
 
                         UpdateRoutingPolicyRequest.Builder builder = UpdateRoutingPolicyRequest.newBuilder();
 
@@ -103,23 +108,23 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
 
                         // BaseFee if specified, will be set to 0 on lnd if not set
                         if (mBaseFee.getData() != null)
-                            builder.setFeeBase(Integer.valueOf(mBaseFee.getData()));
+                            builder.setFeeBase(Long.parseLong(mBaseFee.getData()));
 
                         // Fee Rate if specified, will be set to 0 on lnd if not set
                         if (mFeeRate.getData() != null)
-                            builder.setFeeRate((long) (Double.valueOf(mFeeRate.getData()) * 10000));
+                            builder.setFeeRate((long) (Double.parseDouble(mFeeRate.getData()) * 10000));
 
                         // Timelock delta if specified, will be set to 0 on lnd if not set
                         if (mTimelock.getData() != null)
-                            builder.setDelay(Integer.valueOf(mTimelock.getData()));
+                            builder.setDelay(Integer.parseInt(mTimelock.getData()));
 
                         // MinHTLC if specified
                         if (mMinHTLC.getData() != null)
-                            builder.setMinHTLC(Integer.valueOf(mMinHTLC.getData()));
+                            builder.setMinHTLC(Long.parseLong(mMinHTLC.getData()));
 
                         // MaxHTLC if specified
                         if (mMaxHTLC.getData() != null)
-                            builder.setMaxHTLC(Integer.valueOf(mMaxHTLC.getData()) * 1000);
+                            builder.setMaxHTLC(Long.parseLong(mMaxHTLC.getData()) * 1000L);
 
                         mCompositeDisposable.add(BackendManager.api().updateRoutingPolicy(builder.build())
                                 .subscribe(errorList -> {
