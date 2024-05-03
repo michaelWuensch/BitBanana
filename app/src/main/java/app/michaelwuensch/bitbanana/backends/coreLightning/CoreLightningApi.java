@@ -13,6 +13,8 @@ import com.github.ElementsProject.lightning.cln.ListchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsClosedchannels;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListclosedchannelsResponse;
+import com.github.ElementsProject.lightning.cln.ListforwardsForwards;
+import com.github.ElementsProject.lightning.cln.ListforwardsRequest;
 import com.github.ElementsProject.lightning.cln.ListfundsChannels;
 import com.github.ElementsProject.lightning.cln.ListfundsOutputs;
 import com.github.ElementsProject.lightning.cln.ListfundsRequest;
@@ -55,6 +57,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
+import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -557,6 +560,51 @@ public class CoreLightningApi extends Api {
                         return Single.just(data);
                     } else {
                         return listLnPayments(page + 1, pageSize)
+                                .flatMap(nextPageData -> {
+                                    data.addAll(nextPageData); // Combine current page data with next page data
+                                    return Single.just(data);
+                                });
+                    }
+                });
+    }
+
+    private Single<List<Forward>> getForwardPage(int page, int pageSize, long startTime) {
+        ListforwardsRequest request = ListforwardsRequest.newBuilder()
+                .setStatus(ListforwardsRequest.ListforwardsStatus.SETTLED)
+                .setLimit(pageSize)
+                .setStart((long) page * pageSize)
+                .build();
+
+        return CoreLightningNodeService().listForwards(request)
+                .map(response -> {
+                    List<Forward> forwardsList = new ArrayList<>();
+                    for (ListforwardsForwards forwardingEvent : response.getForwardsList()) {
+                        long timestampNS = (long) (forwardingEvent.getReceivedTime() * 1000000000L); // ResolvedTime should be correct, but missing.
+                        if ((timestampNS / 1000000000L) > startTime)
+                            forwardsList.add(Forward.newBuilder()
+                                    .setAmountIn(forwardingEvent.getInMsat().getMsat())
+                                    .setAmountOut(forwardingEvent.getOutMsat().getMsat())
+                                    .setChannelIdIn(ApiUtil.ScidFromString(forwardingEvent.getInChannel()))
+                                    .setChannelIdOut(ApiUtil.ScidFromString(forwardingEvent.getOutChannel()))
+                                    .setFee(forwardingEvent.getFeeMsat().getMsat())
+                                    .setTimestampNs(timestampNS)
+                                    .build());
+                    }
+                    return forwardsList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching forwarding page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<Forward>> listForwards(int page, int pageSize, long startTime) {
+        return getForwardPage(page, pageSize, startTime)
+                .flatMap(data -> {
+                    if (data.isEmpty()) {
+                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
+                    } else if (data.size() < pageSize) {
+                        return Single.just(data);
+                    } else {
+                        return listForwards(page + 1, pageSize, startTime)
                                 .flatMap(nextPageData -> {
                                     data.addAll(nextPageData); // Combine current page data with next page data
                                     return Single.just(data);
