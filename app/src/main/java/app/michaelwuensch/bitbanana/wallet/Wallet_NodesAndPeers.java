@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
@@ -43,9 +44,11 @@ public class Wallet_NodesAndPeers {
 
     public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, long satPerVByte, boolean isPrivate) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
-            BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-            fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, satPerVByte, isPrivate);
-            return;
+            if (BackendManager.getCurrentBackendType() != BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
+                fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, satPerVByte, isPrivate);
+                return;
+            }
         }
 
         compositeDisposable.add(BackendManager.api().connectPeer(nodeUri)
@@ -80,7 +83,7 @@ public class Wallet_NodesAndPeers {
         compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
-                    if (response.getAddresses().size() > 0) {
+                    if (response.getAddresses() != null && response.getAddresses().size() > 0) {
                         String tempUri = nodeUri.getPubKey() + "@" + response.getAddresses().get(0);
                         LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
