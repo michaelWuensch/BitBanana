@@ -30,17 +30,16 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.listViews.channels.UpdateRoutingPolicyActivity;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.DateItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingEventListItem;
 import app.michaelwuensch.bitbanana.listViews.forwardings.items.ForwardingListItem;
 import app.michaelwuensch.bitbanana.models.Forward;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -310,7 +309,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private void fetchForwardingHistory(int pageSize, long startTime) {
         CompositeDisposable compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(BackendManager.api().listForwards(0, pageSize, startTime)
-                .timeout(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                             mForwardsList = response;
                             compositeDisposable.dispose();
