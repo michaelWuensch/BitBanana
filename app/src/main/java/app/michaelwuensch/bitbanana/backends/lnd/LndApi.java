@@ -103,6 +103,12 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
+/**
+ * Class that translates BitBanana backend interactions into LND API specific interactions.
+ * <p>
+ * You can find the LND API documentation here:
+ * https://lightning.engineering/api-docs/api/lnd/
+ */
 public class LndApi extends Api {
     private static final String LOG_TAG = LndApi.class.getSimpleName();
 

@@ -30,7 +30,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 
 ## Features
 **General**
-- [x] Connect to remote lightning nodes (LND & Core Lightning)
+- [x] Connect to remote lightning nodes (LND, Core Lightning & LndHub)
 - [x] Available in many languages
 - [x] Explanations and help across the app
 - [x] Convenient VPN automation

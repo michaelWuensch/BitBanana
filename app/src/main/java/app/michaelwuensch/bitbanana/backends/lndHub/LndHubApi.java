@@ -30,6 +30,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+/**
+ * Class that translates BitBanana backend interactions into LndHub API specific interactions.
+ * <p>
+ * You can find the LndHub documentation here:
+ * https://github.com/BlueWallet/LndHub/blob/master/doc/Send-requirements.md
+ */
 public class LndHubApi extends Api {
     private static final String LOG_TAG = LndHubApi.class.getSimpleName();
 
