@@ -99,6 +99,12 @@ import app.michaelwuensch.bitbanana.util.WalletUtil;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
+/**
+ * Class that translates BitBanana backend interactions into Core Lightning API specific interactions.
+ * <p>
+ * You can find the CoreLightning API documentation here:
+ * https://docs.corelightning.org/reference/
+ */
 public class CoreLightningApi extends Api {
     private static final String LOG_TAG = CoreLightningApi.class.getSimpleName();
 

@@ -398,7 +398,7 @@ public class BackendConfig implements Comparable<BackendConfig> {
                 case CORE_LIGHTNING_GRPC:
                     return "Core Lightning (gRPC)";
                 case LND_HUB:
-                    return "LNDHub";
+                    return "LndHub";
                 default:
                     return App.getAppContext().getString(R.string.none);
             }
