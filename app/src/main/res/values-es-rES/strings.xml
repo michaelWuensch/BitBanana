@@ -677,7 +677,7 @@
 \nPuedes comprobar el estado de los canales en la vista general de canales.</string>
     <string name="lnurl_pay_save_secret">IMPORTANTE:
 \nEl código se ha copiado en su portapapeles. Por favor, guárdelo por si lo necesita más adelante. Este cuadro de diálogo no se volverá a mostrar.</string>
-    <string name="guardian_custodial_lndhub">Estás utilizando una cuenta LndHub. A menos que usted sea el anfitrión del servicio LndHub, este acuerdo es de custodia. La entidad que gestiona el servicio tiene autoridad sobre su dinero y puede ver su historial de transacciones. Deposite únicamente lo que esté dispuesto a confiarles.</string>
+    <string name="guardian_custodial_lndhub">Esta es una cuenta de LndHub. A menos que usted sea el anfitrión del servicio LndHub, este acuerdo es de custodia. La entidad que gestiona el servicio tiene control sobre su dinero y puede ver su historial de transacciones. Deposita sólo lo que estés dispuesto a confiarles.</string>
     <string name="peer_ping">Ping</string>
     <string name="peer_last_flap">Última conexión perdida</string>
     <string name="backup_data_confirm_headline">Por favor, confirme</string>
@@ -863,4 +863,5 @@
 \nEl nodo al que estás conectado está operando con una versión obsoleta de %1$s. Las versiones anteriores a %2$s ya no son soportadas por BitBanana.</string>
     <string name="error_insufficient_funds">Este pago excede su saldo disponible.</string>
     <string name="backend">Backend</string>
+    <string name="error_connection_rest_authentication">Error al autenticarse con la API Rest.</string>
 </resources>
