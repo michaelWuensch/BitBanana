@@ -824,7 +824,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isUTXOListViewEnabled());
         drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersListViewEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
-        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled());
+        drawerMenu.findItem(R.id.drawerWatchtowers).setVisible(FeatureManager.isWatchtowersEnabled());
+        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled() || FeatureManager.isWatchtowersEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
     }
 
