@@ -5,9 +5,11 @@ import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
+import com.github.ElementsProject.lightning.cln.CloseRequest;
 import com.github.ElementsProject.lightning.cln.ConnectRequest;
 import com.github.ElementsProject.lightning.cln.DisconnectRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
+import com.github.ElementsProject.lightning.cln.FundchannelRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
@@ -54,8 +56,10 @@ import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightnin
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
+import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
@@ -325,7 +329,7 @@ public class CoreLightningApi extends Api {
                                     }
                                     pendingChannelsList.add(PendingChannel.newBuilder()
                                             .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
-                                            .setShortChannelId(ApiUtil.ScidFromString(channel.getShortChannelId()))
+                                            //.setShortChannelId() NEVER AVAILABLE AT THIS STATE
                                             //.setChannelType(???)
                                             .setPendingType(pendingType)
                                             .setInitiator(channel.getOpener() == ChannelSide.LOCAL)
@@ -820,21 +824,9 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
-        AmountOrAll amountOrAll = null;
-        if (sendOnChainPaymentRequest.isSendAll())
-            amountOrAll = AmountOrAll.newBuilder()
-                    .setAll(true)
-                    .build();
-        else
-            amountOrAll = AmountOrAll.newBuilder()
-                    .setAmount(Amount.newBuilder()
-                            .setMsat(sendOnChainPaymentRequest.getAmount())
-                            .build())
-                    .build();
-
         WithdrawRequest request = WithdrawRequest.newBuilder()
                 .setDestination(sendOnChainPaymentRequest.getAddress())
-                .setSatoshi(amountOrAll)
+                .setSatoshi(amountOrAllFromMsat(sendOnChainPaymentRequest.getAmount(), sendOnChainPaymentRequest.isSendAll()))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(sendOnChainPaymentRequest.getSatPerVByte()))
                         .build())
@@ -868,7 +860,47 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Updating channel policy failed: " + throwable.fillInStackTrace()));
     }
 
+    @Override
+    public Completable openChannel(OpenChannelRequest openChannelRequest) {
+        FundchannelRequest request = FundchannelRequest.newBuilder()
+                .setId(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
+                .setAnnounce(!openChannelRequest.isPrivate())
+                .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), false))
+                .setFeerate(Feerate.newBuilder()
+                        .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(openChannelRequest.getSatPerVByte()))
+                        .build())
+                .build();
+
+        return CoreLightningNodeService().fundChannel(request)
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error opening channel: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable closeChannel(CloseChannelRequest closeChannelRequest) {
+        CloseRequest request = CloseRequest.newBuilder()
+                .setId(closeChannelRequest.getShortChannelId().toString())
+                .build();
+
+        return CoreLightningNodeService().close(request)
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
+    }
+
     private Amount amountFromMsat(long msat) {
-        return Amount.newBuilder().setMsat(msat).build();
+        return Amount.newBuilder()
+                .setMsat(msat)
+                .build();
+    }
+
+    private AmountOrAll amountOrAllFromMsat(long msat, boolean all) {
+        if (all)
+            return AmountOrAll.newBuilder()
+                    .setAll(true)
+                    .build();
+        else
+            return AmountOrAll.newBuilder()
+                    .setAmount(amountFromMsat(msat))
+                    .build();
     }
 }

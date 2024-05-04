@@ -286,7 +286,7 @@ public class LndApi extends Api {
                     for (PendingChannelsResponse.PendingOpenChannel channel : response.getPendingOpenChannelsList())
                         pendingChannelsList.add(PendingChannel.newBuilder()
                                 .setRemotePubKey(channel.getChannel().getRemoteNodePub())
-                                //.setShortChannelId(???)
+                                //.setShortChannelId() NEVER AVAILABLE AT THIS STATE
                                 .setChannelType(channel.getChannel().getCommitmentType().name())
                                 .setPendingType(PendingChannel.PendingType.PENDING_OPEN)
                                 .setInitiator(channel.getChannel().getInitiator() == Initiator.INITIATOR_LOCAL)

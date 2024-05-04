@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
@@ -148,6 +149,17 @@ public class Wallet_Channels {
     }
 
     public void closeChannel(OpenChannel channel, boolean force) {
+        // On Core Lightning we do not get a response for Channel Closes if the peer is not online as it waits for 2 days (default)
+        // for the peer to come online before falling back to a force close.
+        // Therefore we reduce the timeout and fake the thrown error to be successful.
+
+        long timeout;
+        boolean fakeSuccess = (force && BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC);
+        if (fakeSuccess)
+            timeout = 5;
+        else
+            timeout = ApiUtil.timeout_long();
+
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder()
                 .setShortChannelId(channel.getShortChannelId())
                 .setFundingOutpoint(channel.getFundingOutpoint())
@@ -155,7 +167,7 @@ public class Wallet_Channels {
                 .build();
 
         compositeDisposable.add(BackendManager.api().closeChannel(closeChannelRequest)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(timeout, TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Channel close successfully initiated!");
                     broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.SUCCESS, null);
@@ -164,7 +176,10 @@ public class Wallet_Channels {
                     if (throwable.getMessage().toLowerCase().contains("offline")) {
                         broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_PEER_OFFLINE, throwable.getMessage());
                     } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
+                        if (fakeSuccess)
+                            broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.SUCCESS, null);
+                        else
+                            broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
                     } else {
                         broadcastChannelCloseUpdate(channel.getFundingOutpoint().toString(), ChannelCloseUpdateListener.ERROR_CHANNEL_CLOSE, throwable.getMessage());
                     }
