@@ -25,6 +25,10 @@
                     android:id="@+id/drawerSignVerify"
                     android:icon="@drawable/outline_sign_24"
                     android:title="@string/sign_verify" />
+                <item
+                    android:id="@+id/drawerWatchtowers"
+                    android:icon="@drawable/outline_sign_24"
+                    android:title="@string/activity_watchtowers" />
             </group>
         </menu>
     </item>

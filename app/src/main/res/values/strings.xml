@@ -140,6 +140,7 @@
     <string name="activity_forwarding">Routing</string>
     <string name="activity_routing_policy">Routing Policy</string>
     <string name="activity_peers">Peers</string>
+    <string name="activity_watchtowers">Watchtowers</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -310,6 +311,8 @@
     <string name="settings_featureCoinControl_summary">Advanced management of on-chain funds. Provides a list of all UTXOs and allows to select specific ones when sending funds. Coin selection is automated if disabled.</string>
     <string name="settings_featurePeers">Peer Management</string>
     <string name="settings_featurePeers_summary">While peer management is automated, this feature still offers manual control for viewing and managing your connected peers.</string>
+    <string name="settings_featureWatchtowers">Watchtower Management</string>
+    <string name="settings_featureWatchtowers_summary">While peer management is automated, this feature still offers manual control for viewing and managing your connected peers.</string>
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
