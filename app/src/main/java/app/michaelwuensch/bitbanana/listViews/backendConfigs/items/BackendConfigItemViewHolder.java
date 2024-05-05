@@ -74,7 +74,10 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
                     mAvatar.setImageBitmap(avatar);
                 });
             } else {
-                mAvatar.setImageResource(R.drawable.unknown_avatar);
+                handler.post(() -> {
+                    // UI Thread work
+                    mAvatar.setImageResource(R.drawable.unknown_avatar);
+                });
             }
         });
 
