@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
+import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterPortRange;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -101,6 +103,7 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         mEtName.setSingleLine(true);
         mEtHost.setSingleLine(true);
+        mEtPort.getEditText().setFilters(new InputFilter[]{new InputFilterPortRange()});
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 

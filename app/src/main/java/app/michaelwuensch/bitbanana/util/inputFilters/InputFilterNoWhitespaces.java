@@ -13,7 +13,7 @@ public class InputFilterNoWhitespaces implements InputFilter {
         for (int i = start; i < end; i++) {
 
             if (Character.isSpaceChar(source.charAt(i))) {
-                // is is a space, we don't want that;
+                // it is a space, we don't want that;
                 return "";
             }
 
