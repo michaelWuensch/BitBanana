@@ -100,9 +100,13 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.ListforwardsResponse> listForwards(com.github.ElementsProject.lightning.cln.ListforwardsRequest request);
 
+    Single<com.github.ElementsProject.lightning.cln.ListoffersResponse> listOffers(com.github.ElementsProject.lightning.cln.ListoffersRequest request);
+
     Single<com.github.ElementsProject.lightning.cln.ListpaysResponse> listPays(com.github.ElementsProject.lightning.cln.ListpaysRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.ListhtlcsResponse> listHtlcs(com.github.ElementsProject.lightning.cln.ListhtlcsRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.OfferResponse> offer(com.github.ElementsProject.lightning.cln.OfferRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.PingResponse> ping(com.github.ElementsProject.lightning.cln.PingRequest request);
 
@@ -125,4 +129,6 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.PreapproveinvoiceResponse> preApproveInvoice(com.github.ElementsProject.lightning.cln.PreapproveinvoiceRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.StaticbackupResponse> staticBackup(com.github.ElementsProject.lightning.cln.StaticbackupRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.BkprlistincomeResponse> bkprListIncome(com.github.ElementsProject.lightning.cln.BkprlistincomeRequest request);
 }

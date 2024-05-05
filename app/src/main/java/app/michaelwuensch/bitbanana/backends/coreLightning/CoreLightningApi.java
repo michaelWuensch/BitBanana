@@ -96,6 +96,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -177,7 +178,8 @@ public class CoreLightningApi extends Api {
                     for (ListfundsOutputs output : response.getOutputsList()) {
                         switch (output.getStatus()) {
                             case CONFIRMED:
-                                onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat();
+                                if (!output.getReserved())
+                                    onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat();
                                 break;
                             case UNCONFIRMED:
                                 onChainUnconfirmed = onChainUnconfirmed + output.getAmountMsat().getMsat();
@@ -471,6 +473,7 @@ public class CoreLightningApi extends Api {
 
     private Single<List<LnInvoice>> getInvoicesPage(int page, int pageSize) {
         ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
+                .setIndex(ListinvoicesRequest.ListinvoicesIndex.CREATED)
                 .setLimit(pageSize)
                 .setStart((long) page * pageSize)
                 .build();
@@ -526,6 +529,26 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<OnChainTransaction>> listOnChainTransactions() {
+        // ToDo: There is still an error in Bkprlistincome in 24.02.2, wait for next version. After that we probably need to execute both Bkprlistincome & listTransaction and link the information to get what we want.
+
+        /*
+        BkprlistincomeRequest request = BkprlistincomeRequest.newBuilder()
+                .build();
+
+        return CoreLightningNodeService().bkprListIncome(request)
+                .map(response -> {
+                    List<OnChainTransaction> transactionList = new ArrayList<>();
+                    for (BkprlistincomeIncome_events incomeEvent : response.getIncomeEventsList()) {
+                        BBLog.e(LOG_TAG, "account: " + incomeEvent.getAccount());
+                        BBLog.e(LOG_TAG, "type: " + incomeEvent.getTag());
+                        BBLog.e(LOG_TAG, "credit: " + incomeEvent.getCreditMsat());
+                        BBLog.e(LOG_TAG, "debit: " + incomeEvent.getDebitMsat());
+                        BBLog.e(LOG_TAG, "______________");
+                    }
+                    return transactionList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
+ */
         return CoreLightningNodeService().listTransactions(ListtransactionsRequest.newBuilder().build())
                 .map(response -> {
                     List<OnChainTransaction> transactionList = new ArrayList<>();
@@ -542,12 +565,13 @@ public class CoreLightningApi extends Api {
                     }
                     return transactionList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching on-chain transactions failed: " + throwable.fillInStackTrace()));
     }
 
     private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {
         ListsendpaysRequest request = ListsendpaysRequest.newBuilder()
                 .setStatus(ListsendpaysRequest.ListsendpaysStatus.COMPLETE)
+                .setIndex(ListsendpaysRequest.ListsendpaysIndex.CREATED)
                 .setLimit(pageSize)
                 .setStart((long) page * pageSize)
                 .build();
@@ -595,6 +619,7 @@ public class CoreLightningApi extends Api {
     private Single<List<Forward>> getForwardPage(int page, int pageSize, long startTime) {
         ListforwardsRequest request = ListforwardsRequest.newBuilder()
                 .setStatus(ListforwardsRequest.ListforwardsStatus.SETTLED)
+                .setIndex(ListforwardsRequest.ListforwardsIndex.CREATED)
                 .setLimit(pageSize)
                 .setStart((long) page * pageSize)
                 .build();
@@ -731,7 +756,11 @@ public class CoreLightningApi extends Api {
                 addressType = NewaddrRequest.NewaddrAddresstype.BECH32;
                 break;
             case TAPROOT:
-                addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
+                // ToDo: remove this when support for 24.02.2 is removed. A bug in that version causes P2TR to no work.
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.02.2")) <= 0)
+                    addressType = NewaddrRequest.NewaddrAddresstype.BECH32;
+                else
+                    addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
         }
         NewaddrRequest request = NewaddrRequest.newBuilder()
                 .setAddresstype(addressType)
