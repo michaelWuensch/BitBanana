@@ -786,7 +786,7 @@
     <string name="connection_state_starting_vpn">Iniciando VPN…</string>
     <string name="type">Tipo</string>
     <string name="duplicate">Duplicar</string>
-    <string name="guardian_custodial_lndhub">Você está usando uma conta LndHub. A não ser que seja o host deste serviço LndHub, este arranjo é custodial. A entidade gerenciando este serviço tem autoridade sobre seu dinheiro e pode ver seu histórico de transações. Apenas deposite o quanto confiar a eles.</string>
+    <string name="guardian_custodial_lndhub">Esta é uma conta LndHub. A não ser que seja o host deste serviço LndHub, este arranjo é custodial. A entidade gerenciando este serviço tem controle sobre seu dinheiro e pode ver seu histórico de transações. Apenas deposite o quanto confiar a eles.</string>
     <string name="error_tor_bootstrapping_failed">Inicialização do Tor falhou.</string>
     <string name="error_unknown_backend">Tipo de backend desconhecido.</string>
     <string name="error_duplication">Duplicação falhou.</string>
