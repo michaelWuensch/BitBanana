@@ -96,6 +96,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -177,7 +178,8 @@ public class CoreLightningApi extends Api {
                     for (ListfundsOutputs output : response.getOutputsList()) {
                         switch (output.getStatus()) {
                             case CONFIRMED:
-                                onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat();
+                                if (!output.getReserved())
+                                    onChainConfirmed = onChainConfirmed + output.getAmountMsat().getMsat();
                                 break;
                             case UNCONFIRMED:
                                 onChainUnconfirmed = onChainUnconfirmed + output.getAmountMsat().getMsat();
@@ -754,7 +756,11 @@ public class CoreLightningApi extends Api {
                 addressType = NewaddrRequest.NewaddrAddresstype.BECH32;
                 break;
             case TAPROOT:
-                addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
+                // ToDo: remove this when support for 24.02.2 is removed. A bug in that version causes P2TR to no work.
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.02.2")) <= 0)
+                    addressType = NewaddrRequest.NewaddrAddresstype.BECH32;
+                else
+                    addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
         }
         NewaddrRequest request = NewaddrRequest.newBuilder()
                 .setAddresstype(addressType)
