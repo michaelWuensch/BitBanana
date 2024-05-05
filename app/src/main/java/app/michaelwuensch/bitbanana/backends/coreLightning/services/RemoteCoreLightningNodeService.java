@@ -257,6 +257,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.ListoffersResponse> listOffers(com.github.ElementsProject.lightning.cln.ListoffersRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listOffers(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.ListpaysResponse> listPays(com.github.ElementsProject.lightning.cln.ListpaysRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listPays(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -264,6 +269,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.ListhtlcsResponse> listHtlcs(com.github.ElementsProject.lightning.cln.ListhtlcsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listHtlcs(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.OfferResponse> offer(com.github.ElementsProject.lightning.cln.OfferRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.offer(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -319,6 +329,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.StaticbackupResponse> staticBackup(com.github.ElementsProject.lightning.cln.StaticbackupRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.staticBackup(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprlistincomeResponse> bkprListIncome(com.github.ElementsProject.lightning.cln.BkprlistincomeRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprListIncome(request, new RemoteSingleObserver<>(emitter)));
     }
 
 }
