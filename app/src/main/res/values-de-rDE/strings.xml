@@ -761,7 +761,7 @@
     <string name="client_certificate">Client-Zertifikat</string>
     <string name="client_key">Client-Schlüssel</string>
     <string name="backup_data_backupVersion_too_old">Diese Version wurde mit einer sehr alten Version von BitBanana erstellt. Leider wird sie nicht mehr unterstützt.</string>
-    <string name="wallet_load_sate_testing_connection">Teste Verbindung…</string>
+    <string name="wallet_load_sate_testing_connection">Verbindung wird getestet…</string>
     <string name="guardian_oldNodeSoftwareVersion">Es ist Zeit für ein Update!
 \n
 \nDer Knoten, mit dem du verbunden bist, verwendet eine veraltete Version von %1$s. Versionen vor %2$s werden von BitBanana nicht mehr unterstützt.</string>
@@ -793,4 +793,14 @@
     <string name="error_connection_clngrpc_missingClientKey">Es fehlt der erforderliche Client-Schlüssel.</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Verbindung wird erneut hergestellt…</string>
+    <string name="wallet_load_state_fetching_data">Daten werden geladen…</string>
+    <string name="error_connection_host_verification_failed_lnd">Überprüfung des Hostnamens fehlgeschlagen.
+\n
+\nDer Hostname deiner Verbindung stimmt nicht mit dem im Host-Zertifikat angegebenen Hostnamen überein.
+\n
+\nDu musst entweder die Zertifikatsüberprüfung in den Verbindungseinstellungen des Knotens deaktivieren oder dein Zertifikat neu erstellen. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain eingetragen ist, bevor du es neu erstellst.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Die bereitgestellten Verbindungsdaten für cln-grpc sind ungültig, da die Parameter nicht im base64url-Format kodiert sind.</string>
+    <string name="error_feature_not_supported_by_backend">Bei Verwendung von %1$s unterstützt BitBanana die folgende Funktion nicht: %2$s</string>
+    <string name="settings_custom_exchange_rate_provider">Benutzerdefinierter Wechselkursanbieter</string>
 </resources>
