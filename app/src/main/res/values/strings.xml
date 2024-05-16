@@ -319,7 +319,7 @@
     <string name="settings_custom_exchange_rate_provider_host_description">Please provide the host address for your exchange rate provider. When you host the exchange rate provider yourself, your privacy is fully maintained.</string>
 
     <string name="settings_feeEstimationProvider">Fee Estimation</string>
-    <string name="settings_node_fee_estimates">Internal node fee estimates</string>
+    <string name="settings_node_fee_estimates">Internal</string>
     <string name="settings_custom_fee_estimation_provider_host_description">Please provide the host address for your fee estimation provider. When you host the fee estimation provider yourself, your privacy is fully maintained.</string>
     <string name="settings_custom_fee_estimation_provider">Custom Fee Estimation</string>
 

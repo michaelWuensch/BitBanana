@@ -3,12 +3,12 @@
 
     <ListPreference
         android:defaultValue="Mempool"
-        android:dialogTitle="@string/settings_custom_exchange_rate_provider_type"
+        android:dialogTitle="@string/type"
         android:entries="@array/customFeeEstimationProviderTypes"
         android:entryValues="@array/customFeeEstimationProviderTypes"
         android:key="customFeeEstimationProviderType"
         android:summary="%s"
-        android:title="@string/settings_custom_exchange_rate_provider_type"
+        android:title="@string/type"
         app:iconSpaceReserved="false" />
 
     <EditTextPreference
