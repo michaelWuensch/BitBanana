@@ -209,7 +209,11 @@
     <string name="error_connection_invalid_host_or_port">Annettu host-osoite tai -portti on virheellinen.</string>
     <string name="error_connection_invalid_macaroon2">Pääsy estetty\n\nMacaroon ei ole kelvollinen.</string>
     <string name="error_connection_server_unreachable">Aikakatkaisu.\nPalvelin ei vastaa.\n\n- Varmista että internet-yhteytesi toimii\n\n- Varmista että palvelin on käynnnissä ja sen IP-osoite on:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.\n\n- Varmista että LND prosessi on käynnissä palvelimella.\n\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">LND-yhteyttä ei saada luotua.
+\n
+\n- Varmista että LND prosessi on käynnissä palvelimella.
+\n
+\n- varmista että TCP-portin edellenohjaus aktiivinen. (Portti: %1$s)</string>
     <string name="error_connection_network_unreachable">Palvelimeen ei saada yhteyttä.\n\nVarmista että Internet-yhteydessäsi ei ole häiriöitä.</string>
     <string name="error_connection_unknown">Yhteys epäonnistui.</string>
     <string name="error_connection_tor_bootstrapping">Tor käynnistys ei onnistunut.
