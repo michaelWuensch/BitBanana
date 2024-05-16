@@ -196,7 +196,11 @@
     <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
     <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
     <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.
+\n
+\n- Уверете се, че LND deamon-ът работи на сървъра Ви.
+\n
+\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
     <string name="error_connection_network_unreachable">Неуспешно свързване с хоста.\n\nМоля уверете се, че имате връзка С Интернет.</string>
     <string name="error_connection_unknown">Връзката неуспешна.</string>
     <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>
