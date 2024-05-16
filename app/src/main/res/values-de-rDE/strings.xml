@@ -220,13 +220,15 @@
 \nBitte verwende eines der folgenden Formate:
 \n
 \n- Lndconnect string (lndconnect://...)
+\n- Core Lightning grpc (cln-grpc://…)
+\n- LndHub (lndhub://…)
 \n- BtcPay Server Verbindung (config=...)
 \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
 \n
-\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
+\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
     <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
     <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
@@ -235,15 +237,11 @@
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
     <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.
 \n
-\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.
-\n
-\nDu musst entweder die Verifizierung des Zertifikats in den Verbindungseinstellungen des Knotens deaktivieren oder das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
+\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Host-Zertifikats überein.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
-    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.
+    <string name="error_connection_lnd_unavailable">Verbindung fehlgeschlagen. Auf den Host kann zugegriffen werden, aber der Knoten antwortet nicht.
 \n
-\n- Stelle sicher, dass der LND daemon auf dem Server läuft.
-\n
-\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
+\nBitte überprüfe, ob der Knoten betriebsbereit ist, ob die Port-Nummer (%1$s) korrekt ist und ob die Port-Weiterleitung eingerichtet ist.</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
     <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.
@@ -255,7 +253,7 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
-    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
+    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es helfen, Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.
 \nBitte verwende eines der folgenden Formate:
@@ -747,7 +745,7 @@
     <string name="discard">Verwerfen</string>
     <string name="duplication_successful">Die Duplizierung war erfolgreich.</string>
     <string name="guardian_custodial_lndhub">Das ist ein LndHub-Konto. Sofern du nicht der Betreiber des LndHub-Dienstes bist, handelt es sich um eine Vermögensverwaltung. Das Unternehmen oder die Person, die den Dienst verwaltet, hat die Kontrolle über dein Geld und kann deinen Transaktionsverlauf einsehen. Zahle nur so viel ein, wie du bereit bist, dem Anbieter zu vertrauen.</string>
-    <string name="error_connection_invalidLndHubConnectString">Ungültige LNDHub Verbindungsdaten.
+    <string name="error_connection_invalidLndHubConnectString">Ungültige LndHub Verbindungsdaten.
 \nBitte stelle sicher, dass du das folgende Format verwendest:
 \n
 \nlndhub://[Benutzer]:[Passwort]@[Host]</string>
@@ -766,7 +764,7 @@
     <string name="error_unsupported_network">Das Bitcoin-Netzwerk, mit dem du verbunden bist, wird nicht unterstützt.</string>
     <string name="error_reading_qrCode_in_image">Es kann kein QR-Code im Bild gescannt oder erkannt werden.</string>
     <string name="error_exchange_rate_requires_tor_toast">Die Abfrage der Wechselkurse ist fehlgeschlagen. Der von dir gewählte Anbieter benötigt tor.</string>
-    <string name="server_certificate">Server-Zertifikat</string>
+    <string name="server_certificate">Host-Zertifikat</string>
     <string name="client_certificate">Client-Zertifikat</string>
     <string name="client_key">Client-Schlüssel</string>
     <string name="backup_data_backupVersion_too_old">Diese Version wurde mit einer sehr alten Version von BitBanana erstellt. Leider wird sie nicht mehr unterstützt.</string>
