@@ -869,7 +869,6 @@
     <string name="wallet_load_sate_testing_connection">Testando conexão…</string>
     <string name="wallet_load_state_reconnect_after_unlock">Reconectar depois de desbloquear…</string>
     <string name="settings_requires_tor_toast">Isto requer Tor. Ative-o nas configurações.</string>
-    <string name="settings_custom_exchange_rate_provider_type">Tipo de Provedor</string>
     <string name="backend">Backend</string>
     <string name="error_insufficient_funds">Este pagamento excede seu balanço disponível.</string>
     <string name="error_connection_rest_authentication">Falha ao autenticar com a API Rest.</string>
