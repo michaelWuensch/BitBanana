@@ -463,7 +463,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             } else if (error == Wallet.ConnectionTestListener.ERROR_TOR) {
                 mTvConnectError.setText(R.string.error_connection_tor_unreachable);
             } else if (error == Wallet.ConnectionTestListener.ERROR_HOST_VERIFICATION) {
-                mTvConnectError.setText(R.string.error_connection_host_verification_failed);
+                if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC)
+                    mTvConnectError.setText(R.string.error_connection_host_verification_failed_lnd);
+                else
+                    mTvConnectError.setText(R.string.error_connection_host_verification_failed);
             } else if (error == Wallet.ConnectionTestListener.ERROR_HOST_UNRESOLVABLE) {
                 mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, BackendManager.getCurrentBackendConfig().getHost()));
             } else if (error == Wallet.ConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {

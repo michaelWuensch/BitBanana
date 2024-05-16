@@ -69,6 +69,8 @@ public class TorServiceEventBroadcaster extends io.matthewnelson.topl_service_ba
                 BackendManager.setError(BackendManager.ERROR_TOR_BOOTSTRAPPING_FAILED);
             }
         }
+        if (notice.endsWith("Action_STOP"))
+            TorManager.getInstance().setIsProxyRunning(false);
     }
 
     @Override
