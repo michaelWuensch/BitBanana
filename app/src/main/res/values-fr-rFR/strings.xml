@@ -209,7 +209,11 @@
     <string name="error_connection_invalid_host_or_port">L\'hôte ou le port fourni est invalide.</string>
     <string name="error_connection_invalid_macaroon2">Accès refusé !\n\nLe fichier macaroon est invalide.</string>
     <string name="error_connection_server_unreachable">Expiration de la requête.\nLe serveur ne répond pas.\n\n- Assurez-vous d\'avoir une bonne connexion Internet\n\n- Assurez-vous que le serveur soit actif et possède l\'adresse IP suivante :\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.\n\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.\n\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.
+\n
+\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.
+\n
+\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
     <string name="error_connection_network_unreachable">Impossible de joindre l\'hôte.\n\nVeuillez vous assurer que vous disposez d\'une connexion Internet.</string>
     <string name="error_connection_unknown">La connexion a échoué.</string>
     <string name="error_connection_tor_bootstrapping">Tor n\'a pas pu démarrer.
