@@ -370,9 +370,10 @@
     <string name="error_connection_invalid_host_or_port">The provided host or port is invalid.</string>
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nThe macaroon is invalid.</string>
     <string name="error_connection_server_unreachable">Timeout.\nThe server is not responding.\n\n- Please make sure you have a good internet connection\n\n- Please make sure the server is running and still has the following IP:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the certificate.\n\n You either have to disable certificate verification in the nodes connection settings or you have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
+    <string name="error_connection_host_verification_failed_lnd">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the host certificate.\n\n You either have to disable certificate verification in the nodes connection settings or you have to recreate your certificate. Make sure the hostname is added to the lnd.conf as tlsextradomain before recreating it.</string>
+    <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the host certificate.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.  Please update your node connection settings if your node is now reachable under a different address or hostname.</string>
-    <string name="error_connection_lnd_unavailable">Unable to connect to LND.\n\n- make sure the LND daemon is running on your server.\n\n- make sure your port forwarding is active. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Connection failed. The host can be accessed, but the node service isn\'t responding.\n\nPlease verify that the node is operational, that the port number (%1$s) is correct, and that port forwarding is set up.</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_no_internet">No internet connection!</string>
@@ -382,7 +383,7 @@
     <string name="error_connection_btcpay_invalid_json">JSON syntax of the BTCPay server configuration is invalid.</string>
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
-    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a Node on clearnet, disabling Tor in the nodes connection settings might also solve your problem.</string>
+    <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a node on clearnet, disabling Tor in the nodes connection settings might solve your problem.</string>
     <string name="error_connection_no_c_lightning_rest_support">Connecting BitBanana to Core Lightning via C-Lightning-Rest is not supported. Please check if your node shares cln-grpc connection details and use those for connection instead.</string>
     <string name="error_connection_clngrpc_invalidConnectString">Invalid cln-grpc connect string.\nPlease make sure you used the following format:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">A provided certificate or key is invalid.</string>
@@ -440,7 +441,7 @@
     <string name="error_input_macaroon_hex">The macaroon must be provided in hex format.</string>
     <string name="error_duplication">Duplication failed.</string>
     <string name="error_unsupported_network">The Bitcoin network you are connected to is not supported.</string>
-    <string name="error_feature_not_supported_by_backend">While connected to %1$s, BitBanana does not support the following feature: %2$s</string>
+    <string name="error_feature_not_supported_by_backend">While using %1$s, BitBanana does not support the following feature: %2$s</string>
     <string name="error_reading_qrCode_in_image">Unable to scan or detect QR code in the image.</string>
     <string name="error_exchange_rate_requires_tor_toast">Failed to fetch exchange rates. Your chosen provider requires tor.</string>
     <string name="error_fee_estimation_requires_tor_toast">Failed to fetch fee estimates. Your chosen provider requires tor.</string>
@@ -547,7 +548,7 @@
     <string name="port">Port</string>
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificate</string>
-    <string name="server_certificate">Server Certificate</string>
+    <string name="server_certificate">Host Certificate</string>
     <string name="client_certificate">Client Certificate</string>
     <string name="client_key">Client Key</string>
     <string name="confirm_node_deletion">Do you really want to delete this node connection?</string>
@@ -786,7 +787,7 @@
     <string name="connection_state_starting_tor">Starting Tor…</string>
     <string name="connection_state_connecting">Connecting…</string>
     <string name="wallet_load_sate_testing_connection">Testing connection…</string>
-    <string name="wallet_load_state_reconnect_after_unlock">Reconnect after unlocking…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Reconnecting…</string>
     <string name="wallet_load_state_fetching_data">Fetching data…</string>
 
     <string name="unsaved_changes">There are unsaved changes.</string>

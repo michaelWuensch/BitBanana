@@ -105,7 +105,7 @@ public class Wallet {
         }
     }
 
-    private void authLndHub(){
+    private void authLndHub() {
         setWalletLoadState(WalletLoadState.TESTING_CONNECTION_BEFORE_UNLOCK);
         // The info request works without authentication. Therefore we need another call and use balances.
         // Without doing this here we would end up with a multicall, that tries to authenticate multiple times.
@@ -293,8 +293,8 @@ public class Wallet {
             BBLog.e(LOG_TAG, "Cannot resolve onion address!");
             broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_TOR);
         } else if (throwable.getMessage().toLowerCase().contains("interrupted")) {
-            BBLog.e(LOG_TAG, "Test if LND is reachable was interrupted.");
-            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_INTERRUPTED);
+            BBLog.e(LOG_TAG, "Connection interrupted.");
+            broadcastConnectionTestResult(throwable.getMessage());
         } else {
             // Unknown error. Print what gets returned directly, always english.
             BBLog.e(LOG_TAG, "Unknown connection error..");
