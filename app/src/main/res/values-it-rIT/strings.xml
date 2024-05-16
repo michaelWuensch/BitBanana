@@ -204,7 +204,11 @@
     <string name="error_connection_invalid_host_or_port">L\'host o la porta forniti non sono validi.</string>
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.
+\n
+\n- assicurati che il daemon LND sia in esecuzione sul tuo server.
+\n
+\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Impossibile raggiungere l ` host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
