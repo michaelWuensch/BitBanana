@@ -229,7 +229,11 @@
     <string name="error_connection_invalid_host_or_port">Poskytovaný host nebo port je neplatný.</string>
     <string name="error_connection_invalid_macaroon2">Přístup byl odepřen! \n\nMacaroon je neplatný.</string>
     <string name="error_connection_server_unreachable">Čas vypršel.\nServer neodpovídá.\n\n- Ujistěte se, že máte dobré připojení k internetu\n\n- Ujistěte se, že server běží a má stále následující IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
+    <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.
+\n
+\n- ujistěte se, že na vašem serveru běží démon LND.
+\n
+\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
     <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.
