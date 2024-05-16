@@ -233,9 +233,17 @@
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nDu musst entweder die Verifizierung des Zertifikats in den Verbindungseinstellungen des Knotens deaktivieren oder das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
+    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.
+\n
+\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.
+\n
+\nDu musst entweder die Verifizierung des Zertifikats in den Verbindungseinstellungen des Knotens deaktivieren oder das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
-    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.
+\n
+\n- Stelle sicher, dass der LND daemon auf dem Server läuft.
+\n
+\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
     <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
