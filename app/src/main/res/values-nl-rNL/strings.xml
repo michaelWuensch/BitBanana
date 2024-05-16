@@ -199,7 +199,11 @@
     <string name="error_connection_invalid_host_or_port">De verstrekte host of poort is ongeldig.</string>
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.
+\n
+\n- zorg ervoor dat de LND daemon draait op je server.
+\n
+\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
     <string name="error_connection_unknown">Verbinding mislukt.</string>
     <string name="error_connection_tor_bootstrapping">Tor kon niet opstarten.
