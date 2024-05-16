@@ -246,7 +246,8 @@
 \n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
-    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
+    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.
+\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
     <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.
 \n
 \nBitBanana unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
