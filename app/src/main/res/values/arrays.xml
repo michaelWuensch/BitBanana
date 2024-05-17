@@ -115,8 +115,10 @@
         <item>fr</item>
         <item>de</item>
         <item>it</item>
+        <item>ja</item>
         <item>pt-BR</item>
         <item>pt-PT</item>
+        <item>es</item>
         <item>uk</item>
     </string-array>
 
@@ -130,8 +132,10 @@
         <item>French</item>
         <item>German</item>
         <item>Italian</item>
+        <item>Japanese</item>
         <item>Portuguese (Brazil)</item>
         <item>Portuguese (Portugal)</item>
+        <item>Spanish</item>
         <item>Ukrainian</item>
     </string-array>
 

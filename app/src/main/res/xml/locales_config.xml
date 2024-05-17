@@ -3,12 +3,14 @@
     <locale android:name="bg"/> <!-- Bulgarian -->
     <locale android:name="cs"/> <!-- Czech -->
     <locale android:name="nl"/> <!-- Dutch -->
-    <locale android:name="en"/>
-    <locale android:name="fi"/>
-    <locale android:name="fr"/> <!-- French (France) -->
+    <locale android:name="en"/> <!-- English -->
+    <locale android:name="fi"/> <!-- Finnish -->
+    <locale android:name="fr"/> <!-- French -->
     <locale android:name="de"/> <!-- German -->
     <locale android:name="it"/> <!-- Italian -->
+    <locale android:name="ja"/> <!-- Japanese -->
     <locale android:name="pt-BR"/> <!-- Portuguese (Brazil) -->
     <locale android:name="pt-PT"/> <!-- Portuguese (Portugal) -->
+    <locale android:name="es"/> <!-- Spanish -->
     <locale android:name="uk"/> <!-- Ukrainian -->
 </locale-config>
