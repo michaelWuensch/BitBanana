@@ -139,7 +139,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Je hebt een bedrag in fiatwaarde verzocht, maar je wisselkoersdata is oud (%1$s uur geleden opgevraagd).\nZorg ervoor dat je een internetverbinding hebt of overweeg om rechtstreeks bitcoin te verzoeken.\n\nWil je toch doorgaan?</string>
     <string name="guardian_remoteConnect">Weet je zeker dat je wilt verbinden met \n\n%1$s\n\nControleer zorgvuldig de hostnaam.</string>
     <string name="guardian_externalLink">Je staat op het punt een link met gevoelige gegevens te openen in je browser. Terwijl BitBanana al je dataverkeer met het Tor-netwerk anonimiseert, doet je browser dat niet. Als je deze gegevens privé wilt houden, gebruik dan een Tor-browser om de link te openen.</string>
-    <string name="guardian_oldLndVersion_remote">Update a.u.b.\n\nDe node waarmee je verbonden bent gebruikt een oude versie van LND. Versies onder %1$s worden niet meer ondersteunt.</string>
     <string name="settings_category_general">Algemeen</string>
     <string name="settings_category_security">Beveiliging</string>
     <string name="settings_category_help">Hulp</string>
@@ -183,7 +182,12 @@
     <string name="error_emptyClipboardPayment">Je klembord bevat geen betalingsdata.</string>
     <string name="error_emptyClipboardConnect">Je klembord bevat geen verbindingsdata.</string>
     <string name="error_qr_code_result_null">Kan QR-Code niet lezen, probeer opnieuw.</string>
-    <string name="error_connection_unsupported_format">Niet ondersteund verbindingsformat.\nGebruik een van de volgende formats:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server verbinding (config=...)\n- Volledige inhoud van je BTCPay Server configbestand</string>
+    <string name="error_connection_unsupported_format">Niet ondersteund verbindingsformat.
+\nGebruik een van de volgende formats:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Server verbinding (config=...)
+\n- Volledige inhoud van je BTCPay Server configbestand</string>
     <string name="error_unableToFetchBTCPayConfig">Kan de configuratie van BTCPay Server niet ophalen.</string>
     <string name="error_connection_invalidLndConnectString">Ongeldige lndconnect string.
 \nControleer of je het volgende format gebruikt:
@@ -195,7 +199,11 @@
     <string name="error_connection_invalid_host_or_port">De verstrekte host of poort is ongeldig.</string>
     <string name="error_connection_invalid_macaroon2">Toegang geweigerd!\n\nDe macaroon is ongeldig.</string>
     <string name="error_connection_server_unreachable">Timeout.\nDe server reageert niet.\n\n-Zorg ervoor dat je een goede internetverbinding hebt\n\n- Zorg er voor dat de server draait de nog steeds de volgende IP heeft:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.\n\n- zorg ervoor dat de LND daemon draait op je server.\n\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Kan geen verbinding maken met LND.
+\n
+\n- zorg ervoor dat de LND daemon draait op je server.
+\n
+\n- zorg ervoor dat je port forwarding actief is. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Kan de host niet bereiken.\n\nZorg ervoor dat je een internetverbinding hebt.</string>
     <string name="error_connection_unknown">Verbinding mislukt.</string>
     <string name="error_connection_tor_bootstrapping">Tor kon niet opstarten.

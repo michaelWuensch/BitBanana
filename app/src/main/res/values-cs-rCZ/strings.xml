@@ -162,7 +162,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Částku jste požadovali jako hodnotu fiat, ale vaše data směnného kurzu jsou stará (načtena před%1$s hodinami).\nUjistěte se, že máte připojení k internetu nebo zvažte žádost přímo v bitcoinech.\n\nChcete přesto pokračovat?</string>
     <string name="guardian_remoteConnect">Opravdu se chcete připojit k \n\n%1$s\n\nProsím pečlivě zkontrolujte název hostitele.</string>
     <string name="guardian_externalLink">V prohlížeči se chystáte otevřít odkaz s citlivými údaji. Zatímco BitBanana anonymizuje veškerý váš provoz pomocí sítě Tor, váš prohlížeč tak nečiní. Pokud chcete zachovat soukromí těchto údajů, použijte k otevření odkazu prohlížeč Tor.</string>
-    <string name="guardian_oldLndVersion_remote">Aktualizujte prosím.\n\nUzel, ke kterému jste připojeni, používá starou verzi LND. Verze pod %1$s již nejsou aktivně podporovány.</string>
     <string name="settings_category_general">Obecné</string>
     <string name="settings_category_security">Zabezpečení</string>
     <string name="settings_category_help">Pomoc</string>
@@ -213,24 +212,33 @@
     <string name="error_emptyClipboardPayment">Schránka neobsahuje žádné platební údaje.</string>
     <string name="error_emptyClipboardConnect">Schránka neobsahuje žádná data připojení.</string>
     <string name="error_qr_code_result_null">Nelze přečíst QR-kód, zkuste to znovu.</string>
-    <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.\nPoužijte jeden z následujících formátů:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Úplný obsah vašeho BTCPay Server config souboru</string>
+    <string name="error_connection_unsupported_format">Nepodporovaný formát připojení.
+\nPoužijte jeden z následujících formátů:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Server connection (config=...)
+\n- Úplný obsah vašeho BTCPay Server config souboru</string>
     <string name="error_unableToFetchBTCPayConfig">Nelze načíst konfiguraci z BTCPay Serveru.</string>
     <string name="error_connection_invalidLndConnectString">Neplatný lndconnect string.
 \nUjistěte se, že jste použili následující formát:
 \n
-\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">Certifikát je neplatný.</string>
     <string name="error_connection_no_macaroon">Vaše informace o připojení neobsahují macaroon. To je povinné.</string>
     <string name="error_connection_invalid_macaroon">Macaroon je neplatný.</string>
     <string name="error_connection_invalid_host_or_port">Poskytovaný host nebo port je neplatný.</string>
     <string name="error_connection_invalid_macaroon2">Přístup byl odepřen! \n\nMacaroon je neplatný.</string>
     <string name="error_connection_server_unreachable">Čas vypršel.\nServer neodpovídá.\n\n- Ujistěte se, že máte dobré připojení k internetu\n\n- Ujistěte se, že server běží a má stále následující IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.\n\n- ujistěte se, že na vašem serveru běží démon LND.\n\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
+    <string name="error_connection_lnd_unavailable">Nelze se připojit k LND.
+\n
+\n- ujistěte se, že na vašem serveru běží démon LND.
+\n
+\n- ujistěte se, že je přesměrování portů aktivní. (Port:%1$s)</string>
     <string name="error_connection_network_unreachable">Nelze se dostat k hostiteli.\n\nZkontrolujte, zda jste připojení k internetu.</string>
     <string name="error_connection_unknown">Připojení se nezdařilo.</string>
     <string name="error_connection_tor_bootstrapping">Tor se nepodařilo spustit.
 \n
-\nBitBanana Android nyní nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
+\nBitBanana nativně podporuje Tor. Pokud používáte Orbot, odstraňte prosím BitBanana ze seznamu aktivovaných Torů v Orbotu nebo Orbot úplně vypněte.</string>
     <string name="error_connection_wallet_locked">Odemkněte prosím peněženku.</string>
     <string name="error_connection_btcpay_invalid_json">Syntaxe JSON konfiguračního souboru BTCPay Serveru je neplatná.</string>
     <string name="error_connection_btcpay_invalid_config">Konfigurace BTCPay Serveru neobsahuje konfiguraci BTC GRPC.</string>
@@ -372,7 +380,9 @@
     <string name="lnurl_pay_save_secret">DŮLEŽITÉ:\nKód byl zkopírován do vaší schránky. Uložte ho, pokud ho budete potřebovat později. Tento dialog se znovu nezobrazí.</string>
     <string name="lnurl_invalid_response">Služba odpověděla neplatnou odpovědí.</string>
     <string name="string_analyzer_unrecognized_data">Nerozpoznaná data.</string>
-    <string name="rest_port">REST (port 8080) není podporován.\n\nChcete změnit port na 10009 (gRPC)?</string>
+    <string name="rest_port">REST není podporován.
+\n
+\nChcete se zkusit připojit přes gRPC?</string>
     <string name="drawer_menu_channels">Kanály</string>
     <string name="drawer_menu_contacts">Kontakty</string>
     <string name="drawer_menu_backup">Záloha</string>
@@ -409,7 +419,9 @@
     <string name="advanced_channel_details_time_lock">Časová zámek</string>
     <string name="advanced_channel_details_explanation_time_lock">V případě nespolupracujícího uzavření (nuceného uzavření) tohoto kanálu je časový zámek počtem bloků, které budete muset počkat, než budete mít opět přístup ke svým prostředkům.</string>
     <string name="advanced_channel_details_local_routing_fee">Místní směrovací poplatek</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">Poplatky, které obdržíte při předání transakce tímto kanálem. Celkový poplatek, který obdržíte, je součtem základního poplatku (v msat) a sazby poplatku.\nZákladní poplatek je částka, kterou obdržíte za každé přeposlání bez ohledu na výši transakce.\nSuma obdržená prostřednictvím sazby poplatku závisí na výši transakce.</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Poplatky, které obdržíte při předání transakce tímto kanálem. Celkový poplatek, který obdržíte, je součtem základního poplatku a sazby poplatku.
+\nZákladní poplatek je částka, kterou obdržíte za každé přeposlání bez ohledu na výši transakce.
+\nSuma obdržená prostřednictvím sazby poplatku závisí na výši transakce.</string>
     <string name="advanced_channel_details_remote_routing_fee">Poplatek za vzdálené směrování</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Poplatky, které druhý uzel obdrží, když předá transakci tímto kanálem. Platí pouze pro předávání transakcí. Pokud tento kanál použijete pro své transakce, nebudete muset nic platit.</string>
     <string name="advanced_channel_details_local_channel_reserve">Místní rezerva kanálu</string>
@@ -462,13 +474,12 @@
     <string name="activity_manage_channels_closed">Zavřené kanály</string>
     <string name="activity_manage_nodes">Spravovat uzly</string>
     <string name="settings_showHelpButtons">Zobrazovat tlačítka nápovědy</string>
-    <string name="node_added">Data pro připojení k uzlu byla přidána.</string>
     <string name="advanced_channel_details_initiator_peer">Protistrana</string>
     <string name="generated_signature">Vygenerovaný podpis:</string>
     <string name="documentation">Dokumentace</string>
     <string name="activity_utxos">Mince (UTXOs)</string>
     <string name="activity_forwarding">Směrování</string>
-    <string name="error_invalid_fee_preset_value">Hodnota muži být větší než 0.</string>
+    <string name="error_invalid_fee_preset_value">Hodnota musí být větší než 0.</string>
     <plurals name="blocks">
         <item quantity="one">%d Blok</item>
         <item quantity="few">%d Bloky</item>
@@ -689,4 +700,60 @@
 \nVáš uzel navazuje spojení automaticky, typicky k těm protistranám, se kterými máte aktivní kanál. Tato spojení můžete nicméně navazovat či ukončovat také manuálně v této aplikaci.</string>
     <string name="settings_featurePeers">Správa protistran</string>
     <string name="disconnect">Odpojit</string>
+    <string name="settings_featureContacts_summary">Se seznamem kontaktů je posílání peněz hračka.</string>
+    <string name="type">Typ</string>
+    <string name="duplicate">Duplikovat</string>
+    <string name="channel_close_type_breach">Breach</string>
+    <string name="guardian_custodial_lndhub">Chystáte se připojit k LNDHub účtu. Pokud nejste provozovatel tohoto LNDHubu nebudete mít skutečnou kontrolu nad vašimi prostředky. Vložte jen tolik prostředků, nakolik věříte provozovateli.</string>
+    <string name="settings_featureSignVerify_summary">Umožňuje podepsat a ověřit zprávy s vaším uzlem.</string>
+    <string name="error_connection_invalidLndHubConnectString">Neplatná LNDHub data.
+\nUjistěte se, že jste použili následující formát:
+\n
+\nlndhub://[user]:[password]@[host]</string>
+    <string name="error_grpc_setup_failed">Inicializace gRPC spojení selhala.</string>
+    <string name="error_input_field_empty">Položka %1$s nesmí být prázdná.</string>
+    <string name="name_duplicate">Jméno kopie</string>
+    <string name="name">Jméno</string>
+    <string name="peer_last_flap">Poslední přepnutí</string>
+    <string name="peer_flap_count">Počet přepnutí</string>
+    <string name="vpn">VPN</string>
+    <string name="vpn_automation">VPN Automatizace</string>
+    <string name="vpn_tunnel_name">Tunel</string>
+    <string name="vpn_no_vpn">Bez VPN</string>
+    <string name="vpn_start_on_open">Nastartovat při spuštění</string>
+    <string name="vpn_unable_to_start">Uups! Vypadá to, že VPN nejde automaticky nastartovat.</string>
+    <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Pro použití VPN dle Vašeho nastavení si musíte nainstalovat aplikaci %1$s.</string>
+    <string name="connection_state_disconnecting">Mazání existujících připojení…</string>
+    <string name="vpn_unable_to_start_no_permission" comment="Parameters are:  %1$s: appName">Aplikaci BitBanana musíte udělit oprávnění abys mohla ovládat %1$s.</string>
+    <string name="connection_state_starting_vpn">Startování VPN…</string>
+    <string name="connection_state_starting_tor">Startování Toru…</string>
+    <string name="duplication_successful">Duplikace proběhla úspěšně.</string>
+    <string name="unsaved_changes">Máte neuložené změny.</string>
+    <string name="connection_state_connecting">Připojování…</string>
+    <string name="discard">Zahodit</string>
+    <string name="error_duplication">Duplikování selhalo.</string>
+    <string name="error_tor_bootstrapping_failed">Tor bootstrapping selhalo.</string>
+    <string name="vpn_stop_on_close">Zastavit při ukončení</string>
+    <string name="vpn_change_battery_settings">Změnit nastavení baterie</string>
+    <string name="error_unknown_backend">Neznámý druh backendu.</string>
+    <string name="error_block_explorer_setup_invalid">Neplatné nastavení Block Exploreru.</string>
+    <string name="error_input_macaroon_hex">Macaroon musí být v hex formátu.</string>
+    <string name="help_dialog_lnurl_auth">Váš uzel slouží jako soukromý způsob přihlášení ke službám. Tento postup je založen na podepisování zpráv a nedojde u něj k odhalení žádných detailů o Vašem uzlu. Pokud Váš uzel přestane fungovat, přijdete o možnost se k Vašemu účtu přihlásit.</string>
+    <string name="help_dialog_settings_features">Příslib aplikace BitBanana je sloužit exportům a nabídnout jim širokou škálu funkcí. Nicméně chápeme, že ne každý potřebuje veškerou funkcionalitu. Proto si můžete v nastavení funkce, které nepotřebujete, schovat.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Sazba poplatků je příliš vysoká. Maximálně je povoleno %1$.2f%%.</string>
+    <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">Abyste mohli použít tuto VPN musíte nejdřív nainstalovat aplikaci%1$s.</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Nedostatečná lightning likvidita pro odesílání. Pro její zvýšení otevřete další kanály.
+\nSoučasné maximum:</string>
+    <string name="error_tor_might_cause_problem">Může to být způsobeno Torem. Zkuste ho v nastavení vypnout.</string>
+    <string name="help_dialog_node_nickname">Jméno se používá pouze pro seřazení Vašich uzlů v aplikaci BitBanana. Nemá žádný jiný efekt.</string>
+    <string name="error_no_permission_to_read_file">Přístup odepřen: Soubor nelze přečíst. Doporučujeme ho přesunout na jiné místo, např. složka \"Stažené\"/\"Downloads\" a otevřít ho tam.</string>
+    <string name="settings_featureCoinControl_summary">Pokročilá správa on-chain prostředků. Poskytuje seznam všech UTXO a umožňuje jejich manuální výběr při zasílání prostředků. Pokud je zakázáno je výběr mincí automatický.</string>
+    <string name="error_insufficient_on_chain_funds">Nedostatek on-chain prostředků. Maximálně dostupných:</string>
+    <string name="settings_unspecifiedAmountInvoices">Povolit faktury bez konkrétní částky</string>
+    <string name="on_chain_fallback_insufficient_funds">Nedostatek lightning prostředků. Platba proběhne on-chain.</string>
+    <string name="on_chain_fallback_expired">Lightning požadavek vypršel. Platba proběhne on-chain.</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Ujistěte se, že aplikace %1$s běží na pozadí. Pokud ano, zkontrolujte, že všechny Android optimalizace jsou pro %1$s vypnuté a aplikaci %1$s restartujte. Tlačítkem níže otevřete nastavení.
+\n
+\nPokud to nepomůže, otevřete %1$s a VPN zapněte ručně.</string>
+    <string name="on_chain_fallback_invalid_data">Neplatný lightning požadavek. Platba proběhne on-chain.</string>
 </resources>

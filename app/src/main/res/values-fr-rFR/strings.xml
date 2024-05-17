@@ -148,7 +148,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Vous avez demandé un montant en valeur fiduciaire, mais votre taux de change est ancien (récupéré il y a %1$s heures).\nAssurez-vous d\'être connecté à Internet ou essayez de demander un montant en Bitcoin.\n\nVoulez-vous continuer malgré cela ?</string>
     <string name="guardian_remoteConnect">Êtes-vous sûr de vouloir vous connecter à \n\n%1$s\n\nVeuillez vérifier cet hôte avec prudence.</string>
     <string name="guardian_externalLink">Vous êtes sur le point d\'ouvrir un lien avec des données sensibles dans votre navigateur. Alors que BitBanana anonymise tout votre trafic avec le réseau Tor, votre navigateur ne le fait pas. Si vous souhaitez garder ces données privées, utilisez le navigateur Tor pour ouvrir le lien.</string>
-    <string name="guardian_oldLndVersion_remote">Veuillez mettre à jour.\n\nLe nœud auquel vous êtes connecté exécute une ancienne version de LND. Les versions inférieures à %1$s ne sont plus activement prises en charge.</string>
     <string name="settings_category_general">Réglages généraux</string>
     <string name="settings_category_security">Sécurité</string>
     <string name="settings_category_help">Aide</string>
@@ -193,7 +192,12 @@
     <string name="error_emptyClipboardPayment">Votre presse-papier ne contient aucune information de paiement.</string>
     <string name="error_emptyClipboardConnect">Votre presse-papier ne contient aucune information de connexion.</string>
     <string name="error_qr_code_result_null">Impossible de lire le QR Code. Veuillez réessayer.</string>
-    <string name="error_connection_unsupported_format">Format de connexion non pris en charge.\nVeuillez utiliser un des formats suivants :\n\n- Chaîne lndconnect (lndconnect://...)\n- Configuration de BTCPay Server (config=...)\n- contenu de votre fichier de configuration BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Format de connexion non pris en charge.
+\nVeuillez utiliser un des formats suivants :
+\n
+\n- Chaîne lndconnect (lndconnect://...)
+\n- Configuration de BTCPay Server (config=...)
+\n- contenu de votre fichier de configuration BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Impossible de récupérer la configuration de BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Chaîne lndconnect invalide.
 \nAssurez-vous d\'utiliser le format suivant :
@@ -205,7 +209,11 @@
     <string name="error_connection_invalid_host_or_port">L\'hôte ou le port fourni est invalide.</string>
     <string name="error_connection_invalid_macaroon2">Accès refusé !\n\nLe fichier macaroon est invalide.</string>
     <string name="error_connection_server_unreachable">Expiration de la requête.\nLe serveur ne répond pas.\n\n- Assurez-vous d\'avoir une bonne connexion Internet\n\n- Assurez-vous que le serveur soit actif et possède l\'adresse IP suivante :\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.\n\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.\n\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Impossible de se connecter à lnd.
+\n
+\n- Assurez-vous que le daemon lnd soit actif sur votre serveur.
+\n
+\n- Assurez-vous que la redirection des ports soit active (Port : %1$s)</string>
     <string name="error_connection_network_unreachable">Impossible de joindre l\'hôte.\n\nVeuillez vous assurer que vous disposez d\'une connexion Internet.</string>
     <string name="error_connection_unknown">La connexion a échoué.</string>
     <string name="error_connection_tor_bootstrapping">Tor n\'a pas pu démarrer.

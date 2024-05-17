@@ -468,9 +468,6 @@
 \n
 \nDeseja continuar mesmo assim\?</string>
     <string name="guardian_disableScrambledPin">Se não estiver misturado, é fácil adivinhar o seu PIN apenas observando os movimentos dos seus dedos.</string>
-    <string name="guardian_oldLndVersion_remote">Por favor atualize.
-\n
-\nO nó ao qual está conectado executa uma versão antiga do LND. Versões abaixo de %1$s já não são suportadas ativamente.</string>
     <string name="guardian_externalLink">Está prestes a abrir uma ligação com dados sensíveis no seu navegador. Embora o BitBanana anonimize os seus dados com a rede Tor, o seu navegador não. Se deseja manter este dados privados use um navegador Tor para abrir a ligação.</string>
     <string name="guardian_certificate_verification">Se a verificação de certificado for desativada, estará vulnerável a um ataque man-in-the-middle. Faça isso apenas se souber o que faz.
 \n
@@ -506,9 +503,9 @@
 \n- Cadeia Lndconnect (lndconnect://...)
 \n- Conexão de BtcPay Server (config=...)
 \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
-    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. 
-\nCertifique-se de usar o seguinte formato: 
-\n 
+    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. \u0020
+\nCertifique-se de usar o seguinte formato: \u0020
+\n \u0020
 \nlndconnect://<ip>:<port>\?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</port></ip></string>
     <string name="error_connection_no_macaroon">As suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -619,7 +616,6 @@
 \nÉ responsável por decidir usar dados reais ou falsos. Como regra geral, recomendamos enviar dados reais apenas se for necessário por algum motivo. (ex.: quando for receber um código pelo correio etc.)
 \n
 \nSe uma caixa de seleção não puder ser desmarcada então este dado é marcado como obrigatório pelo beneficiário. Se não quiser enviar este dado, terá de cancelar o pagamento.</string>
-    <string name="node_added">Dados de conexão de nó foram adicionados.</string>
     <string name="lnurl_decoding_no_lnurl_data">Os dados não contêm um LNURL válido.</string>
     <string name="lnurl_unsupported_type">Tipo LNURL não suportado</string>
     <string name="lnurl_service_not_responding">%s não responde</string>

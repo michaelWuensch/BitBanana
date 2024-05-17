@@ -170,7 +170,6 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Du hast einen Fiat Betrag angefordert, aber dein Umrechnungskurs ist nicht mehr aktuell. (Zuletzt aktualisiert vor %1$s Stunden)\nStelle sicher, dass du eine Internetverbindung hast, oder fordere den Betrag direkt in Bitcoin an.\n\nMöchtest du trotzdem fortfahren?</string>
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
     <string name="guardian_externalLink">Du bist dabei, einen Link mit sensiblen Informationen in deinem Browser zu öffnen. Während BitBanana den kompletten Netzwerkverkehr mit Hilfe des Tor Netzwerks anonymisiert, tut das dein Browser nicht. Wenn du diese Daten privat halten möchtest, benutze einen Tor Browser um den Link zu öffnen.</string>
-    <string name="guardian_oldLndVersion_remote">Bitte aktualisieren.\n\nDie Node mit der du verbunden bist, führt eine alte Version von LND aus. Versionen, die älter sind als %1$s, werden nicht mehr aktiv unterstützt.</string>
     <string name="settings_category_general">Allgemein</string>
     <string name="settings_category_security">Sicherheit</string>
     <string name="settings_category_help">Hilfe</string>
@@ -217,24 +216,36 @@
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
-    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.\nBitte verwende eines der folgenden Formate:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.
+\nBitte verwende eines der folgenden Formate:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- Core Lightning grpc (cln-grpc://…)
+\n- LndHub (lndhub://…)
+\n- BtcPay Server Verbindung (config=...)
+\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
 \n
-\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
+\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Das Zertifikat is ungültig.</string>
     <string name="error_connection_no_macaroon">Deine Verbindungsinformationen enthalten kein Macaroon. Das Macaroon muss angegeben werden.</string>
     <string name="error_connection_invalid_macaroon">Das Macaroon ist ungültig.</string>
     <string name="error_connection_invalid_host_or_port">Der angegebene Host oder Port is ungültig.</string>
     <string name="error_connection_invalid_macaroon2">Zugriff verweigert!\n\nDas Macaroon ist ungültig.</string>
     <string name="error_connection_server_unreachable">Zeitüberschreitung.\nDer Server ist nicht erreichbar.\n\n- Bitte stelle sicher, dass du eine gute Internetverbindung hast.\n\n- Überprüfe ob der Server läuft und unter folgender IP-Adresse erreichbar ist:\n\n%1$s</string>
-    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.\n\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Zertifikats überein.\n\nDu musst entweder die Verifizierung des Zertifikats in den Verbindungseinstellungen des Knotens deaktivieren oder das Zertifikat erneuern. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain hinterlegt ist, bevor du das Zertifikat neu erstellst.</string>
+    <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.
+\n
+\nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Host-Zertifikats überein.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
-    <string name="error_connection_lnd_unavailable">Die Verbindung zum LND kann nicht hergestellt werden.\n\n- Stelle sicher, dass der LND daemon auf dem Server läuft.\n\n- Stelle sicher, dass Port forwarding aktiviert ist. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Verbindung fehlgeschlagen. Auf den Host kann zugegriffen werden, aber der Knoten antwortet nicht.
+\n
+\nBitte überprüfe, ob der Knoten betriebsbereit ist, ob die Port-Nummer (%1$s) korrekt ist und ob die Port-Weiterleitung eingerichtet ist.</string>
     <string name="error_connection_network_unreachable">Der Host kann nicht erreicht werden.\n\nBitte stelle sicher, dass du eine Internetverbindung hast.</string>
     <string name="error_connection_unknown">Verbindung fehlgeschlagen.</string>
-    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
+    <string name="error_connection_tor_unreachable">Tor Verbindung fehlgeschlagen.
+\nBitte aktiviere Tor in den Verbindungseinstellungen des Knotens.</string>
     <string name="error_connection_tor_bootstrapping">Tor konnte nicht gestartet werden.
 \n
 \nBitBanana unterstützt nun Tor standardmäßig. Falls du Orbot nutzt, entferne bitte BitBanana aus der Liste der Tor-aktivierten Apps, oder beende Orbot ganz.</string>
@@ -242,7 +253,7 @@
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
     <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
-    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es auch helfen Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
+    <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es helfen, Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.
 \nBitte verwende eines der folgenden Formate:
@@ -361,7 +372,6 @@
     <string name="confirm_node_deletion">Möchtest du diese Verbindungsdaten der Node wirklich löschen?</string>
     <string name="no_nodes">Keine Nodes</string>
     <string name="spinner_manage_nodes">Verwalten…</string>
-    <string name="node_added">Verbindungsdaten der Node wurden hinzugefügt.</string>
     <string name="useTor">Tor verwenden</string>
     <string name="verify_certificate">Zertifikat verifizieren</string>
     <string name="lnurl_withdraw_success">Abhebung\nerfolgreich</string>
@@ -734,10 +744,10 @@
     <string name="unsaved_changes">Es gibt nicht gespeicherte Änderungen.</string>
     <string name="discard">Verwerfen</string>
     <string name="duplication_successful">Die Duplizierung war erfolgreich.</string>
-    <string name="guardian_custodial_lndhub">Du bist dabei, dich mit einem LNDHub-Konto zu verbinden. Wenn du nicht der Host des LNDHubs bist, handelt es sich um eine Vermögensverwaltung. Wer auch immer den LNDHub kontrolliert, hat die Kontrolle über dein Geld. Zahle nur so viel ein, wie du dieser Person anvertrauen kannst.</string>
-    <string name="error_connection_invalidLndHubConnectString">Ungültige LNDHub Verbindungsdaten. 
-\nBitte stelle sicher, dass du das folgende Format verwendest: 
-\n 
+    <string name="guardian_custodial_lndhub">Das ist ein LndHub-Konto. Sofern du nicht der Betreiber des LndHub-Dienstes bist, handelt es sich um eine Vermögensverwaltung. Das Unternehmen oder die Person, die den Dienst verwaltet, hat die Kontrolle über dein Geld und kann deinen Transaktionsverlauf einsehen. Zahle nur so viel ein, wie du bereit bist, dem Anbieter zu vertrauen.</string>
+    <string name="error_connection_invalidLndHubConnectString">Ungültige LndHub Verbindungsdaten.
+\nBitte stelle sicher, dass du das folgende Format verwendest:
+\n
 \nlndhub://[Benutzer]:[Passwort]@[Host]</string>
     <string name="error_tor_bootstrapping_failed">Tor-Bootstrapping ist fehlgeschlagen.</string>
     <string name="vpn_start_on_open">Beim Öffnen starten</string>
@@ -749,4 +759,56 @@
     <string name="on_chain_fallback_insufficient_funds">Unzureichendes Lightning-Guthaben. Fallback auf On-Chain-Zahlung.</string>
     <string name="on_chain_fallback_expired">Lightning-Anfrage ist abgelaufen. Fallback auf On-Chain-Zahlung.</string>
     <string name="on_chain_fallback_invalid_data">Ungültige Lightning-Anfrage. Fallback auf On-Chain-Zahlung.</string>
+    <string name="error_connection_rest_authentication">Die Authentifizierung der Rest-API ist fehlgeschlagen.</string>
+    <string name="error_input_invalid_data">Das %1$s Eingabefeld enthält ungültige Daten.</string>
+    <string name="error_unsupported_network">Das Bitcoin-Netzwerk, mit dem du verbunden bist, wird nicht unterstützt.</string>
+    <string name="error_reading_qrCode_in_image">Es kann kein QR-Code im Bild gescannt oder erkannt werden.</string>
+    <string name="error_exchange_rate_requires_tor_toast">Die Abfrage der Wechselkurse ist fehlgeschlagen. Der von dir gewählte Anbieter benötigt tor.</string>
+    <string name="server_certificate">Host-Zertifikat</string>
+    <string name="client_certificate">Client-Zertifikat</string>
+    <string name="client_key">Client-Schlüssel</string>
+    <string name="backup_data_backupVersion_too_old">Diese Version wurde mit einer sehr alten Version von BitBanana erstellt. Leider wird sie nicht mehr unterstützt.</string>
+    <string name="wallet_load_sate_testing_connection">Verbindung wird getestet…</string>
+    <string name="guardian_oldNodeSoftwareVersion">Es ist Zeit für ein Update!
+\n
+\nDer Knoten, mit dem du verbunden bist, verwendet eine veraltete Version von %1$s. Versionen vor %2$s werden von BitBanana nicht mehr unterstützt.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">Die aktuelle Gebührenschätzung legt nahe, dass diese Transaktion mit einem Gebührensatz von %1$d sat/vB möglicherweise nie bestätigt wird. Erhöhe die Gebühr, um zu vermeiden, dass die Transaktion für lange Zeit stecken bleibt.
+\n
+\nMöchtest du trotzdem fortfahren?</string>
+    <string name="settings_requires_tor_toast">Dafür ist Tor erforderlich. Aktiviere es in den Einstellungen.</string>
+    <string name="settings_avatarStyleDisplayValues_0">Gemischt</string>
+    <string name="settings_avatarStyleDisplayValues_4">Tiere</string>
+    <string name="error_connection_no_c_lightning_rest_support">Die Verbindung von BitBanana zu Core Lightning über C-Lightning-Rest wird nicht unterstützt. Bitte prüfe, ob dein Knoten cln-grpc-Verbindungsdetails bereitstellt und verwende stattdessen diese für die Verbindung.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Ungültige cln-grpc-Verbindungsdaten.
+\nBitte stelle sicher, dass du das folgende Format verwendest:
+\n
+\ncln-grpc://[ip]:[port]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
+    <string name="error_payment_no_route_small_amount">Es wurde keine Route gefunden. Du versuchst, einen Betrag zu senden, der so klein ist, dass viele Kanäle ihn nicht weiterleiten können. Bitte überprüfe die Routing-Einstellungen für deine eigenen Kanäle und passe den MinHTLC-Wert an, falls nötig.</string>
+    <string name="error_fee_estimation_requires_tor_toast">Gebührenschätzungen konnten nicht abgefragt werden. Der von dir gewählte Anbieter benötigt tor.</string>
+    <string name="error_insufficient_funds">Diese Zahlung übersteigt dein verfügbares Guthaben.</string>
+    <string name="backend">Backend</string>
+    <string name="settings_custom_fee_estimation_provider">Benutzerdefinierte Gebührenschätzung</string>
+    <string name="settings_avatarStyle">Avatar-Stil</string>
+    <string name="settings_avatarStyleDisplayValues_1">Roboter</string>
+    <string name="settings_custom_exchange_rate_provider_host_description">Bitte gib die Host-Adresse deines Wechselkursanbieters an. Wenn du den Wechselkursanbieter selbst hostest, bleibt deine Privatsphäre vollständig gewahrt.</string>
+    <string name="settings_feeEstimationProvider">Gebührenschätzung</string>
+    <string name="settings_custom_fee_estimation_provider_host_description">Bitte gib die Host-Adresse deines Gebührenschätzungsanbieters an. Wenn du den Gebührenschätzungsanbieter selbst hostest, bleibt deine Privatsphäre vollständig gewahrt.</string>
+    <string name="settings_avatarStyleDisplayValues_2">Aliens</string>
+    <string name="settings_avatarStyleDisplayValues_3">Menschen</string>
+    <string name="error_connection_clngrpc_invalidCertificateOrKey">Ein angegebenes Zertifikat oder ein Schlüssel ist ungültig.</string>
+    <string name="error_connection_clngrpc_missingClientCert">Es fehlt das notwendige Client-Zertifikat.</string>
+    <string name="error_connection_clngrpc_missingClientKey">Es fehlt der erforderliche Client-Schlüssel.</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Verbindung wird erneut hergestellt…</string>
+    <string name="wallet_load_state_fetching_data">Daten werden geladen…</string>
+    <string name="error_connection_host_verification_failed_lnd">Überprüfung des Hostnamens fehlgeschlagen.
+\n
+\nDer Hostname deiner Verbindung stimmt nicht mit dem im Host-Zertifikat angegebenen Hostnamen überein.
+\n
+\nDu musst entweder die Zertifikatsüberprüfung in den Verbindungseinstellungen des Knotens deaktivieren oder dein Zertifikat neu erstellen. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain eingetragen ist, bevor du es neu erstellst.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Die bereitgestellten Verbindungsdaten für cln-grpc sind ungültig, da die Parameter nicht im base64url-Format kodiert sind.</string>
+    <string name="error_feature_not_supported_by_backend">Bei Verwendung von %1$s unterstützt BitBanana die folgende Funktion nicht: %2$s</string>
+    <string name="settings_custom_exchange_rate_provider">Benutzerdefinierter Wechselkursanbieter</string>
+    <string name="settings_node_fee_estimates">Intern</string>
 </resources>

@@ -138,7 +138,6 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">На път сте да платите %1$s%% в такси към копачите.\n\nВъзможни решения:\n- опитайте lightning плащане вместо това\n- изберете по-ниска такса и чакайте по-дълго\n- опитайте по-късно\n- транзактирайте с по-голямо кол-во\n\nИскате ли да продължите въпреки това?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Вие сте заявили кол-во във фиат, но данните за курса са стари (получени преди %1$s часа).\nУверете се, че имате Интернет връзка или обмислете възможността да заявите сумата директно в Биткойн.\n\nИскате ли да продължите въпреки това?</string>
     <string name="guardian_remoteConnect">Сигурни ли сте, че искате да се свържете с\n\n%1$s\n\nМоля проверете адреса внимателно.</string>
-    <string name="guardian_oldLndVersion_remote">Моля ъпдейтнете. \n\nНодът, към който сте свързани, използва стара версия на LND. Версиите под %1$s вече не са активно поддържани.</string>
     <string name="settings_category_general">Общи</string>
     <string name="settings_category_security">Сигурност</string>
     <string name="settings_category_help">Помощ</string>
@@ -180,7 +179,12 @@
     <string name="error_emptyClipboardPayment">Клипбордът Ви не съдържа никакви данни за плащания.</string>
     <string name="error_emptyClipboardConnect">Клипбордът Ви не съдържа никакви данни за свързване.</string>
     <string name="error_qr_code_result_null">Неуспешно четене на QR-Код, моля опитайте отново.</string>
-    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.\nМоля използвайте някой от следните формати:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Сървър връзка (config=...)\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
+    <string name="error_connection_unsupported_format">Неподдържан формат за свързване.
+\nМоля използвайте някой от следните формати:
+\n
+\n- Lndconnect string (lndconnect://...)
+\n- BtcPay Сървър връзка (config=...)
+\n- Пълното съдържание на Вашия BTCPay Сървър config файл</string>
     <string name="error_unableToFetchBTCPayConfig">Неуспешно извеждане на конфигурация от BTCPay Сървър.</string>
     <string name="error_connection_invalidLndConnectString">Невалиден lndconnect string.
 \nМоля уверете се, че използвате следния формат:
@@ -192,7 +196,11 @@
     <string name="error_connection_invalid_host_or_port">Избраният хост или порт е невалиден.</string>
     <string name="error_connection_invalid_macaroon2">Достъп отказан!\n\nMacaroon-ът е невалиден.</string>
     <string name="error_connection_server_unreachable">Таймаут.\nСървърът не отговаря.\n\n- Моля уверете се, че имате добра Интернет връзка.\n\n- Моля уверете се, че сървърът работи и все още има следното IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.\n\n- Уверете се, че LND deamon-ът работи на сървъра Ви.\n\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Неуспешно свързване с LND.
+\n
+\n- Уверете се, че LND deamon-ът работи на сървъра Ви.
+\n
+\n- Уверете се, че Вашият port forwarding е активен. (Порт: %1$s)</string>
     <string name="error_connection_network_unreachable">Неуспешно свързване с хоста.\n\nМоля уверете се, че имате връзка С Интернет.</string>
     <string name="error_connection_unknown">Връзката неуспешна.</string>
     <string name="error_connection_wallet_locked">Моля отключете портфейла.</string>

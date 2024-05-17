@@ -144,7 +144,6 @@
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Stai per pagare %1$s%% in tasse di network.\n\nSoluzioni possibili:\n\n- prova un pagamento lightning\n- seleziona tasse minori, attendi di più\n- prova di nuovo più tardi\n- effettua una transazione maggiore\n\nVuoi continuare comunque?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Hai richiesto un importo in valuta fiat, ma i dati sul tasso di cambio non sono aggiornati (recuperate %1$s ore fa).\nAssicurati di essere connesso ad internet o considera di richiedere direttamente in Bitcoin.\n\nVuoi continuare comunque?</string>
     <string name="guardian_remoteConnect">Sei sicuro di voler connetterti a \n\n%1$s\n\n Controlla attentamente il nome host.</string>
-    <string name="guardian_oldLndVersion_remote">Per favore Aggiornare.\n\nIl nodo a cui sei connesso esegue una vecchia versione di LND. Le versioni sotto %1$s non sono più supportate.</string>
     <string name="settings_category_general">Generale</string>
     <string name="settings_category_security">Sicurezza</string>
     <string name="settings_category_help">Aiuto</string>
@@ -188,7 +187,12 @@
     <string name="error_emptyClipboardPayment">I tuoi appunti non contengono dati di pagamento.</string>
     <string name="error_emptyClipboardConnect">I tuoi appunti non contengono dati di connessione.</string>
     <string name="error_qr_code_result_null">Impossibile scansionare il codice QR, prova di nuovo.</string>
-    <string name="error_connection_unsupported_format">Formato di connessione non supportato.\nUtilizza uno dei seguenti formati:\n\n- Stringa Lndconnect (lndconnect://...)\n- Connessione server BtcPay (config=...)\n- Contenuto completo del BTCPay File di configurazione del server</string>
+    <string name="error_connection_unsupported_format">Formato di connessione non supportato.
+\nUtilizza uno dei seguenti formati:
+\n
+\n- Stringa Lndconnect (lndconnect://...)
+\n- Connessione server BtcPay (config=...)
+\n- Contenuto completo del BTCPay File di configurazione del server</string>
     <string name="error_unableToFetchBTCPayConfig">Impossibile recuperare la configurazione dal server BTCPay.</string>
     <string name="error_connection_invalidLndConnectString">Stringa lndconnect non valida.
 \nAssicurati di aver utilizzato il seguente formato:
@@ -200,7 +204,11 @@
     <string name="error_connection_invalid_host_or_port">L\'host o la porta forniti non sono validi.</string>
     <string name="error_connection_invalid_macaroon2">Accesso negato!\n\nMacaroon non valido.</string>
     <string name="error_connection_server_unreachable">Timeout.\nIl server non risponde.\n\n- Assicurati di disporre di una buona connessione Internet\n\n- Assicurati che il server sia in esecuzione e abbia ancora il seguente IP:\n\n%1$s</string>
-    <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.\n\n- assicurati che il daemon LND sia in esecuzione sul tuo server.\n\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
+    <string name="error_connection_lnd_unavailable">Impossibile collegarsi a LND.
+\n
+\n- assicurati che il daemon LND sia in esecuzione sul tuo server.
+\n
+\n- assicurati che il port forwarding sia attivo. (Port: %1$s)</string>
     <string name="error_connection_network_unreachable">Impossibile raggiungere l ` host .\n\nControlla che hai connessione.</string>
     <string name="error_connection_unknown">Connessione fallita.</string>
     <string name="error_connection_wallet_locked">Si prega di sbloccare il portafoglio.</string>
