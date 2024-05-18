@@ -160,11 +160,11 @@
     <string name="error_connection_unsupported_format">Formato de conexión no admitido.
 \nUtilice uno de los siguientes formatos:
 \n
-\n- Cadena Lndconnect (lndconnect://...)
-\n- Core Lightning grpc (cln-grpc://...) (
-\n- LndHub (lndhub://...)
-\n- Conexión al servidor BtcPay (config=...)
-\n- Contenido completo de su fichero de configuración de BTCPay Server</string>
+\n- Cadena Lndconnect (lndconnect://…)
+\n- Grupo Core Lightning (cln-grpc://…)
+\n- LndHub (lndhub://…)
+\n- Conexión al servidor BtcPay (config=…)
+\n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Cadena inválida lndconnect.
 \nPor favor, asegúrese de utilizar el siguiente formato:
@@ -341,27 +341,23 @@
     <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">El host (%1$s) no puede resolverse. Actualiza la configuración de la conexión de tu nodo si ahora se puede acceder a él con una dirección o un nombre para el host diferentes.</string>
     <string name="error_connection_tor_unreachable">La conexión Tor ha fallado.
-\n Por favor, activa Tor en los ajustes de la conexión de los nodos.</string>
+\nPor favor, activa Tor en los ajustes de la conexión de los nodos.</string>
     <string name="settings_slowFee">Transacción lenta</string>
     <string name="error_useRegtestRequest">Estás conectado a la red REGTEST. Utiliza las direcciones REGTEST o las solicitudes de pago.</string>
     <string name="error">Fallo</string>
     <string name="settings_fastFee">Transacción rápida</string>
     <string name="settings_mediumFee">Transacción media</string>
-    <string name="error_connection_host_verification_failed">Error al verificar el nombre del host.
+    <string name="error_connection_host_verification_failed">Error en la verificación del nombre de host.
 \n
-\nEl nombre del host de tu conexión no coincide con el nombre del host proporcionado en el certificado.
-\n
-\n Tienes que desactivar la verificación de los certificados en la configuración de la conexión de los nodos o tienes que volver a crear tu certificado. Asegúrate de que el nombre del host se añade a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
+\nEl nombre de host de su conexión no coincide con el nombre de host proporcionado en el certificado de host.</string>
     <string name="error_connection_unknown">La conexión ha fallado.</string>
-    <string name="error_connection_lnd_unavailable">No se puede conectar a LND.
+    <string name="error_connection_lnd_unavailable">La conexión falló. Se puede acceder al host, pero el servicio del nodo no responde.
 \n
-\n- Asegúrate de que daemon LND se está ejecutando en tu servidor.
-\n
-\n- Asegúrate de que el reenvío de puertos está activo. (Puerto: %1$s)</string>
+\nVerifique que el nodo esté operativo, que el número de puerto (%1$s) es correcto y el reenvío de puertos está configurado.</string>
     <string name="error_zeroAmountPaymentRequest">Esto es un pago con importe cero. BitBanana no admite pagos con importe cero por motivos de seguridad.</string>
     <string name="settings_hideAllBalances_explanation">Ahora todos los saldos están difuminados y el saldo total se oculta tras el logotipo de BitBanana. Simplemente toca en cualquier campo difuminado o el logo de BitBanana para revelar temporalmente tu saldo.</string>
     <string name="settings_hideBalanceType_total">Únicamente el saldo total</string>
-    <string name="error_connection_internal_server_clearnet">El nodo es accesible pero devuelve un error interno. Este error puede ser causado por el uso de un puerto incorrecto. Como está intentando conectarse a un Nodo en clearnet, desactivar Tor en la configuración de la conexión de los nodos también podría resolver el problema.</string>
+    <string name="error_connection_internal_server_clearnet">El nodo es accesible pero devuelve un error interno. Este error puede ser causado por el uso de un puerto incorrecto. Como está intentando conectarse a un nodo en clearnet, desactivar Tor en la configuración de la conexión de los nodos también podría resolver el problema.</string>
     <string name="error_payment_invalid_details">Los pagos no coinciden con los datos especificados en la factura que estás intentando pagar.</string>
     <string name="error_connection_internal_server">El nodo es accesible pero devuelve un error interno. Este error puede deberse al uso de un puerto incorrecto.</string>
     <string name="error_payment_no_route">No se ha encontrado ninguna ruta que respete tu límite de %1$.1f%%. Aumentar el límite de las tarifas en los ajustes o abrir nuevos canales podría resolver el problema.</string>
@@ -818,12 +814,12 @@
     <string name="on_chain_fallback_invalid_data">Solicitud de relámpago no válida. Volviendo al pago en cadena.</string>
     <string name="settings_avatarStyleDisplayValues_2">Extraterrestres</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">La cadena de conexión proporcionada para cln-grpc no es válida ya que los parámetros no están codificados en formato base64url.</string>
-    <string name="error_feature_not_supported_by_backend">Mientras está conectado a %1$s, BitBanana no soporta la siguiente función: %2$s</string>
+    <string name="error_feature_not_supported_by_backend">Mientras está usando %1$s, BitBanana no soporta la siguiente función: %2$s</string>
     <string name="error_reading_qrCode_in_image">No se puede escanear o detectar el código QR en la imagen.</string>
     <string name="client_certificate">Certificado del cliente</string>
     <string name="client_key">Clave de cliente</string>
     <string name="wallet_load_sate_testing_connection">Comprobando la conexión…</string>
-    <string name="wallet_load_state_reconnect_after_unlock">Vuelva a conectar después de desbloquear…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Conectando de nuevo…</string>
     <string name="wallet_load_state_fetching_data">Obteniendo los datos…</string>
     <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
     <string name="settings_avatarStyleDisplayValues_4">Animales</string>
@@ -843,13 +839,13 @@
 \n
 \n¿Desea continuar de todos modos?</string>
     <string name="error_fee_estimation_requires_tor_toast">No se han podido obtener estimaciones de tarifas. El proveedor elegido requiere tor.</string>
-    <string name="server_certificate">Certificado del servidor</string>
+    <string name="server_certificate">Certificado del host</string>
     <string name="settings_custom_exchange_rate_provider">Proveedor de tipos de cambio personalizados</string>
     <string name="backup_data_backupVersion_too_old">Esta versión fue hecha con una versión muy antigua de BitBanana. Desafortunadamente ya no está soportada.</string>
     <string name="settings_requires_tor_toast">Esto requiere Tor. Habilítalo en la configuración.</string>
     <string name="settings_custom_exchange_rate_provider_host_description">Por favor, indique la dirección de su proveedor de servicios de cambio. Si aloja usted mismo el proveedor de tipos de cambio, su privacidad se mantendrá intacta.</string>
     <string name="settings_feeEstimationProvider">Estimación de tasas</string>
-    <string name="settings_node_fee_estimates">Estimaciones de las tasas de los nodos internos</string>
+    <string name="settings_node_fee_estimates">Interno</string>
     <string name="settings_custom_fee_estimation_provider_host_description">Por favor, indique la dirección de alojamiento de su proveedor de estimaciones de tarifas. Si aloja usted mismo el proveedor de estimaciones de tarifas, su privacidad se mantiene intacta.</string>
     <string name="settings_custom_fee_estimation_provider">Presupuesto personalizado</string>
     <string name="settings_avatarStyle">Estilo del avatar</string>
@@ -863,4 +859,9 @@
     <string name="error_insufficient_funds">Este pago excede su saldo disponible.</string>
     <string name="backend">Backend</string>
     <string name="error_connection_rest_authentication">Error al autenticarse con la API Rest.</string>
+    <string name="error_connection_host_verification_failed_lnd">Error en la verificación del nombre de host.
+\n
+\nEl nombre de host de su conexión no coincide con el nombre de host proporcionado en el certificado de host.
+\n
+\nDebe deshabilitar la verificación del certificado en la configuración de conexión de los nodos o debe volver a crear su certificado. Asegúrese de que el nombre de host se agregue a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
 </resources>
