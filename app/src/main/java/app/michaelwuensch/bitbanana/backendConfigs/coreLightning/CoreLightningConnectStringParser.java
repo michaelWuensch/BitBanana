@@ -15,7 +15,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
  * This class parses a core lightning grpc connect string
  * <p>
  * A connect string consists of the following parts:
- * cln-grpc://<HOST>:</PORT>?clientkey=<clientkeyvalue>&clientCert=<clientcertvalue>&caCert=<cacertvalue>
+ * cln-grpc://<HOST>:<PORT>?clientkey=<clientkeyvalue>&clientCert=<clientcertvalue>&caCert=<cacertvalue>
  * <p>
  * The parser returns an object containing the desired data or an descriptive error.
  */
