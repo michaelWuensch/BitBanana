@@ -212,19 +212,15 @@
     <string name="description">Descrição</string>
     <string name="error_connection_host_verification_failed">Verificação de nome de host falhou.
 \n
-\nO nome de host da sua conexão não corresponde ao nome de host do certificado.
-\n
-\n Você terá de desativar a verificação de certificado nas configurações da conexão de nós ou terá de recriar seu certificado. Certifique-se que o nome de host é adicionado a lnd.conf como tlsextradomain antes de recriá-lo.</string>
+\nO nome de host da sua conexão não corresponde ao nome de host do certificado.</string>
     <string name="settings_removePin">Remover PIN</string>
     <string name="settings_addressType">Tipo de Endereço Bitcoin</string>
     <string name="error_connection_internal_server">O nó é alcançável mas retorna um erro interno. Este erro talvez seja causado pelo uso de uma porta errada.</string>
     <string name="error_connection_tor_unreachable">Conexão Tor falhou.
-\n Por favor ative o Tor nas configurações da conexão de nós.</string>
-    <string name="error_connection_lnd_unavailable">Não foi possível conectar ao LND.
+\nPor favor ative o Tor nas configurações da conexão de nós.</string>
+    <string name="error_connection_lnd_unavailable">Conexão falhou. O host pode ser acessado, mas o serviço de nó não está respondendo.
 \n
-\n- certifique-se que o daemon LND está rodando em seu servidor.
-\n
-\n- certifique-se que seu encaminhamento de porta está ativo. (Porta: %1$s)</string>
+\nPor favor verifique que seu nó esteja funcionando, que o número de porta (%1$s) esteja correto, e que o encaminhamento de porta esteja configurado.</string>
     <string name="error_connection_unknown">Conexão falhou.</string>
     <string name="error_connection_internal_server_clearnet">O nó é alcançável mas retorna um erro interno. Este erro talvez seja causado pelo uso de uma porta errada. Como você está tentando se conectar a um nó na clearnet, desativar o Tor nas configurações da conexão de nós pode resolver o seu problema.</string>
     <string name="error_payment_no_route">Nenhuma rota foi encontrada que respeite seu limite de taxa de %1$.1f%%. Aumentar seu limite de taxa nas configurações ou abrir novos canais pode resolver o problema.</string>
@@ -842,10 +838,10 @@
     <string name="error_connection_clngrpc_parameterDecodingFailed">A string de conexão providenciada para cln-grpc é inválida já que os parâmetros não estão codificados no formato base64url.</string>
     <string name="error_reading_qrCode_in_image">Incapaz de escanear ou detectar o código QR da imagem.</string>
     <string name="wallet_load_state_fetching_data">Obtendo dados…</string>
-    <string name="server_certificate">Certificado do Servidor</string>
+    <string name="server_certificate">Certificado do Host</string>
     <string name="client_key">Chave do Cliente</string>
     <string name="settings_custom_exchange_rate_provider_host_description">Por favor ponha o endereço de host para seu provedor de taxa de câmbio. Quando você hospeda o provedor de taxa de câmbio você mesmo, sua privacidade é totalmente mantida.</string>
-    <string name="settings_node_fee_estimates">Estimativas internas de taxa de nó</string>
+    <string name="settings_node_fee_estimates">Interno</string>
     <string name="settings_feeEstimationProvider">Estimativa de Taxa</string>
     <string name="settings_custom_fee_estimation_provider_host_description">Por favor ponha o endereço de host para seu provedor de estimativa de taxa. Quando você hospeda o provedor de estimativa de taxa você mesmo, sua privacidade é totalmente mantida.</string>
     <string name="guardian_oldNodeSoftwareVersion">É hora de atualizar!
@@ -861,15 +857,20 @@
     <string name="error_payment_no_route_small_amount">Nenhuma rota foi encontrada. Você está tentando enviar uma quantia tão pequena que muitos canais podem não rotear. Por favor que as configurações de roteamento para seus próprios canais e adapte o valor MinHTLC se necessário.</string>
     <string name="error_input_invalid_data">O campo de entrada %1$s contém dados inválidos.</string>
     <string name="error_unsupported_network">A rede Bitcoin à qual você está conectado não é suportada.</string>
-    <string name="error_feature_not_supported_by_backend">Enquanto conectado a %1$s, BitBanana não suportará a seguinte função: %2$s</string>
+    <string name="error_feature_not_supported_by_backend">Enquanto usa %1$s, BitBanana não suportará a seguinte função: %2$s</string>
     <string name="error_exchange_rate_requires_tor_toast">Falha ao obter as taxas de câmbio. O seu provedor escolhido requer Tor.</string>
     <string name="error_fee_estimation_requires_tor_toast">Falha ao o ter as estimativas de taxa. Seu provedor escolhido requer Tor.</string>
     <string name="client_certificate">Certificado do Cliente</string>
     <string name="backup_data_backupVersion_too_old">Esta versão foi feita com uma versão muito antiga do BitBanana. Infelizmente ela não é mais suportada.</string>
     <string name="wallet_load_sate_testing_connection">Testando conexão…</string>
-    <string name="wallet_load_state_reconnect_after_unlock">Reconectar depois de desbloquear…</string>
+    <string name="wallet_load_state_reconnect_after_unlock">Reconectando…</string>
     <string name="settings_requires_tor_toast">Isto requer Tor. Ative-o nas configurações.</string>
     <string name="backend">Backend</string>
     <string name="error_insufficient_funds">Este pagamento excede seu balanço disponível.</string>
     <string name="error_connection_rest_authentication">Falha ao autenticar com a API Rest.</string>
+    <string name="error_connection_host_verification_failed_lnd">Verificação de nome de host falhou.
+\n
+\nO nome de host da sua conexão não corresponde ao nome de host providenciado no certificado do host.
+\n
+\nVocê tem de desativar a verificação de certificado nas configurações de conexão de nós ou recriar seu certificado. Certifique-se de que seu nome de host é adicionado a lnd.conf como tlsextradomain antes de recriá-lo.</string>
 </resources>
