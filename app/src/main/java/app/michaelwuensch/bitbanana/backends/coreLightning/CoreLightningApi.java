@@ -773,7 +773,7 @@ public class CoreLightningApi extends Api {
                         case "bech32":
                             return response.getBech32();
                         default:
-                            return response.getP2Tr();
+                            return response.getBech32(); // ToDo: replace with taproot when support for 24.02.2 is removed. A bug in that version causes P2TR to no work.
                     }
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
