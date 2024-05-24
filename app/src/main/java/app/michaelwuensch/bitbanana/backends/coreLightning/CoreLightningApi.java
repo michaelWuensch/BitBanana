@@ -139,7 +139,7 @@ public class CoreLightningApi extends Api {
                             .setPubKey(pubkey)
                             .setBlockHeight(response.getBlockheight())
                             .setLightningNodeUris(lnUris)
-                            .setNetwork(BackendConfig.Network.parseFromString(response.getNetwork()))
+                            .setNetwork(BackendConfig.Network.parseFromString(response.getNetwork().replace("bitcoin", "mainnet")))  // mainnet is called "bitcoin" on cln
                             .setSynced(!(response.hasWarningBitcoindSync() || response.hasWarningLightningdSync()))
                             .setAvatarMaterial(pubkey)
                             .build();
