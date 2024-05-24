@@ -1,0 +1,12 @@
+- Core Lightning support
+- LndHub support (connect to Alby, LNbits, ...)
+- Support for self-hosted exchange rate provider
+- Added mempool.space as exchange rate provider (clearnet & tor)
+- Support for self-hosted Fee Estimation
+- Added mempool.space and blockstream as Fee Estimation providers (clearnet & tor)
+- Scan QR codes from images
+- Set exact on-chain fees in sat/vB
+- Send and request sub satoshi amounts
+- Many UX improvements
+- Translation updates (full Spanish translation!)
+- Bug fixes
