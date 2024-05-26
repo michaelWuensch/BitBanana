@@ -10,11 +10,11 @@ Download or clone the source code from github.
 To verify the release files distributed with github releases, first build the APK:
 ```
 $ cd BitBanana/
-$ git checkout v0.6.6
+$ git checkout v0.8.1
 $ docker run --rm -v `pwd`:/project mingc/android-build-box:1.25.0 bash -c 'cd /project; ./gradlew assembleRelease'
 ```
 After executing this command, the built APK can be found in this directory:
-.../BitBanana/app/build/outputs/apk/release/bitbanana-0.6.6_48-release-unsigned.apk
+.../BitBanana/app/build/outputs/apk/release/bitbanana-0.8.1_58-release-unsigned.apk
 
 Extract both, the just built apk and the apk downloaded from github release.
 Rename the folder of the created apk to "built", the other one to "official".
@@ -32,11 +32,11 @@ Verifying a Play Store release unfortunatelly got more complicated since Google 
 To verify the release files distributed on Play Store, first build the AAB:
 ```
 $ cd BitBanana/
-$ git checkout v0.6.6
+$ git checkout v0.8.1
 $ docker run --rm -v `pwd`:/project mingc/android-build-box:1.25.0 bash -c 'cd /project; ./gradlew bundleRelease'
 ```
 After executing this command, the build AAB can be found in this directory:
-.../BitBanana/app/build/outputs/bundle/release/bitbanana-0.6.6_48-release.aab
+.../BitBanana/app/build/outputs/bundle/release/bitbanana-0.8.1_58-release.aab
 
 The AAB file is used to create device specific APK files.
 When you download the app from Google Play, google is dynamically providing the APK that fits your phone. This APK will be different from the universal APK distributed on GitHub releases. To be able to verify the Google Play download we need to extract the same device specific APK from the AAB we just created.  
@@ -44,7 +44,7 @@ To do so, we need the [bundletool][bundletool].
 Connect your smartphone to the PC and then run:
 
 ```
-$ bundletool build-apks --connected-device --bundle=bitbanana-0.6.6_48-release.aab --output=bitbanana-0.6.6_48-release.apks
+$ bundletool build-apks --connected-device --bundle=bitbanana-0.8.1_58-release.aab --output=bitbanana-0.8.1_58-release.apks
 ```
 
 Good, we now have a self built set of device specific APKs in form of an .apks file.
