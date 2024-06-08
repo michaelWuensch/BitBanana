@@ -89,9 +89,9 @@ message OutputDesc {
 
 message RouteHop {
 	bytes id = 1;
-        string short_channel_id = 2;
+	string scid = 2;
 	Amount feebase = 3;
-        uint32 feeprop = 4;
+	uint32 feeprop = 4;
 	uint32 expirydelta = 5;
 }
 message Routehint {
@@ -101,6 +101,19 @@ message RoutehintList {
 	repeated Routehint hints = 2;
 }
 
+message DecodeRouteHop {
+	bytes pubkey = 1;
+	string short_channel_id = 2;
+	Amount fee_base_msat = 3;
+	uint32 fee_proportional_millionths = 4;
+	uint32 cltv_expiry_delta = 5;
+}
+message DecodeRoutehint {
+	repeated DecodeRouteHop hops = 1;
+}
+message DecodeRoutehintList {
+	repeated DecodeRoutehint hints = 2;
+}
 
 message TlvEntry {
 	uint64 type = 1;
@@ -117,4 +130,21 @@ enum ChannelTypeName {
   anchors_zero_fee_htlc_tx_even = 2;
   scid_alias_even = 3;
   zeroconf_even = 4;
+}
+
+enum AutocleanSubsystem {
+	SUCCEEDEDFORWARDS = 0;
+	FAILEDFORWARDS = 1;
+	SUCCEEDEDPAYS = 2;
+	FAILEDPAYS = 3;
+	PAIDINVOICES = 4;
+	EXPIREDINVOICES = 5;
+}
+
+enum PluginSubcommand {
+	START = 0;
+	STOP = 1;
+	RESCAN = 2;
+	STARTDIR = 3;
+	LIST = 4;
 }

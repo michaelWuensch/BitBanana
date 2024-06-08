@@ -2,10 +2,13 @@ package app.michaelwuensch.bitbanana.backends.coreLightning.services;
 
 import com.github.ElementsProject.lightning.cln.NodeGrpc;
 
+import app.michaelwuensch.bitbanana.backends.DefaultObservable;
 import app.michaelwuensch.bitbanana.backends.DefaultSingle;
 import app.michaelwuensch.bitbanana.backends.RemoteSingleObserver;
+import app.michaelwuensch.bitbanana.backends.RemoteStreamObserver;
 import io.grpc.CallCredentials;
 import io.grpc.Channel;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class RemoteCoreLightningNodeService implements CoreLightningNodeService {
@@ -47,8 +50,23 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.AddpsbtoutputResponse> addPsbtOutput(com.github.ElementsProject.lightning.cln.AddpsbtoutputRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.addPsbtOutput(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.AutocleaninvoiceResponse> autoCleanInvoice(com.github.ElementsProject.lightning.cln.AutocleaninvoiceRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.autoCleanInvoice(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AutocleanonceResponse> autoCleanOnce(com.github.ElementsProject.lightning.cln.AutocleanonceRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.autoCleanOnce(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AutocleanstatusResponse> autoCleanStatus(com.github.ElementsProject.lightning.cln.AutocleanstatusRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.autoCleanStatus(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -92,18 +110,48 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
-    public Single<com.github.ElementsProject.lightning.cln.DelexpiredinvoiceResponse> delExpiredInvoice(com.github.ElementsProject.lightning.cln.DelexpiredinvoiceRequest request) {
-        return DefaultSingle.createDefault(emitter -> asyncStub.delExpiredInvoice(request, new RemoteSingleObserver<>(emitter)));
-    }
-
-    @Override
     public Single<com.github.ElementsProject.lightning.cln.DelinvoiceResponse> delInvoice(com.github.ElementsProject.lightning.cln.DelinvoiceRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.delInvoice(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.DevforgetchannelResponse> devForgetChannel(com.github.ElementsProject.lightning.cln.DevforgetchannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.devForgetChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.EmergencyrecoverResponse> emergencyRecover(com.github.ElementsProject.lightning.cln.EmergencyrecoverRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.emergencyRecover(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.RecoverResponse> recover(com.github.ElementsProject.lightning.cln.RecoverRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.recover(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.RecoverchannelResponse> recoverChannel(com.github.ElementsProject.lightning.cln.RecoverchannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.recoverChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.InvoiceResponse> invoice(com.github.ElementsProject.lightning.cln.InvoiceRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.invoice(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.InvoicerequestResponse> createInvoiceRequest(com.github.ElementsProject.lightning.cln.InvoicerequestRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.createInvoiceRequest(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.DisableinvoicerequestResponse> disableInvoiceRequest(com.github.ElementsProject.lightning.cln.DisableinvoicerequestRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.disableInvoiceRequest(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.ListinvoicerequestsResponse> listInvoiceRequests(com.github.ElementsProject.lightning.cln.ListinvoicerequestsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listInvoiceRequests(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -129,6 +177,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.ListtransactionsResponse> listTransactions(com.github.ElementsProject.lightning.cln.ListtransactionsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listTransactions(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.MakesecretResponse> makeSecret(com.github.ElementsProject.lightning.cln.MakesecretRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.makeSecret(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -227,6 +280,21 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.DelpayResponse> delPay(com.github.ElementsProject.lightning.cln.DelpayRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.delPay(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.DelforwardResponse> delForward(com.github.ElementsProject.lightning.cln.DelforwardRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.delForward(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.DisableofferResponse> disableOffer(com.github.ElementsProject.lightning.cln.DisableofferRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.disableOffer(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.DisconnectResponse> disconnect(com.github.ElementsProject.lightning.cln.DisconnectRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.disconnect(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -242,8 +310,33 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.Fundchannel_cancelResponse> fundChannel_Cancel(com.github.ElementsProject.lightning.cln.Fundchannel_cancelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fundChannelCancel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Fundchannel_completeResponse> fundChannel_Complete(com.github.ElementsProject.lightning.cln.Fundchannel_completeRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fundChannelComplete(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.FundchannelResponse> fundChannel(com.github.ElementsProject.lightning.cln.FundchannelRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.fundChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Fundchannel_startResponse> fundChannel_Start(com.github.ElementsProject.lightning.cln.Fundchannel_startRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fundChannelStart(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.GetlogResponse> getLog(com.github.ElementsProject.lightning.cln.GetlogRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getLog(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.FunderupdateResponse> funderUpdate(com.github.ElementsProject.lightning.cln.FunderupdateRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.funderUpdate(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -272,8 +365,43 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.MultifundchannelResponse> multiFundChannel(com.github.ElementsProject.lightning.cln.MultifundchannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.multiFundChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.MultiwithdrawResponse> multiWithdraw(com.github.ElementsProject.lightning.cln.MultiwithdrawRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.multiWithdraw(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.OfferResponse> offer(com.github.ElementsProject.lightning.cln.OfferRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.offer(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Openchannel_abortResponse> openChannel_Abort(com.github.ElementsProject.lightning.cln.Openchannel_abortRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.openChannelAbort(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Openchannel_bumpResponse> openChannel_Bump(com.github.ElementsProject.lightning.cln.Openchannel_bumpRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.openChannelBump(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Openchannel_initResponse> openChannel_Init(com.github.ElementsProject.lightning.cln.Openchannel_initRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.openChannelInit(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Openchannel_signedResponse> openChannel_Signed(com.github.ElementsProject.lightning.cln.Openchannel_signedRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.openChannelSigned(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Openchannel_updateResponse> openChannel_Update(com.github.ElementsProject.lightning.cln.Openchannel_updateRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.openChannelUpdate(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -282,13 +410,53 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.PluginResponse> plugin(com.github.ElementsProject.lightning.cln.PluginRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.plugin(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.RenepaystatusResponse> renePayStatus(com.github.ElementsProject.lightning.cln.RenepaystatusRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.renePayStatus(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.RenepayResponse> renePay(com.github.ElementsProject.lightning.cln.RenepayRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.renePay(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.ReserveinputsResponse> reserveInputs(com.github.ElementsProject.lightning.cln.ReserveinputsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.reserveInputs(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.SendcustommsgResponse> sendCustomMsg(com.github.ElementsProject.lightning.cln.SendcustommsgRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.sendCustomMsg(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.SendinvoiceResponse> sendInvoice(com.github.ElementsProject.lightning.cln.SendinvoiceRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.sendInvoice(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.SendonionmessageResponse> sendOnionMessage(com.github.ElementsProject.lightning.cln.SendonionmessageRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.sendOnionMessage(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.SetchannelResponse> setChannel(com.github.ElementsProject.lightning.cln.SetchannelRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.setChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.SetconfigResponse> setConfig(com.github.ElementsProject.lightning.cln.SetconfigRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.setConfig(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.SetpsbtversionResponse> setPsbtVersion(com.github.ElementsProject.lightning.cln.SetpsbtversionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.setPsbtVersion(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -302,6 +470,31 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.Splice_initResponse> splice_Init(com.github.ElementsProject.lightning.cln.Splice_initRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.spliceInit(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Splice_signedResponse> splice_Signed(com.github.ElementsProject.lightning.cln.Splice_signedRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.spliceSigned(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.Splice_updateResponse> splice_Update(com.github.ElementsProject.lightning.cln.Splice_updateRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.spliceUpdate(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.UnreserveinputsResponse> unreserveInputs(com.github.ElementsProject.lightning.cln.UnreserveinputsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.unreserveInputs(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.UpgradewalletResponse> upgradeWallet(com.github.ElementsProject.lightning.cln.UpgradewalletRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.upgradeWallet(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.WaitblockheightResponse> waitBlockHeight(com.github.ElementsProject.lightning.cln.WaitblockheightRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.waitBlockHeight(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -312,8 +505,18 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.ListconfigsResponse> listConfigs(com.github.ElementsProject.lightning.cln.ListconfigsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listConfigs(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.StopResponse> stop(com.github.ElementsProject.lightning.cln.StopRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.stop(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.HelpResponse> help(com.github.ElementsProject.lightning.cln.HelpRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.help(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -332,8 +535,78 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprchannelsapyResponse> bkprChannelsApy(com.github.ElementsProject.lightning.cln.BkprchannelsapyRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprChannelsApy(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprdumpincomecsvResponse> bkprDumpIncomeCsv(com.github.ElementsProject.lightning.cln.BkprdumpincomecsvRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprDumpIncomeCsv(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprinspectResponse> bkprInspect(com.github.ElementsProject.lightning.cln.BkprinspectRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprInspect(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprlistaccounteventsResponse> bkprListAccountEvents(com.github.ElementsProject.lightning.cln.BkprlistaccounteventsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprListAccountEvents(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkprlistbalancesResponse> bkprListBalances(com.github.ElementsProject.lightning.cln.BkprlistbalancesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprListBalances(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.BkprlistincomeResponse> bkprListIncome(com.github.ElementsProject.lightning.cln.BkprlistincomeRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.bkprListIncome(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BlacklistruneResponse> blacklistRune(com.github.ElementsProject.lightning.cln.BlacklistruneRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.blacklistRune(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.CheckruneResponse> checkRune(com.github.ElementsProject.lightning.cln.CheckruneRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.checkRune(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.CreateruneResponse> createRune(com.github.ElementsProject.lightning.cln.CreateruneRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.createRune(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.ShowrunesResponse> showRunes(com.github.ElementsProject.lightning.cln.ShowrunesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.showRunes(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.ElementsProject.lightning.cln.BlockAddedNotification> subscribeBlockAdded(com.github.ElementsProject.lightning.cln.StreamBlockAddedRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeBlockAdded(request, new RemoteStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.ElementsProject.lightning.cln.ChannelOpenFailedNotification> subscribeChannelOpenFailed(com.github.ElementsProject.lightning.cln.StreamChannelOpenFailedRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeChannelOpenFailed(request, new RemoteStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.ElementsProject.lightning.cln.ChannelOpenedNotification> subscribeChannelOpened(com.github.ElementsProject.lightning.cln.StreamChannelOpenedRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeChannelOpened(request, new RemoteStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.ElementsProject.lightning.cln.PeerConnectNotification> subscribeConnect(com.github.ElementsProject.lightning.cln.StreamConnectRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeConnect(request, new RemoteStreamObserver<>(emitter)));
+    }
+
+    @Override
+    public Observable<com.github.ElementsProject.lightning.cln.CustomMsgNotification> subscribeCustomMsg(com.github.ElementsProject.lightning.cln.StreamCustomMsgRequest request) {
+        return DefaultObservable.createDefault(emitter -> asyncStub.subscribeCustomMsg(request, new RemoteStreamObserver<>(emitter)));
     }
 
 }
