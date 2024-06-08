@@ -134,7 +134,7 @@ public class CoreLightningApi extends Api {
                     }
                     return CurrentNodeInfo.newBuilder()
                             .setAlias(String.valueOf(response.getAlias()))
-                            .setVersion(new Version(response.getVersion().replace("v", "")))
+                            .setVersion(new Version(response.getVersion().replace("v", "").split("-")[0]))
                             .setFullVersionString(response.getVersion())
                             .setPubKey(pubkey)
                             .setBlockHeight(response.getBlockheight())
