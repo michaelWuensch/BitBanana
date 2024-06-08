@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -191,7 +193,10 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 break;
             case -1:
                 // amount < 0 (sent on-chain)
-                mAmount.setAmountMsat(Math.abs(mTransaction.getAmount() + mTransaction.getFee()));
+                if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC)  // ToDo: do it the correct way for lnd
+                    mAmount.setAmountMsat(Math.abs(mTransaction.getAmount() + mTransaction.getFee()));
+                else
+                    mAmount.setAmountMsat(Math.abs(mTransaction.getAmount()));
                 mFee.setAmountMsat(mTransaction.getFee());
                 break;
         }

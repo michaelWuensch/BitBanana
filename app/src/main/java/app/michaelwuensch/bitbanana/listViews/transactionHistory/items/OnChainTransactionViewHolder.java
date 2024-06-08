@@ -3,6 +3,8 @@ package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
@@ -96,7 +98,10 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     break;
                 case -1:
                     // amount < 0 (sent on-chain)
-                    setAmount(amount + fee, true);
+                    if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC)  // ToDo: do it the correct way for lnd
+                        setAmount(amount + fee, true);
+                    else
+                        setAmount(amount, true);
                     setFee(fee, true);
                     setPrimaryDescription(mContext.getString(R.string.sent));
                     break;

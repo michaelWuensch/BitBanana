@@ -552,7 +552,6 @@ public class LndApi extends Api {
                 .setTransactionId(lndTransaction.getTxHash())
                 .setAmount(lndTransaction.getAmount() * 1000)
                 .setBlockHeight(lndTransaction.getBlockHeight())
-                .setConfirmations(lndTransaction.getNumConfirmations())
                 .setFee(lndTransaction.getTotalFees() * 1000)
                 .setTimeStamp(lndTransaction.getTimeStamp())
                 //.setLabel(lndTransaction.getLabel())

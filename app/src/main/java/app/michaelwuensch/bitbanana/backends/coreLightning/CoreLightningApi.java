@@ -3,6 +3,9 @@ package app.michaelwuensch.bitbanana.backends.coreLightning;
 import com.github.ElementsProject.lightning.cln.Amount;
 import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
+import com.github.ElementsProject.lightning.cln.BkprlistincomeIncome_events;
+import com.github.ElementsProject.lightning.cln.BkprlistincomeRequest;
+import com.github.ElementsProject.lightning.cln.BkprlistincomeResponse;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.CloseRequest;
@@ -35,6 +38,7 @@ import com.github.ElementsProject.lightning.cln.ListpeersRequest;
 import com.github.ElementsProject.lightning.cln.ListsendpaysPayments;
 import com.github.ElementsProject.lightning.cln.ListsendpaysRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
+import com.github.ElementsProject.lightning.cln.ListtransactionsResponse;
 import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
 import com.github.ElementsProject.lightning.cln.NewaddrRequest;
 import com.github.ElementsProject.lightning.cln.PayRequest;
@@ -95,7 +99,6 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
-import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -529,43 +532,85 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<OnChainTransaction>> listOnChainTransactions() {
-        // ToDo: There is still an error in Bkprlistincome in 24.02.2, wait for next version. After that we probably need to execute both Bkprlistincome & listTransaction and link the information to get what we want.
+        if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.02.2")) <= 0)  // ToDo: remove when support for 24.02.2 is removed.
+            return Single.just(new ArrayList<>());
+        else {
+            List<OnChainTransaction> tempFeeList = new ArrayList<>();
+            BkprlistincomeRequest bkprRequest = BkprlistincomeRequest.newBuilder()
+                    .build();
 
-        /*
-        BkprlistincomeRequest request = BkprlistincomeRequest.newBuilder()
-                .build();
+            Single<BkprlistincomeResponse> bkprIncomeRequest = CoreLightningNodeService().bkprListIncome(bkprRequest);
+            Single<ListtransactionsResponse> transactionsRequest = CoreLightningNodeService().listTransactions(ListtransactionsRequest.newBuilder().build());
 
-        return CoreLightningNodeService().bkprListIncome(request)
-                .map(response -> {
-                    List<OnChainTransaction> transactionList = new ArrayList<>();
-                    for (BkprlistincomeIncome_events incomeEvent : response.getIncomeEventsList()) {
-                        BBLog.e(LOG_TAG, "account: " + incomeEvent.getAccount());
-                        BBLog.e(LOG_TAG, "type: " + incomeEvent.getTag());
-                        BBLog.e(LOG_TAG, "credit: " + incomeEvent.getCreditMsat());
-                        BBLog.e(LOG_TAG, "debit: " + incomeEvent.getDebitMsat());
-                        BBLog.e(LOG_TAG, "______________");
-                    }
-                    return transactionList;
-                })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
- */
-        return CoreLightningNodeService().listTransactions(ListtransactionsRequest.newBuilder().build())
-                .map(response -> {
-                    List<OnChainTransaction> transactionList = new ArrayList<>();
-                    for (ListtransactionsTransactions transaction : response.getTransactionsList()) {
-                        transactionList.add(OnChainTransaction.newBuilder()
-                                .setTransactionId(ApiUtil.StringFromHexByteString(transaction.getHash()))
-                                //.setAmount(???)
-                                .setBlockHeight(transaction.getBlockheight())
-                                .setConfirmations(WalletUtil.getBlockHeight() - transaction.getBlockheight())
-                                //.setFee(???)
-                                //.setTimeStamp(???)
-                                //.setLabel(lndTransaction.getLabel())
-                                .build());
-                    }
-                    return transactionList;
-                })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching on-chain transactions failed: " + throwable.fillInStackTrace()));
+            return Single.zip(bkprIncomeRequest, transactionsRequest, (bkprResponse, transactionsResponse) -> {
+                        List<OnChainTransaction> eventList = new ArrayList<>();
+                        for (BkprlistincomeIncome_events incomeEvent : bkprResponse.getIncomeEventsList()) {
+                            BBLog.e(LOG_TAG, "account: " + incomeEvent.getAccount());
+                            BBLog.e(LOG_TAG, "type: " + incomeEvent.getTag());
+                            BBLog.e(LOG_TAG, "credit: " + incomeEvent.getCreditMsat().getMsat());
+                            BBLog.e(LOG_TAG, "debit: " + incomeEvent.getDebitMsat().getMsat());
+                            BBLog.e(LOG_TAG, "description: " + incomeEvent.getDescription());
+                            BBLog.e(LOG_TAG, "TransactionID: " + ApiUtil.StringFromHexByteString(incomeEvent.getTxid()));
+                            BBLog.e(LOG_TAG, "Outpoint: " + incomeEvent.getOutpoint());
+                            BBLog.e(LOG_TAG, "______________");
+
+
+                            if (incomeEvent.getAccount().equals("wallet") && incomeEvent.getTag().equals("deposit")) {
+                                eventList.add(OnChainTransaction.newBuilder()
+                                        .setTransactionId(incomeEvent.getOutpoint().split(":")[0])
+                                        .setAmount(incomeEvent.getCreditMsat().getMsat())
+                                        //.setBlockHeight(incomeEvent.getOutpoint())
+                                        //.setConfirmations(WalletUtil.getBlockHeight() - transaction.getBlockheight())
+                                        .setTimeStamp(incomeEvent.getTimestamp())
+                                        //.setLabel(lndTransaction.getLabel())
+                                        .setType(OnChainTransaction.TransactionType.WALLET_RECEIVE)
+                                        .build());
+                            }
+
+                            if (incomeEvent.getAccount().equals("wallet") && incomeEvent.getTag().equals("withdrawal")) {
+                                eventList.add(OnChainTransaction.newBuilder()
+                                        .setTransactionId(incomeEvent.getOutpoint().split(":")[0])
+                                        .setAmount(incomeEvent.getDebitMsat().getMsat() * -1)
+                                        //.setBlockHeight(incomeEvent.getOutpoint())
+                                        //.setConfirmations(WalletUtil.getBlockHeight() - transaction.getBlockheight())
+                                        .setTimeStamp(incomeEvent.getTimestamp())
+                                        //.setLabel(lndTransaction.getLabel())
+                                        .setType(OnChainTransaction.TransactionType.WALLET_SEND)
+                                        .build());
+                            }
+
+                            if (incomeEvent.getAccount().equals("wallet") && incomeEvent.getTag().equals("onchain_fee")) {
+                                tempFeeList.add(OnChainTransaction.newBuilder()
+                                        .setTransactionId(ApiUtil.StringFromHexByteString(incomeEvent.getTxid()))
+                                        .setAmount(incomeEvent.getDebitMsat().getMsat())
+                                        .build());
+                            }
+
+                        }
+
+                        // Add blockHeight info
+                        List<OnChainTransaction> transactionList = new ArrayList<>();
+                        for (ListtransactionsTransactions transaction : transactionsResponse.getTransactionsList()) {
+                            for (OnChainTransaction t : eventList) {
+                                if (ApiUtil.StringFromHexByteString(transaction.getHash()).equals(t.getTransactionId())) {
+                                    t.setBlockHeight(transaction.getBlockheight());
+                                }
+                            }
+                        }
+
+                        // Combine transaction fees with transactions
+                        for (OnChainTransaction fee : tempFeeList) {
+                            for (OnChainTransaction t : eventList) {
+                                if (fee.getTransactionId().equals(t.getTransactionId()))
+                                    t.setFee(fee.getAmount());
+                            }
+                        }
+
+                        return eventList;
+                    })
+                    .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching on-chain transactions failed: " + throwable.fillInStackTrace()));
+        }
+
     }
 
     private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {
@@ -774,7 +819,7 @@ public class CoreLightningApi extends Api {
                             return response.getBech32();
                         case "bech32m":
                             if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.02.2")) <= 0) // ToDo: remove when support for 24.02.2 is removed. A bug in that version causes P2TR to no work.
-                               return response.getBech32();
+                                return response.getBech32();
                             else
                                 return response.getP2Tr();
                         default:
