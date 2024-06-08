@@ -1,0 +1,3 @@
+- Compatibility with Core Lighting 24.05
+- Added support to generate Taproot addresses for Core Lightning 24.05 and above
+- Display on-chain transactions in transaction history for Core Lightning 24.05 and above
