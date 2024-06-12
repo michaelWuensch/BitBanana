@@ -316,13 +316,14 @@ public class ManualSetup extends BaseAppCompatActivity {
             showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
-        if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
-            showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
-            return;
-        }
 
         if (mSpType.getSelectedItemPosition() == 0) {
             // LND grpc
+            if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+
             if ((mEtAuthenticationToken.getData() == null || mEtAuthenticationToken.getData().isEmpty())) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.macaroon)), RefConstants.ERROR_DURATION_SHORT);
                 return;
@@ -335,6 +336,11 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (mSpType.getSelectedItemPosition() == 1) {
             // CoreLightning grpc
+            if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+
             if ((mEtClientCertificate.getData() == null || mEtClientCertificate.getData().isEmpty())) {
                 if (mEtClientCertificate.getEditText().getText().toString().isEmpty())
                     showError(getString(R.string.error_input_field_empty, getString(R.string.client_certificate)), RefConstants.ERROR_DURATION_SHORT);
