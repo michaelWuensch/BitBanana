@@ -1,0 +1,2 @@
+- Fixed LndHub transaction history not displayed in some cases
+- Fixed port requirement to modify LndHub configuration
