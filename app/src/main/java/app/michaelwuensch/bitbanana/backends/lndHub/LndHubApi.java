@@ -1,5 +1,8 @@
 package app.michaelwuensch.bitbanana.backends.lndHub;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -138,7 +141,12 @@ public class LndHubApi extends Api {
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getuserinvoices")
                 .build();
-        return RxRestWrapper.makeRxCall(getClient(), request, LndHubUserInvoice[].class, response -> {
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LndHubUserInvoice.class, new GenericFallbackDeserializer<>(LndHubUserInvoice.class))
+                .create();
+
+        return RxRestWrapper.makeRxCall(getClient(), gson, request, LndHubUserInvoice[].class, response -> {
             for (LndHubUserInvoice invoice : response) {
                 if (invoice.getPaymentHash().equals(paymentHash)) {
                     LnInvoice.Builder builder = LnInvoice.newBuilder()
@@ -166,7 +174,12 @@ public class LndHubApi extends Api {
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "gettxs")
                 .build();
-        return RxRestWrapper.makeRxCall(getClient(), request, LndHubTx[].class, response -> {
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LndHubTx.class, new GenericFallbackDeserializer<>(LndHubTx.class))
+                .create();
+
+        return RxRestWrapper.makeRxCall(getClient(), gson, request, LndHubTx[].class, response -> {
             List<LnPayment> paymentsList = new ArrayList<>();
 
             for (LndHubTx tx : response)

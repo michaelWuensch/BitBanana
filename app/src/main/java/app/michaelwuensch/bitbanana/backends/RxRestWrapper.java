@@ -25,6 +25,10 @@ public class RxRestWrapper {
     private static final String LOG_TAG = RxRestWrapper.class.getSimpleName();
 
     public static <T, R> Single<R> makeRxCall(OkHttpClient client, Request request, Class<T> jsonResponseClass, Function<T, R> mapper) {
+        return makeRxCall(client, new Gson(), request, jsonResponseClass, mapper);
+    }
+
+    public static <T, R> Single<R> makeRxCall(OkHttpClient client, Gson gson, Request request, Class<T> jsonResponseClass, Function<T, R> mapper) {
         return DefaultSingle.create(emitter -> {
             if (debug)
                 BBLog.d(LOG_TAG, "Execute request " + request.url());
@@ -54,7 +58,7 @@ public class RxRestWrapper {
                                 if (jsonResponseClass == null)
                                     onRxCallSuccess(emitter, mapper.apply(null));
                                 else {
-                                    T result = new Gson().fromJson(responseAsString, jsonResponseClass);
+                                    T result = gson.fromJson(responseAsString, jsonResponseClass);
                                     R mappedData = mapper.apply(result);
                                     onRxCallSuccess(emitter, mappedData);
                                 }
@@ -68,7 +72,7 @@ public class RxRestWrapper {
                         } else {
                             try {
                                 String responseAsString = response.body().string();
-                                RestErrorResponse errorResponse = new Gson().fromJson(responseAsString, RestErrorResponse.class);
+                                RestErrorResponse errorResponse = gson.fromJson(responseAsString, RestErrorResponse.class);
                                 if (errorResponse.getError() && errorResponse.getMessage() != null) {
                                     BBLog.w(LOG_TAG, "Response failed: " + errorResponse.getMessage());
                                     onRxCallFailed(emitter, new RuntimeException(errorResponse.getMessage()));
