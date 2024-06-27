@@ -100,6 +100,11 @@ public class RemoteLndLightningService implements LndLightningService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.GetDebugInfoResponse> getDebugInfo(com.github.lightningnetwork.lnd.lnrpc.GetDebugInfoRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getDebugInfo(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoResponse> getRecoveryInfo(com.github.lightningnetwork.lnd.lnrpc.GetRecoveryInfoRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.getRecoveryInfo(request, new RemoteSingleObserver<>(emitter)));
     }

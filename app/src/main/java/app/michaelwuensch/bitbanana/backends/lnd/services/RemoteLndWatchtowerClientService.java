@@ -27,6 +27,16 @@ public class RemoteLndWatchtowerClientService implements LndWatchtowerClientServ
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerResponse> deactivateTower(com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.deactivateTower(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.wtclientrpc.TerminateSessionResponse> terminateSession(com.github.lightningnetwork.lnd.wtclientrpc.TerminateSessionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.terminateSession(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.wtclientrpc.ListTowersResponse> listTowers(com.github.lightningnetwork.lnd.wtclientrpc.ListTowersRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listTowers(request, new RemoteSingleObserver<>(emitter)));
     }

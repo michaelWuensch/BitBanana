@@ -18,6 +18,8 @@ public interface LndWalletKitService {
 
     Single<com.github.lightningnetwork.lnd.walletrpc.AddrResponse> nextAddr(com.github.lightningnetwork.lnd.walletrpc.AddrRequest request);
 
+    Single<com.github.lightningnetwork.lnd.lnrpc.Transaction> getTransaction(com.github.lightningnetwork.lnd.walletrpc.GetTransactionRequest request);
+
     Single<com.github.lightningnetwork.lnd.walletrpc.ListAccountsResponse> listAccounts(com.github.lightningnetwork.lnd.walletrpc.ListAccountsRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.RequiredReserveResponse> requiredReserve(com.github.lightningnetwork.lnd.walletrpc.RequiredReserveRequest request);
@@ -35,6 +37,8 @@ public interface LndWalletKitService {
     Single<com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptResponse> importTapscript(com.github.lightningnetwork.lnd.walletrpc.ImportTapscriptRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.PublishResponse> publishTransaction(com.github.lightningnetwork.lnd.walletrpc.Transaction request);
+
+    Single<com.github.lightningnetwork.lnd.walletrpc.RemoveTransactionResponse> removeTransaction(com.github.lightningnetwork.lnd.walletrpc.GetTransactionRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.SendOutputsResponse> sendOutputs(com.github.lightningnetwork.lnd.walletrpc.SendOutputsRequest request);
 

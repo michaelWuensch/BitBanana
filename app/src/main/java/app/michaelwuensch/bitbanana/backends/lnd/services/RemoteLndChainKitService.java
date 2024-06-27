@@ -22,6 +22,11 @@ public class RemoteLndChainKitService implements LndChainKitService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.chainrpc.GetBlockHeaderResponse> getBlockHeader(com.github.lightningnetwork.lnd.chainrpc.GetBlockHeaderRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getBlockHeader(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.chainrpc.GetBestBlockResponse> getBestBlock(com.github.lightningnetwork.lnd.chainrpc.GetBestBlockRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.getBestBlock(request, new RemoteSingleObserver<>(emitter)));
     }

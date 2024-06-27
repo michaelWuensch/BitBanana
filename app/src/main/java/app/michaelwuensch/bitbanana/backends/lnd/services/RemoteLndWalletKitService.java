@@ -52,6 +52,11 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.lnrpc.Transaction> getTransaction(com.github.lightningnetwork.lnd.walletrpc.GetTransactionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getTransaction(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.ListAccountsResponse> listAccounts(com.github.lightningnetwork.lnd.walletrpc.ListAccountsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listAccounts(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -94,6 +99,11 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.PublishResponse> publishTransaction(com.github.lightningnetwork.lnd.walletrpc.Transaction request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.publishTransaction(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.RemoveTransactionResponse> removeTransaction(com.github.lightningnetwork.lnd.walletrpc.GetTransactionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.removeTransaction(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override

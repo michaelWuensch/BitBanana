@@ -8,6 +8,10 @@ public interface LndWatchtowerClientService {
 
     Single<com.github.lightningnetwork.lnd.wtclientrpc.RemoveTowerResponse> removeTower(com.github.lightningnetwork.lnd.wtclientrpc.RemoveTowerRequest request);
 
+    Single<com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerResponse> deactivateTower(com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerRequest request);
+
+    Single<com.github.lightningnetwork.lnd.wtclientrpc.TerminateSessionResponse> terminateSession(com.github.lightningnetwork.lnd.wtclientrpc.TerminateSessionRequest request);
+
     Single<com.github.lightningnetwork.lnd.wtclientrpc.ListTowersResponse> listTowers(com.github.lightningnetwork.lnd.wtclientrpc.ListTowersRequest request);
 
     Single<com.github.lightningnetwork.lnd.wtclientrpc.Tower> getTowerInfo(com.github.lightningnetwork.lnd.wtclientrpc.GetTowerInfoRequest request);
