@@ -6,6 +6,8 @@ public class RoutingPolicy implements Serializable {
 
     private final long FeeBase;
     private final long FeeRate;
+    private final long InboundFeeBase;
+    private final long InboundFeeRate;
     private final int Delay;
     private final long MinHTLC;
     private final long MaxHTLC;
@@ -20,6 +22,8 @@ public class RoutingPolicy implements Serializable {
         this.Delay = builder.Delay;
         this.MinHTLC = builder.MinHTLC;
         this.MaxHTLC = builder.MaxHTLC;
+        this.InboundFeeBase = builder.InboundFeeBase;
+        this.InboundFeeRate = builder.InboundFeeRate;
     }
 
     public long getFeeBase() {
@@ -28,6 +32,14 @@ public class RoutingPolicy implements Serializable {
 
     public long getFeeRate() {
         return FeeRate;
+    }
+
+    public long getInboundFeeBase() {
+        return InboundFeeBase;
+    }
+
+    public long getInboundFeeRate() {
+        return InboundFeeRate;
     }
 
     public int getDelay() {
@@ -47,6 +59,8 @@ public class RoutingPolicy implements Serializable {
     public static class Builder {
         private long FeeBase;
         private long FeeRate;
+        private long InboundFeeBase;
+        private long InboundFeeRate;
         private int Delay;
         private long MinHTLC;
         private long MaxHTLC;
@@ -66,6 +80,16 @@ public class RoutingPolicy implements Serializable {
 
         public Builder setFeeRate(long feeRate) {
             this.FeeRate = feeRate;
+            return this;
+        }
+
+        public Builder setInboundFeeBase(long feeBase) {
+            this.InboundFeeBase = feeBase;
+            return this;
+        }
+
+        public Builder setInboundFeeRate(long feeRate) {
+            this.InboundFeeRate = feeRate;
             return this;
         }
 

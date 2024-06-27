@@ -10,6 +10,10 @@ public class UpdateRoutingPolicyRequest implements Serializable {
     private final boolean hasFeeBase;
     private final long FeeRate;
     private final boolean hasFeeRate;
+    private final long InboundFeeBase;
+    private final boolean hasInboundFeeBase;
+    private final long InboundFeeRate;
+    private final boolean hasInboundFeeRate;
     private final int Delay;
     private final boolean hasDelay;
     private final long MinHTLC;
@@ -28,6 +32,10 @@ public class UpdateRoutingPolicyRequest implements Serializable {
         this.hasFeeBase = builder.hasFeeBase;
         this.FeeRate = builder.FeeRate;
         this.hasFeeRate = builder.hasFeeRate;
+        this.InboundFeeBase = builder.InboundFeeBase;
+        this.hasInboundFeeBase = builder.hasInboundFeeBase;
+        this.InboundFeeRate = builder.InboundFeeRate;
+        this.hasInboundFeeRate = builder.hasInboundFeeRate;
         this.Delay = builder.Delay;
         this.hasDelay = builder.hasDelay;
         this.MinHTLC = builder.MinHTLC;
@@ -52,13 +60,28 @@ public class UpdateRoutingPolicyRequest implements Serializable {
         return hasFeeBase;
     }
 
-
     public long getFeeRate() {
         return FeeRate;
     }
 
     public boolean hasFeeRate() {
         return hasFeeRate;
+    }
+
+    public long getInboundFeeBase() {
+        return InboundFeeBase;
+    }
+
+    public boolean hasInboundFeeBase() {
+        return hasInboundFeeBase;
+    }
+
+    public long getInboundFeeRate() {
+        return InboundFeeRate;
+    }
+
+    public boolean hasInboundFeeRate() {
+        return hasInboundFeeRate;
     }
 
     public int getDelay() {
@@ -94,6 +117,10 @@ public class UpdateRoutingPolicyRequest implements Serializable {
         private boolean hasFeeBase;
         private long FeeRate;
         private boolean hasFeeRate;
+        private long InboundFeeBase;
+        private boolean hasInboundFeeBase;
+        private long InboundFeeRate;
+        private boolean hasInboundFeeRate;
         private int Delay;
         private Boolean hasDelay;
         private long MinHTLC;
@@ -124,6 +151,18 @@ public class UpdateRoutingPolicyRequest implements Serializable {
         public Builder setFeeRate(long feeRate) {
             this.FeeRate = feeRate;
             this.hasFeeRate = true;
+            return this;
+        }
+
+        public Builder setInboundFeeBase(long feeBase) {
+            this.InboundFeeBase = feeBase;
+            this.hasInboundFeeBase = true;
+            return this;
+        }
+
+        public Builder setInboundFeeRate(long feeRate) {
+            this.InboundFeeRate = feeRate;
+            this.hasInboundFeeRate = true;
             return this;
         }
 

@@ -18,6 +18,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Hop;
+import com.github.lightningnetwork.lnd.lnrpc.InboundFee;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
 import com.github.lightningnetwork.lnd.lnrpc.Invoice;
 import com.github.lightningnetwork.lnd.lnrpc.InvoiceSubscription;
@@ -461,6 +462,16 @@ public class LndApi extends Api {
             LNDRequest.setMinHtlcMsat(updateRoutingPolicyRequest.getMinHTLC());
             LNDRequest.setMinHtlcMsatSpecified(true);
         }
+        if (updateRoutingPolicyRequest.hasInboundFeeRate() || updateRoutingPolicyRequest.hasInboundFeeBase()) {
+            InboundFee.Builder ifb = InboundFee.newBuilder();
+            if (updateRoutingPolicyRequest.hasInboundFeeBase())
+                ifb.setBaseFeeMsat((int) updateRoutingPolicyRequest.getInboundFeeBase());
+            if (updateRoutingPolicyRequest.hasInboundFeeRate())
+                ifb.setFeeRatePpm((int) updateRoutingPolicyRequest.getInboundFeeRate());
+            LNDRequest.setInboundFee(ifb);
+        }
+
+
         if (updateRoutingPolicyRequest.hasMaxHTLC())
             LNDRequest.setMaxHtlcMsat(updateRoutingPolicyRequest.getMaxHTLC());
 
