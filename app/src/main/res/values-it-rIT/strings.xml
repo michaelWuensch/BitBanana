@@ -375,4 +375,20 @@
     <string name="settings_tor_summary">Anonimizza tutto il traffico web utilizzando la rete Tor. Ciò influisce solo su cose come il recupero dei tassi di cambio o l\\\'apertura di link. L/\\\'utilizzo di Tor per connettersi a un nodo può essere impostato per ogni nodo singolarmente nelle sue impostazioni di connessione.</string>
     <string name="navigation_node">Nodo</string>
     <string name="guardian_zero_amount_invoice">Questa invoice non specifica un importo. Sebbene molto improbabile, le invoice senza un importo specifico possono essere sfruttate e il destinatario riceverà meno di quanto previsto in questo caso. Se possibile, utilizza una invoice con un importo specifico.</string>
+    <string name="available">Disponibile</string>
+    <string name="note">Nota</string>
+    <string name="type">Tipo</string>
+    <string name="duplicate">Duplica</string>
+    <string name="you">Tu</string>
+    <string name="description">Descrizione</string>
+    <string name="offline">offline</string>
+    <string name="date">Data</string>
+    <string name="privacy">Privacy</string>
+    <string name="ok">OK</string>
+    <string name="no">No</string>
+    <string name="reliability">Affidabilità</string>
+    <string name="network">Rete</string>
+    <string name="percent">per cento</string>
+    <string name="manually">Manualmente</string>
+    <string name="disconnect">Disconnetti</string>
 </resources>
