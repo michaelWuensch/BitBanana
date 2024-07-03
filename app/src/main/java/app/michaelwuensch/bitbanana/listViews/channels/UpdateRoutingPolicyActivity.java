@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
@@ -19,6 +21,7 @@ import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -29,6 +32,8 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
 
     private BBInputFieldView mBaseFee;
     private BBInputFieldView mFeeRate;
+    private BBInputFieldView mInboundBaseFee;
+    private BBInputFieldView mInboundFeeRate;
     private BBInputFieldView mTimelock;
     private BBInputFieldView mMinHTLC;
     private BBInputFieldView mMaxHTLC;
@@ -50,6 +55,8 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         // reference views
         mBaseFee = findViewById(R.id.baseFee);
         mFeeRate = findViewById(R.id.feeRate);
+        mInboundBaseFee = findViewById(R.id.inboundBaseFee);
+        mInboundFeeRate = findViewById(R.id.inboundFeeRate);
         mTimelock = findViewById(R.id.timelockDelta);
         mMinHTLC = findViewById(R.id.htlcMin);
         mMaxHTLC = findViewById(R.id.htlcMax);
@@ -59,6 +66,8 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         // setup input types
         mBaseFee.setInputType(InputType.TYPE_CLASS_NUMBER);
         mFeeRate.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        mInboundBaseFee.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        mInboundFeeRate.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         mTimelock.setInputType(InputType.TYPE_CLASS_NUMBER);
         mMinHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
         mMaxHTLC.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -66,6 +75,11 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         // hide input fields based on backend
         if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC)
             mTimelock.setVisibility(View.GONE);
+
+        if (!(BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("0.18.0")) >= 0)) { //ToDo: Remove version check when lnd 0.17 is no longer supported
+            mInboundBaseFee.setVisibility(View.GONE);
+            mInboundFeeRate.setVisibility(View.GONE);
+        }
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
@@ -114,6 +128,14 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
                         if (mFeeRate.getData() != null)
                             builder.setFeeRate((long) (Double.parseDouble(mFeeRate.getData()) * 10000));
 
+                        // Inbound BaseFee if specified
+                        if (mInboundBaseFee.getVisibility() == View.VISIBLE && mInboundBaseFee.getData() != null)
+                            builder.setInboundFeeBase(Long.parseLong(mInboundBaseFee.getData()));
+
+                        // Inbound Fee Rate if specified
+                        if (mInboundFeeRate.getVisibility() == View.VISIBLE && mInboundFeeRate.getData() != null)
+                            builder.setInboundFeeRate((long) (Double.parseDouble(mInboundFeeRate.getData()) * 10000));
+
                         // Timelock delta if specified, will be set to 0 on lnd if not set
                         if (mTimelock.getData() != null)
                             builder.setDelay(Integer.parseInt(mTimelock.getData()));
@@ -157,7 +179,9 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
 
     private void setDefaultValues(RoutingPolicy policy) {
         mBaseFee.setValue(String.valueOf(policy.getFeeBase()));
-        mFeeRate.setValue(String.valueOf(policy.getFeeRate() / 10000d));
+        mFeeRate.setValue(BigDecimal.valueOf((double) (policy.getFeeRate() / 10000d)).stripTrailingZeros().toPlainString());
+        mInboundBaseFee.setValue(String.valueOf(policy.getInboundFeeBase()));
+        mInboundFeeRate.setValue(BigDecimal.valueOf((double) (policy.getInboundFeeRate() / 10000d)).stripTrailingZeros().toPlainString());
         mTimelock.setValue(String.valueOf(policy.getDelay()));
         mMinHTLC.setValue(String.valueOf(policy.getMinHTLC()));
         mMaxHTLC.setValue(String.valueOf(policy.getMaxHTLC() / 1000));

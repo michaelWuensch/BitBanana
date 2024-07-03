@@ -156,7 +156,16 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_local_routing_fee"
-                app:label="@string/advanced_channel_details_local_routing_fee"
+                app:label="@string/advanced_channel_details_routing_fee"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/localInboundRoutingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_inbound_routing_fee"
+                app:label="@string/advanced_channel_details_inbound_routing_fee"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
@@ -205,7 +214,16 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:explanation="@string/advanced_channel_details_explanation_remote_routing_fee"
-                app:label="@string/advanced_channel_details_remote_routing_fee"
+                app:label="@string/advanced_channel_details_routing_fee"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/remoteInboundRoutingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:explanation="@string/advanced_channel_details_explanation_inbound_routing_fee"
+                app:label="@string/advanced_channel_details_inbound_routing_fee"
                 tools:visibility="visible" />
 
             <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
