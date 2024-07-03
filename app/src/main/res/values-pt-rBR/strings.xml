@@ -871,4 +871,20 @@
 \nO nome de host da sua conexão não corresponde ao nome de host providenciado no certificado do host.
 \n
 \nVocê tem de desativar a verificação de certificado nas configurações de conexão de nós ou recriar seu certificado. Certifique-se de que seu nome de host é adicionado a lnd.conf como tlsextradomain antes de recriá-lo.</string>
+    <string name="inbound_fee_base">Taxa Base de Entrada</string>
+    <string name="advanced_channel_details_explanation_inbound_routing_fee">Encaminhar um pagamento envolve dois canais: um canal de saída para receber um quantia específica e um canal de saída para enviar a mesma quantia para outro par. Esta é a taxa que será cobrado quando o canal for selecionado como canal de saída.
+\n
+\nTecnicamente, uma taxa pode ser definida apenas para o canal de saída. Assim, para um par selecionado de canais (de entrada e saída) a taxa de entrada efetivamente ajusta a taxa de saída por uma simples adição. Portanto, um valor negativo resulta em um desconto na taxa de saída, enquanto um positivo aumenta. Por segurança, a taxa total de roteamento não pode ser negativa, garantindo que os fundos não serão perdidos pelo roteamento.
+\n
+\nA taxa base e a taxa de cobrança funcionam da mesma forma que para taxas de saída.</string>
+    <string name="help_dialog_inbound_fee">Encaminhar um pagamento envolve dois canais: um canal de entrada para receber uma quantia determinada e um canal de saída para enviar a mesma quantia para outro par.
+\n
+\nAs taxas de canal de entrada permitem aos operadores dos nós assinalar de forma mais eficiente quando as escassezas de liquidez ocorrem. Ao ajustar este valor, você pode influenciar a probabilidade de um canal ser selecionado como um canal de entrada em roteamento. O valor especificado representa a taxa que você cobra ou o desconto que você oferece quando o canal é escolhido como o canal de entrada.
+\n
+\nTecnicamente, uma taxa pode ser selecionada somente para o canal de saída. Assim, para um par selecionado de canais (de entrada e saída) a taxa de entrada efetivamente ajusta a taxa de saída por uma simples adição. Portanto, um valor negativo resulta em um desconto na taxa de saída, enquanto um valor positivo aumenta. Por segurança, a taxa total de roteamento não pode ser negativa, garantindo que os fundos não serão perdidos por roteamento.
+\n
+\nA taxa base e a taxa de cobrança funcionam da mesma forma que para taxas de saída.</string>
+    <string name="advanced_channel_details_routing_fee">Taxa de Roteamento</string>
+    <string name="advanced_channel_details_inbound_routing_fee">Taxa de Roteamento de Entrada</string>
+    <string name="inbound_fee_rate">Taxa de Cobrança de Entrada</string>
 </resources>
