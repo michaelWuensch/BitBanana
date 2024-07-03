@@ -8,6 +8,7 @@ public class RoutingPolicy implements Serializable {
     private final long FeeRate;
     private final long InboundFeeBase;
     private final long InboundFeeRate;
+    private final boolean HasInboundFee;
     private final int Delay;
     private final long MinHTLC;
     private final long MaxHTLC;
@@ -19,11 +20,12 @@ public class RoutingPolicy implements Serializable {
     private RoutingPolicy(Builder builder) {
         this.FeeBase = builder.FeeBase;
         this.FeeRate = builder.FeeRate;
+        this.InboundFeeBase = builder.InboundFeeBase;
+        this.InboundFeeRate = builder.InboundFeeRate;
+        this.HasInboundFee = builder.HasInboundFee;
         this.Delay = builder.Delay;
         this.MinHTLC = builder.MinHTLC;
         this.MaxHTLC = builder.MaxHTLC;
-        this.InboundFeeBase = builder.InboundFeeBase;
-        this.InboundFeeRate = builder.InboundFeeRate;
     }
 
     public long getFeeBase() {
@@ -40,6 +42,10 @@ public class RoutingPolicy implements Serializable {
 
     public long getInboundFeeRate() {
         return InboundFeeRate;
+    }
+
+    public boolean hasInboundFee() {
+        return HasInboundFee;
     }
 
     public int getDelay() {
@@ -61,6 +67,7 @@ public class RoutingPolicy implements Serializable {
         private long FeeRate;
         private long InboundFeeBase;
         private long InboundFeeRate;
+        private boolean HasInboundFee;
         private int Delay;
         private long MinHTLC;
         private long MaxHTLC;
@@ -85,11 +92,13 @@ public class RoutingPolicy implements Serializable {
 
         public Builder setInboundFeeBase(long feeBase) {
             this.InboundFeeBase = feeBase;
+            this.HasInboundFee = true;
             return this;
         }
 
         public Builder setInboundFeeRate(long feeRate) {
             this.InboundFeeRate = feeRate;
+            this.HasInboundFee = true;
             return this;
         }
 

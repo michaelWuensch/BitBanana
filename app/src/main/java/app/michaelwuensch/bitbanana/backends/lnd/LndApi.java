@@ -100,6 +100,7 @@ import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
+import app.michaelwuensch.bitbanana.wallet.Wallet;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -417,25 +418,36 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getLightningService().getChanInfo(request)
                 .map(response -> {
+                    RoutingPolicy.Builder Node1Policy = RoutingPolicy.newBuilder();
+                    Node1Policy.setFeeBase(response.getNode1Policy().getFeeBaseMsat())
+                            .setFeeRate(response.getNode1Policy().getFeeRateMilliMsat())
+                            .setDelay(response.getNode1Policy().getTimeLockDelta())
+                            .setMinHTLC(response.getNode1Policy().getMinHtlc())
+                            .setMaxHTLC(response.getNode1Policy().getMaxHtlcMsat());
+
+                    if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("0.18.0")) >= 0)  //ToDo: Remove when support for LND 0.17.x is removed
+                        Node1Policy.setInboundFeeBase(response.getNode1Policy().getInboundFeeBaseMsat())
+                                .setInboundFeeRate(response.getNode1Policy().getInboundFeeRateMilliMsat());
+
+                    RoutingPolicy.Builder Node2Policy = RoutingPolicy.newBuilder();
+                    Node2Policy.setFeeBase(response.getNode2Policy().getFeeBaseMsat())
+                            .setFeeRate(response.getNode2Policy().getFeeRateMilliMsat())
+                            .setDelay(response.getNode2Policy().getTimeLockDelta())
+                            .setMinHTLC(response.getNode2Policy().getMinHtlc())
+                            .setMaxHTLC(response.getNode2Policy().getMaxHtlcMsat());
+
+                    if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("0.18.0")) >= 0)  //ToDo: Remove when support for LND 0.17.x is removed
+                        Node2Policy.setInboundFeeBase(response.getNode2Policy().getInboundFeeBaseMsat())
+                                .setInboundFeeRate(response.getNode2Policy().getInboundFeeRateMilliMsat());
+
+
                     return PublicChannelInfo.newBuilder()
                             .setShortChannelId(ApiUtil.ScidFromLong(response.getChannelId()))
                             .setFundingOutpoint(ApiUtil.OutpointFromString(response.getChanPoint()))
                             .setNode1PubKey(response.getNode1Pub())
                             .setNode2PubKey(response.getNode2Pub())
-                            .setNode1RoutingPolicy(RoutingPolicy.newBuilder()
-                                    .setFeeBase(response.getNode1Policy().getFeeBaseMsat())
-                                    .setFeeRate(response.getNode1Policy().getFeeRateMilliMsat())
-                                    .setDelay(response.getNode1Policy().getTimeLockDelta())
-                                    .setMinHTLC(response.getNode1Policy().getMinHtlc())
-                                    .setMaxHTLC(response.getNode1Policy().getMaxHtlcMsat())
-                                    .build())
-                            .setNode2RoutingPolicy(RoutingPolicy.newBuilder()
-                                    .setFeeBase(response.getNode2Policy().getFeeBaseMsat())
-                                    .setFeeRate(response.getNode2Policy().getFeeRateMilliMsat())
-                                    .setDelay(response.getNode2Policy().getTimeLockDelta())
-                                    .setMinHTLC(response.getNode2Policy().getMinHtlc())
-                                    .setMaxHTLC(response.getNode2Policy().getMaxHtlcMsat())
-                                    .build())
+                            .setNode1RoutingPolicy(Node1Policy.build())
+                            .setNode2RoutingPolicy(Node2Policy.build())
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));

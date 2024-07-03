@@ -46,10 +46,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
     private BBExpandablePropertyView mDetailLocalReserve;
     private BBExpandablePropertyView mDetailRemoteReserve;
     private BBExpandablePropertyView mDetailLocalRoutingFee;
+    private BBExpandablePropertyView mDetailLocalInboundRoutingFee;
     private BBExpandablePropertyView mDetailLocalTimelockDelta;
     private BBExpandablePropertyView mDetailLocalMinHTLC;
     private BBExpandablePropertyView mDetailLocalMaxHTLC;
     private BBExpandablePropertyView mDetailRemoteRoutingFee;
+    private BBExpandablePropertyView mDetailRemoteInboundRoutingFee;
     private BBExpandablePropertyView mDetailRemoteTimelockDelta;
     private BBExpandablePropertyView mDetailRemoteMinHTLC;
     private BBExpandablePropertyView mDetailRemoteMaxHTLC;
@@ -80,10 +82,12 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailLocalReserve = findViewById(R.id.localReserve);
         mDetailRemoteReserve = findViewById(R.id.remoteReserve);
         mDetailLocalRoutingFee = findViewById(R.id.localRoutingFee);
+        mDetailLocalInboundRoutingFee = findViewById(R.id.localInboundRoutingFee);
         mDetailLocalTimelockDelta = findViewById(R.id.localTimelockDelta);
         mDetailLocalMinHTLC = findViewById(R.id.localMinHtlc);
         mDetailLocalMaxHTLC = findViewById(R.id.localMaxHtlc);
         mDetailRemoteRoutingFee = findViewById(R.id.remoteRoutingFee);
+        mDetailRemoteInboundRoutingFee = findViewById(R.id.remoteInboundRoutingFee);
         mDetailRemoteTimelockDelta = findViewById(R.id.remoteTimelockDelta);
         mDetailRemoteMinHTLC = findViewById(R.id.remoteMinHtlc);
         mDetailRemoteMaxHTLC = findViewById(R.id.remoteMaxHtlc);
@@ -230,6 +234,8 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         // local fee
         mDetailLocalRoutingFee.setValue("- msat\n - %");
         mDetailLocalRoutingFee.setVisibility(View.VISIBLE);
+        mDetailLocalInboundRoutingFee.setValue("- msat\n - %");
+        mDetailLocalInboundRoutingFee.setVisibility(View.VISIBLE);
 
         // local time lock delta
         mDetailLocalTimelockDelta.setVisibility(View.VISIBLE);
@@ -247,6 +253,8 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         // remote fee
         mDetailRemoteRoutingFee.setValue("- msat\n - %");
         mDetailRemoteRoutingFee.setVisibility(View.VISIBLE);
+        mDetailRemoteInboundRoutingFee.setValue("- msat\n - %");
+        mDetailRemoteInboundRoutingFee.setVisibility(View.VISIBLE);
 
         // remote time lock delta
         mDetailRemoteTimelockDelta.setVisibility(View.VISIBLE);
@@ -389,10 +397,17 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                             remotePolicy = response.getNode1RoutingPolicy();
                         }
                         mLocalRoutingPolicy = localPolicy;
+                        if (!localPolicy.hasInboundFee())
+                            mDetailLocalInboundRoutingFee.setVisibility(View.GONE);
+                        if (!remotePolicy.hasInboundFee())
+                            mDetailRemoteInboundRoutingFee.setVisibility(View.GONE);
 
                         BigDecimal localFeeRate = BigDecimal.valueOf((double) (localPolicy.getFeeRate()) / 10000.0).stripTrailingZeros();
                         String localFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getFeeBase()) + "\n+ " + localFeeRate.toPlainString() + " %";
                         mDetailLocalRoutingFee.setValue(localFee);
+                        BigDecimal localInboundFeeRate = BigDecimal.valueOf((double) (localPolicy.getInboundFeeRate()) / 10000.0).stripTrailingZeros();
+                        String localInboundFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(localPolicy.getInboundFeeBase()) + "\n+ " + localInboundFeeRate.toPlainString() + " %";
+                        mDetailLocalInboundRoutingFee.setValue(localInboundFee);
                         mDetailLocalMinHTLC.setAmountValueMsat(localPolicy.getMinHTLC());
                         mDetailLocalMaxHTLC.setAmountValueMsat(localPolicy.getMaxHTLC());
                         long localTimeLockInSeconds = (long) localPolicy.getDelay() * 10 * 60;
@@ -402,6 +417,9 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
                         BigDecimal remoteFeeRate = BigDecimal.valueOf((double) (remotePolicy.getFeeRate()) / 10000.0).stripTrailingZeros();
                         String remoteFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getFeeBase()) + "\n+ " + remoteFeeRate.toPlainString() + " %";
                         mDetailRemoteRoutingFee.setValue(remoteFee);
+                        BigDecimal remoteInboundFeeRate = BigDecimal.valueOf((double) (remotePolicy.getInboundFeeRate()) / 10000.0).stripTrailingZeros();
+                        String remoteInboundFee = MonetaryUtil.getInstance().getDisplayStringFromMsats(remotePolicy.getInboundFeeBase()) + "\n+ " + remoteInboundFeeRate.toPlainString() + " %";
+                        mDetailRemoteInboundRoutingFee.setValue(remoteInboundFee);
                         mDetailRemoteMinHTLC.setAmountValueMsat(remotePolicy.getMinHTLC());
                         mDetailRemoteMaxHTLC.setAmountValueMsat(remotePolicy.getMaxHTLC());
                         long remoteTimeLockInSeconds = (long) remotePolicy.getDelay() * 10 * 60;

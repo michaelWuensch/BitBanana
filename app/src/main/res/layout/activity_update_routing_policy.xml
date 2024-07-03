@@ -42,6 +42,28 @@
                 app:showHelpButton="true" />
 
             <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inboundBaseFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:defaultInputValue="0"
+                app:helpButtonText="@string/help_dialog_inbound_fee"
+                app:inputLabel="@string/inbound_fee_base"
+                app:inputLabelDetails="(msats)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inboundFeeRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:defaultInputValue="0.0021"
+                app:helpButtonText="@string/help_dialog_inbound_fee"
+                app:inputLabel="@string/inbound_fee_rate"
+                app:inputLabelDetails="(percent)"
+                app:showHelpButton="true" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
                 android:id="@+id/timelockDelta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
