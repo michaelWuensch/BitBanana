@@ -370,9 +370,7 @@
     <string name="advanced_channel_details_explanation_commit_fee">Sulkukulu veloitetaan kun kanavaa suljettaessa. Tämä määrä voi vaihdella ajanmyötä, sillä summa riippuu Bitcoin On-Chain verkon siirtokulujen tasosta.</string>
     <string name="advanced_channel_details_time_lock">Aikalukitus</string>
     <string name="advanced_channel_details_explanation_time_lock">Jos kanava suljetaan yksipuolisesti (uncooperative close / force close), on odotettava tämä määrä lohkoja ennenkuin varat ovat käytettävissäsi.</string>
-    <string name="advanced_channel_details_local_routing_fee">Paikallinen reitityskulu</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Tämä on korvaus jonka velotat ja saat tämän kanavan kautta välittämistäsi tapahtumista.\nPeruskulun saat jokaisesta välitetystä tapahtumasta, riippumatta tapahtuman summasta.\nSinulle maksettavan määräkulun suuruus riippuu välitettävän tapahtuman summasta.\nSaamasi korvauksen kokonaismäärä on peruskulu (ilmoitettuna 1/1000 satoshina) lisättynä määräkululla.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Vastapuolen reitityskulu</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Tämä on korvaus jonka vastapuolen solmu saa sen välittäessä tapahtuman kanavan kautta. Korvaus koskee ainoastaan edelleen välitettäviä tapahtumia. Kun käytät kanavaa omiin tapahtumiisi, ei tätä korvausta veloiteta.</string>
     <string name="advanced_channel_details_local_channel_reserve">Paikallinen kanavavaraus</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Tämä on vähimmäissaldo, joka solmun pitää säilyttää kanavassa kaiken varalta. Ei voi käyttää tätä saldoa. Menetät tämän varauksen saldon, mikäli yrität toimia epärehellisesti kanavan vastapuolta kohtaan.</string>

@@ -101,7 +101,6 @@
     <string name="advanced_channel_details_close_initiator">Fechar Iniciador</string>
     <string name="advanced_channel_details_explanation_commit_fee">A quantia a ser paga em taxas ao fechar o canal. Isto pode mudar com o tempo já que as taxas são sujeitas às taxas de transação da camada base do Bitcoin.</string>
     <string name="advanced_channel_details_explanation_time_lock">No caso de um fechamento não cooperativo (forçado) deste canal, o bloqueio de tempo é o número de blocos que terá de esperar antes de poder aceder os seus fundos novamente.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Taxa do Roteamento Remoto</string>
     <string name="advanced_channel_details_local_channel_reserve">Reserva do Canal Local</string>
     <string name="backup_data_confirm">Confirmo</string>
     <string name="backup_data_create_headline">Backup</string>
@@ -421,7 +420,6 @@
     <string name="host">Host</string>
     <string name="clipboard_error_heading">Dados da área de transferência encontrados, mas são inválidos:</string>
     <string name="advanced_channel_details_time_lock">Bloqueio de Tempo</string>
-    <string name="advanced_channel_details_local_routing_fee">Taxa do Roteamento Local</string>
     <string name="backup_data_confirm_headline">Por Favor Confirme</string>
     <string name="backup_data_password_empty">A palavra-passe precisar ter ao menos 8 caracteres.</string>
     <string name="backup_data_password_mismatch">As palavras-passe não correspondem.</string>

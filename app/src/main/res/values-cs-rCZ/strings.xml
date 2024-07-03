@@ -418,11 +418,9 @@
     <string name="advanced_channel_details_explanation_commit_fee">Částka, která má být BitBananalacena na poplatcích při uzavření kanálu. Tato částka se může v průběhu času měnit, protože poplatky podléhají transakčním poplatkům základní vrstvy bitcoinu.</string>
     <string name="advanced_channel_details_time_lock">Časová zámek</string>
     <string name="advanced_channel_details_explanation_time_lock">V případě nespolupracujícího uzavření (nuceného uzavření) tohoto kanálu je časový zámek počtem bloků, které budete muset počkat, než budete mít opět přístup ke svým prostředkům.</string>
-    <string name="advanced_channel_details_local_routing_fee">Místní směrovací poplatek</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Poplatky, které obdržíte při předání transakce tímto kanálem. Celkový poplatek, který obdržíte, je součtem základního poplatku a sazby poplatku.
 \nZákladní poplatek je částka, kterou obdržíte za každé přeposlání bez ohledu na výši transakce.
 \nSuma obdržená prostřednictvím sazby poplatku závisí na výši transakce.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Poplatek za vzdálené směrování</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Poplatky, které druhý uzel obdrží, když předá transakci tímto kanálem. Platí pouze pro předávání transakcí. Pokud tento kanál použijete pro své transakce, nebudete muset nic platit.</string>
     <string name="advanced_channel_details_local_channel_reserve">Místní rezerva kanálu</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Minimální částka, kterou musí tento uzel rezervovat v tomto zůstatku kanálů. Tuto částku nebudete moci utratit. Tím je zajištěno, že vždy budete mít o co přijít, pokud se pokusíte svého partnera v kanálu podvést.</string>

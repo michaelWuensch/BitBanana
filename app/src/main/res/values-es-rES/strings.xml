@@ -608,7 +608,6 @@
     <string name="advanced_channel_details_initiator">Iniciador</string>
     <string name="advanced_channel_details_explanation_close_type">Los canales pueden cerrarse de distintas maneras. La forma óptima es el cierre cooperativo. Si una de las partes decide cerrar el canal sin la cooperación de la otra, se produce el llamado \"cierre forzado\". Normalmente, un cierre forzado conlleva comisiones más elevadas y el iniciador del cierre tendrá que esperar bastante tiempo hasta poder acceder a sus fondos. Si una de las partes intenta hacer trampas y es descubierta, se produce un cierre por incumplimiento.</string>
     <string name="advanced_channel_details_explanation_time_lock">En caso de un cierre no cooperativo (cierre forzado) de este canal, el tiempo de bloqueo es el número de bloques que tendrá que esperar antes de poder acceder de nuevo a sus fondos.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Tasa de enrutamiento a distancia</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">La cantidad mínima que este nodo debe reservar en el saldo de este canal. No podrás gastar esta cantidad. Esto asegura que siempre tendrás algo que perder si intentas engañar a tu socio de canal.</string>
     <string name="certificate">Certificado</string>
     <string name="spinner_manage_nodes">Gestionar…</string>
@@ -638,7 +637,6 @@
     <string name="advanced_channel_details_initiator_you">Tú</string>
     <string name="advanced_channel_details_close_initiator">Cerrar el iniciador</string>
     <string name="advanced_channel_details_time_lock">Bloqueo horario</string>
-    <string name="advanced_channel_details_local_routing_fee">Tarifa de envío</string>
     <string name="lnurl_service_provided_invalid_data">El servicio con el que está interactuando proporcionó datos no válidos.</string>
     <string name="advanced_channel_details_initiator_peer">Par</string>
     <string name="lnurl_withdraw_fail">Retirar

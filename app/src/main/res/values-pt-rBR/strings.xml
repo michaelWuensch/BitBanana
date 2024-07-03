@@ -500,7 +500,6 @@
     <string name="sign">Assinar</string>
     <string name="nfc_type_not_supported">Tipo NFC não suportado</string>
     <string name="fee_tier_medium_description">Transação Média</string>
-    <string name="advanced_channel_details_remote_routing_fee">Taxa do Roteamento Remoto</string>
     <string name="backup_data_restore_failed_title">Restauração falhou</string>
     <string name="settings_slowFee">Transação Lenta</string>
     <string name="pin_changed">PIN alterado!</string>
@@ -593,7 +592,6 @@
     </plurals>
     <string name="node_name">Nome do Nó</string>
     <string name="identity_tap_on_avatar">Toque em seu avatar para revelar suas informações de nó!</string>
-    <string name="advanced_channel_details_local_routing_fee">Taxa do Roteamento Local</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">A quantia mínima que este nó é obrigado a reservar neste balanço de canal. Você não poderá gastar esta quantia. Isto garante que você sempre terá algo a perder se tentar trapacear seu parceiro do canal.</string>
     <string name="backup_data_confirm">Eu confirmo</string>
     <string name="utxo_no_utxos">Sem UTXOs</string>
