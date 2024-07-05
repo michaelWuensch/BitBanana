@@ -65,6 +65,7 @@ import app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingActivity;
 import app.michaelwuensch.bitbanana.listViews.peers.PeersActivity;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.TransactionHistoryFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
+import app.michaelwuensch.bitbanana.listViews.watchtowers.WatchtowersActivity;
 import app.michaelwuensch.bitbanana.lnurl.auth.LnUrlAuthBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -764,6 +765,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             startActivityForResult(intentPeers, 0);
         } else if (id == R.id.drawerSignVerify) {
             Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
+            startActivity(intentSignVerify);
+        } else if (id == R.id.drawerWatchtowers) {
+            Intent intentSignVerify = new Intent(this, WatchtowersActivity.class);
             startActivity(intentSignVerify);
         } else if (id == R.id.drawerSettings) {
             Intent intentSettings = new Intent(this, SettingsActivity.class);

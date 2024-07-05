@@ -141,6 +141,7 @@
     <string name="activity_routing_policy">Routing Policy</string>
     <string name="activity_peers">Peers</string>
     <string name="activity_watchtowers">Watchtowers</string>
+    <string name="activity_watchtower">Watchtower</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -312,7 +313,7 @@
     <string name="settings_featurePeers">Peer Management</string>
     <string name="settings_featurePeers_summary">While peer management is automated, this feature still offers manual control for viewing and managing your connected peers.</string>
     <string name="settings_featureWatchtowers">Watchtower Management</string>
-    <string name="settings_featureWatchtowers_summary">While peer management is automated, this feature still offers manual control for viewing and managing your connected peers.</string>
+    <string name="settings_featureWatchtowers_summary">If your node remains offline for a longer duration, watchtowers will protect your funds from any fraudulent activity.</string>
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
@@ -448,6 +449,9 @@
     <string name="error_exchange_rate_requires_tor_toast">Failed to fetch exchange rates. Your chosen provider requires tor.</string>
     <string name="error_fee_estimation_requires_tor_toast">Failed to fetch fee estimates. Your chosen provider requires tor.</string>
     <string name="error_insufficient_funds">This payment exceeds your available balance.</string>
+    <string name="error_provided_data_invalid">The provided data is invalid.</string>
+    <string name="error_invalid_watchtower_connection_data">Please ensure the data is in the following format:\n\n- pubkey@host:port</string>
+    <string name="error_invalid_peer_connection_data">Please ensure the data is in one of the following formats:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -538,6 +542,9 @@
     <string name="help_dialog_lnurl_auth">Your node serves as a private authentication method for accessing a service. The procedure is based on message-signing and does not share any information about your node. If your node stops operating, you will lose the ability to log in to the associated account.</string>
     <string name="help_dialog_vpn_automation">This setting makes using a VPN more convenient by automating it. You can still connect using a VPN even if you do not choose anything here, but then you have to start and stop the VPN manually whenever you want to connect.</string>
     <string name="help_dialog_node_nickname">The name is only used to organize your nodes in BitBanana. It has no other effect.</string>
+    <string name="help_dialog_watchtowers">For a watchtower to function, some data must be exchanged with it. This results in some information being disclosed to the watchtower\'s maintainer. The following non encrypted data will be disclosed:\n- Frequency of channel updates\n\nChannel balances stay confidential unless your partner cheats and the watchtower detects it. In this scenario, you\'ll reveal the balances to ensure the protection of your funds.\n\nKeep in mind that a watchtower service cannot take your funds. Their only action during a breach is to initiate a punishment transaction, with the funds going directly to you.</string>
+    <string name="help_dialog_own_watchtower">This is your watchtower on the lightning network.\n\nWhen you tap on the avatar image you will reveal a QR-Code.\nThis code can be scanned by others to add your watchtower to their list, allowing it to oversee their channels. Be careful, this consumes resources, so avoid sharing this connection data publicly on the internet.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
+    <string name="help_dialog_scan_watchtower">QR-Codes containing the following are valid:\n\n- pubkey@host:port</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -803,4 +810,11 @@
     <string name="on_chain_fallback_insufficient_funds">Insufficient lightning funds. Falling back to on-chain payment.</string>
     <string name="on_chain_fallback_expired">Lightning request expired. Falling back to on-chain payment.</string>
     <string name="on_chain_fallback_invalid_data">Invalid lightning request. Falling back to on-chain payment.</string>
+
+    <string name="peers_no_watchtowers">No watchtowers</string>
+    <string name="watchtower_add">Add watchtower</string>
+    <string name="watchtower_show">Show watchtower</string>
+    <string name="own_watchtower_short_description">Your node is a watchtower that can watch and protect other nodes.</string>
+    <string name="own_watchtower_tap_hint">Tap on the avatar to reveal your watchtower information!</string>
+    <string name="lnd_watchtower_client_inactive">The watchtower client is currently inactive. Please ensure lnd is started with the --wtclient.active flag.</string>
 </resources>

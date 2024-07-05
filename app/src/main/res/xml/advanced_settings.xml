@@ -5,12 +5,6 @@
         android:title="@string/settings_category_general"
         app:iconSpaceReserved="false">
 
-        <Preference
-            android:key="goToFeaturesSettings"
-            android:summary="@string/settings_features_summary"
-            android:title="@string/settings_features"
-            app:iconSpaceReserved="false" />
-
         <ListPreference
             android:defaultValue="Mempool.space"
             android:dialogTitle="@string/settings_blockExplorer"

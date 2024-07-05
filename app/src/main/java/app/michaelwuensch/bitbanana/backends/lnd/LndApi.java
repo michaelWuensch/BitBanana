@@ -48,6 +48,10 @@ import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.AddTowerRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.ListTowersRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.RemoveTowerRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.Tower;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
@@ -93,6 +97,7 @@ import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.TimestampedMessage;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
+import app.michaelwuensch.bitbanana.models.Watchtower;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -764,6 +769,64 @@ public class LndApi extends Api {
                     return peerList;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<Watchtower>> listWatchtowers() {
+        ListTowersRequest request = ListTowersRequest.newBuilder()
+                .setIncludeSessions(true)
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().listTowers(request)
+                .map(response -> {
+                    List<Watchtower> watchtowerList = new ArrayList<>();
+                    for (Tower tower : response.getTowersList()) {
+                        watchtowerList.add(Watchtower.newBuilder()
+                                .setPubKey(ApiUtil.StringFromHexByteString(tower.getPubkey()))
+                                .setAddresses(tower.getAddressesList())
+                                .build());
+                    }
+                    return watchtowerList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching watchtowers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable addWatchtower(String pubKey, String address) {
+        AddTowerRequest request = AddTowerRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .setAddress(address)
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().addTower(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Adding watchtower failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable removeWatchtower(String pubKey) {
+        RemoveTowerRequest request = RemoveTowerRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().removeTower(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Removing watchtower failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<LightningNodeUri> getOwnWatchtowerInfo() {
+        com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest request = com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest.newBuilder()
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerService().getInfo(request)
+                .flatMap(response -> {
+                    if (!response.getUrisList().isEmpty()) {
+                        return Single.just(LightningNodeUriParser.parseNodeUri(response.getUris(0)));
+                    } else
+                        return Single.error(new IllegalStateException("URIs list is empty"));
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching own watchtower info failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
