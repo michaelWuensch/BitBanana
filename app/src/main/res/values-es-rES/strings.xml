@@ -166,10 +166,10 @@
 \n- Conexión al servidor BtcPay (config=…)
 \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Cadena inválida lndconnect.
-\nPor favor, asegúrese de utilizar el siguiente formato:
+    <string name="error_connection_invalidLndConnectString">Cadena lndconnect no válida.
+\nAsegúrese de haber utilizado el siguiente formato:
 \n
-\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
+\nlndconnect://[ip]:[puerto]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">El certificado es inválido.</string>
     <string name="error_connection_no_macaroon">Su información de conexión no contiene un macaroon. Esto es obligatorio.</string>
     <string name="error_connection_invalid_macaroon">El macaroon no es válido.</string>
@@ -822,7 +822,7 @@
     <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
     <string name="settings_avatarStyleDisplayValues_4">Animales</string>
     <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida.
-\nAsegúrese de haber utilizado el siguiente formato:
+\nPor favor, asegúrese de haber utilizado el siguiente formato:
 \n
 \ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">El certificado o la clave proporcionados no son válidos.</string>
@@ -862,4 +862,20 @@
 \nEl nombre de host de su conexión no coincide con el nombre de host proporcionado en el certificado de host.
 \n
 \nDebe deshabilitar la verificación del certificado en la configuración de conexión de los nodos o debe volver a crear su certificado. Asegúrese de que el nombre de host se agregue a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
+    <string name="advanced_channel_details_routing_fee">Tarifa de enrutamiento</string>
+    <string name="advanced_channel_details_inbound_routing_fee">Tasa de enrutamiento de entrada</string>
+    <string name="inbound_fee_base">Tasa básica de entrada</string>
+    <string name="inbound_fee_rate">Tasa de entrada</string>
+    <string name="help_dialog_inbound_fee">El reenvío de un pago implica dos canales: un canal de entrada para recibir una cantidad específica y un canal de salida para enviar la misma cantidad a otro par.
+\n
+\nLas tarifas de los canales de entrada permiten a los operadores de nodos señalar de manera más eficiente dónde se producen escasez de liquidez. Al ajustar este valor, puede influir en la probabilidad de que se seleccione un canal como canal de entrada en el enrutamiento. El valor especificado representa la tarifa que cobrará o el descuento que ofrecerá cuando se elija el canal como canal de entrada.
+\n
+\nTécnicamente, solo se puede establecer una tarifa para el canal de salida; por lo tanto, para un par de canales seleccionados (entrante y saliente), la tarifa de entrada ajusta efectivamente la tarifa de salida mediante una simple suma. Por lo tanto, un número negativo da como resultado un descuento en la tarifa de salida, mientras que un número positivo la aumentará. Por razones de seguridad, la tarifa de enrutamiento total no puede ser negativa, lo que garantiza que no se pierdan fondos durante el enrutamiento.
+\n
+\nLa tarifa base y la tasa de tarifa funcionan de la misma manera que para las tarifas de salida.</string>
+    <string name="advanced_channel_details_explanation_inbound_routing_fee">El reenvío de un pago implica dos canales: un canal de entrada para recibir un importe específico y un canal de salida para enviar el mismo importe a otro par. Esta es la comisión que se cobrará cuando el canal se seleccione como canal de entrada.
+\n
+\nTécnicamente, sólo se puede establecer una tarifa para el canal de salida; por lo tanto, para un par de canales seleccionados (entrada y salida) la tarifa de entrada ajusta efectivamente la tarifa de salida mediante una simple suma. Por lo tanto, un número negativo supone un descuento en la tasa de salida, mientras que un número positivo la aumentará. Por seguridad, la comisión de enrutamiento total no puede ser negativa, lo que garantiza que los fondos no se pierdan en el enrutamiento.
+\n
+\nLa comisión base y la tasa de comisión funcionan de la misma manera que para las comisiones de salida.</string>
 </resources>
