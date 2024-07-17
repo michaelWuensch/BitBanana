@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.listViews.watchtowers.items;
 
 
 import app.michaelwuensch.bitbanana.models.Watchtower;
+import app.michaelwuensch.bitbanana.models.WatchtowerSession;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 
 public class WatchtowerListItem implements Comparable<WatchtowerListItem> {
@@ -27,7 +28,28 @@ public class WatchtowerListItem implements Comparable<WatchtowerListItem> {
             return false;
         }
 
-        return true;
+        long thisTotalNumBackups = 0;
+        long thisTotalNumMaxBackups = 0;
+        long thatTotalNumBackups = 0;
+        long thatTotalNumMaxBackups = 0;
+
+        for (WatchtowerSession session : mWatchtower.getSessions()) {
+            thisTotalNumBackups += session.getNumBackups();
+            thisTotalNumMaxBackups += session.getNumMaxBackups();
+        }
+
+        for (WatchtowerSession session : ((WatchtowerListItem) o).getWatchtower().getSessions()) {
+            thatTotalNumBackups += session.getNumBackups();
+            thatTotalNumMaxBackups += session.getNumMaxBackups();
+        }
+
+        if (thisTotalNumBackups != thatTotalNumBackups)
+            return false;
+
+        if (thisTotalNumMaxBackups != thatTotalNumMaxBackups)
+            return false;
+
+        return mWatchtower.getIsActive() == ((WatchtowerListItem) o).getWatchtower().getIsActive();
     }
 
     @Override

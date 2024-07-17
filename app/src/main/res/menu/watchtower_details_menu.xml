@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_reactivate"
+        android:icon="@drawable/baseline_autorenew_24"
+        android:title="@string/reactivate"
+        app:iconTint="@color/white" />
+    <item
+        android:id="@+id/action_deactivate"
+        android:icon="@drawable/baseline_watchtower_disable_24"
+        android:title="@string/deactivate"
+        app:iconTint="@color/white" />
+    <item
+        android:id="@+id/action_remove"
+        android:icon="@drawable/ic_delete_24"
+        android:title="@string/remove" />
+</menu>

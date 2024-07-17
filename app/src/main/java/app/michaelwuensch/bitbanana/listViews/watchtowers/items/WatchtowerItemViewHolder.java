@@ -16,6 +16,7 @@ public class WatchtowerItemViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mWatchtowerName;
     private View mRootView;
+    private View mContentView;
     private WatchtowerSelectListener mWatchtowerSelectListener;
 
 
@@ -24,12 +25,15 @@ public class WatchtowerItemViewHolder extends RecyclerView.ViewHolder {
 
         mWatchtowerName = v.findViewById(R.id.watchtowerName);
         mRootView = v.findViewById(R.id.watchtowerRootView);
+        mContentView = v.findViewById(R.id.watchtowerContent);
     }
 
     public void bindWatchtowerListItem(WatchtowerListItem watchtowerListItem) {
 
         // Set watchtower name
         mWatchtowerName.setText(watchtowerListItem.getAlias());
+        boolean test = watchtowerListItem.getWatchtower().getIsActive();
+        mContentView.setAlpha(watchtowerListItem.getWatchtower().getIsActive() ? 1f : 0.5f);
 
         // Set on click listener
         setOnRootViewClickListener(watchtowerListItem);

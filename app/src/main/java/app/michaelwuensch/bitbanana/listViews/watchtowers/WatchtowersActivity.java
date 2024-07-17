@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.listViews.watchtowers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.listViews.watchtowerSessions.WatchtowerDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.watchtowers.items.WatchtowerListItem;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.Watchtower;
@@ -199,24 +201,10 @@ public class WatchtowersActivity extends BaseAppCompatActivity implements Watcht
 
     @Override
     public void onWatchtowerSelect(Serializable watchtower) {
-        Bundle bundle = new Bundle();
-
         if (watchtower != null) {
-            Watchtower tower = (Watchtower) watchtower;
-            mCompositeDisposable.add(BackendManager.api().removeWatchtower(tower.getPubKey())
-                    .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                    .subscribe(() -> {
-                        BBLog.d(LOG_TAG, "Successfully removed watchtower.");
-                        updateWatchtowersDisplayList();
-                    }, throwable -> {
-                        BBLog.e(LOG_TAG, "Error removing watchtower: " + throwable.getMessage());
-                    }));
-
-
-            // ToDo
-            //Intent intentPeerDetails = new Intent(this, PeerDetailsActivity.class);
-            //intentPeerDetails.putExtra(PeerDetailsActivity.EXTRA_PEER, peer);
-            //startActivityForResult(intentPeerDetails, REQUEST_CODE_PEER_ACTION);
+            Intent intentWatchtowerDetails = new Intent(this, WatchtowerDetailsActivity.class);
+            intentWatchtowerDetails.putExtra(WatchtowerDetailsActivity.EXTRA_WATCHTOWER, watchtower);
+            startActivityForResult(intentWatchtowerDetails, REQUEST_CODE_WATCHTOWER_ACTION);
         }
     }
 
@@ -308,28 +296,14 @@ public class WatchtowersActivity extends BaseAppCompatActivity implements Watcht
         }
 
         if (requestCode == REQUEST_CODE_WATCHTOWER_ACTION) {
-            // ToDO:
-            /*
-            if (resultCode == PeerDetailsActivity.RESPONSE_CODE_DELETE_PEER) {
+            if (resultCode == WatchtowerDetailsActivity.RESPONSE_CODE_REMOVE_WATCHTOWER) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         updateWatchtowersDisplayList();
                     }
                 }, 500);
-
             }
-
-            if (resultCode == PeerDetailsActivity.RESPONSE_CODE_OPEN_CHANNEL) {
-                if (data != null) {
-                    LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
-                    Intent intent = new Intent();
-                    intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, nodeUri);
-                    setResult(resultCode, intent);
-                    finish();
-                }
-            }
-             */
         }
     }
 }

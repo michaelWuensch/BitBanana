@@ -214,6 +214,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.watchtowerSessions.WatchtowerDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity"
             android:label="@string/activity_node_details"
             android:screenOrientation="portrait"

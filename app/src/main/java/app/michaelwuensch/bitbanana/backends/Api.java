@@ -150,10 +150,26 @@ public class Api {
         return Single.error(unsupportedException());
     }
 
+    public Single<Watchtower> getWatchtower(String pubKey) {
+        return Single.error(unsupportedException());
+    }
+
     public Completable addWatchtower(String pubKey, String address) {
         return Completable.error(unsupportedException());
     }
 
+    /**
+     * Deactivates a watchtower so it is no longer used for backups until it is reactivated. (use AddWatchtower to reactivate)
+     * After reactivation the remaining backups in the sessions can still be used.
+     */
+    public Single<String> deactivateWatchtower(String pubKey) {
+        return Single.error(unsupportedException());
+    }
+
+    /**
+     * Removes a watchtower and terminates all associated sessions.
+     * This means the remaining backups in the sessions can no longer be used and if you paid for that service you basically spent that money for nothing.
+     */
     public Completable removeWatchtower(String pubKey) {
         return Completable.error(unsupportedException());
     }

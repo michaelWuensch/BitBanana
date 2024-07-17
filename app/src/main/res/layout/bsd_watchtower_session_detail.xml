@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app.michaelwuensch.bitbanana.customView.BSDScrollableMainView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollableBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheets"
+    android:clipToPadding="false"
+    android:paddingHorizontal="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/idLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ID:" />
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@id/idCopyIcon"
+            app:layout_constraintStart_toEndOf="@id/idLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="b279c22ed7a068d10dc1a38ae66d2d6461e269226c60258c021b1ddcdfe4b00bc4" />
+
+        <ImageView
+            android:id="@+id/idCopyIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@null"
+            android:paddingStart="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/id"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp"
+            app:tint="@color/white" />
+
+
+        <TextView
+            android:id="@+id/typeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id"
+            tools:text="Type:" />
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/typeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/id"
+            tools:text="TAPROOT" />
+
+        <TextView
+            android:id="@+id/stateLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type"
+            tools:text="State:" />
+
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/stateLabel"
+            app:layout_constraintTop_toBottomOf="@+id/type"
+            tools:text="active" />
+
+        <TextView
+            android:id="@+id/backupsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/state"
+            tools:text="Backups:" />
+
+        <TextView
+            android:id="@+id/backups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/state"
+            tools:text="12" />
+
+        <TextView
+            android:id="@+id/pendingBackupsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backups"
+            tools:text="Pending Backups:" />
+
+        <TextView
+            android:id="@+id/pendingBackups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/pendingBackupsLabel"
+            app:layout_constraintTop_toBottomOf="@+id/backups"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/maxBackupsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pendingBackups"
+            tools:text="Max Backups:" />
+
+        <TextView
+            android:id="@+id/maxBackups"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/maxBackupsLabel"
+            app:layout_constraintTop_toBottomOf="@+id/pendingBackups"
+            tools:text="1024" />
+
+        <TextView
+            android:id="@+id/sweepFeeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/maxBackups"
+            tools:text="Sweep Fee:" />
+
+        <TextView
+            android:id="@+id/sweepFee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sweepFeeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/maxBackups"
+            tools:text="10 sat/vByte" />
+
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/id">
+
+        </View>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</app.michaelwuensch.bitbanana.customView.BSDScrollableMainView>
