@@ -43,6 +43,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Manage channels
 - [x] Manage routing fees
 - [x] Routing summary
+- [x] Manage watchtowers
 
 **Wallet**
 - [x] 100% free. The only fees you pay are to the bitcoin network. BitBanana won't charge you a single sat.

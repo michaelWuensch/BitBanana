@@ -65,6 +65,7 @@ import app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingActivity;
 import app.michaelwuensch.bitbanana.listViews.peers.PeersActivity;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.TransactionHistoryFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
+import app.michaelwuensch.bitbanana.listViews.watchtowers.WatchtowersActivity;
 import app.michaelwuensch.bitbanana.lnurl.auth.LnUrlAuthBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
@@ -765,6 +766,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         } else if (id == R.id.drawerSignVerify) {
             Intent intentSignVerify = new Intent(this, SignVerifyActivity.class);
             startActivity(intentSignVerify);
+        } else if (id == R.id.drawerWatchtowers) {
+            Intent intentSignVerify = new Intent(this, WatchtowersActivity.class);
+            startActivity(intentSignVerify);
         } else if (id == R.id.drawerSettings) {
             Intent intentSettings = new Intent(this, SettingsActivity.class);
             startActivity(intentSettings);
@@ -824,7 +828,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isUTXOListViewEnabled());
         drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersListViewEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
-        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled());
+        drawerMenu.findItem(R.id.drawerWatchtowers).setVisible(FeatureManager.isWatchtowersEnabled());
+        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled() || FeatureManager.isWatchtowersEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
     }
 
