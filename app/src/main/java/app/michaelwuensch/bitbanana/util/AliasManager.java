@@ -74,7 +74,7 @@ public class AliasManager {
     public boolean hasUpToDateAliasInfo(String pubkey) {
         if (!hasAliasInfo(pubkey))
             return false;
-        return System.currentTimeMillis() - getNodeAliasInfo(pubkey).getTimestamp() < RefConstants.ALIAS_CHACHE_AGE * 1000L;
+        return System.currentTimeMillis() - getNodeAliasInfo(pubkey).getTimestamp() < RefConstants.ALIAS_CACHE_AGE * 1000L;
     }
 
     public boolean hasAliasInfo(String pubkey) {
