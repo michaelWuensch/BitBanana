@@ -62,7 +62,7 @@
     <string name="activity_connectRemoteNode">Conectar ao nó remoto</string>
     <string name="activity_manage_channels">Canais</string>
     <string name="activity_advanced_settings">Configurações Avançadas</string>
-    <string name="activity_identity">Identidade</string>
+    <string name="activity_identity">Nó</string>
     <string name="navigation_history">Histórico</string>
     <string name="navigation_settings">Configurações</string>
     <string name="pin_create">Criar PIN</string>
@@ -112,7 +112,7 @@
     <string name="setup_connect_local_button">Criar carteira</string>
     <string name="setup_connect_remote_description">Controle seu nó remotamente.</string>
     <string name="setup_connect_remote_button">Conectar ao Nó Remoto</string>
-    <string name="demo_setupNodeBtn">Configurar carteira</string>
+    <string name="demo_setupNodeBtn">Conectar Nó</string>
     <string name="send_lightningPayment">Enviar pagamento pela rede Lightning</string>
     <string name="send_onChainPayment">Enviar pagamento pela rede Bitcoin</string>
     <string name="send_sendPayment">Enviar pagamento</string>
@@ -887,4 +887,53 @@
     <string name="advanced_channel_details_routing_fee">Taxa de Roteamento</string>
     <string name="advanced_channel_details_inbound_routing_fee">Taxa de Roteamento de Entrada</string>
     <string name="inbound_fee_rate">Taxa de Cobrança de Entrada</string>
+    <string name="remove">Remover</string>
+    <string name="deactivate">Desativar</string>
+    <string name="reactivate">Reativar</string>
+    <string name="active">Ativo</string>
+    <string name="inactive">Inativo</string>
+    <string name="terminated">Terminado</string>
+    <string name="exhausted">Exausto</string>
+    <string name="state">Estado</string>
+    <string name="error_provided_data_invalid">Os dados providos são inválidos.</string>
+    <string name="help_dialog_scan_watchtower">Códigos QR contendo o seguinte são válidos:
+\n
+\n- pubkey@host:porta</string>
+    <string name="help_dialog_own_watchtower">Esta é sua torre de guarda na rede Lightning.
+\n
+\nAo tocar na imagem de avatar, você revelará um código QR.
+\nEste código pode ser escaneado por outros para adicionar sua torre de guarda à lista deles, permitindo-a supervisionar seus canais. Tenha cuidado pois isto consome recursos, então evite compartilhar estes dados de conexão publicamente na internet.
+\n
+\nO avatar é único.
+\nEle foi automaticamente gerado com base em sua chave pública e não pode ser trocado.</string>
+    <string name="peers_no_watchtowers">Sem torres de guarda</string>
+    <string name="watchtower_add">Adicionar torre de guarda</string>
+    <string name="watchtower_show">Mostrar torre de guarda</string>
+    <string name="own_watchtower_short_description">Seu nó é uma torre de guarda que pode ver e proteger outros nós.</string>
+    <string name="own_watchtower_tap_hint">Toque no avatar para revelar sua informação de torre de guarda!</string>
+    <string name="watchtower_session_sweep_fee">Taxa de Varrimento</string>
+    <string name="error_invalid_watchtower_connection_data">Por favor certifique-se que os dados estão no seguinte formato:
+\n
+\n- pubkey@host:porta</string>
+    <string name="watchtower_session_max_backups">Máximo de Backups</string>
+    <string name="activity_watchtowers">Torres de Guarda</string>
+    <string name="error_invalid_peer_connection_data">Por favor certifique-se que os dados estão em um dos seguintes formatos:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:porta</string>
+    <string name="watchtower_session_pending_backups">Backups Pendentes</string>
+    <string name="activity_watchtower">Torre de Guarda</string>
+    <string name="guardian_remove_watchtower">Ao remover a torre de guarda, todas as sessões atuais associadas à torre serão terminadas. Algumas sessões não estão exaustas ainda. Os backups restantes serão perdidos e não serão reembolsados, mesmo se você pagou pelo serviço.</string>
+    <string name="watchtower_sessions">Sessões</string>
+    <string name="watchtower_session_details">Detalhes de Sessão</string>
+    <string name="settings_featureWatchtowers">Gerenciamento de Torres de Guarda</string>
+    <string name="settings_featureWatchtowers_summary">Se seu nó permanecer off-line por uma duração maior, torres de guarda protegerão seus fundos de qualquer atividade fraudulenta.</string>
+    <string name="help_dialog_watchtowers">Para a torre de guarda funcionar, alguns dados devem ser trocados com ela. Isto resulta em alguma informação sendo provida ao gerenciador da torre de guarda. Os seguintes dados não criptografados serão providos:
+\n- Frequência de atualizações do canal
+\n
+\nOs balanços do canal ficam confidenciais a não ser que seu parceiro trapaceie e a torre de guarda detecte. Neste cenário, você revelará os balanços para garantir a proteção dos seus fundos.
+\n
+\nTenha em mente que um serviço de torre de guarda não pode tomar seus fundos. A única ação dele durante uma quebra de segurança é iniciar uma transação de punição, com os fundos indo diretamente a você.</string>
+    <string name="lnd_watchtower_client_inactive">O cliente da torre de guarda está atualmente inativo. Por favor certifique-se que o lnd é iniciado com a flag --wtclient.active.</string>
 </resources>
