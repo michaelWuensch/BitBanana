@@ -122,7 +122,7 @@ public class UpdateRoutingPolicyRequest implements Serializable {
         private long InboundFeeRate;
         private boolean hasInboundFeeRate;
         private int Delay;
-        private Boolean hasDelay;
+        private boolean hasDelay;
         private long MinHTLC;
         private boolean hasMinHTLC;
         private long MaxHTLC;
