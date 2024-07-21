@@ -37,6 +37,7 @@ public class UserGuardian {
     private static final String DIALOG_BACKUP_OVERRIDES_EXISTING_DATA = "guardianBackupOverridesExistingData";
     private static final String DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES = "guardianAllowUnspecifiedAmountInvoice";
     private static final String DIALOG_CUSTODIAL_LNDHUB = "guardianCustodialLndHub";
+    private static final String DIALOG_REMOVE_WATCHTOWER = "guardianRemoveWatchtower";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -75,6 +76,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
                 .putBoolean(DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES, true)
                 .putBoolean(DIALOG_CUSTODIAL_LNDHUB, true)
+                .putBoolean(DIALOG_REMOVE_WATCHTOWER, true)
                 .apply();
     }
 
@@ -284,6 +286,15 @@ public class UserGuardian {
         showGuardianDialog(adb);
     }
 
+    /**
+     * Warn the user before removing a watchtower which could potentially cause a paid service to be lost.
+     */
+    public void dumbRemoveWatchtower() {
+        mCurrentDialogName = DIALOG_OLD_NODE_SOFTWARE_VERSION;
+        AlertDialog.Builder adb = createDialog(true);
+        adb.setMessage(R.string.guardian_remove_watchtower);
+        showGuardianDialog(adb);
+    }
 
     /**
      * Create a dialog with a "do not show again" option that is already set up

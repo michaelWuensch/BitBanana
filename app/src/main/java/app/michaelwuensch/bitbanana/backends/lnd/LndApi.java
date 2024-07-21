@@ -48,6 +48,14 @@ import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeResponse;
 import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.AddTowerRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.GetTowerInfoRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.ListTowersRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.RemoveTowerRequest;
+import com.github.lightningnetwork.lnd.wtclientrpc.Tower;
+import com.github.lightningnetwork.lnd.wtclientrpc.TowerSession;
+import com.github.lightningnetwork.lnd.wtclientrpc.TowerSessionInfo;
 import com.google.protobuf.ByteString;
 
 import java.nio.charset.StandardCharsets;
@@ -93,6 +101,8 @@ import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SignMessageResponse;
 import app.michaelwuensch.bitbanana.models.TimestampedMessage;
 import app.michaelwuensch.bitbanana.models.VerifyMessageResponse;
+import app.michaelwuensch.bitbanana.models.Watchtower;
+import app.michaelwuensch.bitbanana.models.WatchtowerSession;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -764,6 +774,131 @@ public class LndApi extends Api {
                     return peerList;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+    }
+
+
+    private Watchtower LndWatchtowerToBBWatchtower(Tower tower) {
+        boolean isActive = false;
+        for (TowerSessionInfo tsi : tower.getSessionInfoList()) {
+            if (tsi.getActiveSessionCandidate())
+                isActive = true;
+        }
+        List<WatchtowerSession> sessions = new ArrayList<>();
+        for (TowerSessionInfo tsi : tower.getSessionInfoList()) {
+            WatchtowerSession.SessionType sessionType;
+            switch (tsi.getPolicyType()) {
+                case LEGACY:
+                    sessionType = WatchtowerSession.SessionType.LEGACY;
+                    break;
+                case ANCHOR:
+                    sessionType = WatchtowerSession.SessionType.ANCHOR;
+                    break;
+                case TAPROOT:
+                    sessionType = WatchtowerSession.SessionType.TAPROOT;
+                    break;
+                default:
+                    sessionType = WatchtowerSession.SessionType.UNKNOWN;
+            }
+            for (TowerSession ts : tsi.getSessionsList()) {
+                sessions.add(WatchtowerSession.newBuilder()
+                        .setId(ApiUtil.StringFromHexByteString(ts.getId()))
+                        .setNumBackups(ts.getNumBackups())
+                        .setNumPendingBackups(ts.getNumPendingBackups())
+                        .setNumMaxBackups(ts.getMaxBackups())
+                        .setSweepSatPerVByte(ts.getSweepSatPerVbyte())
+                        .setType(sessionType)
+                        .build());
+            }
+        }
+
+        return Watchtower.newBuilder()
+                .setPubKey(ApiUtil.StringFromHexByteString(tower.getPubkey()))
+                .setAddresses(tower.getAddressesList())
+                .setIsActive(isActive)
+                .setSessions(sessions)
+                .build();
+    }
+
+    @Override
+    public Single<List<Watchtower>> listWatchtowers() {
+        ListTowersRequest request = ListTowersRequest.newBuilder()
+                .setIncludeSessions(true)
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().listTowers(request)
+                .map(response -> {
+                    List<Watchtower> watchtowerList = new ArrayList<>();
+                    for (Tower tower : response.getTowersList()) {
+                        watchtowerList.add(LndWatchtowerToBBWatchtower(tower));
+                    }
+                    return watchtowerList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching watchtowers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<Watchtower> getWatchtower(String pubKey) {
+        GetTowerInfoRequest request = GetTowerInfoRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .setIncludeSessions(true)
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().getTowerInfo(request)
+                .map(response -> {
+                    return LndWatchtowerToBBWatchtower(response);
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching watchtower info failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable addWatchtower(String pubKey, String address) {
+        AddTowerRequest request = AddTowerRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .setAddress(address)
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().addTower(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Adding watchtower failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<String> deactivateWatchtower(String pubKey) {
+        DeactivateTowerRequest request = DeactivateTowerRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().deactivateTower(request)
+                .map(response -> {
+                    return response.getStatus();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Deactivating watchtower failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable removeWatchtower(String pubKey) {
+        RemoveTowerRequest request = RemoveTowerRequest.newBuilder()
+                .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerClientService().removeTower(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Removing watchtower failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<LightningNodeUri> getOwnWatchtowerInfo() {
+        com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest request = com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest.newBuilder()
+                .build();
+
+        return LndConnection.getInstance().getWatchtowerService().getInfo(request)
+                .flatMap(response -> {
+                    if (!response.getUrisList().isEmpty()) {
+                        return Single.just(LightningNodeUriParser.parseNodeUri(response.getUris(0)));
+                    } else
+                        return Single.error(new IllegalStateException("URIs list is empty"));
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching own watchtower info failed: " + throwable.fillInStackTrace()));
     }
 
     @Override

@@ -209,6 +209,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.OwnWatchtowerActivity"
+            android:label="@string/activity_watchtower"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.watchtowerSessions.WatchtowerDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.itemDetails.BackendConfigDetailsActivity"
             android:label="@string/activity_node_details"
             android:screenOrientation="portrait"
@@ -273,6 +282,15 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.listViews.peers.ScanPeerActivity"
             android:label="@string/peers_add"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.watchtowers.WatchtowersActivity"
+            android:label="@string/activity_watchtowers"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.watchtowers.ScanWatchtowerActivity"
+            android:label="@string/watchtower_add"
             android:screenOrientation="portrait" />
         <activity
             android:name="app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity"

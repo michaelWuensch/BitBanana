@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.listViews.peers;
+package app.michaelwuensch.bitbanana.listViews.watchtowers;
 
 import android.content.Intent;
 
@@ -11,10 +11,10 @@ import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
-public class ScanPeerActivity extends BaseScannerActivity {
+public class ScanWatchtowerActivity extends BaseScannerActivity {
 
     public static final String EXTRA_NODE_URI = "EXTRA_NODE_URI";
-    private static final String LOG_TAG = ScanPeerActivity.class.getSimpleName();
+    private static final String LOG_TAG = ScanWatchtowerActivity.class.getSimpleName();
 
     @Override
     public void onButtonPasteClick() {
@@ -22,7 +22,7 @@ public class ScanPeerActivity extends BaseScannerActivity {
 
         try {
             String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(), false);
-            processPeerData(clipboardContent);
+            processWatchtowerData(clipboardContent);
         } catch (NullPointerException e) {
             showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
         }
@@ -30,20 +30,20 @@ public class ScanPeerActivity extends BaseScannerActivity {
 
     @Override
     public void onButtonInstructionsHelpClick() {
-        HelpDialogUtil.showDialog(ScanPeerActivity.this, R.string.help_dialog_scanPeer);
+        HelpDialogUtil.showDialog(ScanWatchtowerActivity.this, R.string.help_dialog_scan_watchtower);
     }
 
     @Override
     public void handleCameraResult(String result) {
         super.handleCameraResult(result);
 
-        processPeerData(result);
+        processWatchtowerData(result);
     }
 
-    private void processPeerData(String rawData) {
+    private void processWatchtowerData(String rawData) {
         LightningNodeUri nodeUri = LightningNodeUriParser.parseNodeUri(rawData);
-        if (nodeUri == null)
-            showError(getString(R.string.error_provided_data_invalid) + "\n\n" + getString(R.string.error_invalid_peer_connection_data), 7000);
+        if (nodeUri == null || !(nodeUri.hasHost() && nodeUri.hasPort()))
+            showError(getString(R.string.error_provided_data_invalid) + "\n\n" + getString(R.string.error_invalid_watchtower_connection_data), 6000);
         else
             finishWithNode(nodeUri);
     }

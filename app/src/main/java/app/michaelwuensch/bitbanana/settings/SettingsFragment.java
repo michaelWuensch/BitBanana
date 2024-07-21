@@ -57,6 +57,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         mPinPref = findPreference("pinPref");
 
+        // Action when clicked on "Features"
+        final Preference prefFeaturesPresets = findPreference("goToFeaturesSettings");
+        prefFeaturesPresets.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), SettingsFeaturesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         // Update our current selected first currency in the MonetaryUtil
         final ListPreference listBtcUnit = findPreference("firstCurrency");
         listBtcUnit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

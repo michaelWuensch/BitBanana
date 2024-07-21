@@ -36,5 +36,6 @@ public class LndBackend extends Backend {
         bSupportsIdentityScreen = true;
         bSupportsBolt11WithoutAmount = true;
         bSupportsEventSubscription = true;
+        bSupportsWatchtowers = true;
     }
 }

@@ -46,6 +46,7 @@ public class Backend {
      * If this is not possible BitBanana needs to poll for new information in some situations like after executing a payment or while waiting for a invoice to be paid.
      */
     protected boolean bSupportsEventSubscription = false;
+    protected boolean bSupportsWatchtowers = false;
 
     public Backend() {
         this(null);
@@ -157,5 +158,9 @@ public class Backend {
 
     public boolean supportsEventSubscriptions() {
         return bSupportsEventSubscription;
+    }
+
+    public boolean supportsWatchtowers() {
+        return bSupportsWatchtowers;
     }
 }
