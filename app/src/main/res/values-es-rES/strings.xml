@@ -878,4 +878,35 @@
 \nTécnicamente, sólo se puede establecer una tarifa para el canal de salida; por lo tanto, para un par de canales seleccionados (entrada y salida) la tarifa de entrada ajusta efectivamente la tarifa de salida mediante una simple suma. Por lo tanto, un número negativo supone un descuento en la tasa de salida, mientras que un número positivo la aumentará. Por seguridad, la comisión de enrutamiento total no puede ser negativa, lo que garantiza que los fondos no se pierdan en el enrutamiento.
 \n
 \nLa comisión base y la tasa de comisión funcionan de la misma manera que para las comisiones de salida.</string>
+    <string name="terminated">Terminado</string>
+    <string name="exhausted">Agotado</string>
+    <string name="id">ID</string>
+    <string name="state">Estado</string>
+    <string name="activity_watchtowers">Torres de vigilancia</string>
+    <string name="activity_watchtower">Atalaya</string>
+    <string name="error_provided_data_invalid">Los datos proporcionados no son válidos.</string>
+    <string name="error_invalid_watchtower_connection_data">Por favor, asegúrate de que los datos tienen el siguiente formato:
+\n
+\n- pubkey@host:port</string>
+    <string name="error_invalid_peer_connection_data">Por favor, asegúrate segúrese de que los datos están en uno de los siguientes formatos:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="help_dialog_scan_watchtower">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- pubkey@host:port</string>
+    <string name="remove">Quitar</string>
+    <string name="deactivate">Desactivar</string>
+    <string name="reactivate">Reactivar</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
+    <string name="settings_featureWatchtowers">Gestión de la Atalaya</string>
+    <string name="settings_featureWatchtowers_summary">Si su nodo permanece fuera de línea durante un período prolongado, las atalayas protegerán tus fondos de cualquier actividad fraudulenta.</string>
+    <string name="help_dialog_watchtowers">Para que una torre de vigilancia funcione, se deben intercambiar algunos datos con ella. Esto da como resultado que cierta información sea revelada al encargado de la torre de vigilancia. Se divulgarán los siguientes datos no cifrados:
+\n- Frecuencia de actualizaciones de canales
+\n
+\nLos saldos de canal se mantienen confidenciales a menos que su pareja engañe y la atalaya lo detecte. En este escenario, usted revelará los saldos para garantizar la protección de sus fondos.
+\n
+\nTenga en cuenta que un servicio de atalaya no puede tomar sus fondos. Su única acción durante una infracción es iniciar una transacción de castigo, con los fondos yendo directamente a usted.</string>
 </resources>
