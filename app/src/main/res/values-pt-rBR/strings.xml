@@ -936,4 +936,6 @@
 \n
 \nTenha em mente que um serviço de torre de guarda não pode tomar seus fundos. A única ação dele durante uma quebra de segurança é iniciar uma transação de punição, com os fundos indo diretamente a você.</string>
     <string name="lnd_watchtower_client_inactive">O cliente da torre de guarda está atualmente inativo. Por favor certifique-se que o lnd é iniciado com a flag --wtclient.active.</string>
+    <string name="id">ID</string>
+    <string name="watchtower_session_backups">Backups</string>
 </resources>
