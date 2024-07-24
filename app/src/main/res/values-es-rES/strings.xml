@@ -909,4 +909,24 @@
 \nLos saldos de canal se mantienen confidenciales a menos que su pareja engañe y la atalaya lo detecte. En este escenario, usted revelará los saldos para garantizar la protección de sus fondos.
 \n
 \nTenga en cuenta que un servicio de atalaya no puede tomar sus fondos. Su única acción durante una infracción es iniciar una transacción de castigo, con los fondos yendo directamente a usted.</string>
+    <string name="peers_no_watchtowers">Sin torres de vigilancia</string>
+    <string name="own_watchtower_short_description">Tu nodo es una torre de vigilancia que puede vigilar y proteger otros nodos.</string>
+    <string name="watchtower_sessions">Sesiones</string>
+    <string name="watchtower_session_details">Detalles de la sesión</string>
+    <string name="watchtower_session_backups">Copias de seguridad</string>
+    <string name="watchtower_session_pending_backups">Copias de seguridad pendientes</string>
+    <string name="watchtower_session_max_backups">Copias de seguridad máximas</string>
+    <string name="watchtower_session_sweep_fee">Tarifa de barrido</string>
+    <string name="guardian_remove_watchtower">Al quitar la torre, todas las sesiones actuales asociadas con la torre serán terminadas. Algunas sesiones aún no se han agotado. Los respaldos restantes se perderán y no serán reembolsados, incluso si usted pagó por el servicio.</string>
+    <string name="help_dialog_own_watchtower">Esta es su torre de vigilancia en la red Lightning.
+\n
+\nAl tocar la imagen del avatar se revelará un código QR.
+\nOtras personas pueden escanear este código para agregar su torre de vigilancia a su lista, lo que le permitirá supervisar sus canales. Tenga cuidado ya que esto consume recursos, así que evite compartir estos datos de conexión públicamente en Internet.
+\n
+\nEl avatar es único.
+\nSe generó automáticamente en función de su clave pública y no se puede intercambiar.</string>
+    <string name="own_watchtower_tap_hint">¡Toca el avatar para revelar la información de tu torre de vigilancia!</string>
+    <string name="watchtower_add">Añadir torre de vigilancia</string>
+    <string name="watchtower_show">Mostrar torre de vigilancia</string>
+    <string name="lnd_watchtower_client_inactive">El cliente de Watchtower está inactivo actualmente. Asegúrese de que lnd se haya iniciado con el indicador --wtclient.active.</string>
 </resources>
