@@ -166,10 +166,10 @@
 \n- Conexión al servidor BtcPay (config=…)
 \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Cadena inválida lndconnect.
-\nPor favor, asegúrese de utilizar el siguiente formato:
+    <string name="error_connection_invalidLndConnectString">Cadena lndconnect no válida.
+\nAsegúrese de haber utilizado el siguiente formato:
 \n
-\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
+\nlndconnect://[ip]:[puerto]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">El certificado es inválido.</string>
     <string name="error_connection_no_macaroon">Su información de conexión no contiene un macaroon. Esto es obligatorio.</string>
     <string name="error_connection_invalid_macaroon">El macaroon no es válido.</string>
@@ -608,7 +608,6 @@
     <string name="advanced_channel_details_initiator">Iniciador</string>
     <string name="advanced_channel_details_explanation_close_type">Los canales pueden cerrarse de distintas maneras. La forma óptima es el cierre cooperativo. Si una de las partes decide cerrar el canal sin la cooperación de la otra, se produce el llamado \"cierre forzado\". Normalmente, un cierre forzado conlleva comisiones más elevadas y el iniciador del cierre tendrá que esperar bastante tiempo hasta poder acceder a sus fondos. Si una de las partes intenta hacer trampas y es descubierta, se produce un cierre por incumplimiento.</string>
     <string name="advanced_channel_details_explanation_time_lock">En caso de un cierre no cooperativo (cierre forzado) de este canal, el tiempo de bloqueo es el número de bloques que tendrá que esperar antes de poder acceder de nuevo a sus fondos.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Tasa de enrutamiento a distancia</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">La cantidad mínima que este nodo debe reservar en el saldo de este canal. No podrás gastar esta cantidad. Esto asegura que siempre tendrás algo que perder si intentas engañar a tu socio de canal.</string>
     <string name="certificate">Certificado</string>
     <string name="spinner_manage_nodes">Gestionar…</string>
@@ -638,7 +637,6 @@
     <string name="advanced_channel_details_initiator_you">Tú</string>
     <string name="advanced_channel_details_close_initiator">Cerrar el iniciador</string>
     <string name="advanced_channel_details_time_lock">Bloqueo horario</string>
-    <string name="advanced_channel_details_local_routing_fee">Tarifa de envío</string>
     <string name="lnurl_service_provided_invalid_data">El servicio con el que está interactuando proporcionó datos no válidos.</string>
     <string name="advanced_channel_details_initiator_peer">Par</string>
     <string name="lnurl_withdraw_fail">Retirar
@@ -824,7 +822,7 @@
     <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
     <string name="settings_avatarStyleDisplayValues_4">Animales</string>
     <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida.
-\nAsegúrese de haber utilizado el siguiente formato:
+\nPor favor, asegúrese de haber utilizado el siguiente formato:
 \n
 \ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">El certificado o la clave proporcionados no son válidos.</string>
@@ -864,4 +862,71 @@
 \nEl nombre de host de su conexión no coincide con el nombre de host proporcionado en el certificado de host.
 \n
 \nDebe deshabilitar la verificación del certificado en la configuración de conexión de los nodos o debe volver a crear su certificado. Asegúrese de que el nombre de host se agregue a lnd.conf como tlsextradomain antes de volver a crearlo.</string>
+    <string name="advanced_channel_details_routing_fee">Tarifa de enrutamiento</string>
+    <string name="advanced_channel_details_inbound_routing_fee">Tasa de enrutamiento de entrada</string>
+    <string name="inbound_fee_base">Tasa básica de entrada</string>
+    <string name="inbound_fee_rate">Tasa de entrada</string>
+    <string name="help_dialog_inbound_fee">El reenvío de un pago implica dos canales: un canal de entrada para recibir una cantidad específica y un canal de salida para enviar la misma cantidad a otro par.
+\n
+\nLas tarifas de los canales de entrada permiten a los operadores de nodos señalar de manera más eficiente dónde se producen escasez de liquidez. Al ajustar este valor, puede influir en la probabilidad de que se seleccione un canal como canal de entrada en el enrutamiento. El valor especificado representa la tarifa que cobrará o el descuento que ofrecerá cuando se elija el canal como canal de entrada.
+\n
+\nTécnicamente, solo se puede establecer una tarifa para el canal de salida; por lo tanto, para un par de canales seleccionados (entrante y saliente), la tarifa de entrada ajusta efectivamente la tarifa de salida mediante una simple suma. Por lo tanto, un número negativo da como resultado un descuento en la tarifa de salida, mientras que un número positivo la aumentará. Por razones de seguridad, la tarifa de enrutamiento total no puede ser negativa, lo que garantiza que no se pierdan fondos durante el enrutamiento.
+\n
+\nLa tarifa base y la tasa de tarifa funcionan de la misma manera que para las tarifas de salida.</string>
+    <string name="advanced_channel_details_explanation_inbound_routing_fee">El reenvío de un pago implica dos canales: un canal de entrada para recibir un importe específico y un canal de salida para enviar el mismo importe a otro par. Esta es la comisión que se cobrará cuando el canal se seleccione como canal de entrada.
+\n
+\nTécnicamente, sólo se puede establecer una tarifa para el canal de salida; por lo tanto, para un par de canales seleccionados (entrada y salida) la tarifa de entrada ajusta efectivamente la tarifa de salida mediante una simple suma. Por lo tanto, un número negativo supone un descuento en la tasa de salida, mientras que un número positivo la aumentará. Por seguridad, la comisión de enrutamiento total no puede ser negativa, lo que garantiza que los fondos no se pierdan en el enrutamiento.
+\n
+\nLa comisión base y la tasa de comisión funcionan de la misma manera que para las comisiones de salida.</string>
+    <string name="terminated">Terminado</string>
+    <string name="exhausted">Agotado</string>
+    <string name="id">ID</string>
+    <string name="state">Estado</string>
+    <string name="activity_watchtowers">Torres de vigilancia</string>
+    <string name="activity_watchtower">Atalaya</string>
+    <string name="error_provided_data_invalid">Los datos proporcionados no son válidos.</string>
+    <string name="error_invalid_watchtower_connection_data">Por favor, asegúrate de que los datos tienen el siguiente formato:
+\n
+\n- pubkey@host:port</string>
+    <string name="error_invalid_peer_connection_data">Por favor, asegúrate segúrese de que los datos están en uno de los siguientes formatos:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="help_dialog_scan_watchtower">Son válidos los códigos QR que contengan lo siguiente
+\n
+\n- pubkey@host:port</string>
+    <string name="remove">Quitar</string>
+    <string name="deactivate">Desactivar</string>
+    <string name="reactivate">Reactivar</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
+    <string name="settings_featureWatchtowers">Gestión de la Atalaya</string>
+    <string name="settings_featureWatchtowers_summary">Si su nodo permanece fuera de línea durante un período prolongado, las atalayas protegerán tus fondos de cualquier actividad fraudulenta.</string>
+    <string name="help_dialog_watchtowers">Para que una torre de vigilancia funcione, se deben intercambiar algunos datos con ella. Esto da como resultado que cierta información sea revelada al encargado de la torre de vigilancia. Se divulgarán los siguientes datos no cifrados:
+\n- Frecuencia de actualizaciones de canales
+\n
+\nLos saldos de canal se mantienen confidenciales a menos que su pareja engañe y la atalaya lo detecte. En este escenario, usted revelará los saldos para garantizar la protección de sus fondos.
+\n
+\nTenga en cuenta que un servicio de atalaya no puede tomar sus fondos. Su única acción durante una infracción es iniciar una transacción de castigo, con los fondos yendo directamente a usted.</string>
+    <string name="peers_no_watchtowers">Sin torres de vigilancia</string>
+    <string name="own_watchtower_short_description">Tu nodo es una torre de vigilancia que puede vigilar y proteger otros nodos.</string>
+    <string name="watchtower_sessions">Sesiones</string>
+    <string name="watchtower_session_details">Detalles de la sesión</string>
+    <string name="watchtower_session_backups">Copias de seguridad</string>
+    <string name="watchtower_session_pending_backups">Copias de seguridad pendientes</string>
+    <string name="watchtower_session_max_backups">Copias de seguridad máximas</string>
+    <string name="watchtower_session_sweep_fee">Tarifa de barrido</string>
+    <string name="guardian_remove_watchtower">Al quitar la torre, todas las sesiones actuales asociadas con la torre serán terminadas. Algunas sesiones aún no se han agotado. Los respaldos restantes se perderán y no serán reembolsados, incluso si usted pagó por el servicio.</string>
+    <string name="help_dialog_own_watchtower">Esta es su torre de vigilancia en la red Lightning.
+\n
+\nAl tocar la imagen del avatar se revelará un código QR.
+\nOtras personas pueden escanear este código para agregar su torre de vigilancia a su lista, lo que le permitirá supervisar sus canales. Tenga cuidado ya que esto consume recursos, así que evite compartir estos datos de conexión públicamente en Internet.
+\n
+\nEl avatar es único.
+\nSe generó automáticamente en función de su clave pública y no se puede intercambiar.</string>
+    <string name="own_watchtower_tap_hint">¡Toca el avatar para revelar la información de tu torre de vigilancia!</string>
+    <string name="watchtower_add">Añadir torre de vigilancia</string>
+    <string name="watchtower_show">Mostrar torre de vigilancia</string>
+    <string name="lnd_watchtower_client_inactive">El cliente de Watchtower está inactivo actualmente. Asegúrese de que lnd se haya iniciado con el indicador --wtclient.active.</string>
 </resources>

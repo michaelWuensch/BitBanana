@@ -302,8 +302,6 @@
     <string name="advanced_channel_details_lifetime">ライフタイム</string>
     <string name="advanced_channel_details_commit_fee">コミット手数料</string>
     <string name="advanced_channel_details_time_lock">タイムロック</string>
-    <string name="advanced_channel_details_local_routing_fee">ローカルルーティング手数料</string>
-    <string name="advanced_channel_details_remote_routing_fee">リモートルーティング手数料</string>
     <string name="advanced_channel_details_local_channel_reserve">ローカルチャネル残量</string>
     <string name="advanced_channel_details_remote_channel_reserve">リモートチャネル残量</string>
     <string name="backup_data_confirm_headline">確認してください</string>

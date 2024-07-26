@@ -364,9 +364,7 @@
     <string name="advanced_channel_details_explanation_commit_fee">Le montant à payer en frais lors de la fermeture du canal. Cela peut changer au fil du temps car les frais sont soumis aux frais de transaction de la couche de base bitcoin.</string>
     <string name="advanced_channel_details_time_lock">Verrouillage horaire, aussi appelé Time Lock</string>
     <string name="advanced_channel_details_explanation_time_lock">En cas de fermeture non coopérative (force close) de ce canal, le time lock est le nombre de blocs que vous devrez attendre avant de pouvoir à nouveau accéder à vos fonds.</string>
-    <string name="advanced_channel_details_local_routing_fee">Frais de routage locaux</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Les frais que vous recevrez lorsque vous transférez une transaction via ce canal. Le total des frais que vous recevrez correspond à la somme des frais de base (en msat) et du taux de frais.\n Les frais de base sont ce que vous obtenez pour chaque transfert, quel que soit le montant de la transaction.\n Le montant reçu via le taux des frais dépend du montant de la transaction.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Frais de routage à distance</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Les frais que l\'autre nœud recevra lorsqu\'il transmettra une transaction via ce canal. Cela s\'applique uniquement aux transactions de transfert. Vous n\'aurez rien à payer si vous utilisez ce canal pour vos transactions.</string>
     <string name="advanced_channel_details_local_channel_reserve">Réserve local du canal</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Le montant minimum que ce nœud est tenu de garder dans ce canal. Vous ne pourrez pas dépenser ce montant. Cela garantit que vous aurez toujours quelque chose à perdre si vous essayez de tromper votre partenaire.</string>

@@ -430,11 +430,9 @@
     <string name="advanced_channel_details_explanation_commit_fee">Der Betrag an Gebühren, der beim Schließen des Kanals bezahlt werden muss. Dieser Betrag ändert sich mit der Zeit, da er abhängig von den Transaktionsgebühren des Bitcoin Basisnetzwerks ist.</string>
     <string name="advanced_channel_details_time_lock">Blockierungsdauer</string>
     <string name="advanced_channel_details_explanation_time_lock">Im Falle einer unkooperativen Kanalschließung (force close), sagt die Blockierungsdauer, wie viele Blöcke du warten musst, bevor du wieder auf dein Kanalguthaben zugreifen kannst.</string>
-    <string name="advanced_channel_details_local_routing_fee">Weiterleitungsvergütung</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">Die Vergütung, die du erhältst, wenn du eine Transaktion über diesen Kanal weiterleitest. Die Gesamtsumme, die du erhältst, setzt sich aus der Basisgebühr und der Gebührenrate zusammen.
 \nDie Basisgebühr ist das, was du für jede Transaktion bekommst, egal um welchen Betrag es sich bei der Transaktion handelt.
 \nÜber die Gebührenrate bekommst du eine Vergütung, die abhängig vom Betrag der Transaktion ist.</string>
-    <string name="advanced_channel_details_remote_routing_fee">Weiterleitungsgebühr</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Die Gebühren, die dein Kanalpartner erhält, wenn er eine Transaktion weiterleitet. Diese Gebühr fällt nur bei Transaktionsweiterleitungen an. Du musst nichts bezahlen, wenn du diesen Kanal für deine ausgehenden Transaktionen verwendest.</string>
     <string name="advanced_channel_details_local_channel_reserve">Rücklage (du)</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Der minimale Betrag, den du im Guthaben des Kanals zurücklegen musst. Du kannst diesen Betrag nicht ausgeben. Das stellt sicher, dass du immer etwas zu verlieren hast, falls du versuchen würdest, deinen Kanalpartner zu betrügen.</string>
@@ -811,4 +809,71 @@
     <string name="error_feature_not_supported_by_backend">Bei Verwendung von %1$s unterstützt BitBanana die folgende Funktion nicht: %2$s</string>
     <string name="settings_custom_exchange_rate_provider">Benutzerdefinierter Wechselkursanbieter</string>
     <string name="settings_node_fee_estimates">Intern</string>
+    <string name="reactivate">Reaktivieren</string>
+    <string name="active">Aktiv</string>
+    <string name="exhausted">Erschöpft</string>
+    <string name="id">ID</string>
+    <string name="state">Status</string>
+    <string name="activity_watchtower">Watchtower</string>
+    <string name="activity_watchtowers">Watchtowers</string>
+    <string name="settings_featureWatchtowers_summary">Wenn dein Knoten für längere Zeit offline bleibt, schützen Watchtower dein Geld vor betrügerischen Aktivitäten.</string>
+    <string name="settings_featureWatchtowers">Watchtower-Verwaltung</string>
+    <string name="error_provided_data_invalid">Die angegebenen Daten sind ungültig.</string>
+    <string name="error_invalid_watchtower_connection_data">Bitte stelle sicher, dass die Daten das folgende Format haben:
+\n
+\n- pubkey@host:port</string>
+    <string name="error_invalid_peer_connection_data">Bitte stelle sicher, dass die Daten in einem der folgenden Formate vorliegen:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
+    <string name="help_dialog_scan_watchtower">QR-Codes, die Folgendes enthalten, sind gültig:
+\n
+\n- pubkey@host:port</string>
+    <string name="advanced_channel_details_routing_fee">Weiterleitungsgebühr</string>
+    <string name="advanced_channel_details_inbound_routing_fee">Eingehende Weiterleitungsgebühr</string>
+    <string name="inbound_fee_base">Grundgebühr eingehend</string>
+    <string name="inbound_fee_rate">Gebürensatz eingehend</string>
+    <string name="peers_no_watchtowers">Keine Watchtowers</string>
+    <string name="watchtower_add">Watchtower hinzufügen</string>
+    <string name="watchtower_show">Watchtower anzeigen</string>
+    <string name="watchtower_session_pending_backups">Ausstehende Backups</string>
+    <string name="watchtower_session_max_backups">Max Backups</string>
+    <string name="watchtower_session_sweep_fee">Sweep Gebühr</string>
+    <string name="remove">Entfernen</string>
+    <string name="inactive">Inaktiv</string>
+    <string name="deactivate">Deaktivieren</string>
+    <string name="terminated">Terminiert</string>
+    <string name="guardian_remove_watchtower">Durch das Entfernen des Watchtowers werden alle laufenden Sitzungen, die mit dem Watchtower in Verbindung stehen, beendet. Einige Sitzungen sind noch nicht erschöpft. Verbleibende Backups gehen verloren und werden nicht zurückerstattet, selbst wenn Sie für den Dienst bezahlt haben.</string>
+    <string name="help_dialog_inbound_fee">Die Weiterleitung einer Zahlung umfasst zwei Kanäle: einen Eingangskanal für den Empfang eines bestimmten Betrags und einen Ausgangskanal für den Versand desselben Betrags an einen anderen Peer.
+\n
+\nDie Gebühren für eingehende Kanäle ermöglichen es den Knotenbetreibern, effizienter zu signalisieren, wo Liquiditätsknappheit herrscht. Indem du diesen Wert anpasst, kannst du die Wahrscheinlichkeit beeinflussen, dass ein Kanal beim Routing als Eingangskanal ausgewählt wird. Der angegebene Wert stellt die Gebühr dar, die du verlangst, oder den Rabatt, den du anbietest, wenn der Kanal als Eingangskanal gewählt wird.
+\n
+\nTechnisch gesehen kann eine Gebühr nur für den ausgehenden Kanal festgelegt werden; für ein ausgewähltes Kanalpaar (eingehend und ausgehend) passt die Gebühr für den eingehenden Kanal die Gebühr für den ausgehenden Kanal durch eine einfache Addition an. Daher führt eine negative Zahl zu einer Ermäßigung der Gebühr für den ausgehenden Kanal, während eine positive Zahl zu einer Erhöhung der Gebühr führt. Aus Sicherheitsgründen kann die gesamte Routing-Gebühr nicht negativ sein, um sicherzustellen, dass kein Gelde durch das Routing verloren geht.
+\n
+\nGrundgebühr und Gebührensatz funktionieren auf die gleiche Weise wie bei den Ausgangsgebühren.</string>
+    <string name="help_dialog_watchtowers">Damit ein Watchtower funktionieren kann, müssen einige Daten mit ihm ausgetauscht werden. Dies führt dazu, dass einige Informationen an den Betreiber des Watchtowers weitergegeben werden. Die folgenden unverschlüsselten Daten werden offengelegt:
+\n- Häufigkeit der Kanalaktualisierungen
+\n
+\nDer Kontostand des Kanals bleibt vertraulich, es sei denn, dein Partner betrügt und der Watchtower entdeckt dies. In diesem Fall wirst du die Kontostände offenlegen, um den Schutz deines Geldes zu gewährleisten.
+\n
+\nBeachte, dass ein Watchtower dein Geld nicht an sich nehmen kann. Im Falle eines Vertragsbruchs durch deinen Kanalpartner kann er lediglich eine Bestrafungstransaktion einleiten, bei der die Gelder direkt an dich gehen.</string>
+    <string name="help_dialog_own_watchtower">Das ist dein Watchtower im Lightning-Netzwerk.
+\n
+\nWenn du auf das Bild des Avatars tippst, wird ein QR-Code eingeblendet.
+\nDieser Code kann von anderen gescannt werden, um deinen Watchtower zu ihrer Liste hinzuzufügen und ihm somit die Überwachung ihrer Kanäle zu ermöglichen. Vorsicht, das braucht Ressourcen, also vermeide es, diese Verbindungsdaten öffentlich im Internet zu teilen.
+\n
+\nDieser Avatar ist einzigartig.
+\nEr wurde automatisch auf der Grundlage deines öffentlichen Schlüssels erstellt und kann nicht geändert werden.</string>
+    <string name="advanced_channel_details_explanation_inbound_routing_fee">Die Weiterleitung einer Zahlung umfasst zwei Kanäle: einen Eingangskanal für den Empfang eines bestimmten Betrags und einen Ausgangskanal für den Versand desselben Betrags an einen anderen Peer. Dies ist die Gebühr, die erhoben wird, wenn der Kanal als Eingangskanal gewählt wird.
+\n
+\nTechnisch gesehen kann eine Gebühr nur für den ausgehenden Kanal festgelegt werden; für ein ausgewähltes Kanalpaar (eingehend und ausgehend) passt die eingehende Gebühr die ausgehende Gebühr durch einfache Addition an. Daher führt eine negative Zahl zu einer Ermäßigung der Gebühr für den ausgehenden Kanal, während eine positive Zahl zu einer Erhöhung der Gebühr führt. Aus Sicherheitsgründen kann die gesamte Routing-Gebühr nicht negativ sein, um sicherzustellen, dass die Gelder nicht durch das Routing verloren gehen.
+\n
+\nGrundgebühr und Gebührensatz funktionieren auf die gleiche Weise wie bei den Ausgangsgebühren.</string>
+    <string name="own_watchtower_tap_hint">Tippe auf den Avatar, um Informationen über deinen Watchtower zu erhalten!</string>
+    <string name="own_watchtower_short_description">Dein Knoten ist ein Watchtower, der andere Knoten beobachten und schützen kann.</string>
+    <string name="lnd_watchtower_client_inactive">Der Watchtower-Client ist derzeit inaktiv. Bitte stelle sicher, dass lnd mit dem Flag --wtclient.active gestartet wird.</string>
+    <string name="watchtower_sessions">Sitzungen</string>
+    <string name="watchtower_session_details">Sitzungsdetails</string>
+    <string name="watchtower_session_backups">Backups</string>
 </resources>
