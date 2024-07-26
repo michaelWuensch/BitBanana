@@ -1,0 +1,4 @@
+- Added watchtower support for lnd nodes
+- Added inbound fee support for lnd nodes
+- App can now stay 30 seconds in the background before a reconnection is necessary
+- Updated translations
