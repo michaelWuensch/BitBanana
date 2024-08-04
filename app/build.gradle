@@ -145,6 +145,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
 
+    // For parsing lnd macaroons
+    implementation 'com.github.nitram509:jmacaroons:master-SNAPSHOT'
+
     // Implementation for some lightning basics like decoding a bolt 11 invoice
     implementation 'fr.acinq.lightning:lightning-kmp:1.6.1'
 

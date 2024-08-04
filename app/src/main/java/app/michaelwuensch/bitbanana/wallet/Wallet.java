@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -122,6 +123,13 @@ public class Wallet {
     public void checkIfLndIsLocked() {
         setWalletLoadState(WalletLoadState.TESTING_CONNECTION_BEFORE_UNLOCK);
         BBLog.d(LOG_TAG, "LND lock state test.");
+
+        if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted()) {
+            BBLog.d(LOG_TAG, "Restricted account macaroon. LND is assumed to be unlocked.");
+            setWalletLoadState(WalletLoadState.UNLOCKED);
+            connectionTest(true);
+            return;
+        }
 
         compositeDisposable.add(LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
