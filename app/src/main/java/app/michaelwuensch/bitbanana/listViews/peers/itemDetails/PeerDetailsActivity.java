@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.peers.itemDetails;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
@@ -204,6 +206,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.peer_details_menu, menu);
@@ -213,6 +216,12 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
             //noinspection RestrictedApi
             m.setOptionalIconsVisible(true);
+
+            if (!FeatureManager.isOpenChannelEnabled())
+                m.removeItem(R.id.action_open_channel);
+
+            if (!FeatureManager.isPeersModificationEnabled())
+                m.removeItem(R.id.action_disconnect);
         }
 
         return true;

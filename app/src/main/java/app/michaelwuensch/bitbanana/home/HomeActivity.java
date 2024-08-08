@@ -925,6 +925,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         }
     }
 
+    @Override
+    public void onWalletLoadError(String error) {
+
+    }
+
 
     private class HomePagerAdapter extends FragmentPagerAdapter {
         private WalletFragment mWalletFragment;

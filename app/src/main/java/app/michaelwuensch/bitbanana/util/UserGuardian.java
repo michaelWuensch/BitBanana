@@ -37,6 +37,7 @@ public class UserGuardian {
     private static final String DIALOG_BACKUP_OVERRIDES_EXISTING_DATA = "guardianBackupOverridesExistingData";
     private static final String DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES = "guardianAllowUnspecifiedAmountInvoice";
     private static final String DIALOG_CUSTODIAL_LNDHUB = "guardianCustodialLndHub";
+    private static final String DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED = "guardianCustodialLndAccountRestricted";
     private static final String DIALOG_REMOVE_WATCHTOWER = "guardianRemoveWatchtower";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
@@ -76,6 +77,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_CERTIFICATE_VERIFICATION, true)
                 .putBoolean(DIALOG_ALLOW_UNSPECIFIED_AMOUNT_INVOICES, true)
                 .putBoolean(DIALOG_CUSTODIAL_LNDHUB, true)
+                .putBoolean(DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED, true)
                 .putBoolean(DIALOG_REMOVE_WATCHTOWER, true)
                 .apply();
     }
@@ -272,6 +274,28 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_CUSTODIAL_LNDHUB;
         AlertDialog.Builder adb = createDialog(false);
         String message = mContext.getResources().getString(R.string.guardian_custodial_lndhub);
+        adb.setMessage(message);
+        showGuardianDialog(adb, true);
+    }
+
+    /**
+     * Warn the user before connecting to an account restricted LND instance as this might be custodial and the user might risk funds.
+     */
+    public void securityCustodialLndAccountRestricted() {
+        mCurrentDialogName = DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED;
+        AlertDialog.Builder adb = createDontShowAgainDialog(false);
+        String message = mContext.getResources().getString(R.string.guardian_custodial_lnd_accounts);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user before connecting to an account restricted LND instance as this might be custodial and the user might risk funds.
+     */
+    public void securityCustodialLndAccountRestrictedInfoButton() {
+        mCurrentDialogName = DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED;
+        AlertDialog.Builder adb = createDialog(false);
+        String message = mContext.getResources().getString(R.string.guardian_custodial_lnd_accounts);
         adb.setMessage(message);
         showGuardianDialog(adb, true);
     }

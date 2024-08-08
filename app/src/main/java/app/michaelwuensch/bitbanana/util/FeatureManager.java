@@ -52,6 +52,10 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isPeersModificationEnabled() {
+        return getBackend().supportsPeerModification();
+    }
+
     public static boolean isSignVerifyEnabled() {
         boolean backendSupported = getBackend().supportsMessageSigningByNodePrivateKey();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureSignVerify", true);
@@ -70,8 +74,16 @@ public class FeatureManager {
         return getBackend().supportsBalanceDetails();
     }
 
+    public static boolean isOffchainSendingEnabled() {
+        return getBackend().supportsBolt11Sending() || getBackend().supportsBolt12Sending();
+    }
+
     public static boolean isSendingEnabled() {
-        return getBackend().supportsBolt11Sending() || getBackend().supportsOnChainSending() || getBackend().supportsBolt12Sending() || getBackend().supportsKeysend();
+        return isOffchainSendingEnabled() || getBackend().supportsOnChainSending();
+    }
+
+    public static boolean isReceivingEnabled() {
+        return getBackend().supportsBolt11Receive() || getBackend().supportsOnChainReceive();
     }
 
     public static boolean isBolt11WithoutAmountEnabled() {

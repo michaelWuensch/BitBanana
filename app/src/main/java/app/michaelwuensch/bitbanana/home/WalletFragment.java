@@ -21,6 +21,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
@@ -60,6 +61,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private Button mBtnSetup;
     private Button mBtnVpnSettings;
     private Button mSendButton;
+    private Button mReceiveButton;
     private ImageView mCustodialButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
@@ -133,7 +135,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mCustodialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UserGuardian(getContext()).securityCustodialLndHubInfoButton();
+                switch (BackendManager.getCurrentBackendType()) {
+                    case LND_HUB:
+                        new UserGuardian(getContext()).securityCustodialLndHubInfoButton();
+                        break;
+                    case LND_GRPC:
+                        if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted())
+                            new UserGuardian(getContext()).securityCustodialLndAccountRestrictedInfoButton();
+                        break;
+                }
             }
         });
 
@@ -162,8 +172,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
 
         // Action when clicked on "receive"
-        Button btnReceive = view.findViewById(R.id.receiveButton);
-        btnReceive.setOnClickListener(new OnSingleClickListener() {
+        mReceiveButton = view.findViewById(R.id.receiveButton);
+        mReceiveButton.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 ReceiveBSDFragment receiveBottomSheetDialog = new ReceiveBSDFragment();
@@ -331,6 +341,13 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mSendButton.setEnabled(false);
             mSendButton.setTextColor(getResources().getColor(R.color.gray));
         }
+        if (FeatureManager.isReceivingEnabled()) {
+            mReceiveButton.setEnabled(true);
+            mReceiveButton.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mReceiveButton.setEnabled(false);
+            mReceiveButton.setTextColor(getResources().getColor(R.color.gray));
+        }
     }
 
     @Override
@@ -390,13 +407,20 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     private void updateCustodialWarningVisibility() {
-        mCustodialButton.setVisibility(BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB ? View.VISIBLE : View.GONE);
+        boolean isLndHub = BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB;
+        boolean isAccountRestrictedLnd = BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC
+                && ((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted();
+        mCustodialButton.setVisibility(isLndHub || isAccountRestrictedLnd ? View.VISIBLE : View.GONE);
     }
 
     private void showCustodialWarning() {
         switch (BackendManager.getCurrentBackendType()) {
             case LND_HUB:
                 new UserGuardian(getContext()).securityCustodialLndHub();
+                break;
+            case LND_GRPC:
+                if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted())
+                    new UserGuardian(getContext()).securityCustodialLndAccountRestricted();
                 break;
         }
     }
@@ -510,6 +534,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onWalletLoadStateChanged(Wallet.WalletLoadState walletLoadState) {
         switch (walletLoadState) {
+            case ERROR:
+                break;
             case NOT_LOADED:
                 break;
             case TESTING_CONNECTION_BEFORE_UNLOCK:
@@ -536,6 +562,12 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 showCustodialWarning();
                 walletLoadingCompleted();
         }
+    }
+
+    @Override
+    public void onWalletLoadError(String error) {
+        showConnectionErrorScreen();
+        mTvConnectError.setText(error);
     }
 
     @Override

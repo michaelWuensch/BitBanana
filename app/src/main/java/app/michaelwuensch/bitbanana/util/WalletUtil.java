@@ -131,7 +131,7 @@ public class WalletUtil {
      * Returns if the wallet has at least one active channel.
      */
     public static boolean hasOpenActiveChannels() {
-        if (FeatureManager.isChannelManagementEnabled()) {
+        if (FeatureManager.isOpenChannelEnabled()) {
             if (Wallet_Channels.getInstance().getOpenChannelsList() != null) {
                 if (Wallet_Channels.getInstance().getOpenChannelsList().size() != 0) {
                     for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList()) {
@@ -157,7 +157,7 @@ public class WalletUtil {
      * @return amount in msat
      */
     public static long getMaxLightningReceiveAmount() {
-        if (FeatureManager.isChannelManagementEnabled()) {
+        if (FeatureManager.isOpenChannelEnabled()) {
             long tempMax = 0L;
             if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
                 for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())
@@ -165,7 +165,7 @@ public class WalletUtil {
                         tempMax = tempMax + Math.max(c.getRemoteBalance() - c.getRemoteChannelConstraints().getChannelReserve(), 0);
             return tempMax;
         } else {
-            // This is the case for LNDHub connections for example. We don't know how much can be received. Return a high number (10 BTC).
+            // This is the case for LNDHub connections or accounts on LND for example. We don't know how much can be received. Return a high number (10 BTC).
             return 1000000000L;
         }
     }
@@ -176,7 +176,7 @@ public class WalletUtil {
      * @return amount in msat
      */
     public static long getMaxLightningSendAmount() {
-        if (FeatureManager.isChannelManagementEnabled()) {
+        if (FeatureManager.isOpenChannelEnabled()) {
             long tempMax = 0L;
             if (Wallet_Channels.getInstance().getOpenChannelsList() != null)
                 for (OpenChannel c : Wallet_Channels.getInstance().getOpenChannelsList())

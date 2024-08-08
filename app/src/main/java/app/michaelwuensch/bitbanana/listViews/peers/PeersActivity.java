@@ -83,19 +83,23 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (BackendManager.hasBackendConfigs()) {
-                    // Add a new peer
-                    Intent intent = new Intent(PeersActivity.this, ScanPeerActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE_ADD_PEER);
-                } else {
-                    Toast.makeText(PeersActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
+        if (FeatureManager.isPeersModificationEnabled()) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (BackendManager.hasBackendConfigs()) {
+                        // Add a new peer
+                        Intent intent = new Intent(PeersActivity.this, ScanPeerActivity.class);
+                        startActivityForResult(intent, REQUEST_CODE_ADD_PEER);
+                    } else {
+                        Toast.makeText(PeersActivity.this, R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            fab.setVisibility(View.GONE);
+        }
         // Register listeners
         Wallet_NodesAndPeers.getInstance().registerPeerUpdateListener(this);
     }

@@ -333,7 +333,11 @@ public class Wallet {
                             setWalletLoadState(WalletLoadState.WALLET_LOADED);
                             return true;
                         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-                }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
+                }, throwable -> {
+                    setWalletLoadState(WalletLoadState.ERROR);
+                    broadcastWalletLoadError("Exception loading required data on startup: " + throwable.getMessage());
+                    BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
+                }));
 
                 // Fetch the transaction history
                 Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
@@ -358,7 +362,11 @@ public class Wallet {
                             setWalletLoadState(WalletLoadState.WALLET_LOADED);
                             return true;
                         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
-                }, throwable -> BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage())));
+                }, throwable -> {
+                    setWalletLoadState(WalletLoadState.ERROR);
+                    broadcastWalletLoadError("Exception loading required data on startup: " + throwable.getMessage());
+                    BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
+                }));
 
                 // Fetch UTXOs
                 Wallet_TransactionHistory.getInstance().fetchUTXOs();
@@ -372,6 +380,8 @@ public class Wallet {
                             // Everything fetched, now show the wallet!
                             setWalletLoadState(WalletLoadState.WALLET_LOADED);
                         }, throwable -> {
+                            setWalletLoadState(WalletLoadState.ERROR);
+                            broadcastWalletLoadError("Exception loading required data on startup: " + throwable.getMessage());
                             BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
                         }));
 
@@ -475,6 +485,12 @@ public class Wallet {
         }
     }
 
+    public void broadcastWalletLoadError(String errorMessage) {
+        for (WalletLoadStateListener listener : mWalletLoadStateListeners) {
+            listener.onWalletLoadError(errorMessage);
+        }
+    }
+
     public void registerWalletLoadStateListener(WalletLoadStateListener listener) {
         mWalletLoadStateListeners.add(listener);
     }
@@ -508,6 +524,8 @@ public class Wallet {
 
     public interface WalletLoadStateListener {
         void onWalletLoadStateChanged(WalletLoadState state);
+
+        void onWalletLoadError(String error);
     }
 
     public interface InfoListener {

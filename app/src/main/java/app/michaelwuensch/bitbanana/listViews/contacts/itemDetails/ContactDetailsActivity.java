@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 
@@ -62,12 +63,17 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
             case NODEPUBKEY:
                 mUserAvatarView.setupWithNodeUri(new LightningNodeUri.Builder().setPubKey(mContact.getContactData()).build(), true);
                 mTVContactType.setText(getApplicationContext().getString(R.string.contact_type_ln_node));
+                if (!FeatureManager.isKeysendEnabled())
+                    mBottomButtons.getMenu().removeItem(R.id.action_send_money);
+                if (!FeatureManager.isOpenChannelEnabled())
+                    mBottomButtons.getMenu().removeItem(R.id.action_open_channel);
                 break;
             case LNADDRESS:
-                mBottomButtons.getMenu().clear(); //clear old inflated items.
-                mBottomButtons.inflateMenu(R.menu.contact_details_menu_bottom_ln_address);
+                mBottomButtons.getMenu().removeItem(R.id.action_open_channel);
                 mUserAvatarView.setupWithLNAddress(mContact.getLightningAddress(), true);
                 mTVContactType.setText(getApplicationContext().getString(R.string.ln_address));
+                if (!FeatureManager.isOffchainSendingEnabled())
+                    mBottomButtons.getMenu().removeItem(R.id.action_send_money);
                 break;
         }
 

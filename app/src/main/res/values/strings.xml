@@ -264,6 +264,7 @@
     <string name="guardian_custodial_lndhub">This is a LndHub account. Unless you are the host of the LndHub service, this arrangement is custodial. The entity managing the service has control over your money and can view your transaction history. Only deposit what you\'re willing to trust with them.</string>
     <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">The current fee estimation suggests that this transaction with a fee rate of %1$d sat/vB may never be confirmed. Consider increasing the fee to avoid your transaction getting stuck for a long time.\n\nDo you want to proceed anyway?</string>
     <string name="guardian_remove_watchtower">By removing the watchtower, all current sessions associated with the tower will be terminated. Some sessions are not yet exhausted. Remaining backups will get lost and won\'t be refunded, even if you paid for the service.</string>
+    <string name="guardian_custodial_lnd_accounts">You only have access to an account on the LND node. Unless you are the node operator, this arrangement is custodial. The person managing the node has control over your money and can view your transaction history. Only deposit what you\'re willing to trust with that person.</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>

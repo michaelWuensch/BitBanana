@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class SignView extends LinearLayout {
@@ -27,26 +29,28 @@ public class SignView extends LinearLayout {
     private View mViewGeneratedSignatureLayout;
     private ImageView mIVCopySignature;
     private Button mBtnSign;
+    private Context mContext;
 
     private CompositeDisposable mCompositeDisposable;
 
 
     public SignView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public SignView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public SignView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
+        mContext = context;
         View view = inflate(getContext(), R.layout.view_sign, this);
 
         mCompositeDisposable = new CompositeDisposable();
@@ -93,7 +97,10 @@ public class SignView extends LinearLayout {
                         .subscribe(response -> {
                             BBLog.v(LOG_TAG, "Created signature: " + response);
                             updateSignatureInfo(response.getZBase());
-                        }, throwable -> BBLog.d(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace())));
+                        }, throwable -> {
+                            ((BaseAppCompatActivity) mContext).showError(throwable.getMessage(), RefConstants.ERROR_DURATION_SHORT);
+                            BBLog.d(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace());
+                        }));
             }
         } else {
             Toast.makeText(getContext(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();

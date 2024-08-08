@@ -16,9 +16,11 @@ import androidx.core.content.ContextCompat;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class VerifyView extends LinearLayout {
@@ -32,26 +34,28 @@ public class VerifyView extends LinearLayout {
     private TextView mTVPubkeyLabel;
     private TextView mTVPubkey;
     private ImageView mIVCopyPubkey;
+    private Context mContext;
 
     private CompositeDisposable mCompositeDisposable;
 
 
     public VerifyView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public VerifyView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public VerifyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
+        mContext = context;
         View view = inflate(getContext(), R.layout.view_verify, this);
 
         mCompositeDisposable = new CompositeDisposable();
@@ -106,11 +110,10 @@ public class VerifyView extends LinearLayout {
                             updateVerificationInfo(response.isValid(), response.getPubKey());
                         }, throwable -> {
                             BBLog.d(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace());
-                            if (throwable.getMessage().contains("pubkey not found in the graph"))
+                            if (throwable.getMessage() != null && throwable.getMessage().contains("pubkey not found in the graph"))
                                 updateVerificationInfo(false, "none");
                             else {
-                                mTVValidationInfo.setText(throwable.getMessage());
-                                showFailure();
+                                ((BaseAppCompatActivity) mContext).showError(throwable.getMessage(), RefConstants.ERROR_DURATION_SHORT);
                             }
                         }));
             }

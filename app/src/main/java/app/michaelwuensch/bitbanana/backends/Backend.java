@@ -14,6 +14,7 @@ public class Backend {
     protected boolean bSupportsOpenChannel = false;
     protected boolean bSupportsCloseChannel = false;
     protected boolean bSupportsPeerManagement = false;
+    protected boolean bSupportsPeerModification = false;
     protected boolean bSupportsRouting = false;
     protected boolean bSupportsRoutingPolicyManagement = false;
     protected boolean bSupportsCoinControl = false;
@@ -85,6 +86,10 @@ public class Backend {
 
     public boolean supportsPeerManagement() {
         return bSupportsPeerManagement;
+    }
+
+    public boolean supportsPeerModification() {
+        return bSupportsPeerModification;
     }
 
     public boolean supportsRouting() {

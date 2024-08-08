@@ -17,9 +17,11 @@ public class DemoBackend extends Backend {
         bSupportsChannelManagement = true;
         bSupportsOpenChannel = true;
         bSupportsPeerManagement = true;
+        bSupportsPeerModification = true;
         bSupportsRouting = true;
         bSupportsRoutingPolicyManagement = true;
         bSupportsCoinControl = true;
         bSupportsMessageSigningByNodePrivateKey = true;
+        bSupportsWatchtowers = true;
     }
 }
