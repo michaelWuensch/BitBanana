@@ -929,4 +929,5 @@
     <string name="watchtower_add">Añadir torre de vigilancia</string>
     <string name="watchtower_show">Mostrar torre de vigilancia</string>
     <string name="lnd_watchtower_client_inactive">El cliente de Watchtower está inactivo actualmente. Asegúrese de que lnd se haya iniciado con el indicador --wtclient.active.</string>
+    <string name="guardian_custodial_lnd_accounts">Solo tiene acceso a una cuenta en el nodo LND. A menos que seas el operador del nodo, este acuerdo es de custodia. La persona que gestiona el nodo tiene control sobre tu dinero y puede ver tu historial de transacciones. Deposita solo lo que estés dispuesto a confiarle a esta persona.</string>
 </resources>
