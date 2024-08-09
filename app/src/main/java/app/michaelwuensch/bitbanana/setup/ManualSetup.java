@@ -213,6 +213,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             mEtUser.setValue(BackendConfig.getUser());
             mEtPassword.setValue(BackendConfig.getPassword());
         } else {
+            mVpnConfigView.setupWithVpnConfig(null); // This makes sure start on open and stop on close are set to true;
             mSpType.setSelection(0);
         }
 
