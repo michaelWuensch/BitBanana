@@ -16,9 +16,14 @@ import app.michaelwuensch.bitbanana.util.Version;
 public class LndBackend extends Backend {
 
     private boolean isAccountRestricted = false;
+    private String account = "";
 
     public boolean getIsAccountRestricted() {
         return isAccountRestricted;
+    }
+
+    public String getAccount() {
+        return account;
     }
 
     public LndBackend(BackendConfig backendConfig) {
@@ -96,11 +101,17 @@ public class LndBackend extends Backend {
                 if (caveats != null) {
                     for (CaveatPacket caveat : caveats) {
                         if (caveat.getValueAsText().contains("lnd-custom account")) {
+                            // Save account string
+                            account = caveat.getValueAsText().split("lnd-custom account")[1].trim();
+
+                            // Adapt features
                             isAccountRestricted = true;
                             bSupportsWatchtowers = false;
                             bSupportsCoinControl = false;
                             bSupportsRouting = false;
                             bSupportsRoutingFeeEstimation = false;
+                            bSupportsEventSubscription = false;
+                            bSupportsIdentityScreen = false;
                         }
                     }
                 }

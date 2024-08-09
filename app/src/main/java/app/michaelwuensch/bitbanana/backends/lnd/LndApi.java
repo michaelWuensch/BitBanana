@@ -67,6 +67,7 @@ import java.util.Map;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
@@ -143,6 +144,12 @@ public class LndApi extends Api {
                         lnUris[0] = LightningNodeUriParser.parseNodeUri(response.getIdentityPubkey());
                     }
 
+                    String avatarMaterial;
+                    if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted())
+                        avatarMaterial = ((LndBackend) BackendManager.getCurrentBackend()).getAccount();
+                    else
+                        avatarMaterial = response.getIdentityPubkey();
+
                     return CurrentNodeInfo.newBuilder()
                             .setAlias(response.getAlias())
                             .setVersion(new Version(response.getVersion().split("-")[0]))
@@ -152,7 +159,7 @@ public class LndApi extends Api {
                             .setLightningNodeUris(lnUris)
                             .setNetwork(BackendConfig.Network.parseFromString(response.getChains(0).getNetwork()))
                             .setSynced(response.getSyncedToChain())
-                            .setAvatarMaterial(response.getIdentityPubkey())
+                            .setAvatarMaterial(avatarMaterial)
                             .build();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getInfo failed: " + throwable.toString()));
