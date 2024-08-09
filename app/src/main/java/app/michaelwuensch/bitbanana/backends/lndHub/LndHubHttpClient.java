@@ -90,9 +90,35 @@ public class LndHubHttpClient {
             if (accessToken != null) {
                 builder.header("Authorization", "Bearer " + accessToken);
             }
+            Request requestWithTempAccessToken = builder.build();
+            Response response = chain.proceed(requestWithTempAccessToken);
 
-            Request newRequest = builder.build();
-            return chain.proceed(newRequest);
+            // Normally the TokenRefreshAuthenticators authenticate method gets called automatically through a 401 response.
+            // But the original LndHub implementation does return success with the following json instead:
+            // {"error":true,"code":1,"message":"bad auth"}
+            // Therefore, we also check if the response body contains the "error": true structure
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.peekBody(Long.MAX_VALUE).string();
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseBody);
+                    if (jsonResponse.optBoolean("error") && jsonResponse.optInt("code") == 1 && "bad auth".equals(jsonResponse.optString("message"))) {
+                        BBLog.i(LOG_TAG, "Detected bad auth error, refreshing token");
+
+                        // Call the TokenRefreshAuthenticator to get a new token
+                        TokenRefreshAuthenticator authenticator = new TokenRefreshAuthenticator();
+                        Request newRequest = authenticator.authenticate(null, response);
+
+                        if (newRequest != null) {
+                            response.close(); // Close the original response
+                            return chain.proceed(newRequest); // Retry with the new token
+                        }
+                    }
+                } catch (Exception ignore) {
+
+                }
+            }
+
+            return response; // Return the original response if no authentication is needed
         }
     }
 
