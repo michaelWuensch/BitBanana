@@ -938,4 +938,5 @@
     <string name="lnd_watchtower_client_inactive">O cliente da torre de guarda está atualmente inativo. Por favor certifique-se que o lnd é iniciado com a flag --wtclient.active.</string>
     <string name="id">ID</string>
     <string name="watchtower_session_backups">Backups</string>
+    <string name="guardian_custodial_lnd_accounts">Você somente tem acesso a uma conta no nó LND. A não ser que seja o operador do nó, esse arranjo é custodial. A pessoa mantendo o nó tem controle sobre seu dinheiro e pode ver seu histórico de transação. Apenas deposite o que confia com esta pessoa.</string>
 </resources>
