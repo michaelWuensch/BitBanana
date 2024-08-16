@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.backends.lnd;
 
 import static app.michaelwuensch.bitbanana.util.PaymentUtil.KEYSEND_MESSAGE_RECORD;
 
+import com.github.lightningnetwork.lnd.invoicesrpc.LookupInvoiceMsg;
 import com.github.lightningnetwork.lnd.lnrpc.ChanInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.Channel;
 import com.github.lightningnetwork.lnd.lnrpc.ChannelBalanceRequest;
@@ -557,7 +558,20 @@ public class LndApi extends Api {
                     }
                     return invoicesList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching Invoice page failed: " + throwable.fillInStackTrace()));
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice page failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<LnInvoice> getInvoice(String paymentHash) {
+        LookupInvoiceMsg request = LookupInvoiceMsg.newBuilder()
+                .setPaymentHash(ApiUtil.ByteStringFromHexString(paymentHash))
+                .build();
+
+        return LndConnection.getInstance().getInvoicesService().lookupInvoiceV2(request)
+                .map(response -> {
+                    return getInvoiceFromLNDInvoice(response);
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice failed: " + throwable.fillInStackTrace()));
     }
 
     @Override

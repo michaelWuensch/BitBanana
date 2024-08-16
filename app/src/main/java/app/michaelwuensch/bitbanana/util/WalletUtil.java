@@ -147,7 +147,9 @@ public class WalletUtil {
                 return false;
             }
         } else {
-            return Wallet_Balance.getInstance().getBalances().channelBalance() > 0;
+            // As we cannot open channels, we just assume that we can use some that are already open.
+            // We have to assume it as we might not have the permission to examine channels.
+            return true;
         }
     }
 

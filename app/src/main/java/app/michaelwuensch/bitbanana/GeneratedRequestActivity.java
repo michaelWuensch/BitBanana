@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import java.util.concurrent.TimeUnit;
+
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
@@ -241,6 +243,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             // ToDo: Implement checking for on-chain payments
         } else {
             mCompositeDisposable.add(BackendManager.api().getInvoice(mLnInvoice.getPaymentHash())
+                    .delaySubscription(500, TimeUnit.MILLISECONDS) // Delay is important to prevent endless loop if it fails.
                     .subscribe(response -> {
                         if (response == null) {
                             BBLog.i(LOG_TAG, "The requested invoice does not exist.");
