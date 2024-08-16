@@ -106,6 +106,8 @@ public class LndBackend extends Backend {
 
                             // Adapt features
                             isAccountRestricted = true;
+                            bSupportsChannelManagement = false;
+                            bSupportsPeerManagement = false;
                             bSupportsWatchtowers = false;
                             bSupportsCoinControl = false;
                             bSupportsRouting = false;
