@@ -20,6 +20,7 @@
             android:background="#00000000"
             android:maxWidth="200dp"
             android:maxLength="50"
+            android:paddingEnd="40dp"
             android:textAlignment="viewStart"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -65,10 +66,23 @@
             android:gravity="center"
             android:paddingStart="4dp"
             app:layout_constraintBottom_toBottomOf="@id/detailLabel"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/copyImage"
             app:layout_constraintTop_toTopOf="@id/detailLabel"
             app:srcCompat="@drawable/ic_arrow_down_24dp"
             app:tint="@color/banana_yellow" />
+
+        <ImageView
+            android:id="@+id/copyImage"
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/detailLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/detailLabel"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

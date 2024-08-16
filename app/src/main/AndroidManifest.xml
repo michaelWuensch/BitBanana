@@ -270,6 +270,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12OffersActivity"
+            android:label="@string/activity_bolt12_offers"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.CreateBolt12OfferActivity"
+            android:label="@string/activity_bolt12_create_offer"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12QRActivity"
+            android:label="@string/activity_bolt12_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.itemDetails.Bolt12OfferDetailsActivity"
+            android:label="@string/activity_bolt12_details"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingActivity"
             android:label="@string/activity_forwarding"
             android:screenOrientation="portrait"

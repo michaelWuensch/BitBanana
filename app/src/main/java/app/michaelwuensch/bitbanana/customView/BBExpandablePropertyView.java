@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class BBExpandablePropertyView extends ConstraintLayout {
@@ -22,6 +23,7 @@ public class BBExpandablePropertyView extends ConstraintLayout {
     private AmountView mDetailAmountValue;
     private TextView mTvDetailExplanation;
     private ImageView mExpandArrowImage;
+    private ImageView mCopyImage;
     private ImageView mLine;
     private View mVBasicDetails;
     public ViewSwitcher mVsDetailsValueSwitcher;
@@ -51,6 +53,7 @@ public class BBExpandablePropertyView extends ConstraintLayout {
         mDetailAmountValue = view.findViewById(R.id.detailAmountValue);
         mTvDetailExplanation = view.findViewById(R.id.detailExplanation);
         mExpandArrowImage = view.findViewById(R.id.feeArrowUnitImage);
+        mCopyImage = view.findViewById(R.id.copyImage);
         mVsDetailsValueSwitcher = view.findViewById(R.id.valueSwitcher);
         mLine = view.findViewById(R.id.line);
 
@@ -82,6 +85,8 @@ public class BBExpandablePropertyView extends ConstraintLayout {
             String attrExplanation = a.getString(R.styleable.BBExpandablePropertyView_explanation);
             boolean attrHasLine = a.getBoolean(R.styleable.BBExpandablePropertyView_hasLine, true);
             boolean mIsAmountDetail = a.getBoolean(R.styleable.BBExpandablePropertyView_isAmountDetail, false);
+            boolean isExpandable = a.getBoolean(R.styleable.BBExpandablePropertyView_expandableProperty_expandable, true);
+            boolean hasCopyIcon = a.getBoolean(R.styleable.BBExpandablePropertyView_expandableProperty_hasCopyIcon, false);
 
             if (attrLabel != null)
                 setLabel(attrLabel);
@@ -92,6 +97,22 @@ public class BBExpandablePropertyView extends ConstraintLayout {
             setLineVisibility(attrHasLine);
             if (mIsAmountDetail)
                 mVsDetailsValueSwitcher.showNext();
+
+            if (!isExpandable) {
+                mGroupExpandedContent.setOnAllClickListener(null);
+                mVBasicDetails.setOnClickListener(null);
+                mExpandArrowImage.setVisibility(GONE);
+            }
+
+            if (hasCopyIcon) {
+                mCopyImage.setVisibility(VISIBLE);
+                mVBasicDetails.setOnClickListener(new OnSingleClickListener() {
+                    @Override
+                    public void onSingleClick(View v) {
+                        ClipBoardUtil.copyToClipboard(context, mTvDetailLabel.getText().toString(), mTvDetailValue.getText().toString());
+                    }
+                });
+            }
 
             // Don't forget to recycle the TypedArray
             a.recycle();
@@ -126,6 +147,10 @@ public class BBExpandablePropertyView extends ConstraintLayout {
 
     public void setCanBlur(boolean canBlur) {
         mDetailAmountValue.setCanBlur(canBlur);
+    }
+
+    public TextView getmValueTextView() {
+        return mTvDetailValue;
     }
 
     /**

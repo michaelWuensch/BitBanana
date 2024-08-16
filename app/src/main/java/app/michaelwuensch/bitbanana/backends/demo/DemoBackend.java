@@ -23,5 +23,6 @@ public class DemoBackend extends Backend {
         bSupportsCoinControl = true;
         bSupportsMessageSigningByNodePrivateKey = true;
         bSupportsWatchtowers = true;
+        bSupportsBolt12Receive = true;
     }
 }

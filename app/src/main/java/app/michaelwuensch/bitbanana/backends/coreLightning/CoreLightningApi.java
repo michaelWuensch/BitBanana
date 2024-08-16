@@ -10,6 +10,7 @@ import com.github.ElementsProject.lightning.cln.ChannelSide;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.CloseRequest;
 import com.github.ElementsProject.lightning.cln.ConnectRequest;
+import com.github.ElementsProject.lightning.cln.DisableofferRequest;
 import com.github.ElementsProject.lightning.cln.DisconnectRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
 import com.github.ElementsProject.lightning.cln.FundchannelRequest;
@@ -29,6 +30,8 @@ import com.github.ElementsProject.lightning.cln.ListinvoicesInvoices;
 import com.github.ElementsProject.lightning.cln.ListinvoicesRequest;
 import com.github.ElementsProject.lightning.cln.ListnodesNodesAddresses;
 import com.github.ElementsProject.lightning.cln.ListnodesRequest;
+import com.github.ElementsProject.lightning.cln.ListoffersOffers;
+import com.github.ElementsProject.lightning.cln.ListoffersRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsChannels;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsResponse;
@@ -41,6 +44,7 @@ import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsResponse;
 import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
 import com.github.ElementsProject.lightning.cln.NewaddrRequest;
+import com.github.ElementsProject.lightning.cln.OfferRequest;
 import com.github.ElementsProject.lightning.cln.PayRequest;
 import com.github.ElementsProject.lightning.cln.SetchannelRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
@@ -53,12 +57,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
+import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.Balances;
+import app.michaelwuensch.bitbanana.models.Bolt12Offer;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
@@ -69,6 +76,7 @@ import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.RoutingPolicy;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
+import app.michaelwuensch.bitbanana.models.CreateBolt12OfferRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
@@ -741,6 +749,29 @@ public class CoreLightningApi extends Api {
     }
 
     @Override
+    public Single<List<Bolt12Offer>> listBolt12Offers() {
+        ListoffersRequest request = ListoffersRequest.newBuilder()
+                .build();
+
+        return CoreLightningNodeService().listOffers(request)
+                .map(response -> {
+                    List<Bolt12Offer> bolt12OfferList = new ArrayList<>();
+                    for (ListoffersOffers offer : response.getOffersList()) {
+                        bolt12OfferList.add(Bolt12Offer.newBuilder()
+                                .setDecodedBolt12(InvoiceUtil.decodeBolt12(offer.getBolt12()))
+                                .setOfferId(ApiUtil.StringFromHexByteString(offer.getOfferId()))
+                                .setLabel(offer.getLabel())
+                                .setIsActive(offer.getActive())
+                                .setIsSingleUse(offer.getSingleUse())
+                                .setWasAlreadyUsed(offer.getUsed())
+                                .build());
+                    }
+                    return bolt12OfferList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching bolt12 offers failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
     public Completable connectPeer(LightningNodeUri lightningNodeUri) {
         ConnectRequest request = ConnectRequest.newBuilder()
                 .setId(lightningNodeUri.getAsString())
@@ -970,6 +1001,51 @@ public class CoreLightningApi extends Api {
         return CoreLightningNodeService().close(request)
                 .ignoreElement()
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<Bolt12Offer> createBolt12Offer(CreateBolt12OfferRequest createBolt12OfferRequest) {
+        String amountMsat = "any";
+        if (createBolt12OfferRequest.getAmount() != 0)
+            amountMsat = String.valueOf(createBolt12OfferRequest.getAmount());
+
+
+        OfferRequest.Builder requestBuilder = OfferRequest.newBuilder();
+        requestBuilder.setAmount(amountMsat);
+        requestBuilder.setSingleUse(createBolt12OfferRequest.getSingleUse());
+
+        if (createBolt12OfferRequest.getInternalLabel() != null)
+            requestBuilder.setLabel(createBolt12OfferRequest.getInternalLabel());
+
+        if (createBolt12OfferRequest.getDescription() != null)
+            requestBuilder.setDescription(createBolt12OfferRequest.getDescription());
+
+
+        return CoreLightningNodeService().offer(requestBuilder.build())
+                .map(response -> {
+                    if (!response.getCreated())
+                        throw new RuntimeException(App.getAppContext().getString(R.string.error_offer_already_exists));
+                    return Bolt12Offer.newBuilder()
+                            .setDecodedBolt12(InvoiceUtil.decodeBolt12(response.getBolt12()))
+                            .setOfferId(ApiUtil.StringFromHexByteString(response.getOfferId()))
+                            .setLabel(response.getLabel())
+                            .setIsActive(response.getActive())
+                            .setIsSingleUse(response.getSingleUse())
+                            .setWasAlreadyUsed(response.getUsed())
+                            .build();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating offer failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable disableBolt12Offer(String offerId) {
+        DisableofferRequest request = DisableofferRequest.newBuilder()
+                .setOfferId(ApiUtil.ByteStringFromHexString(offerId))
+                .build();
+
+        return CoreLightningNodeService().disableOffer(request)
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error disabling offer: " + throwable.getMessage()));
     }
 
     private Amount amountFromMsat(long msat) {

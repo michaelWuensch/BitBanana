@@ -57,6 +57,7 @@ import app.michaelwuensch.bitbanana.customView.UserAvatarView;
 import app.michaelwuensch.bitbanana.fragments.ChooseNodeActionBSDFragment;
 import app.michaelwuensch.bitbanana.fragments.OpenChannelBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12OffersActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
@@ -751,7 +752,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.drawerChannels) {
+        if (id == R.id.drawerBolt12Offers) {
+            Intent intentBolt12Offers = new Intent(this, Bolt12OffersActivity.class);
+            startActivity(intentBolt12Offers);
+        } else if (id == R.id.drawerChannels) {
             Intent intentChannels = new Intent(this, ManageChannelsActivity.class);
             startActivity(intentChannels);
         } else if (id == R.id.drawerRouting) {
@@ -823,13 +827,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void updateDrawerNavigationMenuVisibilities() {
         Menu drawerMenu = mNavigationView.getMenu();
+        drawerMenu.findItem(R.id.drawerBolt12Offers).setVisible(FeatureManager.isBolt12OffersViewEnabled());
         drawerMenu.findItem(R.id.drawerChannels).setVisible(FeatureManager.isChannelManagementEnabled());
         drawerMenu.findItem(R.id.drawerRouting).setVisible(FeatureManager.isRoutingListViewEnabled());
         drawerMenu.findItem(R.id.drawerUTXOs).setVisible(FeatureManager.isUTXOListViewEnabled());
         drawerMenu.findItem(R.id.drawerPeers).setVisible(FeatureManager.isPeersListViewEnabled());
         drawerMenu.findItem(R.id.drawerSignVerify).setVisible(FeatureManager.isSignVerifyEnabled());
         drawerMenu.findItem(R.id.drawerWatchtowers).setVisible(FeatureManager.isWatchtowersEnabled());
-        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled() || FeatureManager.isWatchtowersEnabled());
+        drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled() || FeatureManager.isWatchtowersEnabled() || FeatureManager.isBolt12OffersViewEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
     }
 

@@ -149,7 +149,7 @@ dependencies {
     implementation 'com.github.nitram509:jmacaroons:master-SNAPSHOT'
 
     // Implementation for some lightning basics like decoding a bolt 11 invoice
-    implementation 'fr.acinq.lightning:lightning-kmp:1.6.1'
+    implementation 'fr.acinq.lightning:lightning-kmp:1.7.2'
 
     // secp256k1 implementation (Used for LNURL Auth)
     implementation 'fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.11.0'

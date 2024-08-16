@@ -52,7 +52,7 @@ public class QRCodeGenerator {
     private static QrVectorOptions getQrVectorOptions(String data) {
         // The design QR-Code does not look good for high density codes.
         // Therefore, depending on how much data is encoded we fall back to a more standard qr code
-        if (data.length() < 140)
+        if (data.length() < 160)
             return getDesignQrVectorOptions(data);
         else
             return getCompatibilityQrVectorOptions();
