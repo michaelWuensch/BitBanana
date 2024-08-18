@@ -18,6 +18,7 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnAddress;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -153,6 +154,11 @@ public class BitcoinStringAnalyzer {
             }
 
             @Override
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+                listener.onValidBolt12Offer(decodedBolt12);
+            }
+
+            @Override
             public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                 listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
             }
@@ -204,6 +210,8 @@ public class BitcoinStringAnalyzer {
         void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
 
         void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
+
+        void onValidBolt12Offer(DecodedBolt12 decodedBolt12);
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 

@@ -82,6 +82,11 @@ public class LiveTestingActivity extends BaseAppCompatActivity {
         test.execute("BITCOIN://bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4", BitcoinStringAnalyzerTest.RESULT_BITCOIN_INVOICE);
         test.execute("BITCOIN://bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4", BitcoinStringAnalyzerTest.RESULT_BITCOIN_INVOICE);
 
+        // Bolt12 Lightning offer
+        test.execute("lno1qgsqvgnwgcg35z6ee2h3yczraddm72xrfua9uve2rlrm9deu7xyfzrc2pexhjgzyv4ekxunfwp6xjmmwzcss9g069rpwu3yvah7ryysy5yxx9amsfq7707cgd8pesxudttdawsnj", BitcoinStringAnalyzerTest.RESULT_BOLT12_OFFER);
+        test.execute("lightning:lno1qgsqvgnwgcg35z6ee2h3yczraddm72xrfua9uve2rlrm9deu7xyfzrc2pexhjgzyv4ekxunfwp6xjmmwzcss9g069rpwu3yvah7ryysy5yxx9amsfq7707cgd8pesxudttdawsnj", BitcoinStringAnalyzerTest.RESULT_BOLT12_OFFER);
+        test.execute("LIGHTNING:lno1qgsqvgnwgcg35z6ee2h3yczraddm72xrfua9uve2rlrm9deu7xyfzrc2pexhjgzyv4ekxunfwp6xjmmwzcss9g069rpwu3yvah7ryysy5yxx9amsfq7707cgd8pesxudttdawsnj", BitcoinStringAnalyzerTest.RESULT_BOLT12_OFFER);
+
         // LNURL (https://lnurl.fiatjaf.com/ was used to generate the lnurls)
         test.execute("lightning:LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKHQCTE8AEK2UMND9HKU0FCXFJRVVFJXF3KYEFNVVCKZWFCXQMXZCTZX56KYEP4XAJRZVRRXU6X2D3CV43RGVP4VESNQCESXGERWWF3V33XZD3HVE3KGWR9V5MKYU2GLGT", BitcoinStringAnalyzerTest.RESULT_LNURL_PAY);
         test.execute("LIGHTNING:LNURL1DP68GURN8GHJ7MRWW4EXCTNXD9SHG6NPVCHXXMMD9AKXUATJDSKHQCTE8AEK2UMND9HKU0FCXFJRVVFJXF3KYEFNVVCKZWFCXQMXZCTZX56KYEP4XAJRZVRRXU6X2D3CV43RGVP4VESNQCESXGERWWF3V33XZD3HVE3KGWR9V5MKYU2GLGT", BitcoinStringAnalyzerTest.RESULT_LNURL_PAY);

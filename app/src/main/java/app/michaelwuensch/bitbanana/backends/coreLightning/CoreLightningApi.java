@@ -13,6 +13,7 @@ import com.github.ElementsProject.lightning.cln.ConnectRequest;
 import com.github.ElementsProject.lightning.cln.DisableofferRequest;
 import com.github.ElementsProject.lightning.cln.DisconnectRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
+import com.github.ElementsProject.lightning.cln.FetchinvoiceRequest;
 import com.github.ElementsProject.lightning.cln.FundchannelRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
@@ -81,6 +82,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
+import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
@@ -553,6 +555,7 @@ public class CoreLightningApi extends Api {
             return Single.zip(bkprIncomeRequest, transactionsRequest, (bkprResponse, transactionsResponse) -> {
                         List<OnChainTransaction> eventList = new ArrayList<>();
                         for (BkprlistincomeIncome_events incomeEvent : bkprResponse.getIncomeEventsList()) {
+                            /*
                             BBLog.e(LOG_TAG, "account: " + incomeEvent.getAccount());
                             BBLog.e(LOG_TAG, "type: " + incomeEvent.getTag());
                             BBLog.e(LOG_TAG, "credit: " + incomeEvent.getCreditMsat().getMsat());
@@ -561,7 +564,7 @@ public class CoreLightningApi extends Api {
                             BBLog.e(LOG_TAG, "TransactionID: " + ApiUtil.StringFromHexByteString(incomeEvent.getTxid()));
                             BBLog.e(LOG_TAG, "Outpoint: " + incomeEvent.getOutpoint());
                             BBLog.e(LOG_TAG, "______________");
-
+                             */
 
                             if (incomeEvent.getAccount().equals("wallet") && incomeEvent.getTag().equals("deposit")) {
                                 eventList.add(OnChainTransaction.newBuilder()
@@ -872,9 +875,11 @@ public class CoreLightningApi extends Api {
                                 .build())
                         .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier());
 
-                if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
-                    requestBuilder.setAmountMsat(Amount.newBuilder()
-                            .setMsat(sendLnPaymentRequest.getAmount()));
+                if (sendLnPaymentRequest.getBolt11() != null) {
+                    if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
+                        requestBuilder.setAmountMsat(Amount.newBuilder()
+                                .setMsat(sendLnPaymentRequest.getAmount()));
+                }
 
                 PayRequest request = requestBuilder.build();
 
@@ -893,6 +898,33 @@ public class CoreLightningApi extends Api {
                             }
                         })
                         .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+
+            case BOLT12_INVOICE:
+                PayRequest.Builder bolt12requestBuilder = PayRequest.newBuilder()
+                        .setBolt11(sendLnPaymentRequest.getBolt12InvoiceString())
+                        .setMaxfee(Amount.newBuilder()
+                                .setMsat(sendLnPaymentRequest.getMaxFee())
+                                .build())
+                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier());
+
+                PayRequest bolt12request = bolt12requestBuilder.build();
+
+                return CoreLightningNodeService().pay(bolt12request)
+                        .map(response -> {
+                            switch (response.getStatus()) {
+                                case COMPLETE:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                                            .build();
+                                default:
+                                    return SendLnPaymentResponse.newBuilder()
+                                            .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                            .setAmount(response.getAmountMsat().getMsat())
+                                            .build();
+                            }
+                        })
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+
             case KEYSEND:
                 List<TlvEntry> tlvEntries = new ArrayList<>();
                 for (CustomRecord cr : sendLnPaymentRequest.getCustomRecords()) {
@@ -1046,6 +1078,24 @@ public class CoreLightningApi extends Api {
         return CoreLightningNodeService().disableOffer(request)
                 .ignoreElement()
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Error disabling offer: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<String> fetchInvoiceFromBolt12Offer(FetchInvoiceFromOfferRequest fetchInvoiceFromOfferRequest) {
+        FetchinvoiceRequest.Builder requestBuilder = FetchinvoiceRequest.newBuilder()
+                .setOffer(fetchInvoiceFromOfferRequest.getDecodedBolt12().getBolt12String())
+                .setAmountMsat(Amount.newBuilder()
+                        .setMsat(fetchInvoiceFromOfferRequest.getAmount())
+                        .build());
+
+        if (fetchInvoiceFromOfferRequest.getComment() != null)
+            requestBuilder.setPayerNote(fetchInvoiceFromOfferRequest.getComment());
+
+        return CoreLightningNodeService().fetchInvoice(requestBuilder.build())
+                .map(response -> {
+                    return response.getInvoice();
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice from offer failed: " + throwable.fillInStackTrace()));
     }
 
     private Amount amountFromMsat(long msat) {

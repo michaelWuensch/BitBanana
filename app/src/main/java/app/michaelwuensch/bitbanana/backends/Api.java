@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
+import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
@@ -238,5 +239,9 @@ public class Api {
 
     public Completable enableBolt12Offer(String offerId) {
         return Completable.error(unsupportedException());
+    }
+
+    public Single<String> fetchInvoiceFromBolt12Offer(FetchInvoiceFromOfferRequest fetchInvoiceFromOfferRequest) {
+        return Single.error(unsupportedException());
     }
 }

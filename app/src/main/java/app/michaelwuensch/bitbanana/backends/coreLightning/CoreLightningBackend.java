@@ -18,6 +18,7 @@ public class CoreLightningBackend extends Backend {
         bSupportsBolt11Receive = true;
         bSupportsBolt11Sending = true;
         bSupportsBolt12Receive = true;
+        bSupportsBolt12Sending = true;
         bSupportsOnChainReceive = true;
         bSupportsOnChainSending = true;
         bSupportsBalanceDetails = true;

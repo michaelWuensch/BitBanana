@@ -15,6 +15,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -89,6 +90,11 @@ public class ScanActivity extends BaseScannerActivity {
 
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                readableDataFound(data);
+            }
+
+            @Override
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
                 readableDataFound(data);
             }
 
