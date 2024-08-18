@@ -930,4 +930,21 @@
     <string name="watchtower_show">Mostrar torre de vigilancia</string>
     <string name="lnd_watchtower_client_inactive">El cliente de Watchtower está inactivo actualmente. Asegúrese de que lnd se haya iniciado con el indicador --wtclient.active.</string>
     <string name="guardian_custodial_lnd_accounts">Solo tiene acceso a una cuenta en el nodo LND. A menos que seas el operador del nodo, este acuerdo es de custodia. La persona que gestiona el nodo tiene control sobre tu dinero y puede ver tu historial de transacciones. Deposita solo lo que estés dispuesto a confiarle a esta persona.</string>
+    <string name="used">Utilizado</string>
+    <string name="unused">Sin utilizar</string>
+    <string name="enable">Permitir</string>
+    <string name="disable">No permitir</string>
+    <string name="activity_bolt12_offers">Códigos de pago</string>
+    <string name="activity_bolt12_create_offer">Crear código de pago</string>
+    <string name="help_dialog_bolt12_label">Esta etiqueta solo está destinada a organizar tus códigos de pago y no será visible para nadie que utilice el código de pago.</string>
+    <string name="help_dialog_bolt12_description">Cualquiera que utilice el código de pago verá la descripción.</string>
+    <string name="offer_single_use">De un solo uso</string>
+    <string name="offer_multi_use">Multiuso</string>
+    <string name="offer_id">ID de la oferta</string>
+    <string name="bolt12">Bolt 12</string>
+    <string name="activity_bolt12_details">Código de pago</string>
+    <string name="error_offer_already_exists">Ya existe un código de pago idéntico.</string>
+    <string name="label">Etiqueta</string>
+    <string name="help_dialog_offers">Los códigos de pago se pueden utilizar varias veces. Cualquier persona que tenga el código puede realizar un pago sin necesidad de que intervenga de inmediato. Sin embargo, tu nodo debe estar conectado para que se realice el pago. Además, los códigos de pago ofrecen funciones avanzadas como pagos recurrentes y mayor privacidad para el receptor.</string>
+    <string name="offer_no_bolt12_offers">Sin códigos de pago</string>
 </resources>
