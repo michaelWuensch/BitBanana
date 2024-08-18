@@ -21,6 +21,10 @@ public class FeatureManager {
         return settingEnabled;
     }
 
+    public static boolean isBolt12OffersViewEnabled() {
+        return getBackend().supportsBolt12Receive();
+    }
+
     public static boolean isRoutingListViewEnabled() {
         boolean backendSupported = getBackend().supportsRouting();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureRoutingSummary", true);

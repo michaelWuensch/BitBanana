@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.backends;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.models.Balances;
+import app.michaelwuensch.bitbanana.models.Bolt12Offer;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
@@ -11,6 +12,7 @@ import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PublicChannelInfo;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.Channels.UpdateRoutingPolicyRequest;
+import app.michaelwuensch.bitbanana.models.CreateBolt12OfferRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceResponse;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
@@ -41,7 +43,7 @@ public class Api {
     }
 
     protected IllegalStateException unsupportedException() {
-        return new IllegalStateException("Unknown or unsupported backend type");
+        return new IllegalStateException("The method is not implemented for the current backend. (" + BackendManager.getCurrentBackendType() + ")");
     }
 
     public Single<CurrentNodeInfo> getCurrentNodeInfo() {
@@ -150,6 +152,10 @@ public class Api {
         return Single.error(unsupportedException());
     }
 
+    public Single<List<Bolt12Offer>> listBolt12Offers() {
+        return Single.error(unsupportedException());
+    }
+
     public Single<Watchtower> getWatchtower(String pubKey) {
         return Single.error(unsupportedException());
     }
@@ -220,5 +226,17 @@ public class Api {
 
     public Single<Long> estimateRoutingFee(String PubKey, long amount) {
         return Single.error(unsupportedException());
+    }
+
+    public Single<Bolt12Offer> createBolt12Offer(CreateBolt12OfferRequest createBolt12OfferRequest) {
+        return Single.error(unsupportedException());
+    }
+
+    public Completable disableBolt12Offer(String offerId) {
+        return Completable.error(unsupportedException());
+    }
+
+    public Completable enableBolt12Offer(String offerId) {
+        return Completable.error(unsupportedException());
     }
 }

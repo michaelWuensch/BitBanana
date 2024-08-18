@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.listViews.channels.itemDetails.AdvancedChannelDetailsActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/offerLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:padding="30dp"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                tools:text="Payment Code Label" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expandableProperty_expandable="false"
+                app:label="@string/active" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/used"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expandableProperty_expandable="false"
+                app:label="@string/used" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expandableProperty_expandable="false"
+                app:label="@string/type" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:expandableProperty_expandable="false"
+                app:label="@string/description"
+                tools:visibility="visible" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expandableProperty_expandable="false"
+                app:expandableProperty_hasCopyIcon="true"
+                app:label="@string/offer_id" />
+
+            <app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView
+                android:id="@+id/bolt12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:expandableProperty_expandable="false"
+                app:expandableProperty_hasCopyIcon="true"
+                app:label="@string/bolt12" />
+
+            <Button
+                android:id="@+id/switchEnabledSateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_clickable_item"
+                android:text="@string/disable"
+                android:textAllCaps="false"
+                android:textColor="@color/banana_yellow"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

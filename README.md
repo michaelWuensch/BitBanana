@@ -51,6 +51,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] Contacts (with [Avatars](https://github.com/michaelWuensch/avathor-rfc#avathor))
 - [x] Send funds to lightning addresses (email like addresses)
 - [x] Send funds without an invoice (keysend)
+- [x] Bolt 12 support (Core Lightning only)
 - [x] NFC support
 - [x] Transaction filters
 - [x] BTC, mBTC, bit & Satoshi units

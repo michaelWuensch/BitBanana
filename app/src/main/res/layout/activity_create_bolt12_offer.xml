@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp">
+
+    <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+        android:id="@+id/offerInputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:helpButtonText="@string/help_dialog_bolt12_label"
+        app:inputLabel="@string/label"
+        app:inputLabelDetails=""
+        app:maxLines="1"
+        app:showHelpButton="true" />
+
+    <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+        android:id="@+id/offerInputDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:helpButtonText="@string/help_dialog_bolt12_description"
+        app:inputLabel="@string/description"
+        app:inputLabelDetails=""
+        app:maxLines="3"
+        app:showHelpButton="true" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/singleUseSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/offer_single_use" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bg_clickable_item"
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:textColor="@color/banana_yellow"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</LinearLayout>

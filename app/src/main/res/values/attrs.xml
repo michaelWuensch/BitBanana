@@ -31,6 +31,8 @@
         <attr name="explanation" format="string" />
         <attr name="hasLine" format="boolean" />
         <attr name="isAmountDetail" format="boolean" />
+        <attr name="expandableProperty_expandable" format="boolean" />
+        <attr name="expandableProperty_hasCopyIcon" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BBInfoLineView">

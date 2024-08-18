@@ -14,8 +14,10 @@ import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import fr.acinq.lightning.payment.Bolt11Invoice;
+import fr.acinq.lightning.wire.OfferTypes;
 
 public class InvoiceUtil {
     private static final String LOG_TAG = InvoiceUtil.class.getSimpleName();
@@ -271,6 +273,23 @@ public class InvoiceUtil {
                     .build();
         } catch (Exception e) {
             throw new Exception(e.getMessage());
+        }
+    }
+
+    public static DecodedBolt12 decodeBolt12(String bolt12) throws Exception {
+        try {
+            OfferTypes.Offer decoded = OfferTypes.Offer.Companion.decode(bolt12).get();
+            long amount = decoded.getAmount() == null ? 0 : decoded.getAmount().getMsat();
+            long expiry = decoded.getExpirySeconds() == null ? 0 : decoded.getExpirySeconds();
+            return DecodedBolt12.newBuilder()
+                    .setBolt12String(bolt12)
+                    .setOfferId(decoded.getOfferId().toHex())
+                    .setAmount(amount)
+                    .setDescription(decoded.getDescription())
+                    .setExpiresAt(expiry)
+                    .build();
+        } catch (Exception e) {
+            throw new Exception("Bolt12 decoding failed: " + e.getMessage());
         }
     }
 

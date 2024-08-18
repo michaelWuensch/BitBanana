@@ -22,6 +22,10 @@
                     android:icon="@drawable/ic_coins"
                     android:title="@string/drawer_menu_coin_control" />
                 <item
+                    android:id="@+id/drawerBolt12Offers"
+                    android:icon="@drawable/baseline_code_24"
+                    android:title="@string/activity_bolt12_offers" />
+                <item
                     android:id="@+id/drawerSignVerify"
                     android:icon="@drawable/outline_sign_24"
                     android:title="@string/sign_verify" />

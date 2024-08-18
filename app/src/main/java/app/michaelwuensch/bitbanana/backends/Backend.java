@@ -37,6 +37,7 @@ public class Backend {
     protected boolean bSupportsKeysend = false;
     protected boolean bSupportsBolt11Sending = false;
     protected boolean bSupportsBolt12Sending = false;
+    protected boolean bSupportsBolt12Receive = false;
     protected boolean bSupportsOnChainReceive = false;
     protected boolean bSupportsBolt11Receive = false;
     protected boolean bSupportsBolt11WithoutAmount = false;
@@ -143,6 +144,10 @@ public class Backend {
 
     public boolean supportsBolt12Sending() {
         return bSupportsBolt12Sending;
+    }
+
+    public boolean supportsBolt12Receive() {
+        return bSupportsBolt12Receive;
     }
 
     public boolean supportsOnChainReceive() {
