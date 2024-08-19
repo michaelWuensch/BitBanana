@@ -939,4 +939,21 @@
     <string name="id">ID</string>
     <string name="watchtower_session_backups">Backups</string>
     <string name="guardian_custodial_lnd_accounts">Você somente tem acesso a uma conta no nó LND. A não ser que seja o operador do nó, esse arranjo é custodial. A pessoa mantendo o nó tem controle sobre seu dinheiro e pode ver seu histórico de transação. Apenas deposite o que confia com esta pessoa.</string>
+    <string name="label">Rótulo</string>
+    <string name="used">Usado</string>
+    <string name="unused">Não usado</string>
+    <string name="enable">Ativar</string>
+    <string name="disable">Desativar</string>
+    <string name="activity_bolt12_offers">Códigos de Pagamento</string>
+    <string name="activity_bolt12_create_offer">Criar Código de Pagamento</string>
+    <string name="activity_bolt12_details">Código de Pagamento</string>
+    <string name="error_offer_already_exists">Um código de pagamento idêntico já existe.</string>
+    <string name="help_dialog_bolt12_description">Qualquer um que usar o código de pagamento verá a descrição.</string>
+    <string name="help_dialog_bolt12_label">Este rótulo é apenas para organizar seus códigos de pagamento e não será visível a ninguém que use o código de pagamento.</string>
+    <string name="offer_no_bolt12_offers">Sem códigos de pagamento</string>
+    <string name="offer_multi_use">Uso múltiplo</string>
+    <string name="offer_id">ID de Oferta</string>
+    <string name="offer_single_use">Uso único</string>
+    <string name="help_dialog_offers">Códigos de pagamento podem ser usados várias vezes. Qualquer um com o código pode fazer um pagamento para você sem requerer seu envolvimento imediato. Entretanto, seu nó deve estar on-line para que o pagamento avance. Além disso, códigos de pagamento oferecem funções avançadas como pagamentos recorrentes e privacidade aumentada ao recipiente.</string>
+    <string name="bolt12">Bolt 12</string>
 </resources>
