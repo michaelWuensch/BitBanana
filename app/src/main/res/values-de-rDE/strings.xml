@@ -876,4 +876,9 @@
     <string name="watchtower_sessions">Sitzungen</string>
     <string name="watchtower_session_details">Sitzungsdetails</string>
     <string name="watchtower_session_backups">Backups</string>
+    <string name="label">Label</string>
+    <string name="used">Benutzt</string>
+    <string name="unused">Unbenutzt</string>
+    <string name="enable">Aktivieren</string>
+    <string name="disable">Deaktivieren</string>
 </resources>
