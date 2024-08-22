@@ -947,4 +947,5 @@
     <string name="label">Etiqueta</string>
     <string name="help_dialog_offers">Los códigos de pago se pueden utilizar varias veces. Cualquier persona que tenga el código puede realizar un pago sin necesidad de que intervenga de inmediato. Sin embargo, tu nodo debe estar conectado para que se realice el pago. Además, los códigos de pago ofrecen funciones avanzadas como pagos recurrentes y mayor privacidad para el receptor.</string>
     <string name="offer_no_bolt12_offers">Sin códigos de pago</string>
+    <string name="error_bolt12_expired">Este código de pago ha caducado.</string>
 </resources>
