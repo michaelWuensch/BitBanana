@@ -881,4 +881,18 @@
     <string name="unused">Unbenutzt</string>
     <string name="enable">Aktivieren</string>
     <string name="disable">Deaktivieren</string>
+    <string name="guardian_custodial_lnd_accounts">Du hast nur Zugang zu einem Konto auf dem LND-Knoten. Sofern du nicht der Betreiber des Knotens bist, handelt es sich um eine Verwahrungslösung. Die Person, die den Knoten verwaltet, hat die Kontrolle über dein Geld und kann deinen Transaktionsverlauf einsehen. Zahle nur das ein, was du bereit bist, dieser Person anzuvertrauen.</string>
+    <string name="help_dialog_bolt12_label">Dieses Label dient nur der Organisation deiner Zahlungscodes und ist für niemanden, der den Zahlungscode verwendet, sichtbar.</string>
+    <string name="offer_single_use">Einmalige Nutzung</string>
+    <string name="error_bolt12_expired">Dieser Zahlungscode ist abgelaufen.</string>
+    <string name="error_offer_already_exists">Ein identischer Zahlungscode ist bereits vorhanden.</string>
+    <string name="help_dialog_bolt12_description">Jeder, der den Zahlungscode verwendet, sieht diese Beschreibung.</string>
+    <string name="offer_no_bolt12_offers">Keine Zahlungscodes</string>
+    <string name="offer_multi_use">Mehrfache Nutzung</string>
+    <string name="offer_id">Offer ID</string>
+    <string name="bolt12">Bolt 12</string>
+    <string name="activity_bolt12_offers">Zahlungscodes</string>
+    <string name="help_dialog_offers">Zahlungscodes können mehrfach verwendet werden. Jeder, der den Code besitzt, kann eine Zahlung an dich senden, ohne dass du direkt eingreifen musst. Dein Knoten muss jedoch online sein, damit die Zahlung durchgeführt werden kann. Darüber hinaus bieten Zahlungscodes erweiterte Funktionen wie wiederkehrende Zahlungen und mehr Privatsphäre für den Empfänger.</string>
+    <string name="activity_bolt12_create_offer">Zahlungscode erstellen</string>
+    <string name="activity_bolt12_details">Zahlungscode</string>
 </resources>
