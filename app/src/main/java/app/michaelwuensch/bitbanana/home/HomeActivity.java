@@ -76,6 +76,7 @@ import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawBSDFragment;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.settings.SettingsActivity;
@@ -577,6 +578,25 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         }
 
                         @Override
+                        public void onValidBolt12Offer(app.michaelwuensch.bitbanana.models.DecodedBolt12 decodedBolt12) {
+                            if (WalletUtil.getMaxLightningSendAmount() < decodedBolt12.getAmount()) {
+                                if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
+                                    // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
+                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(address, amount, message);
+                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                    Toast.makeText(HomeActivity.this, R.string.on_chain_fallback_insufficient_funds, Toast.LENGTH_LONG).show();
+                                } else {
+                                    showError(getString(R.string.error_insufficient_funds), RefConstants.ERROR_DURATION_MEDIUM);
+                                }
+                            } else {
+                                if (decodedBolt12.hasAmountSpecified()) {
+                                    SendBSDFragment sendBSDFragment = SendBSDFragment.createBolt12OfferDialog(decodedBolt12);
+                                    sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
+                                }
+                            }
+                        }
+
+                        @Override
                         public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
                             // never reached
                         }
@@ -602,6 +622,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         }
                     });
                 }
+            }
+
+            @Override
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+                SendBSDFragment sendBSDFragment = SendBSDFragment.createBolt12OfferDialog(decodedBolt12);
+                sendBSDFragment.showDelayed(getSupportFragmentManager(), "sendBottomSheetDialog");
             }
 
             @Override

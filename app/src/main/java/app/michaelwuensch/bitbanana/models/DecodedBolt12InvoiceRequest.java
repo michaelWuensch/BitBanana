@@ -2,7 +2,7 @@ package app.michaelwuensch.bitbanana.models;
 
 import java.io.Serializable;
 
-public class DecodedBolt12 implements Serializable {
+public class DecodedBolt12InvoiceRequest implements Serializable {
 
     private final String Bolt12String;
     private final String OfferId;
@@ -15,7 +15,7 @@ public class DecodedBolt12 implements Serializable {
         return new Builder();
     }
 
-    private DecodedBolt12(Builder builder) {
+    private DecodedBolt12InvoiceRequest(Builder builder) {
         this.Bolt12String = builder.Bolt12String;
         this.OfferId = builder.OfferId;
         this.Amount = builder.Amount;
@@ -83,8 +83,8 @@ public class DecodedBolt12 implements Serializable {
             // required parameters
         }
 
-        public DecodedBolt12 build() {
-            return new DecodedBolt12(this);
+        public DecodedBolt12InvoiceRequest build() {
+            return new DecodedBolt12InvoiceRequest(this);
         }
 
         public Builder setBolt12String(String bolt12String) {

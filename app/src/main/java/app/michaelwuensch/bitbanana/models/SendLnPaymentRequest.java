@@ -7,6 +7,7 @@ public class SendLnPaymentRequest implements Serializable {
 
     private final PaymentType PaymentType;
     private final DecodedBolt11 Bolt11;
+    private final String Bolt12InvoiceString;
     private final long Amount;
     private final long MaxFee;
     private final String DestinationPubKey;
@@ -21,6 +22,7 @@ public class SendLnPaymentRequest implements Serializable {
     private SendLnPaymentRequest(Builder builder) {
         this.PaymentType = builder.PaymentType;
         this.Bolt11 = builder.Bolt11;
+        this.Bolt12InvoiceString = builder.Bolt12InvoiceString;
         this.MaxFee = builder.MaxFee;
         this.Amount = builder.Amount;
         this.DestinationPubKey = builder.DestinationPubKey;
@@ -35,6 +37,13 @@ public class SendLnPaymentRequest implements Serializable {
 
     public DecodedBolt11 getBolt11() {
         return Bolt11;
+    }
+
+    /**
+     * This is used for bolt 12 payments
+     */
+    public String getBolt12InvoiceString() {
+        return Bolt12InvoiceString;
     }
 
     /**
@@ -73,6 +82,7 @@ public class SendLnPaymentRequest implements Serializable {
 
         private PaymentType PaymentType;
         private DecodedBolt11 Bolt11;
+        private String Bolt12InvoiceString;
         private long Amount;
         private long MaxFee;
         private String DestinationPubKey;
@@ -95,6 +105,14 @@ public class SendLnPaymentRequest implements Serializable {
 
         public Builder setBolt11(DecodedBolt11 bolt11) {
             this.Bolt11 = bolt11;
+            return this;
+        }
+
+        /**
+         * This is used for bolt 12 payments
+         */
+        public Builder setBolt12InvoiceString(String bolt12InvoiceString) {
+            this.Bolt12InvoiceString = bolt12InvoiceString;
             return this;
         }
 
@@ -137,6 +155,7 @@ public class SendLnPaymentRequest implements Serializable {
 
     public enum PaymentType {
         BOLT11_INVOICE,
+        BOLT12_INVOICE,
         KEYSEND;
     }
 }

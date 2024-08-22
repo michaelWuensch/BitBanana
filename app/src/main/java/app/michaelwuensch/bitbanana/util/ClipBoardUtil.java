@@ -20,6 +20,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
@@ -98,6 +99,11 @@ public class ClipBoardUtil {
 
             @Override
             public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
+            }
+
+            @Override
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 

@@ -9,6 +9,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -31,6 +32,7 @@ public class BitcoinStringAnalyzerTest {
     public static final int RESULT_CONNECT_DATA = 9;
     public static final int RESULT_NODE_URI = 11;
     public static final int RESULT_URL = 12;
+    public static final int RESULT_BOLT12_OFFER = 13;
 
     private static final String ERROR_LNURL_CHECK_FAILED = "The end result was a lnurl, but BitcoinStringAnalyzer.isLnUrl() did not recognize it.";
 
@@ -58,6 +60,14 @@ public class BitcoinStringAnalyzerTest {
                     mResultListener.onSuccess(input, RESULT_BITCOIN_INVOICE, null);
                 else
                     mResultListener.onFailed(input, expected, RESULT_BITCOIN_INVOICE, null);
+            }
+
+            @Override
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+                if (expected == RESULT_BOLT12_OFFER)
+                    mResultListener.onSuccess(input, RESULT_BOLT12_OFFER, null);
+                else
+                    mResultListener.onFailed(input, expected, RESULT_BOLT12_OFFER, null);
             }
 
             @Override

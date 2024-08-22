@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
@@ -26,12 +27,14 @@ public class InvoiceUtil {
     public static String INVOICE_PREFIX_LIGHTNING_TESTNET = "lntb";
     public static String INVOICE_PREFIX_LIGHTNING_REGTEST = "lnbcrt";
     public static String INVOICE_PREFIX_LIGHTNING_SIGNET = "lntbs";
+    public static String OFFER_PREFIX = "lno";
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_MAINNET = new ArrayList<>(Arrays.asList("1", "3", "bc1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_TESTNET = new ArrayList<>(Arrays.asList("m", "n", "2", "tb1"));
     public static ArrayList<String> ADDRESS_PREFIX_ONCHAIN_REGTEST = new ArrayList<>(Arrays.asList("m", "n", "2", "bcrt1"));
     public static final int ERROR_UNKNOWN = 0;
     public static final int ERROR_NETWORK_MISMATCH = 1;
     public static final int ERROR_INVOICE_EXPIRED = 1;
+    public static final int ERROR_BOLT12_EXPIRED = 1;
     private static final int INVOICE_LIGHTNING_MIN_LENGTH = 6;
 
 
@@ -41,6 +44,10 @@ public class InvoiceUtil {
         }
 
         return hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, data) || hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, data) || hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, data);
+    }
+
+    public static boolean isLightningOffer(@NonNull String data) {
+        return hasPrefix(OFFER_PREFIX, data);
     }
 
     public static boolean isBitcoinAddress(@NonNull String data) {
@@ -78,7 +85,7 @@ public class InvoiceUtil {
         lnInvoice = UriUtil.removeURI(lnInvoice);
 
         // Check if the invoice is a lightning invoice
-        if (InvoiceUtil.isLightningInvoice(lnInvoice)) {
+        if (isLightningInvoice(lnInvoice)) {
 
             // Check if the invoice is for the same network the app is connected to
             switch (Wallet.getInstance().getNetwork()) {
@@ -109,6 +116,8 @@ public class InvoiceUtil {
                 default:
                     listener.onError(ctx.getString(R.string.error_unsupported_network), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
             }
+        } else if (isLightningOffer(lnInvoice)) {
+            decodeLightningOffer(ctx, listener, lnInvoice);
         } else {
             // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
@@ -158,9 +167,7 @@ public class InvoiceUtil {
                 // We also don't have a bitcoin invoice, check if the data is a valid bitcoin address
                 validateOnChainAddress(ctx, listener, data, 0L, null, null);
             }
-
         }
-
     }
 
     private static void validateOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, String address, long amount, String message, String lightningInvoice) {
@@ -202,6 +209,22 @@ public class InvoiceUtil {
                 listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
             else
                 listener.onValidLightningInvoice(decodedBolt11);
+        } catch (Exception e) {
+            listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
+        }
+    }
+
+    private static void decodeLightningOffer(Context ctx, OnReadInvoiceCompletedListener listener, String invoice) {
+        if (!BackendManager.getCurrentBackend().supportsBolt12Sending()) {
+            listener.onError(ctx.getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "BOLT12 sending"), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
+            return;
+        }
+        try {
+            DecodedBolt12 decodedBolt12 = decodeBolt12(invoice);
+            if (decodedBolt12.isExpired())
+                listener.onError(ctx.getString(R.string.error_bolt12_expired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
+            else
+                listener.onValidBolt12Offer(decodedBolt12);
         } catch (Exception e) {
             listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
         }
@@ -286,6 +309,7 @@ public class InvoiceUtil {
                     .setOfferId(decoded.getOfferId().toHex())
                     .setAmount(amount)
                     .setDescription(decoded.getDescription())
+                    .setIssuer(decoded.getIssuer())
                     .setExpiresAt(expiry)
                     .build();
         } catch (Exception e) {
@@ -295,6 +319,8 @@ public class InvoiceUtil {
 
     public interface OnReadInvoiceCompletedListener {
         void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
+
+        void onValidBolt12Offer(DecodedBolt12 decodedBolt12);
 
         void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
 

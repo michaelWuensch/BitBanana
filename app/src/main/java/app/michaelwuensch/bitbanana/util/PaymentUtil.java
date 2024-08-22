@@ -25,7 +25,7 @@ public class PaymentUtil {
     private static final int PREIMAGE_BYTE_LENGTH = 32;
 
     /**
-     * Used to send a lightning payments.
+     * Used to send a lightning payment for a bolt 11 invoice.
      *
      * @param decodedBolt11 The decodedBolt11 invoice that will get paid
      */
@@ -33,6 +33,20 @@ public class PaymentUtil {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT11_INVOICE)
                 .setBolt11(decodedBolt11)
+                .setAmount(amount)
+                .setMaxFee(calculateAbsoluteFeeLimit(amount))
+                .build();
+    }
+
+    /**
+     * Used to send a lightning payment for a bolt 12 invoice.
+     *
+     * @param bolt12Invoice The fetched bolt 12 invoice that will get paid
+     */
+    public static SendLnPaymentRequest prepareBolt12InvoicePayment(@NonNull String bolt12Invoice, long amount) {
+        return SendLnPaymentRequest.newBuilder()
+                .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT12_INVOICE)
+                .setBolt12InvoiceString(bolt12Invoice)
                 .setAmount(amount)
                 .setMaxFee(calculateAbsoluteFeeLimit(amount))
                 .build();

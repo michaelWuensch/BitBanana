@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
@@ -42,9 +45,12 @@ import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
+import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -73,14 +79,18 @@ public class SendBSDFragment extends BaseBSDFragment {
     private NumpadView mNumpad;
     private Button mBtnSend;
     private Button mFallbackButton;
+    private ImageView mPayeeLine;
+    private TextView mPayeeLabel;
     private TextView mPayee;
     private PaymentCommentView mPcvComment;
 
     private DecodedBolt11 mDecodedBolt11;
+    private DecodedBolt12 mDecodedBolt12;
     private String mFallbackOnChainInvoice;
     private String mMemo;
     private String mOnChainAddress;
     private boolean mOnChain;
+    private boolean mIsBolt12Offer;
     private long mFixedAmount;
     private Handler mHandler;
     private boolean mAmountValid = true;
@@ -97,6 +107,18 @@ public class SendBSDFragment extends BaseBSDFragment {
         intent.putExtra("onChain", false);
         intent.putExtra("lnPaymentRequest", decodedBolt11);
         intent.putExtra("fallbackOnChainInvoice", fallbackOnChainInvoice);
+        intent.putExtra("isBolt12Offer", false);
+        SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
+        sendBottomSheetDialog.setArguments(intent.getExtras());
+        return sendBottomSheetDialog;
+    }
+
+    public static SendBSDFragment createBolt12OfferDialog(DecodedBolt12 decodedBolt12) {
+        Intent intent = new Intent();
+        intent.putExtra("keysend", false);
+        intent.putExtra("onChain", false);
+        intent.putExtra("isBolt12Offer", true);
+        intent.putExtra("decodedBolt12", decodedBolt12);
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
@@ -131,11 +153,14 @@ public class SendBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mOnChain = args.getBoolean("onChain");
         mIsKeysend = args.getBoolean("keysend");
+        mIsBolt12Offer = args.getBoolean("isBolt12Offer");
 
         if (mOnChain) {
             mFixedAmount = args.getLong("onChainAmount");
             mOnChainAddress = args.getString("onChainAddress");
             mMemo = args.getString("onChainMessage");
+        } else if (mIsBolt12Offer) {
+            mDecodedBolt12 = (DecodedBolt12) args.getSerializable("decodedBolt12");
         } else {
             if (mIsKeysend) {
                 mKeysendPubkey = args.getString("keysendPubkey");
@@ -161,6 +186,8 @@ public class SendBSDFragment extends BaseBSDFragment {
         mNumpad = view.findViewById(R.id.numpadView);
         mBtnSend = view.findViewById(R.id.sendButton);
         mFallbackButton = view.findViewById(R.id.fallbackButton);
+        mPayeeLine = view.findViewById(R.id.line);
+        mPayeeLabel = view.findViewById(R.id.payeeSourceLabel);
         mPayee = view.findViewById(R.id.sendPayee);
         mPcvComment = view.findViewById(R.id.paymentComment);
 
@@ -325,68 +352,119 @@ public class SendBSDFragment extends BaseBSDFragment {
             });
 
         } else {
-
             // Lightning Payment
-            mLightningFeeView.setVisibility(BackendManager.getCurrentBackend().supportsRoutingFeeEstimation() ? View.VISIBLE : View.GONE);
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
             mResultView.setTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
 
-            if (mIsKeysend) {
-                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
+            if (mIsBolt12Offer) {
+                // Bolt 12
+                if (mDecodedBolt12.getIssuer() == null || mDecodedBolt12.getIssuer().isEmpty()) {
+                    mPayeeLine.setVisibility(View.GONE);
+                    mPayeeLabel.setVisibility(View.GONE);
+                    mPayee.setVisibility(View.GONE);
+                } else {
+                    mPayee.setVisibility(View.VISIBLE);
+                    mPayee.setText(mDecodedBolt12.getIssuer());
+                }
+
                 mPcvComment.setupCharLimit(200);
                 mPcvComment.setVisibility(View.VISIBLE);
-            } else {
-                mPayee.setText(ContactsManager.getInstance().getNameByContactData(mDecodedBolt11.getDestinationPubKey()));
-                mPcvComment.setVisibility(View.GONE);
-            }
 
-            // Scroll to comment when focused
-            mPcvComment.setOnFocusChangedListener(new PaymentCommentView.onCommentFocusChangedListener() {
-                @Override
-                public void onFocusChanged(View view, boolean b) {
-                    if (b)
-                        mBSDScrollableMainView.focusOnView(mPcvComment, 0);
+                if (mDecodedBolt12.getDescription() == null || mDecodedBolt12.getDescription().isEmpty()) {
+                    mExtvMemo.setVisibility(View.GONE);
+                } else {
+                    mExtvMemo.setVisibility(View.VISIBLE);
+                    mExtvMemo.setContent(R.string.memo, mDecodedBolt12.getDescription());
                 }
-            });
 
-            if (mIsKeysend || mDecodedBolt11.hasNoDescription()) {
-                mExtvMemo.setVisibility(View.GONE);
-            } else {
-                mExtvMemo.setVisibility(View.VISIBLE);
-                mExtvMemo.setContent(R.string.memo, mDecodedBolt11.getDescription());
-            }
+                if (mDecodedBolt12.hasAmountSpecified()) {
+                    // A specific amount was requested. We are not allowed to change the amount
+                    mFixedAmount = mDecodedBolt12.getAmount();
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+                    mEtAmount.clearFocus();
+                    mEtAmount.setFocusable(false);
+                } else {
+                    // No specific amount was requested. Let User input an amount.
+                    mNumpad.setVisibility(View.VISIBLE);
+                    setSendButtonEnabled(false);
+                    setFeeFailure();
 
-            if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
-                // No specific amount was requested. Let User input an amount.
-                mNumpad.setVisibility(View.VISIBLE);
-                setSendButtonEnabled(false);
-                setFeeFailure();
-
-                mHandler.postDelayed(() -> {
-                    // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                    mEtAmount.requestFocus();
-                }, 600);
-            } else {
-                // A specific amount was requested. We are not allowed to change the amount
-                mFixedAmount = mDecodedBolt11.getAmountRequested();
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
-                mEtAmount.clearFocus();
-                mEtAmount.setFocusable(false);
-            }
-
-
-            // Action when clicked on "Send payment"
-            mBtnSend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
-                        sendLightningPayment();
-                    else
-                        Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                    mHandler.postDelayed(() -> {
+                        // We have to call this delayed, as otherwise it will still bring up the softKeyboard
+                        mEtAmount.requestFocus();
+                    }, 600);
                 }
-            });
+
+                // Action when clicked on "Send payment"
+                mBtnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
+                            fetchInvoiceFromOffer();
+                        else
+                            Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                // Bolt 11
+                mLightningFeeView.setVisibility(BackendManager.getCurrentBackend().supportsRoutingFeeEstimation() ? View.VISIBLE : View.GONE);
+
+                if (mIsKeysend) {
+                    mPayee.setText(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
+                    mPcvComment.setupCharLimit(200);
+                    mPcvComment.setVisibility(View.VISIBLE);
+                } else {
+                    mPayee.setText(ContactsManager.getInstance().getNameByContactData(mDecodedBolt11.getDestinationPubKey()));
+                    mPcvComment.setVisibility(View.GONE);
+                }
+
+                // Scroll to comment when focused
+                mPcvComment.setOnFocusChangedListener(new PaymentCommentView.onCommentFocusChangedListener() {
+                    @Override
+                    public void onFocusChanged(View view, boolean b) {
+                        if (b)
+                            mBSDScrollableMainView.focusOnView(mPcvComment, 0);
+                    }
+                });
+
+                if (mIsKeysend || mDecodedBolt11.hasNoDescription()) {
+                    mExtvMemo.setVisibility(View.GONE);
+                } else {
+                    mExtvMemo.setVisibility(View.VISIBLE);
+                    mExtvMemo.setContent(R.string.memo, mDecodedBolt11.getDescription());
+                }
+
+                if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
+                    // No specific amount was requested. Let User input an amount.
+                    mNumpad.setVisibility(View.VISIBLE);
+                    setSendButtonEnabled(false);
+                    setFeeFailure();
+
+                    mHandler.postDelayed(() -> {
+                        // We have to call this delayed, as otherwise it will still bring up the softKeyboard
+                        mEtAmount.requestFocus();
+                    }, 600);
+                } else {
+                    // A specific amount was requested. We are not allowed to change the amount
+                    mFixedAmount = mDecodedBolt11.getAmountRequested();
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+                    mEtAmount.clearFocus();
+                    mEtAmount.setFocusable(false);
+                }
+
+                // Action when clicked on "Send payment"
+                mBtnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
+                            prepareStandardBolt11Payment();
+                        else
+                            Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
 
@@ -481,7 +559,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 .setTitle(R.string.fee_limit_title)
                 .setMessage(message)
                 .setCancelable(true)
-                .setPositiveButton(R.string.yes, (dialog, whichButton) -> sendLightningPayment())
+                .setPositiveButton(R.string.yes, (dialog, whichButton) -> prepareStandardBolt11Payment())
                 .setNegativeButton(R.string.no, (dialog, whichButton) -> {
                 });
         Dialog dlg = adb.create();
@@ -492,24 +570,48 @@ public class SendBSDFragment extends BaseBSDFragment {
         dlg.show();
     }
 
-    private void sendLightningPayment() {
+    private void fetchInvoiceFromOffer() {
         switchToSendProgressScreen();
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
 
-        if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mSendAmount, true));
-        } else {
-            mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mDecodedBolt11.getAmountRequested(), true));
-        }
+        FetchInvoiceFromOfferRequest.Builder requestBuilder = FetchInvoiceFromOfferRequest.newBuilder()
+                .setDecodedBolt12(mDecodedBolt12)
+                .setAmount(getLightningPaymentAmountMSat());
+
+        if (!(mPcvComment.getData() == null || mPcvComment.getData().isEmpty()))
+            requestBuilder.setComment(mPcvComment.getData());
+
+        getCompositeDisposable().add(BackendManager.api().fetchInvoiceFromBolt12Offer(requestBuilder.build())
+                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .subscribe(response -> {
+                            prepareBolt12Payment(response);
+                        }
+                        , throwable -> {
+                            BBLog.w(LOG_TAG, "Fetching invoice for offer failed: " + throwable.getMessage());
+                            mHandler.postDelayed(() -> switchToFailedScreen(throwable.getMessage()), 300);
+                        }));
+    }
+
+    private void prepareBolt12Payment(String fetchedInvoice) {
+        SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt12InvoicePayment(fetchedInvoice, getLightningPaymentAmountMSat());
+        sendLightningPayment(sendLnPaymentRequest);
+    }
+
+    private void prepareStandardBolt11Payment() {
+        switchToSendProgressScreen();
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
 
         SendLnPaymentRequest sendLnPaymentRequest = null;
         if (mIsKeysend)
             sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, mSendAmount, mPcvComment.getData());
         else {
-            long amount = mDecodedBolt11.hasAmountSpecified() ? mDecodedBolt11.getAmountRequested() : mSendAmount;
-            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, amount);
+            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getLightningPaymentAmountMSat());
         }
+        sendLightningPayment(sendLnPaymentRequest);
+    }
 
-        PaymentUtil.sendLnPayment(sendLnPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
+    private void sendLightningPayment(SendLnPaymentRequest lnPaymentRequest) {
+        PaymentUtil.sendLnPayment(lnPaymentRequest, getCompositeDisposable(), new PaymentUtil.OnPaymentResult() {
             @Override
             public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 mHandler.postDelayed(() -> switchToSuccessScreen(), 300);
@@ -521,7 +623,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                             Wallet_Balance.getInstance().fetchBalances();
                             Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
                         }
-                    }, 250);
+                    }, 500);
                 }
             }
 
@@ -674,10 +776,17 @@ public class SendBSDFragment extends BaseBSDFragment {
     }
 
     private long getLightningPaymentAmountMSat() {
-        if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
-            return mSendAmount;
+        if (mIsBolt12Offer) {
+            if (mDecodedBolt12.hasAmountSpecified())
+                return mDecodedBolt12.getAmount();
+            else
+                return mSendAmount;
         } else {
-            return mDecodedBolt11.getAmountRequested();
+            if (mIsKeysend || mDecodedBolt11.hasNoAmountSpecified()) {
+                return mSendAmount;
+            } else {
+                return mDecodedBolt11.getAmountRequested();
+            }
         }
     }
 
