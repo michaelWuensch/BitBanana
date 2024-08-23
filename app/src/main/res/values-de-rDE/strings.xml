@@ -347,7 +347,8 @@
 \n- Lightning-Adresse
 \n- pubkey
 \n- pubkey@host
-\n- pubkey@host:port</string>
+\n- pubkey@host:port
+\n- Zahlungscode</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:
 \n
 \n- Lndconnect string (lndconnect://...)
@@ -894,4 +895,15 @@
     <string name="activity_bolt12_offers">Zahlungscodes</string>
     <string name="help_dialog_offers">Zahlungscodes können mehrfach verwendet werden. Jeder, der den Code besitzt, kann eine Zahlung an dich senden, ohne dass du direkt eingreifen musst. Dein Knoten muss jedoch online sein, damit die Zahlung durchgeführt werden kann. Darüber hinaus bieten Zahlungscodes erweiterte Funktionen wie wiederkehrende Zahlungen und mehr Privatsphäre für den Empfänger.</string>
     <string name="activity_bolt12_create_offer">Zahlungscode erstellen</string>
+    <string name="error_invalid_bolt12_offer_format">Ungültiger Zahlungscode.</string>
+    <string name="bolt12_offer">Zahlungscode</string>
+    <string name="error_invalid_contact_data">Ungültiges Format.
+\nBitte verwende eines der folgenden Formate:
+\n
+\n- Lightning Address
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port
+\n- Zahlungscode</string>
+    <string name="bolt12_payer_note">Anmerkung des Zahlers</string>
 </resources>
