@@ -894,5 +894,4 @@
     <string name="activity_bolt12_offers">Zahlungscodes</string>
     <string name="help_dialog_offers">Zahlungscodes können mehrfach verwendet werden. Jeder, der den Code besitzt, kann eine Zahlung an dich senden, ohne dass du direkt eingreifen musst. Dein Knoten muss jedoch online sein, damit die Zahlung durchgeführt werden kann. Darüber hinaus bieten Zahlungscodes erweiterte Funktionen wie wiederkehrende Zahlungen und mehr Privatsphäre für den Empfänger.</string>
     <string name="activity_bolt12_create_offer">Zahlungscode erstellen</string>
-    <string name="activity_bolt12_details">Zahlungscode</string>
 </resources>

@@ -946,7 +946,6 @@
     <string name="disable">Desativar</string>
     <string name="activity_bolt12_offers">Códigos de Pagamento</string>
     <string name="activity_bolt12_create_offer">Criar Código de Pagamento</string>
-    <string name="activity_bolt12_details">Código de Pagamento</string>
     <string name="error_offer_already_exists">Um código de pagamento idêntico já existe.</string>
     <string name="help_dialog_bolt12_description">Qualquer um que usar o código de pagamento verá a descrição.</string>
     <string name="help_dialog_bolt12_label">Este rótulo é apenas para organizar seus códigos de pagamento e não será visível a ninguém que use o código de pagamento.</string>

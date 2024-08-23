@@ -942,7 +942,6 @@
     <string name="offer_multi_use">Multiuso</string>
     <string name="offer_id">ID de la oferta</string>
     <string name="bolt12">Bolt 12</string>
-    <string name="activity_bolt12_details">Código de pago</string>
     <string name="error_offer_already_exists">Ya existe un código de pago idéntico.</string>
     <string name="label">Etiqueta</string>
     <string name="help_dialog_offers">Los códigos de pago se pueden utilizar varias veces. Cualquier persona que tenga el código puede realizar un pago sin necesidad de que intervenga de inmediato. Sin embargo, tu nodo debe estar conectado para que se realice el pago. Además, los códigos de pago ofrecen funciones avanzadas como pagos recurrentes y mayor privacidad para el receptor.</string>
