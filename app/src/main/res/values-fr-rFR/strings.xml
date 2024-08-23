@@ -299,7 +299,11 @@
     <string name="nfc_type_not_supported">Type de NFC non pris en charge</string>
     <string name="help_dialog_scanPaymentRequest">Les QR-Codes contenant les éléments suivants sont valides :\n\n- Adresse Bitcoin\n- Demande de paiement Bitcoin\n- Demande de paiement Lightning</string>
     <string name="help_dialog_scanNodePublicKey">Les QR-Codes contenant les éléments suivants sont valides :\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">Les codes QR contenant les éléments suivants sont valides :\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">Les codes QR contenant les éléments suivants sont valides :
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">Les QR-Codes contenant les éléments suivants sont valides :
 \n
 \n- Chaîne lndconnect (lndconnect://...)
