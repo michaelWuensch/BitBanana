@@ -948,4 +948,14 @@
     <string name="offer_no_bolt12_offers">Sin códigos de pago</string>
     <string name="error_bolt12_expired">Este código de pago ha caducado.</string>
     <string name="bolt12_payer_note">Nota de pago</string>
+    <string name="error_invalid_bolt12_offer_format">Código de pago no válido.</string>
+    <string name="bolt12_offer">Código de pago</string>
+    <string name="error_invalid_contact_data">Formato no válido.
+\nPor favor, utiliza uno de los siguientes:
+\n
+\n- Dirección Lightning
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port
+\n- Código de pago</string>
 </resources>
