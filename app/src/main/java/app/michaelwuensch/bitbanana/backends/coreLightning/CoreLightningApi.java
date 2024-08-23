@@ -459,29 +459,48 @@ public class CoreLightningApi extends Api {
     }
 
     private LnInvoice getInvoiceFromCoreLightningInvoice(ListinvoicesInvoices invoice) {
-        long created_at = 0;
-        if (invoice.getStatus() == ListinvoicesInvoices.ListinvoicesInvoicesStatus.PAID)
-            created_at = invoice.getPaidAt();
-        else {
-            try {
-                created_at = InvoiceUtil.decodeBolt11(invoice.getBolt11()).getTimestamp();
-            } catch (Exception e) {
-                created_at = System.currentTimeMillis() / 1000L;
-            }
-        }
 
-        return LnInvoice.newBuilder()
-                .setBolt11(invoice.getBolt11())
-                .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
-                .setAmountRequested(invoice.getAmountMsat().getMsat())
-                .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
-                .setCreatedAt(created_at) // ToDo: Simplify once the api exposes created_at
-                .setPaidAt(invoice.getPaidAt())
-                .setExpiresAt(invoice.getExpiresAt())
-                .setAddIndex(invoice.getCreatedIndex())
-                .setMemo(invoice.getDescription())
-                //.setKeysendMessage(???)
-                .build();
+        if (invoice.hasBolt11()) {
+            long created_at = 0;
+            if (invoice.getStatus() == ListinvoicesInvoices.ListinvoicesInvoicesStatus.PAID)
+                created_at = invoice.getPaidAt();
+            else {
+                try {
+                    created_at = InvoiceUtil.decodeBolt11(invoice.getBolt11()).getTimestamp();
+                } catch (Exception e) {
+                    created_at = System.currentTimeMillis() / 1000L;
+                }
+            }
+
+            return LnInvoice.newBuilder()
+                    .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
+                    .setBolt11(invoice.getBolt11())
+                    .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
+                    .setAmountRequested(invoice.getAmountMsat().getMsat())
+                    .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
+                    .setCreatedAt(created_at) // ToDo: Simplify once the api exposes created_at
+                    .setPaidAt(invoice.getPaidAt())
+                    .setExpiresAt(invoice.getExpiresAt())
+                    .setAddIndex(invoice.getCreatedIndex())
+                    .setMemo(invoice.getDescription())
+                    //.setKeysendMessage(???)
+                    .build();
+        } else {
+            return LnInvoice.newBuilder()
+                    .setType(LnInvoice.InvoiceType.BOLT12_INVOICE)
+                    .setBolt12(invoice.getBolt12())
+                    .setPaymentHash(ApiUtil.StringFromHexByteString(invoice.getPaymentHash()))
+                    .setAmountRequested(invoice.getAmountMsat().getMsat())
+                    .setAmountPaid(invoice.getAmountReceivedMsat().getMsat())
+                    .setCreatedAt(invoice.getPaidAt()) // Bolt12 invoices normally get paid immediately after they are created, so that is fine.
+                    .setPaidAt(invoice.getPaidAt())
+                    .setExpiresAt(invoice.getExpiresAt())
+                    .setAddIndex(invoice.getCreatedIndex())
+                    .setMemo(invoice.getDescription()) // description of bolt 12 offer
+                    .setBolt12PayerNote(invoice.getInvreqPayerNote())
+                    //.setKeysendMessage(???)
+                    .build();
+        }
     }
 
     private Single<List<LnInvoice>> getInvoicesPage(int page, int pageSize) {
@@ -496,9 +515,6 @@ public class CoreLightningApi extends Api {
                     List<LnInvoice> invoicesList = new ArrayList<>();
                     BBLog.d(LOG_TAG, "Invoices count: " + response.getInvoicesCount());
                     for (ListinvoicesInvoices invoice : response.getInvoicesList()) {
-                        if (!invoice.hasBolt11())
-                            continue;
-
                         invoicesList.add(getInvoiceFromCoreLightningInvoice(invoice));
                     }
                     return invoicesList;

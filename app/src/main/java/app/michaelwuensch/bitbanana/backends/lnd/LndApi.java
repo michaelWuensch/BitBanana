@@ -531,6 +531,7 @@ public class LndApi extends Api {
         }
 
         return LnInvoice.newBuilder()
+                .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
                 .setBolt11(lndInvoice.getPaymentRequest())
                 .setPaymentHash(ApiUtil.StringFromHexByteString(lndInvoice.getRHash()))
                 .setAmountRequested(lndInvoice.getValueMsat())
