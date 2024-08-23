@@ -26,8 +26,9 @@ import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.items.ContactItemViewHolder;
-import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -185,21 +186,42 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                     }
                 } else {
                     LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
-                    if (cm.doesContactDataExist(lnAddress.toString())) {
-                        Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                    if (lnAddress != null) {
+                        if (cm.doesContactDataExist(lnAddress.toString())) {
+                            Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                        } else {
+                            cm.showContactNameInputDialog(this, lnAddress.getUsername(), lnAddress.toString(), Contact.ContactType.LNADDRESS, new ContactsManager.OnNameConfirmedListener() {
+                                @Override
+                                public void onNameAccepted() {
+                                    mAdapter.add(cm.getContactByContactData(lnAddress.toString()));
+                                    mEmptyListText.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onCancelled() {
+
+                                }
+                            });
+                        }
                     } else {
-                        cm.showContactNameInputDialog(this, lnAddress.getUsername(), lnAddress.toString(), Contact.ContactType.LNADDRESS, new ContactsManager.OnNameConfirmedListener() {
-                            @Override
-                            public void onNameAccepted() {
-                                mAdapter.add(cm.getContactByContactData(lnAddress.toString()));
-                                mEmptyListText.setVisibility(View.GONE);
-                            }
+                        DecodedBolt12 decodedBolt12 = (DecodedBolt12) data.getSerializableExtra(ScanContactActivity.EXTRA_BOLT12_OFFER);
 
-                            @Override
-                            public void onCancelled() {
+                        if (cm.doesContactDataExist(decodedBolt12.getBolt12String())) {
+                            Toast.makeText(this, R.string.contact_already_exists, Toast.LENGTH_LONG).show();
+                        } else {
+                            cm.showContactNameInputDialog(this, null, decodedBolt12.getBolt12String(), Contact.ContactType.BOLT12_OFFER, new ContactsManager.OnNameConfirmedListener() {
+                                @Override
+                                public void onNameAccepted() {
+                                    mAdapter.add(cm.getContactByContactData(decodedBolt12.getBolt12String()));
+                                    mEmptyListText.setVisibility(View.GONE);
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onCancelled() {
+
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -209,9 +231,11 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
                 LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                DecodedBolt12 offer = (DecodedBolt12) data.getSerializableExtra(ScanContactActivity.EXTRA_BOLT12_OFFER);
                 Intent intent = new Intent();
                 intent.putExtra(ScanContactActivity.EXTRA_NODE_URI, nodeUri);
                 intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, lnAddress);
+                intent.putExtra(ScanContactActivity.EXTRA_BOLT12_OFFER, offer);
                 setResult(resultCode, intent);
                 finish();
             }
@@ -236,6 +260,10 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                             break;
                         case LNADDRESS:
                             intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, contact.getLightningAddress());
+                            break;
+                        case BOLT12_OFFER:
+                            intent.putExtra(ScanContactActivity.EXTRA_BOLT12_OFFER, contact.getBolt12Offer());
+                            break;
                     }
                     setResult(ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY, intent);
                     finish();

@@ -54,12 +54,18 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
     }
 
-    public void setupWithArbitraryString(String string) {
+    public void setupWithArbitraryString(String string, boolean includeQRCode) {
         reset();
         mCurrentAvatarCreationString = string;
         mIvUserAvatar.setImageBitmap(AvathorUtil.getAvathor(getContext(), mCurrentAvatarCreationString));
-        mIsQRCodeIncluded = false;
         showAvatar();
+        mIsQRCodeIncluded = includeQRCode;
+        if (mIsQRCodeIncluded) {
+            // Generate "QR-Code"
+            Bitmap bmpQRCode = QRCodeGenerator.bitmapFromText(string, 750);
+            mIvQRCode.setImageBitmap(bmpQRCode);
+            setupSwitchListeners();
+        }
     }
 
     public void setupWithLNAddress(LnAddress lnAddress, boolean includeQRCode) {

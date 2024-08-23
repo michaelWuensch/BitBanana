@@ -6,8 +6,10 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 
 public class Contact implements Comparable<Contact>, Serializable {
@@ -52,6 +54,14 @@ public class Contact implements Comparable<Contact>, Serializable {
         return new LnAddress(this.contactData);
     }
 
+    public DecodedBolt12 getBolt12Offer() {
+        try {
+            return InvoiceUtil.decodeBolt12(this.contactData);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     // Used for item adapter
     public String getContent() {
         return this.alias + this.contactData.toLowerCase();
@@ -87,7 +97,8 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     public enum ContactType {
         NODEPUBKEY,
-        LNADDRESS;
+        LNADDRESS,
+        BOLT12_OFFER;
 
         public static Contact.ContactType parseFromString(String enumAsString) {
             try {
@@ -103,6 +114,8 @@ public class Contact implements Comparable<Contact>, Serializable {
                     return R.string.node;
                 case LNADDRESS:
                     return R.string.ln_address;
+                case BOLT12_OFFER:
+                    return R.string.bolt12_offer;
                 default:
                     return R.string.node;
             }
