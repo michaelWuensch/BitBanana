@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jaredsburrows.license'
+// apply plugin: 'com.jaredsburrows.license'  // Uncomment when generating license report
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: 'com.google.protobuf' // Needed for gRPC
 
@@ -61,13 +61,14 @@ android {
     }
 }
 
-// Execute this manually
+/* Uncomment when generating license report
 licenseReport {
     generateHtmlReport = false
     generateJsonReport = true
     copyHtmlReportToAssets = false
     copyJsonReportToAssets = false
 }
+ */
 
 // Copy the licenses file into the res dir if it exists
 copy {
