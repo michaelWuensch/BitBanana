@@ -167,7 +167,7 @@
 \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Cadena lndconnect no válida.
-\nAsegúrese de haber utilizado el siguiente formato:
+\nAsegúrate de haber utilizado el siguiente formato:
 \n
 \nlndconnect://[ip]:[puerto]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">El certificado es inválido.</string>
@@ -822,7 +822,7 @@
     <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
     <string name="settings_avatarStyleDisplayValues_4">Animales</string>
     <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida.
-\nPor favor, asegúrese de haber utilizado el siguiente formato:
+\nAsegúrate de haber utilizado el siguiente formato:
 \n
 \ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">El certificado o la clave proporcionados no son válidos.</string>
@@ -937,7 +937,7 @@
     <string name="activity_bolt12_offers">Códigos de pago</string>
     <string name="activity_bolt12_create_offer">Crear código de pago</string>
     <string name="help_dialog_bolt12_label">Esta etiqueta solo está destinada a organizar tus códigos de pago y no será visible para nadie que utilice el código de pago.</string>
-    <string name="help_dialog_bolt12_description">Cualquiera que utilice el código de pago verá la descripción.</string>
+    <string name="help_dialog_bolt12_description">Cualquiera que utilice el código de pago verá esta descripción.</string>
     <string name="offer_single_use">De un solo uso</string>
     <string name="offer_multi_use">Multiuso</string>
     <string name="offer_id">ID de la oferta</string>
@@ -948,4 +948,5 @@
     <string name="help_dialog_offers">Los códigos de pago se pueden utilizar varias veces. Cualquier persona que tenga el código puede realizar un pago sin necesidad de que intervenga de inmediato. Sin embargo, tu nodo debe estar conectado para que se realice el pago. Además, los códigos de pago ofrecen funciones avanzadas como pagos recurrentes y mayor privacidad para el receptor.</string>
     <string name="offer_no_bolt12_offers">Sin códigos de pago</string>
     <string name="error_bolt12_expired">Este código de pago ha caducado.</string>
+    <string name="bolt12_payer_note">Nota de pago</string>
 </resources>
