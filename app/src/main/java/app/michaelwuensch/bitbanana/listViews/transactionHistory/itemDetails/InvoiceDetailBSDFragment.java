@@ -35,6 +35,8 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
     private AmountView mAmount;
     private TextView mMemoLabel;
     private TextView mMemo;
+    private TextView mBolt12PayerNoteLabel;
+    private TextView mBolt12PayerNote;
     private TextView mDateLabel;
     private TextView mDate;
     private TextView mExpiryLabel;
@@ -51,6 +53,8 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         mAmount = view.findViewById(R.id.amount);
         mMemoLabel = view.findViewById(R.id.memoLabel);
         mMemo = view.findViewById(R.id.memo);
+        mBolt12PayerNoteLabel = view.findViewById(R.id.bolt12PayerNoteLabel);
+        mBolt12PayerNote = view.findViewById(R.id.bolt12PayerNote);
         mDateLabel = view.findViewById(R.id.dateLabel);
         mDate = view.findViewById(R.id.date);
         mExpiryLabel = view.findViewById(R.id.expiryLabel);
@@ -74,6 +78,8 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
         mAmountLabel.setText(amountLabel);
         String memoLabel = getString(R.string.memo) + ":";
         mMemoLabel.setText(memoLabel);
+        String bolt12PayerNoteLabel = getString(R.string.bolt12_payer_note) + ":";
+        mBolt12PayerNoteLabel.setText(bolt12PayerNoteLabel);
         String dateLabel = getString(R.string.date) + ":";
         mDateLabel.setText(dateLabel);
         String expiryLabel = getString(R.string.expiry) + ":";
@@ -92,6 +98,14 @@ public class InvoiceDetailBSDFragment extends BaseBSDFragment {
                 mMemo.setVisibility(View.GONE);
                 mMemoLabel.setVisibility(View.GONE);
             }
+        }
+
+        // Set bolt12 payer note
+        if (invoice.hasBolt12PayerNote()) {
+            mBolt12PayerNote.setText(invoice.getBolt12PayerNote());
+        } else {
+            mBolt12PayerNote.setVisibility(View.GONE);
+            mBolt12PayerNoteLabel.setVisibility(View.GONE);
         }
 
         if (invoice.isPaid()) {

@@ -567,7 +567,7 @@
     <string name="help_dialog_own_watchtower">This is your watchtower on the lightning network.\n\nWhen you tap on the avatar image you will reveal a QR-Code.\nThis code can be scanned by others to add your watchtower to their list, allowing it to oversee their channels. Be careful, this consumes resources, so avoid sharing this connection data publicly on the internet.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
     <string name="help_dialog_scan_watchtower">QR-Codes containing the following are valid:\n\n- pubkey@host:port</string>
     <string name="help_dialog_bolt12_label">This label is only meant to organize your payment codes and will not be visible to anyone using the payment code.</string>
-    <string name="help_dialog_bolt12_description">Anyone using the payment code will see the description.</string>
+    <string name="help_dialog_bolt12_description">Anyone using the payment code will see this description.</string>
     <string name="help_dialog_offers">Payment codes can be used multiple times. Anyone with the code can make a payment to you without requiring your immediate involvement. However, your node must be online for the payment to go through. Additionally, payment codes offer advanced features like recurring payments and enhanced privacy for the receiver.</string>
 
     <string name="node_name">Node Name</string>
@@ -853,5 +853,6 @@
     <string name="offer_multi_use">Multi use</string>
     <string name="offer_id">Offer ID</string>
     <string name="bolt12">Bolt 12</string>
+    <string name="bolt12_payer_note">Payer note</string>
 
 </resources>

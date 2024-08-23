@@ -119,6 +119,7 @@ public class LndHubApi extends Api {
 
             for (LndHubUserInvoice invoice : response) {
                 LnInvoice.Builder builder = LnInvoice.newBuilder()
+                        .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
                         .setCreatedAt(invoice.getTimestamp())
                         .setPaidAt(invoice.getTimestamp())
                         .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
@@ -150,6 +151,7 @@ public class LndHubApi extends Api {
             for (LndHubUserInvoice invoice : response) {
                 if (invoice.getPaymentHash().equals(paymentHash)) {
                     LnInvoice.Builder builder = LnInvoice.newBuilder()
+                            .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
                             .setCreatedAt(invoice.getTimestamp())
                             .setPaidAt(invoice.getTimestamp())
                             .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())

@@ -30,6 +30,8 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
         } else {
             if (invoice.hasKeysendMessage())
                 setSecondaryDescription(invoice.getKeysendMessage(), true);
+            else if (invoice.hasBolt12PayerNote())
+                setSecondaryDescription(invoice.getBolt12PayerNote(), true);
             else
                 setSecondaryDescription("", false);
         }
