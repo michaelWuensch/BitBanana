@@ -1,0 +1,6 @@
+- Added bolt12 support for core lighting nodes
+- Added bolt12 contact type
+- Added lightning terminal accounts support for lnd nodes
+- Added lnd macaroon parsing and adapt UI according to permissions
+- Updated translations
+- Bug fixes
