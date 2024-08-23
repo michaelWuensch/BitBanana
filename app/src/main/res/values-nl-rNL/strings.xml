@@ -290,7 +290,11 @@
     <string name="nfc_type_not_supported">Niet ondersteund NFC-type</string>
     <string name="help_dialog_scanPaymentRequest">QR-Codes die het volgende bevatten zijn geldig:\n\n- Bitcoinadres\n- Bitcoin Betalingsverzoek\n- Lightning Betalingsverzoek</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes die het volgende bevatten zijn geldig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Kanaal</string>
-    <string name="help_dialog_scanContact">QR-Codes die het volgende bevatten zijn geldig:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">QR-Codes die het volgende bevatten zijn geldig:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes die het volgende bevatten zijn geldig:
 \n
 \n- Lndconnect string (lndconnect://...)

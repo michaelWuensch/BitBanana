@@ -241,7 +241,11 @@
     <string name="nfc_type_not_supported">サポートされていないNFC Type</string>
     <string name="help_dialog_scanPaymentRequest">次のデータが含まれるQRコードが有効：\n\n- Bitcoinアドレス\n- Bitcoin支払リクエスト\n- Lightning支払リクエスト</string>
     <string name="help_dialog_scanNodePublicKey">次のデータが含まれるQRコードが有効：\n\n- 公開鍵\n- 公開鍵@ホスト\n- 公開鍵@ホスト:ポート\n- LNURL-チャネル</string>
-    <string name="help_dialog_scanContact">次のデータが含まれるQRコードが有効：\n\n- 公開鍵\n- 公開鍵@ホスト\n- 公開鍵@ホスト:ポート</string>
+    <string name="help_dialog_scanContact">次のデータが含まれるQRコードが有効：
+\n
+\n- 公開鍵
+\n- 公開鍵@ホスト
+\n- 公開鍵@ホスト:ポート</string>
     <string name="help_dialog_scanConnectionInfo">次のデータが含まれるQRコードが有効:
 \n
 \n- Lndconnect先 (lndconnect://...)

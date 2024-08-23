@@ -300,7 +300,11 @@
     <string name="nfc_type_not_supported">NFC-tyyppi ei ole tuettu</string>
     <string name="help_dialog_scanPaymentRequest">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- Bitcoin-osoite\n- Bitcoin-maksupyyntö\n- Lightning-lasku</string>
     <string name="help_dialog_scanNodePublicKey">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:
 \n
 \n- Lndconnect-merkkijono (lndconnect://...)

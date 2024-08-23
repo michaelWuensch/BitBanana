@@ -271,7 +271,11 @@
     <string name="nfc_type_not_supported">Неподдържан NFC тип</string>
     <string name="help_dialog_scanPaymentRequest">QR-Кодове, съдържащи следните, са валидни:\n\n- Биткойн Адрес\n- Биткойн Заявка за Плащане\n- Lightning Заявка за Плащане</string>
     <string name="help_dialog_scanNodePublicKey">QR-Кодове, съдържащи следните, са валидни:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-Кодове, съдържащи следните, са валидни:
 \n
 \n- Lndconnect string (lndconnect://...)
