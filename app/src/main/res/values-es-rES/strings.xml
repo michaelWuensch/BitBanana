@@ -424,12 +424,13 @@
 \n- pubclave@host
 \n- pubkey@host:port
 \n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">Son válidos los códigos QR que contengan lo siguiente
+    <string name="help_dialog_scanContact">Son válidos los códigos QR que contienen lo siguiente
 \n
 \n- Dirección Lightning
 \n- pubkey
 \n- pubkey@host
-\n- pubkey@host:port</string>
+\n- pubkey@host:port
+\n- Código de pago</string>
     <string name="help_dialog_scanGeneric">Aquí todo está permitido.
 \nBasta con escanear un QR-Code y BitBanana determinará automáticamente qué acción tomar en función de los datos.</string>
     <string name="help_dialog_base_fee">Independientemente del valor de la transacción, recibirá una comisión base fija por cada transacción que reenvíe a través del canal. La comisión total recibida es la suma de esta comisión base y la tasa de comisión.</string>
