@@ -734,12 +734,15 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             case ContactDetailsActivity.RESPONSE_CODE_SEND_MONEY:
                 if (data != null) {
                     LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
+                    LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                    DecodedBolt12 offer = (DecodedBolt12) data.getSerializableExtra(ScanContactActivity.EXTRA_BOLT12_OFFER);
                     if (nodeUri != null) {
                         SendBSDFragment sendBSDFragment = SendBSDFragment.createKeysendDialog(nodeUri.getPubKey());
                         sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
-                    } else {
-                        LnAddress lnAddress = (LnAddress) data.getSerializableExtra(ScanContactActivity.EXTRA_LN_ADDRESS);
+                    } else if (lnAddress != null) {
                         analyzeString(lnAddress.toString());
+                    } else {
+                        analyzeString(offer.getBolt12String());
                     }
                     if (mDrawer.isDrawerOpen(GravityCompat.START)) {
                         mDrawer.closeDrawer(GravityCompat.START);
@@ -822,7 +825,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void updateDrawerNavigationMenu() {
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
         if (BackendManager.getCurrentBackendConfig().getAvatarMaterial() != null)
-            userAvatarView.setupWithArbitraryString(BackendManager.getCurrentBackendConfig().getAvatarMaterial());
+            userAvatarView.setupWithArbitraryString(BackendManager.getCurrentBackendConfig().getAvatarMaterial(), false);
         else
             userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);

@@ -158,7 +158,6 @@
     <string name="activity_watchtower">Watchtower</string>
     <string name="activity_bolt12_offers">Payment Codes</string>
     <string name="activity_bolt12_create_offer">Create Payment Code</string>
-    <string name="activity_bolt12_details">Payment Code</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -448,6 +447,7 @@
     <string name="error_lnd_connection_failed">Connection to LND failed, please try again.</string>
     <string name="error_invalid_fee_preset_value">The value has to be bigger than 0.</string>
     <string name="error_invalid_ln_address_format">Invalid format for Lightning Address. A Lightning Address looks like an email address.\n\nusername@domain</string>
+    <string name="error_invalid_bolt12_offer_format">Invalid payment code.</string>
     <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Routing Policies updated but for %1$d of your channels the new rules could not be applied.</string>
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Fee rate to high. A maximum of %1$.2f%% is allowed.</string>
     <string name="error_no_permission_to_read_file">Access Denied: Unable to read the file. We recommend moving it to a different location, such as the \"Downloads\" folder, and accessing it from there.</string>
@@ -473,6 +473,7 @@
     <string name="error_invalid_watchtower_connection_data">Please ensure the data is in the following format:\n\n- pubkey@host:port</string>
     <string name="error_invalid_peer_connection_data">Please ensure the data is in one of the following formats:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="error_offer_already_exists">An identical payment code already exists.</string>
+    <string name="error_invalid_contact_data">Invalid format.\nPlease use one of the following:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- Payment Code</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -538,7 +539,7 @@
 
     <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- Payment Code</string>
     <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://...)\n- BtcPay Server connection (config=...)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
@@ -848,6 +849,7 @@
     <string name="watchtower_session_max_backups">Max Backups</string>
     <string name="watchtower_session_sweep_fee">Sweep Fee</string>
 
+    <string name="bolt12_offer">Payment Code</string>
     <string name="offer_no_bolt12_offers">No payment codes</string>
     <string name="offer_single_use">Single use</string>
     <string name="offer_multi_use">Multi use</string>

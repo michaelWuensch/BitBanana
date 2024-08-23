@@ -22,9 +22,10 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -75,6 +76,9 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                         mType = Contact.ContactType.LNADDRESS;
                         mTvDataLabel.setText(R.string.ln_address);
                         break;
+                    case 2:
+                        mType = Contact.ContactType.BOLT12_OFFER;
+                        mTvDataLabel.setText(R.string.bolt12_offer);
                 }
                 updateInputFilters();
             }
@@ -144,6 +148,15 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                     return;
                 }
                 break;
+            case BOLT12_OFFER:
+                try {
+                    InvoiceUtil.decodeBolt12(data);
+                    addContact(Contact.ContactType.BOLT12_OFFER, name, data);
+                } catch (Exception e) {
+                    showError(getResources().getString(R.string.error_invalid_bolt12_offer_format), RefConstants.ERROR_DURATION_SHORT);
+                    return;
+                }
+                break;
         }
     }
 
@@ -157,6 +170,9 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                 mEtData.setFilters(new InputFilter[]{new InputFilterLowerCase(), new InputFilterNoWhitespaces()});
                 mEtData.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 break;
+            case BOLT12_OFFER:
+                mEtData.setFilters(new InputFilter[]{new InputFilterLowerCase()});
+                mEtData.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         }
         mEtData.setSingleLine(false);
         mEtData.setMinLines(2);

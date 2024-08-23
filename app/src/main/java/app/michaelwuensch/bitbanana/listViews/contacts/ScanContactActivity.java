@@ -5,10 +5,12 @@ import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
-import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
@@ -16,6 +18,7 @@ public class ScanContactActivity extends BaseScannerActivity {
 
     public static final String EXTRA_NODE_URI = "EXTRA_NODE_URI";
     public static final String EXTRA_LN_ADDRESS = "EXTRA_LN_ADDRESS";
+    public static final String EXTRA_BOLT12_OFFER = "EXTRA_BOLT12_OFFER";
     private static final String LOG_TAG = ScanContactActivity.class.getSimpleName();
 
     @Override
@@ -56,8 +59,13 @@ public class ScanContactActivity extends BaseScannerActivity {
             if (lnAddress.isValid()) {
                 return finishWithLNAddress(lnAddress);
             } else {
-                showError(getResources().getString(R.string.error_lightning_uri_invalid), RefConstants.ERROR_DURATION_LONG);
-                return false;
+                try {
+                    DecodedBolt12 offer = InvoiceUtil.decodeBolt12(rawData);
+                    return finishWithBolt12Offer(offer);
+                } catch (Exception e) {
+                    showError(getResources().getString(R.string.error_invalid_contact_data), RefConstants.ERROR_DURATION_LONG);
+                    return false;
+                }
             }
         } else {
             return finishWithNode(nodeUri);
@@ -75,6 +83,14 @@ public class ScanContactActivity extends BaseScannerActivity {
     private boolean finishWithLNAddress(LnAddress lnAddress) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_LN_ADDRESS, lnAddress);
+        setResult(RESULT_OK, intent);
+        finish();
+        return true;
+    }
+
+    private boolean finishWithBolt12Offer(DecodedBolt12 decodedBolt12) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_BOLT12_OFFER, decodedBolt12);
         setResult(RESULT_OK, intent);
         finish();
         return true;

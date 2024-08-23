@@ -15,6 +15,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
@@ -75,6 +76,14 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
                 if (!FeatureManager.isOffchainSendingEnabled())
                     mBottomButtons.getMenu().removeItem(R.id.action_send_money);
                 break;
+            case BOLT12_OFFER:
+                mBottomButtons.getMenu().removeItem(R.id.action_open_channel);
+                mUserAvatarView.setupWithArbitraryString(mContact.getContactData(), true);
+                mTVContactType.setText(getApplicationContext().getString(R.string.bolt12_offer));
+                if (!FeatureManager.isOffchainSendingEnabled() || !BackendManager.getCurrentBackend().supportsBolt12Sending())
+                    mBottomButtons.getMenu().removeItem(R.id.action_send_money);
+                break;
+
         }
 
         mDataToEncode = mContact.getContactData();
@@ -146,6 +155,9 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
                                 break;
                             case LNADDRESS:
                                 intent.putExtra(ScanContactActivity.EXTRA_LN_ADDRESS, mContact.getLightningAddress());
+                                break;
+                            case BOLT12_OFFER:
+                                intent.putExtra(ScanContactActivity.EXTRA_BOLT12_OFFER, mContact.getBolt12Offer());
                                 break;
                         }
                         setResult(RESPONSE_CODE_SEND_MONEY, intent);

@@ -282,12 +282,12 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12QRActivity"
-            android:label="@string/activity_bolt12_details"
+            android:label="@string/bolt12_offer"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
             android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.itemDetails.Bolt12OfferDetailsActivity"
-            android:label="@string/activity_bolt12_details"
+            android:label="@string/bolt12_offer"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
