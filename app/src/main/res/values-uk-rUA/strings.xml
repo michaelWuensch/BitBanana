@@ -261,7 +261,11 @@
     <string name="app_reset_message">Додаток було скинуто, оскільки останнє оновлення включало деякі структурні зміни.\nНа жаль, вам доведеться повторно пройти процес налаштування.</string>
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
-    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">QR-Codes containing the following are valid:
+\n
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:port</string>
     <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:
 \n
 \n- рядок Lndconnect (lndconnect://...)
