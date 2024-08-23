@@ -32,5 +32,22 @@
       }
     ],
     "dependency": "org.mariuszgromada.math:MathParser.org-mXparser:4.4.2"
+  },
+  {
+    "project": "jmacaroons",
+    "description": "Pure Java implementation of Macaroons: Cookies with Contextual Caveats for Decentralized Authorization in the Cloud",
+    "version": "0.5.0",
+    "developers": [
+      "Martin W. Kirst"
+    ],
+    "url": "https://github.com/nitram509/jmacaroons",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.github.nitram509:jmacaroons:0.5.0"
   }
 ]

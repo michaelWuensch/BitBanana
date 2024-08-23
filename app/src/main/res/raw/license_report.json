@@ -17,6 +17,23 @@
     "dependency": "javax.annotation:javax.annotation-api:1.3.2"
   },
   {
+    "project": "${project.groupId}:${project.artifactId}",
+    "description": "Pure Java implementation of Macaroons: Cookies with Contextual Caveats for Decentralized Authorization in the Cloud",
+    "version": "0.5.0",
+    "developers": [
+      "Martin W. Kirst"
+    ],
+    "url": "https://github.com/nitram509/jmacaroons",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.github.nitram509:jmacaroons:0.5.0"
+  },
+  {
     "project": "Activity",
     "description": "Provides the base Activity subclass and the relevant hooks to build a composable structure on top.",
     "version": "1.6.0",
@@ -1211,21 +1228,19 @@
     "dependency": "com.google.guava:guava:32.0.1-android"
   },
   {
-    "project": "IntelliJ IDEA Annotations",
-    "description": "A set of annotations used for code inspection support and code documentation.",
-    "version": "13.0",
-    "developers": [
-      "JetBrains Team"
-    ],
-    "url": "http://www.jetbrains.org",
+    "project": "Hamcrest Core",
+    "description": "This is the core API of hamcrest matcher framework to be used by third-party framework providers. This includes the a foundation set of matcher implementations for common operations.",
+    "version": "1.3",
+    "developers": [],
+    "url": null,
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        "license": "New BSD License",
+        "license_url": "http://www.opensource.org/licenses/bsd-license.php"
       }
     ],
-    "dependency": "org.jetbrains:annotations:13.0"
+    "dependency": "org.hamcrest:hamcrest-core:1.3"
   },
   {
     "project": "io.grpc:grpc-api",
@@ -1345,6 +1360,23 @@
     "dependency": "com.google.j2objc:j2objc-annotations:2.8"
   },
   {
+    "project": "JetBrains Java Annotations",
+    "description": "A set of annotations used for code inspection support and code documentation.",
+    "version": "23.0.0",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/JetBrains/java-annotations",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains:annotations:23.0.0"
+  },
+  {
     "project": "Jetpack WindowManager Library",
     "description": "WindowManager Jetpack library. Currently only provides additional functionality on foldable devices.",
     "version": "1.0.0",
@@ -1382,6 +1414,60 @@
     "dependency": "info.guardianproject:jtorctl:0.4.5.7"
   },
   {
+    "project": "JUnit",
+    "description": "JUnit is a unit testing framework for Java, created by Erich Gamma and Kent Beck.",
+    "version": "4.13.2",
+    "developers": [
+      "David Saff",
+      "Kevin Cooney",
+      "Stefan Birkner",
+      "Marc Philipp"
+    ],
+    "url": "http://junit.org",
+    "year": "2002",
+    "licenses": [
+      {
+        "license": "Eclipse Public License 1.0",
+        "license_url": "http://www.eclipse.org/legal/epl-v10.html"
+      }
+    ],
+    "dependency": "junit:junit:4.13.2"
+  },
+  {
+    "project": "Kermit",
+    "description": "Kermit The Log",
+    "version": "2.0.2",
+    "developers": [
+      "Kevin Galligan"
+    ],
+    "url": "https://github.com/touchlab/Kermit",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "co.touchlab:kermit-jvm:2.0.2"
+  },
+  {
+    "project": "Kermit",
+    "description": "Kermit The Log",
+    "version": "2.0.2",
+    "developers": [
+      "Kevin Galligan"
+    ],
+    "url": "https://github.com/touchlab/Kermit",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "co.touchlab:kermit-core-jvm:2.0.2"
+  },
+  {
     "project": "KeyboardVisibilityEvent",
     "description": "Android Library to handle keyboard visibility change with ease.",
     "version": "3.0.0-RC3",
@@ -1399,9 +1485,43 @@
     "dependency": "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3"
   },
   {
+    "project": "Kotlin Multiplatform Bitcoin Library",
+    "description": "A simple Kotlin Multiplatform library which implements most of the bitcoin protocol",
+    "version": "0.19.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/bitcoin-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.bitcoin:bitcoin-kmp-jvm:0.19.0"
+  },
+  {
+    "project": "Kotlin Multiplatform Lightning Network Engine",
+    "description": "A Kotlin Multiplatform implementation of the Lightning Network",
+    "version": "1.7.2",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/lightning-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.lightning:lightning-kmp-jvm:1.7.2"
+  },
+  {
     "project": "Kotlin Stdlib",
-    "description": "Kotlin Standard Library for JVM",
-    "version": "1.8.21",
+    "description": "Kotlin Standard Library",
+    "version": "1.9.23",
     "developers": [
       "Kotlin Team"
     ],
@@ -1413,12 +1533,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:1.8.21"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:1.9.23"
   },
   {
     "project": "Kotlin Stdlib Common",
     "description": "Kotlin Common Standard Library",
-    "version": "1.8.21",
+    "version": "1.8.0",
     "developers": [
       "Kotlin Team"
     ],
@@ -1430,12 +1550,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.21"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0"
   },
   {
     "project": "Kotlin Stdlib Jdk7",
     "description": "Kotlin Standard Library JDK 7 extension",
-    "version": "1.8.21",
+    "version": "1.9.23",
     "developers": [
       "Kotlin Team"
     ],
@@ -1447,12 +1567,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.23"
   },
   {
     "project": "Kotlin Stdlib Jdk8",
     "description": "Kotlin Standard Library JDK 8 extension",
-    "version": "1.8.21",
+    "version": "1.9.23",
     "developers": [
       "Kotlin Team"
     ],
@@ -1464,12 +1584,46 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23"
+  },
+  {
+    "project": "Kotlin Test",
+    "description": "Kotlin Test Multiplatform library",
+    "version": "1.9.10",
+    "developers": [
+      "Kotlin Team"
+    ],
+    "url": "https://kotlinlang.org/",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlin:kotlin-test:1.9.10"
+  },
+  {
+    "project": "Kotlin Test Junit",
+    "description": "Kotlin Test Support for junit",
+    "version": "1.9.10",
+    "developers": [
+      "Kotlin Team"
+    ],
+    "url": "https://kotlinlang.org/",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlin:kotlin-test-junit:1.9.10"
   },
   {
     "project": "kotlinx-coroutines-android",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.6.4",
+    "version": "1.7.3",
     "developers": [
       "JetBrains Team"
     ],
@@ -1481,12 +1635,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
   },
   {
     "project": "kotlinx-coroutines-core",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.6.4",
+    "version": "1.7.3",
     "developers": [
       "JetBrains Team"
     ],
@@ -1498,7 +1652,381 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3"
+  },
+  {
+    "project": "kotlinx-coroutines-jdk8",
+    "description": "Coroutines support libraries for Kotlin",
+    "version": "1.7.3",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx.coroutines",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3"
+  },
+  {
+    "project": "kotlinx-coroutines-slf4j",
+    "description": "Coroutines support libraries for Kotlin",
+    "version": "1.7.3",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx.coroutines",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.7.3"
+  },
+  {
+    "project": "kotlinx-datetime",
+    "description": "Kotlin Datetime Library",
+    "version": "0.6.0",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx-datetime",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.0"
+  },
+  {
+    "project": "kotlinx-serialization-cbor",
+    "description": "Kotlin multiplatform serialization runtime library",
+    "version": "1.6.2",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx.serialization",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-serialization-cbor-jvm:1.6.2"
+  },
+  {
+    "project": "kotlinx-serialization-core",
+    "description": "Kotlin multiplatform serialization runtime library",
+    "version": "1.6.2",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx.serialization",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.6.2"
+  },
+  {
+    "project": "kotlinx-serialization-json",
+    "description": "Kotlin multiplatform serialization runtime library",
+    "version": "1.6.2",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/Kotlin/kotlinx.serialization",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.6.2"
+  },
+  {
+    "project": "ktor-client-auth",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-client-auth-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-client-content-negotiation",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-client-content-negotiation-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-client-core",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-client-core-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-client-json",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-client-json-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-client-okhttp",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-client-okhttp-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-events",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-events-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-http",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-http-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-io",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-io-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-network",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-network-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-network-tls",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-network-tls-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-serialization",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-serialization-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-serialization-kotlinx",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-serialization-kotlinx-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-serialization-kotlinx-json",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-utils",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-utils-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-websocket-serialization",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-websocket-serialization-jvm:2.3.7"
+  },
+  {
+    "project": "ktor-websockets",
+    "description": "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort.",
+    "version": "2.3.7",
+    "developers": [
+      "JetBrains Team"
+    ],
+    "url": "https://github.com/ktorio/ktor",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "io.ktor:ktor-websockets-jvm:2.3.7"
   },
   {
     "project": "LiveData Core Kotlin Extensions",
@@ -1558,7 +2086,7 @@
   {
     "project": "michaelWuensch/avathor-android-library",
     "description": "Avatar images for the bitcoin lightning network.Implementation of the Avathor specification for android.",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "developers": [
       "Michael Wünsch"
     ],
@@ -1570,12 +2098,12 @@
         "license_url": "https://api.github.com/licenses/mit"
       }
     ],
-    "dependency": "com.github.michaelWuensch:avathor-android-library:1.2.0"
+    "dependency": "com.github.michaelWuensch:avathor-android-library:1.3.0"
   },
   {
     "project": "okhttp",
     "description": "Square’s meticulous HTTP client for Java and Kotlin.",
-    "version": "4.9.0",
+    "version": "4.12.0",
     "developers": [
       "Square, Inc."
     ],
@@ -1587,12 +2115,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.squareup.okhttp3:okhttp:4.9.0"
+    "dependency": "com.squareup.okhttp3:okhttp:4.12.0"
   },
   {
-    "project": "Okio",
-    "description": "A modern I/O API for Java",
-    "version": "2.8.0",
+    "project": "okio",
+    "description": "A modern I/O library for Android, Java, and Kotlin Multiplatform.",
+    "version": "3.6.0",
     "developers": [
       "Square, Inc."
     ],
@@ -1604,7 +2132,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.squareup.okio:okio:2.8.0"
+    "dependency": "com.squareup.okio:okio-jvm:3.6.0"
   },
   {
     "project": "perfmark:perfmark-api",
@@ -1762,7 +2290,7 @@
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
     "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
-    "version": "0.11.0",
+    "version": "0.15.0",
     "developers": [
       "ACINQ"
     ],
@@ -1774,12 +2302,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-common:0.11.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm:0.15.0"
   },
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
     "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
-    "version": "0.11.0",
+    "version": "0.15.0",
     "developers": [
       "ACINQ"
     ],
@@ -1791,7 +2319,107 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jvm:0.11.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-darwin:0.15.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.15.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-linux:0.15.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.15.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-mingw:0.15.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.15.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-extract:0.15.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.15.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-common:0.15.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.15.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jvm:0.15.0"
+  },
+  {
+    "project": "SLF4J API Module",
+    "description": "The slf4j API",
+    "version": "1.7.36",
+    "developers": [],
+    "url": "http://www.slf4j.org",
+    "year": null,
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "http://www.opensource.org/licenses/mit-license.php"
+      }
+    ],
+    "dependency": "org.slf4j:slf4j-api:1.7.36"
   },
   {
     "project": "Tink Cryptography API for Android",
@@ -1915,7 +2543,7 @@
   {
     "project": "ZXing Core",
     "description": "Core barcode encoding/decoding library",
-    "version": "3.5.1",
+    "version": "3.5.3",
     "developers": [],
     "url": null,
     "year": null,
@@ -1925,7 +2553,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.zxing:core:3.5.1"
+    "dependency": "com.google.zxing:core:3.5.3"
   },
   {
     "project": "zxing-android-embedded",
