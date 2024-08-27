@@ -2101,6 +2101,96 @@
     "dependency": "com.github.michaelWuensch:avathor-android-library:1.3.0"
   },
   {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-hla:1.0.5"
+  },
+  {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-dnssec:1.0.5"
+  },
+  {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-iterative-resolver:1.0.5"
+  },
+  {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-client:1.0.5"
+  },
+  {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-core:1.0.5"
+  },
+  {
     "project": "okhttp",
     "description": "Square’s meticulous HTTP client for Java and Kotlin.",
     "version": "4.12.0",

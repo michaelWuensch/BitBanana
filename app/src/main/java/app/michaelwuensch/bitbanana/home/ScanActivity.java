@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -84,17 +85,17 @@ public class ScanActivity extends BaseScannerActivity {
 
         BitcoinStringAnalyzer.analyze(ScanActivity.this, compositeDisposable, data, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
                 readableDataFound(data);
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+            public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
                 readableDataFound(data);
             }
 
             @Override
-            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                 readableDataFound(data);
             }
 
@@ -121,11 +122,6 @@ public class ScanActivity extends BaseScannerActivity {
             @Override
             public void onValidLnUrlAuth(URL url) {
                 // never reached
-            }
-
-            @Override
-            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
-                readableDataFound(data);
             }
 
             @Override

@@ -21,12 +21,12 @@ import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
-import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -44,9 +44,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
     private String mDataToEncodeInQRCode;
     private String mDataToCopyOrShare;
     private boolean mOnChain;
-    private String mAddress;
-    private String mMemo;
-    private String mAmount;
+    private Bip21Invoice mBip21Invoice;
     private DecodedBolt11 mLnInvoice;
     private ConstraintLayout mClRequestView;
     private ConstraintLayout mClPaymentReceivedView;
@@ -62,9 +60,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mOnChain = extras.getBoolean("onChain");
-            mAddress = extras.getString("address");
-            mAmount = extras.getString("amount");
-            mMemo = extras.getString("memo");
+            mBip21Invoice = (Bip21Invoice) extras.getSerializable("bip21Invoice");
             mLnInvoice = (DecodedBolt11) extras.getSerializable("lnInvoice");
         }
 
@@ -96,9 +92,9 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
 
             // Generate on-chain request data to encode
-            mDataToEncodeInQRCode = InvoiceUtil.generateBitcoinInvoice(mAddress, mAmount, mMemo, null);
-            if ((mAmount.isEmpty() || mAmount.equals("") || mAmount.equals("0")) && (mMemo.isEmpty() || mMemo.equals(""))) {
-                mDataToCopyOrShare = mAddress;
+            mDataToEncodeInQRCode = mBip21Invoice.toString();
+            if (mBip21Invoice.getAmount() == 0 && (mBip21Invoice.getMessage() == null || mBip21Invoice.getMessage().isEmpty())) {
+                mDataToCopyOrShare = mBip21Invoice.getAddress();
             } else {
                 mDataToCopyOrShare = mDataToEncodeInQRCode;
             }

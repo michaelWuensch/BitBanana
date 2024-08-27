@@ -32,6 +32,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -370,12 +371,14 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 BBLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
                         .subscribe(response -> {
-                            String value = MonetaryUtil.getInstance().msatsToBitcoinString(mReceiveAmount);
+                            Bip21Invoice bip21Invoice = Bip21Invoice.newBuilder()
+                                    .setAddress(response)
+                                    .setAmount(mReceiveAmount)
+                                    .setMessage(mEtMemo.getText().toString())
+                                    .build();
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
-                            intent.putExtra("address", response);
-                            intent.putExtra("amount", value);
-                            intent.putExtra("memo", mEtMemo.getText().toString());
+                            intent.putExtra("bip21Invoice", bip21Invoice);
                             startActivity(intent);
                             dismiss();
                         }, throwable -> {

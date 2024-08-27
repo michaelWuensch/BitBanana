@@ -11,8 +11,8 @@ android {
         applicationId "app.michaelwuensch.bitbanana"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 62
-        versionName "0.8.5"
+        versionCode 63
+        versionName "0.8.6"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "bitbanana-" + versionName + "_" + versionCode)
@@ -167,6 +167,9 @@ dependencies {
 
     // Library to react to software keyboard visibility changes
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
+
+    // Library for reading dns records. This allows us to interact with email like addresses for BitcoinPayments.
+    implementation 'org.minidns:minidns-hla:1.0.5'
 
 
     // Basic Android libraries

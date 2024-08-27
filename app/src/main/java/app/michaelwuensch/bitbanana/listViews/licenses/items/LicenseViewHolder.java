@@ -19,7 +19,7 @@ public class LicenseViewHolder extends RecyclerView.ViewHolder {
     Context mContext;
     private TextView mProjectName;
     private TextView mURL;
-    private TextView mVersion;
+    private TextView mDependency;
     private TextView mDevelopers;
     private TextView mLicenseLabel;
     private TextView mLicenseURL;
@@ -34,7 +34,7 @@ public class LicenseViewHolder extends RecyclerView.ViewHolder {
         mContext = itemView.getContext();
         mProjectName = itemView.findViewById(R.id.projectName);
         mURL = itemView.findViewById(R.id.projectUrl);
-        mVersion = itemView.findViewById(R.id.projectVersion);
+        mDependency = itemView.findViewById(R.id.dependency);
         mDevelopers = itemView.findViewById(R.id.projectDevelopers);
         mLicenseLabel = itemView.findViewById(R.id.licensesLabel);
         mLicenseURL = itemView.findViewById(R.id.licenseUrl);
@@ -62,15 +62,15 @@ public class LicenseViewHolder extends RecyclerView.ViewHolder {
             mURL.setVisibility(View.GONE);
         }
 
-        if (dependency.getVersion() != null && !dependency.getVersion().isEmpty()) {
-            mVersion.setText(licenseListItem.getDependency().getVersion());
-            mVersion.setVisibility(View.VISIBLE);
+        if (dependency.getDependency() != null && !dependency.getDependency().isEmpty()) {
+            mDependency.setText("Dependency:\n" + dependency.getDependency());
+            mDependency.setVisibility(View.VISIBLE);
         } else {
-            mVersion.setVisibility(View.GONE);
+            mDependency.setVisibility(View.GONE);
         }
 
         if (dependency.getDevelopers() != null && dependency.getDevelopers().length > 0) {
-            String developers = "by: ";
+            String developers = "By:\n";
             for (String developer : dependency.getDevelopers()) {
                 developers = developers + developer + ", ";
             }

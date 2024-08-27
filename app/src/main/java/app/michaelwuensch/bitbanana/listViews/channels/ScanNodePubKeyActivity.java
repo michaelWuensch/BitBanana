@@ -15,6 +15,7 @@ import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -69,17 +70,17 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
     private void processUserData(String rawData) {
         BitcoinStringAnalyzer.analyze(ScanNodePubKeyActivity.this, mCompositeDisposable, rawData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+            public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
             @Override
-            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
@@ -105,11 +106,6 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
 
             @Override
             public void onValidLnUrlAuth(URL url) {
-                showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
-            }
-
-            @Override
-            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }
 
