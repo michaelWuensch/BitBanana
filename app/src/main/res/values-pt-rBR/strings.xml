@@ -287,7 +287,8 @@
 \n- Endereço Lightning
 \n- pubkey
 \n- pubkey@host
-\n- pubkey@host:port</string>
+\n- pubkey@host:porta
+\n- Código de Pagamento</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:
 \n
 \n+ instantâneo
@@ -947,7 +948,7 @@
     <string name="activity_bolt12_offers">Códigos de Pagamento</string>
     <string name="activity_bolt12_create_offer">Criar Código de Pagamento</string>
     <string name="error_offer_already_exists">Um código de pagamento idêntico já existe.</string>
-    <string name="help_dialog_bolt12_description">Qualquer um que usar o código de pagamento verá a descrição.</string>
+    <string name="help_dialog_bolt12_description">Qualquer um que usar o código de pagamento verá esta descrição.</string>
     <string name="help_dialog_bolt12_label">Este rótulo é apenas para organizar seus códigos de pagamento e não será visível a ninguém que use o código de pagamento.</string>
     <string name="offer_no_bolt12_offers">Sem códigos de pagamento</string>
     <string name="offer_multi_use">Uso múltiplo</string>
@@ -955,4 +956,16 @@
     <string name="offer_single_use">Uso único</string>
     <string name="help_dialog_offers">Códigos de pagamento podem ser usados várias vezes. Qualquer um com o código pode fazer um pagamento para você sem requerer seu envolvimento imediato. Entretanto, seu nó deve estar on-line para que o pagamento avance. Além disso, códigos de pagamento oferecem funções avançadas como pagamentos recorrentes e privacidade aumentada ao recipiente.</string>
     <string name="bolt12">Bolt 12</string>
+    <string name="error_bolt12_expired">Este código de pagamento expirou.</string>
+    <string name="bolt12_offer">Código de Pagamento</string>
+    <string name="error_invalid_bolt12_offer_format">Código de pagamento inválido.</string>
+    <string name="error_invalid_contact_data">Formato inválido.
+\nPor favor use um dos seguintes:
+\n
+\n- Endereço Lightning
+\n- pubkey
+\n- pubkey@host
+\n- pubkey@host:porta
+\n- Código de Pagamento</string>
+    <string name="bolt12_payer_note">Nota do pagador</string>
 </resources>
