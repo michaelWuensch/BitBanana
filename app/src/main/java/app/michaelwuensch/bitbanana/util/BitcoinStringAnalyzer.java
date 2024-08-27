@@ -15,8 +15,8 @@ import app.michaelwuensch.bitbanana.lnurl.LnurlDecoder;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
-import app.michaelwuensch.bitbanana.lnurl.staticInternetIdentifier.StaticInternetIdentifier;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -50,7 +50,7 @@ public class BitcoinStringAnalyzer {
         // Before handling normal lnurls, check if there is a lnurl of form lnurlp://lightningAddress
         if (UriUtil.isLNURLPUri(result)) {
             LnAddress lnAddress = new LnAddress(UriUtil.removeURI(result));
-            if (lnAddress.isValid()) {
+            if (lnAddress.isValidLnurlAddress()) {
                 return UriUtil.removeURI(result);
             }
         }
@@ -147,20 +147,20 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfLnOrBitcoinInvoice(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        InvoiceUtil.readInvoice(ctx, inputString, new InvoiceUtil.OnReadInvoiceCompletedListener() {
+        InvoiceUtil.readInvoice(ctx, inputString, null, new InvoiceUtil.OnReadInvoiceCompletedListener() {
             @Override
-            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
-                listener.onValidLightningInvoice(decodedBolt11);
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
+                listener.onValidLightningInvoice(decodedBolt11, fallbackOnChainInvoice);
             }
 
             @Override
-            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
-                listener.onValidBolt12Offer(decodedBolt12);
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
+                listener.onValidBolt12Offer(decodedBolt12, fallbackOnChainInvoice);
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
-                listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
+            public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
+                listener.onValidBitcoinInvoice(onChainInvoice);
             }
 
             @Override
@@ -176,11 +176,18 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfStaticInternetIdentifier(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        StaticInternetIdentifier.checkIfValidStaticInternetIdentifier(ctx, inputString, new StaticInternetIdentifier.OnStaticIdentifierChecked() {
+        StaticInternetIdentifierReader.checkIfValidStaticInternetIdentifier(ctx, inputString, new StaticInternetIdentifierReader.OnStaticIdentifierChecked() {
 
             @Override
-            public void onValidInternetIdentifier(LnUrlPayResponse lnUrlPayResponse) {
-                listener.onValidInternetIdentifier(lnUrlPayResponse);
+            public void onValidLnurlPay(LnUrlPayResponse lnUrlPayResponse) {
+                listener.onValidLnUrlPay(lnUrlPayResponse);
+            }
+
+            @Override
+            public void onValidBip353DnsRecord(String bip21InvoiceString) {
+                // We have retrieved the actual invoice information that was stored in a dns record for a human readable address like "user@domain.com"
+                // Therefore we now do a second round and test that result for validity.
+                checkIfLnOrBitcoinInvoice(ctx, compositeDisposable, bip21InvoiceString, listener);
             }
 
             @Override
@@ -207,11 +214,11 @@ public class BitcoinStringAnalyzer {
 
 
     public interface OnDataDecodedListener {
-        void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
+        void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice);
 
-        void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
+        void onValidBitcoinInvoice(Bip21Invoice onChainInvoice);
 
-        void onValidBolt12Offer(DecodedBolt12 decodedBolt12);
+        void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice);
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 
@@ -222,8 +229,6 @@ public class BitcoinStringAnalyzer {
         void onValidLnUrlPay(LnUrlPayResponse payResponse);
 
         void onValidLnUrlAuth(URL url);
-
-        void onValidInternetIdentifier(LnUrlPayResponse payResponse);
 
         void onValidConnectData(BackendConfig backendConfig);
 

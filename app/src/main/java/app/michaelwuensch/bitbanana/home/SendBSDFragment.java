@@ -44,6 +44,7 @@ import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
@@ -86,7 +87,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private DecodedBolt11 mDecodedBolt11;
     private DecodedBolt12 mDecodedBolt12;
-    private String mFallbackOnChainInvoice;
+    private Bip21Invoice mFallbackOnChainInvoice;
     private String mMemo;
     private String mOnChainAddress;
     private boolean mOnChain;
@@ -101,7 +102,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private View mRootView;
     private DebounceHandler mFeeCaclulationDebounceHandler = new DebounceHandler();
 
-    public static SendBSDFragment createLightningDialog(DecodedBolt11 decodedBolt11, String fallbackOnChainInvoice) {
+    public static SendBSDFragment createLightningDialog(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
         Intent intent = new Intent();
         intent.putExtra("keysend", false);
         intent.putExtra("onChain", false);
@@ -113,24 +114,25 @@ public class SendBSDFragment extends BaseBSDFragment {
         return sendBottomSheetDialog;
     }
 
-    public static SendBSDFragment createBolt12OfferDialog(DecodedBolt12 decodedBolt12) {
+    public static SendBSDFragment createBolt12OfferDialog(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
         Intent intent = new Intent();
         intent.putExtra("keysend", false);
         intent.putExtra("onChain", false);
         intent.putExtra("isBolt12Offer", true);
         intent.putExtra("decodedBolt12", decodedBolt12);
+        intent.putExtra("fallbackOnChainInvoice", fallbackOnChainInvoice);
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
     }
 
-    public static SendBSDFragment createOnChainDialog(String address, long amount, String message) {
+    public static SendBSDFragment createOnChainDialog(Bip21Invoice onChainInvoice) {
         Intent intent = new Intent();
         intent.putExtra("keysend", false);
         intent.putExtra("onChain", true);
-        intent.putExtra("onChainAddress", address);
-        intent.putExtra("onChainAmount", amount);
-        intent.putExtra("onChainMessage", message);
+        intent.putExtra("onChainAddress", onChainInvoice.getAddress());
+        intent.putExtra("onChainAmount", onChainInvoice.getAmount());
+        intent.putExtra("onChainMessage", onChainInvoice.getMessage());
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
@@ -161,12 +163,13 @@ public class SendBSDFragment extends BaseBSDFragment {
             mMemo = args.getString("onChainMessage");
         } else if (mIsBolt12Offer) {
             mDecodedBolt12 = (DecodedBolt12) args.getSerializable("decodedBolt12");
+            mFallbackOnChainInvoice = (Bip21Invoice) args.getSerializable("fallbackOnChainInvoice");
         } else {
             if (mIsKeysend) {
                 mKeysendPubkey = args.getString("keysendPubkey");
             } else {
                 mDecodedBolt11 = (DecodedBolt11) args.getSerializable("lnPaymentRequest");
-                mFallbackOnChainInvoice = args.getString("fallbackOnChainInvoice");
+                mFallbackOnChainInvoice = (Bip21Invoice) args.getSerializable("fallbackOnChainInvoice");
             }
         }
 
@@ -488,7 +491,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         mFallbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((HomeActivity) getActivity()).analyzeString(mFallbackOnChainInvoice);
+                ((HomeActivity) getActivity()).analyzeString(mFallbackOnChainInvoice.toString());
                 dismiss();
             }
         });

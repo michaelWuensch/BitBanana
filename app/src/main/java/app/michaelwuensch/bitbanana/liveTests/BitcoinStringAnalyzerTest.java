@@ -8,6 +8,7 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -33,6 +34,9 @@ public class BitcoinStringAnalyzerTest {
     public static final int RESULT_NODE_URI = 11;
     public static final int RESULT_URL = 12;
     public static final int RESULT_BOLT12_OFFER = 13;
+    public static final int RESULT_LIGHTNING_INVOICE_WITH_ON_CHAIN_FALLBACK = 14;
+    public static final int RESULT_BOLT12_OFFER_WITH_ON_CHAIN_FALLBACK = 15;
+
 
     private static final String ERROR_LNURL_CHECK_FAILED = "The end result was a lnurl, but BitcoinStringAnalyzer.isLnUrl() did not recognize it.";
 
@@ -47,15 +51,22 @@ public class BitcoinStringAnalyzerTest {
     public void execute(String input, int expected) {
         BitcoinStringAnalyzer.analyze(App.getAppContext(), mCompositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
-                if (expected == RESULT_LIGHTNING_INVOICE)
-                    mResultListener.onSuccess(input, RESULT_LIGHTNING_INVOICE, null);
-                else
-                    mResultListener.onFailed(input, expected, RESULT_LIGHTNING_INVOICE, null);
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
+                if (fallbackOnChainInvoice == null) {
+                    if (expected == RESULT_LIGHTNING_INVOICE)
+                        mResultListener.onSuccess(input, RESULT_LIGHTNING_INVOICE, null);
+                    else
+                        mResultListener.onFailed(input, expected, RESULT_LIGHTNING_INVOICE, null);
+                } else {
+                    if (expected == RESULT_LIGHTNING_INVOICE_WITH_ON_CHAIN_FALLBACK)
+                        mResultListener.onSuccess(input, RESULT_LIGHTNING_INVOICE_WITH_ON_CHAIN_FALLBACK, null);
+                    else
+                        mResultListener.onFailed(input, expected, RESULT_LIGHTNING_INVOICE_WITH_ON_CHAIN_FALLBACK, null);
+                }
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+            public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
                 if (expected == RESULT_BITCOIN_INVOICE)
                     mResultListener.onSuccess(input, RESULT_BITCOIN_INVOICE, null);
                 else
@@ -63,11 +74,18 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
-            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
-                if (expected == RESULT_BOLT12_OFFER)
-                    mResultListener.onSuccess(input, RESULT_BOLT12_OFFER, null);
-                else
-                    mResultListener.onFailed(input, expected, RESULT_BOLT12_OFFER, null);
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
+                if (fallbackOnChainInvoice == null) {
+                    if (expected == RESULT_BOLT12_OFFER)
+                        mResultListener.onSuccess(input, RESULT_BOLT12_OFFER, null);
+                    else
+                        mResultListener.onFailed(input, expected, RESULT_BOLT12_OFFER, null);
+                } else {
+                    if (expected == RESULT_BOLT12_OFFER_WITH_ON_CHAIN_FALLBACK)
+                        mResultListener.onSuccess(input, RESULT_BOLT12_OFFER_WITH_ON_CHAIN_FALLBACK, null);
+                    else
+                        mResultListener.onFailed(input, expected, RESULT_BOLT12_OFFER_WITH_ON_CHAIN_FALLBACK, null);
+                }
             }
 
             @Override
@@ -102,9 +120,7 @@ public class BitcoinStringAnalyzerTest {
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
-                if (!BitcoinStringAnalyzer.isLnUrl(input))
-                    mResultListener.onFailed(input, expected, RESULT_LNURL_PAY, ERROR_LNURL_CHECK_FAILED);
-                else if (expected == RESULT_LNURL_PAY)
+                if (expected == RESULT_LNURL_PAY)
                     mResultListener.onSuccess(input, RESULT_LNURL_PAY, null);
                 else
                     mResultListener.onFailed(input, expected, RESULT_LNURL_PAY, null);
@@ -118,14 +134,6 @@ public class BitcoinStringAnalyzerTest {
                     mResultListener.onSuccess(input, RESULT_LNURL_AUTH, null);
                 else
                     mResultListener.onFailed(input, expected, RESULT_LNURL_AUTH, null);
-            }
-
-            @Override
-            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
-                if (expected == RESULT_LNADDRESS)
-                    mResultListener.onSuccess(input, RESULT_LNADDRESS, null);
-                else
-                    mResultListener.onFailed(input, expected, RESULT_LNADDRESS, null);
             }
 
             @Override

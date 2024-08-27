@@ -69,22 +69,24 @@
                 tools:text="https://project _url" />
 
             <TextView
-                android:id="@+id/projectVersion"
+                android:id="@+id/dependency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="1.27" />
+                tools:text="Dependency:\n1.27" />
 
             <TextView
                 android:id="@+id/projectDevelopers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="by: developer names" />
+                tools:text="By:\ndeveloper names" />
 
         </LinearLayout>
 

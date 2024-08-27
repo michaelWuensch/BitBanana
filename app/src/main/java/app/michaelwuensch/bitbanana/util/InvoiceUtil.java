@@ -3,9 +3,6 @@ package app.michaelwuensch.bitbanana.util;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.common.net.UrlEscapers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,6 +11,7 @@ import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
@@ -70,7 +68,7 @@ public class InvoiceUtil {
         return input.matches("^((bc1|tb1|bcrt1)[ac-hj-np-z02-9]{11,71}|(BC1|TB1|BCRT1)[AC-HJ-NP-Z02-9]{11,71})$");
     }
 
-    public static void readInvoice(Context ctx, String data, OnReadInvoiceCompletedListener listener) {
+    public static void readInvoice(Context ctx, String data, Bip21Invoice fallbackOnChainInvoice, OnReadInvoiceCompletedListener listener) {
 
         // Avoid index out of bounds. An Request with less than 11 characters isn't valid.
         if (data.length() < 11) {
@@ -91,7 +89,7 @@ public class InvoiceUtil {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, lnInvoice) && !hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice);
+                        decodeLightningInvoice(ctx, listener, lnInvoice, fallbackOnChainInvoice);
                     } else {
                         // Show error. Please use a MAINNET invoice.
                         listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -99,7 +97,7 @@ public class InvoiceUtil {
                     break;
                 case TESTNET:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice);
+                        decodeLightningInvoice(ctx, listener, lnInvoice, fallbackOnChainInvoice);
                     } else {
                         // Show error. Please use a TESTNET invoice.
                         listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -107,7 +105,7 @@ public class InvoiceUtil {
                     break;
                 case REGTEST:
                     if (hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, lnInvoice)) {
-                        decodeLightningInvoice(ctx, listener, lnInvoice);
+                        decodeLightningInvoice(ctx, listener, lnInvoice, fallbackOnChainInvoice);
                     } else {
                         // Show error. Please use a REGTEST invoice.
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
@@ -117,11 +115,11 @@ public class InvoiceUtil {
                     listener.onError(ctx.getString(R.string.error_unsupported_network), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
             }
         } else if (isLightningOffer(lnInvoice)) {
-            decodeLightningOffer(ctx, listener, lnInvoice);
+            decodeLightningOffer(ctx, listener, lnInvoice, fallbackOnChainInvoice);
         } else {
             // We do not have a lightning invoice... check if it is a valid bitcoin address / invoice
 
-            // Check if we have a bitcoin invoice with the "bitcoin:" uri scheme
+            // Check if we have a bip21 bitcoin invoice with the "bitcoin:" uri scheme
             if (UriUtil.isBitcoinUri(data)) {
 
                 // Add "//" to make it parsable for the java URI class if it is not present
@@ -138,6 +136,8 @@ public class InvoiceUtil {
                     long onChainInvoiceAmount = 0L;
                     String onChainInvoiceMessage = null;
                     String lightningInvoice = null;
+                    String bolt12Offer = null;
+                    String lnurl = null;
 
                     // Fetch params
                     if (bitcoinURI.getQuery() != null) {
@@ -153,9 +153,69 @@ public class InvoiceUtil {
                             if (param[0].equals("lightning")) {
                                 lightningInvoice = param[1];
                             }
+                            if (param[0].equals("lno")) {
+                                bolt12Offer = param[1];
+                            }
+                            if (param[0].equals("lnurl")) {
+                                lnurl = param[1];
+                            }
+                        }
+
+                        Bip21Invoice onChainInvoice = Bip21Invoice.newBuilder()
+                                .setAddress(onChainAddress)
+                                .setAmount(onChainInvoiceAmount)
+                                .setMessage(onChainInvoiceMessage)
+                                .build();
+
+                        boolean validOnChainAddress = validateOnChainAddress(onChainAddress);
+
+
+                        // Check for other payment data than standard bitcoin address. We prefer lightning.
+                        // If other data is available, we validate it. If it is invalid, we continue with the BTC address.
+
+                        // If more than one payment information is provided, this order in the code defines what we use.
+                        if (bolt12Offer != null && BackendManager.getCurrentBackend().supportsBolt12Sending()) {
+                            if (validateBolt12LightningOffer(bolt12Offer)) {
+                                if (validOnChainAddress)
+                                    readInvoice(ctx, bolt12Offer, onChainInvoice, listener);
+                                else
+                                    readInvoice(ctx, bolt12Offer, null, listener);
+                                return;
+                            }
+                        }
+                        if (lightningInvoice != null) {
+                            if (validateBolt11Invoice(lightningInvoice)) {
+                                if (validOnChainAddress)
+                                    readInvoice(ctx, lightningInvoice, onChainInvoice, listener);
+                                else
+                                    readInvoice(ctx, lightningInvoice, null, listener);
+                                return;
+                            }
+                        }
+                        if (lnurl != null) {
+                            // ToDo: Support this case
+                        }
+
+                        // None of the extra payment data is valid.  Now use the same order a
+                        if (!validOnChainAddress) {
+                            // onChain address is invalid as well. Now we call the methods in the same order, so that an actual useful error message will be displayed.
+                            if (bolt12Offer != null) {
+                                decodeLightningOffer(ctx, listener, bolt12Offer, null);
+                                return;
+                            }
+                            if (lightningInvoice != null) {
+                                decodeLightningInvoice(ctx, listener, lightningInvoice, null);
+                                return;
+                            }
                         }
                     }
-                    validateOnChainAddress(ctx, listener, onChainAddress, onChainInvoiceAmount, onChainInvoiceMessage, lightningInvoice);
+
+                    // No extra payment data, go with bitcoin address
+                    readOnChainAddress(ctx, listener, Bip21Invoice.newBuilder()
+                            .setAddress(onChainAddress)
+                            .setAmount(onChainInvoiceAmount)
+                            .setMessage(onChainInvoiceMessage)
+                            .build());
 
                 } catch (URISyntaxException e) {
                     BBLog.w(LOG_TAG, "URI could not be parsed");
@@ -164,32 +224,35 @@ public class InvoiceUtil {
                 }
 
             } else {
-                // We also don't have a bitcoin invoice, check if the data is a valid bitcoin address
-                validateOnChainAddress(ctx, listener, data, 0L, null, null);
+                // We also don't have a bip21 bitcoin invoice, check if the data is a valid bitcoin address
+                readOnChainAddress(ctx, listener, Bip21Invoice.newBuilder()
+                        .setAddress(data)
+                        .build());
             }
         }
     }
 
-    private static void validateOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, String address, long amount, String message, String lightningInvoice) {
+    private static void readOnChainAddress(Context ctx, OnReadInvoiceCompletedListener listener, Bip21Invoice onChainInvoice) {
+        String address = onChainInvoice.getAddress();
         if (address != null && isBitcoinAddress(address)) {
             switch (Wallet.getInstance().getNetwork()) {
                 case MAINNET:
                     if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_MAINNET, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
+                        listener.onValidBitcoinInvoice(onChainInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useMainnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case TESTNET:
-                    if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
+                    if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
+                        listener.onValidBitcoinInvoice(onChainInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useTestnetRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
                     break;
                 case REGTEST:
-                    if (hasPrefix((ArrayList<String>) ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
-                        listener.onValidBitcoinInvoice(address, amount, message, lightningInvoice);
+                    if (hasPrefix(ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
+                        listener.onValidBitcoinInvoice(onChainInvoice);
                     } else {
                         listener.onError(ctx.getString(R.string.error_useRegtestRequest), RefConstants.ERROR_DURATION_MEDIUM, ERROR_NETWORK_MISMATCH);
                     }
@@ -202,19 +265,103 @@ public class InvoiceUtil {
         }
     }
 
-    private static void decodeLightningInvoice(Context ctx, OnReadInvoiceCompletedListener listener, String invoice) {
+    private static void decodeLightningInvoice(Context ctx, OnReadInvoiceCompletedListener listener, String invoice, Bip21Invoice fallbackOnChainInvoice) {
         try {
             DecodedBolt11 decodedBolt11 = decodeBolt11(invoice);
             if (decodedBolt11.isExpired())
                 listener.onError(ctx.getString(R.string.error_paymentRequestExpired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
             else
-                listener.onValidLightningInvoice(decodedBolt11);
+                listener.onValidLightningInvoice(decodedBolt11, fallbackOnChainInvoice);
         } catch (Exception e) {
             listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
         }
     }
 
-    private static void decodeLightningOffer(Context ctx, OnReadInvoiceCompletedListener listener, String invoice) {
+    /**
+     * This function just validates if a on chain bitcoin address will be valid in the given context. It does not cause any action.
+     */
+    private static boolean validateOnChainAddress(String address) {
+        if (!BackendManager.getCurrentBackend().supportsOnChainSending())
+            return false;
+
+        if (address != null && isBitcoinAddress(address)) {
+            switch (Wallet.getInstance().getNetwork()) {
+                case MAINNET:
+                    if (!hasPrefix(ADDRESS_PREFIX_ONCHAIN_MAINNET, address)) {
+                        return false;
+                    }
+                    break;
+                case TESTNET:
+                    if (!hasPrefix(ADDRESS_PREFIX_ONCHAIN_TESTNET, address)) {
+                        return false;
+                    }
+                    break;
+                case REGTEST:
+                    if (!hasPrefix(ADDRESS_PREFIX_ONCHAIN_REGTEST, address)) {
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This function just validates if a bolt11 invoice will be valid in the given context. It does not cause any action.
+     */
+    private static boolean validateBolt11Invoice(String invoice) {
+        if (!FeatureManager.isOffchainSendingEnabled())
+            return false;
+
+        switch (Wallet.getInstance().getNetwork()) {
+            case MAINNET:
+                if (!hasPrefix(INVOICE_PREFIX_LIGHTNING_MAINNET, invoice) || hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, invoice)) {
+                    return false;
+                }
+                break;
+            case TESTNET:
+                if (!hasPrefix(INVOICE_PREFIX_LIGHTNING_TESTNET, invoice)) {
+                    return false;
+                }
+                break;
+            case REGTEST:
+                if (!hasPrefix(INVOICE_PREFIX_LIGHTNING_REGTEST, invoice)) {
+                    return false;
+                }
+                break;
+        }
+
+        try {
+            DecodedBolt11 decodedBolt11 = decodeBolt11(invoice);
+            if (decodedBolt11.isExpired())
+                return false;
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * This function just validates if a bolt12 offer will be valid in the given context. It does not cause any action.
+     */
+    private static boolean validateBolt12LightningOffer(String offer) {
+        if (!BackendManager.getCurrentBackend().supportsBolt12Sending())
+            return false;
+
+        try {
+            DecodedBolt12 decodedBolt12 = decodeBolt12(offer);
+            if (decodedBolt12.isExpired())
+                return false;
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static void decodeLightningOffer(Context ctx, OnReadInvoiceCompletedListener listener, String invoice, Bip21Invoice fallbackOnChainInvoice) {
         if (!BackendManager.getCurrentBackend().supportsBolt12Sending()) {
             listener.onError(ctx.getString(R.string.error_feature_not_supported_by_backend, BackendManager.getCurrentBackend().getNodeImplementationName(), "BOLT12 sending"), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
             return;
@@ -224,35 +371,10 @@ public class InvoiceUtil {
             if (decodedBolt12.isExpired())
                 listener.onError(ctx.getString(R.string.error_bolt12_expired), RefConstants.ERROR_DURATION_SHORT, ERROR_INVOICE_EXPIRED);
             else
-                listener.onValidBolt12Offer(decodedBolt12);
+                listener.onValidBolt12Offer(decodedBolt12, fallbackOnChainInvoice);
         } catch (Exception e) {
             listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
         }
-    }
-
-    private static String appendParameter(String base, String name, String value) {
-        if (!base.contains("?"))
-            return base + "?" + name + "=" + value;
-        else
-            return base + "&" + name + "=" + value;
-    }
-
-    public static String generateBitcoinInvoice(@NonNull String address, @Nullable String amount, @Nullable String message, @Nullable String lightningInvoice) {
-        String bitcoinInvoice = UriUtil.generateBitcoinUri(address);
-
-        if (amount != null)
-            if (!(amount.isEmpty() || amount.equals("0")))
-                bitcoinInvoice = InvoiceUtil.appendParameter(bitcoinInvoice, "amount", amount);
-        if (message != null)
-            if (!message.isEmpty()) {
-                String escapedMessage = UrlEscapers.urlPathSegmentEscaper().escape(message);
-                bitcoinInvoice = appendParameter(bitcoinInvoice, "message", escapedMessage);
-            }
-        if (lightningInvoice != null)
-            if (!lightningInvoice.isEmpty())
-                bitcoinInvoice = appendParameter(bitcoinInvoice, "lightning", message);
-
-        return bitcoinInvoice;
     }
 
     private static boolean hasPrefix(@NonNull String prefix, @NonNull String data) {
@@ -318,11 +440,11 @@ public class InvoiceUtil {
     }
 
     public interface OnReadInvoiceCompletedListener {
-        void onValidLightningInvoice(DecodedBolt11 decodedBolt11);
+        void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice);
 
-        void onValidBolt12Offer(DecodedBolt12 decodedBolt12);
+        void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice);
 
-        void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice);
+        void onValidBitcoinInvoice(Bip21Invoice onChainInvoice);
 
         void onError(String error, int duration, int errorCode);
 

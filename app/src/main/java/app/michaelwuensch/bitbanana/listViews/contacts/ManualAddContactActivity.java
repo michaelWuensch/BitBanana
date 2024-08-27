@@ -141,7 +141,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
                 break;
             case LNADDRESS:
                 LnAddress lnAddress = new LnAddress(data);
-                if (lnAddress.isValid()) {
+                if (lnAddress.isValidLnurlAddress() || lnAddress.isValidBip353DnsRecordAddress()) {
                     addContact(Contact.ContactType.LNADDRESS, name, data);
                 } else {
                     showError(getResources().getString(R.string.error_invalid_ln_address_format), RefConstants.ERROR_DURATION_LONG);

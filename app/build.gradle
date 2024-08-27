@@ -168,6 +168,9 @@ dependencies {
     // Library to react to software keyboard visibility changes
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
 
+    // Library for reading dns records. This allows us to interact with email like addresses for BitcoinPayments.
+    implementation 'org.minidns:minidns-hla:1.0.5'
+
 
     // Basic Android libraries
     implementation 'androidx.appcompat:appcompat:1.6.1'

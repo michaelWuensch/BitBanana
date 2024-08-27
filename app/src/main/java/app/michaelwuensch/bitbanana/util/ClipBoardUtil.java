@@ -22,6 +22,7 @@ import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ClipBoardUtil {
@@ -93,17 +94,17 @@ public class ClipBoardUtil {
 
         BitcoinStringAnalyzer.analyze(context, compositeDisposable, clipboardContent, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
-            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+            public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
             @Override
-            public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+            public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
             @Override
-            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+            public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                 showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
@@ -130,11 +131,6 @@ public class ClipBoardUtil {
             @Override
             public void onValidLnUrlAuth(URL url) {
                 // never reached
-            }
-
-            @Override
-            public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
-                showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
             @Override

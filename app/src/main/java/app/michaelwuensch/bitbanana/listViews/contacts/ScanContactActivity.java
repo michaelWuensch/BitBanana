@@ -56,7 +56,7 @@ public class ScanContactActivity extends BaseScannerActivity {
 
         if (nodeUri == null) {
             LnAddress lnAddress = new LnAddress(rawData);
-            if (lnAddress.isValid()) {
+            if (lnAddress.isValidLnurlAddress() || lnAddress.isValidBip353DnsRecordAddress()) {
                 return finishWithLNAddress(lnAddress);
             } else {
                 try {

@@ -28,8 +28,7 @@
         "license": "CC-BY-3.0",
         "license_url": "https://creativecommons.org/licenses/by/3.0/"
       }
-    ],
-    "dependency": "robots"
+    ]
   },
   {
     "project": "Artwork: Aliens",
@@ -43,8 +42,7 @@
         "license": "CC-BY-3.0",
         "license_url": "https://creativecommons.org/licenses/by/3.0/"
       }
-    ],
-    "dependency": "aliens"
+    ]
   },
   {
     "project": "Artwork: Animals (Cats & Birds)",
@@ -58,8 +56,7 @@
         "license": "CC-BY-4.0",
         "license_url": "https://creativecommons.org/licenses/by/4.0/"
       }
-    ],
-    "dependency": "animals"
+    ]
   },
   {
     "project": "Artwork: Humans",
@@ -73,7 +70,6 @@
         "license": "Free for personal and commercial use",
         "license_url": "https://avataaars.com/"
       }
-    ],
-    "dependency": "humans"
+    ]
   }
 ]

@@ -47,11 +47,20 @@ public class LicenseListItem implements Comparable<LicenseListItem> {
         }
         LicenseListItem that = (LicenseListItem) obj;
 
-        return mDependency.getDependency().equals(that.getDependency().getDependency());
+        boolean equalName = mDependency.getProject().toLowerCase().equals(that.mDependency.getProject().toLowerCase());
+        boolean equalDependency = false;
+        if (mDependency.getDependency() == null || that.getDependency() == null) {
+            equalDependency = mDependency.getDependency() == null && that.getDependency() == null;
+            return equalName && equalDependency;
+        } else
+            return mDependency.getDependency().equals(that.getDependency().getDependency());
     }
 
     @Override
     public int hashCode() {
-        return mDependency.getDependency().hashCode();
+        if (mDependency.getDependency() != null)
+            return mDependency.getDependency().hashCode();
+        else
+            return mDependency.getProject().hashCode();
     }
 }

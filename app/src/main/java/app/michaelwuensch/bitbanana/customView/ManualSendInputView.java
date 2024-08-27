@@ -21,6 +21,7 @@ import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -75,17 +76,17 @@ public class ManualSendInputView extends ConstraintLayout {
                 }
                 BitcoinStringAnalyzer.analyze(getContext(), mCompositeDisposable, mData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
                     @Override
-                    public void onValidLightningInvoice(DecodedBolt11 decodedBolt11) {
+                    public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
                         mListener.onValid(mData);
                     }
 
                     @Override
-                    public void onValidBitcoinInvoice(String address, long amount, String message, String lightningInvoice) {
+                    public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
                         mListener.onValid(mData);
                     }
 
                     @Override
-                    public void onValidBolt12Offer(DecodedBolt12 decodedBolt12) {
+                    public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                         mListener.onValid(mData);
                     }
 
@@ -112,11 +113,6 @@ public class ManualSendInputView extends ConstraintLayout {
                     @Override
                     public void onValidLnUrlAuth(URL url) {
                         invalidInput();
-                    }
-
-                    @Override
-                    public void onValidInternetIdentifier(LnUrlPayResponse payResponse) {
-                        mListener.onValid(mData);
                     }
 
                     @Override

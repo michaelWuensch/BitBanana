@@ -110,6 +110,13 @@ public class UriUtil {
         }
     }
 
+    public static String appendParameter(String base, String name, String value) {
+        if (!base.contains("?"))
+            return base + "?" + name + "=" + value;
+        else
+            return base + "&" + name + "=" + value;
+    }
+
     private static boolean hasPrefix(String prefix, String data) {
         if (data == null)
             return false;
