@@ -114,6 +114,20 @@
         android:title="Development"
         app:iconSpaceReserved="false">
 
+        <EditTextPreference
+            android:dialogMessage="All hosts matching this string will be replaced with the string you set in 'Override Host Target'. This is very useful if for example the ip address of your regtest network host changed."
+            android:key="overrideHostSource"
+            android:title="Override Host Source"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:dialogMessage="All hosts matching the string from 'Override Host Source' will be replaced with this string. This is very useful if for example the ip address for your regtest network host changed."
+            android:key="overrideHostTarget"
+            android:title="Override Host Target"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             android:key="resetAll"
             android:title="Reset APP"

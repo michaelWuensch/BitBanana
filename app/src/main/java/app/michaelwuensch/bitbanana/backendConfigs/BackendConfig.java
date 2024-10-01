@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
 /**
@@ -171,6 +172,15 @@ public class BackendConfig implements Comparable<BackendConfig> {
         return host;
     }
 
+    /* This allows us to fake replace a host with another, which is useful when you have saved all your node connections with a local IP that changed later.
+     *  If no override is present, the original host will be returned
+     */
+    public String getHostWithOverride() {
+        String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
+        String target = PrefsUtil.getPrefs().getString("overrideHostTarget", "");
+        return host.replace(source, target);
+    }
+
     public void setHost(String host) {
         this.host = host;
     }
@@ -317,13 +327,13 @@ public class BackendConfig implements Comparable<BackendConfig> {
     }
 
     public boolean isHostAddressTor() {
-        if (getHost() != null)
-            return this.getHost().toLowerCase().contains(".onion");
+        if (getHostWithOverride() != null)
+            return this.getHostWithOverride().toLowerCase().contains(".onion");
         return false;
     }
 
     public boolean isTorHostAddress() {
-        return RemoteConnectUtil.isTorHostAddress(getHost());
+        return RemoteConnectUtil.isTorHostAddress(getHostWithOverride());
     }
 
     public BackendConfig getCopy() {

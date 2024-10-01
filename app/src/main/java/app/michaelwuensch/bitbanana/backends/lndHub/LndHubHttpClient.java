@@ -177,7 +177,7 @@ public class LndHubHttpClient {
 
             // Create the request to the authentication endpoint
             Request request = new Request.Builder()
-                    .url(BackendManager.getCurrentBackendConfig().getHost() + "auth?type=refresh_token")
+                    .url(BackendManager.getCurrentBackendConfig().getHostWithOverride() + "auth?type=refresh_token")
                     .post(body)
                     .build();
 
@@ -199,7 +199,7 @@ public class LndHubHttpClient {
 
             // Create the request to the authentication endpoint
             Request request = new Request.Builder()
-                    .url(BackendManager.getCurrentBackendConfig().getHost() + "auth?type=auth")
+                    .url(BackendManager.getCurrentBackendConfig().getHostWithOverride() + "auth?type=auth")
                     .post(body)
                     .build();
 

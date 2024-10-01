@@ -108,7 +108,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Host
             BBInfoLineView ilHost = findViewById(R.id.host);
-            ilHost.setData(getWalletConfig().getHost());
+            ilHost.setData(getWalletConfig().getHostWithOverride());
 
             // Port
             BBInfoLineView ilPort = findViewById(R.id.port);

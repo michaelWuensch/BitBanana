@@ -481,7 +481,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             if (error == Wallet.ConnectionTestListener.ERROR_AUTHENTICATION) {
                 mTvConnectError.setText(R.string.error_connection_invalid_macaroon2);
             } else if (error == Wallet.ConnectionTestListener.ERROR_TIMEOUT) {
-                mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, BackendManager.getCurrentBackendConfig().getHost()));
+                mTvConnectError.setText(getResources().getString(R.string.error_connection_server_unreachable, BackendManager.getCurrentBackendConfig().getHostWithOverride()));
             } else if (error == Wallet.ConnectionTestListener.ERROR_UNAVAILABLE) {
                 mTvConnectError.setText(getResources().getString(R.string.error_connection_lnd_unavailable, String.valueOf(BackendManager.getCurrentBackendConfig().getPort())));
             } else if (error == Wallet.ConnectionTestListener.ERROR_TOR) {
@@ -492,7 +492,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 else
                     mTvConnectError.setText(R.string.error_connection_host_verification_failed);
             } else if (error == Wallet.ConnectionTestListener.ERROR_HOST_UNRESOLVABLE) {
-                mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, BackendManager.getCurrentBackendConfig().getHost()));
+                mTvConnectError.setText(getString(R.string.error_connection_host_unresolvable, BackendManager.getCurrentBackendConfig().getHostWithOverride()));
             } else if (error == Wallet.ConnectionTestListener.ERROR_NETWORK_UNREACHABLE) {
                 mTvConnectError.setText(R.string.error_connection_network_unreachable);
             } else if (error == Wallet.ConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED) {

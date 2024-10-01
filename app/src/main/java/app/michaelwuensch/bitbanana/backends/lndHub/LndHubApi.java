@@ -51,7 +51,7 @@ public class LndHubApi extends Api {
     }
 
     private String getBaseUrl() {
-        return BackendManager.getCurrentBackendConfig().getHost();
+        return BackendManager.getCurrentBackendConfig().getHostWithOverride();
     }
 
     @Override

@@ -46,7 +46,7 @@ public class CoreLightningConnection {
 
 
     private void generateChannelAndStubs() {
-        String host = BackendManager.getCurrentBackendConfig().getHost();
+        String host = BackendManager.getCurrentBackendConfig().getHostWithOverride();
         int port = BackendManager.getCurrentBackendConfig().getPort();
 
         HostnameVerifier hostnameVerifier = null;
