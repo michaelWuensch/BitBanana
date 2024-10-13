@@ -237,8 +237,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key != null) {
             // Update if primary currency has been switched from this or another activity
-            if (key.equals("firstCurrencyIsPrimary")) {
+            if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
                 updateTotalBalanceDisplay();
+            } else if (key.contains("Currency")) {
+                mMainBalanceView.updateBalancesDelayed(500);
             }
             if (key.equals(PrefsUtil.BALANCE_HIDE_TYPE)) {
                 if (PrefsUtil.getPrefs().getString(PrefsUtil.BALANCE_HIDE_TYPE, "off").equals("off")) {

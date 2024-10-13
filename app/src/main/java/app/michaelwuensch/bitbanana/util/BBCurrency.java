@@ -3,6 +3,8 @@ package app.michaelwuensch.bitbanana.util;
 import android.icu.util.Currency;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;

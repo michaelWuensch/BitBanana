@@ -93,54 +93,66 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/BalanceSecondaryLayout"
+            <FrameLayout
+                android:id="@+id/secondaryBalanceVisibility"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/BalancePrimaryLayout">
 
-                <TextView
-                    android:id="@+id/BalanceSecondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    app:layout_constraintTop_toBottomOf="@id/BalancePrimary"
-                    tools:text="Secondary" />
+                <LinearLayout
+                    android:id="@+id/BalanceSecondaryLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                    android:id="@+id/BalanceSecondaryUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    tools:text="sat" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/BalanceSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="15sp"
+                        app:layout_constraintTop_toBottomOf="@id/BalancePrimary"
+                        tools:text="Secondary" />
+
+                    <app.michaelwuensch.bitbanana.customView.NonClippingTextView
+                        android:id="@+id/BalanceSecondaryUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/gray"
+                        android:textSize="15sp"
+                        android:textStyle="italic"
+                        tools:text="sat" />
+                </LinearLayout>
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:id="@+id/switchButtonImage"
+        <FrameLayout
+            android:id="@+id/switchButtonVisibility"
             android:layout_width="28dp"
             android:layout_height="50dp"
             android:layout_marginTop="4dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/ic_swap_vert_black_24dp"
             app:layout_constraintBottom_toBottomOf="@+id/BalanceLayout"
             app:layout_constraintStart_toEndOf="@+id/BalanceLayout"
             app:layout_constraintTop_toTopOf="@+id/BalanceLayout"
-            app:layout_constraintVertical_bias="0.6"
-            app:tint="@color/banana_yellow" />
+            app:layout_constraintVertical_bias="0.6">
+
+            <ImageView
+                android:id="@+id/switchButtonImage"
+                android:layout_width="28dp"
+                android:layout_height="50dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_swap_vert_black_24dp"
+                app:tint="@color/banana_yellow" />
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

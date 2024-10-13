@@ -58,39 +58,35 @@ public class FeeEstimationUtil {
 
     public void getFeeEstimates() {
 
-        if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
-                !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
+        String provider = PrefsUtil.getFeeEstimationProvider();
 
-            String provider = PrefsUtil.getFeeEstimationProvider();
-
-            switch (provider) {
-                case INTERNAL:
-                    if (BackendManager.getCurrentBackend().supportsOnChainFeeEstimation())
-                        sendInternalRequest();
-                    else
-                        sendMempoolRequest(MEMPOOL_HOST);
-                    break;
-                case BLOCKSTREAM:
-                    sendBlockstreamRequest(BLOCKSTREAM_HOST);
-                    break;
-                case BLOCKSTREAM_TOR:
-                    sendBlockstreamRequest(BLOCKSTREAM_TOR_HOST);
-                    break;
-                case MEMPOOL:
+        switch (provider) {
+            case INTERNAL:
+                if (BackendManager.getCurrentBackend().supportsOnChainFeeEstimation())
+                    sendInternalRequest();
+                else
                     sendMempoolRequest(MEMPOOL_HOST);
-                    break;
-                case MEMPOOL_TOR:
-                    sendMempoolRequest(MEMPOOL_TOR_HOST);
-                    break;
-                case "Custom":
-                    sendMempoolRequest(PrefsUtil.getCustomFeeEstimationProviderHost());
-                    break;
-                default:
-                    sendMempoolRequest(MEMPOOL_HOST);
-            }
-
-            BBLog.v(LOG_TAG, "Fee estimation request initiated");
+                break;
+            case BLOCKSTREAM:
+                sendBlockstreamRequest(BLOCKSTREAM_HOST);
+                break;
+            case BLOCKSTREAM_TOR:
+                sendBlockstreamRequest(BLOCKSTREAM_TOR_HOST);
+                break;
+            case MEMPOOL:
+                sendMempoolRequest(MEMPOOL_HOST);
+                break;
+            case MEMPOOL_TOR:
+                sendMempoolRequest(MEMPOOL_TOR_HOST);
+                break;
+            case "Custom":
+                sendMempoolRequest(PrefsUtil.getCustomFeeEstimationProviderHost());
+                break;
+            default:
+                sendMempoolRequest(MEMPOOL_HOST);
         }
+
+        BBLog.v(LOG_TAG, "Fee estimation request initiated");
     }
 
     /**

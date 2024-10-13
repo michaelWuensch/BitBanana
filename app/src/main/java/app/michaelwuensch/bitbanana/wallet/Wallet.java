@@ -108,6 +108,12 @@ public class Wallet {
 
     private void authLndHub() {
         setWalletLoadState(WalletLoadState.TESTING_CONNECTION_BEFORE_UNLOCK);
+
+        if (!BackendManager.getCurrentBackendConfig().getHostWithOverride().contains("http")) {
+            // This if statement prevents a crash that could deadlock the application if something in the host address missed the protocol
+            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_HOST_UNRESOLVABLE);
+            return;
+        }
         // The info request works without authentication. Therefore we need another call and use balances.
         // Without doing this here we would end up with a multicall, that tries to authenticate multiple times.
         compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()

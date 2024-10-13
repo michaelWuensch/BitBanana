@@ -166,7 +166,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mEtAmount.setShowSoftInputOnFocus(false);
 
         // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
 
         // Handle comment field
         if (mPaymentData.isCommentAllowed()) {
@@ -225,13 +225,13 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     // make text red if input is too large or too small
                     if (mSendAmount > mMaxSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMaxSendable, true);
+                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMaxSendable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
                     } else if (mSendAmount < mMinSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mMinSendable, true);
+                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMinSendable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
                         mBtnSend.setEnabled(false);
                         mBtnSend.setTextColor(getResources().getColor(R.color.gray));
@@ -268,9 +268,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), true);
+                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), true);
                 if (mAmountValid) {
-                    mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
+                    mSendAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -298,7 +298,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
             // A specific amount was requested. We are not allowed to change the amount.
             mFixedAmount = mPaymentData.getMaxSendable();
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, true));
             mEtAmount.clearFocus();
             mEtAmount.setFocusable(false);
             mEtAmount.setEnabled(false);
@@ -307,7 +307,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             mNumpad.setVisibility(View.VISIBLE);
             mSendAmount = mMinSendable;
             mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mMinSendable, true));
+            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mMinSendable, true));
             mBlockOnInputChanged = false;
 
             mHandler.postDelayed(() -> {
@@ -385,23 +385,27 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         });
 
 
-        // Action when clicked on receive unit
-        LinearLayout llUnit = view.findViewById(R.id.unitLayout);
-        llUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBlockOnInputChanged = true;
-                MonetaryUtil.getInstance().switchCurrencies();
-                if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmount, true));
-                } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, true));
+        // Action when clicked on unit
+        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
+            LinearLayout llUnit = view.findViewById(R.id.unitLayout);
+            llUnit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBlockOnInputChanged = true;
+                    MonetaryUtil.getInstance().switchToNextCurrency();
+                    if (mFixedAmount == 0L) {
+                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mSendAmount, true));
+                    } else {
+                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, true));
+                    }
+                    mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+                    mEtAmount.setSelection(mEtAmount.getText().length());
+                    mBlockOnInputChanged = false;
                 }
-                mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mEtAmount.setSelection(mEtAmount.getText().length());
-                mBlockOnInputChanged = false;
-            }
-        });
+            });
+        } else {
+            view.findViewById(R.id.switchUnitImage).setVisibility(View.GONE);
+        }
 
         if (mMinSendable > mMaxSendable) {
             // There is no way the payment can be routed... show an error immediately
@@ -513,7 +517,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
     private void executeSuccessAction(LnUrlPaySuccessAction successAction, SendLnPaymentResponse sendLnPaymentResponse) {
 
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(mFinalChosenAmount, true));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mFinalChosenAmount, true));
 
         if (successAction == null) {
             BBLog.d(LOG_TAG, "No Success action.");

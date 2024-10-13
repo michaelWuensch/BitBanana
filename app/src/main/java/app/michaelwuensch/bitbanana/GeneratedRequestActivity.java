@@ -259,7 +259,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
 
     private void showPaidScreen(long amount) {
         // It was paid, show success screen
-        mFinishedAmount.setText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(amount, true));
+        mFinishedAmount.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(amount, true));
         mClPaymentReceivedView.setVisibility(View.VISIBLE);
         mClRequestView.setVisibility(View.GONE);
         mVibrator.vibrate(RefConstants.VIBRATE_LONG);

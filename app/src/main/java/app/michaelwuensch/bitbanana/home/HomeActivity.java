@@ -247,7 +247,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             mExchangeRateScheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            ExchangeRateUtil.getInstance().getExchangeRates();
+                            ExchangeRateUtil.getInstance().getExchangeRates(false);
                         }
                     }, 10, RefConstants.EXCHANGE_RATE_PERIOD, RefConstants.EXCHANGE_RATE_PERIOD_UNIT);
         }

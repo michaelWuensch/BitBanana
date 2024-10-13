@@ -48,6 +48,8 @@ public class MainBalanceView extends MotionLayout {
     private AmountView mAvLightningPending;
     private View mBalanceDetails;
     private View mVHandleFadeout;
+    private View mVSecondaryBalanceVisibility;
+    private View mVSwitchButtonVisibility;
 
     private boolean mIsExpanded;
     private boolean mIsTransitioning;
@@ -89,6 +91,8 @@ public class MainBalanceView extends MotionLayout {
         mAvLightningPending = view.findViewById(R.id.lightningPending);
         mBalanceDetails = view.findViewById(R.id.balanceDetails);
         mVHandleFadeout = view.findViewById(R.id.handleFadeOut);
+        mVSecondaryBalanceVisibility = view.findViewById(R.id.secondaryBalanceVisibility);
+        mVSwitchButtonVisibility = view.findViewById(R.id.switchButtonVisibility);
 
         updateBalanceDetailsVisibility();
 
@@ -192,7 +196,7 @@ public class MainBalanceView extends MotionLayout {
                 if (hideMainBalance() && !mIsExpanded) {
                     restartFadeOut();
                 } else {
-                    MonetaryUtil.getInstance().switchCurrencies();
+                    MonetaryUtil.getInstance().switchToNextCurrency();
                 }
             }
         });
@@ -201,7 +205,7 @@ public class MainBalanceView extends MotionLayout {
         mIvSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MonetaryUtil.getInstance().switchCurrencies();
+                MonetaryUtil.getInstance().switchToNextCurrency();
 
                 // also cancel fade out if hideTotalBalance option is active
                 if (hideMainBalance() && !mIsExpanded) {
@@ -212,7 +216,14 @@ public class MainBalanceView extends MotionLayout {
     }
 
     public void updateBalances() {
+        updateBalancesInternal(0);
+    }
 
+    public void updateBalancesDelayed(int delayInMilliSeconds) {
+        updateBalancesInternal(delayInMilliSeconds);
+    }
+
+    private void updateBalancesInternal(int delayInMilliSeconds) {
         // Finish transition before updating the balances. If done while transitioning, layout gets unrecoverably broken.
         if (mIsTransitioning) {
             if (mIsExpanded)
@@ -222,14 +233,14 @@ public class MainBalanceView extends MotionLayout {
         }
 
         Handler threadHandler = new Handler(Looper.getMainLooper());
-        threadHandler.post(new Runnable() {
+        threadHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 updateBalanceDetailsVisibility();
 
                 // Adapt unit text size depending on its length
-                if (MonetaryUtil.getInstance().getPrimaryDisplayUnit().length() > 2) {
+                if (MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit().length() > 2) {
                     mTvPrimaryBalanceUnit.setTextSize(20);
                 } else {
                     mTvPrimaryBalanceUnit.setTextSize(32);
@@ -242,10 +253,18 @@ public class MainBalanceView extends MotionLayout {
                     balances = Wallet_Balance.getInstance().getDemoBalances();
                 }
 
-                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(balances.total(), false));
-                mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getSecondaryDisplayAmountStringFromMSats(balances.total(), false));
-                mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getSecondaryDisplayUnit());
+                mTvPrimaryBalance.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(balances.total(), false));
+                mTvPrimaryBalanceUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+
+                if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
+                    mVSwitchButtonVisibility.setVisibility(VISIBLE);
+                    mVSecondaryBalanceVisibility.setVisibility(VISIBLE);
+                    mTvSecondaryBalance.setText(MonetaryUtil.getInstance().getNextCurrencyDisplayAmountStringFromMSats(balances.total(), false));
+                    mTvSecondaryBalanceUnit.setText(MonetaryUtil.getInstance().getNextCurrencyDisplayUnit());
+                } else {
+                    mVSwitchButtonVisibility.setVisibility(GONE);
+                    mVSecondaryBalanceVisibility.setVisibility(GONE);
+                }
 
                 // Balance details
                 mAvOnChain.setAmountMsat(balances.onChainConfirmed());
@@ -255,7 +274,7 @@ public class MainBalanceView extends MotionLayout {
 
                 BBLog.v(LOG_TAG, "Total balance display updated");
             }
-        });
+        }, delayInMilliSeconds);
     }
 
     public void updateNetworkInfo() {

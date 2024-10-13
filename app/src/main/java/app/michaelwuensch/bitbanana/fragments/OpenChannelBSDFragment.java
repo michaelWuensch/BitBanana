@@ -64,6 +64,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     private LightningNodeUri mLightningNodeUri;
     private OnChainFeeView mOnChainFeeView;
     private CheckBox mPrivateCheckbox;
+    private View mVSwitchImage;
     private long mValueChannelCapacity;
     private boolean mBlockOnInputChanged;
     private long mOnChainUnconfirmed;
@@ -87,6 +88,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mOpenChannelButton = view.findViewById(R.id.openChannelButton);
         mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
         mPrivateCheckbox = view.findViewById(R.id.privateCheckBox);
+        mVSwitchImage = view.findViewById(R.id.localAmountSwitchUnitImage);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
@@ -138,11 +140,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), false);
+                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), false);
 
                 // calculate fees
                 if (mAmountValid) {
-                    mValueChannelCapacity = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(mEtAmount.getText().toString());
+                    mValueChannelCapacity = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(mEtAmount.getText().toString());
                     calculateTransactionSize();
                 } else {
                     setFeeFailure();
@@ -151,15 +153,20 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         });
 
         // Action when clicked on receive unit
-        LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
-        llUnit.setOnClickListener(v -> {
-            mBlockOnInputChanged = true;
-            MonetaryUtil.getInstance().switchCurrencies();
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mValueChannelCapacity, false));
-            mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-            setAvailableFunds();
-            mBlockOnInputChanged = false;
-        });
+        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
+            mVSwitchImage.setVisibility(View.VISIBLE);
+            LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
+            llUnit.setOnClickListener(v -> {
+                mBlockOnInputChanged = true;
+                MonetaryUtil.getInstance().switchToNextCurrency();
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mValueChannelCapacity, false));
+                mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+                setAvailableFunds();
+                mBlockOnInputChanged = false;
+            });
+        } else {
+            mVSwitchImage.setVisibility(View.GONE);
+        }
 
         mNumpad.setVisibility(View.VISIBLE);
 
@@ -187,7 +194,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
 
                     if (mValueChannelCapacity < minSendAmount) {
                         // amount is to small
-                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(minSendAmount, false);
+                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(minSendAmount, false);
                         showError(message, Snackbar.LENGTH_LONG);
                         return;
                     }
@@ -195,7 +202,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                     if (mValueChannelCapacity > maxSendAmount) {
                         // amount is to big
                         if (mValueChannelCapacity > absoluteMaxSendAmount) {
-                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(absoluteMaxSendAmount, false);
+                            String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(absoluteMaxSendAmount, false);
                             showError(message, Snackbar.LENGTH_LONG);
                             return;
                         } else {
@@ -204,7 +211,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                                 showError(message, 10000);
                                 return;
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(onChainAvailable + onChainUnconfirmed, false);
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(onChainAvailable + onChainUnconfirmed, false);
                                 showError(message, Snackbar.LENGTH_LONG);
                                 return;
                             }
@@ -245,7 +252,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mEtAmount.setShowSoftInputOnFocus(false);
 
         // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
 
         return view;
     }

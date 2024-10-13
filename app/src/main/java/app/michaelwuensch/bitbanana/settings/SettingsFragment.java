@@ -14,18 +14,11 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.R;
@@ -34,9 +27,7 @@ import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
 import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.util.AppUtil;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
-import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
@@ -47,6 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreference mSwTor;
     private ListPreference mListCurrency;
+    private Preference mCurrencyPref;
     private Preference mPinPref;
     private ListPreference mListLanguage;
 
@@ -68,43 +60,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Update our current selected first currency in the MonetaryUtil
-        final ListPreference listBtcUnit = findPreference("firstCurrency");
-        listBtcUnit.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MonetaryUtil.getInstance().loadFirstCurrency(String.valueOf(newValue));
-                // Calling switch currency twice will update all currency labels across the app
-                // while keeping the same currency as primary
-                MonetaryUtil.getInstance().switchCurrencies();
-                MonetaryUtil.getInstance().switchCurrencies();
-                return true;
-            }
-        });
-
-
-        // Action when clicked on "currency".
-        // The list has to be generated on the fly based on the exchange rate data
-        // we received from our provider. Therefore when the provider adds new currencies,
-        // they will automatically show up in BitBanana.
-        mListCurrency = findPreference("secondCurrency");
-        mListCurrency.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        // Action when clicked on "Features"
+        mCurrencyPref = findPreference("goToCurrencySettings");
+        mCurrencyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                createSecondCurrencyList();
-                return true;
-            }
-        });
-
-        // Update our current selected second currency in the MonetaryUtil
-        mListCurrency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(String.valueOf(newValue));
-                // Calling switch currency twice will update all currency labels across the app
-                // while keeping the same currency as primary
-                MonetaryUtil.getInstance().switchCurrencies();
-                MonetaryUtil.getInstance().switchCurrencies();
+                Intent intent = new Intent(getActivity(), SettingsCurrenciesActivity.class);
+                startActivity(intent);
                 return true;
             }
         });
@@ -256,67 +218,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-
-    private CharSequence[] joinCharSequenceArrays(CharSequence[] first, CharSequence[] second) {
-        if (first == null && second == null) {
-            return null;
-        } else if (first == null) {
-            return second;
-        } else if (second == null) {
-            // No exchange rate has been fetched so far. This could happen if the app was started for the first time
-            // without internet. Or if the user blocks connection to the exchange rate provider for example.
-            return first;
-        } else {
-            List<CharSequence> both = new ArrayList<CharSequence>(first.length + second.length);
-            Collections.addAll(both, first);
-            Collections.addAll(both, second);
-            return both.toArray(new CharSequence[both.size()]);
-        }
-    }
-
-    private void createSecondCurrencyList() {
-
-        CharSequence[] btcEntryValues = getActivity().getResources().getStringArray(R.array.btcCurrencyCodes);
-        CharSequence[] btcEntriesDisplayValue = getActivity().getResources().getStringArray(R.array.btcUnitDisplayValues);
-        CharSequence[] fiatEntryValues = null;
-        CharSequence[] fiatEntryDisplayValue = null;
-
-        try {
-            JSONObject jsonAvailableCurrencies = new JSONObject(PrefsUtil.getPrefs().getString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, PrefsUtil.DEFAULT_FIAT_CURRENCIES));
-
-            JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
-            fiatEntryValues = new CharSequence[currencies.length()];
-            fiatEntryDisplayValue = new CharSequence[currencies.length()];
-            for (int i = 0, count = currencies.length(); i < count; i++) {
-                try {
-                    fiatEntryValues[i] = currencies.getString(i);
-
-                    String currencyName = MonetaryUtil.getInstance().getCurrencyNameFromCurrencyCode(currencies.getString(i));
-                    if (currencyName == null) {
-                        currencyName = currencies.getString(i);
-                    } else {
-                        currencyName = "(" + currencies.getString(i) + ") " + currencyName;
-                    }
-                    fiatEntryDisplayValue[i] = currencyName;
-                } catch (JSONException e) {
-                    BBLog.d(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
-                }
-            }
-
-        } catch (JSONException e) {
-            BBLog.d(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
-        }
-
-        // Combine btc list with fiat list
-        CharSequence[] entryValues = joinCharSequenceArrays(btcEntryValues, fiatEntryValues);
-        CharSequence[] entryDisplayValues = joinCharSequenceArrays(btcEntriesDisplayValue, fiatEntryDisplayValue);
-
-        // Use the arrays for the list preference
-        mListCurrency.setEntryValues(entryValues);
-        mListCurrency.setEntries(entryDisplayValues);
-
-    }
-
     private void createLanguagesList() {
         // This is necessary as we want to have "system language translatable, while the languages themselves will not be translatable
         CharSequence[] languageDisplayValues = getActivity().getResources().getStringArray(R.array.languageDisplayValues);
@@ -327,10 +228,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        mListCurrency.setValue(PrefsUtil.getSecondCurrencyCode());
-        mListCurrency.setSummary("%s");
-        createSecondCurrencyList();
         pinOptionText();
+        currencyPrefSummary();
     }
 
     private void pinOptionText() {
@@ -340,5 +239,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             mPinPref.setTitle(R.string.settings_addPin);
         }
+    }
+
+    private void currencyPrefSummary() {
+        String summary = CurrencyCodeToDisplayString(PrefsUtil.getFirstCurrencyCode());
+        if (!PrefsUtil.getSecondCurrencyCode().equals("none"))
+            summary = summary + ", " + CurrencyCodeToDisplayString(PrefsUtil.getSecondCurrencyCode());
+        if (!PrefsUtil.getThirdCurrencyCode().equals("none"))
+            summary = summary + ", " + CurrencyCodeToDisplayString(PrefsUtil.getThirdCurrencyCode());
+        if (!PrefsUtil.getForthCurrencyCode().equals("none"))
+            summary = summary + ", " + CurrencyCodeToDisplayString(PrefsUtil.getForthCurrencyCode());
+        if (!PrefsUtil.getFifthCurrencyCode().equals("none"))
+            summary = summary + ", " + CurrencyCodeToDisplayString(PrefsUtil.getFifthCurrencyCode());
+        mCurrencyPref.setSummary(summary);
+    }
+
+    private String CurrencyCodeToDisplayString(String code) {
+        return code.replace("ccBTC", "BTC").replace("ccMBTC", "mBTC").replace("ccBIT", "bit").replace("ccSAT", "sat");
     }
 }

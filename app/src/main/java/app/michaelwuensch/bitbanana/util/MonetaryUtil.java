@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -16,8 +18,8 @@ public class MonetaryUtil {
     private static final String LOG_TAG = MonetaryUtil.class.getSimpleName();
 
     private static MonetaryUtil mInstance;
-    private BBCurrency mFirstCurrency;
-    private BBCurrency mSecondCurrency;
+    private static int mCurrencyIndex;
+    private List<BBCurrency> mCurrencies;
 
     public static MonetaryUtil getInstance() {
         if (mInstance == null) {
@@ -28,136 +30,193 @@ public class MonetaryUtil {
     }
 
     private MonetaryUtil() {
+        mCurrencies = new ArrayList<>();
+        reloadAllCurrencies();
+    }
 
-        loadFirstCurrency(PrefsUtil.getFirstCurrencyCode());
+    private int getCurrencyIndex() {
+        return PrefsUtil.getPrefs().getInt(PrefsUtil.CURRENT_CURRENCY_INDEX, 0);
+    }
 
-        String SecondCurrencyCode = PrefsUtil.getSecondCurrencyCode();
-        switch (SecondCurrencyCode) {
-            case BBCurrency.CURRENCY_CODE_BTC:
-            case BBCurrency.CURRENCY_CODE_MBTC:
-            case BBCurrency.CURRENCY_CODE_BIT:
-            case BBCurrency.CURRENCY_CODE_SATOSHI:
-                setSecondCurrency(SecondCurrencyCode);
-                break;
-            default:
-                // Here we go if the user has selected a fiat currency as second currency.
-                if (PrefsUtil.getPrefs().getString("fiat_" + PrefsUtil.getSecondCurrencyCode(), "").isEmpty()) {
-                    mSecondCurrency = new BBCurrency(PrefsUtil.getSecondCurrencyCode(), 0, 0);
-                } else {
-                    loadSecondCurrencyFromPrefs(PrefsUtil.getSecondCurrencyCode());
-                }
+    private int nextCurrencyIndex() {
+        int currentIndex = getCurrencyIndex();
+        if (currentIndex + 1 >= mCurrencies.size())
+            return 0;
+        return currentIndex + 1;
+    }
+
+    private BBCurrency getCurrentCurrency() {
+        try {
+            return mCurrencies.get(getCurrencyIndex());
+        } catch (IndexOutOfBoundsException e) {
+            setCurrentCurrencyIndex(0);
+            return mCurrencies.get(0);
         }
     }
 
-    /**
-     * Creates a Currency object depending on the provided currencyCode (ccBTC, ccMBTC, ...) and sets it as the first currency of the MonetaryUtil.
-     * This is only to be used with bitcoin currency codes. If an invalid value is supplied it will fallback to Satoshi
-     *
-     * @param currencyCode
-     */
-    public void loadFirstCurrency(String currencyCode) {
-        if (currencyCode.equals(BBCurrency.CURRENCY_CODE_BTC) || currencyCode.equals(BBCurrency.CURRENCY_CODE_MBTC) || currencyCode.equals(BBCurrency.CURRENCY_CODE_BIT))
-            setFirstCurrency(currencyCode);
-        else
-            setFirstCurrency(BBCurrency.CURRENCY_CODE_SATOSHI);
+    private BBCurrency getNextCurrency() {
+        return mCurrencies.get(nextCurrencyIndex());
     }
 
+    private void setCurrentCurrencyIndex(int i) {
+        PrefsUtil.editPrefs().putInt(PrefsUtil.CURRENT_CURRENCY_INDEX, 0).commit();
+    }
+
+    public void reloadAllCurrencies() {
+        // Clear old
+        mCurrencies = new ArrayList<>();
+
+        addCurrency(PrefsUtil.getFirstCurrencyCode(), false, 0);
+        addCurrency(PrefsUtil.getSecondCurrencyCode(), false, 0);
+        addCurrency(PrefsUtil.getThirdCurrencyCode(), false, 0);
+        addCurrency(PrefsUtil.getForthCurrencyCode(), false, 0);
+        addCurrency(PrefsUtil.getFifthCurrencyCode(), false, 0);
+
+        if (getCurrencyIndex() >= mCurrencies.size())
+            setCurrentCurrencyIndex(0);
+    }
+
+    public void updateCurrencyByCurrencyCode(String code) {
+        for (int i = 0; i < mCurrencies.size(); i++) {
+            if (mCurrencies.get(i).getCode().equals(code)) {
+                addCurrency(code, true, i);
+                break;
+            }
+        }
+    }
+
+    public void updateCurrencyUIs() {
+        // Calling switch currency twice will update all currency labels across the app
+        // while keeping the same currency as current currency
+        int temp = getCurrencyIndex();
+        setCurrentCurrencyIndex(nextCurrencyIndex());
+        setCurrentCurrencyIndex(temp);
+    }
 
     /**
-     * Creates a Currency object depending on the provided currencyCode (USD, EUR, ccBTC, ccMBTC, ...) and sets it as the second currency of the MonetaryUtil.
+     * Creates a Currency object depending on the provided currencyCode (USD, EUR, ccBTC, ccMBTC, ...) and adds it to our list of available currency of the MonetaryUtil.
      * Fiat and Bitcoin currency codes are allowed here.
      * By loading it, we have access to it without parsing the JSON string over and over.
      *
      * @param currencyCode (USD, EUR, etc.)
      */
-    public void loadSecondCurrencyFromPrefs(String currencyCode) {
+    private void addCurrency(String currencyCode, boolean update, int updatePos) {
+        // Abort if it is no currency
+        if (currencyCode.equals("none"))
+            return;
+        // Abort if we already have that currency
+        for (BBCurrency currency : mCurrencies)
+            if (currency.getCode().equals(currencyCode))
+                return;
+
         switch (currencyCode) {
             case BBCurrency.CURRENCY_CODE_BTC:
             case BBCurrency.CURRENCY_CODE_MBTC:
             case BBCurrency.CURRENCY_CODE_BIT:
             case BBCurrency.CURRENCY_CODE_SATOSHI:
-                setSecondCurrency(currencyCode);
+                mCurrencies.add(new BBCurrency(currencyCode));
                 break;
             default:
                 try {
                     JSONObject selectedCurrency = new JSONObject(PrefsUtil.getPrefs().getString("fiat_" + currencyCode, "{}"));
-                    BBCurrency BBCurrency;
+                    BBCurrency bbCurrency;
                     if (selectedCurrency.has("symbol")) {
-                        BBCurrency = new BBCurrency(currencyCode,
+                        bbCurrency = new BBCurrency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"),
                                 selectedCurrency.getString("symbol"));
                     } else {
-                        BBCurrency = new BBCurrency(currencyCode,
+                        bbCurrency = new BBCurrency(currencyCode,
                                 selectedCurrency.getDouble("rate"),
                                 selectedCurrency.getLong("timestamp"));
                     }
 
-                    mSecondCurrency = BBCurrency;
+                    if (update)
+                        mCurrencies.set(updatePos, bbCurrency);
+                    else
+                        mCurrencies.add(bbCurrency);
                 } catch (JSONException e) {
                     // App was probably never started before. If we can't find the fiat in the prefs,
                     // create a placeholder currency.
-                    mSecondCurrency = new BBCurrency("USD", 0, 0);
+                    if (!update)
+                        mCurrencies.add(new BBCurrency("USD", 0, 0));
                 }
         }
     }
 
-    public BBCurrency getFirstCurrency() {
-        return mFirstCurrency;
+    public boolean isCurrentCurrencyBitcoin() {
+        return getCurrentCurrency().isBitcoin();
     }
 
-    public BBCurrency getSecondCurrency() {
-        return mSecondCurrency;
+    public boolean isCurrentCurrencyFiat() {
+        return !getCurrentCurrency().isBitcoin();
+    }
+
+    public boolean hasMoreThanOneCurrency() {
+        return mCurrencies.size() > 1;
     }
 
     /**
-     * Get the amount and display unit of the primary currency as properly formatted string.
+     * Returns if the user has selected to display at least one fiat currency in his currency settings.
+     */
+    public boolean displaysAtLeastOneFiatCurrency() {
+        boolean fiat = false;
+        for (BBCurrency currency : mCurrencies)
+            if (!currency.isBitcoin()) {
+                fiat = true;
+                break;
+            }
+        return fiat;
+    }
+
+    /**
+     * Get the amount and display unit of the current currency as properly formatted string.
      *
      * @param msats in milli Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayStringFromMSats(long msats, boolean msatPrecision) {
-        return getPrimaryDisplayAmountStringFromMSats(msats, msatPrecision) + " " + getPrimaryDisplayUnit();
+    public String getCurrentCurrencyDisplayStringFromMSats(long msats, boolean msatPrecision) {
+        return getCurrentCurrencyDisplayAmountStringFromMSats(msats, msatPrecision) + " " + getCurrentCurrencyDisplayUnit();
     }
 
     /**
-     * Get the msat amount displayed as a properly formatted string in the primary currency.
+     * Get the msat amount displayed as a properly formatted string in the current currency.
      *
      * @param msats milli Satoshis
      * @return formatted string
      */
-    public String getPrimaryDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
-        return getPrimaryCurrency().formatValueAsDisplayString(msats, msatPrecision);
+    public String getCurrentCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+        return getCurrentCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
 
     /**
-     * Get the display unit of the primary currency as properly formatted string.
+     * Get the display unit of the current currency as properly formatted string.
      *
      * @return formatted string
      */
-    public String getPrimaryDisplayUnit() {
-        return getPrimaryCurrency().getSymbol();
+    public String getCurrentCurrencyDisplayUnit() {
+        return getCurrentCurrency().getSymbol();
     }
 
     /**
-     * Get the amount of the secondary currency as properly formatted string.
+     * Get the amount of the next currency as properly formatted string.
      *
      * @param msats
      * @return formatted string
      */
-    public String getSecondaryDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
-        return getSecondaryCurrency().formatValueAsDisplayString(msats, msatPrecision);
+    public String getNextCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+        return getNextCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
 
     /**
-     * Get the display unit of the secondary currency as properly formatted string.
+     * Get the display unit of the next currency as properly formatted string.
      *
      * @return formatted string
      */
-    public String getSecondaryDisplayUnit() {
-        return getSecondaryCurrency().getSymbol();
+    public String getNextCurrencyDisplayUnit() {
+        return getNextCurrency().getSymbol();
     }
 
 
@@ -166,60 +225,32 @@ public class MonetaryUtil {
      *
      * @return Age in seconds.
      */
-    public long getExchangeRateAge() {
-        return (System.currentTimeMillis() / 1000) - mSecondCurrency.getTimestamp();
+    public long getCurrentCurrencyExchangeRateAge() {
+        if (getCurrentCurrency().isBitcoin())
+            return 0;
+        return (System.currentTimeMillis() / 1000) - getCurrentCurrency().getTimestamp();
     }
 
     /**
-     * Switch which of the currencies (first or second one) is used as primary currency.
+     * Use the next currency as the current currency.
      */
-    public void switchCurrencies() {
-        if (PrefsUtil.isFirstCurrencyPrimary()) {
-            PrefsUtil.editPrefs().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, false).apply();
-        } else {
-            PrefsUtil.editPrefs().putBoolean(PrefsUtil.FIRST_CURRENCY_IS_PRIMARY, true).apply();
-        }
+    public void switchToNextCurrency() {
+        PrefsUtil.editPrefs().putInt(PrefsUtil.CURRENT_CURRENCY_INDEX, nextCurrencyIndex()).apply();
     }
 
-    /**
-     * Get primary currency object
-     *
-     * @return
-     */
-    public BBCurrency getPrimaryCurrency() {
-        if (PrefsUtil.isFirstCurrencyPrimary()) {
-            return mFirstCurrency;
-        } else {
-            return mSecondCurrency;
-        }
-    }
-
-
-    /**
-     * Get secondary currency object
-     *
-     * @return
-     */
-    public BBCurrency getSecondaryCurrency() {
-        if (PrefsUtil.isFirstCurrencyPrimary()) {
-            return mSecondCurrency;
-        } else {
-            return mFirstCurrency;
-        }
-    }
 
     /**
      * This function ensures that if we have an msat value that is not a multiple of 1000 it will display as msat,
      * while it will display in the chosen currency if it is a multiple of 1000
      */
     public String getDisplayStringFromMsats(long msats) {
-        if (getPrimaryCurrency().isBitcoin()) {
+        if (isCurrentCurrencyBitcoin()) {
             if (msats % 1000 == 0)
-                return getPrimaryDisplayStringFromMSats(msats, true);
+                return getCurrentCurrencyDisplayStringFromMSats(msats, true);
             else
                 return msats + " msat";
         } else {
-            return getPrimaryDisplayStringFromMSats(msats, true);
+            return getCurrentCurrencyDisplayStringFromMSats(msats, true);
         }
     }
 
@@ -236,18 +267,18 @@ public class MonetaryUtil {
         }
     }
 
-    public String msatsToPrimaryTextInputString(long msats, boolean allowMsat) {
-        return getPrimaryCurrency().formatValueAsTextInputString(msats, true, allowMsat);
+    public String msatsToCurrentCurrencyTextInputString(long msats, boolean allowMsat) {
+        return getCurrentCurrency().formatValueAsTextInputString(msats, true, allowMsat);
     }
 
     /**
-     * Converts the supplied value to msat. The exchange rate of the primary currency is used.
+     * Converts the supplied value to msat. The exchange rate of the current currency is used.
      *
-     * @param primaryValue
+     * @param textInputValue
      * @return String without grouping or fractions
      */
-    public long convertPrimaryTextInputToMsat(String primaryValue) {
-        return getPrimaryCurrency().TextInputToValueInMsats(primaryValue);
+    public long convertCurrentCurrencyTextInputToMsat(String textInputValue) {
+        return getCurrentCurrency().TextInputToValueInMsats(textInputValue);
     }
 
     /**
@@ -263,24 +294,8 @@ public class MonetaryUtil {
      * Checks if a numerical currency input is valid.
      * This function always checks against the rules of the primary currency.
      */
-    public boolean validateCurrencyInput(String input, boolean allowMsat) {
-        return getPrimaryCurrency().validateInput(input, allowMsat);
-    }
-
-    private void setFirstCurrency(String currencyCode) {
-        mFirstCurrency = new BBCurrency(currencyCode);
-    }
-
-    private void setSecondCurrency(String currencyCode) {
-        mSecondCurrency = new BBCurrency(currencyCode);
-    }
-
-    public void setSecondCurrency(String currencyCode, Double rate, Long timestamp) {
-        mSecondCurrency = new BBCurrency(currencyCode, rate, timestamp);
-    }
-
-    void setSecondCurrency(String currencyCode, Double rate, Long timestamp, String symbol) {
-        mSecondCurrency = new BBCurrency(currencyCode, rate, timestamp, symbol);
+    public boolean validateCurrentCurrencyInput(String input, boolean allowMsat) {
+        return getCurrentCurrency().validateInput(input, allowMsat);
     }
 
     /**
@@ -290,9 +305,9 @@ public class MonetaryUtil {
      * it is never used and we always show the symbol / iso4217 code after the amount.
      */
     private String localizedFiatAmount(long value) {
-        double fiatValue = (mSecondCurrency.getRate()) * value;
+        double fiatValue = (getCurrentCurrency().getRate()) * value;
         NumberFormat nf = NumberFormat.getCurrencyInstance(SystemUtil.getSystemLocale());
-        nf.setCurrency(Currency.getInstance(mSecondCurrency.getCode()));
+        nf.setCurrency(Currency.getInstance(getCurrentCurrency().getCode()));
         return nf.format(fiatValue);
     }
 }

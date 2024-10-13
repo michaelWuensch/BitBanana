@@ -57,11 +57,11 @@ public class ExchangeRateUtil {
         return mInstance;
     }
 
-    public void getExchangeRates() {
+    public void getExchangeRates(boolean force) {
 
-        if (!MonetaryUtil.getInstance().getSecondCurrency().isBitcoin() ||
+        if (force || MonetaryUtil.getInstance().displaysAtLeastOneFiatCurrency() ||
                 !PrefsUtil.getPrefs().contains(PrefsUtil.AVAILABLE_FIAT_CURRENCIES)) {
-            
+
             String provider = PrefsUtil.getExchangeRateProvider();
 
             switch (provider) {
@@ -368,14 +368,8 @@ public class ExchangeRateUtil {
                 availableCurrenciesArray.put(rateCode);
                 editor.putString("fiat_" + rateCode, tempRate.toString());
 
-                // Update the current fiat currency of the Monetary util
-                if (rateCode.equals(PrefsUtil.getSecondCurrencyCode())) {
-                    if (tempRate.has(SYMBOL)) {
-                        MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP), tempRate.getString(SYMBOL));
-                    } else {
-                        MonetaryUtil.getInstance().setSecondCurrency(rateCode, tempRate.getDouble(RATE), tempRate.getLong(TIMESTAMP));
-                    }
-                }
+                // Update fiat currencies of the Monetary util
+                MonetaryUtil.getInstance().updateCurrencyByCurrencyCode(rateCode);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -410,9 +404,24 @@ public class ExchangeRateUtil {
                     editor.putBoolean(PrefsUtil.IS_DEFAULT_CURRENCY_SET, true);
                     editor.putString(PrefsUtil.SECOND_CURRENCY, currencyCode);
                     editor.commit();
-                    MonetaryUtil.getInstance().loadSecondCurrencyFromPrefs(currencyCode);
+                    MonetaryUtil.getInstance().reloadAllCurrencies();
                 }
             }
+        }
+
+        // Handle currencies that are set in settings but are no longer available by the current exchange rate provider
+        if (!isCurrencyAvailable(PrefsUtil.getThirdCurrencyCode())
+                || !isCurrencyAvailable(PrefsUtil.getForthCurrencyCode())
+                || !isCurrencyAvailable(PrefsUtil.getFifthCurrencyCode())) {
+            final SharedPreferences.Editor editor = PrefsUtil.editPrefs();
+            if (!isCurrencyAvailable(PrefsUtil.getThirdCurrencyCode()))
+                editor.putString(PrefsUtil.THIRD_CURRENCY, "none");
+            if (!isCurrencyAvailable(PrefsUtil.getForthCurrencyCode()))
+                editor.putString(PrefsUtil.FORTH_CURRENCY, "none");
+            if (!isCurrencyAvailable(PrefsUtil.getFifthCurrencyCode()))
+                editor.putString(PrefsUtil.FIFTH_CURRENCY, "none");
+            editor.commit();
+            MonetaryUtil.getInstance().reloadAllCurrencies();
         }
     }
 
