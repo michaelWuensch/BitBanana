@@ -160,6 +160,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsCurrenciesActivity"
+            android:label="@string/currencies"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.settings.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
             android:screenOrientation="portrait"

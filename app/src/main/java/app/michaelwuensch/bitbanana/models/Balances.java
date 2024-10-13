@@ -59,14 +59,14 @@ public class Balances {
     public void debugPrint() {
         // In LND a cooperative close is in both, "On Chain Unconfirmed" & "Channels Pending Close", which will cause a to high total balance until the next block is mined
         // At the same time a pending force close initiated by the channel partner is ONLY in "Channels Pending Close".
-        BBLog.d(LOG_TAG, "------ Balances in " + MonetaryUtil.getInstance().getPrimaryDisplayUnit() + " -------");
-        BBLog.d(LOG_TAG, "Total: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(total(), false));
-        BBLog.d(LOG_TAG, "On Chain total: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(onChainTotal(), false));
-        BBLog.d(LOG_TAG, "On Chain confirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(onChainConfirmed(), false));
-        BBLog.d(LOG_TAG, "On Chain unconfirmed: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(onChainUnconfirmed(), false));
-        BBLog.d(LOG_TAG, "Open Channels: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(channelBalance(), false));
-        BBLog.d(LOG_TAG, "Channels Pending Open: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(channelBalancePending(), false));
-        BBLog.d(LOG_TAG, "Channels Pending Close: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(channelBalanceLimbo(), false));
+        BBLog.d(LOG_TAG, "------ Balances in " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit() + " -------");
+        BBLog.d(LOG_TAG, "Total: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(total(), false));
+        BBLog.d(LOG_TAG, "On Chain total: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(onChainTotal(), false));
+        BBLog.d(LOG_TAG, "On Chain confirmed: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(onChainConfirmed(), false));
+        BBLog.d(LOG_TAG, "On Chain unconfirmed: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(onChainUnconfirmed(), false));
+        BBLog.d(LOG_TAG, "Open Channels: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(channelBalance(), false));
+        BBLog.d(LOG_TAG, "Channels Pending Open: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(channelBalancePending(), false));
+        BBLog.d(LOG_TAG, "Channels Pending Close: " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(channelBalanceLimbo(), false));
         BBLog.d(LOG_TAG, "----------------------------");
     }
 

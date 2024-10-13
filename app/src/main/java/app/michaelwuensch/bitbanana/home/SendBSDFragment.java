@@ -206,7 +206,7 @@ public class SendBSDFragment extends BaseBSDFragment {
         mEtAmount.setShowSoftInputOnFocus(false);
 
         // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
 
         // Input validation for the amount field.
         mEtAmount.addTextChangedListener(new TextWatcher() {
@@ -234,11 +234,11 @@ public class SendBSDFragment extends BaseBSDFragment {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
                             } else {
-                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(Wallet_Balance.getInstance().getBalances().onChainTotal(), false);
+                                String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(Wallet_Balance.getInstance().getBalances().onChainTotal(), false);
                                 showError(message, 4000);
                             }
                         } else {
-                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxSendable, true);
+                            String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxSendable, true);
                             showError(message, 6000);
                         }
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
@@ -274,10 +274,10 @@ public class SendBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
+                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mOnChain);
 
                 if (mAmountValid) {
-                    mSendAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
+                    mSendAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
                     calculateFee();
                 } else {
                     setFeeFailure();
@@ -306,7 +306,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
             if (mFixedAmount != 0L) {
                 // A specific amount was requested. We are not allowed to change the amount.
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, !mOnChain));
                 mEtAmount.clearFocus();
                 mEtAmount.setFocusable(false);
                 mEtAmount.setEnabled(false);
@@ -385,7 +385,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 if (mDecodedBolt12.hasAmountSpecified()) {
                     // A specific amount was requested. We are not allowed to change the amount
                     mFixedAmount = mDecodedBolt12.getAmount();
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, !mOnChain));
                     mEtAmount.clearFocus();
                     mEtAmount.setFocusable(false);
                 } else {
@@ -452,7 +452,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 } else {
                     // A specific amount was requested. We are not allowed to change the amount
                     mFixedAmount = mDecodedBolt11.getAmountRequested();
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, !mOnChain));
                     mEtAmount.clearFocus();
                     mEtAmount.setFocusable(false);
                 }
@@ -471,22 +471,26 @@ public class SendBSDFragment extends BaseBSDFragment {
         }
 
 
-        // Action when clicked on receive unit
-        LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
-        llUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBlockOnInputChanged = true;
-                MonetaryUtil.getInstance().switchCurrencies();
-                if (mFixedAmount == 0L) {
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mSendAmount, !mOnChain));
-                } else {
-                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mFixedAmount, !mOnChain));
+        // Action when clicked on unit
+        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
+            LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
+            llUnit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBlockOnInputChanged = true;
+                    MonetaryUtil.getInstance().switchToNextCurrency();
+                    if (mFixedAmount == 0L) {
+                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mSendAmount, !mOnChain));
+                    } else {
+                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, !mOnChain));
+                    }
+                    mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+                    mBlockOnInputChanged = false;
                 }
-                mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mBlockOnInputChanged = false;
-            }
-        });
+            });
+        } else {
+            view.findViewById(R.id.sendSwitchUnitImage).setVisibility(View.GONE);
+        }
 
         mFallbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -511,7 +515,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private void performOnChainSend() {
         long sendAmount = getOnChainSendAmount();
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(sendAmount, false));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(sendAmount, false));
 
         switchToSendProgressScreen();
 
@@ -575,7 +579,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private void fetchInvoiceFromOffer() {
         switchToSendProgressScreen();
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
 
         FetchInvoiceFromOfferRequest.Builder requestBuilder = FetchInvoiceFromOfferRequest.newBuilder()
                 .setDecodedBolt12(mDecodedBolt12)
@@ -602,7 +606,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private void prepareStandardBolt11Payment() {
         switchToSendProgressScreen();
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(getLightningPaymentAmountMSat(), true));
 
         SendLnPaymentRequest sendLnPaymentRequest = null;
         if (mIsKeysend)

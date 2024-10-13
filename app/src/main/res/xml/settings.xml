@@ -15,24 +15,9 @@
             android:title="@string/settings_features"
             app:iconSpaceReserved="false" />
 
-        <ListPreference
-            android:defaultValue="ccSAT"
-            android:dialogTitle="@string/settings_btcUnit"
-            android:entries="@array/btcUnitDisplayValues"
-            android:entryValues="@array/btcCurrencyCodes"
-            android:key="firstCurrency"
-            android:summary="%s"
-            android:title="@string/settings_btcUnit"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="USD"
-            android:dialogTitle="@string/settings_currency"
-            android:entries="@array/currency"
-            android:entryValues="@array/currency"
-            android:key="secondCurrency"
-            android:summary="%s"
-            android:title="@string/settings_currency"
+        <Preference
+            android:key="goToCurrencySettings"
+            android:title="@string/currencies"
             app:iconSpaceReserved="false" />
 
         <ListPreference

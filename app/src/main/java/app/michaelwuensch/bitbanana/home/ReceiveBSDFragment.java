@@ -107,7 +107,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mEtAmount.setShowSoftInputOnFocus(false);
 
         // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
 
 
         // Action when clicked on "Lightning" Button
@@ -161,17 +161,21 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
 
         // Action when clicked on receive unit
-        LinearLayout llUnit = view.findViewById(R.id.receiveUnitLayout);
-        llUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBlockOnInputChanged = true;
-                MonetaryUtil.getInstance().switchCurrencies();
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToPrimaryTextInputString(mReceiveAmount, !mOnChain));
-                mTvUnit.setText(MonetaryUtil.getInstance().getPrimaryDisplayUnit());
-                mBlockOnInputChanged = false;
-            }
-        });
+        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
+            LinearLayout llUnit = view.findViewById(R.id.receiveUnitLayout);
+            llUnit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBlockOnInputChanged = true;
+                    MonetaryUtil.getInstance().switchToNextCurrency();
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mReceiveAmount, !mOnChain));
+                    mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+                    mBlockOnInputChanged = false;
+                }
+            });
+        } else {
+            view.findViewById(R.id.receiveSwitchUnitImage).setVisibility(View.GONE);
+        }
 
 
         // Input validation for the amount field.
@@ -199,7 +203,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     if (!mEtAmount.getText().toString().equals(".")) {
                         if (mReceiveAmount > maxReceivable) {
                             mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(maxReceivable, true);
+                            String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxReceivable, true);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
                             mBtnNext.setEnabled(false);
                             mBtnNext.setTextColor(getResources().getColor(R.color.gray));
@@ -237,9 +241,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrencyInput(arg0.toString(), !mOnChain);
+                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mOnChain);
                 if (mAmountValid) {
-                    mReceiveAmount = MonetaryUtil.getInstance().convertPrimaryTextInputToMsat(arg0.toString());
+                    mReceiveAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
                 }
             }
         });
@@ -321,7 +325,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     }
 
     private void onGenerateRequestClicked() {
-        if (!MonetaryUtil.getInstance().getPrimaryCurrency().isBitcoin() && MonetaryUtil.getInstance().getExchangeRateAge() > 3600) {
+        if (MonetaryUtil.getInstance().isCurrentCurrencyFiat() && MonetaryUtil.getInstance().getCurrentCurrencyExchangeRateAge() > 3600) {
             // Warn the user if his primary currency is not of type bitcoin and his exchange rate is older than 1 hour.
             new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
                 @Override
@@ -333,7 +337,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                 public void onCancelled() {
 
                 }
-            }).securityOldExchangeRate(MonetaryUtil.getInstance().getExchangeRateAge());
+            }).securityOldExchangeRate(MonetaryUtil.getInstance().getCurrentCurrencyExchangeRateAge());
         } else {
             generateRequest();
         }

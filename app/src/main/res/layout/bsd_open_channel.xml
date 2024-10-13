@@ -163,6 +163,15 @@
                             app:layout_constraintStart_toEndOf="@+id/localAmount"
                             app:layout_constraintTop_toTopOf="parent">
 
+                            <app.michaelwuensch.bitbanana.customView.NonClippingTextView
+                                android:id="@+id/localAmountUnit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textSize="30sp"
+                                android:textStyle="italic"
+                                tools:text="UNIT" />
+
                             <ImageView
                                 android:id="@+id/localAmountSwitchUnitImage"
                                 android:layout_width="18dp"
@@ -172,15 +181,6 @@
                                 android:paddingTop="5dp"
                                 app:srcCompat="@drawable/ic_swap_vert_black_24dp"
                                 app:tint="@color/banana_yellow" />
-
-                            <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                                android:id="@+id/localAmountUnit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:textSize="30sp"
-                                android:textStyle="italic"
-                                tools:text="UNIT" />
                         </LinearLayout>
 
                         <TextView

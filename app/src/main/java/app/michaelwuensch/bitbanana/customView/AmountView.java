@@ -112,7 +112,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
                         }.start();
                     } else {
                         if (mSwitchesValueOnClick) {
-                            MonetaryUtil.getInstance().switchCurrencies();
+                            MonetaryUtil.getInstance().switchToNextCurrency();
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key != null) {
-            if (key.equals("firstCurrencyIsPrimary")) {
+            if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
                 if (mIsUndefinedValue) {
                     setUndefinedValue();
                     return;
@@ -150,9 +150,9 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         mIsUndefinedValue = false;
         mIsOverriddenWithText = false;
         if (mIsWithoutUnit)
-            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromMSats(value, mMsatPrecision);
+            mAmountText = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(value, mMsatPrecision);
         else
-            mAmountText = MonetaryUtil.getInstance().getPrimaryDisplayStringFromMSats(value, mMsatPrecision);
+            mAmountText = MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(value, mMsatPrecision);
         updateAmountText();
         styleBasedOnValue(value);
         if (!mIsTemporaryRevealed)
@@ -205,7 +205,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
 
     public void setUndefinedValue() {
         mIsUndefinedValue = true;
-        mTvAmount.setText("? " + MonetaryUtil.getInstance().getPrimaryDisplayUnit());
+        mTvAmount.setText("? " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
     }
 
     public void overrideWithText(String text) {

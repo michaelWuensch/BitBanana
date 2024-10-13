@@ -177,6 +177,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
      */
     public String getHostWithOverride() {
         String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
+        if (source.isEmpty())
+            return host;
         String target = PrefsUtil.getPrefs().getString("overrideHostTarget", "");
         return host.replace(source, target);
     }

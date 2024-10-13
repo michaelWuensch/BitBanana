@@ -24,7 +24,6 @@ public class PrefsUtil {
 
     // shared preference references
     public static final String PREVENT_SCREEN_RECORDING = "preventScreenRecording";
-    public static final String FIRST_CURRENCY_IS_PRIMARY = "firstCurrencyIsPrimary";
     public static final String PIN_HASH = "pin_hash";
     public static final String PIN_LENGTH = "pin_length";
     public static final String SETTINGS_VERSION = "settings_ver";
@@ -37,6 +36,9 @@ public class PrefsUtil {
     public static final String IS_DEFAULT_CURRENCY_SET = "isDefaultCurrencySet";
     public static final String FIRST_CURRENCY = "firstCurrency";
     public static final String SECOND_CURRENCY = "secondCurrency";
+    public static final String THIRD_CURRENCY = "thirdCurrency";
+    public static final String FORTH_CURRENCY = "forthCurrency";
+    public static final String FIFTH_CURRENCY = "fifthCurrency";
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
@@ -56,6 +58,7 @@ public class PrefsUtil {
     public static final String FEE_ESTIMATE_DAY = "feeEstimateDay";
     public static final String FEE_ESTIMATE_MINIMUM = "feeEstimateMinimum";
     public static final String FEE_ESTIMATE_TIMESTAMP = "feeEstimateTimestamp";
+    public static final String CURRENT_CURRENCY_INDEX = "currentCurrencyIndex";
 
 
     // default values
@@ -127,10 +130,6 @@ public class PrefsUtil {
         return getPrefs().getBoolean(PREVENT_SCREEN_RECORDING, true);
     }
 
-    public static boolean isFirstCurrencyPrimary() {
-        return getPrefs().getBoolean(FIRST_CURRENCY_IS_PRIMARY, true);
-    }
-
     public static String getOnChainFeeTier() {
         return getPrefs().getString(ON_CHAIN_FEE_TIER, OnChainFeeView.OnChainFeeTier.FAST.name());
     }
@@ -162,6 +161,18 @@ public class PrefsUtil {
 
     public static String getSecondCurrencyCode() {
         return getPrefs().getString(SECOND_CURRENCY, "USD");
+    }
+
+    public static String getThirdCurrencyCode() {
+        return getPrefs().getString(THIRD_CURRENCY, "none");
+    }
+
+    public static String getForthCurrencyCode() {
+        return getPrefs().getString(FORTH_CURRENCY, "none");
+    }
+
+    public static String getFifthCurrencyCode() {
+        return getPrefs().getString(FIFTH_CURRENCY, "none");
     }
 
     public static boolean isTorEnabled() {

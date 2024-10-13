@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen">
+
+    <ListPreference
+        android:defaultValue="ccSAT"
+        android:dialogTitle="@string/settings_btcUnit"
+        android:entries="@array/btcUnitDisplayValues"
+        android:entryValues="@array/btcCurrencyCodes"
+        android:key="firstCurrency"
+        android:summary="%s"
+        android:title="@string/settings_btcUnit"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="USD"
+        android:dialogTitle="@string/currency"
+        android:entries="@array/currency"
+        android:entryValues="@array/currency"
+        android:key="secondCurrency"
+        android:summary="%s"
+        android:title="@string/currency"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="none"
+        android:dialogTitle="@string/currency"
+        android:entries="@array/currency"
+        android:entryValues="@array/currency"
+        android:key="thirdCurrency"
+        android:summary="%s"
+        android:title="@string/currency"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="none"
+        android:dialogTitle="@string/currency"
+        android:entries="@array/currency"
+        android:entryValues="@array/currency"
+        android:key="forthCurrency"
+        android:summary="%s"
+        android:title="@string/currency"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="none"
+        android:dialogTitle="@string/currency"
+        android:entries="@array/currency"
+        android:entryValues="@array/currency"
+        android:key="fifthCurrency"
+        android:summary="%s"
+        android:title="@string/currency"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

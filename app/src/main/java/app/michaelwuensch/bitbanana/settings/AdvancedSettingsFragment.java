@@ -82,7 +82,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
                 boolean isCustom = newValue.toString().equalsIgnoreCase("Custom");
                 if (!isCustom) {
                     PrefsUtil.editPrefs().putString(PrefsUtil.EXCHANGE_RATE_PROVIDER, newValue.toString()).commit();
-                    ExchangeRateUtil.getInstance().getExchangeRates();
+                    ExchangeRateUtil.getInstance().getExchangeRates(true);
                 }
                 updateCustomExchangeRateProviderOptions(isCustom);
                 return true;
