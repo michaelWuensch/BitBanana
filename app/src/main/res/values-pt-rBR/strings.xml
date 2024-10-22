@@ -968,4 +968,9 @@
 \n- pubkey@host:porta
 \n- Código de Pagamento</string>
     <string name="bolt12_payer_note">Nota do pagador</string>
+    <string name="currencies">Moedas</string>
+    <string name="help_dialog_settings_currencies">Tocar no campo de qualquer quantia permite que você mude as moedas que configurou aqui. Se selecionar apenas unidades Bitcoin, o app irá parar de contatar os provedores de taxa de câmbio.</string>
+    <string name="currency">Moeda</string>
+    <string name="settings_currency_none">Nenhuma</string>
+    <string name="settings_no_fee_limit">Sem limite</string>
 </resources>
