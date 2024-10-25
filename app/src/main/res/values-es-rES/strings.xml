@@ -959,4 +959,9 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Código de pago</string>
+    <string name="currencies">Divisas</string>
+    <string name="currency">Divisa</string>
+    <string name="settings_currency_none">Ninguna</string>
+    <string name="settings_no_fee_limit">Sin límite</string>
+    <string name="help_dialog_settings_currencies">Al pulsar cualquier campo con un importe, podrá cambiar entre las divisas que haya configurado. Si solo selecciona unidades de Bitcoin, la aplicación dejará de comunicarse con los proveedores de tipos de cambio.</string>
 </resources>

@@ -175,4 +175,16 @@
     <string name="disconnect">离线</string>
     <string name="success">成功</string>
     <string name="activity_connectRemoteNode">连接到远程节点</string>
+    <string name="remove">删除</string>
+    <string name="deactivate">停用</string>
+    <string name="reactivate">重新激活</string>
+    <string name="id">ID</string>
+    <string name="state">状态</string>
+    <string name="pin_changed">PIN已修改！</string>
+    <string name="label">标签</string>
+    <string name="used">已使用</string>
+    <string name="unused">未使用</string>
+    <string name="enable">启动</string>
+    <string name="disable">停止</string>
+    <string name="watchtower_session_backups">备份</string>
 </resources>
