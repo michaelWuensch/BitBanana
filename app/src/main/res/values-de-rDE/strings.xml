@@ -906,4 +906,9 @@
 \n- pubkey@host:port
 \n- Zahlungscode</string>
     <string name="bolt12_payer_note">Anmerkung des Zahlers</string>
+    <string name="settings_no_fee_limit">Kein Limit</string>
+    <string name="help_dialog_settings_currencies">Wenn du auf ein beliebiges Betragsfeld tippst, kannst du zwischen den Währungen wechseln, die du hier eingestellt hast. Wenn du nur Bitcoin-Einheiten auswählst, wird die App aufhören, Wechselkursanbieter zu kontaktieren.</string>
+    <string name="currency">Währung</string>
+    <string name="currencies">Währungen</string>
+    <string name="settings_currency_none">Keine</string>
 </resources>
