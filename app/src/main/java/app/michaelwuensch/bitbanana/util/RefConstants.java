@@ -48,8 +48,9 @@ public class RefConstants {
     ----------- Change to BitBanana ------------
     2: Added additional data to backup config: Network. Changed values for backend (0.7.3)
     3: Changed certificate encoding from Base64Url to Base64, macaroon to authenticationToken (0.7.6)
+    4: Added app settings to data backup. (Everything except PIN, StealthMode & language)
     */
-    public static final int DATA_BACKUP_VERSION = 3;
+    public static final int DATA_BACKUP_VERSION = 4;
     public static final int DATA_BACKUP_LAST_SUPPORTED_VERSION = 0;
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
 
