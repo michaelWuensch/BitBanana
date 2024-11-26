@@ -705,11 +705,11 @@
     <string name="advanced_channel_details_explanation_remote_minHTLC">The smallest value your peer is willing to forward on this channel in a single transaction.</string>
     <string name="advanced_channel_details_explanation_remote_maxHTLC">The maximum value your peer is willing to forward on this channel in a single transaction.</string>
 
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Data to connect BitBanana to your running nodes\n- Contacts</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Node configs\n- Contacts\n- App Settings</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_confirm_headline">Please Confirm</string>
     <string name="backup_data_confirm">I confirm</string>
-    <string name="backup_data_restore_description">Restore your connected nodes and contacts.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
+    <string name="backup_data_restore_description">Restore your connected nodes, contacts and app settings.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
     <string name="backup_data_create_headline">Backup</string>
     <string name="backup_data_restore_headline">Restore</string>
     <string name="backup_data_password_enter">Enter your password</string>

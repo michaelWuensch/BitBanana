@@ -1,10 +1,13 @@
 package app.michaelwuensch.bitbanana.backup;
 
+import android.content.SharedPreferences;
+
 import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -15,6 +18,7 @@ import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -27,6 +31,7 @@ import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
@@ -52,8 +57,12 @@ public class DataBackupUtil {
             backendConfigsJsonString = backendConfigsJsonString.substring(1, backendConfigsJsonString.length() - 1);
             backupJson = backupJson + backendConfigsJsonString + ",";
         }
-        backupJson = backupJson.substring(0, backupJson.length() - 1) + "}";
+        // Settings
+        Map<String, ?> allEntries = PrefsUtil.getPrefs().getAll();
+        String settingsJsonString = "\"settings\":" + new Gson().toJson(allEntries);
+        backupJson = backupJson + settingsJsonString + ",";
 
+        backupJson = backupJson.substring(0, backupJson.length() - 1) + "}";
 
         // Encrypting the backup.
 
@@ -81,8 +90,7 @@ public class DataBackupUtil {
     }
 
     public static boolean restoreBackup(String backup, int backupVersion) {
-
-        if (backupVersion < 4) {
+        if (backupVersion < 5) {
             DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
 
             // restore backend configs
@@ -97,6 +105,35 @@ public class DataBackupUtil {
                 } catch (GeneralSecurityException | IOException e) {
                     e.printStackTrace();
                     return false;
+                }
+            }
+
+            if (backupVersion > 3) {
+                if (dataBackup.getSettings() != null) {
+                    Map<String, ?> restoredMap = dataBackup.getSettings();
+
+                    // Save to SharedPreferences
+                    SharedPreferences.Editor editor = PrefsUtil.editPrefs();
+
+                    for (Map.Entry<String, ?> entry : restoredMap.entrySet()) {
+                        Object value = entry.getValue();
+                        if (value instanceof Boolean) {
+                            if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore the for backups.
+                                continue;
+                            editor.putBoolean(entry.getKey(), (Boolean) value);
+                        } else if (value instanceof Float) {
+                            editor.putFloat(entry.getKey(), (Float) value);
+                        } else if (value instanceof Integer) {
+                            editor.putInt(entry.getKey(), (Integer) value);
+                        } else if (value instanceof Long) {
+                            editor.putLong(entry.getKey(), (Long) value);
+                        } else if (value instanceof String) {
+                            if (entry.getKey().equals("language")) // language change causes problems during restore...
+                                continue;
+                            editor.putString(entry.getKey(), (String) value);
+                        }
+                    }
+                    editor.apply();
                 }
             }
 
