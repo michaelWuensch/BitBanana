@@ -731,7 +731,7 @@ public class SendBSDFragment extends BaseBSDFragment {
 
     private void setCalculatedFeeAmountLightning(long amount) {
         double calculatedFeePercent = (amount / (double) getLightningPaymentAmountMSat());
-        String feePercentageString = "(" + String.format("%.1f", calculatedFeePercent * 100) + "%)";
+        String feePercentageString = "(" + String.format("%.2f", calculatedFeePercent * 100) + "%)";
         mLightningFeeView.setAmountMsat(amount, feePercentageString, false);
     }
 
