@@ -661,7 +661,7 @@ public class CoreLightningApi extends Api {
                                 .setFee(payment.getAmountSentMsat().getMsat() - payment.getAmountMsat().getMsat())
                                 .setCreatedAt(payment.getCreatedAt())
                                 .setBolt11(payment.getBolt11())
-                                .setMemo(PaymentRequestUtil.getMemo(payment.getDescription()))
+                                .setMemo(PaymentRequestUtil.getMemo(payment.getBolt11()))
                                 //.setKeysendMessage(???)
                                 .build());
                     }
