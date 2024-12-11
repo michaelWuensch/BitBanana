@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <queries>
         <package android:name="com.tailscale.ipn" />
@@ -38,6 +39,20 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="io.matthewnelson.kmp.tor.runtime.service.TorServiceConfig$Initializer"
+                android:value="androidx.startup" />
+        </provider>
+        <service
+            android:name="io.matthewnelson.kmp.tor.runtime.service.TorService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity-alias
             android:name=".LauncherActivity"

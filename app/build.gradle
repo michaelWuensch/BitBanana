@@ -6,11 +6,11 @@ apply plugin: 'com.google.protobuf' // Needed for gRPC
 import com.android.build.OutputFile
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     defaultConfig {
         applicationId "app.michaelwuensch.bitbanana"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 64
         versionName "0.8.7"
         vectorDrawables.useSupportLibrary = true
@@ -59,6 +59,9 @@ android {
     lint {
         disable 'MissingTranslation', 'ExtraTranslation', 'MissingQuantity'
     }
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 /* Uncomment when generating license report
@@ -90,7 +93,7 @@ protobuf {
     plugins {
         javalite { artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0" }
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.57.1'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.68.2'
         }
     }
 
@@ -136,13 +139,14 @@ dependencies {
     implementation 'com.nambimobile.widgets:expandable-fab:1.2.1'
 
     // Tor implementation
-    implementation "io.matthewnelson.topl-android:tor-binary:0.4.6.5"
-    implementation "io.matthewnelson.topl-android:topl-service:2.1.2"
+    implementation("io.matthewnelson.kmp-tor:resource-exec-tor:408.13.0")
+    implementation("io.matthewnelson.kmp-tor:runtime:2.0.0-alpha02")
+    implementation("io.matthewnelson.kmp-tor:runtime-service:2.0.0-alpha02")
 
     // gRPC implementation to communicate with lnd
-    implementation 'io.grpc:grpc-okhttp:1.57.1'
-    implementation 'io.grpc:grpc-protobuf-lite:1.57.1'
-    implementation 'io.grpc:grpc-stub:1.57.1'
+    implementation 'io.grpc:grpc-okhttp:1.68.2'
+    implementation 'io.grpc:grpc-protobuf-lite:1.68.2'
+    implementation 'io.grpc:grpc-stub:1.68.2'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'com.google.code.gson:gson:2.9.0'
     compileOnly 'com.google.api.grpc:googleapis-common-protos:0.0.3'
@@ -173,18 +177,18 @@ dependencies {
 
 
     // Basic Android libraries
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.security:security-crypto:1.1.0-alpha06"
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
     // Libraries for tests
     testImplementation 'org.json:json:20200518'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
