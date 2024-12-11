@@ -219,7 +219,7 @@ public class ExchangeRateUtil {
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "Coinbase response could not be parsed as json");
                     e.printStackTrace();
-                    if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
+                    if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass") || responseData.toLowerCase().contains("challenge")) {
                         broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }
                 }
