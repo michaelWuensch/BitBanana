@@ -123,7 +123,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
 
     private void showEnterPin() {
         if (mSetupMode == CHANGE_PIN) {
-            changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter_old)));
+            changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter_old), true));
         } else {
             changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter)));
         }

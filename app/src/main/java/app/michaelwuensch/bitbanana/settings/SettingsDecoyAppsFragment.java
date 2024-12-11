@@ -1,6 +1,8 @@
 package app.michaelwuensch.bitbanana.settings;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -48,6 +50,14 @@ public class SettingsDecoyAppsFragment extends PreferenceFragmentCompat {
                             new ComponentName(getActivity().getPackageName(), PACKAGENAME + ".decoyApps.CalcActivity"),
                             PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                     mExplanation.setVisible(true);
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.note)
+                            .setMessage(R.string.stealth_mode_explanation_popup)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            }).show();
                 }
                 return true;
             }

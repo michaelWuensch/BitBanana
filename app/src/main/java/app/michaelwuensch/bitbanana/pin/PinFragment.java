@@ -48,7 +48,7 @@ public class PinFragment extends Fragment {
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
     private static final String ARG_TEMP_PIN = "tempPin";
-
+    private static final String ARG_FORCE_BIOMETRICS_DISABLED = "forceBiometricsDisabled";
     private int mPinLength = 0;
 
     private ImageButton mBtnPinConfirm;
@@ -69,6 +69,7 @@ public class PinFragment extends Fragment {
     private int mMode;
     private int mNumFails;
     private String mTempPin;
+    private boolean mForceBiometricsDisabled;
 
 
     /**
@@ -84,6 +85,24 @@ public class PinFragment extends Fragment {
         Bundle args = new Bundle();
         args.putInt(ARG_MODE, mode);
         args.putString(ARG_PROMPT, prompt);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param mode   set the mode to either create, confirm or enter pin.
+     * @param prompt Short text to describe what is happening.
+     * @return A new instance of fragment PinFragment.
+     */
+    public static PinFragment newInstance(int mode, String prompt, boolean forceBiometricsDisabled) {
+        PinFragment fragment = new PinFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_MODE, mode);
+        args.putString(ARG_PROMPT, prompt);
+        args.putBoolean(ARG_FORCE_BIOMETRICS_DISABLED, forceBiometricsDisabled);
         fragment.setArguments(args);
         return fragment;
     }
@@ -114,6 +133,7 @@ public class PinFragment extends Fragment {
             mMode = getArguments().getInt(ARG_MODE);
             mPromptString = getArguments().getString(ARG_PROMPT);
             mTempPin = getArguments().getString(ARG_TEMP_PIN);
+            mForceBiometricsDisabled = getArguments().getBoolean(ARG_FORCE_BIOMETRICS_DISABLED);
         }
     }
 
@@ -195,7 +215,7 @@ public class PinFragment extends Fragment {
 
 
         // Make biometrics Button visible if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && !mForceBiometricsDisabled) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -245,7 +265,7 @@ public class PinFragment extends Fragment {
 
 
         // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && !mForceBiometricsDisabled) {
             if (PrefsUtil.isBiometricPreferred()) {
                 initBiometricPrompt();
             }
