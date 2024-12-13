@@ -125,7 +125,7 @@ public class ClipBoardUtil {
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
-                // never reached
+                showProceedQuestion(R.string.clipboard_scan_payment, context, listener);
             }
 
             @Override

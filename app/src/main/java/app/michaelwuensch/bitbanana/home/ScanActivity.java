@@ -116,7 +116,7 @@ public class ScanActivity extends BaseScannerActivity {
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
-                // never reached
+                readableDataFound(data);
             }
 
             @Override
