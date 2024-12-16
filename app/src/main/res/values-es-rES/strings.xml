@@ -964,4 +964,5 @@
     <string name="settings_currency_none">Ninguna</string>
     <string name="settings_no_fee_limit">Sin límite</string>
     <string name="help_dialog_settings_currencies">Al pulsar cualquier campo con un importe, podrá cambiar entre las divisas que haya configurado. Si solo selecciona unidades de Bitcoin, la aplicación dejará de comunicarse con los proveedores de tipos de cambio.</string>
+    <string name="stealth_mode_explanation_popup">A partir de ahora, BitBanana se parece a una calculadora simple. Para acceder a BitBanana, use esa calculadora y realice un cálculo que sea igual a 21.</string>
 </resources>
