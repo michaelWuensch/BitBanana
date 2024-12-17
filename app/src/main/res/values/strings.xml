@@ -136,6 +136,7 @@
     <string name="disable">Disable</string>
     <string name="currency">Currency</string>
     <string name="currencies">Currencies</string>
+    <string name="immediately">Immediately</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -312,6 +313,7 @@
     <string name="settings_changePin">Change/Remove PIN</string>
     <string name="settings_addPin">Protect with PIN</string>
     <string name="settings_removePin">Remove PIN</string>
+    <string name="settings_lockScreenTimeout">Auto-Lock Timeout</string>
 
     <string name="settings_features">Features</string>
     <string name="settings_features_summary">Personalize the app to your needs by toggling features on or off.</string>

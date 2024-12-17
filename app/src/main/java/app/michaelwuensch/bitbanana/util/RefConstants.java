@@ -71,16 +71,8 @@ public class RefConstants {
     public static final int ERROR_DURATION_LONG = 8000;
     public static final int ERROR_DURATION_VERY_LONG = 12000;
 
-    // Number of seconds after moving the app to background until the app gets locked.
-    public static final int ACCESS_TIMEOUT = 15;
-
-    /* Number of seconds after moving the app to background until all connection is teared down.
-    This should be long enough so that if a user accidentally minimizes minimizes the app he has enough time to open it again without having to reconnect.
-    On Android 13 this seemed to work even with long delays like 30 seconds. Since Android 14 everything above 5 seconds is unreliable as battery optimization seems to stop the handler.
-    On latest tests on Android 14 it seemed to work again for some reason.
-    If a PIN is activated, the connection will also be stopped when the PIN Screen is shown.
-     */
-    public static final int DISCONNECT_TIMEOUT = 30;
+    // Number of seconds after moving the app to background until all connection is teared down.
+    public static final int DISCONNECT_TIMEOUT = 300;
 
     // Schedule intervals
     public static final int EXCHANGE_RATE_PERIOD = 90;

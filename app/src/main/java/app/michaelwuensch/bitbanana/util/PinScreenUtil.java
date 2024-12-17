@@ -11,13 +11,30 @@ import app.michaelwuensch.bitbanana.pin.PinEntryActivity;
 
 public class PinScreenUtil {
 
-    static public void askForAccess(Activity activity, OnSecurityCheckPerformedListener onSecurityCheckPerformedListener) {
+    private static final String LOG_TAG = PinScreenUtil.class.getSimpleName();
+    public static boolean isPinScreenShown;
+
+    static public void askForAccess(Activity activity, boolean forceRestart, OnSecurityCheckPerformedListener onSecurityCheckPerformedListener) {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
             if (PrefsUtil.isPinEnabled()) {
-                // Go to PIN entry screen
-                Intent pinIntent = new Intent(activity, PinEntryActivity.class);
-                pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivity(pinIntent);
+                if (TimeOutUtil.getInstance().isFullyTimedOut() || forceRestart) {
+                    // Go to PIN entry screen, remove all history, full reconnect is needed.
+                    BBLog.d(LOG_TAG, "Show PIN screen, remove history.");
+                    Intent pinIntent = new Intent(activity, PinEntryActivity.class);
+                    pinIntent.putExtra(PinEntryActivity.EXTRA_CLEAR_HISTORY, true);
+                    pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(pinIntent);
+                    isPinScreenShown = true;
+                } else {
+                    if (!isPinScreenShown) {
+                        // Go to PIN entry screen, but don't clear current state. This allows the user to continue where he left but is less secure as sensitive data is still kept in memory and could theoretically be read out by malicious apps or hackers.
+                        BBLog.d(LOG_TAG, "Show PIN screen, keep history.");
+                        Intent pinIntent = new Intent(activity, PinEntryActivity.class);
+                        pinIntent.putExtra(PinEntryActivity.EXTRA_CLEAR_HISTORY, false);
+                        activity.startActivity(pinIntent);
+                        isPinScreenShown = true;
+                    }
+                }
             } else {
 
                 // Check if pin is active according to key store
