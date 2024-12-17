@@ -37,10 +37,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
     private SwitchPreference mSwTor;
-    private ListPreference mListCurrency;
     private Preference mCurrencyPref;
     private Preference mPinPref;
     private ListPreference mListLanguage;
+    private ListPreference mListLockScreenTimeout;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -48,6 +48,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.settings, rootKey);
 
         mPinPref = findPreference("pinPref");
+        mListLockScreenTimeout = findPreference("lockScreenTimeoutPref");
+        lockScreenTimeoutDisplayEntries();
 
         // Action when clicked on "Features"
         final Preference prefFeaturesPresets = findPreference("goToFeaturesSettings");
@@ -216,6 +218,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+
+        updateLockScreenTimeoutVisibility(PrefsUtil.isPinEnabled());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pinOptionText();
+        currencyPrefSummary();
+        updateLockScreenTimeoutVisibility(PrefsUtil.isPinEnabled());
     }
 
     private void createLanguagesList() {
@@ -225,13 +237,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mListLanguage.setEntries(languageDisplayValues);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        pinOptionText();
-        currencyPrefSummary();
-    }
-
     private void pinOptionText() {
         // Display add or change pin
         if (PrefsUtil.isPinEnabled()) {
@@ -239,6 +244,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             mPinPref.setTitle(R.string.settings_addPin);
         }
+    }
+
+    private void lockScreenTimeoutDisplayEntries() {
+        CharSequence[] lockScreenTimeoutDisplayEntries = new CharSequence[5];
+        lockScreenTimeoutDisplayEntries[0] = getActivity().getResources().getString(R.string.immediately);
+        lockScreenTimeoutDisplayEntries[1] = getActivity().getResources().getQuantityString(R.plurals.duration_second, 10, 10);
+        lockScreenTimeoutDisplayEntries[2] = getActivity().getResources().getQuantityString(R.plurals.duration_second, 30, 30);
+        lockScreenTimeoutDisplayEntries[3] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 1, 1);
+        lockScreenTimeoutDisplayEntries[4] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 5, 5);
+
+        mListLockScreenTimeout.setEntries(lockScreenTimeoutDisplayEntries);
+    }
+
+    private void updateLockScreenTimeoutVisibility(boolean isEnabled) {
+        mListLockScreenTimeout.setVisible(isEnabled);
     }
 
     private void currencyPrefSummary() {

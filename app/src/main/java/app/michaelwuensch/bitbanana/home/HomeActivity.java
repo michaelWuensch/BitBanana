@@ -292,15 +292,15 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onMoveToForeground() {
         BBLog.d(LOG_TAG, "BitBanana moved to foreground");
+        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
         // Test if PIN screen should be shown.
-        PinScreenUtil.askForAccess(this, () -> {
+        PinScreenUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
         });
     }
 
     private void continueMoveToForeground() {
-        App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
         // start listeners and schedules
         setupExchangeRateSchedule();
         registerNetworkStatusChangeListener();
@@ -344,7 +344,12 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         TimeOutUtil.getInstance().setCanBeRestarted(false);
 
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
-        App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> stopListenersAndSchedules(), RefConstants.DISCONNECT_TIMEOUT * 1000);
+        App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> disconnectTimeoutReached(), RefConstants.DISCONNECT_TIMEOUT * 1000);
+    }
+
+    private void disconnectTimeoutReached(){
+        BBLog.i(LOG_TAG, "Disconnect timeout reached.");
+        stopListenersAndSchedules();
     }
 
     @Override

@@ -65,6 +65,14 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
+            android:defaultValue="30"
+            android:entryValues="@array/lockScreenTimeout"
+            android:key="lockScreenTimeoutPref"
+            android:summary="%s"
+            android:title="@string/settings_lockScreenTimeout"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
             android:defaultValue="off"
             android:dialogTitle="@string/settings_hideBalance"
             android:entries="@array/hideBalanceTypeDisplayValues"

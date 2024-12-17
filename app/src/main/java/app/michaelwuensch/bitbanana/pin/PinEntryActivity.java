@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -31,6 +32,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
+import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.ScrambledNumpad;
@@ -39,6 +41,8 @@ import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
 public class PinEntryActivity extends BaseAppCompatActivity {
+
+    public static final String EXTRA_CLEAR_HISTORY = "ClearHistory";
 
     private int mPinLength = 0;
 
@@ -58,12 +62,27 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     private Vibrator mVibrator;
     private int mNumFails;
     private boolean mScramble;
+    private boolean mClearHistory;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pin_input);
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mClearHistory = extras.getBoolean(EXTRA_CLEAR_HISTORY);
+        }
+
+        // Disable back button by adding a callback
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Do nothing, effectively disabling the back button
+            }
+        });
 
         mUserInput = new StringBuilder();
         mNumpad = new ScrambledNumpad();
@@ -154,9 +173,15 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
                 PrefsUtil.editPrefs().putInt("numPINFails", 0).apply();
 
-                Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if (mClearHistory) {
+                    Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    PinScreenUtil.isPinScreenShown = false;
+                } else {
+                    PinScreenUtil.isPinScreenShown = false;
+                    finish();
+                }
 
             }
 
@@ -338,10 +363,15 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             PrefsUtil.editPrefs().putInt("numPINFails", 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
-
-            Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            if (mClearHistory) {
+                Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                PinScreenUtil.isPinScreenShown = false;
+            } else {
+                PinScreenUtil.isPinScreenShown = false;
+                finish();
+            }
         } else {
             mNumFails++;
 

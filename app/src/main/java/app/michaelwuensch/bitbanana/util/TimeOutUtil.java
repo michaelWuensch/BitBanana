@@ -25,7 +25,15 @@ public class TimeOutUtil {
     }
 
     public boolean isTimedOut() {
-        boolean timedOut = (System.currentTimeMillis() - appClosed) > RefConstants.ACCESS_TIMEOUT * 1000;
+        boolean timedOut = (System.currentTimeMillis() - appClosed) > PrefsUtil.getLockScreenTimeout() * 1000;
+        // Do also not allow times prior to "appClosed".
+        // This would allow to circumventing timeout check by setting the time of the device manually.
+        boolean invalidTime = System.currentTimeMillis() < appClosed;
+        return timedOut || invalidTime;
+    }
+
+    public boolean isFullyTimedOut() {
+        boolean timedOut = (System.currentTimeMillis() - appClosed) > RefConstants.DISCONNECT_TIMEOUT * 1000;
         // Do also not allow times prior to "appClosed".
         // This would allow to circumventing timeout check by setting the time of the device manually.
         boolean invalidTime = System.currentTimeMillis() < appClosed;

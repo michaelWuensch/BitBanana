@@ -238,4 +238,8 @@ public class PrefsUtil {
     public static long getFeeEstimate_Timestamp() {
         return getPrefs().getLong(FEE_ESTIMATE_TIMESTAMP, 0);
     }
+
+    public static long getLockScreenTimeout() {
+        return Long.parseLong(getPrefs().getString("lockScreenTimeoutPref", "30"));
+    }
 }
