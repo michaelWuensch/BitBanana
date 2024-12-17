@@ -110,6 +110,7 @@ public class DataBackupUtil {
 
             if (backupVersion > 3) {
                 if (dataBackup.getSettings() != null) {
+                    BBLog.d(LOG_TAG, "Restoring settings ...");
                     Map<String, ?> restoredMap = dataBackup.getSettings();
 
                     // Save to SharedPreferences
@@ -117,9 +118,15 @@ public class DataBackupUtil {
 
                     for (Map.Entry<String, ?> entry : restoredMap.entrySet()) {
                         Object value = entry.getValue();
+
+                        if (entry.getKey().equals(PrefsUtil.SETTINGS_VERSION))  // this should not be loaded from backup
+                            continue;
+                        if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore the for backups.
+                            continue;
+                        if (entry.getKey().equals("language")) // language change causes problems during restore...
+                            continue;
+
                         if (value instanceof Boolean) {
-                            if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore the for backups.
-                                continue;
                             editor.putBoolean(entry.getKey(), (Boolean) value);
                         } else if (value instanceof Float) {
                             editor.putFloat(entry.getKey(), (Float) value);
@@ -128,12 +135,11 @@ public class DataBackupUtil {
                         } else if (value instanceof Long) {
                             editor.putLong(entry.getKey(), (Long) value);
                         } else if (value instanceof String) {
-                            if (entry.getKey().equals("language")) // language change causes problems during restore...
-                                continue;
                             editor.putString(entry.getKey(), (String) value);
                         }
                     }
                     editor.apply();
+                    BBLog.d(LOG_TAG, "Settings restored.");
                 }
             }
 
