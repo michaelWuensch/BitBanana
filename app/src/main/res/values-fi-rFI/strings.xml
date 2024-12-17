@@ -110,7 +110,7 @@
     <string name="channel_close_error">Kanavan sulkeminen epäonnistui</string>
     <string name="channel_close_confirmation">Haluatko varmasti suĺkea kanavan \n\n%s\n kanssa?</string>
     <string name="channel_close_force_confirmation">Oletko varma että haluat sulkea kanavan:\n\n%1$s\n\nVarasi tulevat olemaan jäädytettynä %2$s.</string>
-    <string name="channel_close_time">Sulkemisen viive</string>
+    <string name="channel_close_time">Aikaa sulkemiseen</string>
     <string name="channel_open">Avaa kanava</string>
     <string name="channel_open_success">Kanavan avaus käynnistetty</string>
     <string name="channel_open_error">Virhe kanavan avaamisessa</string>
@@ -416,7 +416,7 @@
     <string name="active">Aktiivinen</string>
     <string name="inactive">Ei-aktiivinen</string>
     <string name="terminated">Lopetettu</string>
-    <string name="exhausted">Uupunut</string>
+    <string name="exhausted">Loppuun käytetty</string>
     <string name="id">Tunnus</string>
     <string name="type">Tyyppi</string>
     <string name="duplicate">Monista</string>
@@ -435,4 +435,33 @@
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Maksutaso korkea. Enintään %1$.2f %% sallitaan.</string>
     <string name="backend">Takapää</string>
     <string name="disconnect">Katkaise yhteys</string>
+    <string name="channel_close_type">Sulje tyyppi</string>
+    <string name="guardian_invoices_without_specified_amount">Laskut, joista puuttuu tietty summa, muodostavat turvallisuusriskin. Vaikka se on erittäin epätodennäköistä, reitin varrella olevat välittäjät voivat hyödyntää tällaisia laskuja, jolloin vastaanottaja saa odotettua vähemmän ilman havaitsemista. Tällaista riskiä ei ole suorissa maksuissa.</string>
+    <string name="guardian_custodial_lnd_accounts">Sinulla on pääsy vain LND-solmussa olevaan tiliin. Ellet ole solmuoperaattori, tämä järjestely on säilytys. Solmua hallinnoiva henkilö hallitsee rahojasi ja voi tarkastella tapahtumahistoriaasi. Talleta tälle henkilölle vain se, minkä olet valmis luottamaan.</string>
+    <string name="demo_setupNodeFirstAvatar">Sinun on ensin muodostettava yhteys solmuun, ennen kuin voit nähdä solmutietosi ja avatarisi.</string>
+    <string name="activity_routing_policy">Reitityskäytäntö</string>
+    <string name="channel_close_type_force_close">Pakota sulkeminen</string>
+    <string name="channel_close_type_coop">Osuuskunta</string>
+    <string name="guardian_custodial_lndhub">Tämä on LndHub-tili. Ellet ole LndHub-palvelun isäntä, tämä järjestely on pidätysmääräinen. Palvelua hallinnoiva taho hallitsee rahasi ja voi tarkastella tapahtumahistoriaasi. Talleta heille vain se, minkä olet valmis luottamaan.</string>
+    <string name="activity_utxos">Kolikot (UTXO:t)</string>
+    <string name="onChain">Ketjussa</string>
+    <string name="activity_node_details">Solmun yksityiskohdat</string>
+    <string name="activity_manage_nodes">Hallitse solmuja</string>
+    <string name="activity_manage_channels_closed">Suljetut kanavat</string>
+    <string name="activity_watchtower">Vartiotorni</string>
+    <string name="activity_bolt12_offers">Maksukoodit</string>
+    <string name="activity_watchtowers">Vartiotornit</string>
+    <string name="navigation_node">Solmu</string>
+    <string name="currency">Valuutta</string>
+    <string name="currencies">Valuutat</string>
+    <string name="activity_bolt12_create_offer">Luo maksukoodi</string>
+    <string name="activity_forwarding">Reititys</string>
+    <string name="demo_setupNodeFirst">Sinun on ensin muodostettava yhteys solmuun.</string>
+    <string name="guardian_oldNodeSoftwareVersion">On päivityksen aika!\n\nSolmu, johon olet yhteydessä, toimii %1$s:n vanhentuneessa versiossa. BitBanana ei enää tue %2$s edeltäviä versioita.</string>
+    <string name="guardian_zero_amount_invoice">Tämä lasku ei ilmoita summaa. Vaikka se on erittäin epätodennäköistä, laskuja, joissa ei ole tiettyä summaa, voidaan hyödyntää ja vastaanottaja saa siinä tapauksessa odotettua vähemmän. Jos mahdollista, käytä laskua tietyllä summalla.</string>
+    <string name="guardian_backup_overrides_existing_data">Osa tiedoista on jo olemassa!\nVarmuuskopion palauttaminen poistaa kaikki seuraavat tiedot ennen palauttamista:\n\n- Solmuyhteystiedot\n- Yhteystiedot\n\nJatketaanko?</string>
+    <string name="guardian_certificate_verification">Jos varmenteen vahvistus on poistettu käytöstä, olet alttiina välimieshyökkäykselle. Tee tämä vain, jos tiedät mitä olet tekemässä.\n\nSen sijaan on suositeltavaa määrittää varmenteen asetukset oikein.\nTämä tarkoittaa, että solmun varmenteessa on oltava tässä yhteysasetuksessa käyttämäsi isäntänimi. Lisää isäntänimi lnd.conf-tiedostoon tlsextradomain ennen varmenteen uudelleenluomista.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">Nykyinen maksuarvio viittaa siihen, että tätä tapahtumaa, jonka maksuprosentti on %1$d sat/vB, ei ehkä koskaan vahvisteta. Harkitse maksun korottamista, jotta tapahtumasi ei juutu pitkäksi aikaa.\n\nHaluatko silti jatkaa?</string>
+    <string name="guardian_remove_watchtower">Poistamalla vartiotornin kaikki nykyiset torniin liittyvät istunnot lopetetaan. Joitakin istuntoja ei ole vielä käytetty loppuun. Jäljelle jääneet varmuuskopiot katoavat, eikä niitä palauteta, vaikka maksaisit palvelusta.</string>
+    <string name="activity_manage_channels">Kanavat</string>
 </resources>
