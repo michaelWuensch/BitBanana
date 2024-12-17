@@ -144,8 +144,7 @@
     <string name="guardian_pasteFromClipboard">クリップボードからペーストするときは、必ず最後の3〜5桁を再確認してください。 悪意のあるアプリが気付かないうちにバックグラウンドでアドレスを改ざんした可能性があります。</string>
     <string name="guardian_disableScrambledPin">スクランブルしていない場合は、指の動きを見て簡単にPINを推測できます。</string>
     <string name="guardian_disableScreenProtection">画面記録を許可すると、BitBananaの使用中に悪意のあるアプリがビデオ録画したり、スクリーンショットを撮ったりする可能性があります。 ビデオ録画やスクリーンショットを撮る時のみ、無効にすることをお勧めします。</string>
-    <string name="guardian_remoteConnect">%1$sに接続してよろしいですか？\n
-ホスト名をよく確認してください。</string>
+    <string name="guardian_remoteConnect">%1$sに接続してよろしいですか？\n ホスト名をよく確認してください。</string>
     <string name="settings_category_general">一般</string>
     <string name="settings_category_security">セキュリティ</string>
     <string name="settings_category_help">ヘルプ</string>

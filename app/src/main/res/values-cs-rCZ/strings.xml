@@ -754,4 +754,6 @@
 \n
 \nPokud to nepomůže, otevřete %1$s a VPN zapněte ručně.</string>
     <string name="on_chain_fallback_invalid_data">Neplatný lightning požadavek. Platba proběhne on-chain.</string>
+    <string name="username">Uživatelské jméno</string>
+    <string name="password">Heslo</string>
 </resources>

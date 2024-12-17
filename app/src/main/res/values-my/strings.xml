@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">OK</string>
+    <string name="cancel">ပယ်ဖျက်မည်</string>
+    <string name="share">မျှဝေမည်</string>
+    <string name="copy">ကူယူမည်</string>
+    <string name="paste">ကူးထည့်မည်</string>
+    <string name="details">အသေးစိတ်</string>
+    <string name="amount">ပမာဏ</string>
+    <string name="memo">မှတ်စုတို</string>
+    <string name="shareDialogTitle">App ကိုရွေးပါ</string>
+</resources>

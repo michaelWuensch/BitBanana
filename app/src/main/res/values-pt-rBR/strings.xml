@@ -973,4 +973,5 @@
     <string name="currency">Moeda</string>
     <string name="settings_currency_none">Nenhuma</string>
     <string name="settings_no_fee_limit">Sem limite</string>
+    <string name="stealth_mode_explanation_popup">De agora em diante, o BitBanana parece uma simples calculadora. Para acessar o BitBanana, use a calculadora e faça um cálculo que seja igual a 21.</string>
 </resources>
