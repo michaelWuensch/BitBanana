@@ -12,5 +12,6 @@
     <locale android:name="pt-BR"/> <!-- Portuguese (Brazil) -->
     <locale android:name="pt-PT"/> <!-- Portuguese (Portugal) -->
     <locale android:name="es"/> <!-- Spanish -->
+    <locale android:name="ta"/> <!-- Tamil -->
     <locale android:name="uk"/> <!-- Ukrainian -->
 </locale-config>
