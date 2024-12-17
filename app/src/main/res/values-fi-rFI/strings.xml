@@ -145,7 +145,7 @@
     <string name="guardian_pasteFromClipboard">Tarkista aina viimeiset 3-5 numeroa kun lopioit leikepöydältä. Haitallinen sovellus on voinut muuttaa osoitetta huomaamatta taustalla.</string>
     <string name="guardian_disableScrambledPin">Mikäli näppäimistö ei ole sekoitettu, on PIN-koodisi nähtävissä sormen liikkeistäsi.</string>
     <string name="guardian_disableScreenProtection">Mikäli sallit näytön talletukset, voivat mahdollliset haittaohjelmat ottaaa kuvia tai nauhoittaa videota näyttösi sisällöstä. Suosittelemme kytkemään asetuksen käyttöön vain  kun haluat ottaa näytöstä kuvia tai videota.</string>
-    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Olet maksamassa siirtokuluina %1$s%%.\n\nVaihtoehtoisesti:\n- kokeile maksaa Lightning-maksuna\n- aseta matalampi siirtokulu ja odota pidempään,\n- yritä myöhemmin uudelleen\n- tai lähetä suurempi määrä\n\nHaluatko jatkaa nykyisellä siirtokululla?</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Aiot maksaa %1$s %% verkkomaksuina.\n\nMahdollisia ratkaisuja:\n- kokeile salamamaksua sen sijaan\n- valitse pienempi maksu, odota pidempään\n- yritä myöhemmin uudelleen\n- asioida isompi summa\n\nHaluatko silti jatkaa?</string>
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Olet antanut määrän fiat-valuutassa, mutta vaihtokurssien tiedot ovat vanhoja (päivitetty viimeksi %1$s tuntia sitten).\nVarmista verkkoyhteytesi toiminta tai pyydä maksua bitcoin-määräisenä.\n\nHaluatko jatkaa fiat-määräisenä?</string>
     <string name="guardian_remoteConnect">Oletko varma että haluat yhdistää \n\n%1$s\n\nVarmista palvelimen osoite huolellisesti.</string>
     <string name="guardian_externalLink">Olet avaamassa selaimessa linkkiä joka sisältää luottamuksellista tietoa. BitBanana suojaa kaiken liikenteesi kun Tor-yhteydet ovat käytössä. Selaimesi ei näin tee. Käytä Tor-selainta, mikäli haluat säilyttää tämän yhteyden tiedot luottamuksellisina.</string>
@@ -243,7 +243,7 @@
     <string name="error_invalid_bitcoin_request">Virheellinen bitcoin-pyyntö.</string>
     <string name="error_payment_invalid_details">Maksun tiedot eivät täsmään sen laskun tietoihin, jota yrität maksaa.</string>
     <string name="error_payment_timeout">Aikakatkaisu. Reittiä ei löytynyt.</string>
-    <string name="error_payment_no_route">Halutulle maksulle ei löydetty reittiä. Uuden Lightning-kanavan avaaminen voi auttaa ratkaisemaan ongelman.</string>
+    <string name="error_payment_no_route">Ei löytynyt reittiä, joka noudattaisi maksurajaasi %1$.1f %%. Maksurajan korottaminen asetuksissa tai uusien kanavien avaaminen saattaa ratkaista ongelman.</string>
     <string name="error_payment_insufficient_balance">Maksun summa on suurempi kuin mitä voit lähettää nykyisien Lightning-kanavien kautta..</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Varmista että vastaanottaja kykeneen hyödyntämään keysend-toiminnallisuutta.</string>
     <string name="error_only_payment_data_allowed">Tähän voi syöttää vain maksutietoja.</string>
@@ -289,7 +289,7 @@
     <string name="fee_not_available">ei tiedossa</string>
     <string name="fee_limit_title">Kulujen hälytysraja</string>
     <string name="fee_limit_threshold">Kulujen raja yli 1$d sats maksuille: %2$s</string>
-    <string name="fee_limit_exceeded">Tämän laskun siirtokulut (%1$.1f%%) ylittävät määritellyn enimmäismäärän (%2$.0f%%).\n\nHaluatko varmasti maksaa tämän laskun?</string>
+    <string name="fee_limit_exceeded">Tämän maksun (%1$.1f %%) siirtokulut ylittävät asetuksissa määritellyn rajan (%2$.1f %%).\n\nHaluatko todella maksaa tämän laskun?</string>
     <string name="fee_limit_exceeded_payment">Tämän maksun siirtokulut (%1$d sats) ovat enemmän kuin laskun summa (%2$d sats).\n\nHaluatko varmasti maksaa tämän laskun?</string>
     <string name="unlock_wallet">Avaa lompakko</string>
     <string name="biometricPrompt_title">Biometrinen tunnistautuminen</string>
@@ -402,4 +402,37 @@
     <string name="backup_data_no_data">Varmuuskopioitavaa tietoa ei ole.</string>
     <string name="backup_data_version_too_old">Varmuuskopio oli tehty sovelluksen uudemmalla versiolla. Päivitäthän sovelluksesi ja yritä uudelleen.</string>
     <string name="backup_data_invalid_file_chosen">Tämä ei ole toimiva varmuuskopio. Valitsethan tiedoston joka oli luotu tässä sovelluksella?</string>
+    <string name="username">Käyttäjänimi</string>
+    <string name="password">Salasana</string>
+    <string name="pubkey">Julkinen avain</string>
+    <string name="save">Tallenna</string>
+    <string name="percent">Prosentti</string>
+    <string name="off">Pois</string>
+    <string name="available">Saatavilla</string>
+    <string name="note">Huomautus</string>
+    <string name="remove">Poista</string>
+    <string name="deactivate">Deaktivoi</string>
+    <string name="reactivate">Aktivoi uudelleen</string>
+    <string name="active">Aktiivinen</string>
+    <string name="inactive">Ei-aktiivinen</string>
+    <string name="terminated">Lopetettu</string>
+    <string name="exhausted">Uupunut</string>
+    <string name="id">Tunnus</string>
+    <string name="type">Tyyppi</string>
+    <string name="duplicate">Monista</string>
+    <string name="you">Sinä</string>
+    <string name="description">Kuvaus</string>
+    <string name="none">Ei yhtään</string>
+    <string name="ok">Hyvä on</string>
+    <string name="payee">Maksunsaaja</string>
+    <string name="used">Käytetty</string>
+    <string name="unused">Ei käytetty</string>
+    <string name="enable">Ota käyttöön</string>
+    <string name="reliability">Luotettavuus</string>
+    <string name="network">Verkko</string>
+    <string name="manually">Manuaalisesti</string>
+    <string name="documentation">Dokumentaatio</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Maksutaso korkea. Enintään %1$.2f %% sallitaan.</string>
+    <string name="backend">Takapää</string>
+    <string name="disconnect">Katkaise yhteys</string>
 </resources>
