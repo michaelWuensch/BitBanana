@@ -1,0 +1,11 @@
+- Proper Android 14 support
+- Added Auto-Lock Timeout setting
+- Increased disconnect timeout after app moved to background to 5 min
+- Unlocking the app does no longer restart the connection.
+- Migration Backup now includes app settings
+- Increased displayed lightning fee precision
+- Added explanation popup when enabling stealth mode
+- Fixed Memo not being displayed on outgoing payments (Core Lightning)
+- Fixed scanning lightning address doing nothing
+- Added Tamil language
+- Updated translations
