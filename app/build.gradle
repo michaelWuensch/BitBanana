@@ -11,8 +11,8 @@ android {
         applicationId "app.michaelwuensch.bitbanana"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 64
-        versionName "0.8.7"
+        versionCode 65
+        versionName "0.8.8"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "bitbanana-" + versionName + "_" + versionCode)
