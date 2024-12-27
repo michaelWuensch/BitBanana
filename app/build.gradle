@@ -41,6 +41,13 @@ android {
         }
     }
 
+    // Disable dependency meta data. This is required for releasing on F-Droid.
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
