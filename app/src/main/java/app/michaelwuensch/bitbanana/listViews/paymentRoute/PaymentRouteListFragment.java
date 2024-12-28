@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.listViews.channels;
+package app.michaelwuensch.bitbanana.listViews.paymentRoute;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,27 +9,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Serializable;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
+import app.michaelwuensch.bitbanana.listViews.paymentRoute.items.HopListItem;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChannelListFragment extends Fragment implements ChannelSelectListener {
+public class PaymentRouteListFragment extends Fragment {
 
-    private static final String LOG_TAG = ChannelListFragment.class.getSimpleName();
+    private static final String LOG_TAG = PaymentRouteListFragment.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private ChannelItemAdapter mAdapter;
-    private ChannelSelectListener mChannelSelectListener;
-
-    public void setChannelSelectListener(ChannelSelectListener channelSelectListener) {
-        mChannelSelectListener = channelSelectListener;
-    }
+    private PaymentRouteItemAdapter mAdapter;
 
 
     @Override
@@ -41,14 +35,14 @@ public class ChannelListFragment extends Fragment implements ChannelSelectListen
         // Get View elements
         mRecyclerView = view.findViewById(R.id.recyclerList);
 
-        mAdapter = new ChannelItemAdapter(this);
+        mAdapter = new PaymentRouteItemAdapter();
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
     }
 
-    public void replaceAllItems(List<ChannelListItem> items) {
+    public void replaceAllItems(List<HopListItem> items) {
         if (mAdapter != null) {
             mAdapter.replaceAll(items);
         }
@@ -56,12 +50,5 @@ public class ChannelListFragment extends Fragment implements ChannelSelectListen
 
     public void scrollToPosition(int pos) {
         mRecyclerView.scrollToPosition(pos);
-    }
-
-    @Override
-    public void onChannelSelect(Serializable channel, int type) {
-        if (mChannelSelectListener != null) {
-            mChannelSelectListener.onChannelSelect(channel, type);
-        }
     }
 }

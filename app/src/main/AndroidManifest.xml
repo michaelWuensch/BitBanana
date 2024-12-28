@@ -165,6 +165,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.paymentRoute.PaymentRouteActivity"
+            android:label="@string/activity_payment_route"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity"
             android:label="@string/activity_manage_nodes"
             android:screenOrientation="portrait"

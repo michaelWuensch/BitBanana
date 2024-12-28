@@ -137,6 +137,8 @@
     <string name="currency">Currency</string>
     <string name="currencies">Currencies</string>
     <string name="immediately">Immediately</string>
+    <string name="forwarded">Forwarded</string>
+    <string name="summary">Summary</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -161,6 +163,7 @@
     <string name="activity_watchtower">Watchtower</string>
     <string name="activity_bolt12_offers">Payment Codes</string>
     <string name="activity_bolt12_create_offer">Create Payment Code</string>
+    <string name="activity_payment_route">Payment Path</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -865,5 +868,7 @@
     <string name="offer_id">Offer ID</string>
     <string name="bolt12">Bolt 12</string>
     <string name="bolt12_payer_note">Payer note</string>
+
+    <string name="view_payment_path">View payment path</string>
 
 </resources>

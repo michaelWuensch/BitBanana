@@ -21,6 +21,7 @@ public class Backend {
     protected boolean bSupportsBalanceDetails = false;
     protected boolean bSupportsMessageSigningByNodePrivateKey = false;
     protected boolean bSupportsLnurlAuth = false;
+    protected boolean bSupportsDisplayPaymentRoute = false;
 
     /**
      * If the backend has a function to get recommended on-chain fees
@@ -172,5 +173,9 @@ public class Backend {
 
     public boolean supportsWatchtowers() {
         return bSupportsWatchtowers;
+    }
+
+    public boolean supportsDisplayPaymentRoute() {
+        return bSupportsDisplayPaymentRoute;
     }
 }

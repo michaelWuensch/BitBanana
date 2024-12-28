@@ -18,6 +18,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
+import com.github.lightningnetwork.lnd.lnrpc.HTLCAttempt;
 import com.github.lightningnetwork.lnd.lnrpc.Hop;
 import com.github.lightningnetwork.lnd.lnrpc.InboundFee;
 import com.github.lightningnetwork.lnd.lnrpc.Initiator;
@@ -90,8 +91,10 @@ import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
 import app.michaelwuensch.bitbanana.models.Forward;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnFeature;
+import app.michaelwuensch.bitbanana.models.LnHop;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.models.LnRoute;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
@@ -668,7 +671,7 @@ public class LndApi extends Api {
                 paymentStatus = LnPayment.Status.PENDING;
         }
 
-        return LnPayment.newBuilder()
+        LnPayment.Builder lnPaymentBuilder = LnPayment.newBuilder()
                 .setPaymentHash(lndPayment.getPaymentHash())
                 .setPaymentPreimage(lndPayment.getPaymentPreimage())
                 .setDestinationPubKey(lastHop.getPubKey())
@@ -678,8 +681,38 @@ public class LndApi extends Api {
                 .setCreatedAt(lndPayment.getCreationTimeNs() / 1000000000)
                 .setBolt11(lndPayment.getPaymentRequest())
                 .setMemo(PaymentRequestUtil.getMemo(lndPayment.getPaymentRequest()))
-                .setKeysendMessage(keysendMessage)
-                .build();
+                .setKeysendMessage(keysendMessage);
+
+        if (paymentStatus == LnPayment.Status.SUCCEEDED) {
+            // Check for routes (payment paths)
+            List<LnRoute> routes = new ArrayList<>();
+            for (HTLCAttempt htlcAttempt : lndPayment.getHtlcsList()) {
+                if (htlcAttempt.getStatus() == HTLCAttempt.HTLCStatus.SUCCEEDED && htlcAttempt.hasRoute()) {
+                    List<LnHop> hops = new ArrayList<>();
+                    int id = 1;
+                    for (Hop hop : htlcAttempt.getRoute().getHopsList()) {
+                        hops.add(LnHop.newBuilder()
+                                .setIdInRoute(id)
+                                .setShortChannelId(ApiUtil.ScidFromLong(hop.getChanId()))
+                                .setPubKey(hop.getPubKey())
+                                .setAmount(hop.getAmtToForwardMsat())
+                                .setFee(hop.getFeeMsat())
+                                .setIsLastHop(id == htlcAttempt.getRoute().getHopsList().size())
+                                .build());
+                        id++;
+                    }
+                    routes.add(LnRoute.newBuilder()
+                            .setHops(hops)
+                            .setAmount(htlcAttempt.getRoute().getTotalAmtMsat())
+                            .setFee(htlcAttempt.getRoute().getTotalFeesMsat())
+                            .build());
+                }
+            }
+            if (!routes.isEmpty())
+                lnPaymentBuilder.setRoutes(routes);
+        }
+
+        return lnPaymentBuilder.build();
     }
 
     private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {

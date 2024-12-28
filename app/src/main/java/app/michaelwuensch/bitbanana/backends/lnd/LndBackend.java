@@ -58,6 +58,7 @@ public class LndBackend extends Backend {
         bSupportsBolt11WithoutAmount = true;
         bSupportsEventSubscription = true;
         bSupportsWatchtowers = true;
+        bSupportsDisplayPaymentRoute = true;
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {
