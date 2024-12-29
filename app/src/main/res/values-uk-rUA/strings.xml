@@ -771,4 +771,8 @@
     <string name="activity_manage_channels">Канали</string>
     <string name="backend">Backend</string>
     <string name="settings_tor">Tor</string>
+    <string name="forwarded">Переслано</string>
+    <string name="summary">Резюме</string>
+    <string name="activity_payment_route">Шлях оплати</string>
+    <string name="view_payment_path">Переглянути шлях платежу</string>
 </resources>
