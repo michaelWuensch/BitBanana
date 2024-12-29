@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/hopCircle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="20dp"
+        android:src="@drawable/bg_hop_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/hopLine"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:src="@drawable/line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/hopCircle"
+        app:layout_constraintStart_toStartOf="@id/hopCircle"
+        app:layout_constraintTop_toBottomOf="@id/hopCircle"
+        app:tint="@color/gray" />
+
+    <TextView
+        android:id="@+id/hopNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/deep_sea_blue"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/hopCircle"
+        app:layout_constraintEnd_toEndOf="@+id/hopCircle"
+        app:layout_constraintStart_toStartOf="@id/hopCircle"
+        app:layout_constraintTop_toTopOf="@id/hopCircle"
+        tools:text="1" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hopCircle"
+        app:layout_constraintTop_toTopOf="@id/hopNumber">
+
+        <TextView
+            android:id="@+id/hopName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:textColor="@color/banana_yellow"
+            android:textSize="18sp"
+            tools:text="You" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="10dp"
+            android:paddingStart="15dp">
+
+            <TextView
+                android:id="@+id/hopAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="Forwarded" />
+
+            <android.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <app.michaelwuensch.bitbanana.customView.AmountView
+                android:id="@+id/hopActionAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hopFeeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="10dp"
+            android:paddingStart="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fee"
+                android:textSize="16sp" />
+
+            <android.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <app.michaelwuensch.bitbanana.customView.AmountView
+                android:id="@+id/hopFeeAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class LnPayment implements Serializable {
 
@@ -17,6 +18,8 @@ public class LnPayment implements Serializable {
     private final boolean hasMemo;
     private final String KeysendMessage;
     private final boolean hasKeysendMessage;
+    private final List<LnRoute> Routes;
+    private final boolean hasRoutes;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -36,6 +39,8 @@ public class LnPayment implements Serializable {
         this.hasMemo = builder.hasMemo;
         this.KeysendMessage = builder.KeysendMessage;
         this.hasKeysendMessage = builder.hasKeysendMessage;
+        this.Routes = builder.Routes;
+        this.hasRoutes = builder.hasRoutes;
     }
 
     public String getPaymentHash() {
@@ -99,6 +104,14 @@ public class LnPayment implements Serializable {
         return hasKeysendMessage;
     }
 
+    public List<LnRoute> getRoutes() {
+        return Routes;
+    }
+
+    public boolean hasRoutes() {
+        return hasRoutes;
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -116,6 +129,8 @@ public class LnPayment implements Serializable {
         private boolean hasMemo;
         private String KeysendMessage;
         private boolean hasKeysendMessage;
+        private List<LnRoute> Routes;
+        private boolean hasRoutes;
 
         private Builder() {
             // required parameters
@@ -184,6 +199,12 @@ public class LnPayment implements Serializable {
         public Builder setKeysendMessage(String keysendMessage) {
             KeysendMessage = keysendMessage;
             hasKeysendMessage = keysendMessage != null && !keysendMessage.isEmpty();
+            return this;
+        }
+
+        public Builder setRoutes(List<LnRoute> routes) {
+            Routes = routes;
+            hasRoutes = true;
             return this;
         }
     }

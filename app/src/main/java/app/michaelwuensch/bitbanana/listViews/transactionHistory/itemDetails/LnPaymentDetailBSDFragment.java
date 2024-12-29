@@ -1,9 +1,11 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.listViews.paymentRoute.PaymentRouteActivity;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
@@ -39,6 +42,7 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private TextView mPreimageLabel;
     private TextView mPreimage;
     private ImageView mPreimageCopyIcon;
+    private Button mShowPaymentRouteButton;
 
     @Nullable
     @Override
@@ -60,6 +64,7 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mPreimageLabel = view.findViewById(R.id.preimageLabel);
         mPreimage = view.findViewById(R.id.preimage);
         mPreimageCopyIcon = view.findViewById(R.id.preimageCopyIcon);
+        mShowPaymentRouteButton = view.findViewById(R.id.showPaymentRouteButton);
 
         mBSDScrollableMainView.setSeparatorVisibility(true);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
@@ -95,6 +100,18 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
             mPayeeLabel.setVisibility(View.GONE);
             mPayee.setVisibility(View.GONE);
             mPayeeCopyIcon.setVisibility(View.GONE);
+        }
+
+        if (payment.hasRoutes()) {
+            mShowPaymentRouteButton.setVisibility(View.VISIBLE);
+            mShowPaymentRouteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), PaymentRouteActivity.class);
+                    intent.putExtra(PaymentRouteActivity.EXTRA_LNPAYMENT, payment);
+                    startActivity(intent);
+                }
+            });
         }
 
         mAmount.setAmountMsat(payment.getAmountPaid());

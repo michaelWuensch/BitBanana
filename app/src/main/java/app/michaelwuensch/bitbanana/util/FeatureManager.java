@@ -96,6 +96,10 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isDisplayPaymentRouteEnabled() {
+        return getBackend().supportsDisplayPaymentRoute();
+    }
+
     public static boolean isLnurlAuthEnabled() {
         return getBackend().supportsLnurlAuth();
     }
