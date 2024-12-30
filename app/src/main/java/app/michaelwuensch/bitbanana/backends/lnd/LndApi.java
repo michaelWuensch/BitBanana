@@ -1023,7 +1023,7 @@ public class LndApi extends Api {
                 request = SendPaymentRequest.newBuilder()
                         .setDest(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
                         .setAmtMsat(sendLnPaymentRequest.getAmount())
-                        .setFeeLimitSat(sendLnPaymentRequest.getMaxFee())
+                        .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
                         .setPaymentHash(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getPaymentHash()))
                         .setNoInflightUpdates(true)
                         .putAllDestCustomRecords(customRecords)
