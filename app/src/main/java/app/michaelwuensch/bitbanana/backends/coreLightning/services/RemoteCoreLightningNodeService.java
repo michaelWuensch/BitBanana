@@ -55,11 +55,6 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
-    public Single<com.github.ElementsProject.lightning.cln.AutocleaninvoiceResponse> autoCleanInvoice(com.github.ElementsProject.lightning.cln.AutocleaninvoiceRequest request) {
-        return DefaultSingle.createDefault(emitter -> asyncStub.autoCleanInvoice(request, new RemoteSingleObserver<>(emitter)));
-    }
-
-    @Override
     public Single<com.github.ElementsProject.lightning.cln.AutocleanonceResponse> autoCleanOnce(com.github.ElementsProject.lightning.cln.AutocleanonceRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.autoCleanOnce(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -122,6 +117,16 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.EmergencyrecoverResponse> emergencyRecover(com.github.ElementsProject.lightning.cln.EmergencyrecoverRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.emergencyRecover(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.GetemergencyrecoverdataResponse> getEmergencyRecoverData(com.github.ElementsProject.lightning.cln.GetemergencyrecoverdataRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getEmergencyRecoverData(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.ExposesecretResponse> exposeSecret(com.github.ElementsProject.lightning.cln.ExposesecretRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.exposeSecret(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -295,6 +300,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.EnableofferResponse> enableOffer(com.github.ElementsProject.lightning.cln.EnableofferRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.enableOffer(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.DisconnectResponse> disconnect(com.github.ElementsProject.lightning.cln.DisconnectRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.disconnect(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -342,6 +352,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.GetrouteResponse> getRoute(com.github.ElementsProject.lightning.cln.GetrouteRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.getRoute(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.ListaddressesResponse> listAddresses(com.github.ElementsProject.lightning.cln.ListaddressesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.listAddresses(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -440,11 +455,6 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
-    public Single<com.github.ElementsProject.lightning.cln.SendonionmessageResponse> sendOnionMessage(com.github.ElementsProject.lightning.cln.SendonionmessageRequest request) {
-        return DefaultSingle.createDefault(emitter -> asyncStub.sendOnionMessage(request, new RemoteSingleObserver<>(emitter)));
-    }
-
-    @Override
     public Single<com.github.ElementsProject.lightning.cln.SetchannelResponse> setChannel(com.github.ElementsProject.lightning.cln.SetchannelRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.setChannel(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -482,6 +492,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.Splice_updateResponse> splice_Update(com.github.ElementsProject.lightning.cln.Splice_updateRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.spliceUpdate(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.DevspliceResponse> devSplice(com.github.ElementsProject.lightning.cln.DevspliceRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.devSplice(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
@@ -565,6 +580,16 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkpreditdescriptionbypaymentidResponse> bkprEditDescriptionByPaymentId(com.github.ElementsProject.lightning.cln.BkpreditdescriptionbypaymentidRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprEditDescriptionByPaymentId(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.BkpreditdescriptionbyoutpointResponse> bkprEditDescriptionByOutpoint(com.github.ElementsProject.lightning.cln.BkpreditdescriptionbyoutpointRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bkprEditDescriptionByOutpoint(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.BlacklistruneResponse> blacklistRune(com.github.ElementsProject.lightning.cln.BlacklistruneRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.blacklistRune(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -582,6 +607,81 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.ShowrunesResponse> showRunes(com.github.ElementsProject.lightning.cln.ShowrunesRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.showRunes(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskreneunreserveResponse> askReneUnreserve(com.github.ElementsProject.lightning.cln.AskreneunreserveRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneUnreserve(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenelistlayersResponse> askReneListLayers(com.github.ElementsProject.lightning.cln.AskrenelistlayersRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneListLayers(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenecreatelayerResponse> askReneCreateLayer(com.github.ElementsProject.lightning.cln.AskrenecreatelayerRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneCreateLayer(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskreneremovelayerResponse> askReneRemoveLayer(com.github.ElementsProject.lightning.cln.AskreneremovelayerRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneRemoveLayer(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenereserveResponse> askReneReserve(com.github.ElementsProject.lightning.cln.AskrenereserveRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneReserve(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskreneageResponse> askReneAge(com.github.ElementsProject.lightning.cln.AskreneageRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneAge(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.GetroutesResponse> getRoutes(com.github.ElementsProject.lightning.cln.GetroutesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.getRoutes(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenedisablenodeResponse> askReneDisableNode(com.github.ElementsProject.lightning.cln.AskrenedisablenodeRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneDisableNode(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskreneinformchannelResponse> askReneInformChannel(com.github.ElementsProject.lightning.cln.AskreneinformchannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneInformChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenecreatechannelResponse> askReneCreateChannel(com.github.ElementsProject.lightning.cln.AskrenecreatechannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneCreateChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskreneupdatechannelResponse> askReneUpdateChannel(com.github.ElementsProject.lightning.cln.AskreneupdatechannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneUpdateChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenebiaschannelResponse> askReneBiasChannel(com.github.ElementsProject.lightning.cln.AskrenebiaschannelRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneBiasChannel(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.AskrenelistreservationsResponse> askReneListReservations(com.github.ElementsProject.lightning.cln.AskrenelistreservationsRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.askReneListReservations(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.InjectpaymentonionResponse> injectPaymentOnion(com.github.ElementsProject.lightning.cln.InjectpaymentonionRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.injectPaymentOnion(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.XpayResponse> xpay(com.github.ElementsProject.lightning.cln.XpayRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.xpay(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override

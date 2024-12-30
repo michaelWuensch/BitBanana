@@ -19,8 +19,6 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.AddpsbtoutputResponse> addPsbtOutput(com.github.ElementsProject.lightning.cln.AddpsbtoutputRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.AutocleaninvoiceResponse> autoCleanInvoice(com.github.ElementsProject.lightning.cln.AutocleaninvoiceRequest request);
-
     Single<com.github.ElementsProject.lightning.cln.AutocleanonceResponse> autoCleanOnce(com.github.ElementsProject.lightning.cln.AutocleanonceRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.AutocleanstatusResponse> autoCleanStatus(com.github.ElementsProject.lightning.cln.AutocleanstatusRequest request);
@@ -46,6 +44,10 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.DevforgetchannelResponse> devForgetChannel(com.github.ElementsProject.lightning.cln.DevforgetchannelRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.EmergencyrecoverResponse> emergencyRecover(com.github.ElementsProject.lightning.cln.EmergencyrecoverRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.GetemergencyrecoverdataResponse> getEmergencyRecoverData(com.github.ElementsProject.lightning.cln.GetemergencyrecoverdataRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.ExposesecretResponse> exposeSecret(com.github.ElementsProject.lightning.cln.ExposesecretRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.RecoverResponse> recover(com.github.ElementsProject.lightning.cln.RecoverRequest request);
 
@@ -115,6 +117,8 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.DisableofferResponse> disableOffer(com.github.ElementsProject.lightning.cln.DisableofferRequest request);
 
+    Single<com.github.ElementsProject.lightning.cln.EnableofferResponse> enableOffer(com.github.ElementsProject.lightning.cln.EnableofferRequest request);
+
     Single<com.github.ElementsProject.lightning.cln.DisconnectResponse> disconnect(com.github.ElementsProject.lightning.cln.DisconnectRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.FeeratesResponse> feerates(com.github.ElementsProject.lightning.cln.FeeratesRequest request);
@@ -134,6 +138,8 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.FunderupdateResponse> funderUpdate(com.github.ElementsProject.lightning.cln.FunderupdateRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.GetrouteResponse> getRoute(com.github.ElementsProject.lightning.cln.GetrouteRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.ListaddressesResponse> listAddresses(com.github.ElementsProject.lightning.cln.ListaddressesRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.ListforwardsResponse> listForwards(com.github.ElementsProject.lightning.cln.ListforwardsRequest request);
 
@@ -173,8 +179,6 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.SendinvoiceResponse> sendInvoice(com.github.ElementsProject.lightning.cln.SendinvoiceRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.SendonionmessageResponse> sendOnionMessage(com.github.ElementsProject.lightning.cln.SendonionmessageRequest request);
-
     Single<com.github.ElementsProject.lightning.cln.SetchannelResponse> setChannel(com.github.ElementsProject.lightning.cln.SetchannelRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.SetconfigResponse> setConfig(com.github.ElementsProject.lightning.cln.SetconfigRequest request);
@@ -190,6 +194,8 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.Splice_signedResponse> splice_Signed(com.github.ElementsProject.lightning.cln.Splice_signedRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.Splice_updateResponse> splice_Update(com.github.ElementsProject.lightning.cln.Splice_updateRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.DevspliceResponse> devSplice(com.github.ElementsProject.lightning.cln.DevspliceRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.UnreserveinputsResponse> unreserveInputs(com.github.ElementsProject.lightning.cln.UnreserveinputsRequest request);
 
@@ -223,6 +229,10 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.BkprlistincomeResponse> bkprListIncome(com.github.ElementsProject.lightning.cln.BkprlistincomeRequest request);
 
+    Single<com.github.ElementsProject.lightning.cln.BkpreditdescriptionbypaymentidResponse> bkprEditDescriptionByPaymentId(com.github.ElementsProject.lightning.cln.BkpreditdescriptionbypaymentidRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.BkpreditdescriptionbyoutpointResponse> bkprEditDescriptionByOutpoint(com.github.ElementsProject.lightning.cln.BkpreditdescriptionbyoutpointRequest request);
+
     Single<com.github.ElementsProject.lightning.cln.BlacklistruneResponse> blacklistRune(com.github.ElementsProject.lightning.cln.BlacklistruneRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.CheckruneResponse> checkRune(com.github.ElementsProject.lightning.cln.CheckruneRequest request);
@@ -230,6 +240,36 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.CreateruneResponse> createRune(com.github.ElementsProject.lightning.cln.CreateruneRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.ShowrunesResponse> showRunes(com.github.ElementsProject.lightning.cln.ShowrunesRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskreneunreserveResponse> askReneUnreserve(com.github.ElementsProject.lightning.cln.AskreneunreserveRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenelistlayersResponse> askReneListLayers(com.github.ElementsProject.lightning.cln.AskrenelistlayersRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenecreatelayerResponse> askReneCreateLayer(com.github.ElementsProject.lightning.cln.AskrenecreatelayerRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskreneremovelayerResponse> askReneRemoveLayer(com.github.ElementsProject.lightning.cln.AskreneremovelayerRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenereserveResponse> askReneReserve(com.github.ElementsProject.lightning.cln.AskrenereserveRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskreneageResponse> askReneAge(com.github.ElementsProject.lightning.cln.AskreneageRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.GetroutesResponse> getRoutes(com.github.ElementsProject.lightning.cln.GetroutesRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenedisablenodeResponse> askReneDisableNode(com.github.ElementsProject.lightning.cln.AskrenedisablenodeRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskreneinformchannelResponse> askReneInformChannel(com.github.ElementsProject.lightning.cln.AskreneinformchannelRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenecreatechannelResponse> askReneCreateChannel(com.github.ElementsProject.lightning.cln.AskrenecreatechannelRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskreneupdatechannelResponse> askReneUpdateChannel(com.github.ElementsProject.lightning.cln.AskreneupdatechannelRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenebiaschannelResponse> askReneBiasChannel(com.github.ElementsProject.lightning.cln.AskrenebiaschannelRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.AskrenelistreservationsResponse> askReneListReservations(com.github.ElementsProject.lightning.cln.AskrenelistreservationsRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.InjectpaymentonionResponse> injectPaymentOnion(com.github.ElementsProject.lightning.cln.InjectpaymentonionRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.XpayResponse> xpay(com.github.ElementsProject.lightning.cln.XpayRequest request);
 
     Observable<com.github.ElementsProject.lightning.cln.BlockAddedNotification> subscribeBlockAdded(com.github.ElementsProject.lightning.cln.StreamBlockAddedRequest request);
 
