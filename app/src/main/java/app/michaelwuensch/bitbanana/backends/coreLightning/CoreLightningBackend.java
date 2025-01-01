@@ -12,8 +12,8 @@ public class CoreLightningBackend extends Backend {
         // General
         mApi = new CoreLightningApi();
         mNodeImplementationName = "Core Lightning";
-        mMinRequiredVersion = new Version("24.02.2");
-        mMinRequiredVersionName = "v24.02.2";
+        mMinRequiredVersion = new Version("24.05");
+        mMinRequiredVersionName = "v24.05";
 
         // Features
         FeatureBolt11Receive = new BackendFeature(true);
