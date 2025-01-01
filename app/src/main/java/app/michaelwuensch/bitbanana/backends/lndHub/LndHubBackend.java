@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.backends.lndHub;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Backend;
+import app.michaelwuensch.bitbanana.backends.BackendFeature;
 
 public class LndHubBackend extends Backend {
 
@@ -12,9 +13,9 @@ public class LndHubBackend extends Backend {
         mNodeImplementationName = "LNDHub";
 
         // Features
-        bSupportsBolt11Receive = true;
-        bSupportsBolt11Sending = !(isLnBits() && backendConfig.getUser().equals("invoice"));
-        bSupportsOnChainReceive = !(isLnBits() || isAlby());
+        FeatureBolt11Receive = new BackendFeature(true);
+        FeatureBolt11Sending = new BackendFeature(!(isLnBits() && backendConfig.getUser().equals("invoice")));
+        FeatureOnChainReceive = new BackendFeature(!(isLnBits() || isAlby()));
     }
 
     private boolean isLnBits() {

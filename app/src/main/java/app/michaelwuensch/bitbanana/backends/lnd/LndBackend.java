@@ -9,6 +9,7 @@ import java.util.List;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Backend;
+import app.michaelwuensch.bitbanana.backends.BackendFeature;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.Version;
@@ -35,30 +36,30 @@ public class LndBackend extends Backend {
         mMinRequiredVersionName = "v0.17.0-beta";
 
         // Features
-        bSupportsBolt11Receive = true;
-        bSupportsBolt11Sending = true;
-        bSupportsOnChainReceive = true;
-        bSupportsOnChainSending = true;
-        bSupportsChannelManagement = true;
-        bSupportsOpenChannel = true;
-        bSupportsCloseChannel = true;
-        bSupportsPeerManagement = true;
-        bSupportsPeerModification = true;
-        bSupportsRouting = true;
-        bSupportsRoutingPolicyManagement = true;
-        bSupportsCoinControl = true;
-        bSupportsBalanceDetails = true;
-        bSupportsMessageSigningByNodePrivateKey = true;
-        bSupportsLnurlAuth = true;
-        bSupportsKeysend = true;
-        bSupportsOnChainFeeEstimation = true;
-        bSupportsAbsoluteOnChainFeeEstimation = true;
-        bSupportsRoutingFeeEstimation = true;
-        bSupportsIdentityScreen = true;
-        bSupportsBolt11WithoutAmount = true;
-        bSupportsEventSubscription = true;
-        bSupportsWatchtowers = true;
-        bSupportsDisplayPaymentRoute = true;
+        FeatureBolt11Receive = new BackendFeature(true);
+        FeatureBolt11Sending = new BackendFeature(true);
+        FeatureOnChainReceive = new BackendFeature(true);
+        FeatureOnChainSending = new BackendFeature(true);
+        FeatureChannelManagement = new BackendFeature(true);
+        FeatureOpenChannel = new BackendFeature(true);
+        FeatureCloseChannel = new BackendFeature(true);
+        FeaturePeerManagement = new BackendFeature(true);
+        FeaturePeerModification = new BackendFeature(true);
+        FeatureRouting = new BackendFeature(true);
+        FeatureRoutingPolicyManagement = new BackendFeature(true);
+        FeatureCoinControl = new BackendFeature(true);
+        FeatureBalanceDetails = new BackendFeature(true);
+        FeatureMessageSigningByNodePrivateKey = new BackendFeature(true);
+        FeatureLnurlAuth = new BackendFeature(true);
+        FeatureKeysend = new BackendFeature(true);
+        FeatureOnChainFeeEstimation = new BackendFeature(true);
+        FeatureAbsoluteOnChainFeeEstimation = new BackendFeature(true);
+        FeatureRoutingFeeEstimation = new BackendFeature(true);
+        FeatureIdentityScreen = new BackendFeature(true);
+        FeatureBolt11WithoutAmount = new BackendFeature(true);
+        FeatureEventSubscriptions = new BackendFeature(true);
+        FeatureWatchtowers = new BackendFeature(true);
+        FeatureDisplayPaymentRoute = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {
@@ -71,30 +72,30 @@ public class LndBackend extends Backend {
                 List<LndMacaroonPermission> permissions = LndMacaroonPermissionParser.parsePermissions(macaroon.identifier);
 
                 if (!(hasReadPermission(permissions, "message") || hasWritePermission(permissions, "message")))
-                    bSupportsMessageSigningByNodePrivateKey = false;
+                    FeatureMessageSigningByNodePrivateKey = new BackendFeature(false);
 
                 if (!hasWritePermission(permissions, "address"))
-                    bSupportsOnChainReceive = false;
+                    FeatureOnChainReceive = new BackendFeature(false);
 
                 if (!hasWritePermission(permissions, "invoices"))
-                    bSupportsBolt11Receive = false;
+                    FeatureBolt11Receive = new BackendFeature(false);
 
                 if (!hasWritePermission(permissions, "offchain")) {
-                    bSupportsBolt11Sending = false;
-                    bSupportsKeysend = false;
+                    FeatureBolt11Sending = new BackendFeature(false);
+                    FeatureKeysend = new BackendFeature(false);
                 }
 
                 if (!hasWritePermission(permissions, "onchain")) {
-                    bSupportsOnChainSending = false;
-                    bSupportsOpenChannel = false;
-                    bSupportsCloseChannel = false;
+                    FeatureOnChainSending = new BackendFeature(false);
+                    FeatureOpenChannel = new BackendFeature(false);
+                    FeatureCloseChannel = new BackendFeature(false);
                 }
 
                 if (!hasReadPermission(permissions, "peers"))
-                    bSupportsPeerManagement = false;
+                    FeaturePeerManagement = new BackendFeature(false);
 
                 if (!hasWritePermission(permissions, "peers"))
-                    bSupportsPeerModification = false;
+                    FeaturePeerModification = new BackendFeature(false);
 
 
                 // Check for account restriction
@@ -107,14 +108,14 @@ public class LndBackend extends Backend {
 
                             // Adapt features
                             isAccountRestricted = true;
-                            bSupportsChannelManagement = false;
-                            bSupportsPeerManagement = false;
-                            bSupportsWatchtowers = false;
-                            bSupportsCoinControl = false;
-                            bSupportsRouting = false;
-                            bSupportsRoutingFeeEstimation = false;
-                            bSupportsEventSubscription = false;
-                            bSupportsIdentityScreen = false;
+                            FeatureChannelManagement = new BackendFeature(false);
+                            FeaturePeerManagement = new BackendFeature(false);
+                            FeatureWatchtowers = new BackendFeature(false);
+                            FeatureCoinControl = new BackendFeature(false);
+                            FeatureRouting = new BackendFeature(false);
+                            FeatureRoutingFeeEstimation = new BackendFeature(false);
+                            FeatureEventSubscriptions = new BackendFeature(false);
+                            FeatureIdentityScreen = new BackendFeature(false);
                         }
                     }
                 }
