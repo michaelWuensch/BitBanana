@@ -952,20 +952,37 @@ public class CoreLightningApi extends Api {
                                 .build());
                 }
 
-                KeysendRequest keysendRequest = KeysendRequest.newBuilder()
-                        .setDestination(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
-                        .setAmountMsat(Amount.newBuilder()
-                                .setMsat(sendLnPaymentRequest.getAmount())
-                                .build())
-                        .setMaxfeepercent((double) sendLnPaymentRequest.getMaxFee() / (double) sendLnPaymentRequest.getAmount()) // ToDo: replace with maxfee once it is available
-                        .setExemptfee(Amount.newBuilder()
-                                .setMsat(0)
-                                .build())
-                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
-                        .setExtratlvs(TlvStream.newBuilder()
-                                .addAllEntries(tlvEntries)
-                                .build())
-                        .build();
+                KeysendRequest keysendRequest;
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) >= 0) { // ToDo: remove when support for 24.08.2 is removed. Keysend did not support maxFee setting until 24.11.
+                    keysendRequest = KeysendRequest.newBuilder()
+                            .setDestination(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
+                            .setAmountMsat(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getAmount())
+                                    .build())
+                            .setMaxfee(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getMaxFee())
+                                    .build())
+                            .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                            .setExtratlvs(TlvStream.newBuilder()
+                                    .addAllEntries(tlvEntries)
+                                    .build())
+                            .build();
+                } else {
+                    keysendRequest = KeysendRequest.newBuilder()
+                            .setDestination(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
+                            .setAmountMsat(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getAmount())
+                                    .build())
+                            .setMaxfeepercent((double) sendLnPaymentRequest.getMaxFee() / (double) sendLnPaymentRequest.getAmount()) // ToDo: replace with maxfee once it is available
+                            .setExemptfee(Amount.newBuilder()
+                                    .setMsat(0)
+                                    .build())
+                            .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                            .setExtratlvs(TlvStream.newBuilder()
+                                    .addAllEntries(tlvEntries)
+                                    .build())
+                            .build();
+                }
 
                 return CoreLightningNodeService().keySend(keysendRequest)
                         .map(response -> {

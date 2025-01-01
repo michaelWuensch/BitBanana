@@ -32,8 +32,8 @@ public class LndBackend extends Backend {
         // General
         mApi = new LndApi();
         mNodeImplementationName = "LND";
-        mMinRequiredVersion = new Version("0.17.0");
-        mMinRequiredVersionName = "v0.17.0-beta";
+        mMinRequiredVersion = new Version("0.18.0");
+        mMinRequiredVersionName = "v0.18.0-beta";
 
         // Features
         FeatureBolt11Receive = new BackendFeature(true);
