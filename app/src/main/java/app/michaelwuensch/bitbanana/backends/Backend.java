@@ -10,46 +10,46 @@ public class Backend {
     protected Version mMinRequiredVersion = new Version("0.0.0");
     protected String mMinRequiredVersionName = "v0.0.0-beta";
     protected String mNodeImplementationName = "UNKNOWN";
-    protected boolean bSupportsChannelManagement = false;
-    protected boolean bSupportsOpenChannel = false;
-    protected boolean bSupportsCloseChannel = false;
-    protected boolean bSupportsPeerManagement = false;
-    protected boolean bSupportsPeerModification = false;
-    protected boolean bSupportsRouting = false;
-    protected boolean bSupportsRoutingPolicyManagement = false;
-    protected boolean bSupportsCoinControl = false;
-    protected boolean bSupportsBalanceDetails = false;
-    protected boolean bSupportsMessageSigningByNodePrivateKey = false;
-    protected boolean bSupportsLnurlAuth = false;
-    protected boolean bSupportsDisplayPaymentRoute = false;
+    protected BackendFeature FeatureChannelManagement = new BackendFeature(false);
+    protected BackendFeature FeatureOpenChannel = new BackendFeature(false);
+    protected BackendFeature FeatureCloseChannel = new BackendFeature(false);
+    protected BackendFeature FeaturePeerManagement = new BackendFeature(false);
+    protected BackendFeature FeaturePeerModification = new BackendFeature(false);
+    protected BackendFeature FeatureRouting = new BackendFeature(false);
+    protected BackendFeature FeatureRoutingPolicyManagement = new BackendFeature(false);
+    protected BackendFeature FeatureCoinControl = new BackendFeature(false);
+    protected BackendFeature FeatureBalanceDetails = new BackendFeature(false);
+    protected BackendFeature FeatureMessageSigningByNodePrivateKey = new BackendFeature(false);
+    protected BackendFeature FeatureLnurlAuth = new BackendFeature(false);
+    protected BackendFeature FeatureDisplayPaymentRoute = new BackendFeature(false);
 
     /**
      * If the backend has a function to get recommended on-chain fees
      */
-    protected boolean bSupportsOnChainFeeEstimation = false;
+    protected BackendFeature FeatureOnChainFeeEstimation = new BackendFeature(false);
 
     /**
      * If the backend has a way to calculate the on-chain transaction before actually sending it.
      * This allows to display the absolute fee that will be payed for the transaction rather than just a sat/vB value.
      */
-    protected boolean bSupportsAbsoluteOnChainFeeEstimation = false;
-    protected boolean bSupportsRoutingFeeEstimation = false;
-    protected boolean bSupportsOnChainSending = false;
-    protected boolean bSupportsKeysend = false;
-    protected boolean bSupportsBolt11Sending = false;
-    protected boolean bSupportsBolt12Sending = false;
-    protected boolean bSupportsBolt12Receive = false;
-    protected boolean bSupportsOnChainReceive = false;
-    protected boolean bSupportsBolt11Receive = false;
-    protected boolean bSupportsBolt11WithoutAmount = false;
-    protected boolean bSupportsIdentityScreen = false;
+    protected BackendFeature FeatureAbsoluteOnChainFeeEstimation = new BackendFeature(false);
+    protected BackendFeature FeatureRoutingFeeEstimation = new BackendFeature(false);
+    protected BackendFeature FeatureOnChainSending = new BackendFeature(false);
+    protected BackendFeature FeatureKeysend = new BackendFeature(false);
+    protected BackendFeature FeatureBolt11Sending = new BackendFeature(false);
+    protected BackendFeature FeatureBolt12Sending = new BackendFeature(false);
+    protected BackendFeature FeatureBolt12Receive = new BackendFeature(false);
+    protected BackendFeature FeatureOnChainReceive = new BackendFeature(false);
+    protected BackendFeature FeatureBolt11Receive = new BackendFeature(false);
+    protected BackendFeature FeatureBolt11WithoutAmount = new BackendFeature(false);
+    protected BackendFeature FeatureIdentityScreen = new BackendFeature(false);
 
     /**
      * Whether or not it is possible to subscribe to events that happen on the backend.
      * If this is not possible BitBanana needs to poll for new information in some situations like after executing a payment or while waiting for a invoice to be paid.
      */
-    protected boolean bSupportsEventSubscription = false;
-    protected boolean bSupportsWatchtowers = false;
+    protected BackendFeature FeatureEventSubscriptions = new BackendFeature(false);
+    protected BackendFeature FeatureWatchtowers = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -75,107 +75,107 @@ public class Backend {
     }
 
     public boolean supportsChannelManagement() {
-        return bSupportsChannelManagement;
+        return FeatureChannelManagement.isAvailable();
     }
 
     public boolean supportsOpenChannel() {
-        return bSupportsOpenChannel;
+        return FeatureOpenChannel.isAvailable();
     }
 
     public boolean supportsCloseChannel() {
-        return bSupportsCloseChannel;
+        return FeatureCloseChannel.isAvailable();
     }
 
     public boolean supportsPeerManagement() {
-        return bSupportsPeerManagement;
+        return FeaturePeerManagement.isAvailable();
     }
 
     public boolean supportsPeerModification() {
-        return bSupportsPeerModification;
+        return FeaturePeerModification.isAvailable();
     }
 
     public boolean supportsRouting() {
-        return bSupportsRouting;
+        return FeatureRouting.isAvailable();
     }
 
     public boolean supportsRoutingPolicyManagement() {
-        return bSupportsRoutingPolicyManagement;
+        return FeatureRoutingPolicyManagement.isAvailable();
     }
 
     public boolean supportsCoinControl() {
-        return bSupportsCoinControl;
+        return FeatureCoinControl.isAvailable();
     }
 
     public boolean supportsBalanceDetails() {
-        return bSupportsBalanceDetails;
+        return FeatureBalanceDetails.isAvailable();
     }
 
     public boolean supportsMessageSigningByNodePrivateKey() {
-        return bSupportsMessageSigningByNodePrivateKey;
+        return FeatureMessageSigningByNodePrivateKey.isAvailable();
     }
 
     public boolean supportsLnurlAuth() {
-        return bSupportsLnurlAuth;
+        return FeatureLnurlAuth.isAvailable();
     }
 
     public boolean supportsKeysend() {
-        return bSupportsKeysend;
+        return FeatureKeysend.isAvailable();
     }
 
     public boolean supportsOnChainFeeEstimation() {
-        return bSupportsOnChainFeeEstimation;
+        return FeatureOnChainFeeEstimation.isAvailable();
     }
 
     public boolean supportsAbsoluteOnChainFeeEstimation() {
-        return bSupportsAbsoluteOnChainFeeEstimation;
+        return FeatureAbsoluteOnChainFeeEstimation.isAvailable();
     }
 
 
     public boolean supportsRoutingFeeEstimation() {
-        return bSupportsRoutingFeeEstimation;
+        return FeatureRoutingFeeEstimation.isAvailable();
     }
 
     public boolean supportsOnChainSending() {
-        return bSupportsOnChainSending;
+        return FeatureOnChainSending.isAvailable();
     }
 
     public boolean supportsBolt11Sending() {
-        return bSupportsBolt11Sending;
+        return FeatureBolt11Sending.isAvailable();
     }
 
     public boolean supportsBolt12Sending() {
-        return bSupportsBolt12Sending;
+        return FeatureBolt12Sending.isAvailable();
     }
 
     public boolean supportsBolt12Receive() {
-        return bSupportsBolt12Receive;
+        return FeatureBolt12Receive.isAvailable();
     }
 
     public boolean supportsOnChainReceive() {
-        return bSupportsOnChainReceive;
+        return FeatureOnChainReceive.isAvailable();
     }
 
     public boolean supportsBolt11Receive() {
-        return bSupportsBolt11Receive;
+        return FeatureBolt11Receive.isAvailable();
     }
 
     public boolean supportsIdentityScreen() {
-        return bSupportsIdentityScreen;
+        return FeatureIdentityScreen.isAvailable();
     }
 
     public boolean supportsBolt11WithoutAmount() {
-        return bSupportsBolt11WithoutAmount;
+        return FeatureBolt11WithoutAmount.isAvailable();
     }
 
     public boolean supportsEventSubscriptions() {
-        return bSupportsEventSubscription;
+        return FeatureEventSubscriptions.isAvailable();
     }
 
     public boolean supportsWatchtowers() {
-        return bSupportsWatchtowers;
+        return FeatureWatchtowers.isAvailable();
     }
 
     public boolean supportsDisplayPaymentRoute() {
-        return bSupportsDisplayPaymentRoute;
+        return FeatureDisplayPaymentRoute.isAvailable();
     }
 }
