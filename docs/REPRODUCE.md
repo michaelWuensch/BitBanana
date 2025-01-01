@@ -73,19 +73,24 @@ Now that we finally have two folders "built" and "official", each one with 3 sub
 $ diff --brief --recursive built/ official/
 ```
 
-This command should list as few differences as possible. In fact it should only list differences that have to do with signing & repackaging by google.
+This command should list as few differences as possible. In fact it should only list the differences listed below:
 
-- AndroidManifest.xml
+Expected differences because the official built is signed:
 - META-INF/BNDLTOOL.RSA
 - META-INF/BNDLTOOL.SF
 - META-INF/MANIFEST.MF
 - stamp-cert-sha256
 
-If this command lists any other files, this means that some of the files are not identical which in turn means the build cannot be verified. Otherwhise the build is verified!
+Unfortunatelly google seems to mess up more than that as it also produces differences in the following files, that I can't get rid of:
+- AndroidManifest.xml
+- splits0.xml
+- resources.arsc
+
+These differences are all small and I do not consider them dangerous. So if no other files are listed, the build is verified.
+If you disagree, fair enough. I invite you to help me getting rid of those extra differences. I just could not find a solution so far. This procedure is the best I could come up with to reproduce a Playstore Release that uses Android App Bundles.
 
 Please note:
-The differences are not always the same. It seems to depend on which smartphone you use for the process. And on some google seems to even mess with dex files, which means it is hard to call it reproducible in that case. Still this procedure is the best I could come up with so far to reproduce a Playstore Release using Android App Bundles.
-
+The differences might even differ for different users. It seems to depend on which smartphone you use for the process.
 If you know any better or easier way to verify such a build, please let me know! :)
 
 [bundletool]: https://github.com/google/bundletool
