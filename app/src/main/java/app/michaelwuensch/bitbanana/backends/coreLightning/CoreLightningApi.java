@@ -12,6 +12,7 @@ import com.github.ElementsProject.lightning.cln.CloseRequest;
 import com.github.ElementsProject.lightning.cln.ConnectRequest;
 import com.github.ElementsProject.lightning.cln.DisableofferRequest;
 import com.github.ElementsProject.lightning.cln.DisconnectRequest;
+import com.github.ElementsProject.lightning.cln.EnableofferRequest;
 import com.github.ElementsProject.lightning.cln.Feerate;
 import com.github.ElementsProject.lightning.cln.FetchinvoiceRequest;
 import com.github.ElementsProject.lightning.cln.FundchannelRequest;
@@ -1094,6 +1095,17 @@ public class CoreLightningApi extends Api {
         return CoreLightningNodeService().disableOffer(request)
                 .ignoreElement()
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Error disabling offer: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Completable enableBolt12Offer(String offerId) {
+        EnableofferRequest request = EnableofferRequest.newBuilder()
+                .setOfferId(ApiUtil.ByteStringFromHexString(offerId))
+                .build();
+
+        return CoreLightningNodeService().enableOffer(request)
+                .ignoreElement()
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error enabling offer: " + throwable.getMessage()));
     }
 
     @Override

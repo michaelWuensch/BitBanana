@@ -51,7 +51,7 @@ public class Bolt12OfferItemViewHolder extends RecyclerView.ViewHolder {
             mTvLabel.setText(offer.getLabel());
         }
 
-        if (offer.getDecodedBolt12().getDescription().isEmpty()) {
+        if (offer.getDecodedBolt12().getDescription() == null || offer.getDecodedBolt12().getDescription().isEmpty()) {
             mTvDescription.setVisibility(View.GONE);
         } else {
             mTvDescription.setVisibility(View.VISIBLE);
