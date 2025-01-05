@@ -72,6 +72,7 @@ public class SendLnPaymentResponse implements Serializable {
         NO_ROUTE,
         INSUFFICIENT_FUNDS,
         INCORRECT_PAYMENT_DETAILS,
+        CANCELED,
         UNKNOWN;
     }
 }

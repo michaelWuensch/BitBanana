@@ -1055,6 +1055,9 @@ public class LndApi extends Api {
                                 case FAILURE_REASON_INCORRECT_PAYMENT_DETAILS:
                                     failureReason = SendLnPaymentResponse.FailureReason.INCORRECT_PAYMENT_DETAILS;
                                     break;
+                                case FAILURE_REASON_CANCELED:
+                                    failureReason = SendLnPaymentResponse.FailureReason.CANCELED;
+                                    break;
                                 default:
                                     failureReason = SendLnPaymentResponse.FailureReason.UNKNOWN;
                             }
