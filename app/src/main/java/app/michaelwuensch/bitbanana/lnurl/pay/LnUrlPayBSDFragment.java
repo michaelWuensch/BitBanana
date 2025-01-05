@@ -502,6 +502,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         case INCORRECT_PAYMENT_DETAILS:
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_invalid_details);
                             break;
+                        case CANCELED:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_canceled);
+                            break;
                         default:
                             errorMessage = errorPrefix + "\n\n" + error;
                             break;

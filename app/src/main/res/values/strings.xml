@@ -449,6 +449,7 @@
     <string name="error_payment_no_route_small_amount">No route was found. You are trying to send an amount that is so small, that many channels might not route it. Please check your the routing settings for your own channels and adapt the MinHTLC value if necessary.</string>
     <string name="error_payment_insufficient_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Please make sure the recipient has enabled the keysend feature.</string>
+    <string name="error_payment_canceled">The sender canceled the payment..</string>
     <string name="error_only_payment_data_allowed">Only payment data is allowed here.</string>
     <string name="error_node_not_yet_ready">Your node is not fully synced yet. Please try again later.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>

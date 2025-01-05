@@ -656,6 +656,9 @@ public class SendBSDFragment extends BaseBSDFragment {
                         case INCORRECT_PAYMENT_DETAILS:
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_keysend_not_enabled_on_remote);
                             break;
+                        case CANCELED:
+                            errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_canceled);
+                            break;
                         default:
                             errorMessage = errorPrefix + "\n\n" + error;
                             break;

@@ -63,6 +63,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private CustomViewPager mViewPager;
     private ChannelsPagerAdapter mPagerAdapter;
     private boolean isOpenChannelView = true;
+    private long createOptionsMenuTimestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,6 +293,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(getResources().getString(R.string.search));
+        createOptionsMenuTimestamp = System.currentTimeMillis();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -304,11 +306,13 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                 mCurrentSearchString = newText;
                 final List<ChannelListItem> filteredChannelList = filter(mChannelItems, newText);
                 mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
-                mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
+                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500)
+                    mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
 
                 final List<ChannelListItem> filteredClosedChannelList = filter(mClosedChannelItems, newText);
                 mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
-                mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
+                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500)
+                    mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
 
                 return true;
             }
