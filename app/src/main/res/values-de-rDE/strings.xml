@@ -238,7 +238,7 @@
     <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.
 \n
 \nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Host-Zertifikats überein.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden.  Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Addresse erreichbar ist.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden. Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Adresse erreichbar ist.</string>
     <string name="error_connection_lnd_unavailable">Verbindung fehlgeschlagen. Auf den Host kann zugegriffen werden, aber der Knoten antwortet nicht.
 \n
 \nBitte überprüfe, ob der Knoten betriebsbereit ist, ob die Port-Nummer (%1$s) korrekt ist und ob die Port-Weiterleitung eingerichtet ist.</string>
@@ -914,4 +914,9 @@
     <string name="settings_lockScreenTimeout">Automatische Sperre</string>
     <string name="immediately">Sofort</string>
     <string name="stealth_mode_explanation_popup">Ab jetzt sieht BitBanana wie ein einfacher Taschenrechner aus. Um auf BitBanana zuzugreifen, verwende diesen Taschenrechner und führe eine Berechnung aus, die 21 ergibt.</string>
+    <string name="view_payment_path">Zahlungsweg anzeigen</string>
+    <string name="forwarded">Weitergeleitet</string>
+    <string name="summary">Zusammenfassung</string>
+    <string name="activity_payment_route">Zahlungsweg</string>
+    <string name="error_payment_canceled">Der Absender hat die Zahlung gestoppt.</string>
 </resources>

@@ -976,4 +976,8 @@
     <string name="stealth_mode_explanation_popup">De agora em diante, o BitBanana parece uma simples calculadora. Para acessar o BitBanana, use a calculadora e faça um cálculo que seja igual a 21.</string>
     <string name="immediately">Imediatamente</string>
     <string name="settings_lockScreenTimeout">Tempo para Bloqueio Automático</string>
+    <string name="view_payment_path">Ver caminho do pagamento</string>
+    <string name="summary">Resumo</string>
+    <string name="forwarded">Encaminhado</string>
+    <string name="activity_payment_route">Caminho do Pagamento</string>
 </resources>
