@@ -1,0 +1,17 @@
+- Proper Android 14 support
+- Added Payment Path view
+- Migration Backup now includes app settings
+- Implemented "Enable Offer" command for Core Lightning >=24.11
+- Allow offers without description (Core Lightning)
+- Added Auto-Lock Timeout setting
+- Increased disconnect timeout after app moved to background to 5 min
+- Unlocking the app does no longer restart the connection
+- Increased VPN start timeout from 5 to 15 seconds to improve UX on slow internet connection
+- Increased displayed lightning fee precision
+- Added explanation popup when enabling stealth mode
+- Fixed Memo not being displayed on outgoing payments (Core Lightning)
+- Fixed scanning lightning address doing nothing
+- Fixed incorrect fee limit for keysends with lnd
+- Fixed channel management view scrolling to top when closing channel details
+- Added Tamil language
+- Updated translations
