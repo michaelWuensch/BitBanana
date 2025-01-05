@@ -914,4 +914,8 @@
     <string name="settings_lockScreenTimeout">Automatische Sperre</string>
     <string name="immediately">Sofort</string>
     <string name="stealth_mode_explanation_popup">Ab jetzt sieht BitBanana wie ein einfacher Taschenrechner aus. Um auf BitBanana zuzugreifen, verwende diesen Taschenrechner und führe eine Berechnung aus, die 21 ergibt.</string>
+    <string name="view_payment_path">Zahlungsweg anzeigen</string>
+    <string name="forwarded">Weitergeleitet</string>
+    <string name="summary">Zusammenfassung</string>
+    <string name="activity_payment_route">Zahlungsweg</string>
 </resources>
