@@ -23,8 +23,6 @@ Thanks for being willing to contribute!
 
 - Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
-- Before submitting, please read the [Coding Guidelines](#coding-guidelines) to know more about our coding conventions and practices.
-
 #### **Do you intend to add a new feature or change an existing one?**
 
 - Please join us on [discord][discord] and check [open issues][issues] to see what contributions are needed before tackling a task to avoid duplicate work.
