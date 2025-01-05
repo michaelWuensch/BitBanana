@@ -55,6 +55,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] NFC support
 - [x] Transaction filters
 - [x] BTC, mBTC, bit & Satoshi units
+- [x] Display payment paths
 - [x] Fiat currency prices
 - [x] Support for SegWit & Taproot
 - [x] Sign/Verify
