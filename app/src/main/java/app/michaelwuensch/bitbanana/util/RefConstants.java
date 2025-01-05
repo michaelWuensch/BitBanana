@@ -74,6 +74,9 @@ public class RefConstants {
     // Number of seconds after moving the app to background until all connection is teared down.
     public static final int DISCONNECT_TIMEOUT = 300;
 
+    // Number of seconds to wait for the VPN to start before throwing an error. This is only relevant for connections with VPN automation activated.
+    public static final int VPN_START_TIMEOUT = 15;
+
     // Schedule intervals
     public static final int EXCHANGE_RATE_PERIOD = 90;
     public static final TimeUnit EXCHANGE_RATE_PERIOD_UNIT = TimeUnit.SECONDS;

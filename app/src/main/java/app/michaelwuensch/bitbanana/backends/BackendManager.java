@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 
@@ -137,7 +138,7 @@ public class BackendManager {
     }
 
     private static void waitingForVPN(Context ctx) {
-        if (VPNCheckAttempts < 10) {
+        if (VPNCheckAttempts < RefConstants.VPN_START_TIMEOUT * 2) {
             if (!VPNUtil.isVpnActive(ctx)) {
                 VPNCheckAttempts++;
                 BBLog.v(LOG_TAG, "Check VPN available: " + VPNCheckAttempts);
