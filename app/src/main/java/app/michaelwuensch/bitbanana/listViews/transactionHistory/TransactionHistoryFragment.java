@@ -478,7 +478,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
                     text = invoiceMemo + invoiceKeysendMessage + invoiceAmount;
                     break;
                 case HistoryListItem.TYPE_LN_PAYMENT:
-                    String paymentMemo = ((LnPaymentItem) item).getPayment().getMemo();
+                    String paymentMemo = ((LnPaymentItem) item).getPayment().getDescription();
                     String paymentKeysendMessage = ((LnPaymentItem) item).getPayment().getKeysendMessage();
                     String paymentAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((LnPaymentItem) item).getPayment().getAmountPaid(), true);
 

@@ -16,6 +16,7 @@ import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import fr.acinq.lightning.payment.Bolt11Invoice;
+import fr.acinq.lightning.payment.Bolt12Invoice;
 import fr.acinq.lightning.wire.OfferTypes;
 
 public class InvoiceUtil {
@@ -436,6 +437,45 @@ public class InvoiceUtil {
                     .build();
         } catch (Exception e) {
             throw new Exception("Bolt12 decoding failed: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Reading the description field from a bolt11 invoice string.
+     */
+    public static String getBolt11Description(@NonNull String bolt11) {
+        try {
+            return InvoiceUtil.decodeBolt11(bolt11).getDescription();
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while trying to read description of the following invoice:  " + bolt11);
+            BBLog.w(LOG_TAG, "Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Reading the description field from a bolt12 invoice string. (lni1...)
+     */
+    public static String getBolt12InvoiceDescription(@NonNull String bolt12invoice) {
+        try {
+            return Bolt12Invoice.Companion.fromString(bolt12invoice).get().getDescription();
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while trying to read description of the following bolt12 invoice:  " + bolt12invoice);
+            BBLog.w(LOG_TAG, "Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Reading the payer note from a bolt12 invoice string. (lni1...)
+     */
+    public static String getBolt12InvoicePayerNote(@NonNull String bolt12invoice) {
+        try {
+            return Bolt12Invoice.Companion.fromString(bolt12invoice).get().getInvoiceRequest().getPayerNote();
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while trying to read payer note of the following bolt12 invoice:  " + bolt12invoice);
+            BBLog.w(LOG_TAG, "Error: " + e.getMessage());
+            return null;
         }
     }
 

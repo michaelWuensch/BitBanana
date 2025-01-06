@@ -14,8 +14,13 @@ public class LnPayment implements Serializable {
     private final long Fee;
     private final long CreatedAt;
     private final String Bolt11;
-    private final String Memo;
-    private final boolean hasMemo;
+    private final boolean hasBolt11;
+    private final String Bolt12;
+    private final boolean hasBolt12;
+    private final String Description;
+    private final boolean hasDescription;
+    private final String Bolt12PayerNote;
+    private final boolean hasBolt12PayerNote;
     private final String KeysendMessage;
     private final boolean hasKeysendMessage;
     private final List<LnRoute> Routes;
@@ -35,8 +40,13 @@ public class LnPayment implements Serializable {
         this.Fee = builder.Fee;
         this.CreatedAt = builder.CreatedAt;
         this.Bolt11 = builder.Bolt11;
-        this.Memo = builder.Memo;
-        this.hasMemo = builder.hasMemo;
+        this.hasBolt11 = builder.hasBolt11;
+        this.Bolt12 = builder.Bolt12;
+        this.hasBolt12 = builder.hasBolt12;
+        this.Description = builder.Description;
+        this.hasDescription = builder.hasDescription;
+        this.Bolt12PayerNote = builder.Bolt12PayerNote;
+        this.hasBolt12PayerNote = builder.hasBolt12PayerNote;
         this.KeysendMessage = builder.KeysendMessage;
         this.hasKeysendMessage = builder.hasKeysendMessage;
         this.Routes = builder.Routes;
@@ -88,12 +98,32 @@ public class LnPayment implements Serializable {
         return Bolt11;
     }
 
-    public String getMemo() {
-        return Memo;
+    public boolean hasBolt11() {
+        return hasBolt11;
     }
 
-    public boolean hasMemo() {
-        return hasMemo;
+    public String getBolt12() {
+        return Bolt12;
+    }
+
+    public boolean hasBolt12() {
+        return hasBolt12;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public boolean hasDescription() {
+        return hasDescription;
+    }
+
+    public String getBolt12PayerNote() {
+        return Bolt12PayerNote;
+    }
+
+    public boolean hasBolt12PayerNote() {
+        return hasBolt12PayerNote;
     }
 
     public String getKeysendMessage() {
@@ -125,8 +155,13 @@ public class LnPayment implements Serializable {
         private long Fee;
         private long CreatedAt;
         private String Bolt11;
-        private String Memo;
-        private boolean hasMemo;
+        private boolean hasBolt11;
+        private String Bolt12;
+        private boolean hasBolt12;
+        private String Description;
+        private boolean hasDescription;
+        private String Bolt12PayerNote;
+        private boolean hasBolt12PayerNote;
         private String KeysendMessage;
         private boolean hasKeysendMessage;
         private List<LnRoute> Routes;
@@ -187,12 +222,25 @@ public class LnPayment implements Serializable {
 
         public Builder setBolt11(String bolt11) {
             Bolt11 = bolt11;
+            hasBolt11 = bolt11 != null && !bolt11.isEmpty();
             return this;
         }
 
-        public Builder setMemo(String memo) {
-            Memo = memo;
-            hasMemo = memo != null && !memo.isEmpty();
+        public Builder setBolt12(String bolt12) {
+            Bolt12 = bolt12;
+            hasBolt12 = bolt12 != null && !bolt12.isEmpty();
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            Description = description;
+            hasDescription = description != null && !description.isEmpty();
+            return this;
+        }
+
+        public Builder setBolt12PayerNote(String bolt12PayerNote) {
+            Bolt12PayerNote = bolt12PayerNote;
+            hasBolt12PayerNote = bolt12PayerNote != null && !bolt12PayerNote.isEmpty();
             return this;
         }
 

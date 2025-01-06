@@ -3,6 +3,7 @@
 - Migration Backup now includes app settings
 - Implemented "Enable Offer" command for Core Lightning >=24.11
 - Allow offers without description (Core Lightning)
+- Added description and payer note for paid bolt12 offers
 - Added Auto-Lock Timeout setting
 - Increased disconnect timeout after app moved to background to 5 min
 - Unlocking the app does no longer restart the connection

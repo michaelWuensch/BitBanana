@@ -34,14 +34,34 @@
             app:textSize="15sp" />
 
         <TextView
-            android:id="@+id/memoLabel"
+            android:id="@+id/feeLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/amount"
-            tools:text="Verwendungszweck:" />
+            tools:text="Fee:" />
+
+        <app.michaelwuensch.bitbanana.customView.AmountView
+            android:id="@+id/fee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/amount"
+            app:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/memoLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fee"
+            tools:text="Memo:" />
 
         <TextView
             android:id="@+id/memo"
@@ -53,28 +73,31 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/memoLabel"
-            app:layout_constraintTop_toBottomOf="@+id/amount"
+            app:layout_constraintTop_toBottomOf="@+id/fee"
             tools:text="Some description!" />
 
         <TextView
-            android:id="@+id/feeLabel"
+            android:id="@+id/payerNoteLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/memo"
-            tools:text="Fee:" />
+            tools:text="Payer note:" />
 
-        <app.michaelwuensch.bitbanana.customView.AmountView
-            android:id="@+id/fee"
+        <TextView
+            android:id="@+id/payerNote"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/payerNoteLabel"
             app:layout_constraintTop_toBottomOf="@+id/memo"
-            app:textSize="15sp" />
+            tools:text="Some description!" />
 
         <TextView
             android:id="@+id/dateLabel"
@@ -83,7 +106,7 @@
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fee"
+            app:layout_constraintTop_toBottomOf="@+id/payerNote"
             tools:text="Date:" />
 
         <TextView
@@ -96,7 +119,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/dateLabel"
-            app:layout_constraintTop_toBottomOf="@+id/fee"
+            app:layout_constraintTop_toBottomOf="@+id/payerNote"
             tools:text="Yesterday" />
 
         <TextView

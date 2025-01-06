@@ -188,7 +188,7 @@ public class LndHubApi extends Api {
                 paymentsList.add(LnPayment.newBuilder()
                         .setPaymentPreimage(tx.getPaymentPreimage())
                         .setFee(Math.abs(tx.getFee() * 1000L))
-                        .setMemo(tx.getMemo())
+                        .setDescription(tx.getMemo())
                         .setCreatedAt(tx.getTimestamp())
                         .setAmountPaid(Math.abs(tx.getValue() * 1000L))
                         .setBolt11(tx.getPaymentRequest())

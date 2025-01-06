@@ -38,11 +38,13 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         setAmount(payment.getAmountPaid() * -1, true);
         setFee(payment.getFee(), true);
 
-        if (payment.hasMemo()) {
-            setSecondaryDescription(payment.getMemo(), true);
+        if (payment.hasDescription()) {
+            setSecondaryDescription(payment.getDescription(), true);
         } else {
             if (payment.hasKeysendMessage())
                 setSecondaryDescription(payment.getKeysendMessage(), true);
+            else if (payment.hasBolt12PayerNote())
+                setSecondaryDescription(payment.getBolt12PayerNote(), true);
             else
                 setSecondaryDescription("", false);
         }

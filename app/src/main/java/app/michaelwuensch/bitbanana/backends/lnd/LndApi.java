@@ -110,8 +110,8 @@ import app.michaelwuensch.bitbanana.models.Watchtower;
 import app.michaelwuensch.bitbanana.models.WatchtowerSession;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
@@ -680,7 +680,7 @@ public class LndApi extends Api {
                 .setFee(lndPayment.getFeeMsat())
                 .setCreatedAt(lndPayment.getCreationTimeNs() / 1000000000)
                 .setBolt11(lndPayment.getPaymentRequest())
-                .setMemo(PaymentRequestUtil.getMemo(lndPayment.getPaymentRequest()))
+                .setDescription(InvoiceUtil.getBolt11Description(lndPayment.getPaymentRequest()))
                 .setKeysendMessage(keysendMessage);
 
         if (paymentStatus == LnPayment.Status.SUCCEEDED) {

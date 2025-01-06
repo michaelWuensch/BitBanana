@@ -35,6 +35,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private AmountView mAmount;
     private TextView mMemoLabel;
     private TextView mMemo;
+    private TextView mPayerNoteLabel;
+    private TextView mPayerNote;
     private TextView mFeeLabel;
     private AmountView mFee;
     private TextView mDateLabel;
@@ -57,6 +59,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mAmount = view.findViewById(R.id.amount);
         mMemoLabel = view.findViewById(R.id.memoLabel);
         mMemo = view.findViewById(R.id.memo);
+        mPayerNoteLabel = view.findViewById(R.id.payerNoteLabel);
+        mPayerNote = view.findViewById(R.id.payerNote);
         mFeeLabel = view.findViewById(R.id.feeLabel);
         mFee = view.findViewById(R.id.fee);
         mDateLabel = view.findViewById(R.id.dateLabel);
@@ -83,6 +87,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mAmountLabel.setText(amountLabel);
         String memoLabel = getString(R.string.memo) + ":";
         mMemoLabel.setText(memoLabel);
+        String payerNoteLabel = getString(R.string.bolt12_payer_note) + ":";
+        mPayerNoteLabel.setText(payerNoteLabel);
         String feeLabel = getString(R.string.fee) + ":";
         mFeeLabel.setText(feeLabel);
         String dateLabel = getString(R.string.date) + ":";
@@ -121,8 +127,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreatedAt(), getActivity()));
 
 
-        if (payment.hasMemo()) {
-            mMemo.setText(payment.getMemo());
+        if (payment.hasDescription()) {
+            mMemo.setText(payment.getDescription());
         } else {
             if (payment.hasKeysendMessage())
                 mMemo.setText(payment.getKeysendMessage());
@@ -131,6 +137,13 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
                 mMemo.setVisibility(View.GONE);
                 mMemoLabel.setVisibility(View.GONE);
             }
+        }
+
+        if (payment.hasBolt12PayerNote()) {
+            mPayerNote.setText(payment.getBolt12PayerNote());
+        } else {
+            mPayerNote.setVisibility(View.GONE);
+            mPayerNoteLabel.setVisibility(View.GONE);
         }
     }
 }

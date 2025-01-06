@@ -34,14 +34,14 @@ import com.github.ElementsProject.lightning.cln.ListnodesNodesAddresses;
 import com.github.ElementsProject.lightning.cln.ListnodesRequest;
 import com.github.ElementsProject.lightning.cln.ListoffersOffers;
 import com.github.ElementsProject.lightning.cln.ListoffersRequest;
+import com.github.ElementsProject.lightning.cln.ListpaysPays;
+import com.github.ElementsProject.lightning.cln.ListpaysRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsChannels;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsRequest;
 import com.github.ElementsProject.lightning.cln.ListpeerchannelsResponse;
 import com.github.ElementsProject.lightning.cln.ListpeersPeers;
 import com.github.ElementsProject.lightning.cln.ListpeersPeersLog;
 import com.github.ElementsProject.lightning.cln.ListpeersRequest;
-import com.github.ElementsProject.lightning.cln.ListsendpaysPayments;
-import com.github.ElementsProject.lightning.cln.ListsendpaysRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsRequest;
 import com.github.ElementsProject.lightning.cln.ListtransactionsResponse;
 import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
@@ -104,7 +104,6 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.PaymentRequestUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -642,27 +641,42 @@ public class CoreLightningApi extends Api {
     }
 
     private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {
-        ListsendpaysRequest request = ListsendpaysRequest.newBuilder()
-                .setStatus(ListsendpaysRequest.ListsendpaysStatus.COMPLETE)
-                .setIndex(ListsendpaysRequest.ListsendpaysIndex.CREATED)
+        ListpaysRequest request = ListpaysRequest.newBuilder()
+                .setStatus(ListpaysRequest.ListpaysStatus.COMPLETE)
+                .setIndex(ListpaysRequest.ListpaysIndex.CREATED)
                 .setLimit(pageSize)
                 .setStart((long) page * pageSize)
                 .build();
 
-        return CoreLightningNodeService().listSendPays(request)
+        return CoreLightningNodeService().listPays(request)
                 .map(response -> {
                     List<LnPayment> paymentsList = new ArrayList<>();
-                    for (ListsendpaysPayments payment : response.getPaymentsList()) {
+                    for (ListpaysPays payment : response.getPaysList()) {
+                        String description = null;
+                        if (payment.hasDescription()) {
+                            description = payment.getDescription();
+                        } else {
+                            if (payment.hasBolt11())
+                                description = InvoiceUtil.getBolt11Description(payment.getBolt11());
+                            else if (payment.hasBolt12())
+                                description = InvoiceUtil.getBolt12InvoiceDescription(payment.getBolt12());
+                        }
+                        String bolt12PayerNote = null;
+                        if (payment.hasBolt12())
+                            bolt12PayerNote = InvoiceUtil.getBolt12InvoicePayerNote(payment.getBolt12());
+
                         paymentsList.add(LnPayment.newBuilder()
                                 .setPaymentHash(ApiUtil.StringFromHexByteString(payment.getPaymentHash()))
-                                .setPaymentPreimage(ApiUtil.StringFromHexByteString(payment.getPaymentPreimage()))
+                                .setPaymentPreimage(ApiUtil.StringFromHexByteString(payment.getPreimage()))
                                 .setDestinationPubKey(ApiUtil.StringFromHexByteString(payment.getDestination()))
                                 .setStatus(LnPayment.Status.SUCCEEDED)
                                 .setAmountPaid(payment.getAmountMsat().getMsat())
                                 .setFee(payment.getAmountSentMsat().getMsat() - payment.getAmountMsat().getMsat())
                                 .setCreatedAt(payment.getCreatedAt())
                                 .setBolt11(payment.getBolt11())
-                                .setMemo(PaymentRequestUtil.getMemo(payment.getBolt11()))
+                                .setBolt12(payment.getBolt12())
+                                .setDescription(description)
+                                .setBolt12PayerNote(bolt12PayerNote)
                                 //.setKeysendMessage(???)
                                 .build());
                     }
