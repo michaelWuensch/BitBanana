@@ -3,6 +3,8 @@ package app.michaelwuensch.bitbanana.models;
 import java.io.Serializable;
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.util.InvoiceUtil;
+
 public class LnPayment implements Serializable {
 
     private final String PaymentHash;
@@ -17,14 +19,17 @@ public class LnPayment implements Serializable {
     private final boolean hasBolt11;
     private final String Bolt12;
     private final boolean hasBolt12;
-    private final String Description;
-    private final boolean hasDescription;
-    private final String Bolt12PayerNote;
-    private final boolean hasBolt12PayerNote;
+    private String Description;
+    private boolean hasDescription;
+    private boolean descriptionChecked;
+    private String Bolt12PayerNote;
+    private boolean hasBolt12PayerNote;
+    private boolean bolt12PayerNoteChecked;
     private final String KeysendMessage;
     private final boolean hasKeysendMessage;
     private final List<LnRoute> Routes;
     private final boolean hasRoutes;
+
 
     public static Builder newBuilder() {
         return new Builder();
@@ -111,18 +116,22 @@ public class LnPayment implements Serializable {
     }
 
     public String getDescription() {
+        checkDescription();
         return Description;
     }
 
     public boolean hasDescription() {
+        checkDescription();
         return hasDescription;
     }
 
     public String getBolt12PayerNote() {
+        checkBolt12PayerNote();
         return Bolt12PayerNote;
     }
 
     public boolean hasBolt12PayerNote() {
+        checkBolt12PayerNote();
         return hasBolt12PayerNote;
     }
 
@@ -142,6 +151,45 @@ public class LnPayment implements Serializable {
         return hasRoutes;
     }
 
+    // This is used for performance reasons. Nodes with thousands of transactions would need to parse it for all payments.
+    // Doing it like this allows the app to only parse the bolt11 string when it needs to be displayed.
+    private void checkDescription() {
+        if (descriptionChecked)
+            return;
+        if (Description != null && !Description.isEmpty()) {
+            descriptionChecked = true;
+            return;
+        }
+
+        if (hasBolt11()) {
+            Description = InvoiceUtil.getBolt11Description(getBolt11());
+            if (Description != null && !Description.isEmpty())
+                hasDescription = true;
+        } else if (hasBolt12()) {
+            Description = InvoiceUtil.getBolt12InvoiceDescription(getBolt12());
+            if (Description != null && !Description.isEmpty())
+                hasDescription = true;
+        }
+        descriptionChecked = true;
+    }
+
+    // This is used for performance reasons. Nodes with thousands of transactions would need to parse it for all payments.
+    // Doing it like this allows the app to only parse the bolt12 string when it needs to be displayed.
+    private void checkBolt12PayerNote() {
+        if (bolt12PayerNoteChecked)
+            return;
+        if (Bolt12PayerNote != null && !Bolt12PayerNote.isEmpty()) {
+            bolt12PayerNoteChecked = true;
+            return;
+        }
+
+        if (hasBolt12()) {
+            Bolt12PayerNote = InvoiceUtil.getBolt12InvoicePayerNote(getBolt12());
+            if (Bolt12PayerNote != null && !Bolt12PayerNote.isEmpty())
+                hasBolt12PayerNote = true;
+        }
+        bolt12PayerNoteChecked = true;
+    }
 
     //Builder Class
     public static class Builder {

@@ -652,19 +652,6 @@ public class CoreLightningApi extends Api {
                 .map(response -> {
                     List<LnPayment> paymentsList = new ArrayList<>();
                     for (ListpaysPays payment : response.getPaysList()) {
-                        String description = null;
-                        if (payment.hasDescription()) {
-                            description = payment.getDescription();
-                        } else {
-                            if (payment.hasBolt11())
-                                description = InvoiceUtil.getBolt11Description(payment.getBolt11());
-                            else if (payment.hasBolt12())
-                                description = InvoiceUtil.getBolt12InvoiceDescription(payment.getBolt12());
-                        }
-                        String bolt12PayerNote = null;
-                        if (payment.hasBolt12())
-                            bolt12PayerNote = InvoiceUtil.getBolt12InvoicePayerNote(payment.getBolt12());
-
                         paymentsList.add(LnPayment.newBuilder()
                                 .setPaymentHash(ApiUtil.StringFromHexByteString(payment.getPaymentHash()))
                                 .setPaymentPreimage(ApiUtil.StringFromHexByteString(payment.getPreimage()))
@@ -675,8 +662,8 @@ public class CoreLightningApi extends Api {
                                 .setCreatedAt(payment.getCreatedAt())
                                 .setBolt11(payment.getBolt11())
                                 .setBolt12(payment.getBolt12())
-                                .setDescription(description)
-                                .setBolt12PayerNote(bolt12PayerNote)
+                                .setDescription(payment.getDescription())
+                                //.setBolt12PayerNote()  This information is contained in the bolt12 string and will only be extracted when it needs to be displayed to improve performance.
                                 //.setKeysendMessage(???)
                                 .build());
                     }

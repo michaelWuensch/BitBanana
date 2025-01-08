@@ -680,7 +680,7 @@ public class LndApi extends Api {
                 .setFee(lndPayment.getFeeMsat())
                 .setCreatedAt(lndPayment.getCreationTimeNs() / 1000000000)
                 .setBolt11(lndPayment.getPaymentRequest())
-                .setDescription(InvoiceUtil.getBolt11Description(lndPayment.getPaymentRequest()))
+                //.setDescription() This information is contained in the bolt11 string and will only be extracted when it needs to be displayed to improve performance.
                 .setKeysendMessage(keysendMessage);
 
         if (paymentStatus == LnPayment.Status.SUCCEEDED) {
