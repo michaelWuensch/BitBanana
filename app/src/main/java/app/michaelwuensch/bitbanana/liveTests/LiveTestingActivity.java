@@ -49,6 +49,24 @@ public class LiveTestingActivity extends BaseAppCompatActivity {
             return disabled;
     }
 
+    private void PerformanceTest() {
+        int iterations = 1000;
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; i++) {
+
+        }
+        long stop = System.currentTimeMillis();
+        BBLog.i(LOG_TAG, "Method 1 ms: " + (stop - start));
+
+        start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; i++) {
+
+        }
+        stop = System.currentTimeMillis();
+        BBLog.i(LOG_TAG, "Method 2 ms: " + (stop - start));
+    }
+
     private void StringAnalyzerTest() {
         BitcoinStringAnalyzerTest.TestResult resultListener = new BitcoinStringAnalyzerTest.TestResult() {
             @Override
