@@ -162,7 +162,7 @@ public class LnPayment implements Serializable {
         }
 
         if (hasBolt11()) {
-            Description = InvoiceUtil.getBolt11Description(getBolt11());
+            Description = InvoiceUtil.getBolt11DescriptionFast(getBolt11());
             if (Description != null && !Description.isEmpty())
                 hasDescription = true;
         } else if (hasBolt12()) {

@@ -479,6 +479,53 @@ public class InvoiceUtil {
         }
     }
 
+    /**
+     * Reading the description field from a bolt11 invoice string.
+     * This function performs about 8 times faster than parsing the bolt11 string with the lightning kmp library.
+     */
+    public static String getBolt11DescriptionFast(@NonNull String bolt11) {
+        try {
+            // Extract the tagged data fields in the bech32 encoded string.
+            // Start: position of bech32 separator "1" + 1 + timestamp (7)
+            // End: length - checksum (6) - signature (104)
+            String taggedPart = bolt11.substring(bolt11.lastIndexOf("1") + 1 + 7, bolt11.length() - 6 - 104);
+
+            byte[] decodedBech32 = Bech32.bech32Decode(bolt11, false).second;
+
+            // Extract tagged data fields in decoded byte array
+            byte[] decodedTaggedPart = Arrays.copyOfRange(decodedBech32, 7, decodedBech32.length - 104);
+
+            // Find start and end index of memo data
+            int start = 0, end = 0;
+            int index = 0;
+            while (index < taggedPart.length()) {
+                boolean isDescription = taggedPart.charAt(index) == 'd';
+                int currentDataFieldLength = getTaggedDataFieldLength(taggedPart.substring(index + 1, index + 3));
+                if (isDescription) {
+                    start = index + 3;
+                    end = index + 3 + currentDataFieldLength;
+                    break;
+                }
+                index = index + 3 + currentDataFieldLength;
+            }
+
+            if (start != 0) {
+                byte[] decodedDescriptionPart = Arrays.copyOfRange(decodedTaggedPart, start, end);
+                return new String(Bech32.regroupBytes(decodedDescriptionPart));
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while trying to read description of the following invoice:  " + bolt11);
+            BBLog.w(LOG_TAG, "Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private static int getTaggedDataFieldLength(String lengthString) {
+        return Bech32.CHARSET.indexOf(lengthString.charAt(0)) * 32 + Bech32.CHARSET.indexOf(lengthString.charAt(1));
+    }
+
     public interface OnReadInvoiceCompletedListener {
         void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice);
 
