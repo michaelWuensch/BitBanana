@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -16,6 +17,7 @@ import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class Wallet_TransactionHistory {
@@ -183,7 +185,10 @@ public class Wallet_TransactionHistory {
      * This will fetch lightning payments from the node.
      */
     public void fetchPayments() {
-        compositeDisposable.add(BackendManager.api().listLnPayments(0, 500)
+        int pageSize = 500;
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) // ToDo: Remove version check once versions smaller 24.11 are no longer supported.
+            pageSize = 10000;
+        compositeDisposable.add(BackendManager.api().listLnPayments(0, pageSize)
                 .subscribe(response -> {
                     mPaymentsList = Lists.reverse(response); // we want most recent on top.
                     mPaymentsUpdated = true;

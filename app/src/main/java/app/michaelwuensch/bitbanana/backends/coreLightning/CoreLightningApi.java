@@ -678,7 +678,7 @@ public class CoreLightningApi extends Api {
                 .flatMap(data -> {
                     if (data.isEmpty()) {
                         return Single.just(Collections.emptyList()); // No more pages, return an empty list
-                    } else if (data.size() < pageSize || Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) {  // ToDo: Remove version check once versions smaller 24.11 are no longer supported.
+                    } else if (data.size() < pageSize) {
                         return Single.just(data);
                     } else {
                         return listLnPayments(page + 1, pageSize)
