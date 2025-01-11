@@ -980,4 +980,5 @@
     <string name="summary">Resumo</string>
     <string name="forwarded">Encaminhado</string>
     <string name="activity_payment_route">Caminho do Pagamento</string>
+    <string name="error_payment_canceled">O remetente cancelou o pagamento.</string>
 </resources>
