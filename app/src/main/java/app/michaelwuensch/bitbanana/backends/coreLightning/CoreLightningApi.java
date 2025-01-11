@@ -92,6 +92,7 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
+import app.michaelwuensch.bitbanana.models.PagedResponse;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
@@ -503,38 +504,49 @@ public class CoreLightningApi extends Api {
         }
     }
 
-    private Single<List<LnInvoice>> getInvoicesPage(int page, int pageSize) {
+    private Single<PagedResponse<LnInvoice>> getInvoicesPage(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "Fetching invoices page, offset:  " + (firstIndexOffset + 1));
         ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
                 .setIndex(ListinvoicesRequest.ListinvoicesIndex.CREATED)
                 .setLimit(pageSize)
-                .setStart((long) page * pageSize)
+                .setStart(firstIndexOffset + 1) //index is one based on this call
                 .build();
 
         return CoreLightningNodeService().listInvoices(invoiceRequest)
                 .map(response -> {
+                    long lastIndexOffset = firstIndexOffset;
                     List<LnInvoice> invoicesList = new ArrayList<>();
-                    BBLog.d(LOG_TAG, "Invoices count: " + response.getInvoicesCount());
                     for (ListinvoicesInvoices invoice : response.getInvoicesList()) {
                         invoicesList.add(getInvoiceFromCoreLightningInvoice(invoice));
+                        lastIndexOffset = invoice.getCreatedIndex();
                     }
-                    return invoicesList;
+                    PagedResponse<LnInvoice> page = PagedResponse.<LnInvoice>newBuilder()
+                            .setPage(invoicesList)
+                            .setPageSize(response.getInvoicesCount())
+                            .setLastIndexOffset(lastIndexOffset)
+                            .build();
+                    return page;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching Invoice page failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
-    public Single<List<LnInvoice>> listInvoices(int page, int pageSize) {
-        return getInvoicesPage(page, pageSize)
+    public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
+        return getInvoicesPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data.isEmpty()) {
-                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
-                    } else if (data.size() < pageSize) {
-                        return Single.just(data);
+                    if (data == null || data.getPage().isEmpty()) {
+                        // No more pages, return an empty list
+                        return Single.just(Collections.emptyList());
+                    } else if (data.getPageSize() < pageSize) {
+                        // Current page has fewer items than pageSize, no more data to fetch
+                        return Single.just(data.getPage());
                     } else {
-                        return listInvoices(page + 1, pageSize)
-                                .flatMap(nextPageData -> {
-                                    data.addAll(nextPageData); // Combine current page data with next page data
-                                    return Single.just(data);
+                        // Fetch the next page and concatenate results
+                        return listInvoices(data.getLastIndexOffset(), pageSize)
+                                .map(nextPageData -> {
+                                    List<LnInvoice> combinedList = new ArrayList<>(data.getPage());
+                                    combinedList.addAll(nextPageData);
+                                    return combinedList;
                                 });
                     }
                 });
@@ -640,16 +652,18 @@ public class CoreLightningApi extends Api {
 
     }
 
-    private Single<List<LnPayment>> getLnPaymentPage(int page, int pageSize) {
+    private Single<PagedResponse<LnPayment>> getLnPaymentPage(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset + 1));
         ListpaysRequest request = ListpaysRequest.newBuilder()
                 .setStatus(ListpaysRequest.ListpaysStatus.COMPLETE)
                 .setIndex(ListpaysRequest.ListpaysIndex.CREATED)
                 .setLimit(pageSize)
-                .setStart((long) page * pageSize)
+                .setStart(firstIndexOffset + 1) //index is one based on this call
                 .build();
 
         return CoreLightningNodeService().listPays(request)
                 .map(response -> {
+                    long lastIndexOffset = firstIndexOffset;
                     List<LnPayment> paymentsList = new ArrayList<>();
                     for (ListpaysPays payment : response.getPaysList()) {
                         paymentsList.add(LnPayment.newBuilder()
@@ -666,40 +680,52 @@ public class CoreLightningApi extends Api {
                                 //.setBolt12PayerNote()  This information is contained in the bolt12 string and will only be extracted when it needs to be displayed to improve performance.
                                 //.setKeysendMessage(???)
                                 .build());
+                        lastIndexOffset = payment.getCreatedIndex();
                     }
-                    return paymentsList;
+                    PagedResponse<LnPayment> page = PagedResponse.<LnPayment>newBuilder()
+                            .setPage(paymentsList)
+                            .setPageSize(response.getPaysCount())
+                            .setLastIndexOffset(lastIndexOffset)
+                            .build();
+                    return page;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching payment page failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
-    public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
-        return getLnPaymentPage(page, pageSize)
+    public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
+        return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data.isEmpty()) {
-                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
-                    } else if (data.size() < pageSize) {
-                        return Single.just(data);
+                    if (data == null || data.getPage().isEmpty()) {
+                        // No more pages, return an empty list
+                        return Single.just(Collections.emptyList());
+                    } else if (data.getPageSize() < pageSize) {
+                        // Current page has fewer items than pageSize, no more data to fetch
+                        return Single.just(data.getPage());
                     } else {
-                        return listLnPayments(page + 1, pageSize)
-                                .flatMap(nextPageData -> {
-                                    data.addAll(nextPageData); // Combine current page data with next page data
-                                    return Single.just(data);
+                        // Fetch the next page and concatenate results
+                        return listLnPayments(data.getLastIndexOffset(), pageSize)
+                                .map(nextPageData -> {
+                                    List<LnPayment> combinedList = new ArrayList<>(data.getPage());
+                                    combinedList.addAll(nextPageData);
+                                    return combinedList;
                                 });
                     }
                 });
     }
 
-    private Single<List<Forward>> getForwardPage(int page, int pageSize, long startTime) {
+    private Single<PagedResponse<Forward>> getForwardPage(long firstIndexOffset, int pageSize, long startTime) {
+        BBLog.d(LOG_TAG, "Fetching forwards page, offset:  " + (firstIndexOffset + 1));
         ListforwardsRequest request = ListforwardsRequest.newBuilder()
                 .setStatus(ListforwardsRequest.ListforwardsStatus.SETTLED)
                 .setIndex(ListforwardsRequest.ListforwardsIndex.CREATED)
                 .setLimit(pageSize)
-                .setStart((long) page * pageSize)
+                .setStart(firstIndexOffset + 1) //index is one based on this call
                 .build();
 
         return CoreLightningNodeService().listForwards(request)
                 .map(response -> {
+                    long lastIndexOffset = firstIndexOffset;
                     List<Forward> forwardsList = new ArrayList<>();
                     for (ListforwardsForwards forwardingEvent : response.getForwardsList()) {
                         long timestampNS = (long) (forwardingEvent.getReceivedTime() * 1000000000L); // ResolvedTime should be correct, but missing.
@@ -712,25 +738,35 @@ public class CoreLightningApi extends Api {
                                     .setFee(forwardingEvent.getFeeMsat().getMsat())
                                     .setTimestampNs(timestampNS)
                                     .build());
+                        lastIndexOffset = forwardingEvent.getCreatedIndex();
                     }
-                    return forwardsList;
+                    PagedResponse<Forward> page = PagedResponse.<Forward>newBuilder()
+                            .setPage(forwardsList)
+                            .setPageSize(response.getForwardsCount())
+                            .setLastIndexOffset(lastIndexOffset)
+                            .build();
+                    return page;
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching forwarding page failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
-    public Single<List<Forward>> listForwards(int page, int pageSize, long startTime) {
-        return getForwardPage(page, pageSize, startTime)
+    public Single<List<Forward>> listForwards(long firstIndexOffset, int pageSize, long startTime) {
+        return getForwardPage(firstIndexOffset, pageSize, startTime)
                 .flatMap(data -> {
-                    if (data.isEmpty()) {
-                        return Single.just(Collections.emptyList()); // No more pages, return an empty list
-                    } else if (data.size() < pageSize) {
-                        return Single.just(data);
+                    if (data == null || data.getPage().isEmpty()) {
+                        // No more pages, return an empty list
+                        return Single.just(Collections.emptyList());
+                    } else if (data.getPageSize() < pageSize) {
+                        // Current page has fewer items than pageSize, no more data to fetch
+                        return Single.just(data.getPage());
                     } else {
-                        return listForwards(page + 1, pageSize, startTime)
-                                .flatMap(nextPageData -> {
-                                    data.addAll(nextPageData); // Combine current page data with next page data
-                                    return Single.just(data);
+                        // Fetch the next page and concatenate results
+                        return listForwards(data.getLastIndexOffset(), pageSize, startTime)
+                                .map(nextPageData -> {
+                                    List<Forward> combinedList = new ArrayList<>(data.getPage());
+                                    combinedList.addAll(nextPageData);
+                                    return combinedList;
                                 });
                     }
                 });

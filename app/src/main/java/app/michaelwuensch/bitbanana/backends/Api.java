@@ -94,11 +94,11 @@ public class Api {
     /**
      * This will fetch all invoice from the node in a paginated way.
      *
-     * @param page     Use 0 as start of the recursion to fetch all invoices
-     * @param pageSize How many invoices are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @param firstIndexOffset Use 0 as start of the recursion to fetch all invoices
+     * @param pageSize         How many invoices are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
      * @return A list of all invoices
      */
-    public Single<List<LnInvoice>> listInvoices(int page, int pageSize) {
+    public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
         return Single.error(unsupportedException());
     }
 
@@ -121,23 +121,23 @@ public class Api {
     /**
      * This will fetch all lightning payments from the node in a paginated way.
      *
-     * @param page     Use 0 as start of the recursion to fetch all payments
-     * @param pageSize How many payments are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @param firstIndexOffset Use 0 as start of the recursion to fetch all payments
+     * @param pageSize         How many payments are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
      * @return A list of all payments
      */
-    public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
+    public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
         return Single.error(unsupportedException());
     }
 
     /**
      * This will fetch all forwarding events that happened
      *
-     * @param page      Use 0 as start of the recursion to fetch all forward events
-     * @param pageSize  How many forward events are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
-     * @param startTime Starting time in seconds since UNIX epoch. All forward events that are more recent than this will be returned.
+     * @param firstIndexOffset Use 0 as start of the recursion to fetch all forward events
+     * @param pageSize         How many forward events are fetched per page (per Api call). Make this big enough so it is fast, but small enough to not hit any message length limits.
+     * @param startTime        Starting time in seconds since UNIX epoch. All forward events that are more recent than this will be returned.
      * @return A list of all matching forwarding events
      */
-    public Single<List<Forward>> listForwards(int page, int pageSize, long startTime) {
+    public Single<List<Forward>> listForwards(long firstIndexOffset, int pageSize, long startTime) {
         return Single.error(unsupportedException());
     }
 

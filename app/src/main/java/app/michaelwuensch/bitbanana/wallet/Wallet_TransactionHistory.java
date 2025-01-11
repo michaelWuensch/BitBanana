@@ -187,9 +187,7 @@ public class Wallet_TransactionHistory {
     public void fetchPayments() {
         int pageSize = 500;
         if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) // ToDo: Remove version check once versions smaller 24.11 are no longer supported.
-            pageSize = 10000;
-        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC) // ToDo: Add version check once a version is available where the listPayments pagination is not broken.
-            pageSize = 10000;
+            pageSize = 100000;
 
         compositeDisposable.add(BackendManager.api().listLnPayments(0, pageSize)
                 .subscribe(response -> {

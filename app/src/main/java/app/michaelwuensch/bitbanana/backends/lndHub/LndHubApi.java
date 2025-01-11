@@ -110,7 +110,7 @@ public class LndHubApi extends Api {
     }
 
     @Override
-    public Single<List<LnInvoice>> listInvoices(int page, int pageSize) {
+    public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getuserinvoices")
                 .build();
@@ -172,7 +172,7 @@ public class LndHubApi extends Api {
     }
 
     @Override
-    public Single<List<LnPayment>> listLnPayments(int page, int pageSize) {
+    public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "gettxs")
                 .build();
