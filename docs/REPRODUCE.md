@@ -5,19 +5,21 @@
 If an application available on the app store cannot be reproduced by using the given source code, it poses a significant security threat. In such cases, the developer could potentially add hidden code and vulnerabilities that may allow them to gain unauthorized access to sensitive user data or even steal their funds.
 
 
-## Verify Github release
-Download or clone the source code from github.  
-To verify the release files distributed with github releases, first build the APK:
+## Verify GitHub and F-Droid release
+To verify the GitHub or F-Droid release, first build the APK from source.  
+To do so, download or clone the source code from GitHub.
+Then execute the following commands inside the BitBanana source code folder:
+
 ```
-$ cd BitBanana/
 $ git checkout v0.8.8
 $ docker run --rm -v `pwd`:/project mingc/android-build-box:1.28.0 bash -c 'cd /project; ./gradlew assembleRelease'
 ```
-After executing this command, the built APK can be found in this directory:
+After executing these commands, the built APK can be found in this directory:
 .../BitBanana/app/build/outputs/apk/release/bitbanana-0.8.8_65-release-unsigned.apk
 
-Extract both, the just built apk and the apk downloaded from github release.
-Rename the folder of the created apk to "built", the other one to "official".
+Then download the release from [GitHub][githubrelease] or [F-Droid][fdroidrelease].
+Extract both, the just built apk and the downloaded release apk.
+Rename the folder of the built apk to "built", the other one to "official".
 
 Then run the following command:
 
@@ -28,10 +30,9 @@ $ diff --brief --recursive built/ official/
 If this command lists any files, this means that some of the files are not identical which in turn means the build cannot be verified. If it does not list any differences, the build is verified!
 
 ## Verify Play Store release
-Verifying a Play Store release unfortunatelly got more complicated since Google enforces usage of Android App Bundles (AAB).  
-To verify the release files distributed on Play Store, first build the AAB:
+Verifying a Play Store release unfortunatelly got more complicated and unreliable since Google enforces usage of Android App Bundles (AAB).  
+To verify the release files distributed on Play Store, first download or clone the source code from GitHub. Then navigate to the source code folder and build the AAB using the following commands:
 ```
-$ cd BitBanana/
 $ git checkout v0.8.8
 $ docker run --rm -v `pwd`:/project mingc/android-build-box:1.28.0 bash -c 'cd /project; ./gradlew bundleRelease'
 ```
@@ -94,3 +95,5 @@ The differences might even differ for different users. It seems to depend on whi
 If you know any better or easier way to verify such a build, please let me know! :)
 
 [bundletool]: https://github.com/google/bundletool
+[githubrelease]: https://github.com/michaelWuensch/BitBanana/releases
+[fdroidrelease]: https://f-droid.org/packages/app.michaelwuensch.bitbanana/
