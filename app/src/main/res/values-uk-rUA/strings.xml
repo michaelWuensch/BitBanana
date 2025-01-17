@@ -776,4 +776,5 @@
     <string name="activity_payment_route">Шлях оплати</string>
     <string name="view_payment_path">Переглянути шлях платежу</string>
     <string name="error_payment_canceled">Відправник скасував платіж.</string>
+    <string name="guardian_release_utxo">Цей UTXO не було заблоковано вами за допомогою інтерфейсу користувача BitBanana, і, ймовірно, заблоковано з поважної причини. Розблокуйте його, лише якщо ви впевнені, що це необхідно.</string>
 </resources>
