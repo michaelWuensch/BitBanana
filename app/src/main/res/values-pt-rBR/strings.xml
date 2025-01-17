@@ -320,8 +320,7 @@
 \n
 \nEste avatar é único.
 \nEle foi gerado automaticamente baseado em sua chave pública e não pode ser alterado.</string>
-    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain.
-\nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain. \nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.</string>
     <string name="help_dialog_sign_verify">Ao assinar uma mensagem com seu nó, você prova que é o dono deste nó. Como a assinatura contém a chave pública do nó, outros podem verificar esta mensagem assinada.
 \n
 \nEsta ferramenta pode ser usada em diferentes cenários como provando a identidade ou para fazer login com seu nó em alguns serviços.</string>
