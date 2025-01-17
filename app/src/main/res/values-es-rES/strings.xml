@@ -489,8 +489,7 @@
 \n- Cadena lndconnect (lndconnect://...)
 \n- Conexión al servidor BTCPay (config=...)
 \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
-    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos sus fondos On-Chain.
-\nDe forma similar a las monedas, las salidas de transacciones no gastadas (UTXOs) sólo pueden gastarse en conjunto. Como los UTXOs pueden tener cualquier valor, simplemente recibirás cambio en forma de otro UTXO cuando envíes transacciones.</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos sus fondos On-Chain. \nDe forma similar a las monedas, las salidas de transacciones no gastadas (UTXOs) sólo pueden gastarse en conjunto. Como los UTXOs pueden tener cualquier valor, simplemente recibirás cambio en forma de otro UTXO cuando envíes transacciones.</string>
     <string name="help_dialog_sign_verify">Al firmar un mensaje con tu nodo, puedes demostrar que eres el propietario de ese nodo. Como la firma contiene la clave pública del nodo, otros pueden verificar el mensaje firmado.
 \n
 \nEsta característica se puede utilizar en diferentes escenarios, como la prueba de identidad o, por ejemplo, para iniciar sesión con tu nodo en algunos servicios.</string>
