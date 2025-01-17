@@ -278,6 +278,7 @@
     <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">The current fee estimation suggests that this transaction with a fee rate of %1$d sat/vB may never be confirmed. Consider increasing the fee to avoid your transaction getting stuck for a long time.\n\nDo you want to proceed anyway?</string>
     <string name="guardian_remove_watchtower">By removing the watchtower, all current sessions associated with the tower will be terminated. Some sessions are not yet exhausted. Remaining backups will get lost and won\'t be refunded, even if you paid for the service.</string>
     <string name="guardian_custodial_lnd_accounts">You only have access to an account on the LND node. Unless you are the node operator, this arrangement is custodial. The person managing the node has control over your money and can view your transaction history. Only deposit what you\'re willing to trust with that person.</string>
+    <string name="guardian_release_utxo">This UTXO was not locked by you using the BitBanana UI and is likely locked for a good reason. Unlock it only if you are sure it\’s necessary.</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>
@@ -556,7 +557,7 @@
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible to the network.\nOnly use private channels if you open a channel to a node that does not route payments or when you do not route payments yourself.\nTo route payments your node should have a very high uptime. If you run your node on a mobile device or a device that is often offline, you should not route payments and stick to private channels.</string>
     <string name="help_dialog_identity">This is your node on the lightning network.\n\nWhen you tap on your avatar image you will reveal a QR-Code.\nOthers can scan that code and add you to their contacts, open channels with you or send money to you.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
-    <string name="help_dialog_utxos">This list of UTXOs represents all your On-Chain funds.\nIn similar fashion to coins, unspent transaction outputs (UTXOs) can only be spent as a whole. As UTXOs can have any value you will simply receive change in form of another UTXO when sending transactions.</string>
+    <string name="help_dialog_utxos">This list of UTXOs represents all your On-Chain funds.\nIn similar fashion to coins, unspent transaction outputs (UTXOs) can only be spent as a whole. As UTXOs can have any value you will simply receive change in form of another UTXO when sending transactions.\n\nBy locking specific UTXOs here, you ensure they won’t be selected for on-chain transactions or channel openings. UTXOs locked with BitBanana will stay locked for 24 hours, but you have the option to unlock them manually whenever required.</string>
     <string name="help_dialog_sign_verify">By signing a message with your node, you can proof that you are the owner of this node. As the signature contains the nodes public key, others can verify such a signed message.\n\nThis feature can be used in different scenarios like proofing identity or for example to login with your node on some services.</string>
     <string name="help_dialog_forwarding">This view shows all the payments that you forwarded for other participants of the lightning network. Moreover you can see the funds you earned for providing that service.\n\nIn the lightning network channels are used for payments. When two participants want to send funds to each other but they do not have a channel open between them, they will have to find other participants in the network that have.\n\nExample:\nAlice wants to send funds to Carol, but does not have a channel with Carol. A direct payment is therefore impossible. But if Alice has a channel to Bob and Bob has a channel to Carol there is a solution. Bob can forward the payment to Carol.\n\nPayments often use multiple forwardings (hops) to finally reach their destination.</string>
     <string name="help_dialog_channels">The list of lightning channels represents your lightning funds. Lightning channels are necessary to participate in the lightning network that allows instant and cheap bitcoin payments.\n\nTo \"convert\" on-chain funds to lightning funds you have to open a channel. To \"convert\" lightning funds back to on-chain funds, you have to close an existing channel.\nBoth operation, opening and closing channels, are achieved by an on-chain transaction that costs fees. Therefore, try to keep channels open for as long as possible!\n\nAn easy way to get started with opening channels is to use lightningnetwork.plus.</string>
@@ -871,5 +872,10 @@
     <string name="bolt12_payer_note">Payer note</string>
 
     <string name="view_payment_path">View payment path</string>
+
+    <string name="lock_utxo">Lock</string>
+    <string name="unlock_utxo">Unlock</string>
+    <string name="locked">Locked</string>
+    <string name="locked_until">Locked until</string>
 
 </resources>

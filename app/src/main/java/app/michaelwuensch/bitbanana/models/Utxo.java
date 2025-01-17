@@ -9,6 +9,8 @@ public class Utxo implements Serializable {
     private final long BlockHeight;
     private final long Confirmations;
     private final Outpoint Outpoint;
+    private final Lease Lease;
+    private final boolean hasLease;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -20,6 +22,8 @@ public class Utxo implements Serializable {
         this.Outpoint = builder.Outpoint;
         this.BlockHeight = builder.BlockHeight;
         this.Confirmations = builder.Confirmations;
+        this.Lease = builder.Lease;
+        this.hasLease = builder.hasLease;
     }
 
     public String getAddress() {
@@ -48,6 +52,13 @@ public class Utxo implements Serializable {
         return Confirmations;
     }
 
+    public Lease getLease() {
+        return Lease;
+    }
+
+    public boolean isLeased() {
+        return hasLease;
+    }
 
     //Builder Class
     public static class Builder {
@@ -57,6 +68,8 @@ public class Utxo implements Serializable {
         private long BlockHeight;
         private long Confirmations;
         private Outpoint Outpoint;
+        private Lease Lease;
+        private boolean hasLease;
 
         private Builder() {
             // required parameters
@@ -94,6 +107,12 @@ public class Utxo implements Serializable {
 
         public Builder setOutpoint(Outpoint outpoint) {
             this.Outpoint = outpoint;
+            return this;
+        }
+
+        public Builder setLease(Lease lease) {
+            this.Lease = lease;
+            this.hasLease = lease != null;
             return this;
         }
     }

@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.listViews.utxos.items;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOSelectListener;
+import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
@@ -21,12 +23,14 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
     private AmountView mUTXOAmount;
     private View mRootView;
     private UTXOSelectListener mUTXOSelectListener;
+    private ImageView mLeasedIcon;
     private Context mContext;
 
 
     public UTXOItemViewHolder(View v) {
         super(v);
 
+        mLeasedIcon = v.findViewById(R.id.leasedIcon);
         mUTXOAddress = v.findViewById(R.id.utxoAddress);
         mUTXOAmount = v.findViewById(R.id.utxoAmount);
         mUTXOContentView = v.findViewById(R.id.utxoContent);
@@ -36,14 +40,25 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
     public void bindUTXOListItem(UTXOListItem utxoListItem) {
 
+        Utxo utxo = utxoListItem.getUtxo();
+
+        // Update locked icon
+        mLeasedIcon.setVisibility(utxo.isLeased() ? View.VISIBLE : View.GONE);
+
         // Set utxo address
-        mUTXOAddress.setText(utxoListItem.getUtxo().getAddress());
+        if (utxo.isLeased())
+            mUTXOAddress.setText(R.string.locked);
+        else
+            mUTXOAddress.setText(utxo.getAddress());
 
         // Set utxo amount
-        mUTXOAmount.setAmountMsat(utxoListItem.getUtxo().getAmount());
+        mUTXOAmount.setAmountMsat(utxo.getAmount());
 
         // Show unconfirmed as semitransparent
-        mUTXOContentView.setAlpha(utxoListItem.getUtxo().getConfirmations() == 0 ? 0.5f : 1f);
+        if (utxo.isLeased())
+            mUTXOContentView.setAlpha(1f);
+        else
+            mUTXOContentView.setAlpha(utxo.getConfirmations() == 0 ? 0.5f : 1f);
 
         // Set on click listener
         setOnRootViewClickListener(utxoListItem);

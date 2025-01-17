@@ -108,5 +108,5 @@ public class RefConstants {
 
     // Other
     public static final String SETUP_MODE = "setupMode";
-
+    public static final String BITBANANA_UTXO_LEASE_ID = "bb21212121212121212121212121212121212121212121212121212121212121";
 }

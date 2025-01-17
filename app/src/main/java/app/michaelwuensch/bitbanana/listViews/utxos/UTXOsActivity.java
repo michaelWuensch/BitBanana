@@ -76,7 +76,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     }
 
     private void updateUTXOsDisplayList() {
-        List<Utxo> utxos = Wallet_TransactionHistory.getInstance().mUTXOsList;
+        List<Utxo> utxos = Wallet_TransactionHistory.getInstance().getUTXOList();
         mUTXOItems.clear();
         if (utxos != null) {
             for (Utxo utxo : utxos) {
@@ -105,7 +105,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
             UTXODetailBSDFragment utxoDetailBSDFragment = new UTXODetailBSDFragment();
             bundle.putSerializable(UTXODetailBSDFragment.ARGS_UTXO, utxo);
             utxoDetailBSDFragment.setArguments(bundle);
-            utxoDetailBSDFragment.show(getSupportFragmentManager(), UTXODetailBSDFragment.TAG);
+            utxoDetailBSDFragment.show(getSupportFragmentManager(), UTXODetailBSDFragment.LOG_TAG);
         }
     }
 

@@ -32,6 +32,7 @@ import com.github.lightningnetwork.lnd.lnrpc.ListPeersRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NewAddressRequest;
 import com.github.lightningnetwork.lnd.lnrpc.NodeAddress;
 import com.github.lightningnetwork.lnd.lnrpc.NodeInfoRequest;
+import com.github.lightningnetwork.lnd.lnrpc.OutPoint;
 import com.github.lightningnetwork.lnd.lnrpc.Payment;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.PendingChannelsResponse;
@@ -49,7 +50,13 @@ import com.github.lightningnetwork.lnd.routerrpc.RouteFeeRequest;
 import com.github.lightningnetwork.lnd.routerrpc.SendPaymentRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeRequest;
 import com.github.lightningnetwork.lnd.walletrpc.EstimateFeeResponse;
+import com.github.lightningnetwork.lnd.walletrpc.LeaseOutputRequest;
+import com.github.lightningnetwork.lnd.walletrpc.ListLeasesRequest;
+import com.github.lightningnetwork.lnd.walletrpc.ListLeasesResponse;
 import com.github.lightningnetwork.lnd.walletrpc.ListUnspentRequest;
+import com.github.lightningnetwork.lnd.walletrpc.ListUnspentResponse;
+import com.github.lightningnetwork.lnd.walletrpc.ReleaseOutputRequest;
+import com.github.lightningnetwork.lnd.walletrpc.UtxoLease;
 import com.github.lightningnetwork.lnd.wtclientrpc.AddTowerRequest;
 import com.github.lightningnetwork.lnd.wtclientrpc.DeactivateTowerRequest;
 import com.github.lightningnetwork.lnd.wtclientrpc.GetTowerInfoRequest;
@@ -89,6 +96,8 @@ import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
 import app.michaelwuensch.bitbanana.models.Forward;
+import app.michaelwuensch.bitbanana.models.Lease;
+import app.michaelwuensch.bitbanana.models.LeaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnFeature;
 import app.michaelwuensch.bitbanana.models.LnHop;
@@ -101,6 +110,7 @@ import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.PagedResponse;
 import app.michaelwuensch.bitbanana.models.Peer;
+import app.michaelwuensch.bitbanana.models.ReleaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
@@ -250,24 +260,47 @@ public class LndApi extends Api {
                 .setMaxConfs(999999999) // default is 0
                 .build();
 
-        return LndConnection.getInstance().getWalletKitService().listUnspent(listUnspentRequest)
-                .map(response -> {
-                    List<app.michaelwuensch.bitbanana.models.Utxo> utxoList = new ArrayList<>();
-                    for (Utxo utxo : response.getUtxosList()) {
-                        utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
-                                .setAddress(utxo.getAddress())
-                                .setAmount(utxo.getAmountSat() * 1000)
-                                .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
-                                .setConfirmations(utxo.getConfirmations())
-                                .setOutpoint(Outpoint.newBuilder()
-                                        .setTransactionID(utxo.getOutpoint().getTxidStr())
-                                        .setOutputIndex(utxo.getOutpoint().getOutputIndex())
-                                        .build())
-                                .build());
-                    }
-                    return utxoList;
-                })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.fillInStackTrace()));
+        ListLeasesRequest listLeasesRequest = ListLeasesRequest.newBuilder().build();
+
+        Single<ListUnspentResponse> listUnspentObservable = LndConnection.getInstance().getWalletKitService().listUnspent(listUnspentRequest);
+        Single<ListLeasesResponse> listLeasesObservable = LndConnection.getInstance().getWalletKitService().listLeases(listLeasesRequest);
+
+        return Single.zip(listUnspentObservable, listLeasesObservable, (listUnspentResponse, listLeasesResponse) -> {
+            List<app.michaelwuensch.bitbanana.models.Utxo> utxoList = new ArrayList<>();
+            for (Utxo utxo : listUnspentResponse.getUtxosList()) {
+                utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
+                        .setAddress(utxo.getAddress())
+                        .setAmount(utxo.getAmountSat() * 1000)
+                        .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
+                        .setConfirmations(utxo.getConfirmations())
+                        .setOutpoint(Outpoint.newBuilder()
+                                .setTransactionID(utxo.getOutpoint().getTxidStr())
+                                .setOutputIndex(utxo.getOutpoint().getOutputIndex())
+                                .build())
+                        .setLease(null)
+                        .build());
+            }
+            for (UtxoLease utxoLease : listLeasesResponse.getLockedUtxosList()) {
+                Lease lease = Lease.newBuilder()
+                        .setId(ApiUtil.StringFromHexByteString(utxoLease.getId()))
+                        .setExpiration(utxoLease.getExpiration())
+                        .setOutpoint(Outpoint.newBuilder()
+                                .setTransactionID(utxoLease.getOutpoint().getTxidStr())
+                                .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
+                                .build())
+                        .build();
+                utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
+                        //.setAddress(???)
+                        .setAmount(utxoLease.getValue() * 1000)
+                        .setOutpoint(Outpoint.newBuilder()
+                                .setTransactionID(utxoLease.getOutpoint().getTxidStr())
+                                .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
+                                .build())
+                        .setLease(lease)
+                        .build());
+            }
+            return utxoList;
+        }).doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
@@ -1223,5 +1256,37 @@ public class LndApi extends Api {
                     return response.getRoutingFeeMsat();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Routing fee estimation failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Completable leaseUTXO(LeaseUTXORequest leaseUTXORequest) {
+        LeaseOutputRequest request = LeaseOutputRequest.newBuilder()
+                .setOutpoint(OutPoint.newBuilder()
+                        .setTxidStr(leaseUTXORequest.getOutpoint().getTransactionID())
+                        .setOutputIndex(leaseUTXORequest.getOutpoint().getOutputIndex())
+                        .build())
+                .setId(ApiUtil.ByteStringFromHexString(leaseUTXORequest.getId()))
+                .setExpirationSeconds(leaseUTXORequest.getExpiration())
+                .build();
+
+        return LndConnection.getInstance().getWalletKitService().leaseOutput(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Leasing output failed: " + throwable.getMessage()));
+    }
+
+
+    @Override
+    public Completable releaseUTXO(ReleaseUTXORequest releaseUTXORequest) {
+        ReleaseOutputRequest request = ReleaseOutputRequest.newBuilder()
+                .setOutpoint(OutPoint.newBuilder()
+                        .setTxidStr(releaseUTXORequest.getOutpoint().getTransactionID())
+                        .setOutputIndex(releaseUTXORequest.getOutpoint().getOutputIndex())
+                        .build())
+                .setId(ApiUtil.ByteStringFromHexString(releaseUTXORequest.getId()))
+                .build();
+
+        return LndConnection.getInstance().getWalletKitService().releaseOutput(request)
+                .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Releasing output failed: " + throwable.getMessage()));
     }
 }
