@@ -50,6 +50,7 @@ public class Backend {
      */
     protected BackendFeature FeatureEventSubscriptions = new BackendFeature(false);
     protected BackendFeature FeatureWatchtowers = new BackendFeature(false);
+    protected BackendFeature FeatureManuallyLeaseUTXOs = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -177,5 +178,9 @@ public class Backend {
 
     public boolean supportsDisplayPaymentRoute() {
         return FeatureDisplayPaymentRoute.isAvailable();
+    }
+
+    public boolean supportsManuallyLeasingUTXOs() {
+        return FeatureManuallyLeaseUTXOs.isAvailable();
     }
 }

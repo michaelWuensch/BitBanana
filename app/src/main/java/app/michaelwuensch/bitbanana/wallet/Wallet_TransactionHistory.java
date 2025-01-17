@@ -33,7 +33,7 @@ public class Wallet_TransactionHistory {
     private List<OnChainTransaction> mOnChainTransactionList;
     private List<LnInvoice> mInvoiceList;
     private List<LnPayment> mPaymentsList;
-    public List<Utxo> mUTXOsList;
+    private List<Utxo> mUTXOsList;
 
 
     private boolean mTransactionUpdated = false;
@@ -44,7 +44,6 @@ public class Wallet_TransactionHistory {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private Wallet_TransactionHistory() {
-        ;
     }
 
     public static Wallet_TransactionHistory getInstance() {
@@ -120,6 +119,10 @@ public class Wallet_TransactionHistory {
 
     public List<OnChainTransaction> getOnChainTransactionList() {
         return mOnChainTransactionList;
+    }
+
+    public List<Utxo> getUTXOList() {
+        return mUTXOsList;
     }
 
     /**

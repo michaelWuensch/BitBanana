@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.FeeEstimateResponse;
 import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
 import app.michaelwuensch.bitbanana.models.Forward;
+import app.michaelwuensch.bitbanana.models.LeaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -26,6 +27,7 @@ import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.NodeInfo;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Peer;
+import app.michaelwuensch.bitbanana.models.ReleaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
@@ -243,5 +245,13 @@ public class Api {
 
     public Single<String> fetchInvoiceFromBolt12Offer(FetchInvoiceFromOfferRequest fetchInvoiceFromOfferRequest) {
         return Single.error(unsupportedException());
+    }
+
+    public Completable leaseUTXO(LeaseUTXORequest leaseUTXORequest) {
+        return Completable.error(unsupportedException());
+    }
+
+    public Completable releaseUTXO(ReleaseUTXORequest releaseUTXORequest) {
+        return Completable.error(unsupportedException());
     }
 }

@@ -60,6 +60,7 @@ public class LndBackend extends Backend {
         FeatureEventSubscriptions = new BackendFeature(true);
         FeatureWatchtowers = new BackendFeature(true);
         FeatureDisplayPaymentRoute = new BackendFeature(true);
+        FeatureManuallyLeaseUTXOs = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {
