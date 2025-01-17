@@ -547,8 +547,7 @@
     <string name="signature_to_verify">Podpis k ověření</string>
     <string name="channel_summary_total_unavailable">Celkem offline</string>
     <string name="signature_invalid">Podpis je neplatný!</string>
-    <string name="help_dialog_utxos">Tento seznam UTXOs představuje vaše on-chain prostředky.
-\nPodobně jako mince, UTXOs (neutracené transakční výstupy) mohou být utraceny pouze celé. Pokud reálně utratíte méně, než je velikost UTXO, vrátí se vám drobné jako nové UTXO.</string>
+    <string name="help_dialog_utxos">Tento seznam UTXOs představuje vaše on-chain prostředky. \nPodobně jako mince, UTXOs (neutracené transakční výstupy) mohou být utraceny pouze celé. Pokud reálně utratíte méně, než je velikost UTXO, vrátí se vám drobné jako nové UTXO.</string>
     <string name="guardian_zero_amount_invoice">Tato faktura neobsahuje částku. Ačkoliv je to nepravděpodobné, faktury bez částky mohou být zneužité a příjemce obdrží méně než kolik očekává. Pokud je to možné, použijte fakturu se specifikovanou částkou.</string>
     <string name="guardian_backup_overrides_existing_data">Některá data už existují!
 \nObnova ze zálohy smaže všechna následující data:
