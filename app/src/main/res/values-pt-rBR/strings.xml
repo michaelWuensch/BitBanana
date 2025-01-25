@@ -320,7 +320,7 @@
 \n
 \nEste avatar é único.
 \nEle foi gerado automaticamente baseado em sua chave pública e não pode ser alterado.</string>
-    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain. \nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain. \nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.\n\nAo bloquear UTXOs específicas aqui, você garante que que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas você tem a opção de desbloqueá-las manualmente quando necessário.</string>
     <string name="help_dialog_sign_verify">Ao assinar uma mensagem com seu nó, você prova que é o dono deste nó. Como a assinatura contém a chave pública do nó, outros podem verificar esta mensagem assinada.
 \n
 \nEsta ferramenta pode ser usada em diferentes cenários como provando a identidade ou para fazer login com seu nó em alguns serviços.</string>
@@ -980,4 +980,9 @@
     <string name="forwarded">Encaminhado</string>
     <string name="activity_payment_route">Caminho do Pagamento</string>
     <string name="error_payment_canceled">O remetente cancelou o pagamento.</string>
+    <string name="guardian_release_utxo">Esta UTXO não foi bloqueada por você usando a IU do BitBanana e provavelmente está bloqueada por um bom motivo. Desbloqueie apenas se tem certeza de que é necessário.</string>
+    <string name="lock_utxo">Bloquear</string>
+    <string name="unlock_utxo">Desbloquear</string>
+    <string name="locked">Bloqueado</string>
+    <string name="locked_until">Bloqueado até</string>
 </resources>
