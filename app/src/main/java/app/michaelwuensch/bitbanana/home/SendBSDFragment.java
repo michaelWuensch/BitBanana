@@ -2,8 +2,10 @@ package app.michaelwuensch.bitbanana.home;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -20,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -44,6 +48,7 @@ import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
+import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
 import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
@@ -54,6 +59,7 @@ import app.michaelwuensch.bitbanana.models.SendOnChainPaymentRequest;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.DebounceHandler;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -63,9 +69,11 @@ import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
-public class SendBSDFragment extends BaseBSDFragment {
+public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = SendBSDFragment.class.getSimpleName();
+
+    private ActivityResultLauncher<Intent> mActivityResultLauncher;
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDProgressView mProgressScreen;
@@ -84,6 +92,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     private TextView mPayeeLabel;
     private TextView mPayee;
     private PaymentCommentView mPcvComment;
+    private UtxoOptionsView mUtxoOptionsView;
 
     private DecodedBolt11 mDecodedBolt11;
     private DecodedBolt12 mDecodedBolt12;
@@ -193,14 +202,30 @@ public class SendBSDFragment extends BaseBSDFragment {
         mPayeeLabel = view.findViewById(R.id.payeeSourceLabel);
         mPayee = view.findViewById(R.id.sendPayee);
         mPcvComment = view.findViewById(R.id.paymentComment);
+        mUtxoOptionsView = view.findViewById(R.id.utxoOptions);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mResultView.setOnOkListener(this::dismiss);
 
         mHandler = new Handler();
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
         mNumpad.bindEditText(mEtAmount);
+
+        // Initialize the ActivityResultLauncher
+        mActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // Pass result to the custom view
+                        mUtxoOptionsView.handleActivityResult(data);
+                    }
+                }
+        );
+        mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncher);
+
 
         // deactivate default keyboard for number input.
         mEtAmount.setShowSoftInputOnFocus(false);
@@ -296,6 +321,8 @@ public class SendBSDFragment extends BaseBSDFragment {
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_onchain_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_onChainPayment);
             mPcvComment.setVisibility(View.GONE);
+            mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnSendEnabled() ? View.VISIBLE : View.GONE);
+            mUtxoOptionsView.setUtxoSelectClickListener(this);
 
             if (mMemo == null) {
                 mExtvMemo.setVisibility(View.GONE);
@@ -360,6 +387,7 @@ public class SendBSDFragment extends BaseBSDFragment {
             mResultView.setTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
+            mUtxoOptionsView.setVisibility(View.GONE);
 
             if (mIsBolt12Offer) {
                 // Bolt 12
@@ -523,6 +551,7 @@ public class SendBSDFragment extends BaseBSDFragment {
                 .setAddress(mOnChainAddress)
                 .setAmount(sendAmount)
                 .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
+                .setUTXOs(mUtxoOptionsView.getSelectedUTXOs())
                 .build();
 
         getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
@@ -557,6 +586,7 @@ public class SendBSDFragment extends BaseBSDFragment {
     @Override
     public void onDestroyView() {
         mHandler.removeCallbacksAndMessages(null);
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
 
         super.onDestroyView();
     }
@@ -814,6 +844,25 @@ public class SendBSDFragment extends BaseBSDFragment {
         } else {
             mBtnSend.setEnabled(false);
             mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+        }
+    }
+
+    @Override
+    public long onSelectUtxosClicked() {
+        return getOnChainSendAmount();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
+        if (key != null) {
+            if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
+                if (mFixedAmount == 0L) {
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mSendAmount, !mOnChain));
+                } else {
+                    mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, !mOnChain));
+                }
+                mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+            }
         }
     }
 }

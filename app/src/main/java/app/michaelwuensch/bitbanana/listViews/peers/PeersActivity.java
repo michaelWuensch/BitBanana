@@ -262,7 +262,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
             if (data != null) {
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanContactActivity.EXTRA_NODE_URI);
                 if (nodeUri != null) {
-                    Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, false, 0, 0, false);
+                    Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, false, 0, 0, false, null);
                 }
             }
         }

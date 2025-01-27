@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -93,7 +94,7 @@ public class Wallet_Channels {
         return mClosedChannelsList;
     }
 
-    public void openChannel(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate) {
+    public void openChannel(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
         compositeDisposable.add(BackendManager.api().listPeers()
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
@@ -107,10 +108,10 @@ public class Wallet_Channels {
 
                     if (connected) {
                         BBLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
-                        openChannelConnected(nodeUri, amount, satPerVByte, isPrivate);
+                        openChannelConnected(nodeUri, amount, satPerVByte, isPrivate, UTXOs);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, satPerVByte, isPrivate);
+                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, satPerVByte, isPrivate, UTXOs);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
@@ -122,12 +123,13 @@ public class Wallet_Channels {
                 }));
     }
 
-    public void openChannelConnected(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate) {
+    public void openChannelConnected(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
         OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
                 .setNodePubKey(nodeUri.getPubKey())
                 .setSatPerVByte(satPerVByte)
                 .setPrivate(isPrivate)
                 .setAmount(amount)
+                .setUTXOs(UTXOs)
                 .build();
 
         compositeDisposable.add(BackendManager.api().openChannel(openChannelRequest)
