@@ -1045,7 +1045,7 @@ public class CoreLightningApi extends Api {
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
         WithdrawRequest.Builder requestBuilder = WithdrawRequest.newBuilder()
                 .setDestination(sendOnChainPaymentRequest.getAddress())
-                .setSatoshi(amountOrAllFromMsat(sendOnChainPaymentRequest.getAmount(), sendOnChainPaymentRequest.isSendAll()))
+                .setSatoshi(amountOrAllFromMsat(sendOnChainPaymentRequest.getAmount(), sendOnChainPaymentRequest.isSendAll(), false))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(sendOnChainPaymentRequest.getSatPerVByte()))
                         .build());
@@ -1093,7 +1093,7 @@ public class CoreLightningApi extends Api {
         FundchannelRequest.Builder requestBuilder = FundchannelRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setAnnounce(!openChannelRequest.isPrivate())
-                .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), false))
+                .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), false, false))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(openChannelRequest.getSatPerVByte()))
                         .build());
@@ -1204,14 +1204,19 @@ public class CoreLightningApi extends Api {
                 .build();
     }
 
-    private AmountOrAll amountOrAllFromMsat(long msat, boolean all) {
+    private AmountOrAll amountOrAllFromMsat(long msat, boolean all, boolean mSatPrecision) {
         if (all)
             return AmountOrAll.newBuilder()
                     .setAll(true)
                     .build();
-        else
+        else {
+            long mSatToUse = msat;
+            if (!mSatPrecision)
+                mSatToUse = (msat / 1000) * 1000L;
+
             return AmountOrAll.newBuilder()
-                    .setAmount(amountFromMsat(msat))
+                    .setAmount(amountFromMsat(mSatToUse))
                     .build();
+        }
     }
 }
