@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup
+        android:id="@+id/mainGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="utxoOptionLabel, utxoSummary, arrowImage"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/utxoOptionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/utxo_selection"
+        android:textAlignment="viewStart"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/utxoSummary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/utxoSummary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/automatic"
+        android:textAlignment="textEnd"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/utxoOptionLabel"
+        app:layout_constraintEnd_toStartOf="@+id/arrowImage"
+        app:layout_constraintStart_toEndOf="@id/utxoOptionLabel"
+        app:layout_constraintTop_toTopOf="@+id/utxoOptionLabel" />
+
+    <ImageView
+        android:id="@+id/arrowImage"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/utxoSummary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/utxoSummary"
+        app:srcCompat="@drawable/ic_arrow_down_24dp"
+        app:tint="@color/banana_yellow" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/expandableContentGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="utxoContainer, buttonLayout"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/utxoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/utxoSummary">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/utxoContainer">
+
+        <Button
+            android:id="@+id/selectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_clickable_item"
+            android:text="@string/select"
+            android:textAllCaps="false"
+            android:textColor="@color/banana_yellow"
+            android:textSize="16sp"
+            tools:text="Select ..." />
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_clickable_item"
+            android:text="@string/reset"
+            android:textAllCaps="false"
+            android:textColor="@color/banana_yellow"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/lineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonLayout"
+        app:srcCompat="@color/gray"
+        tools:ignore="ContentDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>

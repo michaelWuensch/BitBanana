@@ -1144,11 +1144,22 @@ public class LndApi extends Api {
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
 
-        SendCoinsRequest request = SendCoinsRequest.newBuilder()
+
+        SendCoinsRequest.Builder requestBuilder = SendCoinsRequest.newBuilder()
                 .setAddr(sendOnChainPaymentRequest.getAddress())
                 .setAmount(sendOnChainPaymentRequest.getAmount() / 1000)
-                .setSatPerVbyte(sendOnChainPaymentRequest.getSatPerVByte())
-                .build();
+                .setSatPerVbyte(sendOnChainPaymentRequest.getSatPerVByte());
+
+        if (sendOnChainPaymentRequest.hasUTXOs()) {
+            for (Outpoint outpoint : sendOnChainPaymentRequest.getUTXOs()) {
+                requestBuilder.addOutpoints(OutPoint.newBuilder()
+                        .setOutputIndex(outpoint.getOutputIndex())
+                        .setTxidStr(outpoint.getTransactionID())
+                        .build());
+            }
+        }
+
+        SendCoinsRequest request = requestBuilder.build();
 
         return LndConnection.getInstance().getLightningService().sendCoins(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
@@ -1216,12 +1227,21 @@ public class LndApi extends Api {
 
     @Override
     public Completable openChannel(OpenChannelRequest openChannelRequest) {
-        com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request = com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.newBuilder()
+        com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.Builder requestBuilder = com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.newBuilder()
                 .setNodePubkey(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setSatPerVbyte(openChannelRequest.getSatPerVByte())
                 .setPrivate(openChannelRequest.isPrivate())
-                .setLocalFundingAmount(openChannelRequest.getAmount() / 1000)
-                .build();
+                .setLocalFundingAmount(openChannelRequest.getAmount() / 1000);
+
+        if (openChannelRequest.hasUTXOs())
+            for (Outpoint outpoint : openChannelRequest.getUTXOs()) {
+                requestBuilder.addOutpoints(OutPoint.newBuilder()
+                        .setOutputIndex(outpoint.getOutputIndex())
+                        .setTxidStr(outpoint.getTransactionID())
+                        .build());
+            }
+
+        com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest request = requestBuilder.build();
 
         return LndConnection.getInstance().getLightningService().openChannel(request)
                 .firstOrError()

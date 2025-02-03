@@ -1,11 +1,15 @@
 package app.michaelwuensch.bitbanana.listViews.utxos;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,8 +21,10 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.listViews.utxos.itemDetails.UTXODetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.items.UTXOListItem;
+import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -28,21 +34,45 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_TransactionHistory.UtxoSubscriptionListener {
 
+    public static final String EXTRA_UTXO_ACTIVITY_MODE = "utxoActivityMode";
+    public static final String EXTRA_UTXO_SELECTED = "selectedUTXOs";
+    public static final String EXTRA_UTXO_PRESELECTED = "preselectedUTXOs";
+    public static final String EXTRA_TRANSACTION_AMOUNT = "transactionAmount";
+    public static final int MODE_VIEW = 0;
+    public static final int MODE_SELECT = 1;
+
     private static final String LOG_TAG = UTXOsActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private UTXOItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private List<UTXOListItem> mUTXOItems;
+    private List<Outpoint> mPreselectedUTXOs = null;
     private TextView mEmptyListText;
+    private Button mBtnConfirm;
+    private AmountView mTotalSelectedAmount;
+    private View mSelectionLayout;
+    private TextView mTotalSelectedAmountLabel;
+    private int mMode;
+    private long mTransactionAmountMSat;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_utxos);
+
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_UTXO_ACTIVITY_MODE);
+            mPreselectedUTXOs = (List<Outpoint>) extras.getSerializable(EXTRA_UTXO_PRESELECTED);
+            mTransactionAmountMSat = extras.getLong(EXTRA_TRANSACTION_AMOUNT);
+        } else {
+            mMode = 0;
+        }
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -52,6 +82,10 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
 
         mRecyclerView = findViewById(R.id.utxoList);
         mEmptyListText = findViewById(R.id.listEmpty);
+        mBtnConfirm = findViewById(R.id.confirmButton);
+        mTotalSelectedAmount = findViewById(R.id.totalSelectedAmount);
+        mSelectionLayout = findViewById(R.id.selectionLayout);
+        mTotalSelectedAmountLabel = findViewById(R.id.totalSelectedAmountLabel);
 
         mUTXOItems = new ArrayList<>();
 
@@ -62,8 +96,17 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new UTXOItemAdapter(mUTXOItems, this);
+        mAdapter = new UTXOItemAdapter(mUTXOItems, this, mMode);
         mRecyclerView.setAdapter(mAdapter);
+
+        switch (mMode) {
+            case MODE_VIEW:
+                setupViewMode();
+                break;
+            case MODE_SELECT:
+                setupSelectMode();
+                break;
+        }
     }
 
     @Override
@@ -90,6 +133,13 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                 mEmptyListText.setVisibility(View.GONE);
             }
 
+            // Apply preselection if necessary
+            if (mPreselectedUTXOs != null && !mPreselectedUTXOs.isEmpty()) {
+                mAdapter.setPreselectedItems(mPreselectedUTXOs);
+                mPreselectedUTXOs = null;
+                updateUiToSelection();
+            }
+
             // Update the list view
             mAdapter.notifyDataSetChanged();
         }
@@ -97,15 +147,77 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    private void setupViewMode() {
+        mSelectionLayout.setVisibility(View.GONE);
+    }
+
+    private void setupSelectMode() {
+        String title = getString(R.string.select) + " ...";
+        setTitle(title);
+        mSelectionLayout.setVisibility(View.VISIBLE);
+        mTotalSelectedAmount.setAmountMsat(0);
+        mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
+        mTotalSelectedAmountLabel.setText(getResources().getString(R.string.total) + ":");
+        setConfirmButtonEnabled(false);
+        mBtnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resultIntent = new Intent();
+                List<Utxo> selectedUTXOs = new ArrayList<>();
+                for (UTXOListItem utxoListItem : mAdapter.getSelectedItems())
+                    selectedUTXOs.add(utxoListItem.getUtxo());
+                resultIntent.putExtra(EXTRA_UTXO_SELECTED, (Serializable) selectedUTXOs);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+    }
+
+    private void setConfirmButtonEnabled(boolean enabled) {
+        if (enabled) {
+            mBtnConfirm.setEnabled(true);
+            mBtnConfirm.setTextColor(getResources().getColor(R.color.banana_yellow));
+        } else {
+            mBtnConfirm.setEnabled(false);
+            mBtnConfirm.setTextColor(getResources().getColor(R.color.gray));
+        }
+    }
+
     @Override
     public void onUtxoSelect(Serializable utxo) {
-        Bundle bundle = new Bundle();
+        switch (mMode) {
+            case MODE_VIEW:
+                Bundle bundle = new Bundle();
+                if (utxo != null) {
+                    UTXODetailBSDFragment utxoDetailBSDFragment = new UTXODetailBSDFragment();
+                    bundle.putSerializable(UTXODetailBSDFragment.ARGS_UTXO, utxo);
+                    utxoDetailBSDFragment.setArguments(bundle);
+                    utxoDetailBSDFragment.show(getSupportFragmentManager(), UTXODetailBSDFragment.LOG_TAG);
+                }
+                break;
+            case MODE_SELECT:
+                updateUiToSelection();
+                break;
+        }
+    }
 
-        if (utxo != null) {
-            UTXODetailBSDFragment utxoDetailBSDFragment = new UTXODetailBSDFragment();
-            bundle.putSerializable(UTXODetailBSDFragment.ARGS_UTXO, utxo);
-            utxoDetailBSDFragment.setArguments(bundle);
-            utxoDetailBSDFragment.show(getSupportFragmentManager(), UTXODetailBSDFragment.LOG_TAG);
+    private void updateUiToSelection() {
+        if (mAdapter.getSelectedItems().isEmpty()) {
+            setConfirmButtonEnabled(false);
+            mTotalSelectedAmount.setAmountMsat(0);
+            mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
+        } else {
+            long totalAmt = 0;
+            for (UTXOListItem item : mAdapter.getSelectedItems())
+                totalAmt += item.getUtxo().getAmount();
+            mTotalSelectedAmount.setAmountMsat(totalAmt);
+            if (totalAmt >= mTransactionAmountMSat) {
+                setConfirmButtonEnabled(true);
+                mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.green));
+            } else {
+                setConfirmButtonEnabled(false);
+                mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
+            }
         }
     }
 
@@ -123,7 +235,15 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         int id = item.getItemId();
 
         if (id == R.id.helpButton) {
-            HelpDialogUtil.showDialog(UTXOsActivity.this, R.string.help_dialog_utxos);
+            switch (mMode) {
+                case MODE_VIEW:
+                    HelpDialogUtil.showDialog(UTXOsActivity.this, getString(R.string.help_dialog_utxos) + "\n\n" + getString(R.string.help_dialog_utxos_locking));
+                    break;
+                case MODE_SELECT:
+                    HelpDialogUtil.showDialog(UTXOsActivity.this, getString(R.string.help_dialog_utxos) + "\n\n" + getString(R.string.help_dialog_utxos_select));
+                    break;
+            }
+
             return true;
         }
 

@@ -92,7 +92,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:background="@color/transparent"
-                            android:ellipsize="end"
+                            android:ellipsize="middle"
                             android:maxLines="1"
                             android:paddingStart="15dp"
                             android:paddingTop="9dp"
@@ -102,7 +102,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/payeeSourceLabel"
                             app:layout_constraintTop_toBottomOf="@id/line"
-                            tools:text="Alice (0238834839...)" />
+                            tools:text="Alice (0238834839ABE432DF091262FEA763252)" />
 
                         <ImageView
                             android:id="@+id/line2"
@@ -193,13 +193,25 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <app.michaelwuensch.bitbanana.customView.UtxoOptionsView
+                        android:id="@+id/utxoOptions"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="10dp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sendInputsView"
+                        tools:visibility="visible" />
+
                     <RelativeLayout
                         android:id="@+id/sendFeeTopLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/sendInputsView">
+                        app:layout_constraintTop_toBottomOf="@id/utxoOptions">
 
                         <app.michaelwuensch.bitbanana.customView.LightningFeeView
                             android:id="@+id/sendFeeLightningLayout"

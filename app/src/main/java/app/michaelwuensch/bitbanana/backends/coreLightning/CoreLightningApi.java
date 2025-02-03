@@ -1043,13 +1043,22 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
-        WithdrawRequest request = WithdrawRequest.newBuilder()
+        WithdrawRequest.Builder requestBuilder = WithdrawRequest.newBuilder()
                 .setDestination(sendOnChainPaymentRequest.getAddress())
                 .setSatoshi(amountOrAllFromMsat(sendOnChainPaymentRequest.getAmount(), sendOnChainPaymentRequest.isSendAll()))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(sendOnChainPaymentRequest.getSatPerVByte()))
-                        .build())
-                .build();
+                        .build());
+
+        if (sendOnChainPaymentRequest.hasUTXOs())
+            for (Outpoint outpoint : sendOnChainPaymentRequest.getUTXOs()) {
+                requestBuilder.addUtxos(com.github.ElementsProject.lightning.cln.Outpoint.newBuilder()
+                        .setOutnum(outpoint.getOutputIndex())
+                        .setTxid(ApiUtil.ByteStringFromHexString(outpoint.getTransactionID()))
+                        .build());
+            }
+
+        WithdrawRequest request = requestBuilder.build();
 
         return CoreLightningNodeService().withdraw(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
@@ -1081,14 +1090,23 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Completable openChannel(OpenChannelRequest openChannelRequest) {
-        FundchannelRequest request = FundchannelRequest.newBuilder()
+        FundchannelRequest.Builder requestBuilder = FundchannelRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setAnnounce(!openChannelRequest.isPrivate())
                 .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), false))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(openChannelRequest.getSatPerVByte()))
-                        .build())
-                .build();
+                        .build());
+
+        if (openChannelRequest.hasUTXOs())
+            for (Outpoint outpoint : openChannelRequest.getUTXOs()) {
+                requestBuilder.addUtxos(com.github.ElementsProject.lightning.cln.Outpoint.newBuilder()
+                        .setOutnum(outpoint.getOutputIndex())
+                        .setTxid(ApiUtil.ByteStringFromHexString(outpoint.getTransactionID()))
+                        .build());
+            }
+
+        FundchannelRequest request = requestBuilder.build();
 
         return CoreLightningNodeService().fundChannel(request)
                 .ignoreElement()

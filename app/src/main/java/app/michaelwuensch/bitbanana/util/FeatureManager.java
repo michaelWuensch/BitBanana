@@ -41,6 +41,18 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isUtxoSelectionOnSendEnabled() {
+        boolean backendSupported = getBackend().supportsUtxoSelectOnSend();
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
+        return settingEnabled && backendSupported;
+    }
+
+    public static boolean isUtxoSelectionOnChannelOpenEnabled() {
+        boolean backendSupported = getBackend().supportsUtxoSelectOnChannelOpen();
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
+        return settingEnabled && backendSupported;
+    }
+
     public static boolean isContactsEnabled() {
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureContacts", true);
         return settingEnabled;

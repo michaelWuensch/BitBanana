@@ -1,5 +1,8 @@
 package app.michaelwuensch.bitbanana.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -14,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -32,6 +37,7 @@ import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
+import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -39,15 +45,18 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Channels.ChannelOpenUpdateListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, Wallet_Channels.ChannelOpenUpdateListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
+
+    private ActivityResultLauncher<Intent> mActivityResultLauncher;
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDResultView mResultView;
@@ -69,6 +78,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     private boolean mBlockOnInputChanged;
     private long mOnChainUnconfirmed;
     private long mOnChainConfirmed;
+    private UtxoOptionsView mUtxoOptionsView;
 
     @Nullable
     @Override
@@ -95,6 +105,25 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
         mBSDScrollableMainView.setTitle(R.string.channel_open);
         mResultView.setOnOkListener(this::dismiss);
         mNumpad.bindEditText(mEtAmount);
+        mUtxoOptionsView = view.findViewById(R.id.utxoOptions);
+
+        mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnChannelOpenEnabled() ? View.VISIBLE : View.GONE);
+        mUtxoOptionsView.setUtxoSelectClickListener(this);
+
+        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+
+        // Initialize the ActivityResultLauncher
+        mActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // Pass result to the custom view
+                        mUtxoOptionsView.handleActivityResult(data);
+                    }
+                }
+        );
+        mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncher);
 
         mOnChainFeeView.initialSetup();
         setFeeFailure();
@@ -259,7 +288,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
 
     private void performChannelOpen() {
         switchToProgressScreen();
-        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked());
+        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked(), mUtxoOptionsView.getSelectedUTXOs());
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {
@@ -314,6 +343,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
     @Override
     public void onDestroy() {
         Wallet_Channels.getInstance().unregisterChannelOpenUpdateListener(this);
+        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 
@@ -411,6 +441,22 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements Wallet_Ch
                             }));
         } else {
             setFeeFailure();
+        }
+    }
+
+    @Override
+    public long onSelectUtxosClicked() {
+        return mValueChannelCapacity;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
+        if (key != null) {
+            if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mValueChannelCapacity, false));
+                mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
+                setAvailableFunds();
+            }
         }
     }
 }

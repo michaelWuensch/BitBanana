@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SendOnChainPaymentRequest implements Serializable {
 
@@ -8,6 +9,7 @@ public class SendOnChainPaymentRequest implements Serializable {
     private final long Amount;
     private final long SatPerVByte;
     private final boolean SendAll;
+    private final List<Outpoint> UTXOs;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -18,6 +20,7 @@ public class SendOnChainPaymentRequest implements Serializable {
         this.Amount = builder.Amount;
         this.Address = builder.Address;
         this.SendAll = builder.SendAll;
+        this.UTXOs = builder.UTXOs;
     }
 
     public String getAddress() {
@@ -45,6 +48,19 @@ public class SendOnChainPaymentRequest implements Serializable {
         return SendAll;
     }
 
+    /**
+     * The UTXOs that will be used to create this transaction.
+     */
+    public List<Outpoint> getUTXOs() {
+        return UTXOs;
+    }
+
+    public boolean hasUTXOs() {
+        if (UTXOs == null)
+            return false;
+        return !UTXOs.isEmpty();
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -53,7 +69,7 @@ public class SendOnChainPaymentRequest implements Serializable {
         private long Amount;
         private long SatPerVByte;
         private boolean SendAll;
-
+        private List<Outpoint> UTXOs;
 
         private Builder() {
             // required parameters
@@ -89,6 +105,14 @@ public class SendOnChainPaymentRequest implements Serializable {
          */
         public Builder setSendAll(boolean sendAll) {
             SendAll = sendAll;
+            return this;
+        }
+
+        /**
+         * The UTXOs that will be used to create this transaction. This is optional.
+         */
+        public Builder setUTXOs(List<Outpoint> utxos) {
+            UTXOs = utxos;
             return this;
         }
     }

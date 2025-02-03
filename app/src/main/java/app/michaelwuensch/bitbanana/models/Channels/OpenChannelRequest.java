@@ -1,6 +1,9 @@
 package app.michaelwuensch.bitbanana.models.Channels;
 
 import java.io.Serializable;
+import java.util.List;
+
+import app.michaelwuensch.bitbanana.models.Outpoint;
 
 public class OpenChannelRequest implements Serializable {
 
@@ -9,6 +12,7 @@ public class OpenChannelRequest implements Serializable {
     private final long SatPerVByte;
     private final boolean Private;
     private final boolean UseAllFunds;
+    private final List<Outpoint> UTXOs;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -20,6 +24,7 @@ public class OpenChannelRequest implements Serializable {
         this.NodePubKey = builder.NodePubKey;
         this.Private = builder.Private;
         this.UseAllFunds = builder.UseAllFunds;
+        this.UTXOs = builder.UTXOs;
     }
 
     public String getNodePubKey() {
@@ -54,6 +59,19 @@ public class OpenChannelRequest implements Serializable {
         return UseAllFunds;
     }
 
+    /**
+     * The UTXOs that will be used to open this channel.
+     */
+    public List<Outpoint> getUTXOs() {
+        return UTXOs;
+    }
+
+    public boolean hasUTXOs() {
+        if (UTXOs == null)
+            return false;
+        return !UTXOs.isEmpty();
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -63,7 +81,7 @@ public class OpenChannelRequest implements Serializable {
         private long SatPerVByte;
         private boolean Private;
         private boolean UseAllFunds;
-
+        private List<Outpoint> UTXOs;
 
         private Builder() {
             // required parameters
@@ -107,6 +125,14 @@ public class OpenChannelRequest implements Serializable {
          */
         public Builder setUseAllFunds(boolean useAllFunds) {
             UseAllFunds = useAllFunds;
+            return this;
+        }
+
+        /**
+         * The UTXOs that will be used to open this channel. This is optional.
+         */
+        public Builder setUTXOs(List<Outpoint> utxos) {
+            UTXOs = utxos;
             return this;
         }
     }

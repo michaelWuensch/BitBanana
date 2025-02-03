@@ -15,7 +15,7 @@
         android:id="@+id/utxoContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_clickable_item"
+        android:background="@drawable/bg_selectable_list_item"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="15dp"

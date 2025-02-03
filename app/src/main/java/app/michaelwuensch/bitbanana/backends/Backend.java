@@ -51,6 +51,8 @@ public class Backend {
     protected BackendFeature FeatureEventSubscriptions = new BackendFeature(false);
     protected BackendFeature FeatureWatchtowers = new BackendFeature(false);
     protected BackendFeature FeatureManuallyLeaseUTXOs = new BackendFeature(false);
+    protected BackendFeature FeatureUtxoSelectOnSend = new BackendFeature(false);
+    protected BackendFeature FeatureUtxoSelectOnChannelOpen = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -182,5 +184,13 @@ public class Backend {
 
     public boolean supportsManuallyLeasingUTXOs() {
         return FeatureManuallyLeaseUTXOs.isAvailable();
+    }
+
+    public boolean supportsUtxoSelectOnSend() {
+        return FeatureUtxoSelectOnSend.isAvailable();
+    }
+
+    public boolean supportsUtxoSelectOnChannelOpen() {
+        return FeatureUtxoSelectOnChannelOpen.isAvailable();
     }
 }
