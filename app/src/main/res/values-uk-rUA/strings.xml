@@ -437,7 +437,7 @@
     <string name="error_invalid_data_to_create_channel">Недійсний формат.\nВикористовуйте один із наведених нижче способів.\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- LNURL-канал</string>
     <string name="error_payment_invalid_details">Платіжні реквізити не збігаються з даними, зазначеними в рахунку-фактурі, який ви намагаєтеся оплатити.</string>
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Висока ставка комісії. Дозволено максимум %1$.2f%%.</string>
-    <string name="help_dialog_utxos">Цей список UTXO представляє всі ваші фонди On-Chain. \nПодібно до монет, невитрачені виходи транзакцій (UTXO) можна витрачати лише в цілому. Оскільки UTXO може мати будь-яке значення, ви просто отримаєте здачу у формі іншого UTXO під час надсилання транзакцій. \n\nЗаблокувавши тут певні UTXO, ви гарантуєте, що вони не будуть вибрані для транзакцій у мережі або відкриття каналів. UTXO, заблоковані за допомогою BitBanana, залишатимуться заблокованими протягом 24 годин, але у вас є можливість розблокувати їх вручну, коли це буде потрібно.</string>
+    <string name="help_dialog_utxos">Цей список UTXO представляє всі ваші фонди On-Chain. \nПодібно до монет, невитрачені виходи транзакцій (UTXO) можна витрачати лише в цілому. Оскільки UTXO може мати будь-яке значення, ви просто отримаєте здачу у формі іншого UTXO під час надсилання транзакцій.</string>
     <string name="help_dialog_maxHTLC">Максимальна вартість, яку ви готові переслати на цей канал за одну транзакцію.\n\nЗалиште це поле порожнім, якщо ви не хочете змінювати поточне встановлене значення.</string>
     <string name="help_dialog_node_nickname">Ім’я використовується лише для організації ваших вузлів у BitBanana. Іншого ефекту не має.</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">Найменша вартість, яку ви готові переслати на цей канал за одну транзакцію.</string>
@@ -781,4 +781,13 @@
     <string name="locked">Заблоковано</string>
     <string name="unlock_utxo">Розблокувати</string>
     <string name="lock_utxo">Замок</string>
+    <string name="utxo_selection">Вибір UTXO</string>
+    <string name="select">Виберіть</string>
+    <string name="reset">Скинути</string>
+    <string name="change">Зміна</string>
+    <string name="confirm_selection">Підтвердити вибір</string>
+    <string name="automatic">Автоматичний</string>
+    <string name="help_dialog_utxos_locking">Заблокувавши тут певні UTXO, ви гарантуєте, що вони не будуть вибрані для транзакцій у мережі або відкриття каналів. UTXO, заблоковані за допомогою BitBanana, залишатимуться заблокованими протягом 24 годин, але у вас є можливість розблокувати їх вручну, коли це буде потрібно.</string>
+    <string name="help_dialog_utxos_select">Вибравши конкретні UTXO, ви можете покращити свою конфіденційність або заощадити в деяких випадках.</string>
+    <string name="total">Всього</string>
 </resources>
