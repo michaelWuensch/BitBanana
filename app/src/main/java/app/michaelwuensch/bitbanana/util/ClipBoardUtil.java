@@ -19,10 +19,10 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ClipBoardUtil {
@@ -47,6 +47,9 @@ public class ClipBoardUtil {
 
     public static String getPrimaryContent(Context context, boolean addToScanHistory) throws NullPointerException {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        if (clipboard.getPrimaryClip() == null)
+            return null;
+        
         String data = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
 
         if (addToScanHistory) {
