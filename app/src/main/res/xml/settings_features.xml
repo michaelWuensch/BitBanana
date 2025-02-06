@@ -26,7 +26,7 @@
         app:iconSpaceReserved="false" />
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="featureCoinControl"
         android:summary="@string/settings_featureCoinControl_summary"
         android:title="@string/settings_featureCoinControl"
