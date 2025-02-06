@@ -138,6 +138,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.home.ManualSendScanActivity"
+            android:label="@string/scan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppOverlayTheme" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.GeneratedRequestActivity"
             android:label="@string/activity_receive"
             android:screenOrientation="portrait"

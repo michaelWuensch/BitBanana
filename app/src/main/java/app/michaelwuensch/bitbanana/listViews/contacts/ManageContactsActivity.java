@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.ManualSendInputView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
+import app.michaelwuensch.bitbanana.home.ManualSendScanActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.items.ContactItemViewHolder;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
@@ -40,6 +43,9 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
     public static final int MODE_MANAGE = 0;
     public static final int MODE_SEND = 1;
     public static final int MODE_OPEN_CHANNEL = 2;
+
+    private ActivityResultLauncher<Intent> mActivityResultLauncher;
+
     private static final String LOG_TAG = ManageContactsActivity.class.getSimpleName();
     private static int REQUEST_CODE_ADD_CONTACT = 111;
     private static int REQUEST_CODE_CONTACT_ACTION = 112;
@@ -70,6 +76,16 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mManualInput = findViewById(R.id.manualInput);
         mRecyclerView = findViewById(R.id.contactsList);
         mEmptyListText = findViewById(R.id.listEmpty);
+
+        // Initialize the ActivityResultLauncher
+        mActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Intent data = result.getData();
+                    handleActivityResult(result.getResultCode(), data);
+                }
+        );
+        mManualInput.setActivityResultLauncher(mActivityResultLauncher);
 
         // Receive data from last activity
         Bundle extras = getIntent().getExtras();
@@ -354,5 +370,10 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
                 showError(error, duration);
             }
         });
+    }
+
+    private void handleActivityResult(int resultCode, Intent data) {
+        if (resultCode == ManualSendScanActivity.RESULT_CODE_MANUAL_SCAN_INPUT)
+            mManualInput.setInputText(data.getStringExtra(ManualSendScanActivity.SCAN_RESULT));
     }
 }

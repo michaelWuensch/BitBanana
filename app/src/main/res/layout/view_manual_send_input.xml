@@ -11,40 +11,47 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="15dp"
         android:ems="10"
         android:hint="@string/manual_send_input_hint"
         android:inputType="text"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/continueButton"
+        app:layout_constraintEnd_toStartOf="@+id/pasteButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/continueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_clickable_item"
-        android:text="@string/continue_string"
-        android:textAllCaps="false"
-        android:textColor="@color/banana_yellow"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+        android:id="@+id/pasteButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/bg_clickable_item_bright"
+        android:src="@drawable/ic_content_copy_black_24dp"
+        app:layout_constraintEnd_toStartOf="@id/scanButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 
-    <ProgressBar
-        android:id="@+id/spinner"
-        style="?android:attr/progressBarStyleSmall"
+    <ImageButton
+        android:id="@+id/scanButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_clickable_item_bright"
+        android:src="@drawable/ic_scan_qr_code_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <app.michaelwuensch.bitbanana.customView.BBButton
+        android:id="@+id/continueButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/continueButton"
-        app:layout_constraintStart_toStartOf="@id/continueButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:bbbutton_bright="true"
+        app:bbbutton_text="@string/continue_string"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
