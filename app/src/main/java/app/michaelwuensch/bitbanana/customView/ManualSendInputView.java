@@ -2,35 +2,43 @@ package app.michaelwuensch.bitbanana.customView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageButton;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.home.ManualSendScanActivity;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ManualSendInputView extends ConstraintLayout {
 
-    private Button mBtnContinue;
+    private ActivityResultLauncher<Intent> mActivityResultLauncher;
+
+    private BBButton mBtnContinue;
+    private ImageButton mImgBtnPaste;
+    private ImageButton mImgBtnScan;
     private EditText mEditText;
-    private ProgressBar mSpinner;
     private OnResultListener mListener;
     private CompositeDisposable mCompositeDisposable;
     private String mData;
@@ -55,18 +63,59 @@ public class ManualSendInputView extends ConstraintLayout {
         View view = inflate(getContext(), R.layout.view_manual_send_input, this);
 
         mEditText = view.findViewById(R.id.sendInput);
+        mImgBtnPaste = view.findViewById(R.id.pasteButton);
+        mImgBtnScan = view.findViewById(R.id.scanButton);
         mBtnContinue = view.findViewById(R.id.continueButton);
-        mSpinner = view.findViewById(R.id.spinner);
     }
 
     public void setupView(CompositeDisposable cd) {
         mCompositeDisposable = cd;
+
+        mImgBtnPaste.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditText.setText(ClipBoardUtil.getPrimaryContent(getContext(), false));
+            }
+        });
+
+        mImgBtnScan.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(getContext(), ManualSendScanActivity.class);
+                mActivityResultLauncher.launch(scanIntent);
+            }
+        });
+
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (mEditText.getText() != null) {
+                    if (mEditText.getText().toString().isEmpty())
+                        mBtnContinue.setButtonEnabled(false);
+                    else
+                        mBtnContinue.setButtonEnabled(true);
+                } else {
+                    mBtnContinue.setButtonEnabled(false);
+                }
+            }
+        });
+
+        mBtnContinue.setButtonEnabled(false);
         mBtnContinue.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 mData = mEditText.getText().toString();
-                mSpinner.setVisibility(VISIBLE);
-                mBtnContinue.setVisibility(INVISIBLE);
+                mBtnContinue.showProgress();
                 /* We are not allowed to access LNURL links twice.
                 Therefore we first have to check if it is a LNURL and then hand over to the HomeActivity.
                 Executing the rest twice doesn't harm anyone.
@@ -167,8 +216,15 @@ public class ManualSendInputView extends ConstraintLayout {
     private void resetContinueButton() {
         // This has to be executed on the main tread. If not it will crash if it is a callback from a http request.
         ((Activity) getContext()).runOnUiThread(() -> {
-            mBtnContinue.setVisibility(VISIBLE);
-            mSpinner.setVisibility(INVISIBLE);
+            mBtnContinue.hideProgress();
         });
+    }
+
+    public void setInputText(String text) {
+        mEditText.setText(text);
+    }
+
+    public void setActivityResultLauncher(ActivityResultLauncher<Intent> launcher) {
+        mActivityResultLauncher = launcher;
     }
 }

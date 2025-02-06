@@ -311,4 +311,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
+    public void hideScannerInstructions() {
+        mScannerInstructionsHelp.setVisibility(View.GONE);
+    }
 }

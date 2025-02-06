@@ -43,4 +43,12 @@
         <attr name="infoLine_ellipsizeEnd" format="boolean" />
         <attr name="infoLine_ellipsizeMiddle" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="BBButton">
+        <attr name="bbbutton_text" format="string" />
+        <attr name="bbbutton_image" format="reference" />
+        <attr name="bbbutton_contentColor" format="color" />
+        <attr name="bbbutton_textSize" format="dimension" />
+        <attr name="bbbutton_bright" format="boolean" />
+    </declare-styleable>
 </resources>
