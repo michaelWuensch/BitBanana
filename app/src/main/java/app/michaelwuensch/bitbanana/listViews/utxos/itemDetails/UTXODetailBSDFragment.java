@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +17,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.models.LeaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.ReleaseUTXORequest;
@@ -51,7 +51,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
     private TextView mLeasedTimeoutLabel;
     private TextView mLeasedTimeout;
     private ImageView mAddressCopyButton;
-    private Button mLockUnlockButton;
+    private BBButton mLockUnlockButton;
 
     @Nullable
     @Override

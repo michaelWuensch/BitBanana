@@ -196,16 +196,13 @@
             app:srcCompat="@drawable/ic_content_copy_black_24dp"
             app:tint="@color/white" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/showPaymentRouteButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/view_payment_path"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
             android:visibility="gone"
+            app:bbbutton_text="@string/view_payment_path"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/preimageLabel"

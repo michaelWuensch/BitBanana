@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -108,7 +108,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
 
 
         // Action when clicked on "Open Channel"
-        Button btnOpen = view.findViewById(R.id.openButton);
+        BBButton btnOpen = view.findViewById(R.id.openButton);
         btnOpen.setOnClickListener(v -> {
             if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                 switchToProgressScreen();

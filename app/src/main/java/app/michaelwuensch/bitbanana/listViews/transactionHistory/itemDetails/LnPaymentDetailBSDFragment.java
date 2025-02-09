@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +15,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.listViews.paymentRoute.PaymentRouteActivity;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -44,7 +44,7 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private TextView mPreimageLabel;
     private TextView mPreimage;
     private ImageView mPreimageCopyIcon;
-    private Button mShowPaymentRouteButton;
+    private BBButton mShowPaymentRouteButton;
 
     @Nullable
     @Override

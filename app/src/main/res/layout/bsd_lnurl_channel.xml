@@ -88,17 +88,13 @@
                     app:srcCompat="@drawable/ic_help_black_24dp"
                     app:tint="@color/gray" />
 
-                <Button
+                <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/openButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/bg_clickable_item"
-                    android:text="@string/channel_open"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
-                    android:textSize="16sp"
+                    app:bbbutton_text="@string/channel_open"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

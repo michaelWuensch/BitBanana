@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class DataBackupCreatePagerAdapter extends PagerAdapter {
@@ -50,13 +50,12 @@ public class DataBackupCreatePagerAdapter extends PagerAdapter {
             backupView = inflater.inflate(R.layout.view_data_backup_confirm, container, false);
 
             CheckBox checkBoxConfirm = backupView.findViewById(R.id.data_backup_confirm_checkbox_confirm);
-            Button buttonContinue = backupView.findViewById(R.id.data_backup_confirm_continue_button);
-            Button buttonCancel = backupView.findViewById(R.id.data_backup_confirm_cancel_button);
+            BBButton buttonContinue = backupView.findViewById(R.id.data_backup_confirm_continue_button);
+            buttonContinue.setButtonEnabled(false);
+            BBButton buttonCancel = backupView.findViewById(R.id.data_backup_confirm_cancel_button);
 
             checkBoxConfirm.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                buttonContinue.setEnabled(isChecked);
-                buttonContinue.setTextColor(isChecked ? mContext.getResources().getColor(R.color.banana_yellow) : mContext.getResources().getColor(R.color.gray));
-
+                buttonContinue.setButtonEnabled(isChecked);
             });
 
             buttonCancel.setOnClickListener(new OnSingleClickListener() {
@@ -78,7 +77,7 @@ public class DataBackupCreatePagerAdapter extends PagerAdapter {
             // password
             backupView = inflater.inflate(R.layout.view_data_backup_password, container, false);
 
-            Button buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
+            BBButton buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
             EditText pw1 = backupView.findViewById(R.id.pw1_input);
             EditText pw2 = backupView.findViewById(R.id.pw2_input);
 
@@ -110,7 +109,7 @@ public class DataBackupCreatePagerAdapter extends PagerAdapter {
             mBackupCreationSuccess = backupView.findViewById(R.id.creatingBackupSuccess);
             mBackupCreationFailed = backupView.findViewById(R.id.creatingBackupFailed);
 
-            Button finishButton = backupView.findViewById(R.id.data_backup_create_finish_button);
+            BBButton finishButton = backupView.findViewById(R.id.data_backup_create_finish_button);
             finishButton.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {

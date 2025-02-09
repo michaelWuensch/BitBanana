@@ -102,17 +102,13 @@
                 android:text="@string/routing_policy_applies_for_all_channels"
                 android:textColor="@color/red" />
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_clickable_item"
-                android:text="@string/submit_routing_policy"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="16sp" />
+                app:bbbutton_text="@string/submit_routing_policy" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

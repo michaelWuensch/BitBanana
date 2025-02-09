@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.NumpadView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
@@ -51,8 +51,8 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private ConstraintLayout mContentTopLayout;
-    private View mBtnLn;
-    private View mBtnOnChain;
+    private BBButton mBtnLn;
+    private BBButton mBtnOnChain;
     private View mChooseTypeView;
     private View mReceiveAmountView;
     private EditText mEtAmount;
@@ -60,11 +60,11 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private TextView mTvUnit;
     private View mMemoView;
     private NumpadView mNumpad;
-    private Button mBtnNext;
-    private Button mBtnGenerateRequest;
+    private BBButton mBtnNext;
+    private BBButton mBtnGenerateRequest;
     private boolean mOnChain;
     private TextView mTvNoIncomingBalance;
-    private Button mBtnManageChannels;
+    private BBButton mBtnManageChannels;
     private View mViewNoIncomingBalance;
     private boolean mAmountValid = true;
     private long mReceiveAmount;
@@ -205,16 +205,13 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                             mEtAmount.setTextColor(getResources().getColor(R.color.red));
                             String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxReceivable, true);
                             Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                            mBtnNext.setEnabled(false);
-                            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                            mBtnNext.setButtonEnabled(false);
                         } else if (mReceiveAmount == 0 && !FeatureManager.isBolt11WithoutAmountEnabled()) {
                             // Disable 0 sat ln invoices
-                            mBtnNext.setEnabled(false);
-                            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+                            mBtnNext.setButtonEnabled(false);
                         } else {
                             mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                            mBtnNext.setEnabled(true);
-                            mBtnNext.setTextColor(getResources().getColor(R.color.banana_yellow));
+                            mBtnNext.setButtonEnabled(true);
                         }
                     }
                 }
@@ -299,11 +296,9 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mChooseTypeView.setVisibility(View.GONE);
         mMemoView.setVisibility(View.GONE);
         if (FeatureManager.isBolt11WithoutAmountEnabled()) {
-            mBtnNext.setEnabled(true);
-            mBtnNext.setTextColor(getResources().getColor(R.color.banana_yellow));
+            mBtnNext.setButtonEnabled(true);
         } else {
-            mBtnNext.setEnabled(false);
-            mBtnNext.setTextColor(getResources().getColor(R.color.gray));
+            mBtnNext.setButtonEnabled(false);
         }
         mEtAmount.setHint(getResources().getString(R.string.amount));
 

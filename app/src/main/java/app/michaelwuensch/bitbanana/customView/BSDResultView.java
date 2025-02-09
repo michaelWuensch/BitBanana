@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,7 +45,7 @@ public class BSDResultView extends ConstraintLayout {
         mResultContent = view.findViewById(R.id.resultContent);
 
         // Ok Button
-        Button okButton = findViewById(R.id.okButton);
+        BBButton okButton = findViewById(R.id.okButton);
         okButton.setOnClickListener(view1 -> {
             if (mOnOkListener != null)
                 mOnOkListener.onOk();

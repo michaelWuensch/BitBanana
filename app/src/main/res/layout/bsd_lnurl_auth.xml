@@ -64,17 +64,13 @@
                     android:textAlignment="viewStart"
                     android:textSize="16sp" />
 
-                <Button
+                <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/authButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginTop="25dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/bg_clickable_item"
-                    android:text="@string/login_verb"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
-                    android:textSize="16sp" />
+                    app:bbbutton_text="@string/login_verb" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

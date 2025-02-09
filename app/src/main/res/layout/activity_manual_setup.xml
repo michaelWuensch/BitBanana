@@ -215,17 +215,13 @@
                     android:text="@string/verify_certificate" />
             </FrameLayout>
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_clickable_item"
-                android:text="@string/save"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="16sp" />
+                app:bbbutton_text="@string/save" />
 
         </LinearLayout>
 

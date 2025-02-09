@@ -48,34 +48,26 @@
         app:layout_constraintBottom_toTopOf="@+id/data_backup_confirm_continue_button"
         app:layout_constraintStart_toStartOf="@+id/data_backup_confirm_continue_button" />
 
-    <Button
+    <app.michaelwuensch.bitbanana.customView.BBButton
         android:id="@+id/data_backup_confirm_continue_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_margin="20dp"
-        android:background="@drawable/bg_clickable_item"
-        android:enabled="false"
-        android:text="@string/continue_string"
-        android:textAllCaps="false"
-        android:textColor="@color/gray"
-        android:textSize="18sp"
+        app:bbbutton_text="@string/continue_string"
         app:layout_constraintBottom_toTopOf="@id/data_backup_confirm_cancel_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <app.michaelwuensch.bitbanana.customView.BBButton
         android:id="@+id/data_backup_confirm_cancel_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/transparent"
-        android:text="@string/cancel"
-        android:textAllCaps="false"
-        android:textColor="@color/banana_yellow"
-        android:textSize="18sp"
+        app:bbbutton_text="@string/cancel"
+        app:bbbutton_transparent="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

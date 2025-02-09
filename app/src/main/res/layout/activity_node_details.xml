@@ -170,35 +170,26 @@
             </LinearLayout>
 
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/buttonChangeConnection"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_clickable_item_bright"
-                android:padding="15dp"
-                android:text="@string/change_data"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="18sp"
+                app:bbbutton_bright="true"
+                app:bbbutton_text="@string/change_data"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/connectionData" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/buttonActivate"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/bg_clickable_item"
-            android:padding="15dp"
-            android:text="@string/open_node"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="18sp"
+            app:bbbutton_text="@string/open_node"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

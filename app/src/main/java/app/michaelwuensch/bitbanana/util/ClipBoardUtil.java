@@ -49,7 +49,7 @@ public class ClipBoardUtil {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         if (clipboard.getPrimaryClip() == null)
             return null;
-        
+
         String data = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
 
         if (addToScanHistory) {
@@ -68,13 +68,10 @@ public class ClipBoardUtil {
             return;
         }
 
-        try {
-            getPrimaryContent(context, false);
-        } catch (NullPointerException e) {
-            return;
-        }
-
         String clipboardContent = getPrimaryContent(context, false);
+        if (clipboardContent == null)
+            return;
+
         String clipboardContentHash = UtilFunctions.sha256Hash(clipboardContent);
 
         if (PrefsUtil.getPrefs().getString(PrefsUtil.LAST_CLIPBOARD_SCAN, "").equals(clipboardContentHash)) {

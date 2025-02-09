@@ -31,12 +31,11 @@ public class ScanContactActivity extends BaseScannerActivity {
     public void onButtonPasteClick() {
         super.onButtonPasteClick();
 
-        try {
-            String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(), false);
+        String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(), false);
+        if (clipboardContent != null)
             processUserData(clipboardContent);
-        } catch (NullPointerException e) {
+        else
             showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
-        }
     }
 
     @Override

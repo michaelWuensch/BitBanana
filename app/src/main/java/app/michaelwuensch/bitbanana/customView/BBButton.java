@@ -84,7 +84,7 @@ public class BBButton extends FrameLayout {
 
             // Optionally apply text size.
             if (ta.hasValue(R.styleable.BBButton_bbbutton_textSize)) {
-                float textSize = ta.getDimensionPixelSize(R.styleable.AmountView_textSize, 0);
+                float textSize = ta.getDimensionPixelSize(R.styleable.BBButton_bbbutton_textSize, 0);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
 
@@ -94,6 +94,21 @@ public class BBButton extends FrameLayout {
                 if (bright) {
                     frameLayout.setBackgroundResource(R.drawable.bg_clickable_item_bright);
                 }
+            }
+
+            // Optionally make the button transparent
+            if (ta.hasValue(R.styleable.BBButton_bbbutton_transparent)) {
+                boolean transparent = ta.getBoolean(R.styleable.BBButton_bbbutton_transparent, false);
+                if (transparent) {
+                    frameLayout.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+
+            // Optionally apply horizontal content padding
+            if (ta.hasValue(R.styleable.BBButton_bbbutton_horizontalContentPadding)) {
+                int horizontalContentPadding = ta.getDimensionPixelSize(R.styleable.BBButton_bbbutton_horizontalContentPadding, 0);
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) contentLayout.getLayoutParams();
+                params.setMargins(horizontalContentPadding, 0, horizontalContentPadding, 0);
             }
 
             ta.recycle();
@@ -137,6 +152,8 @@ public class BBButton extends FrameLayout {
     }
 
     public void setText(String text) {
+        if (text != null && !text.isEmpty())
+            textView.setVisibility(VISIBLE);
         textView.setText(text);
     }
 }

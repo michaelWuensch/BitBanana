@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +32,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -62,7 +62,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
     private ExpandableTextView mExtvDescription;
     private TextView mTvUnit;
     private NumpadView mNumpad;
-    private Button mBtnWithdraw;
+    private BBButton mBtnWithdraw;
     private TextView mTvWithdrawSource;
 
     private long mFixedAmount;
@@ -153,8 +153,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
 
                     if (mFixedAmount != 0L) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setEnabled(true);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.banana_yellow));
+                        mBtnWithdraw.setButtonEnabled(true);
                         return;
                     }
 
@@ -163,22 +162,18 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMaxWithdrawable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnWithdraw.setButtonEnabled(false);
                     } else if (mWithdrawAmount < mMinWithdrawable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMinWithdrawable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnWithdraw.setButtonEnabled(false);
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setEnabled(true);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.banana_yellow));
+                        mBtnWithdraw.setButtonEnabled(true);
                     }
                     if (mWithdrawAmount == 0) {
-                        mBtnWithdraw.setEnabled(false);
-                        mBtnWithdraw.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnWithdraw.setButtonEnabled(false);
                     }
                 }
             }

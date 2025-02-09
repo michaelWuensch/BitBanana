@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
@@ -14,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBExpandablePropertyView;
 import app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12QRActivity;
 import app.michaelwuensch.bitbanana.models.Bolt12Offer;
@@ -32,7 +32,7 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
     private BBExpandablePropertyView mDetailDescription;
     private BBExpandablePropertyView mDetailID;
     private BBExpandablePropertyView mDetailBolt12;
-    private Button mBtnSwitchEnabledState;
+    private BBButton mBtnSwitchEnabledState;
 
     private Bolt12Offer mBolt12Offer;
 
@@ -148,9 +148,9 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
 
         // button
         if (mBolt12Offer.getIsActive())
-            mBtnSwitchEnabledState.setText(R.string.disable);
+            mBtnSwitchEnabledState.setText(getString(R.string.disable));
         else
-            mBtnSwitchEnabledState.setText(R.string.enable);
+            mBtnSwitchEnabledState.setText(getString(R.string.enable));
     }
 
     private void switchEnabledState() {
@@ -159,7 +159,7 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
                     .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                     .subscribe(() -> {
                         mDetailActive.setValue(getResources().getString(R.string.no));
-                        mBtnSwitchEnabledState.setText(R.string.enable);
+                        mBtnSwitchEnabledState.setText(getString(R.string.enable));
                         mBolt12Offer.updateActiveState(false);
                     }, throwable -> {
                         BBLog.w(LOG_TAG, "Disabling offer failed: " + throwable.getMessage());
@@ -170,7 +170,7 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
                     .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                     .subscribe(() -> {
                         mDetailActive.setValue(getResources().getString(R.string.yes));
-                        mBtnSwitchEnabledState.setText(R.string.disable);
+                        mBtnSwitchEnabledState.setText(getString(R.string.disable));
                         mBolt12Offer.updateActiveState(true);
                     }, throwable -> {
                         BBLog.w(LOG_TAG, "Enabling offer failed: " + throwable.getMessage());

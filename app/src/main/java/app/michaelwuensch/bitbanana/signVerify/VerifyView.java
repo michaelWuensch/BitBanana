@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -28,7 +29,7 @@ public class VerifyView extends LinearLayout {
     private static final String LOG_TAG = SignView.class.getSimpleName();
     private EditText mEtMessageToVerify;
     private EditText mEtSignatureToVerify;
-    private Button mBtnVerify;
+    private BBButton mBtnVerify;
     private View mViewVerifyLayout;
     private TextView mTVValidationInfo;
     private TextView mTVPubkeyLabel;

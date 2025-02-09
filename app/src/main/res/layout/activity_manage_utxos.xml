@@ -80,18 +80,15 @@
                         app:textSize="28sp" />
                 </LinearLayout>
 
-                <Button
+                <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/confirmButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="15dp"
-                    android:background="@drawable/bg_clickable_item_bright"
-                    android:text="@string/confirm_selection"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
-                    android:textSize="16sp" />
+                    app:bbbutton_bright="true"
+                    app:bbbutton_text="@string/confirm_selection" />
 
             </LinearLayout>
         </LinearLayout>

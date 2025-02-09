@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,8 +30,8 @@ public class UtxoOptionsView extends ConstraintLayout {
     private ImageView mArrowImage;
     private ClickableConstraintLayoutGroup mGroupMain;
     private Group mGroupExpandableContent;
-    private Button mBtnSelect;
-    private Button mBtnReset;
+    private BBButton mBtnSelect;
+    private BBButton mBtnReset;
     private LinearLayout mUtxoContainer;
     private OnUtxoSelectClickListener mOnUtxoSelectClickListener;
 
@@ -69,7 +68,7 @@ public class UtxoOptionsView extends ConstraintLayout {
         String selectButtonText = context.getString(R.string.select) + " ...";
         mBtnSelect.setText(selectButtonText);
 
-        setResetButtonEnabled(false);
+        mBtnReset.setButtonEnabled(false);
 
         mBtnReset.setOnClickListener(new OnClickListener() {
             @Override
@@ -116,16 +115,6 @@ public class UtxoOptionsView extends ConstraintLayout {
         mGroupExpandableContent.setVisibility(expand ? View.VISIBLE : View.GONE);
     }
 
-    private void setResetButtonEnabled(boolean enabled) {
-        if (enabled) {
-            mBtnReset.setEnabled(true);
-            mBtnReset.setTextColor(getResources().getColor(R.color.banana_yellow));
-        } else {
-            mBtnReset.setEnabled(false);
-            mBtnReset.setTextColor(getResources().getColor(R.color.gray));
-        }
-    }
-
     public List<Outpoint> getSelectedUTXOs() {
         return mSelectedUTXOs;
     }
@@ -159,7 +148,7 @@ public class UtxoOptionsView extends ConstraintLayout {
         mUtxoContainer.setVisibility(VISIBLE);
 
         mTvUtxoSummary.setText(R.string.manually);
-        setResetButtonEnabled(true);
+        mBtnReset.setButtonEnabled(true);
     }
 
     private void reset() {
@@ -167,7 +156,7 @@ public class UtxoOptionsView extends ConstraintLayout {
             mSelectedUTXOs.clear();
         mTvUtxoSummary.setText(R.string.automatic);
         mUtxoContainer.removeAllViews();
-        setResetButtonEnabled(false);
+        mBtnReset.setButtonEnabled(false);
         mBtnSelect.setText(getContext().getString(R.string.select) + " ...");
         mUtxoContainer.setVisibility(GONE);
     }

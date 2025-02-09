@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,6 +24,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
@@ -40,7 +40,7 @@ public class DataBackupIntroFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_data_backup_intro, container, false);
 
-        Button buttonStartBackup = view.findViewById(R.id.data_backup_intro_create_button);
+        BBButton buttonStartBackup = view.findViewById(R.id.data_backup_intro_create_button);
         buttonStartBackup.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
@@ -51,7 +51,7 @@ public class DataBackupIntroFragment extends Fragment {
                 }
             }
         });
-        Button buttonRestoreBackup = view.findViewById(R.id.data_backup_intro_restore_button);
+        BBButton buttonRestoreBackup = view.findViewById(R.id.data_backup_intro_restore_button);
         buttonRestoreBackup.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {

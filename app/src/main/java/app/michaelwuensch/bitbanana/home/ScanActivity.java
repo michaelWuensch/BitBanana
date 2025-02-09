@@ -14,10 +14,10 @@ import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.channel.LnUrlHostedChannelResponse;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.lnurl.withdraw.LnUrlWithdrawResponse;
+import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -47,11 +47,12 @@ public class ScanActivity extends BaseScannerActivity {
     public void onButtonPasteClick() {
         super.onButtonPasteClick();
 
-        try {
-            readData(ClipBoardUtil.getPrimaryContent(getApplicationContext(), true));
-        } catch (NullPointerException e) {
+        String clipboardString = ClipBoardUtil.getPrimaryContent(getApplicationContext(), true);
+
+        if (clipboardString != null)
+            readData(clipboardString);
+        else
             showError(getResources().getString(R.string.error_emptyClipboardPayment), RefConstants.ERROR_DURATION_SHORT);
-        }
     }
 
     @Override

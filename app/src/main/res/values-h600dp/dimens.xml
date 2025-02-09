@@ -9,4 +9,6 @@
 
     <dimen name="numpad_button_height">45dp</dimen>
     <dimen name="numpad_button_text_size">30sp</dimen>
+
+    <dimen name="button_height">55dp</dimen>
 </resources>

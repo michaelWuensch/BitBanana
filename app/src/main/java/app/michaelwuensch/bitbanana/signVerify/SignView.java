@@ -15,6 +15,7 @@ import android.widget.Toast;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -28,7 +29,7 @@ public class SignView extends LinearLayout {
     private TextView mTVGeneratedSignature;
     private View mViewGeneratedSignatureLayout;
     private ImageView mIVCopySignature;
-    private Button mBtnSign;
+    private BBButton mBtnSign;
     private Context mContext;
 
     private CompositeDisposable mCompositeDisposable;

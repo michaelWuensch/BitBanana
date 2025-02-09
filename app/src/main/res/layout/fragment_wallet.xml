@@ -91,12 +91,12 @@
             android:background="?actionBarItemBackground"
             android:scaleType="center"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/historyButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_error_24"
-            app:tint="@color/red" />
+            app:tint="@color/red"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -222,40 +222,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/vpnSettingsButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="8dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_clickable_item"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/vpn_change_battery_settings"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="18sp"
+            app:bbbutton_text="@string/vpn_change_battery_settings"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/connectError" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/reconnectBtn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="8dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_clickable_item"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/retry"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="18sp"
+            app:bbbutton_text="@string/retry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/vpnSettingsButton" />

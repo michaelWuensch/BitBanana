@@ -27,45 +27,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/lnBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
-                android:background="@drawable/bg_clickable_item">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/lnBtnIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_nav_wallet_black_24dp"
-                        app:tint="@color/banana_yellow" />
-
-                    <TextView
-                        android:id="@+id/lnBtnText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:text="@string/lightning"
-                        android:textColor="@color/banana_yellow"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                app:bbbutton_image="@drawable/ic_nav_wallet_black_24dp"
+                app:bbbutton_text="@string/lightning" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,44 +66,15 @@
                     app:srcCompat="@color/white" />
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/onChainBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
-                android:background="@drawable/bg_clickable_item">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/onChainBtnIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_onchain_black_24dp"
-                        app:tint="@color/banana_yellow" />
-
-                    <TextView
-                        android:id="@+id/onChainBtnText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:text="@string/onChain"
-                        android:textColor="@color/banana_yellow"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:bbbutton_image="@drawable/ic_onchain_black_24dp"
+                app:bbbutton_text="@string/onChain" />
 
         </LinearLayout>
 
@@ -182,17 +123,13 @@
                 app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceText"
                 app:srcCompat="@color/gray" />
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/manageChannels"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_clickable_item"
-                android:text="@string/settings_manageChannels"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="16sp"
+                app:bbbutton_text="@string/settings_manageChannels"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/noIncomingChannelBalanceBottomLine" />
@@ -336,39 +273,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/receiveInputsView" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/nextButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/next"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="16sp"
             android:visibility="gone"
+            app:bbbutton_text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/numpadView" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/generateRequestButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/receive_generateRequest"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="16sp"
             android:visibility="gone"
+            app:bbbutton_text="@string/receive_generateRequest"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"

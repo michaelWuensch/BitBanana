@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import androidx.transition.TransitionManager;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -59,7 +59,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
     private TextView mChannelVisibility;
     private ImageView mChannelVisibilitySeparatorLine;
     private TextView mFundingTx;
-    private Button mCloseChannelButton;
+    private BBButton mCloseChannelButton;
 
     private ConstraintLayout mChannelDetailsLayout;
     private ConstraintLayout mClosingTxLayout;
@@ -269,7 +269,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
 
     private void showClosingButton(OpenChannel channel, boolean forceClose, int csvDelay) {
         mCloseChannelButton.setVisibility(View.VISIBLE);
-        mCloseChannelButton.setText(forceClose ? getText(R.string.channel_close_force) : getText(R.string.channel_close));
+        mCloseChannelButton.setText(forceClose ? getString(R.string.channel_close_force) : getString(R.string.channel_close));
         mCloseChannelButton.setOnClickListener(view1 -> closeChannel(channel, forceClose, csvDelay));
     }
 

@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import java.net.URL;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -38,7 +38,7 @@ public class LnUrlAuthBSDFragment extends BaseBSDFragment {
     private ConstraintLayout mContentTopLayout;
     private View mInfoView;
     private TextView mServiceName;
-    private Button mAuthButton;
+    private BBButton mAuthButton;
     private TextView mInfoQuestion;
 
     private LnUrlAuth mLnUrlAuth;

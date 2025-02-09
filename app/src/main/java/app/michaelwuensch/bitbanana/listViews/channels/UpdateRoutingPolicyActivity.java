@@ -3,7 +3,6 @@ package app.michaelwuensch.bitbanana.listViews.channels;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.listViews.channels.itemDetails.ChannelDetailBSDFragment;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
@@ -38,7 +38,7 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
     private BBInputFieldView mMinHTLC;
     private BBInputFieldView mMaxHTLC;
     private TextView mAllChannelsWarning;
-    private Button mBtnSubmit;
+    private BBButton mBtnSubmit;
     private OpenChannel mChannel;
 
 

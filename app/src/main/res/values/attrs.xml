@@ -50,5 +50,7 @@
         <attr name="bbbutton_contentColor" format="color" />
         <attr name="bbbutton_textSize" format="dimension" />
         <attr name="bbbutton_bright" format="boolean" />
+        <attr name="bbbutton_transparent" format="boolean" />
+        <attr name="bbbutton_horizontalContentPadding" format="dimension" />
     </declare-styleable>
 </resources>
