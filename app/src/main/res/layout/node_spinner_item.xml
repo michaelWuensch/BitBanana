@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:ellipsize="end"
     android:gravity="center"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingHorizontal="5dp"
+    android:paddingVertical="10dp"
     android:singleLine="true"
     android:textSize="18sp" />
