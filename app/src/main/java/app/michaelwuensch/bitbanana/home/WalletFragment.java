@@ -25,6 +25,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
@@ -59,7 +60,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private TextView mWalletNameWidthDummy;
     private ImageView mStatusDot;
     private Button mBtnSetup;
-    private Button mBtnVpnSettings;
+    private BBButton mBtnVpnSettings;
     private Button mSendButton;
     private Button mReceiveButton;
     private ImageView mCustodialButton;
@@ -204,7 +205,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
 
         // Action when clicked on "retry"
-        Button btnReconnect = view.findViewById(R.id.reconnectBtn);
+        BBButton btnReconnect = view.findViewById(R.id.reconnectBtn);
         btnReconnect.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {

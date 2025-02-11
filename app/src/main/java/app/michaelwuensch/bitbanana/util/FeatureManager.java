@@ -37,19 +37,19 @@ public class FeatureManager {
 
     public static boolean isUTXOListViewEnabled() {
         boolean backendSupported = getBackend().supportsCoinControl();
-        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", false);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isUtxoSelectionOnSendEnabled() {
         boolean backendSupported = getBackend().supportsUtxoSelectOnSend();
-        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", false);
         return settingEnabled && backendSupported;
     }
 
     public static boolean isUtxoSelectionOnChannelOpenEnabled() {
         boolean backendSupported = getBackend().supportsUtxoSelectOnChannelOpen();
-        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", true);
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureCoinControl", false);
         return settingEnabled && backendSupported;
     }
 

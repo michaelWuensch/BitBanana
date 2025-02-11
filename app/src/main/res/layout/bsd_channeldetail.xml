@@ -413,18 +413,15 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.50" />
 
-                <Button
+                <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/channelCloseButton"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_clickable_item"
-                    android:textAllCaps="false"
-                    android:textColor="@color/banana_yellow"
+                    android:layout_height="@dimen/button_height"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spacer"
-                    tools:text="Close Channel"
+                    tools:bbbutton_text="Close Channel"
                     tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

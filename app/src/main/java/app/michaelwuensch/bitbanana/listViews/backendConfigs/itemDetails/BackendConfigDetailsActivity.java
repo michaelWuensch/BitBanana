@@ -27,6 +27,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
@@ -59,7 +60,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
         loadBackendConfigData();
 
-        Button switchBtn = findViewById(R.id.buttonActivate);
+        BBButton switchBtn = findViewById(R.id.buttonActivate);
         switchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +174,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
             ilTor.setData(torData);
 
-            Button changeBtn = findViewById(R.id.buttonChangeConnection);
+            BBButton changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

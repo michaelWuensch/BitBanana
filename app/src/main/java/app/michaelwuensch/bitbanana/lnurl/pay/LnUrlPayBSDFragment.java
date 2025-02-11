@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +44,7 @@ import javax.crypto.spec.SecretKeySpec;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
@@ -85,7 +85,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
     private TextView mTvUnit;
     private View mDescriptionView;
     private NumpadView mNumpad;
-    private Button mBtnSend;
+    private BBButton mBtnSend;
     private TextView mTvSuccessActionText;
     private TextView mTvPayee;
     private PayerDataView mPayerDataView;
@@ -217,8 +217,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
                     if (mFixedAmount != 0L) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnSend.setEnabled(true);
-                        mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
+                        mBtnSend.setButtonEnabled(true);
                         return;
                     }
 
@@ -227,22 +226,18 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMaxSendable, true);
                         Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnSend.setEnabled(false);
-                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnSend.setButtonEnabled(false);
                     } else if (mSendAmount < mMinSendable) {
                         mEtAmount.setTextColor(getResources().getColor(R.color.red));
                         String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMinSendable, true);
                         Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
-                        mBtnSend.setEnabled(false);
-                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnSend.setButtonEnabled(false);
                     } else {
                         mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnSend.setEnabled(true);
-                        mBtnSend.setTextColor(getResources().getColor(R.color.banana_yellow));
+                        mBtnSend.setButtonEnabled(true);
                     }
                     if (mSendAmount == 0) {
-                        mBtnSend.setEnabled(false);
-                        mBtnSend.setTextColor(getResources().getColor(R.color.gray));
+                        mBtnSend.setButtonEnabled(false);
                     }
                 }
             }
@@ -319,7 +314,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
 
         // Action when clicked on "send"
-        mBtnSend.setText(R.string.activity_send);
+        mBtnSend.setText(getResources().getString(R.string.activity_send));
         mBtnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

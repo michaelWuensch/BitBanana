@@ -41,17 +41,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
     public void onButtonPasteClick() {
         super.onButtonPasteClick();
 
-        String clipboardContent = "";
-        boolean isClipboardContentValid = false;
-        try {
-            clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(), true);
-            isClipboardContentValid = true;
-        } catch (NullPointerException e) {
-            showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
-        }
-        if (isClipboardContentValid) {
+        String clipboardContent = ClipBoardUtil.getPrimaryContent(getApplicationContext(), true);
+        if (clipboardContent != null)
             verifyDesiredConnection(clipboardContent);
-        }
+        else
+            showError(getResources().getString(R.string.error_emptyClipboardConnect), RefConstants.ERROR_DURATION_SHORT);
     }
 
     @Override

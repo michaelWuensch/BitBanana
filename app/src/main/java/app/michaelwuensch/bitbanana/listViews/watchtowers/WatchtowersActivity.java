@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +27,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.listViews.watchtowerSessions.WatchtowerDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.watchtowers.items.WatchtowerListItem;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -57,7 +57,7 @@ public class WatchtowersActivity extends BaseAppCompatActivity implements Watcht
     private TextView mEmptyListText;
     private TextView mClientNotActiveText;
     private View mOwnWatchtowerLayout;
-    private Button mOwnWatchtowerButton;
+    private BBButton mOwnWatchtowerButton;
     private LightningNodeUri mOwnWatchtowerUri;
     private CompositeDisposable mCompositeDisposable;
     private FloatingActionButton mFab;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class DataBackupRestorePagerAdapter extends PagerAdapter {
@@ -50,7 +50,7 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             // password
             backupView = inflater.inflate(R.layout.view_data_backup_password, container, false);
 
-            Button buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
+            BBButton buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
             EditText pw1 = backupView.findViewById(R.id.pw1_input);
             EditText pw2 = backupView.findViewById(R.id.pw2_input);
             TextView pw2Title = backupView.findViewById(R.id.pw2_title);
@@ -82,7 +82,7 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             mBackupRestoringFailed = backupView.findViewById(R.id.restoringBackupFailed);
             mBackupRestoringFailedDescription = backupView.findViewById(R.id.data_backup_finish_description_failed);
 
-            Button finishButton = backupView.findViewById(R.id.data_backup_restore_finish_button);
+            BBButton finishButton = backupView.findViewById(R.id.data_backup_restore_finish_button);
             finishButton.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {

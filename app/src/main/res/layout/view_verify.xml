@@ -59,17 +59,13 @@
                 android:minLines="3"
                 android:scrollbars="vertical" />
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/verifyButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_clickable_item"
-                android:text="@string/verify_message"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="16sp" />
+                app:bbbutton_text="@string/verify_message" />
 
             <LinearLayout
                 android:id="@+id/verifiedSignatureLayout"

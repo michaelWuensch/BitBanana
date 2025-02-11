@@ -37,15 +37,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <app.michaelwuensch.bitbanana.customView.BBButton
                 android:id="@+id/ownWatchtowerButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_clickable_item_bright"
-                android:text="@string/watchtower_show"
-                android:textAllCaps="false"
-                android:textColor="@color/banana_yellow"
-                android:textSize="18sp"
+                android:layout_height="@dimen/button_height"
+                app:bbbutton_bright="true"
+                app:bbbutton_text="@string/watchtower_show"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
@@ -69,9 +66,9 @@
             android:layout_marginTop="20dp"
             android:padding="30dp"
             android:text="@string/lnd_watchtower_client_inactive"
+            android:textAlignment="center"
             android:textColor="@color/red"
             android:textSize="18sp"
-            android:textAlignment="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

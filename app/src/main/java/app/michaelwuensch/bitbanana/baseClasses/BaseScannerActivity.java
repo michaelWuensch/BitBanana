@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.PermissionsUtil;
@@ -55,8 +56,8 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     private ImageButton mBtnFlashlight;
     private ImageButton mBtnGalery;
     private TextView mTvPermissionRequired;
-    private Button mButtonPaste;
-    private Button mButtonHelp;
+    private BBButton mButtonPaste;
+    private BBButton mButtonHelp;
     private View mQrBorder;
 
     protected DecoratedBarcodeView mQRCodeScannerView;

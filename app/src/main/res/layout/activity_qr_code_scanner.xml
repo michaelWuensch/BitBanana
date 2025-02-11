@@ -2,6 +2,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -36,37 +37,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:theme="@style/TransparentToolbar" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/scannerPaste"
             android:layout_width="@dimen/qr_scanner_button_width"
-            android:layout_height="@dimen/qr_scanner_button_height"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="@dimen/qr_scanner_paste_button_marginBottom"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/paste"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="18sp"
+            app:bbbutton_image="@drawable/baseline_content_paste_24"
+            app:bbbutton_text="@string/paste"
             app:layout_constraintBottom_toTopOf="@id/scannerHelp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <app.michaelwuensch.bitbanana.customView.BBButton
             android:id="@+id/scannerHelp"
             android:layout_width="@dimen/qr_scanner_button_width"
-            android:layout_height="@dimen/qr_scanner_button_height"
+            android:layout_height="@dimen/button_height"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_clickable_item"
-            android:text="@string/needHelp"
-            android:textAllCaps="false"
-            android:textColor="@color/banana_yellow"
-            android:textSize="18sp"
             android:visibility="gone"
+            app:bbbutton_text="@string/needHelp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@+id/scannerGalleryButton"
@@ -147,32 +142,6 @@
                 app:tint="@color/banana_yellow" />
         </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/textViewPeers"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/suggested_peers"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/peer_title_text_size"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/recyclerViewPeers"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPeers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/scannerPaste"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

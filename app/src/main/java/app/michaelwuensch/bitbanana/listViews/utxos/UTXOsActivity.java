@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -22,6 +21,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.listViews.utxos.itemDetails.UTXODetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.items.UTXOListItem;
 import app.michaelwuensch.bitbanana.models.Outpoint;
@@ -50,7 +50,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     private List<UTXOListItem> mUTXOItems;
     private List<Outpoint> mPreselectedUTXOs = null;
     private TextView mEmptyListText;
-    private Button mBtnConfirm;
+    private BBButton mBtnConfirm;
     private AmountView mTotalSelectedAmount;
     private View mSelectionLayout;
     private TextView mTotalSelectedAmountLabel;
@@ -158,7 +158,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mTotalSelectedAmount.setAmountMsat(0);
         mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
         mTotalSelectedAmountLabel.setText(getResources().getString(R.string.total) + ":");
-        setConfirmButtonEnabled(false);
+        mBtnConfirm.setButtonEnabled(false);
         mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,16 +171,6 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                 finish();
             }
         });
-    }
-
-    private void setConfirmButtonEnabled(boolean enabled) {
-        if (enabled) {
-            mBtnConfirm.setEnabled(true);
-            mBtnConfirm.setTextColor(getResources().getColor(R.color.banana_yellow));
-        } else {
-            mBtnConfirm.setEnabled(false);
-            mBtnConfirm.setTextColor(getResources().getColor(R.color.gray));
-        }
     }
 
     @Override
@@ -203,7 +193,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
 
     private void updateUiToSelection() {
         if (mAdapter.getSelectedItems().isEmpty()) {
-            setConfirmButtonEnabled(false);
+            mBtnConfirm.setButtonEnabled(false);
             mTotalSelectedAmount.setAmountMsat(0);
             mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
         } else {
@@ -212,10 +202,10 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                 totalAmt += item.getUtxo().getAmount();
             mTotalSelectedAmount.setAmountMsat(totalAmt);
             if (totalAmt >= mTransactionAmountMSat) {
-                setConfirmButtonEnabled(true);
+                mBtnConfirm.setButtonEnabled(true);
                 mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.green));
             } else {
-                setConfirmButtonEnabled(false);
+                mBtnConfirm.setButtonEnabled(false);
                 mTotalSelectedAmount.setTextColor(ContextCompat.getColor(UTXOsActivity.this, R.color.red));
             }
         }

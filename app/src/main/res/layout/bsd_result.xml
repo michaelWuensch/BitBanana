@@ -46,16 +46,12 @@
             tools:text="@string/lnurl_channel_pending_hint" />
     </LinearLayout>
 
-    <Button
+    <app.michaelwuensch.bitbanana.customView.BBButton
         android:id="@+id/okButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height"
         android:layout_marginBottom="15dp"
-        android:background="@drawable/bg_clickable_item"
-        android:text="@string/ok"
-        android:textAllCaps="false"
-        android:textColor="@color/banana_yellow"
-        android:textSize="16sp"
+        app:bbbutton_text="@string/ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

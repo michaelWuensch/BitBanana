@@ -2,7 +2,6 @@ package app.michaelwuensch.bitbanana.listViews.bolt12offers;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -11,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.models.CreateBolt12OfferRequest;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -25,7 +25,7 @@ public class CreateBolt12OfferActivity extends BaseAppCompatActivity {
     private BBInputFieldView mLabel;
     private BBInputFieldView mDescription;
     private SwitchCompat mSingleUse;
-    private Button mBtnCreate;
+    private BBButton mBtnCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
