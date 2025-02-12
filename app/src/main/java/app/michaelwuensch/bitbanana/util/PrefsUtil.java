@@ -192,7 +192,13 @@ public class PrefsUtil {
     }
 
     public static String getCustomBlockExplorerHost() {
-        return getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
+        String host = getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
+
+        String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
+        if (source.isEmpty())
+            return host;
+        String target = PrefsUtil.getPrefs().getString("overrideHostTarget", "");
+        return host.replace(source, target);
     }
 
     public static String getCustomExchangeRateProviderHost() {
