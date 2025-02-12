@@ -277,7 +277,7 @@
     <string name="error_connection_no_internet">Немає підключення до Інтернету!</string>
     <string name="server_certificate">Сертифікат хоста</string>
     <string name="drawer_menu_routing">Маршрутизація</string>
-    <string name="regtest_blockexplorer_unavailable">Провідники блоків недоступні в режимі REGTEST.</string>
+    <string name="regtest_blockexplorer_unavailable">Оскільки ви підключені до мережі REGTEST, це працюватиме, лише якщо ви налаштуєте спеціальний провідник блоків у налаштуваннях.</string>
     <string name="contact_already_exists">Цей контакт вже існує!</string>
     <string name="no_contacts">Немає контактів</string>
     <string name="advanced_channel_details_initiator_peer">Одноліток</string>
