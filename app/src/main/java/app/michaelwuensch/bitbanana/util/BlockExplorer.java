@@ -30,7 +30,7 @@ public class BlockExplorer {
      * @param ctx
      */
     public void showTransaction(String transactionID, Context ctx) {
-        if (Wallet.getInstance().getNetworkWithFallback() == BackendConfig.Network.REGTEST) {
+        if (Wallet.getInstance().getNetworkWithFallback() == BackendConfig.Network.REGTEST && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.regtest_blockexplorer_unavailable)
                     .setCancelable(true)
@@ -102,7 +102,7 @@ public class BlockExplorer {
      */
     public void showAddress(String address, Context ctx) {
 
-        if (Wallet.getInstance().getNetworkWithFallback() == BackendConfig.Network.REGTEST) {
+        if (Wallet.getInstance().getNetworkWithFallback() == BackendConfig.Network.REGTEST && !PrefsUtil.getBlockExplorer().equals("Custom")) {
             new AlertDialog.Builder(ctx)
                     .setMessage(R.string.regtest_blockexplorer_unavailable)
                     .setCancelable(true)

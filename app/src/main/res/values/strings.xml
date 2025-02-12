@@ -662,7 +662,7 @@
     <string name="identity_switch_public">Public</string>
     <string name="identity_tap_on_avatar">Tap on your avatar to reveal your node information!</string>
 
-    <string name="regtest_blockexplorer_unavailable">Block explorers are not available in REGTEST mode.</string>
+    <string name="regtest_blockexplorer_unavailable">As you are connected to a REGTEST network, this will only work if you configure a custom block explorer in the settings.</string>
 
     <string name="clipboard_error_heading">Clipboard data found, but it is invalid:</string>
     <string name="clipboard_scan_payment">Your clipboard contains payment information. Do you want to initiate a payment?</string>
