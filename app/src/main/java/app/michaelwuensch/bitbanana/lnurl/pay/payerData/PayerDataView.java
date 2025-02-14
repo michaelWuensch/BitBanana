@@ -46,7 +46,9 @@ public class PayerDataView extends LinearLayout {
         mPayerDataIdentifier = view.findViewById(R.id.payerDataIdentifier);
         mPayerDataEmail = view.findViewById(R.id.payerDataEmail);
         mPayerDataPubkey = view.findViewById(R.id.payerDataPubkey);
+    }
 
+    public void setupView(LnUrlpRequestedPayerData requestedPayerData, Context context) {
         mPayerDataName.setOnEditTextFocusedListener(new PayerDataEntryView.onEditTextFocusedListener() {
             @Override
             public void onEditTextFocused() {
@@ -77,9 +79,7 @@ public class PayerDataView extends LinearLayout {
         mHelpButton.setOnClickListener(view1 -> {
             HelpDialogUtil.showDialog(mActivity, R.string.help_dialog_payer_data_payment);
         });
-    }
 
-    public void setupView(LnUrlpRequestedPayerData requestedPayerData, Context context) {
         mActivity = context;
         mPayerDataName.setVisibility(requestedPayerData.isNameSupported() ? VISIBLE : GONE);
         mPayerDataIdentifier.setVisibility(requestedPayerData.isIdentifierSupported() ? VISIBLE : GONE);

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,6 +41,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     private Group mGroupSendFeeDuration;
     private FeeTierChangedListener mFeeTierChangedListener;
     private OnChainFeeView.OnChainFeeTier mOnChainFeeTier;
+    private ClearFocusListener mClearFocusListener;
     private long mTransactionSizeVByte;
     private boolean mManualMode;
 
@@ -114,7 +116,13 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
             @Override
             public void onSingleClick(View v) {
                 boolean isFeeDurationVisible = mGroupSendFeeDuration.getVisibility() == View.VISIBLE;
-                toggleFeeTierView(isFeeDurationVisible);
+                hideKeyboard();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toggleFeeTierView(isFeeDurationVisible);
+                    }
+                }, 100);
             }
         });
 
@@ -144,6 +152,11 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
 
             }
         });
+
+        if (!BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation()) {
+            mTvSendFeeAmount.setVisibility(GONE);
+            mPbCalculateFee.setVisibility(GONE);
+        }
     }
 
     // This stuff has to be outside of init(), otherwise the preview does not work in Android Studio
@@ -227,6 +240,8 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
         TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
         mFeeArrowUnitImage.setImageResource(hide ? R.drawable.ic_arrow_down_24dp : R.drawable.ic_arrow_up_24dp);
         mGroupSendFeeDuration.setVisibility(hide ? View.GONE : View.VISIBLE);
+        if (mClearFocusListener != null)
+            mClearFocusListener.onClearFocus();
     }
 
     /**
@@ -284,6 +299,15 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     private int getSliderMax() {
         int nextBlock = PrefsUtil.getFeeEstimate_NextBlock();
         return Math.max(nextBlock + 20, nextBlock + (int) (0.2 * nextBlock));
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getRootView().getWindowToken(), 0);
+    }
+
+    public void setClearFocusListener(ClearFocusListener listener) {
+        mClearFocusListener = listener;
     }
 
     public enum OnChainFeeTier {

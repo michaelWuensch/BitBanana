@@ -10,18 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,13 +38,14 @@ import javax.crypto.spec.SecretKeySpec;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.customView.BBAmountInput;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.customView.BBExpandableTextInfoBox;
+import app.michaelwuensch.bitbanana.customView.BBTextInputBox;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
-import app.michaelwuensch.bitbanana.customView.NumpadView;
-import app.michaelwuensch.bitbanana.customView.PaymentCommentView;
+import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
@@ -71,39 +66,28 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class LnUrlPayBSDFragment extends BaseBSDFragment {
+public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusListener {
 
     private static final String LOG_TAG = LnUrlPayBSDFragment.class.getSimpleName();
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDResultView mResultView;
     private BSDProgressView mProgressView;
+    private BBExpandableTextInfoBox mPayeeView;
+    private BBExpandableTextInfoBox mDescriptionView;
+    private BBAmountInput mAmountInput;
     private ConstraintLayout mContentTopLayout;
     private View mSendInputsView;
-    private EditText mEtAmount;
-    private PaymentCommentView mPcvComment;
-    private TextView mTvUnit;
-    private View mDescriptionView;
-    private NumpadView mNumpad;
+    private BBTextInputBox mPcvComment;
     private BBButton mBtnSend;
     private TextView mTvSuccessActionText;
-    private TextView mTvPayee;
     private PayerDataView mPayerDataView;
 
-    private long mFixedAmount;
-    private boolean mAmountValid = true;
-    private long mMinSendable;
-    private long mMaxSendable;
     private String mServiceURLString;
-    private long mFinalChosenAmount;
-
-    private ExpandableTextView mDescription;
 
     private Handler mHandler;
     private LnUrlPayResponse mPaymentData;
     private LnUrlpPayerData mPayerData;
-    private long mSendAmount;
-    private boolean mBlockOnInputChanged;
 
     public static LnUrlPayBSDFragment createLnUrlPayDialog(LnUrlPayResponse response) {
         Bundle bundle = new Bundle();
@@ -123,10 +107,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mPaymentData = (LnUrlPayResponse) args.getSerializable(LnUrlPayResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdrawal value for LNURL.
-        mMaxSendable = Math.min((mPaymentData.getMaxSendable()), WalletUtil.getMaxLightningSendAmount());
-        mMinSendable = mPaymentData.getMinSendable();
-
         // Extract the URL from the service
         try {
             URL url = new URL(mPaymentData.getCallback());
@@ -143,14 +123,11 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mResultView = view.findViewById(R.id.resultLayout);
         mContentTopLayout = view.findViewById(R.id.contentTopLayout);
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
+        mPayeeView = view.findViewById(R.id.payeeView);
+        mDescriptionView = view.findViewById(R.id.descriptionView);
+        mAmountInput = view.findViewById(R.id.amountInput);
         mSendInputsView = view.findViewById(R.id.sendInputsView);
-        mEtAmount = view.findViewById(R.id.sendAmount);
         mPcvComment = view.findViewById(R.id.paymentComment);
-        mTvUnit = view.findViewById(R.id.unit);
-        mDescription = view.findViewById(R.id.expandableDescription);
-        mDescriptionView = view.findViewById(R.id.sendDescriptionTopLayout);
-        mTvPayee = view.findViewById(R.id.sendPayee);
-        mNumpad = view.findViewById(R.id.numpadView);
         mBtnSend = view.findViewById(R.id.sendButton);
         mTvSuccessActionText = view.findViewById(R.id.successActionText);
         mPayerDataView = view.findViewById(R.id.payerDataView);
@@ -160,13 +137,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mResultView.setOnOkListener(this::dismiss);
 
-        mNumpad.bindEditText(mEtAmount);
-
-        // deactivate default keyboard for number input.
-        mEtAmount.setShowSoftInputOnFocus(false);
-
-        // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
 
         // Handle comment field
         if (mPaymentData.isCommentAllowed()) {
@@ -176,7 +146,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
         }
 
         // Scroll to comment when focused
-        mPcvComment.setOnFocusChangedListener(new PaymentCommentView.onCommentFocusChangedListener() {
+        mPcvComment.setOnFocusChangedListener(new BBTextInputBox.onCommentFocusChangedListener() {
             @Override
             public void onFocusChanged(View view, boolean b) {
                 if (b)
@@ -192,6 +162,8 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 // We do not support that yet
                 switchToFailedScreen(getContext().getString(R.string.lnurl_payer_data_not_supported));
             }
+        } else {
+            mPayerDataView.setVisibility(View.GONE);
         }
 
         mPayerDataView.setOnFieldFocusedListener(new PayerDataView.onFieldFocusedListener() {
@@ -201,115 +173,86 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             }
         });
 
-        // Input validation for the amount field.
-        mEtAmount.addTextChangedListener(new TextWatcher() {
+        mPayeeView.setClearFocusListener(this);
+        mDescriptionView.setClearFocusListener(this);
 
+        mAmountInput.setupView();
+        mAmountInput.setSendAllEnabled(false);
+        mAmountInput.setOnChain(false);
+        mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
             @Override
-            public void afterTextChanged(Editable arg0) {
+            public boolean onAfterTextChanged(String newText, long amount, boolean isFixedAmount, boolean isOnChain) {
+                if (newText.equals(".") || amount == 0)
+                    return false;
 
-                // remove the last inputted character if not valid
-                if (!mAmountValid) {
-                    mNumpad.removeOneDigit();
-                    return;
+                if (isFixedAmount) {
+                    return true;
                 }
 
-                if (!mEtAmount.getText().toString().equals(".")) {
-
-                    if (mFixedAmount != 0L) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnSend.setButtonEnabled(true);
-                        return;
-                    }
-
-                    // make text red if input is too large or too small
-                    if (mSendAmount > mMaxSendable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMaxSendable, true);
-                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnSend.setButtonEnabled(false);
-                    } else if (mSendAmount < mMinSendable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMinSendable, true);
-                        Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
-                        mBtnSend.setButtonEnabled(false);
-                    } else {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnSend.setButtonEnabled(true);
-                    }
-                    if (mSendAmount == 0) {
-                        mBtnSend.setButtonEnabled(false);
-                    }
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int start, int before,
-                                      int count) {
-                if (arg0.length() == 0) {
-                    // No entered text so will show hint
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                if (amount > mPaymentData.getMaxSendable()) {
+                    String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMaxSendable(), true);
+                    showError(maxAmount, 2000);
+                    return false;
+                } else if (amount < mPaymentData.getMinSendable()) {
+                    String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMinSendable(), true);
+                    showError(minAmount, 2000);
+                    return false;
                 } else {
-                    mEtAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                    long maxSendable = WalletUtil.getMaxLightningSendAmount();
+                    if (amount > maxSendable) {
+                        String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxSendable, true);
+                        showError(message, 6000);
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
+            }
 
-                if (mBlockOnInputChanged)
-                    return;
+            @Override
+            public void onInputValidityChanged(boolean valid) {
+                mBtnSend.setButtonEnabled(valid);
+            }
 
-                // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), true);
-                if (mAmountValid) {
-                    mSendAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
-                }
+            @Override
+            public void onInputChanged(boolean valid) {
+
+            }
+
+            @Override
+            public void onError(String message, int duration) {
+                showError(message, duration);
             }
         });
 
+
         if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_IDENTIFIER) != null) {
-            mTvPayee.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_IDENTIFIER));
+            mPayeeView.setContent(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_IDENTIFIER));
         } else if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_EMAIL) != null) {
-            mTvPayee.setText(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_EMAIL));
+            mPayeeView.setContent(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_EMAIL));
         } else if (mServiceURLString != null) {
-            mTvPayee.setText(mServiceURLString);
+            mPayeeView.setContent(mServiceURLString);
         } else {
-            mTvPayee.setText(R.string.unknown);
+            mPayeeView.setContent(R.string.unknown);
         }
 
         // Description. If we have a long description we show only that.
         if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_LONG_DESCRIPTION) != null) {
-            mDescription.setContent(R.string.description, mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_LONG_DESCRIPTION));
+            mDescriptionView.setContent(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_LONG_DESCRIPTION));
 
         } else if (mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT) != null) {
-            mDescription.setContent(R.string.description, mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT));
+            mDescriptionView.setContent(mPaymentData.getMetadataAsString(LnUrlPayResponse.METADATA_TEXT));
         } else {
             mDescriptionView.setVisibility(View.GONE);
         }
 
         if (mPaymentData.getMinSendable() == mPaymentData.getMaxSendable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mPaymentData.getMaxSendable();
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, true));
-            mEtAmount.clearFocus();
-            mEtAmount.setFocusable(false);
-            mEtAmount.setEnabled(false);
+            mAmountInput.setFixedAmount(mPaymentData.getMaxSendable());
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
-            mNumpad.setVisibility(View.VISIBLE);
-            mSendAmount = mMinSendable;
-            mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mMinSendable, true));
-            mBlockOnInputChanged = false;
-
-            mHandler.postDelayed(() -> {
-                // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                mEtAmount.requestFocus();
-                mEtAmount.setSelection(mEtAmount.getText().length());
-            }, 600);
+            mAmountInput.setAmount(mPaymentData.getMinSendable());
+            mAmountInput.selectText();
         }
 
 
@@ -322,12 +265,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 switchToWithdrawProgressScreen();
 
                 BBLog.v(LOG_TAG, "Lnurl pay initiated...");
-
-                if (mFixedAmount == 0L) {
-                    mFinalChosenAmount = mSendAmount;
-                } else {
-                    mFinalChosenAmount = mFixedAmount;
-                }
 
                 // Gather Payer Data
                 if (mPaymentData.requestsPayerData()) {
@@ -343,7 +280,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 // Create send request
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
-                        .setAmount(mFinalChosenAmount)
+                        .setAmount(mAmountInput.getAmount())
                         .setComment(mPcvComment.getData())
                         .setPayerData(mPayerData)
                         .build();
@@ -379,30 +316,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
             }
         });
 
-
-        // Action when clicked on unit
-        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
-            LinearLayout llUnit = view.findViewById(R.id.unitLayout);
-            llUnit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mBlockOnInputChanged = true;
-                    MonetaryUtil.getInstance().switchToNextCurrency();
-                    if (mFixedAmount == 0L) {
-                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mSendAmount, true));
-                    } else {
-                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, true));
-                    }
-                    mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-                    mEtAmount.setSelection(mEtAmount.getText().length());
-                    mBlockOnInputChanged = false;
-                }
-            });
-        } else {
-            view.findViewById(R.id.switchUnitImage).setVisibility(View.GONE);
-        }
-
-        if (mMinSendable > mMaxSendable) {
+        if (mPaymentData.getMinSendable() > WalletUtil.getMaxLightningSendAmount()) {
             // There is no way the payment can be routed... show an error immediately
             switchToWithdrawProgressScreen();
             switchToFailedScreen(getResources().getString(R.string.lnurl_pay_insufficient_channel_balance));
@@ -415,7 +329,12 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
         BBLog.d(LOG_TAG, "Second pay response: " + secondPayResponse);
 
-        LnUrlPaySecondResponse lnUrlPaySecondResponse = new Gson().fromJson(secondPayResponse, LnUrlPaySecondResponse.class);
+        LnUrlPaySecondResponse lnUrlPaySecondResponse = null;
+        try {
+            lnUrlPaySecondResponse = new Gson().fromJson(secondPayResponse, LnUrlPaySecondResponse.class);
+        } catch (Exception e) {
+            showError(secondPayResponse, 7000);
+        }
 
         if (lnUrlPaySecondResponse == null) {
             switchToFailedScreen(getResources().getString(R.string.lnurl_invalid_response));
@@ -445,7 +364,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                     // Disable 0 sat invoices
                     BBLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                } else if (decodedBolt11.getAmountRequested() != mFinalChosenAmount) {
+                } else if (decodedBolt11.getAmountRequested() != mAmountInput.getAmount()) {
                     BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                 } else if (decodedBolt11.getDescriptionHash() == null || !decodedBolt11.getDescriptionHash().equals(metadataHash)) {
@@ -515,7 +434,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
 
     private void executeSuccessAction(LnUrlPaySuccessAction successAction, SendLnPaymentResponse sendLnPaymentResponse) {
 
-        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mFinalChosenAmount, true));
+        mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mAmountInput.getAmount(), true));
 
         if (successAction == null) {
             BBLog.d(LOG_TAG, "No Success action.");
@@ -658,5 +577,10 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment {
                 mResultView.setDetailsText(error);
             }
         });
+    }
+
+    @Override
+    public void onClearFocus() {
+        mAmountInput.clearFocus();
     }
 }

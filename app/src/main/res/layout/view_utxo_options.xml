@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rectangle_seablue"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="10dp">
 
     <app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup
         android:id="@+id/mainGroup"
@@ -16,11 +20,11 @@
         android:id="@+id/utxoOptionLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#00000000"
         android:maxLength="50"
         android:text="@string/utxo_selection"
         android:textAlignment="viewStart"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/utxoSummary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -87,6 +91,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
+            app:bbbutton_bright="true"
             app:bbbutton_textSize="16sp"
             tools:bbbutton_text="Select ..." />
 
@@ -98,6 +103,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="0dp"
             android:layout_weight="1"
+            app:bbbutton_bright="true"
             app:bbbutton_text="@string/reset"
             app:bbbutton_textSize="16sp" />
 
@@ -109,6 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonLayout"

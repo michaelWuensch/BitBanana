@@ -53,4 +53,18 @@
         <attr name="bbbutton_transparent" format="boolean" />
         <attr name="bbbutton_horizontalContentPadding" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="BBAmountInput"></declare-styleable>
+
+    <declare-styleable name="BBExpandableTextInfoBox">
+        <attr name="BBExpandableTextInfoBox_setLabel" format="string" />
+        <attr name="BBExpandableTextInfoBox_setContent" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="BBTextInputBox">
+        <attr name="BBTextInputBox_Label" format="string" />
+        <attr name="BBTextInputBox_ImeOption_next" format="boolean" />
+        <attr name="BBTextInputBox_ImeOption_done" format="boolean" />
+        <attr name="BBTextInputBox_SingleLine" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -65,7 +65,8 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AmountView);
-            mSwitchesValueOnClick = a.getBoolean(R.styleable.AmountView_switchesValueOnClick, true);
+            if (!isInEditMode()) // For some unexplainable reason this is necessary so that the preview works
+                mSwitchesValueOnClick = a.getBoolean(R.styleable.AmountView_switchesValueOnClick, true);
             mStyleBasedOnValue = a.getBoolean(R.styleable.AmountView_styleBasedOnValue, false);
             mIsWithoutUnit = a.getBoolean(R.styleable.AmountView_isWithoutUnit, false);
             boolean attrShowLabel = a.getBoolean(R.styleable.AmountView_showLabel, false);
@@ -74,6 +75,10 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             int attrTextSize = a.getDimensionPixelSize(R.styleable.AmountView_textSize, 0);
             ColorStateList attrTextColor = a.getColorStateList(R.styleable.AmountView_textColor);
             mMsatPrecision = a.getBoolean(R.styleable.AmountView_amountView_msatPrecision, true);
+
+            if (a.hasValue(R.styleable.AmountView_setLabelText)) {
+                mTvLabel.setText(a.getString(R.styleable.AmountView_setLabelText));
+            }
 
             if (attrTextColor != null)
                 setTextColor(attrTextColor);
