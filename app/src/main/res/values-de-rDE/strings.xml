@@ -406,7 +406,7 @@
     <string name="identity_switch_tor">Tor</string>
     <string name="identity_switch_public">Öffentlich</string>
     <string name="identity_tap_on_avatar">Tippe auf deinen Avatar um deine Identität zu zeigen!</string>
-    <string name="regtest_blockexplorer_unavailable">Block-Explorer sind im REGTEST Modus nicht verfügbar.</string>
+    <string name="regtest_blockexplorer_unavailable">Da du mit einem REGTEST-Netzwerk verbunden bist, funktioniert das nur, wenn du in den Einstellungen einen benutzerdefinierten Block-Explorer konfigurierst.</string>
     <string name="clipboard_error_heading">Ungültige Daten in der Zwischenablage gefunden:</string>
     <string name="clipboard_scan_payment">Die Zwischenablage enthält Zahlungsinformationen. Möchtest du eine Zahlung durchführen?</string>
     <string name="clipboard_scan_lnurl">Die Zwischenablage enthält LNURL Daten. Möchtest du sie verwenden?</string>
@@ -588,7 +588,7 @@
     <string name="drawer_menu_nodes">Knoten</string>
     <string name="settings_features">Funktionen</string>
     <string name="percent">Prozent</string>
-    <string name="settings_featureCoinControl_summary">Erweiterte Verwaltung von On-Chain-Vorgängen. Bietet eine Liste aller UTXOs und ermöglicht die Auswahl bestimmter UTXOs beim Senden. Die UTXO-Auswahl erfolgt automatisch, wenn dieses feature deaktiviert ist.</string>
+    <string name="settings_featureCoinControl_summary">Erweiterte Verwaltung von On-Chain-Guthaben. Bietet eine Liste aller UTXOs und ermöglicht die optionale Auswahl bestimmter UTXOs beim Senden oder beim Öffnen von Kanälen.</string>
     <string name="settings_featureHelpButtons_summary">Die praktischen \? Knöpfe in der gesamten App helfen neuen Benutzern mit detaillierten Erklärungen.</string>
     <string name="htlc_max">Max HTLC</string>
     <string name="peer">Peer</string>
@@ -919,4 +919,18 @@
     <string name="summary">Zusammenfassung</string>
     <string name="activity_payment_route">Zahlungsweg</string>
     <string name="error_payment_canceled">Der Absender hat die Zahlung gestoppt.</string>
+    <string name="automatic">Automatisch</string>
+    <string name="select">Auswählen</string>
+    <string name="confirm_selection">Auswahl bestätigen</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="total">Gesamt</string>
+    <string name="change">Ändern</string>
+    <string name="help_dialog_utxos_locking">Indem du hier bestimmte UTXOs sperrst, stellst du sicher, dass sie nicht für On-Chain-Transaktionen oder Kanalöffnungen ausgewählt werden. Mit BitBanana gesperrte UTXOs bleiben für 24 Stunden gesperrt, aber du hast die Möglichkeit, sie bei Bedarf manuell zu entsperren.</string>
+    <string name="help_dialog_utxos_select">Durch die Auswahl bestimmter UTXOs kannst du deine Privatsphäre verbessern oder in einigen Fällen Gebühren sparen.</string>
+    <string name="unlock_utxo">Entsperren</string>
+    <string name="locked">Gesperrt</string>
+    <string name="utxo_selection">UTXO Auswahl</string>
+    <string name="locked_until">Gesperrt bis</string>
+    <string name="lock_utxo">Sperren</string>
+    <string name="guardian_release_utxo">Dieser UTXO wurde nicht von dir mit der BitBanana UI gesperrt und ist wahrscheinlich aus einem guten Grund gesperrt. Hebe die Sperrung nur auf, wenn du dir sicher bist, dass es notwendig ist.</string>
 </resources>
