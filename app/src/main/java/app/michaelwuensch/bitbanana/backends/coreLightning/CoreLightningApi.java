@@ -1093,7 +1093,7 @@ public class CoreLightningApi extends Api {
         FundchannelRequest.Builder requestBuilder = FundchannelRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setAnnounce(!openChannelRequest.isPrivate())
-                .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), false, false))
+                .setAmount(amountOrAllFromMsat(openChannelRequest.getAmount(), openChannelRequest.isUseAllFunds(), false))
                 .setFeerate(Feerate.newBuilder()
                         .setPerkw((int) UtilFunctions.satPerVByteToSatPerKw(openChannelRequest.getSatPerVByte()))
                         .build());

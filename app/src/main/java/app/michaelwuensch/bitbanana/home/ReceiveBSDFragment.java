@@ -152,6 +152,11 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             }
 
             @Override
+            public void onSendAllCheckboxChanged(boolean checked) {
+
+            }
+
+            @Override
             public void onError(String message, int duration) {
 
             }

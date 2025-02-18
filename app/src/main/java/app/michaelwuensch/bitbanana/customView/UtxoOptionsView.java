@@ -35,7 +35,7 @@ public class UtxoOptionsView extends ConstraintLayout {
     private BBButton mBtnSelect;
     private BBButton mBtnReset;
     private LinearLayout mUtxoContainer;
-    private OnUtxoSelectClickListener mOnUtxoSelectClickListener;
+    private OnUtxoViewButtonListener mOnUtxoViewButtonListener;
     private ClearFocusListener mClearFocusListener;
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher;
@@ -83,12 +83,12 @@ public class UtxoOptionsView extends ConstraintLayout {
         mBtnSelect.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                if (mActivityResultLauncher != null && mOnUtxoSelectClickListener != null) {
+                if (mActivityResultLauncher != null && mOnUtxoViewButtonListener != null) {
                     Intent intent = new Intent(getContext(), UTXOsActivity.class);
                     intent.putExtra(UTXOsActivity.EXTRA_UTXO_ACTIVITY_MODE, UTXOsActivity.MODE_SELECT);
                     if (mSelectedUTXOs != null && !mSelectedUTXOs.isEmpty())
                         intent.putExtra(UTXOsActivity.EXTRA_UTXO_PRESELECTED, (Serializable) mSelectedUTXOs);
-                    intent.putExtra(UTXOsActivity.EXTRA_TRANSACTION_AMOUNT, mOnUtxoSelectClickListener.onSelectUtxosClicked());
+                    intent.putExtra(UTXOsActivity.EXTRA_TRANSACTION_AMOUNT, mOnUtxoViewButtonListener.onSelectUtxosClicked());
                     mActivityResultLauncher.launch(intent);
                 }
             }
@@ -172,15 +172,19 @@ public class UtxoOptionsView extends ConstraintLayout {
         mBtnReset.setButtonEnabled(false);
         mBtnSelect.setText(getContext().getString(R.string.select) + " ...");
         mUtxoContainer.setVisibility(GONE);
+        if (mOnUtxoViewButtonListener != null)
+            mOnUtxoViewButtonListener.onResetUtxoViewClicked();
     }
 
-    public interface OnUtxoSelectClickListener {
+    public interface OnUtxoViewButtonListener {
         long onSelectUtxosClicked();
+
+        void onResetUtxoViewClicked();
     }
 
     // Set the listener
-    public void setUtxoSelectClickListener(OnUtxoSelectClickListener listener) {
-        this.mOnUtxoSelectClickListener = listener;
+    public void setUtxoViewButtonListener(OnUtxoViewButtonListener listener) {
+        this.mOnUtxoViewButtonListener = listener;
     }
 
     public void hideKeyboard() {

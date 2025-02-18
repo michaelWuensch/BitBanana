@@ -45,6 +45,9 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     private long mTransactionSizeVByte;
     private boolean mManualMode;
 
+    private boolean mSendAllFlag;
+    private boolean mUtxosSelectedFlag;
+
     public OnChainFeeView(Context context) {
         super(context);
         init();
@@ -217,7 +220,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     }
 
     private void updateAbsoluteFee() {
-        if (BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation()) {
+        if (BackendManager.getCurrentBackend().supportsAbsoluteOnChainFeeEstimation() && !mSendAllFlag && !mUtxosSelectedFlag) {
             if (mTransactionSizeVByte == 0) {
                 mTvSendFeeAmount.overrideWithText(R.string.fee_not_available);
                 mTvSendFeeAmount.setVisibility(View.VISIBLE);
@@ -308,6 +311,16 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
 
     public void setClearFocusListener(ClearFocusListener listener) {
         mClearFocusListener = listener;
+    }
+
+    public void setSendAllFlag(boolean enabled) {
+        mSendAllFlag = enabled;
+        updateAbsoluteFee();
+    }
+
+    public void setUtxosSelectedFlag(boolean enabled) {
+        mUtxosSelectedFlag = enabled;
+        updateAbsoluteFee();
     }
 
     public enum OnChainFeeTier {

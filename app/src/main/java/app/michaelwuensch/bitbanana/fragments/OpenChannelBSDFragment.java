@@ -32,6 +32,8 @@ import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
+import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -44,7 +46,7 @@ import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, Wallet_Channels.ChannelOpenUpdateListener, ClearFocusListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoViewButtonListener, Wallet_Channels.ChannelOpenUpdateListener, ClearFocusListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
@@ -94,20 +96,27 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
                         Intent data = result.getData();
                         // Pass result to the custom view
                         mUtxoOptionsView.handleActivityResult(data);
+
+                        // Update Amount View
+                        long selectedAmount = data.getLongExtra(UTXOsActivity.EXTRA_TOTAL_SELECTED_UTXO_AMOUNT, 0);
+                        mAmountInput.updateUtxoSelectionAmount(selectedAmount);
+
+                        // Update On-Chain Fee view
+                        mOnChainFeeView.setUtxosSelectedFlag(selectedAmount > 0);
                     }
                 }
         );
 
         mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncher);
         mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnChannelOpenEnabled() ? View.VISIBLE : View.GONE);
-        mUtxoOptionsView.setUtxoSelectClickListener(this);
+        mUtxoOptionsView.setUtxoViewButtonListener(this);
 
         mOnChainFeeView.initialSetup();
         mOnChainFeeView.setClearFocusListener(this);
         setFeeFailure();
 
         mAmountInput.setupView();
-        mAmountInput.setSendAllEnabled(false);
+        mAmountInput.setSendAllEnabled(true);
         mAmountInput.setOnChain(true);
         mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
             @Override
@@ -162,6 +171,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
                     calculateTransactionSize();
                 else
                     setFeeFailure();
+            }
+
+            @Override
+            public void onSendAllCheckboxChanged(boolean checked) {
+                mOnChainFeeView.setSendAllFlag(checked);
             }
 
             @Override
@@ -231,7 +245,15 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
     private void performChannelOpen() {
         hideKeyboard();
         switchToProgressScreen();
-        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mAmountInput.getAmount(), mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked(), mUtxoOptionsView.getSelectedUTXOs());
+        OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
+                .setNodePubKey(mLightningNodeUri.getPubKey())
+                .setAmount(mAmountInput.getAmount())
+                .setUseAllFunds(mAmountInput.getSendAllChecked())
+                .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
+                .setPrivate(mPrivateCheckbox.isChecked())
+                .setUTXOs(mUtxoOptionsView.getSelectedUTXOs())
+                .build();
+        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, openChannelRequest);
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {
@@ -274,9 +296,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
     }
 
     @Override
-    public void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
+    public void onChannelOpenUpdate(String nodePubKey, int status, String message) {
 
-        if (mLightningNodeUri.getPubKey().equals(lightningNodeUri.getPubKey())) {
+        if (mLightningNodeUri.getPubKey().equals(nodePubKey)) {
             if (status == Wallet_Channels.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
                 Wallet_Channels.getInstance().updateLNDChannelsWithDebounce();
@@ -372,7 +394,16 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
 
     @Override
     public long onSelectUtxosClicked() {
-        return mAmountInput.getAmount();
+        if (mAmountInput.getSendAllChecked())
+            return 0;
+        else
+            return mAmountInput.getAmount();
+    }
+
+    @Override
+    public void onResetUtxoViewClicked() {
+        mAmountInput.updateUtxoSelectionAmount(0);
+        mOnChainFeeView.setUtxosSelectedFlag(false);
     }
 
     @Override

@@ -157,6 +157,11 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFo
             }
 
             @Override
+            public void onSendAllCheckboxChanged(boolean checked) {
+
+            }
+
+            @Override
             public void onError(String message, int duration) {
                 showError(message, duration);
             }

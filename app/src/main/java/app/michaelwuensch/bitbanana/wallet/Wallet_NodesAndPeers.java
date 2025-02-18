@@ -1,15 +1,16 @@
 package app.michaelwuensch.bitbanana.wallet;
 
 
+import androidx.annotation.Nullable;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -44,11 +45,11 @@ public class Wallet_NodesAndPeers {
         compositeDisposable.clear();
     }
 
-    public void connectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
+    public void connectPeer(LightningNodeUri nodeUri, @Nullable OpenChannelRequest openChannelRequest) {
         if (nodeUri.getHost() == null || nodeUri.getHost().isEmpty()) {
             if (BackendManager.getCurrentBackendType() != BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
                 BBLog.d(LOG_TAG, "Host info missing. Trying to fetch host info to connect peer...");
-                fetchNodeInfoToConnectPeer(nodeUri, openChannel, amount, satPerVByte, isPrivate, UTXOs);
+                fetchNodeInfoToConnectPeer(nodeUri, openChannelRequest);
                 return;
             }
         }
@@ -58,22 +59,22 @@ public class Wallet_NodesAndPeers {
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully connected to peer.");
                     broadcastPeerConnectedSuccess();
-                    if (openChannel) {
+                    if (openChannelRequest != null) {
                         BBLog.d(LOG_TAG, "Now that we are connected to peer, trying to open channel...");
-                        Wallet_Channels.getInstance().openChannelConnected(nodeUri, amount, satPerVByte, isPrivate, UTXOs);
+                        Wallet_Channels.getInstance().openChannelConnected(openChannelRequest);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error connecting to peer: " + throwable.getMessage());
 
-                    if (openChannel) {
+                    if (openChannelRequest != null) {
                         if (throwable.getMessage().toLowerCase().contains("refused")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_REFUSED, throwable.getMessage());
                         } else if (throwable.getMessage().toLowerCase().contains("self")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_SELF, throwable.getMessage());
                         } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_TIMEOUT, throwable.getMessage());
                         } else {
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION, throwable.getMessage());
                         }
                     } else {
                         broadcastPeerConnectedError(throwable.getMessage());
@@ -81,7 +82,7 @@ public class Wallet_NodesAndPeers {
                 }));
     }
 
-    private void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, boolean openChannel, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
+    private void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, @Nullable OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
@@ -90,18 +91,18 @@ public class Wallet_NodesAndPeers {
                         LightningNodeUri nodeUriWithHost = LightningNodeUriParser.parseNodeUri(tempUri);
                         if (nodeUriWithHost != null) {
                             BBLog.d(LOG_TAG, "Host info successfully fetched. NodeUriWithHost: " + nodeUriWithHost.getAsString());
-                            connectPeer(nodeUriWithHost, openChannel, amount, satPerVByte, isPrivate, UTXOs);
+                            connectPeer(nodeUriWithHost, openChannelRequest);
                         } else {
                             BBLog.d(LOG_TAG, "Failed to parse nodeUri");
-                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                            Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri.getPubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                         }
                     } else {
                         BBLog.w(LOG_TAG, "Node Info does not contain any addresses.");
-                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                        Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri.getPubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                     }
                 }, throwable -> {
                     BBLog.w(LOG_TAG, "Fetching host info failed. Exception in get node info (" + nodeUri.getPubKey() + ") request task: " + throwable.getMessage());
-                    Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri, Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
+                    Wallet_Channels.getInstance().broadcastChannelOpenUpdate(nodeUri.getPubKey(), Wallet_Channels.ChannelOpenUpdateListener.ERROR_CONNECTION_NO_HOST, null);
                 }));
     }
 

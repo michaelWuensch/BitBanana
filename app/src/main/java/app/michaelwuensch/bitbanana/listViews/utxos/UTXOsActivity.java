@@ -36,6 +36,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
 
     public static final String EXTRA_UTXO_ACTIVITY_MODE = "utxoActivityMode";
     public static final String EXTRA_UTXO_SELECTED = "selectedUTXOs";
+    public static final String EXTRA_TOTAL_SELECTED_UTXO_AMOUNT = "selectedUTXOAmount";
     public static final String EXTRA_UTXO_PRESELECTED = "preselectedUTXOs";
     public static final String EXTRA_TRANSACTION_AMOUNT = "transactionAmount";
     public static final int MODE_VIEW = 0;
@@ -167,6 +168,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                 for (UTXOListItem utxoListItem : mAdapter.getSelectedItems())
                     selectedUTXOs.add(utxoListItem.getUtxo());
                 resultIntent.putExtra(EXTRA_UTXO_SELECTED, (Serializable) selectedUTXOs);
+                resultIntent.putExtra(EXTRA_TOTAL_SELECTED_UTXO_AMOUNT, mTotalSelectedAmount.getAmount());
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
             }
