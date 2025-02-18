@@ -5,14 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,12 +27,13 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.customView.BBAmountInput;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.customView.BBExpandableTextInfoBox;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.ExpandableTextView;
-import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -49,31 +45,23 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
+public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFocusListener {
 
     private static final String LOG_TAG = LnUrlWithdrawBSDFragment.class.getSimpleName();
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDResultView mResultView;
     private BSDProgressView mProgressView;
+    private BBAmountInput mAmountInput;
+    private BBExpandableTextInfoBox mServiceView;
+    private BBExpandableTextInfoBox mDescriptionView;
     private ConstraintLayout mContentTopLayout;
     private View mWithdrawInputs;
-    private EditText mEtAmount;
-    private ExpandableTextView mExtvDescription;
-    private TextView mTvUnit;
-    private NumpadView mNumpad;
     private BBButton mBtnWithdraw;
-    private TextView mTvWithdrawSource;
 
-    private long mFixedAmount;
-    private boolean mAmountValid = true;
-    private long mMinWithdrawable;
-    private long mMaxWithdrawable;
     private String mServiceURLString;
     private Handler mHandler;
     private LnUrlWithdrawResponse mWithdrawData;
-    private long mWithdrawAmount;
-    private boolean mBlockOnInputChanged;
 
     public static LnUrlWithdrawBSDFragment createWithdrawDialog(LnUrlWithdrawResponse response) {
         Bundle bundle = new Bundle();
@@ -93,10 +81,6 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         Bundle args = getArguments();
         mWithdrawData = (LnUrlWithdrawResponse) args.getSerializable(LnUrlWithdrawResponse.ARGS_KEY);
 
-        // Calculate correct min and max withdrawal value for LNURL.
-        mMaxWithdrawable = Math.min((mWithdrawData.getMaxWithdrawable()), WalletUtil.getMaxLightningReceiveAmount());
-        mMinWithdrawable = mWithdrawData.getMinWithdrawable();
-
         // Extract the URL from the Withdraw service
         try {
             URL url = new URL(mWithdrawData.getCallback());
@@ -114,124 +98,90 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         mContentTopLayout = view.findViewById(R.id.contentTopLayout);
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
 
+        mAmountInput = view.findViewById(R.id.amountInput);
         mWithdrawInputs = view.findViewById(R.id.withdrawInputsView);
-        mEtAmount = view.findViewById(R.id.withdrawAmount);
-        mTvUnit = view.findViewById(R.id.unit);
-        mExtvDescription = view.findViewById(R.id.withdrawDescription);
-        mTvWithdrawSource = view.findViewById(R.id.withdrawSource);
+        mServiceView = view.findViewById(R.id.withdrawSourceView);
+        mDescriptionView = view.findViewById(R.id.descriptionView);
 
-        mNumpad = view.findViewById(R.id.numpadView);
         mBtnWithdraw = view.findViewById(R.id.withdrawButton);
-
 
         mBSDScrollableMainView.setTitle(R.string.withdraw);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mResultView.setOnOkListener(this::dismiss);
 
-        mNumpad.bindEditText(mEtAmount);
+        mDescriptionView.setClearFocusListener(this);
+        mServiceView.setClearFocusListener(this);
 
-        // deactivate default keyboard for number input.
-        mEtAmount.setShowSoftInputOnFocus(false);
-
-        // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-
-        // Input validation for the amount field.
-        mEtAmount.addTextChangedListener(new TextWatcher() {
-
+        mAmountInput.setupView();
+        mAmountInput.setOnChain(false);
+        mAmountInput.setSendAllEnabled(false);
+        mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
             @Override
-            public void afterTextChanged(Editable arg0) {
+            public boolean onAfterTextChanged(String newText, long amount, boolean isFixedAmount, boolean isOnChain) {
+                if (newText.equals(".") || amount == 0)
+                    return false;
 
-                // remove the last inputted character if not valid
-                if (!mAmountValid) {
-                    mNumpad.removeOneDigit();
-                    return;
+                if (isFixedAmount) {
+                    return true;
                 }
 
-                if (!mEtAmount.getText().toString().equals(".")) {
-
-                    if (mFixedAmount != 0L) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setButtonEnabled(true);
-                        return;
-                    }
-
-                    // make text red if input is too large or too small
-                    if (mWithdrawAmount > mMaxWithdrawable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMaxWithdrawable, true);
-                        Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setButtonEnabled(false);
-                    } else if (mWithdrawAmount < mMinWithdrawable) {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.red));
-                        String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mMinWithdrawable, true);
-                        Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
-                        mBtnWithdraw.setButtonEnabled(false);
+                if (amount > mWithdrawData.getMaxWithdrawable()) {
+                    String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mWithdrawData.getMaxWithdrawable(), true);
+                    Toast.makeText(getActivity(), maxAmount, Toast.LENGTH_SHORT).show();
+                    return false;
+                } else if (amount < mWithdrawData.getMinWithdrawable()) {
+                    String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mWithdrawData.getMinWithdrawable(), true);
+                    Toast.makeText(getActivity(), minAmount, Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    long maxWithdrawable = WalletUtil.getMaxLightningReceiveAmount();
+                    if (amount > maxWithdrawable) {
+                        String errorMsg = getString(R.string.error_insufficient_lightning_receive_liquidity, MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxWithdrawable, true));
+                        showError(errorMsg, 7000);
+                        return false;
                     } else {
-                        mEtAmount.setTextColor(getResources().getColor(R.color.white));
-                        mBtnWithdraw.setButtonEnabled(true);
-                    }
-                    if (mWithdrawAmount == 0) {
-                        mBtnWithdraw.setButtonEnabled(false);
+                        return true;
                     }
                 }
             }
 
             @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-                // TODO Auto-generated method stub
+            public void onInputValidityChanged(boolean valid) {
+                mBtnWithdraw.setButtonEnabled(valid);
+            }
+
+            @Override
+            public void onInputChanged(boolean valid) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence arg0, int start, int before,
-                                      int count) {
-                if (mBlockOnInputChanged)
-                    return;
-
-                // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), false);
-                if (mAmountValid) {
-                    mWithdrawAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
-                }
+            public void onError(String message, int duration) {
+                showError(message, duration);
             }
         });
 
         if (mServiceURLString != null) {
-            mTvWithdrawSource.setText(mServiceURLString);
+            mServiceView.setContent(mServiceURLString);
         } else {
-            mTvWithdrawSource.setText(R.string.unknown);
+            mServiceView.setContent(R.string.unknown);
         }
 
         if (mWithdrawData.getDefaultDescription() == null || mWithdrawData.getDefaultDescription().isEmpty()) {
-            mExtvDescription.setVisibility(View.GONE);
+            mDescriptionView.setVisibility(View.GONE);
         } else {
-            mExtvDescription.setVisibility(View.VISIBLE);
-            mExtvDescription.setContent(R.string.description, mWithdrawData.getDefaultDescription());
+            mDescriptionView.setVisibility(View.VISIBLE);
+            mDescriptionView.setContent(mWithdrawData.getDefaultDescription());
         }
 
         if (mWithdrawData.getMinWithdrawable() == mWithdrawData.getMaxWithdrawable()) {
             // A specific amount was requested. We are not allowed to change the amount.
-            mFixedAmount = mWithdrawData.getMaxWithdrawable();
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, true));
-            mEtAmount.clearFocus();
-            mEtAmount.setFocusable(false);
-            mEtAmount.setEnabled(false);
+            mAmountInput.setFixedAmount(mWithdrawData.getMaxWithdrawable());
         } else {
             // No specific amount was requested. Let User input an amount, but pre fill with maxWithdraw amount.
-            mNumpad.setVisibility(View.VISIBLE);
-            mWithdrawAmount = mMaxWithdrawable;
-            mBlockOnInputChanged = true;
-            mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mMaxWithdrawable, true));
-            mBlockOnInputChanged = false;
-
-            mHandler.postDelayed(() -> {
-                // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-                mEtAmount.requestFocus();
-                mEtAmount.setSelection(mEtAmount.getText().length());
-            }, 200);
+            mAmountInput.setAmount(Math.min((mWithdrawData.getMaxWithdrawable()), WalletUtil.getMaxLightningReceiveAmount()));
+            mAmountInput.selectText();
         }
 
 
@@ -245,15 +195,8 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 BBLog.d(LOG_TAG, "Trying to withdraw...");
 
                 // Create ln-invoice
-                long value;
-                if (mFixedAmount == 0L) {
-                    value = mWithdrawAmount;
-                } else {
-                    value = mFixedAmount;
-                }
-
                 CreateInvoiceRequest request = CreateInvoiceRequest.newBuilder()
-                        .setAmount(value)
+                        .setAmount(mAmountInput.getAmount())
                         .setDescription(mWithdrawData.getDefaultDescription())
                         .setExpiry(300L)
                         .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
@@ -302,28 +245,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
         });
 
 
-        // Action when clicked on receive unit
-        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
-            LinearLayout llUnit = view.findViewById(R.id.unitLayout);
-            llUnit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mBlockOnInputChanged = true;
-                    MonetaryUtil.getInstance().switchToNextCurrency();
-                    if (mFixedAmount == 0L) {
-                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mWithdrawAmount, false));
-                    } else {
-                        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mFixedAmount, false));
-                    }
-                    mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-                    mBlockOnInputChanged = false;
-                }
-            });
-        } else {
-            view.findViewById(R.id.switchUnitImage).setVisibility(View.GONE);
-        }
-
-        if (mMinWithdrawable > mMaxWithdrawable) {
+        if (mWithdrawData.getMinWithdrawable() > WalletUtil.getMaxLightningReceiveAmount()) {
             // There is no way the withdraw can be routed... show an error immediately
             switchToWithdrawProgressScreen();
             switchToFailedScreen(getResources().getString(R.string.lnurl_withdraw_insufficient_channel_balance));
@@ -376,7 +298,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 mProgressView.spinningFinished(true);
                 TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView());
                 mWithdrawInputs.setVisibility(View.GONE);
-                mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mWithdrawAmount, true));
+                mResultView.setDetailsText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mAmountInput.getAmount(), true));
                 mResultView.setVisibility(View.VISIBLE);
                 mResultView.setHeading(R.string.lnurl_withdraw_success, true);
             }
@@ -399,5 +321,10 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment {
                 mResultView.setDetailsText(error);
             }
         });
+    }
+
+    @Override
+    public void onClearFocus() {
+        mAmountInput.clearFocus();
     }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,10 +27,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/withdrawInputsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:paddingStart="30dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="30dp"
@@ -39,152 +39,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/line"
+                <app.michaelwuensch.bitbanana.customView.BBAmountInput
+                    android:id="@+id/amountInput"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@color/gray" />
+                    android:layout_height="wrap_content" />
 
-                <!-- Dummy item to prevent EditText from receiving focus -->
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/amountLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:ems="10"
-                    android:maxLength="50"
-                    android:text="@string/amount"
-                    android:textAlignment="viewStart"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@id/unitLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/withdrawAmount"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@color/transparent"
-                    android:ems="10"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="0dp"
-                    android:textAlignment="textEnd"
-                    android:textSize="30sp"
-                    app:layout_constraintEnd_toStartOf="@+id/unitLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/unitLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/withdrawAmount"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <app.michaelwuensch.bitbanana.customView.NonClippingTextView
-                        android:id="@+id/unit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:gravity="center"
-                        android:textSize="30sp"
-                        android:textStyle="italic"
-                        tools:text="UNIT" />
-
-                    <ImageView
-                        android:id="@+id/switchUnitImage"
-                        android:layout_width="18dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingStart="4dp"
-                        android:paddingTop="5dp"
-                        app:srcCompat="@drawable/ic_swap_vert_black_24dp"
-                        app:tint="@color/banana_yellow" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/line2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/unitLayout"
-                    app:srcCompat="@color/gray" />
-
-                <TextView
-                    android:id="@+id/withdrawSourceLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:maxLength="50"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="9dp"
-                    android:text="@string/lnurl_service"
-                    android:textAlignment="viewStart"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                <TextView
-                    android:id="@+id/withdrawSource"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:paddingStart="15dp"
-                    android:paddingTop="9dp"
-                    android:paddingBottom="9dp"
-                    android:textAlignment="viewEnd"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/withdrawSourceLabel"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
-                    tools:text="lnurl.bigsun.xyz" />
-
-                <ImageView
-                    android:id="@+id/line3"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/withdrawSourceLabel"
-                    app:srcCompat="@color/gray" />
-
-                <app.michaelwuensch.bitbanana.customView.ExpandableTextView
-                    android:id="@+id/withdrawDescription"
+                <app.michaelwuensch.bitbanana.customView.BBExpandableTextInfoBox
+                    android:id="@+id/withdrawSourceView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line3" />
+                    android:layout_marginTop="10dp"
+                    app:BBExpandableTextInfoBox_setLabel="@string/lnurl_service" />
 
-                <app.michaelwuensch.bitbanana.customView.NumpadView
-                    android:id="@+id/numpadView"
+                <app.michaelwuensch.bitbanana.customView.BBExpandableTextInfoBox
+                    android:id="@+id/descriptionView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/withdrawDescription" />
+                    android:layout_marginTop="10dp"
+                    app:BBExpandableTextInfoBox_setLabel="@string/description" />
 
                 <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/withdrawButton"
@@ -192,13 +64,9 @@
                     android:layout_height="@dimen/button_height"
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="15dp"
-                    app:bbbutton_text="@string/withdraw"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/numpadView" />
+                    app:bbbutton_text="@string/withdraw" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

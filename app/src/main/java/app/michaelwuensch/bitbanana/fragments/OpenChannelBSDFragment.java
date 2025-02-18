@@ -2,26 +2,19 @@ package app.michaelwuensch.bitbanana.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -30,12 +23,13 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
-import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBAmountInput;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.customView.BBExpandableTextInfoBox;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
-import app.michaelwuensch.bitbanana.customView.NumpadView;
+import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
@@ -45,13 +39,12 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
-public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, Wallet_Channels.ChannelOpenUpdateListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, Wallet_Channels.ChannelOpenUpdateListener, ClearFocusListener {
 
     public static final String TAG = OpenChannelBSDFragment.class.getSimpleName();
     public static final String ARGS_NODE_URI = "NODE_URI";
@@ -59,25 +52,17 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
     private ActivityResultLauncher<Intent> mActivityResultLauncher;
 
     private BSDScrollableMainView mBSDScrollableMainView;
+    private BBAmountInput mAmountInput;
+    private BBExpandableTextInfoBox mNodeView;
     private BSDResultView mResultView;
     private BSDProgressView mProgressView;
     private ConstraintLayout mContentTopLayout;
-    private ConstraintLayout mOpenChannelInputLayout;
-    private NumpadView mNumpad;
-    private EditText mEtAmount;
-    private TextView mTvUnit;
-    private boolean mAmountValid = false;
+    private LinearLayout mOpenChannelInputLayout;
     private BBButton mOpenChannelButton;
-    private TextView mTvNodeAlias;
-    private AmountView mTvOnChainFunds;
     private LightningNodeUri mLightningNodeUri;
     private OnChainFeeView mOnChainFeeView;
     private CheckBox mPrivateCheckbox;
-    private View mVSwitchImage;
-    private long mValueChannelCapacity;
-    private boolean mBlockOnInputChanged;
-    private long mOnChainUnconfirmed;
-    private long mOnChainConfirmed;
+
     private UtxoOptionsView mUtxoOptionsView;
 
     @Nullable
@@ -86,31 +71,20 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
         View view = inflater.inflate(R.layout.bsd_open_channel, container);
 
         mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
+        mAmountInput = view.findViewById(R.id.amountInput);
+        mNodeView = view.findViewById(R.id.nodeView);
         mResultView = view.findViewById(R.id.resultLayout);
         mContentTopLayout = view.findViewById(R.id.contentTopLayout);
         mProgressView = view.findViewById(R.id.paymentProgressLayout);
         mOpenChannelInputLayout = view.findViewById(R.id.openChannelInputLayout);
-        mNumpad = view.findViewById(R.id.numpadView);
-        mTvNodeAlias = view.findViewById(R.id.nodeAliasText);
-        mTvOnChainFunds = view.findViewById(R.id.onChainFunds);
-        mEtAmount = view.findViewById(R.id.localAmount);
-        mTvUnit = view.findViewById(R.id.localAmountUnit);
         mOpenChannelButton = view.findViewById(R.id.openChannelButton);
         mOnChainFeeView = view.findViewById(R.id.sendFeeOnChainLayout);
         mPrivateCheckbox = view.findViewById(R.id.privateCheckBox);
-        mVSwitchImage = view.findViewById(R.id.localAmountSwitchUnitImage);
-
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mBSDScrollableMainView.setTitle(R.string.channel_open);
         mResultView.setOnOkListener(this::dismiss);
-        mNumpad.bindEditText(mEtAmount);
         mUtxoOptionsView = view.findViewById(R.id.utxoOptions);
-
-        mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnChannelOpenEnabled() ? View.VISIBLE : View.GONE);
-        mUtxoOptionsView.setUtxoSelectClickListener(this);
-
-        PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
 
         // Initialize the ActivityResultLauncher
         mActivityResultLauncher = registerForActivityResult(
@@ -123,90 +97,23 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
                     }
                 }
         );
+
         mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncher);
+        mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnChannelOpenEnabled() ? View.VISIBLE : View.GONE);
+        mUtxoOptionsView.setUtxoSelectClickListener(this);
 
         mOnChainFeeView.initialSetup();
+        mOnChainFeeView.setClearFocusListener(this);
         setFeeFailure();
 
-        Wallet_Channels.getInstance().registerChannelOpenUpdateListener(this);
-
-        if (getArguments() != null) {
-            mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
-            setAlias(mLightningNodeUri);
-        }
-
-        setAvailableFunds();
-        ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
-        if (FeatureManager.isHelpButtonsEnabled()) {
-            privateHelpButton.setVisibility(View.VISIBLE);
-            privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
-        } else {
-            privateHelpButton.setVisibility(View.GONE);
-        }
-
-        // Input validation for the amount field.
-        mEtAmount.addTextChangedListener(new TextWatcher() {
-
+        mAmountInput.setupView();
+        mAmountInput.setSendAllEnabled(false);
+        mAmountInput.setOnChain(true);
+        mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1,
-                                          int arg2, int arg3) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-                // remove the last inputted character if not valid
-                if (!mAmountValid) {
-                    mNumpad.removeOneDigit();
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence arg0, int start, int before,
-                                      int count) {
-                if (mBlockOnInputChanged)
-                    return;
-
-                // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), false);
-
-                // calculate fees
-                if (mAmountValid) {
-                    mValueChannelCapacity = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(mEtAmount.getText().toString());
-                    calculateTransactionSize();
-                } else {
-                    setFeeFailure();
-                }
-            }
-        });
-
-        // Action when clicked on receive unit
-        if (MonetaryUtil.getInstance().hasMoreThanOneCurrency()) {
-            mVSwitchImage.setVisibility(View.VISIBLE);
-            LinearLayout llUnit = view.findViewById(R.id.sendUnitLayout);
-            llUnit.setOnClickListener(v -> {
-                mBlockOnInputChanged = true;
-                MonetaryUtil.getInstance().switchToNextCurrency();
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mValueChannelCapacity, false));
-                mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-                setAvailableFunds();
-                mBlockOnInputChanged = false;
-            });
-        } else {
-            mVSwitchImage.setVisibility(View.GONE);
-        }
-
-        mNumpad.setVisibility(View.VISIBLE);
-
-        mOpenChannelButton.setOnClickListener(new OnSingleClickListener() {
-            @Override
-            public void onSingleClick(View v) {
-                if (!mAmountValid || mEtAmount.getText().toString().equals(".")) {
-                    // no real amount
-                    showError(getResources().getString(R.string.amount_invalid), Snackbar.LENGTH_LONG);
-                    return;
-                }
+            public boolean onAfterTextChanged(String newText, long amount, boolean isFixedAmount, boolean isOnChain) {
+                if (amount <= 0)
+                    return false;
 
                 // ToDo: values are from LND. Make it generic? Support Wumbo channels?
                 long minSendAmount = 20000 * 1000L;
@@ -221,33 +128,80 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
                         maxSendAmount = onChainAvailable;
                     }
 
-                    if (mValueChannelCapacity < minSendAmount) {
-                        // amount is to small
-                        String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(minSendAmount, false);
-                        showError(message, Snackbar.LENGTH_LONG);
-                        return;
-                    }
-
-                    if (mValueChannelCapacity > maxSendAmount) {
+                    if (amount > maxSendAmount) {
                         // amount is to big
-                        if (mValueChannelCapacity > absoluteMaxSendAmount) {
+                        if (amount > absoluteMaxSendAmount) {
                             String message = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(absoluteMaxSendAmount, false);
                             showError(message, Snackbar.LENGTH_LONG);
-                            return;
+                            return false;
                         } else {
-                            if (mValueChannelCapacity < (onChainAvailable + onChainUnconfirmed)) {
+                            if (amount < (onChainAvailable + onChainUnconfirmed)) {
                                 String message = getResources().getString(R.string.error_funds_not_confirmed_yet);
                                 showError(message, 10000);
-                                return;
+                                return false;
                             } else {
                                 String message = getResources().getString(R.string.error_insufficient_on_chain_funds) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(onChainAvailable + onChainUnconfirmed, false);
                                 showError(message, Snackbar.LENGTH_LONG);
-                                return;
+                                return false;
                             }
                         }
                     }
+                    return true;
+                } else
+                    return true;
+            }
 
-                } else {
+            @Override
+            public void onInputValidityChanged(boolean valid) {
+                mOpenChannelButton.setButtonEnabled(valid);
+            }
+
+            @Override
+            public void onInputChanged(boolean valid) {
+                if (valid)
+                    calculateTransactionSize();
+                else
+                    setFeeFailure();
+            }
+
+            @Override
+            public void onError(String message, int duration) {
+                showError(message, duration);
+            }
+        });
+        mAmountInput.requestFocusDelayed();
+
+        Wallet_Channels.getInstance().registerChannelOpenUpdateListener(this);
+
+        if (getArguments() != null) {
+            mLightningNodeUri = (LightningNodeUri) getArguments().getSerializable(ARGS_NODE_URI);
+            setAlias(mLightningNodeUri);
+        }
+
+        ImageButton privateHelpButton = view.findViewById(R.id.privateHelpButton);
+        if (FeatureManager.isHelpButtonsEnabled()) {
+            privateHelpButton.setVisibility(View.VISIBLE);
+            privateHelpButton.setOnClickListener(view1 -> HelpDialogUtil.showDialog(getActivity(), R.string.help_dialog_private_channels));
+        } else {
+            privateHelpButton.setVisibility(View.GONE);
+        }
+
+        mOpenChannelButton.setButtonEnabled(false);
+        mOpenChannelButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+
+                // ToDo: values are from LND. Make it generic?
+                long minSendAmount = 20000 * 1000L;
+
+                if (mAmountInput.getAmount() < minSendAmount) {
+                    // amount is to small
+                    String message = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(minSendAmount, false);
+                    showError(message, Snackbar.LENGTH_LONG);
+                    return;
+                }
+
+                if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
                     // you need to setup wallet to open a channel
                     showError(getResources().getString(R.string.error_channel_open_node_setup), Snackbar.LENGTH_LONG);
                     return;
@@ -271,30 +225,19 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
             }
         });
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            // We have to call this delayed, as otherwise it will still bring up the softKeyboard
-            mEtAmount.requestFocus();
-        }, 600);
-
-        // deactivate default keyboard for number input.
-        mEtAmount.setShowSoftInputOnFocus(false);
-
-        // set unit to current primary unit
-        mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-
         return view;
     }
 
     private void performChannelOpen() {
+        hideKeyboard();
         switchToProgressScreen();
-        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mValueChannelCapacity, mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked(), mUtxoOptionsView.getSelectedUTXOs());
+        Wallet_Channels.getInstance().openChannel(mLightningNodeUri, mAmountInput.getAmount(), mOnChainFeeView.getSatPerVByteFee(), mPrivateCheckbox.isChecked(), mUtxoOptionsView.getSelectedUTXOs());
     }
 
     private void setAlias(LightningNodeUri lightningNodeUri) {
         String alias = AliasManager.getInstance().getAliasWithoutPubkey(lightningNodeUri.getPubKey());
         alias = alias + " (" + lightningNodeUri.getPubKey() + ")";
-        mTvNodeAlias.setText(alias);
+        mNodeView.setContent(alias);
     }
 
     private void switchToProgressScreen() {
@@ -324,26 +267,9 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
         mResultView.setDetailsText(R.string.channel_open_success);
     }
 
-    private void setAvailableFunds() {
-        long available = Wallet_Balance.getInstance().getBalances().onChainConfirmed();
-        mOnChainConfirmed = available;
-        mOnChainUnconfirmed = Wallet_Balance.getInstance().getBalances().onChainUnconfirmed();
-        mTvOnChainFunds.setLabelText(getString(R.string.available) + ": ");
-        mTvOnChainFunds.setLabelVisibility(true);
-        mTvOnChainFunds.setAmountMsat(available);
-    }
-
-    private void showError(String message, int duration) {
-        Snackbar msg = Snackbar.make(getView().findViewById(R.id.coordinator), message, duration);
-        View sbView = msg.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
-        msg.show();
-    }
-
     @Override
     public void onDestroy() {
         Wallet_Channels.getInstance().unregisterChannelOpenUpdateListener(this);
-        PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 
@@ -390,7 +316,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
 
     private void calculateTransactionSize() {
         setCalculatingFee();
-        estimateOnChainTransactionSize(mValueChannelCapacity);
+        estimateOnChainTransactionSize(mAmountInput.getAmount());
     }
 
     /**
@@ -446,17 +372,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
 
     @Override
     public long onSelectUtxosClicked() {
-        return mValueChannelCapacity;
+        return mAmountInput.getAmount();
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String key) {
-        if (key != null) {
-            if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mValueChannelCapacity, false));
-                mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-                setAvailableFunds();
-            }
-        }
+    public void onClearFocus() {
+        mAmountInput.clearFocus();
     }
 }

@@ -1,17 +1,23 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -81,5 +87,30 @@ public class BaseBSDFragment extends RxBSDFragment {
     @Override
     public int getTheme() {
         return R.style.BBBottomSheetDialogTheme;
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getView().getRootView().getWindowToken(), 0);
+    }
+
+    public void showKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+    }
+
+    protected void showError(String message, int durationMS) {
+        if (getView() != null && getView().findViewById(R.id.coordinator) != null) {
+            Snackbar snackbar = Snackbar.make(getView().findViewById(R.id.coordinator), message, durationMS);
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red));
+            snackbar.show();
+        } else {
+            showToast(message, durationMS > 3000 ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        }
+    }
+
+    protected void showToast(String message, int length) {
+        Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
     }
 }

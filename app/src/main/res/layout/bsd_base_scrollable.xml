@@ -1,100 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollableBsdRoot"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
 
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="4dp"
-        android:background="?actionBarItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_close_black_24dp"
-        app:tint="@color/gray" />
-
-    <ImageButton
-        android:id="@+id/helpButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="7dp"
-        android:background="?actionBarItemBackground"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/closeButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_help_black_24dp"
-        app:tint="@color/gray"
-        tools:visibility="visible" />
-
-    <ImageButton
-        android:id="@+id/moreButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="7dp"
-        android:background="?actionBarItemBackground"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/helpButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_more_vert_24"
-        app:tint="@color/gray"
-        tools:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/titleIcon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_icon_modal_lightning" />
-
-    <TextView
-        android:id="@+id/title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLength="25"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleIcon"
-        tools:text="Title" />
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bottom_sheets">
 
-    <ImageView
-        android:id="@+id/separatorLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:srcCompat="@color/gray"
-        tools:ignore="ContentDescription" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollableBsdRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        android:fadeScrollbars="true"
-        android:paddingTop="2dp"
-        android:paddingBottom="10dp"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+            <ImageButton
+                android:id="@+id/closeButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="4dp"
+                android:background="?actionBarItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_close_black_24dp"
+                app:tint="@color/gray" />
 
-    </androidx.core.widget.NestedScrollView>
+            <ImageButton
+                android:id="@+id/helpButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="7dp"
+                android:background="?actionBarItemBackground"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/closeButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_help_black_24dp"
+                app:tint="@color/gray"
+                tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageButton
+                android:id="@+id/moreButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="7dp"
+                android:background="?actionBarItemBackground"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/helpButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_more_vert_24"
+                app:tint="@color/gray"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/titleIcon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_icon_modal_lightning" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="25"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/titleIcon"
+                tools:text="Title" />
+
+            <ImageView
+                android:id="@+id/separatorLine"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:srcCompat="@color/gray"
+                tools:ignore="ContentDescription" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="true"
+                android:fadeScrollbars="true"
+                android:paddingTop="2dp"
+                android:paddingBottom="10dp"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title">
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,9 +2,11 @@ package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ public class UtxoOptionsView extends ConstraintLayout {
     private BBButton mBtnReset;
     private LinearLayout mUtxoContainer;
     private OnUtxoSelectClickListener mOnUtxoSelectClickListener;
+    private ClearFocusListener mClearFocusListener;
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher;
 
@@ -95,7 +98,13 @@ public class UtxoOptionsView extends ConstraintLayout {
         mGroupMain.setOnAllClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                toggleExpandState();
+                hideKeyboard();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toggleExpandState();
+                    }
+                }, 100);
             }
         });
     }
@@ -113,6 +122,10 @@ public class UtxoOptionsView extends ConstraintLayout {
         TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
         mArrowImage.setImageResource(expand ? R.drawable.ic_arrow_up_24dp : R.drawable.ic_arrow_down_24dp);
         mGroupExpandableContent.setVisibility(expand ? View.VISIBLE : View.GONE);
+        if (mSelectedUTXOs == null || mSelectedUTXOs.isEmpty())
+            mUtxoContainer.setVisibility(GONE);
+        if (mClearFocusListener != null)
+            mClearFocusListener.onClearFocus();
     }
 
     public List<Outpoint> getSelectedUTXOs() {
@@ -168,5 +181,14 @@ public class UtxoOptionsView extends ConstraintLayout {
     // Set the listener
     public void setUtxoSelectClickListener(OnUtxoSelectClickListener listener) {
         this.mOnUtxoSelectClickListener = listener;
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getRootView().getWindowToken(), 0);
+    }
+
+    public void setClearFocusListener(ClearFocusListener listener) {
+        mClearFocusListener = listener;
     }
 }
