@@ -225,4 +225,27 @@
     <string name="guardian_backup_overrides_existing_data">일부 데이터가 이미 존재합니다!\n백업을 복원하면 다음의 모든 데이터가 삭제됩니다:\n\n- 노드 연결 데이터\n- 연락처\n\n계속하시겠습니까?</string>
     <string name="guardian_invoices_without_specified_amount">특정 금액이 누락된 송장은 보안 위험을 초래할 수 있습니다. 가능성은 매우 낮지만 경로를 따라 중개자가 이러한 송장을 악용하여 수취인이 예상보다 적은 금액을 감지하지 못하고 수령할 수 있습니다. 직접 채널을 통한 결제에는 이러한 위험이 존재하지 않습니다.</string>
     <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">현재 수수료 추정치에 따르면 수수료율이 %1$d sat/vB인 이 거래는 검증되지 않을 수 있습니다. 거래가 오랫동안 중단되는 것을 방지하려면 수수료 인상을 고려하세요.\n\n그래도 계속 진행하시겠습니까?</string>
+    <string name="settings_systemLanguage">시스템 언어</string>
+    <string name="settings_hideAllBalances_explanation">이제 모든 잔액이 흐리게 표시되며, 총 잔액은 비트바나나 로고 뒤에 숨겨집니다. 흐릿하게 표시된 필드나 비트바나나 로고를 탭하면 잔액이 일시적으로 표시됩니다.</string>
+    <string name="settings_scan_clipboard_summary">비트바나나가 처리할 수 있는 데이터를 클립보드에서 자동으로 확인합니다.</string>
+    <string name="settings_hideTotalBalance_explanation">이제 총 잔액이 숨겨집니다. 홈 화면에서 비트바나나 로고를 탭하면 표시됩니다.</string>
+    <string name="guardian_remove_watchtower">와치타워를 제거하면 와치타워과 관련된 모든 현재 세션이 종료됩니다. 일부 세션은 아직 완료되지 않았습니다. 남은 백업은 손실되며 서비스 비용을 지불했더라도 환불되지 않습니다.</string>
+    <string name="guardian_custodial_lnd_accounts">LND 노드에 있는 계정에만 액세스할 수 있습니다. 노드 운영자가 아닌 한, 이 방식은 수탁 방식입니다. 노드를 관리하는 사람이 회원님의 자금을 관리하고 거래 내역을 볼 수 있습니다. 신뢰할 수 있는 사람에게만 자금을 예치하세요.</string>
+    <string name="guardian_release_utxo">이 UTXO는 비트바나나를 통해 사용자가 잠근 것이 아니며, 특정한 이유로 잠겨 있을 가능성이 높습니다. 필요성이 확실한 경우에만 잠금을 해제하세요.</string>
+    <string name="settings_custom">사용자 정의 …</string>
+    <string name="settings_category_general">일반</string>
+    <string name="settings_category_security">보안</string>
+    <string name="settings_category_help">도움</string>
+    <string name="settings_category_advanced">고급</string>
+    <string name="settings_btcUnit">비트코인 단위</string>
+    <string name="settings_currency">두 번째 단위</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_tor">토르</string>
+    <string name="settings_tor_summary">토르 네트워크를 사용해 모든 웹 트래픽을 익명화합니다. 이는 환율 조회나 LNURL 서비스와의 상호 작용에만 영향을 미칩니다. 노드 연결에 토르를 사용할지 여부는 연결 설정에서 각 노드에 대해 개별적으로 설정할 수 있습니다.</string>
+    <string name="settings_scan_clipboard">클립보드 확인</string>
+    <string name="settings_hapticPin">햅틱 PIN 피드백</string>
+    <string name="settings_payer_data">결제 인증</string>
+    <string name="settings_manageChannels">라이트닝 채널 관리</string>
+    <string name="settings_scramblePin">PIN 입력 화면 무작위화</string>
+    <string name="settings_preventScreenRecording">화면 녹화 차단</string>
 </resources>
