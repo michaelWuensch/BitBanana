@@ -202,7 +202,7 @@ public class Wallet_TransactionHistory {
 
     public void fetchUTXOs() {
         if (Wallet.getInstance().isInfoFetched()) {
-            compositeDisposable.add(BackendManager.getCurrentBackend().api().listUTXOs(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
+            compositeDisposable.add(BackendManager.api().listUTXOs(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
                     .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                     .subscribe(response -> {
                                 mUTXOsList = response;
@@ -379,9 +379,5 @@ public class Wallet_TransactionHistory {
 
     public interface UtxoSubscriptionListener {
         void onUtxoListUpdated();
-    }
-
-    public interface PeerUpdateListener {
-        void onConnectedToPeer();
     }
 }

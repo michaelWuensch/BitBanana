@@ -18,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
@@ -27,14 +26,14 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.listViews.bolt12offers.itemDetails.Bolt12OfferDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.bolt12offers.items.Bolt12OfferListItem;
 import app.michaelwuensch.bitbanana.models.Bolt12Offer;
-import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Bolt12Offers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt12OfferSelectListener, SwipeRefreshLayout.OnRefreshListener {
+public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt12OfferSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Bolt12Offers.Bolt12OffersSubscriptionListener {
 
     private static final String LOG_TAG = Bolt12OffersActivity.class.getSimpleName();
 
@@ -63,6 +62,8 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
         mEmptyListText = findViewById(R.id.listEmpty);
 
         mBolt12OffersItems = new ArrayList<>();
+
+        Wallet_Bolt12Offers.getInstance().registerBolt12OffersSubscriptionListener(this);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(Bolt12OffersActivity.this);
@@ -93,55 +94,46 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
 
         // Update the list
         updateBolt12OffersDisplayList();
+        Wallet_Bolt12Offers.getInstance().fetchBolt12Offers();
     }
 
     private void updateBolt12OffersDisplayList() {
+        BBLog.v(LOG_TAG, "Update bolt12 Offers list.");
 
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            if (Wallet.getInstance().isConnectedToNode()) {
-
-                BBLog.v(LOG_TAG, "Update bolt12 Offers list.");
-
-                mCompositeDisposable.add(BackendManager.api().listBolt12Offers()
-                        .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
-                        .subscribe(response -> {
-                                    mBolt12OffersItems.clear();
-                                    for (Bolt12Offer offer : response) {
-                                        Bolt12OfferListItem currItem = new Bolt12OfferListItem(offer);
-                                        mBolt12OffersItems.add(currItem);
-                                    }
-
-                                    // Show "No payment codes" if the list is empty
-                                    if (mBolt12OffersItems.size() == 0) {
-                                        mEmptyListText.setVisibility(View.VISIBLE);
-                                    } else {
-                                        mEmptyListText.setVisibility(View.GONE);
-                                    }
-
-                                    // Set number in activity title
-                                    if (mBolt12OffersItems.size() > 0) {
-                                        String title = getResources().getString(R.string.activity_bolt12_offers); // + " (" + mBolt12OffersItems.size() + ")";
-                                        setTitle(title);
-                                    } else {
-                                        setTitle(getResources().getString(R.string.activity_bolt12_offers));
-                                    }
-
-                                    // Update the list view
-                                    mAdapter.replaceAll(mBolt12OffersItems);
-                                }
-                                , throwable -> {
-                                    BBLog.w(LOG_TAG, "Fetching bolt12 offers list failed: " + throwable.getMessage());
-                                }));
-
-                // Remove refreshing symbol
-                mSwipeRefreshLayout.setRefreshing(false);
+        mBolt12OffersItems.clear();
+        if (Wallet_Bolt12Offers.getInstance().getBolt12OffersList() != null) {
+            for (Bolt12Offer offer : Wallet_Bolt12Offers.getInstance().getBolt12OffersList()) {
+                Bolt12OfferListItem currItem = new Bolt12OfferListItem(offer);
+                mBolt12OffersItems.add(currItem);
             }
         }
+
+        // Show "No payment codes" if the list is empty
+        if (mBolt12OffersItems.size() == 0) {
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListText.setVisibility(View.GONE);
+        }
+
+        // Set number in activity title
+        if (mBolt12OffersItems.size() > 0) {
+            String title = getResources().getString(R.string.activity_bolt12_offers); // + " (" + mBolt12OffersItems.size() + ")";
+            setTitle(title);
+        } else {
+            setTitle(getResources().getString(R.string.activity_bolt12_offers));
+        }
+
+        // Update the list view
+        mAdapter.replaceAll(mBolt12OffersItems);
+
+        // Remove refreshing symbol
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     protected void onDestroy() {
         mCompositeDisposable.dispose();
+        Wallet_Bolt12Offers.getInstance().unregisterBolt12OffersSubscriptionListener(this);
         super.onDestroy();
     }
 
@@ -201,7 +193,7 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isConnectedToNode()) {
-            updateBolt12OffersDisplayList();
+            Wallet_Bolt12Offers.getInstance().fetchBolt12Offers();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -223,5 +215,10 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
             intentQDetails.putExtra("bolt12offer", bolt12Offer);
             startActivity(intentQDetails);
         }
+    }
+
+    @Override
+    public void onBolt12OffersListUpdated() {
+        updateBolt12OffersDisplayList();
     }
 }
