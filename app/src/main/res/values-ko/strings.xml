@@ -187,4 +187,42 @@
     <string name="channel_close_type">닫기 유형</string>
     <string name="channel_close_error">채널 닫기 에러</string>
     <string name="channel_open">채널 열기</string>
+    <string name="guardian_disableScreenProtection">화면 녹화를 허용하면 비트바나나를 사용하는 동안 악성 소프트웨어가 동영상을 녹화하거나 스크린샷을 찍을 수 있습니다. 동영상을 녹화하거나 스크린샷을 찍을 때만 이 기능을 비활성화하는 것이 좋습니다.</string>
+    <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">이 데이터를 클립보드에 복사하면 다른 앱(악성 앱도 포함)이 이 데이터에 액세스하여 수정할 수 있습니다.\n\n붙여넣는 동안 변경된 내용이 없는지 확인하려면 처음 부분과 비교하세요:\n\n%1$s\n</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">네트워크 수수료로 %1$s%% 지불하려고 합니다.\n\n가능한 해결책:\n- 라이트닝 결제를 대신 사용해보세요.\n- 더 낮은 수수료를 선택하고 더 오래 기다립니다.\n- 나중에 다시 시도하세요.\n- 더 큰 금액으로 거래하세요.\n\n그래도 계속 진행하시겠습니까?</string>
+    <string name="guardian_certificate_verification">인증서 확인을 비활성화하면 중간자 공격에 취약해집니다. 자신이 무엇을 하는지 알고 있는 경우에만 이 작업을 수행하세요.\n\n대신 인증서를 올바르게 설정하는 것이 좋습니다.\n즉, 노드의 인증서에 이 연결 설정에 사용 중인 호스트 이름이 포함되어야 합니다. 인증서를 다시 만들기 전에 lnd.conf의 tlsextradomain에 호스트 이름을 추가합니다.</string>
+    <string name="guardian_externalLink">브라우저에서 민감한 데이터가 포함된 링크를 열려고 합니다. 비트바나나는 토르 네트워크를 통해 사용자의 모든 트래픽을 익명화하지만, 브라우저는 익명화하지 않습니다. 이 데이터를 비공개로 유지하려면 토르 브라우저를 사용해 링크를 열어야 합니다.</string>
+    <string name="guardian_pasteFromClipboard">클립보드에서 붙여넣을 때는 항상 마지막 3~5자리 숫자를 다시 확인하세요. 악성 앱이 사용자 몰래 백그라운드에서 주소를 변경했을 수 있습니다.</string>
+    <string name="guardian_custodial_lndhub">이 계정은 LndHub 계정입니다. 귀하가 LndHub 서비스의 호스트가 아닌 한, 이 계약은 위탁 관리 방식입니다. 서비스를 관리하는 주체가 회원님의 자금을 관리하고 거래 내역을 볼 수 있습니다. 신뢰할 수 있는 금액만 입금하세요.</string>
+    <string name="setup_connect_local_button">지갑 생성</string>
+    <string name="setup_connect_remote_description">나만의 노드를 원격으로 제어하세요.</string>
+    <string name="setup_connect_remote_button">원격 노드에 연결</string>
+    <string name="demo_setupNodeBtn">노드 연결</string>
+    <string name="demo_setupNodeFirst">먼저 노드에 연결해야 합니다.</string>
+    <string name="demo_setupNodeFirstAvatar">먼저 노드에 연결해야만 노드 정보와 아바타를 볼 수 있습니다.</string>
+    <string name="send_lightningPayment">라이트닝 결제 보내기</string>
+    <string name="send_onChainPayment">온체인 결제 보내기</string>
+    <string name="send_sendPayment">결제 보내기</string>
+    <string name="send_success">결제\n성공</string>
+    <string name="send_fail">결제\n실패</string>
+    <string name="send_SendOnChainInstead">온체인 보내기</string>
+    <string name="receive_generateRequest">요청 생성</string>
+    <string name="receive_generateRequest_failed">요청 생성에 실패했습니다.</string>
+    <string name="receive_lightning_request">라이트닝 요청</string>
+    <string name="receive_on_chain_request">온체인 요청</string>
+    <string name="receive_noActiveChannels">라이트닝 네트워크를 통해 비트코인을 받으려면 먼저 채널을 열어야 합니다.</string>
+    <string name="receive_noIncomeBalance">라이트닝 네트워크를 통해 비트코인을 받으려면 채널 중 하나 이상에 상대방 측의 잔액이 있어야 합니다.\n\n이를 위해서는 먼저 라이트닝 네트워크에 비용을 지출해야 합니다.\n\n채널 관리 영역에서는 현재 라이트닝 네트워크를 통해 얼마나 많이 주고받을 수 있는지 언제든지 확인할 수 있습니다.</string>
+    <string name="receive_requestFullfilled">인보이스\n결제됨</string>
+    <string name="guardian_doNotShowAgain">다시 표시하지 마세요.</string>
+    <string name="guardian_Title">Attention</string>
+    <string name="guardian_reset">모든 보안 경고가 다시 활성화됩니다.</string>
+    <string name="guardian_copyToClipboard_lightning">이 데이터를 클립보드에 복사하면 다른 앱(악성 앱도 포함)이 이 데이터에 액세스하여 수정할 수 있습니다.\n\n붙여넣는 동안 변경된 내용이 없는지 확인하려면 끝부분을 다음과 비교하세요:\n\n%1$s\n</string>
+    <string name="guardian_disableScrambledPin">만약 숫자 배열이 무작위로 변경되지 않으면, 손가락 움직임만으로도 쉽게 PIN을 추측할 수 있습니다.</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">금액을 법정 화폐 가치로 요청했지만 환율 데이터가 오래되었습니다 (%1$s 시간 전에 검색됨).\n인터넷에 연결되어 있는지 확인하거나 비트코인으로 직접 요청하는 것을 고려하세요.\n\n그래도 계속하시겠습니까?</string>
+    <string name="guardian_remoteConnect">다음과 같은 곳에 연결하시겠습니까?\n%1$s\n\n호스트명을 주의 깊게 확인하세요.</string>
+    <string name="guardian_oldNodeSoftwareVersion">이제 업데이트할 시간입니다!\n\n연결된 노드가 %1$s의 오래된 버전에서 작동하고 있습니다. %2$s 이전 버전은 비트바나나에서 더 이상 지원되지 않습니다.</string>
+    <string name="guardian_zero_amount_invoice">이 청구서에는 금액이 명시되어 있지 않습니다. 가능성은 매우 낮지만 특정 금액이 없는 인보이스가 악용될 수 있으며, 이 경우 수신자는 예상보다 적은 금액을 받게 됩니다. 가능하면 특정 금액이 명시된 인보이스를 사용하세요.</string>
+    <string name="guardian_backup_overrides_existing_data">일부 데이터가 이미 존재합니다!\n백업을 복원하면 다음의 모든 데이터가 삭제됩니다:\n\n- 노드 연결 데이터\n- 연락처\n\n계속하시겠습니까?</string>
+    <string name="guardian_invoices_without_specified_amount">특정 금액이 누락된 송장은 보안 위험을 초래할 수 있습니다. 가능성은 매우 낮지만 경로를 따라 중개자가 이러한 송장을 악용하여 수취인이 예상보다 적은 금액을 감지하지 못하고 수령할 수 있습니다. 직접 채널을 통한 결제에는 이러한 위험이 존재하지 않습니다.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">현재 수수료 추정치에 따르면 수수료율이 %1$d sat/vB인 이 거래는 검증되지 않을 수 있습니다. 거래가 오랫동안 중단되는 것을 방지하려면 수수료 인상을 고려하세요.\n\n그래도 계속 진행하시겠습니까?</string>
 </resources>
