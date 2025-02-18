@@ -15,7 +15,11 @@ public class Bip21Invoice implements Serializable {
     private final long Amount;
     private final String Message;
     private final boolean hasMessage;
-
+    /**
+     * The lightning parameter is actually not a direct specification of BIP21 but rather a proposal found here: https://bitcoinqr.dev/
+     */
+    private final String Lightning;
+    private final boolean hasLightning;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -26,6 +30,8 @@ public class Bip21Invoice implements Serializable {
         this.Amount = builder.Amount;
         this.Message = builder.Message;
         this.hasMessage = builder.hasMessage;
+        this.Lightning = builder.Lightning;
+        this.hasLightning = builder.hasLightning;
     }
 
     public String getAddress() {
@@ -51,6 +57,14 @@ public class Bip21Invoice implements Serializable {
         return hasMessage;
     }
 
+    public String getLightning() {
+        return Lightning;
+    }
+
+    public boolean hasLightning() {
+        return hasLightning;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -58,11 +72,13 @@ public class Bip21Invoice implements Serializable {
 
         if (Amount != 0)
             bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "amount", MonetaryUtil.getInstance().msatsToBitcoinString(Amount));
-        if (Message != null)
-            if (!Message.isEmpty()) {
-                String escapedMessage = UrlEscapers.urlPathSegmentEscaper().escape(Message);
-                bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "message", escapedMessage);
-            }
+        if (hasMessage) {
+            String escapedMessage = UrlEscapers.urlPathSegmentEscaper().escape(Message);
+            bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "message", escapedMessage);
+        }
+        if (hasLightning) {
+            bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "lightning", Lightning);
+        }
 
         return bitcoinInvoice;
     }
@@ -74,6 +90,8 @@ public class Bip21Invoice implements Serializable {
         private long Amount;
         private String Message;
         private boolean hasMessage;
+        private String Lightning;
+        private boolean hasLightning;
 
         private Builder() {
             // required parameters
@@ -99,6 +117,12 @@ public class Bip21Invoice implements Serializable {
         public Builder setMessage(String message) {
             Message = message;
             hasMessage = message != null && !message.isEmpty();
+            return this;
+        }
+
+        public Builder setLightning(String lightning) {
+            Lightning = lightning;
+            hasLightning = lightning != null && !lightning.isEmpty();
             return this;
         }
     }

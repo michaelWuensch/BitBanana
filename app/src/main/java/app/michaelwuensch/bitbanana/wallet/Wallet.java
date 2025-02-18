@@ -73,6 +73,7 @@ public class Wallet {
         Wallet_Channels.getInstance().reset();
         Wallet_TransactionHistory.getInstance().reset();
         Wallet_NodesAndPeers.getInstance().reset();
+        Wallet_Bolt12Offers.getInstance().reset();
 
         mCurrentNodeInfo = null;
         mWalletLoadState = WalletLoadState.NOT_LOADED;
@@ -86,6 +87,7 @@ public class Wallet {
         Wallet_Channels.getInstance().cancelSubscriptions();
         Wallet_TransactionHistory.getInstance().cancelSubscriptions();
         Wallet_NodesAndPeers.getInstance().cancelSubscriptions();
+        Wallet_Bolt12Offers.getInstance().cancelSubscriptions();
         compositeDisposable.clear();
     }
 
@@ -345,6 +347,8 @@ public class Wallet {
                     BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
                 }));
 
+                //Data that can be loaded after wallet is displayed
+
                 // Fetch the transaction history
                 Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
 
@@ -362,8 +366,8 @@ public class Wallet {
             case CORE_LIGHTNING_GRPC:
                 // Fetching the data that is required before we show the wallet.
                 compositeDisposable.add(Single.zip(Wallet_Balance.getInstance().fetchBalanceSingle(),
-                        Wallet_Channels.getInstance().fetchChannelsSingle(),
-                        (response1, response2) -> {
+                        Wallet_Channels.getInstance().fetchChannelsSingle(), Wallet_Bolt12Offers.getInstance().fetchBolt12OffersSingle(),
+                        (response1, response2, response3) -> {
                             // Everything fetched, now show the wallet!
                             setWalletLoadState(WalletLoadState.WALLET_LOADED);
                             return true;
@@ -373,6 +377,8 @@ public class Wallet {
                     broadcastWalletLoadError("Exception loading required data on startup: " + throwable.getMessage());
                     BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
                 }));
+
+                //Data that can be loaded after wallet is displayed
 
                 // Fetch UTXOs
                 Wallet_TransactionHistory.getInstance().fetchUTXOs();
