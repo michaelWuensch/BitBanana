@@ -213,11 +213,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- LNURL-Channel</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos:
-\n
-\n- Cadeia Lndconnect (lndconnect://...)
-\n- Conexão de servidor BtcPay (config=...)
-\n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:
 \n
 \n+ instantâneo
@@ -598,9 +594,7 @@
 \nAmbas as operações, abrir e fechar canais, são realizadas com uma transação on-chain que custam taxas. Portanto, tente manter os canais abertos pelo maior tempo possível!
 \n
 \nUma maneira fácil de começar a abrir canais é usando lightningnetwork.plus.</string>
-    <string name="help_dialog_connect_node_help">Infelizmente estes códigos QR são tão grandes que alguns aparelhos não conseguem os escanear. Se este for o caso para si, terá de copiar e colar.
-\n
-\nSe precisa de mais ajuda, por favor confira a nossa documentação de configuração.</string>
+    <string name="help_dialog_connect_node_help">Infelizmente estes códigos QR são tão grandes que alguns aparelhos não conseguem os escanear. Se este for o caso para si, terá de copiar e colar. \n \nSe precisa de mais ajuda, por favor confira a nossa documentação de configuração.</string>
     <string name="help_dialog_payer_data_settings">Alguns beneficiários suportam ou até requerem que envie informações adicionais sobre você. Para a sua conveniência, pode definir os valores padrão aqui, para que não tenha que inserir esta informação sempre. Estes dados são gravados apenas localmente no telefone.
 \n
 \nPor favor note que mesmo com os padrões definidos ainda poderá modificar os dados ao fazer um pagamento. Também poderá definir que dados são enviados.
