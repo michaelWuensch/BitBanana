@@ -338,9 +338,7 @@
 \nAmbas as operações, abrir e fechar canais, são realizadas com uma transação on-chain que custam taxas. Portanto, tente manter os canais abertos pelo maior tempo possível!
 \n
 \nUma maneira fácil de começar a abrir canais é usando lightningnetwork.plus.</string>
-    <string name="help_dialog_connect_node_help">Infelizmente estes códigos QR são tão grandes que alguns dispositivos não conseguem os escanear. Se este for o caso para você, terá de copiar e colar.
-\n
-\nSe precisa de mais ajuda, por favor confira nossa documentação de configuração.</string>
+    <string name="help_dialog_connect_node_help">Infelizmente estes códigos QR são tão grandes que alguns dispositivos não conseguem os escanear. Se este for o caso para você, terá de copiar e colar. \n \nSe precisa de mais ajuda, por favor confira nossa documentação de configuração.</string>
     <string name="support_donate">Doar</string>
     <string name="identity_switch_public">Público</string>
     <string name="support_donate_description">Apoie os desenvolvedores.</string>
@@ -457,11 +455,7 @@
     </plurals>
     <string name="fee_tier_slow_title">Lento</string>
     <string name="fee_tier_medium_title">Médio</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos:
-\n
-\n- String Lndconnect (lndconnect://...)
-\n- Conexão de servidor BtcPay (config=...)
-\n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- String Lndconnect (lndconnect://...) \n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
     <string name="change_data">Mudar dados</string>
     <string name="invoice_detail">Detalhes da cobrança</string>
     <string name="string_analyzer_unrecognized_data">Dados não reconhecidos.</string>
