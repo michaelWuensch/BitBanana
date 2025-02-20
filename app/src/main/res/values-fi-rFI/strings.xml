@@ -302,11 +302,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:
-\n
-\n- Lndconnect-merkkijono (lndconnect://...)
-\n- BtcPay Server -yhteysconnection (config=...)
-\n- Full content of your BTCPay Server config file</string>
+    <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja: \n \n- Lndconnect-merkkijono (lndconnect://...) \n- BtcPay Server -yhteysconnection (config=...) \n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ välitön\n+ pienet siirtokulut\n- ei aina mahdollinen\n\nTäydellinen pieniin tapahtumiin.\nKäytä aina kuin mahdollista.\n\n\nOn-Chain:\n\n+ aina mahdollinen\n- hitaampi\n- korkeammat siirtokulut\n\nSoveltuu hyvin isoille siirroille.\nkäytä silloin kun Lightning-tapahtuma ei ole mahdollinen.</string>
     <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
     <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
