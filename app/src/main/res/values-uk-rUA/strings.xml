@@ -254,11 +254,7 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">Дійсні QR-коди, які містять:\n\n- Адреса блискавки\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- Код платежу</string>
-    <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними:
-\n
-\n- рядок Lndconnect (lndconnect://...)
-\n- підключення до сервера BtcPay (config=...)
-\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними: \n \n- рядок Lndconnect (lndconnect://...) \n- підключення до сервера BtcPay (config=...) \n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
@@ -277,7 +273,7 @@
     <string name="error_connection_no_internet">Немає підключення до Інтернету!</string>
     <string name="server_certificate">Сертифікат хоста</string>
     <string name="drawer_menu_routing">Маршрутизація</string>
-    <string name="regtest_blockexplorer_unavailable">Провідники блоків недоступні в режимі REGTEST.</string>
+    <string name="regtest_blockexplorer_unavailable">Оскільки ви підключені до мережі REGTEST, це працюватиме, лише якщо ви налаштуєте спеціальний провідник блоків у налаштуваннях.</string>
     <string name="contact_already_exists">Цей контакт вже існує!</string>
     <string name="no_contacts">Немає контактів</string>
     <string name="advanced_channel_details_initiator_peer">Одноліток</string>
@@ -775,5 +771,20 @@
     <string name="summary">Резюме</string>
     <string name="activity_payment_route">Шлях оплати</string>
     <string name="view_payment_path">Переглянути шлях платежу</string>
-    <string name="error_payment_canceled">Відправник скасував платіж..</string>
+    <string name="error_payment_canceled">Відправник скасував платіж.</string>
+    <string name="guardian_release_utxo">Цей UTXO не було заблоковано вами за допомогою інтерфейсу користувача BitBanana, і, ймовірно, заблоковано з поважної причини. Розблокуйте його, лише якщо ви впевнені, що це необхідно.</string>
+    <string name="locked_until">Заблоковано до</string>
+    <string name="locked">Заблоковано</string>
+    <string name="unlock_utxo">Розблокувати</string>
+    <string name="lock_utxo">Замок</string>
+    <string name="utxo_selection">Вибір UTXO</string>
+    <string name="select">Виберіть</string>
+    <string name="reset">Скинути</string>
+    <string name="change">Зміна</string>
+    <string name="confirm_selection">Підтвердити вибір</string>
+    <string name="automatic">Автоматичний</string>
+    <string name="help_dialog_utxos_locking">Заблокувавши тут певні UTXO, ви гарантуєте, що вони не будуть вибрані для транзакцій у мережі або відкриття каналів. UTXO, заблоковані за допомогою BitBanana, залишатимуться заблокованими протягом 24 годин, але у вас є можливість розблокувати їх вручну, коли це буде потрібно.</string>
+    <string name="help_dialog_utxos_select">Вибравши конкретні UTXO, ви можете покращити свою конфіденційність або заощадити в деяких випадках.</string>
+    <string name="total">Всього</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Максимальна сума: %1$s\n\nНедостатня блискавична ліквідність. Щоб збільшити цей ліміт, збільште дохід свого каналу.</string>
 </resources>

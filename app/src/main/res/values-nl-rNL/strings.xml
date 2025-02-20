@@ -295,11 +295,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes die het volgende bevatten zijn geldig:
-\n
-\n- Lndconnect string (lndconnect://...)
-\n- BtcPay Server verbinding (config=...)
-\n- Volledige inhoud van je BTCPay Server configfile</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes die het volgende bevatten zijn geldig: \n \n- Lndconnect string (lndconnect://...) \n- BtcPay Server verbinding (config=...) \n- Volledige inhoud van je BTCPay Server configfile</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ onmiddelijk\n+ lage vergoedingen\n- niet altijd mogelijk\n\nPerfect voor kleine transacties.\nGebruik wanneer mogelijk.\n\n\nOn-Chain:\n\n+ altijd mogelijk\n- langzamer\n- hogere vergoedingen\n\nGoed voor grote transacties.\nGebruik dit wanneer Lightning niet mogelijk is.</string>
     <string name="help_dialog_scanGeneric">Alles is hier toegestaan.\nScan gewoon een QR-code en BitBanana bepaalt automatisch welke actie moet worden ondernomen, afhankelijk van de gegevens.</string>
     <string name="help_dialog_identity">Dit is je identiteit op het Lightningnetwerk.\n\nWanneer u op je avatar-afbeelding tikt, onthul je een QR-code.\nAnderen kunnen die code scannen en je toevoegen aan hun contacten, kanalen met je openen of geld naar je sturen.\n\nDeze avatar is uniek.\nHet is automatisch gegenereerd op basis van je publieke sleutel en kan niet worden gewijzigd.</string>

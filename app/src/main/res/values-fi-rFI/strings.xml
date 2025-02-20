@@ -79,7 +79,7 @@
     <string name="pin_confirm_new">Vahvista uusi PIN</string>
     <string name="pin_entered_wrong">Väärä PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Odota %1$s sekuntia.</string>
-    <string name="pin_changed">PIN-koodi on vaihdettu.</string>
+    <string name="pin_changed">PIN-koodi vaihdettu!</string>
     <string name="requested_payment">Pyydetty</string>
     <string name="request_expired">Vanhentunut</string>
     <string name="internal">Sisäinen</string>
@@ -199,10 +199,7 @@
 \n- BtcPay -palvelimen konfiguraatio (config=...)
 \n- Sinun BTCPay-palvelimesi täydellinen konfiguraatiotiedosto</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguraation hakeminen BTCPay-palvelimelta epäonnistui.</string>
-    <string name="error_connection_invalidLndConnectString">Virheellinen lndconnect-merkkijono.
-\nVarmista että käyttämäsi merkkijono on muotoa:
-\n
-\nlndconnect://&lt;ip&gt;:&lt;port&gt;?cert=&lt;...&gt;&amp;macaroon=&lt;...&gt;</string>
+    <string name="error_connection_invalidLndConnectString">Virheellinen lndconnect-merkkijono.\nVarmista, että käytit seuraavaa muotoa:\n\nlndconnect://[ip]:[portti]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Varmenne ei ole kelvollinen.</string>
     <string name="error_connection_no_macaroon">Pakollinen Macaroon-tieto puuttuu yhteyden määrityksistä.</string>
     <string name="error_connection_invalid_macaroon">Macaroon ei ole kelvollinen.</string>
@@ -305,11 +302,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja:
-\n
-\n- Lndconnect-merkkijono (lndconnect://...)
-\n- BtcPay Server -yhteysconnection (config=...)
-\n- Full content of your BTCPay Server config file</string>
+    <string name="help_dialog_scanConnectionInfo">Ainoastaan seuraavia tietoja sisältävät QR-koodit ovat tuettuja: \n \n- Lndconnect-merkkijono (lndconnect://...) \n- BtcPay Server -yhteysconnection (config=...) \n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ välitön\n+ pienet siirtokulut\n- ei aina mahdollinen\n\nTäydellinen pieniin tapahtumiin.\nKäytä aina kuin mahdollista.\n\n\nOn-Chain:\n\n+ aina mahdollinen\n- hitaampi\n- korkeammat siirtokulut\n\nSoveltuu hyvin isoille siirroille.\nkäytä silloin kun Lightning-tapahtuma ei ole mahdollinen.</string>
     <string name="help_dialog_scanGeneric">Mitä vain dataa hyväksytään tässä.\nLue QR-koodi ja koodin sisältämän tiedon perusteella sovellus tunnistaa automaattisesti tapahtuman tyypin.</string>
     <string name="help_dialog_identity">Tämä on sinun identiteettisi Lightning-verkossa.\n\nKun napautat hahmoa, näet identiteetin QR-koodina.\nAnna muiden scannata koodi ja he voivat lisätä sinut yhteystietoihinsa, avata kanavia sinulle päin ja lähettää varoja sinulle.\n\nLuotu hahmo on yksilöllinen.\nSe on luotu julkisen avaimesi (public key) perusteella, eikä sitä voi muokata.</string>
@@ -349,7 +342,7 @@
     <string name="support_privacy_description">Yksityisyytesi on meille täskeää.</string>
     <string name="support_help_description">Tutustu dokumentaatioon</string>
     <string name="identity_switch_public">Julkinen</string>
-    <string name="identity_tap_on_avatar">Napauta hahmoa nähdäksesi identiteettisi tiedot.</string>
+    <string name="identity_tap_on_avatar">Napauta avatariasi paljastaaksesi solmutietosi!</string>
     <string name="regtest_blockexplorer_unavailable">Lohkoketjuselaimet eivät ole käytettävissä REGTEST-tilassa.</string>
     <string name="clipboard_error_heading">Leikepöydältä löytyi tietoa mutta se sitä ei tunnistettu:</string>
     <string name="clipboard_scan_payment">Leikepöydältä löytyi maksun tiedot. Haluatko siirtyä maksamaan sen?</string>
@@ -361,7 +354,7 @@
     <string name="add_contact">Lisää yhteystieto</string>
     <string name="send_money">Lähetä varoja</string>
     <string name="contact_name">Yhteystiedon nimi</string>
-    <string name="contact_already_exists">Tämä yhteystieto on jo tallennettuna.</string>
+    <string name="contact_already_exists">Tämä yhteystieto on jo olemassa!</string>
     <string name="no_contacts">Ei yhteystietoja.</string>
     <string name="manual_send_input_hint">Osoite tai maksutieto</string>
     <string name="advanced_channel_details_explanation_capacity">Kanavan kokonaiskapasiteetti. Paikallisesta kanavan sulkukulu- ja saldo-varauksesta johtuen kaikki varat eivät ole käytettävissä</string>

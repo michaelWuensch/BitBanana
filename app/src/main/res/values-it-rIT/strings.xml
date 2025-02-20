@@ -291,11 +291,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi:
-\n
-\n- Stringa di connessioneLND (lndconnect://...)
-\n- Connessione al server BtcPay (config=...)
-\n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes contenenti quanto segue sono validi: \n \n- Stringa di connessioneLND (lndconnect://...) \n- Connessione al server BtcPay (config=...) \n- Contenuto completo del tuo file di configurazione del server BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:
 \n
 \n+ immediato

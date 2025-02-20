@@ -477,20 +477,13 @@
 \nAmbos canales de operación, de apertura y cierre, se logran mediante una transacción en cadena que cuesta honorarios. Por lo tanto, trate de mantener los canales abiertos durante el mayor tiempo posible!
 \n
 \nUna forma sencilla de empezar a abrir canales es usar lightningnetwork.plus.</string>
-    <string name="help_dialog_connect_node_help">Por desgracia, estos códigos QR son tan grandes que algunos dispositivos no son capaces de escanearlos. Si este es tu caso, tendrás que volver a copiar y pegar.
-\n
-\nSi necesitas más ayuda, consulta nuestra documentación de configuración.</string>
+    <string name="help_dialog_connect_node_help">Por desgracia, estos códigos QR son tan grandes que algunos dispositivos no son capaces de escanearlos. Si este es tu caso, tendrás que volver a copiar y pegar. \n \nSi necesitas más ayuda, consulta nuestra documentación de configuración.</string>
     <string name="nfc_type_not_supported">Tipo de NFC no admitido</string>
     <string name="help_dialog_private_channels">Los canales privados no son más seguros, simplemente no son visibles para la red.
 \nUtilice canales privados sólo si abre un canal a un nodo que no enruta pagos o cuando no enrute pagos usted mismo.
 \nPara enrutar pagos tu nodo debe tener un tiempo de actividad muy alto. Si ejecuta su nodo en un dispositivo móvil o un dispositivo que está a menudo fuera de línea, no debe enrutar los pagos y se adhieren a los canales privados.</string>
-    <string name="help_dialog_scanConnectionInfo">Son válidos los códigos QR que contengan lo siguiente
-\n
-\n- Cadena lndconnect (lndconnect://...)
-\n- Conexión al servidor BTCPay (config=...)
-\n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
-    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos sus fondos On-Chain.
-\nDe forma similar a las monedas, las salidas de transacciones no gastadas (UTXOs) sólo pueden gastarse en conjunto. Como los UTXOs pueden tener cualquier valor, simplemente recibirás cambio en forma de otro UTXO cuando envíes transacciones.</string>
+    <string name="help_dialog_scanConnectionInfo">Son válidos los códigos QR que contengan lo siguiente \n \n- Cadena lndconnect (lndconnect://...) \n- Conexión al servidor BTCPay (config=...) \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos sus fondos On-Chain. \nDe forma similar a las monedas, las salidas de transacciones no gastadas (UTXOs) sólo pueden gastarse en conjunto. Como los UTXOs pueden tener cualquier valor, simplemente recibirás cambio en forma de otro UTXO cuando envíes transacciones.</string>
     <string name="help_dialog_sign_verify">Al firmar un mensaje con tu nodo, puedes demostrar que eres el propietario de ese nodo. Como la firma contiene la clave pública del nodo, otros pueden verificar el mensaje firmado.
 \n
 \nEsta característica se puede utilizar en diferentes escenarios, como la prueba de identidad o, por ejemplo, para iniciar sesión con tu nodo en algunos servicios.</string>
