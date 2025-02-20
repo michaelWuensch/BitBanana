@@ -220,6 +220,11 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             }
 
             @Override
+            public void onSendAllCheckboxChanged(boolean checked) {
+
+            }
+
+            @Override
             public void onError(String message, int duration) {
                 showError(message, duration);
             }

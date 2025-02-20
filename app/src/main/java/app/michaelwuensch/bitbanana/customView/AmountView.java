@@ -164,6 +164,10 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
             applyBlur();
     }
 
+    public long getAmount() {
+        return mValue;
+    }
+
     private void styleBasedOnValue(long value) {
         if (mStyleBasedOnValue) {
             Long valueLong = value;

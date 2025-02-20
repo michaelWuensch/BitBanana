@@ -41,6 +41,7 @@ import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
+import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
 import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
@@ -60,7 +61,7 @@ import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
-public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoSelectClickListener, ClearFocusListener {
+public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoViewButtonListener, ClearFocusListener {
 
     private static final String LOG_TAG = SendBSDFragment.class.getSimpleName();
 
@@ -187,7 +188,6 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         mDescriptionView.setClearFocusListener(this);
 
         mAmountInput.setupView();
-        mAmountInput.setSendAllEnabled(false);
         mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
             @Override
             public boolean onAfterTextChanged(String newText, long amount, boolean isFixedAmount, boolean isOnChain) {
@@ -235,6 +235,11 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             }
 
             @Override
+            public void onSendAllCheckboxChanged(boolean checked) {
+                mOnChainFeeView.setSendAllFlag(checked);
+            }
+
+            @Override
             public void onError(String message, int duration) {
                 showError(message, duration);
             }
@@ -252,8 +257,15 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        // Pass result to the custom view
+                        // Pass result to the utxo view
                         mUtxoOptionsView.handleActivityResult(data);
+
+                        // Update Amount View
+                        long selectedAmount = data.getLongExtra(UTXOsActivity.EXTRA_TOTAL_SELECTED_UTXO_AMOUNT, 0);
+                        mAmountInput.updateUtxoSelectionAmount(selectedAmount);
+
+                        // Update On-Chain Fee view
+                        mOnChainFeeView.setUtxosSelectedFlag(selectedAmount > 0);
                     }
                 }
         );
@@ -262,6 +274,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
         if (mOnChain) {
             mAmountInput.setOnChain(true);
+            mAmountInput.setSendAllEnabled(true);
             mPayeeView.setContent(mOnChainAddress);
             mOnChainFeeView.initialSetup();
             mOnChainFeeView.setClearFocusListener(this);
@@ -273,7 +286,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             mBSDScrollableMainView.setTitle(R.string.send_onChainPayment);
             mPcvComment.setVisibility(View.GONE);
             mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnSendEnabled() ? View.VISIBLE : View.GONE);
-            mUtxoOptionsView.setUtxoSelectClickListener(this);
+            mUtxoOptionsView.setUtxoViewButtonListener(this);
 
             if (mDescription == null) {
                 mDescriptionView.setVisibility(View.GONE);
@@ -326,6 +339,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         } else {
             // Lightning Payment
             mAmountInput.setOnChain(false);
+            mAmountInput.setSendAllEnabled(false);
             mBSDScrollableMainView.setTitleIcon(R.drawable.ic_icon_modal_lightning);
             mResultView.setTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
@@ -450,6 +464,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
                 .setAmount(sendAmount)
                 .setSatPerVByte(mOnChainFeeView.getSatPerVByteFee())
                 .setUTXOs(mUtxoOptionsView.getSelectedUTXOs())
+                .setSendAll(mAmountInput.getSendAllChecked())
                 .build();
 
         getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
@@ -713,7 +728,16 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
     @Override
     public long onSelectUtxosClicked() {
-        return getSendAmount();
+        if (mAmountInput.getSendAllChecked())
+            return 0;
+        else
+            return getSendAmount();
+    }
+
+    @Override
+    public void onResetUtxoViewClicked() {
+        mAmountInput.updateUtxoSelectionAmount(0);
+        mOnChainFeeView.setUtxosSelectedFlag(false);
     }
 
     @Override

@@ -1143,12 +1143,15 @@ public class LndApi extends Api {
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
-
-
         SendCoinsRequest.Builder requestBuilder = SendCoinsRequest.newBuilder()
                 .setAddr(sendOnChainPaymentRequest.getAddress())
-                .setAmount(sendOnChainPaymentRequest.getAmount() / 1000)
+                .setSendAll(sendOnChainPaymentRequest.isSendAll())
                 .setSatPerVbyte(sendOnChainPaymentRequest.getSatPerVByte());
+
+        if (sendOnChainPaymentRequest.isSendAll())
+            requestBuilder.setSendAll(true);
+        else
+            requestBuilder.setAmount(sendOnChainPaymentRequest.getAmount() / 1000);
 
         if (sendOnChainPaymentRequest.hasUTXOs()) {
             for (Outpoint outpoint : sendOnChainPaymentRequest.getUTXOs()) {
@@ -1230,8 +1233,12 @@ public class LndApi extends Api {
         com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.Builder requestBuilder = com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.newBuilder()
                 .setNodePubkey(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setSatPerVbyte(openChannelRequest.getSatPerVByte())
-                .setPrivate(openChannelRequest.isPrivate())
-                .setLocalFundingAmount(openChannelRequest.getAmount() / 1000);
+                .setPrivate(openChannelRequest.isPrivate());
+
+        if (openChannelRequest.isUseAllFunds())
+            requestBuilder.setFundMax(true);
+        else
+            requestBuilder.setLocalFundingAmount(openChannelRequest.getAmount() / 1000);
 
         if (openChannelRequest.hasUTXOs())
             for (Outpoint outpoint : openChannelRequest.getUTXOs()) {

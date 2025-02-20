@@ -23,7 +23,6 @@ import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannelRequest;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
-import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Peer;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -94,13 +93,13 @@ public class Wallet_Channels {
         return mClosedChannelsList;
     }
 
-    public void openChannel(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
+    public void openChannel(LightningNodeUri nodeUri, OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().listPeers()
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     boolean connected = false;
                     for (Peer node : response) {
-                        if (node.getPubKey().equals(nodeUri.getPubKey())) {
+                        if (node.getPubKey().equals(openChannelRequest.getNodePubKey())) {
                             connected = true;
                             break;
                         }
@@ -108,44 +107,36 @@ public class Wallet_Channels {
 
                     if (connected) {
                         BBLog.d(LOG_TAG, "Already connected to peer, trying to open channel...");
-                        openChannelConnected(nodeUri, amount, satPerVByte, isPrivate, UTXOs);
+                        openChannelConnected(openChannelRequest);
                     } else {
                         BBLog.d(LOG_TAG, "Not connected to peer, trying to connect...");
-                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, true, amount, satPerVByte, isPrivate, UTXOs);
+                        Wallet_NodesAndPeers.getInstance().connectPeer(nodeUri, openChannelRequest);
                     }
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error listing peers request: " + throwable.getMessage());
                     if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, throwable.getMessage());
+                        broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.ERROR_GET_PEERS_TIMEOUT, throwable.getMessage());
                     } else {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_GET_PEERS, throwable.getMessage());
+                        broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.ERROR_GET_PEERS, throwable.getMessage());
                     }
                 }));
     }
 
-    public void openChannelConnected(LightningNodeUri nodeUri, long amount, long satPerVByte, boolean isPrivate, List<Outpoint> UTXOs) {
-        OpenChannelRequest openChannelRequest = OpenChannelRequest.newBuilder()
-                .setNodePubKey(nodeUri.getPubKey())
-                .setSatPerVByte(satPerVByte)
-                .setPrivate(isPrivate)
-                .setAmount(amount)
-                .setUTXOs(UTXOs)
-                .build();
-
+    public void openChannelConnected(OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().openChannel(openChannelRequest)
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Channel open successfully initiated!");
-                    broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.SUCCESS, null);
+                    broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.SUCCESS, null);
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Error opening channel: " + throwable.getMessage());
 
                     if (throwable.getMessage().toLowerCase().contains("pending channels exceed maximum")) {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, throwable.getMessage());
+                        broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.ERROR_CHANNEL_PENDING_MAX, throwable.getMessage());
                     } else if (throwable.getMessage().toLowerCase().contains("terminated")) {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
+                        broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.ERROR_CHANNEL_TIMEOUT, throwable.getMessage());
                     } else {
-                        broadcastChannelOpenUpdate(nodeUri, ChannelOpenUpdateListener.ERROR_CHANNEL_OPEN, throwable.getMessage());
+                        broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.ERROR_CHANNEL_OPEN, throwable.getMessage());
                     }
                 }));
     }
@@ -388,9 +379,9 @@ public class Wallet_Channels {
     /**
      * Notify all listeners to channel open updates
      */
-    public void broadcastChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message) {
+    public void broadcastChannelOpenUpdate(String nodePubKey, int status, String message) {
         for (ChannelOpenUpdateListener listener : mChannelOpenUpdateListeners) {
-            listener.onChannelOpenUpdate(lightningNodeUri, status, message);
+            listener.onChannelOpenUpdate(nodePubKey, status, message);
         }
     }
 
@@ -439,6 +430,6 @@ public class Wallet_Channels {
         int ERROR_CHANNEL_PENDING_MAX = 8;
         int ERROR_CHANNEL_OPEN = 9;
 
-        void onChannelOpenUpdate(LightningNodeUri lightningNodeUri, int status, String message);
+        void onChannelOpenUpdate(String nodePubKey, int status, String message);
     }
 }

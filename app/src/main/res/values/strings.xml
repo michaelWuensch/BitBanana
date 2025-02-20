@@ -592,6 +592,9 @@
     <string name="help_dialog_bolt12_description">Anyone using the payment code will see this description.</string>
     <string name="help_dialog_offers">Payment codes can be used multiple times. Anyone with the code can make a payment to you without requiring your immediate involvement. However, your node must be online for the payment to go through. Additionally, payment codes offer advanced features like recurring payments and enhanced privacy for the receiver.</string>
     <string name="help_dialog_settings_currencies">Tapping any amount field allows you to change between the currencies you\'ve set up here. If you only select Bitcoin units, the app will stop contacting exchange rate providers.</string>
+    <string name="help_dialog_allFunds_1">If this box is selected, BitBanana will use all of your on-chain funds.</string>
+    <string name="help_dialog_allFunds_1_utxo_selection">If this box is selected, BitBanana will spend all the funds from your chosen UTXOs.</string>
+    <string name="help_dialog_allFunds_2">However, if you have open channels, a portion of these funds may be held as emergency reserves to ensure stable channel operation. You might also get some of those funds back as change.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -888,6 +891,8 @@
     <string name="locked_until">Locked until</string>
 
     <string name="utxo_selection">UTXO selection</string>
+    <string name="use_all_funds">Use all funds</string>
+    <string name="use_all_selected_funds">Use all selected funds</string>
 
 
 </resources>
