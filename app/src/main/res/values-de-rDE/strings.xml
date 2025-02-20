@@ -349,11 +349,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Zahlungscode</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:
-\n
-\n- Lndconnect string (lndconnect://...)
-\n- BtcPay Server Verbindung (config=...)
-\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig: \n \n- Lndconnect string (lndconnect://...) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.
@@ -537,9 +533,7 @@
     <string name="error_connection_no_internet">Keine Internetverbindung!</string>
     <string name="advanced_channel_details_explanation_initiator">Wer hat den Kanal geöffnet\?</string>
     <string name="documentation">Dokumentation</string>
-    <string name="help_dialog_connect_node_help">Leider sind diese QR-Codes so groß, dass einige Geräte nicht in der Lage sind, sie zu scannen. Wenn dies der Fall ist, musst du auf Copy/Paste zurückgreifen.
-\n
-\nWenn du weitere Hilfe benötigst, lies bitte unsere Setup-Dokumentation.</string>
+    <string name="help_dialog_connect_node_help">Leider sind diese QR-Codes so groß, dass einige Geräte nicht in der Lage sind, sie zu scannen. Wenn dies der Fall ist, musst du auf Copy/Paste zurückgreifen. \n \nWenn du weitere Hilfe benötigst, lies bitte unsere Setup-Dokumentation.</string>
     <string name="advanced_channel_details_explanation_lifetime_closed">Hier wird angezeigt, wie lange dieser Kanal aktiv war.</string>
     <string name="advanced_channel_details_explanation_close_initiator">Wer hat den Kanal geschlossen\?</string>
     <string name="advanced_channel_details_close_initiator">Initiator der Schließung</string>
