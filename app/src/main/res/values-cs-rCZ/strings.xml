@@ -346,11 +346,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné:
-\n
-\n- Lndconnect řetězec (lndconnect://...)
-\n- BtcPay Server připojení (config=...)
-\n- Celý obsah vašeho BTCPay Server config souboru</string>
+    <string name="help_dialog_scanConnectionInfo">QR-kódy obsahující následující informace jsou platné: \n \n- Lndconnect řetězec (lndconnect://...) \n- BtcPay Server připojení (config=...) \n- Celý obsah vašeho BTCPay Server config souboru</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ okamžité\n+ nízké poplatky\n- není vždy možné\n\nIdeální pro malé transakce.\nPoužívejte, kdykoli je to možné.\n\n\nOn-Chain:\n\n+ vždy možné\n-pomalejší\n- vyšší poplatky\n\nDobré pro velké transakce.\nPoužijte, pokud není možné použít Lightning.</string>
     <string name="help_dialog_scanGeneric">Zde je povoleno cokoli.\nVyhledejte pouze QR kód a BitBanana automaticky určí, která akce bude provedena v závislosti na datech.</string>
     <string name="help_dialog_identity">Toto je vaše identita v lightning síti.\n\nKlepnutím na obrázek svého avatara zobrazíte QR kód.\nOstatní mohou tento kód naskenovat a přidat si vás ke svým kontaktům, otevřít s vámi kanály nebo vám poslat peníze.\n\nTento avatar je jedinečný.\nByl vygenerován automaticky na základě vašeho veřejného klíče a nelze jej změnit.</string>
@@ -598,9 +594,7 @@
     <string name="help_dialog_sign_verify">Podepsáním zprávy vaším uzlem můžete dokázat, že jste jeho majitelem. Jelikož podpis obsahuje veřejný klíč uzlu, můžou ostatní takto podepsanou zprávu ověřit.
 \n
 \nTato funkce může být použita například při ověřování identity nebo pro přihlášení do některých služeb.</string>
-    <string name="help_dialog_connect_node_help">Bohužel jsou tyto QR kódy tak velké, že je některá zařízení nejsou schopná naskenovat. Pokud se vám to stane, budete jej muset ručně zkopírovat.
-\n
-\nPokud potřebujete pomoct, zkuste naši dokumentaci.</string>
+    <string name="help_dialog_connect_node_help">Bohužel jsou tyto QR kódy tak velké, že je některá zařízení nejsou schopná naskenovat. Pokud se vám to stane, budete jej muset ručně zkopírovat. \n \nPokud potřebujete pomoct, zkuste naši dokumentaci.</string>
     <string name="help_dialog_stealth_mode">Díky režimu utajení se bude při zběžném fyzickém prohledání vašeho telefonu zdát, že aplikace BitBanana není nainstalována. Toho je docíleno změnou jména a ikonky aplikace a spuštěním zdánlivě jiné aplikace. V systémovém nastavení bude nicméně BitBanana vidět pod svým skutečným jménem a ikonkou.
 \n
 \nNení to dokonalé řešení, ale mělo by to trochu pomoci udělat váš bitcoinový software méně nápadný.</string>
