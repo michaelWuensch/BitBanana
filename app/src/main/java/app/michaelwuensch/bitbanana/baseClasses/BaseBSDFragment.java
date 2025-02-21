@@ -111,6 +111,6 @@ public class BaseBSDFragment extends RxBSDFragment {
     }
 
     protected void showToast(String message, int length) {
-        Toast.makeText(getActivity(), R.string.receive_generateRequest_failed, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), message, length).show();
     }
 }
