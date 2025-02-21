@@ -54,7 +54,7 @@
     <string name="support">Підтримка</string>
     <string name="activity_receive">Отримати</string>
     <string name="activity_send">Сплатити</string>
-    <string name="activity_connectRemoteNode">Підключитися до віддаленого вузла</string>
+    <string name="activity_connectRemoteNode">Додати вузол</string>
     <string name="activity_advanced_settings">Розширені налаштування</string>
     <string name="activity_identity">Identity</string>
     <string name="navigation_history">Історія</string>
@@ -254,7 +254,7 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">Дійсні QR-коди, які містять:\n\n- Адреса блискавки\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- Код платежу</string>
-    <string name="help_dialog_scanConnectionInfo">QR-коди, що містять таке, є дійсними: \n \n- рядок Lndconnect (lndconnect://...) \n- підключення до сервера BtcPay (config=...) \n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Дійсні QR-коди, які містять: \n\n- Рядок Lndconnect (lndconnect://…) \n- Core Lightning grpc (cln-grpc://…) \n- LndHub (lndhub://…) \n- Підключення до сервера BtcPay (config=…) \n- Повний вміст конфігураційного файлу сервера BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
@@ -339,7 +339,7 @@
     <string name="exhausted">виснажений</string>
     <string name="id">ID</string>
     <string name="state">Держава</string>
-    <string name="activity_manage_channels_closed">Закриті канали</string>
+    <string name="activity_manage_channels_closed">Зачинено</string>
     <string name="verify">Підтвердити</string>
     <string name="type">Тип</string>
     <string name="duplicate">дублікат</string>
@@ -612,7 +612,7 @@
     <string name="lnurl_auth_link_info">Ви бажаєте пов’язати наявний обліковий запис зі своїм вузлом?</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">Здається, %1$s блокує запити, що надходять із мережі Tor. Ви можете спробувати вимкнути Tor у налаштуваннях або звернутися до служби та попросити їх оновити свої правила Cloudflare.</string>
     <string name="help_dialog_channels">Список каналів блискавки представляє ваші фонди блискавки. Канали Lightning необхідні для участі в мережі Lightning, яка дозволяє здійснювати миттєві та дешеві платежі біткойнами. \n\nЩоб «перетворити» кошти в ланцюжку на блискавичні кошти, вам потрібно відкрити канал. Щоб «конвертувати» блискавичні кошти назад у мережеві кошти, вам потрібно закрити існуючий канал. \nОбидві операції, як відкриття, так і закриття каналів, здійснюються за допомогою транзакції в ланцюжку, за яку стягується комісія. Тому намагайтеся тримати канали відкритими якомога довше! \n\nПростий спосіб почати відкривати канали – скористатися lightningnetwork.plus.</string>
-    <string name="help_dialog_connect_node_help">На жаль, ці QR-коди настільки великі, що деякі пристрої не можуть їх сканувати. Якщо це так, вам доведеться повернутися до копіювання/вставлення. \n\nЯкщо вам потрібна додаткова допомога, зверніться до нашої документації з налаштування.</string>
+    <string name="help_dialog_connect_node_help">На жаль, ці QR-коди настільки великі, що деякі пристрої не можуть їх сканувати. Якщо це ваш випадок, вам доведеться повернутися до копіювання/вставлення. \n\nЯкщо вам потрібна додаткова допомога, зверніться до нашої документації з налаштування.</string>
     <string name="help_dialog_vpn_automation">Це налаштування робить використання VPN зручнішим завдяки автоматизації. Ви все ще можете підключитися за допомогою VPN, навіть якщо ви нічого не виберете тут, але тоді вам доведеться запускати та зупиняти VPN вручну щоразу.</string>
     <string name="clipboard_scan_lnurl">Ваш буфер обміну містить дані LNURL. Ви хочете використовувати його?</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">Комісії, які інший вузол отримає, коли він пересилає транзакцію через цей канал. Це стосується лише експедиційних операцій. Вам не доведеться нічого платити, якщо ви використовуєте цей канал для своїх транзакцій.</string>
@@ -787,4 +787,9 @@
     <string name="help_dialog_utxos_select">Вибравши конкретні UTXO, ви можете покращити свою конфіденційність або заощадити в деяких випадках.</string>
     <string name="total">Всього</string>
     <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Максимальна сума: %1$s\n\nНедостатня блискавична ліквідність. Щоб збільшити цей ліміт, збільште дохід свого каналу.</string>
+    <string name="help_dialog_allFunds_2">Однак, якщо у вас є відкриті канали, частина цих коштів може зберігатися як надзвичайний резерв для забезпечення стабільної роботи каналу. Ви також можете отримати частину цих коштів назад як здачу.</string>
+    <string name="use_all_selected_funds">Використовуйте всі вибрані кошти</string>
+    <string name="help_dialog_allFunds_1_utxo_selection">Якщо позначено цей прапорець, BitBanana витратить усі кошти з вибраних вами UTXO.</string>
+    <string name="use_all_funds">Використовуйте всі кошти</string>
+    <string name="help_dialog_allFunds_1">Якщо позначено цей прапорець, BitBanana використовуватиме всі ваші кошти в мережі.</string>
 </resources>
