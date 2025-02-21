@@ -8,7 +8,7 @@ A regtest setup will save you a lot of time as it allows you to test BitBanana i
 The easiest way to create and manage simulated regtest networks is by using Polar.
 
 1. Download [Polar][polar]
-2. Setup a network in Polar with at least one LND node.
+2. Setup a network in Polar with at least one LND or Core Lightning node.
 
 
 ### Remote control your simulated regtest LND nodes with BitBanana
@@ -23,7 +23,5 @@ To connect BitBanana with a simulated LND node:
 7. If you are using an Android Studio Emulator, replace the IP address with `10.0.2.2`. If you are using an android phone, replace the IP address with the IP address of the computer running polar.
 8. Scroll down and make sure both Tor & Certificate verification are turned off.
 9. Have fun testing!
-
-Please note that connecting to regtest nodes will only work when building with debug build variant.
 
 [polar]: https://lightningpolar.com/

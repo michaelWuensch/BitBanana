@@ -65,6 +65,7 @@ Or download the latest APK from the [Releases Section](https://github.com/michae
 - [x] 100% Self-custodial
 - [x] 100% open source code with [reproducible](docs/REPRODUCE.md) releases
 - [x] ZERO data collection
+- [x] Available on F-Droid
 - [x] Coin Control
 - [x] Tor support
 - [x] PIN protected access
