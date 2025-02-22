@@ -1,0 +1,9 @@
+- Coin Control
+- "Send all" option
+- Many design and usability improvements
+- Support for custom BlockExplorers on Regtest nodes
+- Fixes for nodes with more than 500 outgoing lightning payments
+- Performance improvements for nodes with lots of payments
+- Bug fixes
+- Added Korean language (thanks DedSec)
+- Updated translations
