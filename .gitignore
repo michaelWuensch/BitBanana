@@ -64,3 +64,9 @@ fastlane/readme.md
 # release files
 app/debug
 app/release
+
+# deployment
+keystore/
+
+# reproducible builds
+reproducible-builds/apks/
