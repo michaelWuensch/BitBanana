@@ -70,3 +70,4 @@ keystore/
 
 # reproducible builds
 reproducible-builds/apks/
+reproducible-builds/extracted_apks/
