@@ -56,7 +56,7 @@ public class Wallet {
     private void setWalletLoadState(WalletLoadState walletLoadState) {
         if (mWalletLoadState != walletLoadState) {
             mWalletLoadState = walletLoadState;
-            BBLog.v(LOG_TAG, "New wallet load state: " + walletLoadState);
+            BBLog.i(LOG_TAG, "New wallet load state: " + walletLoadState);
             broadcastWalletLoadState(walletLoadState);
         }
     }

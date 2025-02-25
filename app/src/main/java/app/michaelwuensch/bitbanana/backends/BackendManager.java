@@ -277,7 +277,7 @@ public class BackendManager {
 
     private static void setBackendState(BackendState backendState) {
         if (currentBackendState != backendState) {
-            BBLog.v(LOG_TAG, "New backend state: " + backendState);
+            BBLog.i(LOG_TAG, "New backend state: " + backendState);
             currentBackendState = backendState;
             broadcastBackendStateChange(backendState);
         }

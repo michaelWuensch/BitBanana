@@ -145,6 +145,8 @@
     <string name="reset">Reset</string>
     <string name="total">Total</string>
     <string name="change">Change</string>
+    <string name="clear">Clear</string>
+    <string name="copy_all">Copy all</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -349,6 +351,7 @@
     <string name="settings_featureWatchtowers">Watchtower Management</string>
     <string name="settings_featureWatchtowers_summary">If your node remains offline for a longer duration, watchtowers will protect your funds from any fraudulent activity.</string>
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
+    <string name="settings_featureLogs_summary">If enabled, BitBanana will record logs that can be viewed in the Log section in the main menu. Enable it only if you\'re troubleshooting an issue and need to inspect the logs.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
     <string name="settings_custom_exchange_rate_provider">Custom Exchange Rate Provider</string>
@@ -894,5 +897,7 @@
     <string name="use_all_funds">Use all funds</string>
     <string name="use_all_selected_funds">Use all selected funds</string>
 
+    <string name="logs">Logs</string>
+    <string name="logs_no_logs">No logs</string>
 
 </resources>

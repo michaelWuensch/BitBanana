@@ -78,6 +78,10 @@ public class FeatureManager {
         return settingEnabled && backendSupported;
     }
 
+    public static boolean isInAppLogEnabled() {
+        return PrefsUtil.isLoggingEnabled();
+    }
+
     public static boolean isOpenChannelEnabled() {
         return getBackend().supportsOpenChannel() && getBackend().supportsChannelManagement();
     }

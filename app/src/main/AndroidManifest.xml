@@ -332,6 +332,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.logs.LogsActivity"
+            android:label="@string/logs"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.peers.ScanPeerActivity"
             android:label="@string/peers_add"
             android:screenOrientation="portrait" />

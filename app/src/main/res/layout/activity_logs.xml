@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.listViews.logs.LogsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/clearButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                app:bbbutton_text="@string/clear" />
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/copyButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                app:bbbutton_text="@string/copy_all" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/listEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logs_no_logs"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonLayout" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/logsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+                android:scrollbars="vertical" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

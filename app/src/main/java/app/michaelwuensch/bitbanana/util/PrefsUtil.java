@@ -155,6 +155,10 @@ public class PrefsUtil {
         }
     }
 
+    public static boolean isLoggingEnabled() {
+        return getPrefs().getBoolean("featureLogs", false);
+    }
+
     public static String getFirstCurrencyCode() {
         return getPrefs().getString(FIRST_CURRENCY, BBCurrency.CURRENCY_CODE_SATOSHI);
     }
