@@ -933,4 +933,9 @@
     <string name="use_all_selected_funds">Gesamtes ausgewähltes Guthaben verwenden</string>
     <string name="help_dialog_allFunds_2">Wenn du jedoch offene Kanäle hast, kann ein Teil dieses Guthabens als Notreserve gehalten werden, um einen stabilen Kanalbetrieb zu gewährleisten. Du könntest auch einen Teil dieses Guthabens als Wechselgeld zurückbekommen.</string>
     <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximaler Betrag: %1$s\n\nUngenügende Lightning-Liquidität. Erhöhe deine eingehende Kanalkapazität um dieses Limit zu erhöhen.</string>
+    <string name="logs_no_logs">Keine Logs</string>
+    <string name="clear">Löschen</string>
+    <string name="copy_all">Alles kopieren</string>
+    <string name="settings_featureLogs_summary">Wenn diese Option aktiviert ist, erfasst BitBanana Logs, die im Abschnitt Logs im Hauptmenü angezeigt werden können. Aktiviere diese Funktion nur, wenn du ein Problem untersuchen willst und die Protokolle einsehen musst.</string>
+    <string name="logs">Logs</string>
 </resources>
