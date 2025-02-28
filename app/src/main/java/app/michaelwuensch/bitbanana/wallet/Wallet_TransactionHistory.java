@@ -149,6 +149,7 @@ public class Wallet_TransactionHistory {
     private void isHistoryUpdateFinished() {
         if (mTransactionUpdated && mInvoicesUpdated && mPaymentsUpdated) {
             mUpdatingHistory = false;
+            BBLog.d(LOG_TAG, "History update finished.");
             broadcastHistoryUpdate();
         }
     }
@@ -189,6 +190,8 @@ public class Wallet_TransactionHistory {
      */
     public void fetchPayments() {
         int pageSize = 500;
+        if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC)
+            pageSize = 3000;
         if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) // ToDo: Remove version check once versions smaller 24.11 are no longer supported.
             pageSize = 100000;
 
