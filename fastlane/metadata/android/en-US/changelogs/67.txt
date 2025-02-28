@@ -4,6 +4,7 @@
 - Support for custom BlockExplorers on Regtest nodes
 - Fixes for nodes with more than 500 outgoing lightning payments
 - Performance improvements for nodes with lots of payments
+- Added in app log
 - Bug fixes
 - Added Korean language (thanks DedSec)
 - Updated translations

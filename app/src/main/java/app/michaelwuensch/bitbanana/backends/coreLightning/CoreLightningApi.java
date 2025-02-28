@@ -505,7 +505,7 @@ public class CoreLightningApi extends Api {
     }
 
     private Single<PagedResponse<LnInvoice>> getInvoicesPage(long firstIndexOffset, int pageSize) {
-        BBLog.d(LOG_TAG, "Fetching invoices page, offset:  " + (firstIndexOffset + 1));
+        BBLog.v(LOG_TAG, "Fetching invoices page, offset:  " + (firstIndexOffset + 1) + ", PageSize: " + pageSize);
         ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
                 .setIndex(ListinvoicesRequest.ListinvoicesIndex.CREATED)
                 .setLimit(pageSize)
@@ -653,7 +653,7 @@ public class CoreLightningApi extends Api {
     }
 
     private Single<PagedResponse<LnPayment>> getLnPaymentPage(long firstIndexOffset, int pageSize) {
-        BBLog.d(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset + 1) + ", PageSize: " + pageSize);
+        BBLog.v(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset + 1) + ", PageSize: " + pageSize);
         ListpaysRequest request = ListpaysRequest.newBuilder()
                 .setStatus(ListpaysRequest.ListpaysStatus.COMPLETE)
                 .setIndex(ListpaysRequest.ListpaysIndex.UPDATED)
@@ -663,7 +663,7 @@ public class CoreLightningApi extends Api {
 
         return CoreLightningNodeService().listPays(request)
                 .map(response -> {
-                    BBLog.d(LOG_TAG, "Payment page response. Contained elements: " + response.getPaysList().size());
+                    BBLog.v(LOG_TAG, "Payment page response. Contained elements: " + response.getPaysList().size());
                     long lastIndexOffset = firstIndexOffset;
                     List<LnPayment> paymentsList = new ArrayList<>();
                     for (ListpaysPays payment : response.getPaysList()) {
@@ -706,7 +706,7 @@ public class CoreLightningApi extends Api {
                                 .map(nextPageData -> {
                                     List<LnPayment> combinedList = new ArrayList<>(data.getPage());
                                     combinedList.addAll(nextPageData);
-                                    BBLog.d(LOG_TAG, "Combined payment pages. Contained elements: " + combinedList.size());
+                                    BBLog.v(LOG_TAG, "Combined payment pages. Contained elements: " + combinedList.size());
                                     return combinedList;
                                 });
                     }
@@ -714,7 +714,7 @@ public class CoreLightningApi extends Api {
     }
 
     private Single<PagedResponse<Forward>> getForwardPage(long firstIndexOffset, int pageSize, long startTime) {
-        BBLog.d(LOG_TAG, "Fetching forwards page, offset:  " + (firstIndexOffset + 1));
+        BBLog.v(LOG_TAG, "Fetching forwards page, offset:  " + (firstIndexOffset + 1) + ", PageSize: " + pageSize);
         ListforwardsRequest request = ListforwardsRequest.newBuilder()
                 .setStatus(ListforwardsRequest.ListforwardsStatus.SETTLED)
                 .setIndex(ListforwardsRequest.ListforwardsIndex.CREATED)
