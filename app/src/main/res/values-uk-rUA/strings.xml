@@ -792,4 +792,9 @@
     <string name="help_dialog_allFunds_1_utxo_selection">Якщо позначено цей прапорець, BitBanana витратить усі кошти з вибраних вами UTXO.</string>
     <string name="use_all_funds">Використовуйте всі кошти</string>
     <string name="help_dialog_allFunds_1">Якщо позначено цей прапорець, BitBanana використовуватиме всі ваші кошти в мережі.</string>
+    <string name="copy_all">Копіювати все</string>
+    <string name="logs_no_logs">Без журналів</string>
+    <string name="logs">Журнали</string>
+    <string name="clear">Очистити</string>
+    <string name="settings_featureLogs_summary">Якщо ввімкнено, BitBanana записуватиме журнали, які можна переглянути в розділі Журнал головного меню. Увімкніть його, лише якщо ви вирішуєте проблему та потребуєте перевірки журналів.</string>
 </resources>
