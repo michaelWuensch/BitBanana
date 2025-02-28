@@ -60,7 +60,7 @@
     <string name="notConnected">Ei yhdistetty</string>
     <string name="activity_receive">Vastaanota</string>
     <string name="activity_send">Maksa</string>
-    <string name="activity_connectRemoteNode">Yhdistä etäsolmuun</string>
+    <string name="activity_connectRemoteNode">Lisää solmu</string>
     <string name="activity_advanced_settings">Edistyneet asetukset</string>
     <string name="activity_identity">Identiteetti</string>
     <string name="activity_manage_contacts">Muokkaa kontakteja</string>
@@ -162,7 +162,7 @@
     <string name="settings_manageChannels">Hallitsee Salamakanavia</string>
     <string name="settings_scramblePin">Sekoita PIN näyttö</string>
     <string name="settings_preventScreenRecording">Estä näytön tallennus</string>
-    <string name="settings_hideTotalBalance_explanation">Kun aktivoitu, klikkaa BitBanana-logoa pääsivulla nähdäksesi saldosi.</string>
+    <string name="settings_hideTotalBalance_explanation">Kokonaissaldo on nyt piilotettu. Näytä saldo napauttamalla pääsivulla olevaa BitBanana-logoa.</string>
     <string name="settings_resetSecurityWarnings">Palauta alkuperäiset turvallisuusilmoitukset</string>
     <string name="settings_help">Tarvitsetko apua?</string>
     <string name="settings_reportIssue">Ilmoita ongelmasta</string>
@@ -440,7 +440,7 @@
     <string name="onChain">Ketjussa</string>
     <string name="activity_node_details">Solmun yksityiskohdat</string>
     <string name="activity_manage_nodes">Hallitse solmuja</string>
-    <string name="activity_manage_channels_closed">Suljetut kanavat</string>
+    <string name="activity_manage_channels_closed">Suljettu</string>
     <string name="activity_watchtower">Vartiotorni</string>
     <string name="activity_bolt12_offers">Maksukoodit</string>
     <string name="activity_watchtowers">Vartiotornit</string>
@@ -457,4 +457,29 @@
     <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">Nykyinen maksuarvio viittaa siihen, että tätä tapahtumaa, jonka maksuprosentti on %1$d sat/vB, ei ehkä koskaan vahvisteta. Harkitse maksun korottamista, jotta tapahtumasi ei juutu pitkäksi aikaa.\n\nHaluatko silti jatkaa?</string>
     <string name="guardian_remove_watchtower">Poistamalla vartiotornin kaikki nykyiset torniin liittyvät istunnot lopetetaan. Joitakin istuntoja ei ole vielä käytetty loppuun. Jäljelle jääneet varmuuskopiot katoavat, eikä niitä palauteta, vaikka maksaisit palvelusta.</string>
     <string name="activity_manage_channels">Kanavat</string>
+    <string name="immediately">Heti</string>
+    <string name="settings_features">Ominaisuudet</string>
+    <string name="reset">Nollaa</string>
+    <string name="automatic">Automaattinen</string>
+    <string name="select">Valitse</string>
+    <string name="confirm_selection">Vahvista valinta</string>
+    <string name="total">Yhteensä</string>
+    <string name="change">Muuta</string>
+    <string name="activity_payment_route">Maksureitti</string>
+    <string name="guardian_release_utxo">Et ole lukinnut tätä UTXO:ta BitBanana-käyttöliittymästä, mutta se on todennäköisesti lukittu hyvästä syystä. Avaa lukitus vain, jos olet varma, että se on välttämätöntä.</string>
+    <string name="settings_currency_none">Ei mitään</string>
+    <string name="settings_lockScreenTimeout">Automaattilukituksen aikakatkaisu</string>
+    <string name="settings_hapticPin">Tuntopohjainen PIN-palaute</string>
+    <string name="disable">Poista käytöstä</string>
+    <string name="settings_custom">Mukautettu…</string>
+    <string name="settings_hideAllBalances_explanation">Kaikki saldot on nyt sumennettu ja kokonaissaldo piilotettu BitBanana-logon taakse. Voit näyttää saldosi väliaikaisesti napauttamalla mitä tahansa sumennettua kenttää tai BitBanana-logoa.</string>
+    <string name="settings_hideBalance">Piilota saldo</string>
+    <string name="settings_hideBalanceType_total">Vain kokonaissaldo</string>
+    <string name="settings_payer_data">Maksuntunnistus</string>
+    <string name="settings_tor">Tor</string>
+    <string name="settings_tor_summary">Anonymisoi kaikki verkkoliikenne Tor-verkon kautta. Tämä vaikuttaa vain valuuttakurssien noutamisen kaltaisiin toimintoihin tai esimerkiksi LNURL-palveluiden käyttöön. Yksittäisten solmujen yhteysasetuksissa voi valita itse, käytetäänkö Tor-verkkoa solmuihin yhdistämiseen.</string>
+    <string name="settings_features_summary">Voit mukauttaa sovellusta tarpeisiisi ottamalla ominaisuuksia käyttöön tai pois käytöstä.</string>
+    <string name="forwarded">Lähetetty edelleen</string>
+    <string name="summary">Yhteenveto</string>
+    <string name="settings_hideBalanceType_all">Kaikki saldot</string>
 </resources>
