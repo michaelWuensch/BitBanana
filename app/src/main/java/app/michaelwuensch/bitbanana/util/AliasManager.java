@@ -104,7 +104,7 @@ public class AliasManager {
      */
     public void saveAliasesToCache() {
         PrefsUtil.putSerializable(PrefsUtil.NODE_ALIAS_CACHE, mAliases).apply();
-        BBLog.d(LOG_TAG, "Saved Alias cache.");
+        BBLog.v(LOG_TAG, "Saved Alias cache.");
     }
 
     /**

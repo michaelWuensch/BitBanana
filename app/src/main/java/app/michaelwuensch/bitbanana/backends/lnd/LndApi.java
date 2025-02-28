@@ -582,7 +582,7 @@ public class LndApi extends Api {
     }
 
     private Single<PagedResponse<LnInvoice>> getInvoicesPage(long firstIndexOffset, int pageSize) {
-        BBLog.d(LOG_TAG, "Fetching invoices page, offset:  " + (firstIndexOffset));
+        BBLog.v(LOG_TAG, "Fetching invoices page, offset:  " + (firstIndexOffset) + ", PageSize: " + pageSize);
         ListInvoiceRequest invoiceRequest = ListInvoiceRequest.newBuilder()
                 .setNumMaxInvoices(pageSize)
                 .setIndexOffset(firstIndexOffset)
@@ -760,7 +760,7 @@ public class LndApi extends Api {
     }
 
     private Single<PagedResponse<LnPayment>> getLnPaymentPage(long firstIndexOffset, int pageSize) {
-        BBLog.d(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset));
+        BBLog.v(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset) + ", PageSize: " + pageSize);
         ListPaymentsRequest request = ListPaymentsRequest.newBuilder()
                 .setIncludeIncomplete(false)
                 .setMaxPayments(pageSize)
@@ -807,7 +807,7 @@ public class LndApi extends Api {
     }
 
     private Single<PagedResponse<Forward>> getForwardPage(long firstIndexOffset, int pageSize, long startTime) {
-        BBLog.d(LOG_TAG, "Fetching forwards page, offset:  " + (firstIndexOffset));
+        BBLog.v(LOG_TAG, "Fetching forwards page, offset:  " + (firstIndexOffset) + ", PageSize: " + pageSize);
         ForwardingHistoryRequest request = ForwardingHistoryRequest.newBuilder()
                 .setStartTime(startTime)
                 .setNumMaxEvents(pageSize)
