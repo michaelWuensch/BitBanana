@@ -60,6 +60,10 @@
     </item>
     <group>
         <item
+            android:id="@+id/drawerLogs"
+            android:icon="@drawable/baseline_log_24"
+            android:title="@string/logs" />
+        <item
             android:id="@+id/drawerSupport"
             android:icon="@drawable/ic_mail_outline_24"
             android:title="@string/support" />

@@ -653,16 +653,17 @@ public class CoreLightningApi extends Api {
     }
 
     private Single<PagedResponse<LnPayment>> getLnPaymentPage(long firstIndexOffset, int pageSize) {
-        BBLog.d(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset + 1));
+        BBLog.d(LOG_TAG, "Fetching payments page, offset:  " + (firstIndexOffset + 1) + ", PageSize: " + pageSize);
         ListpaysRequest request = ListpaysRequest.newBuilder()
                 .setStatus(ListpaysRequest.ListpaysStatus.COMPLETE)
-                .setIndex(ListpaysRequest.ListpaysIndex.CREATED)
+                .setIndex(ListpaysRequest.ListpaysIndex.UPDATED)
                 .setLimit(pageSize)
                 .setStart(firstIndexOffset + 1) //index is one based on this call
                 .build();
 
         return CoreLightningNodeService().listPays(request)
                 .map(response -> {
+                    BBLog.d(LOG_TAG, "Payment page response. Contained elements: " + response.getPaysList().size());
                     long lastIndexOffset = firstIndexOffset;
                     List<LnPayment> paymentsList = new ArrayList<>();
                     for (ListpaysPays payment : response.getPaysList()) {
@@ -680,7 +681,7 @@ public class CoreLightningApi extends Api {
                                 //.setBolt12PayerNote()  This information is contained in the bolt12 string and will only be extracted when it needs to be displayed to improve performance.
                                 //.setKeysendMessage(???)
                                 .build());
-                        lastIndexOffset = payment.getCreatedIndex();
+                        lastIndexOffset = payment.getUpdatedIndex();
                     }
                     PagedResponse<LnPayment> page = PagedResponse.<LnPayment>newBuilder()
                             .setPage(paymentsList)
@@ -696,18 +697,16 @@ public class CoreLightningApi extends Api {
     public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
         return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data == null || data.getPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
-                        // Current page has fewer items than pageSize, no more data to fetch
-                        return Single.just(data.getPage());
                     } else {
                         // Fetch the next page and concatenate results
                         return listLnPayments(data.getLastIndexOffset(), pageSize)
                                 .map(nextPageData -> {
                                     List<LnPayment> combinedList = new ArrayList<>(data.getPage());
                                     combinedList.addAll(nextPageData);
+                                    BBLog.d(LOG_TAG, "Combined payment pages. Contained elements: " + combinedList.size());
                                     return combinedList;
                                 });
                     }

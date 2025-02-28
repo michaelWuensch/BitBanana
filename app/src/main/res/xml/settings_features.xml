@@ -53,4 +53,11 @@
         android:title="@string/sign_verify"
         app:iconSpaceReserved="false" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="featureLogs"
+        android:summary="@string/settings_featureLogs_summary"
+        android:title="@string/logs"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>

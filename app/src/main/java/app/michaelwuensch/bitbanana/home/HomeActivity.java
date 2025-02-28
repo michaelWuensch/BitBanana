@@ -63,6 +63,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.itemDetails.ContactDetailsActivity;
 import app.michaelwuensch.bitbanana.listViews.forwardings.ForwardingActivity;
+import app.michaelwuensch.bitbanana.listViews.logs.LogsActivity;
 import app.michaelwuensch.bitbanana.listViews.peers.PeersActivity;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.TransactionHistoryFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
@@ -347,7 +348,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> disconnectTimeoutReached(), RefConstants.DISCONNECT_TIMEOUT * 1000);
     }
 
-    private void disconnectTimeoutReached(){
+    private void disconnectTimeoutReached() {
         BBLog.i(LOG_TAG, "Disconnect timeout reached.");
         stopListenersAndSchedules();
     }
@@ -750,10 +751,14 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         } else if (id == R.id.drawerBackup) {
             Intent intentBackup = new Intent(this, BackupActivity.class);
             startActivity(intentBackup);
+        } else if (id == R.id.drawerLogs) {
+            Intent intentLogs = new Intent(this, LogsActivity.class);
+            startActivity(intentLogs);
         } else if (id == R.id.drawerSupport) {
             Intent intentSupport = new Intent(this, SupportActivity.class);
             startActivity(intentSupport);
         }
+
         return true;
     }
 
@@ -800,6 +805,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         drawerMenu.findItem(R.id.drawerWatchtowers).setVisible(FeatureManager.isWatchtowersEnabled());
         drawerMenu.findItem(R.id.drawerNodeSection).setVisible(FeatureManager.isChannelManagementEnabled() || FeatureManager.isUTXOListViewEnabled() || FeatureManager.isRoutingListViewEnabled() || FeatureManager.isSignVerifyEnabled() || FeatureManager.isWatchtowersEnabled() || FeatureManager.isBolt12OffersViewEnabled());
         drawerMenu.findItem(R.id.drawerContacts).setVisible(FeatureManager.isContactsEnabled());
+        drawerMenu.findItem(R.id.drawerLogs).setVisible(FeatureManager.isInAppLogEnabled());
     }
 
     public TransactionHistoryFragment getHistoryFragment() {
