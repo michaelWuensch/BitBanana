@@ -1,6 +1,6 @@
 # BitBanana
 
-![Screenshot of BitBanana app](docs/screenshot.png)
+![Screenshot of BitBanana app](docs/media/screenshot.png)
 
 [![GitHub license](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Translated](https://hosted.weblate.org/widgets/bitbanana/-/svg-badge.svg)](https://hosted.weblate.org/engage/bitbanana/)
