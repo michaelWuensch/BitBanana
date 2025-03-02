@@ -92,6 +92,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             app:bbbutton_bright="true"
+            app:bbbutton_horizontalContentPadding="5dp"
             app:bbbutton_textSize="16sp"
             tools:bbbutton_text="Select ..." />
 
@@ -104,6 +105,7 @@
             android:layout_marginEnd="0dp"
             android:layout_weight="1"
             app:bbbutton_bright="true"
+            app:bbbutton_horizontalContentPadding="5dp"
             app:bbbutton_text="@string/reset"
             app:bbbutton_textSize="16sp" />
 

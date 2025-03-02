@@ -16,7 +16,7 @@ public class ContactsJson {
 
     public Contact getContactByContactData(@NonNull String contactData) {
         for (Contact contact : mContacts) {
-            if (contact.getContactData().equals(contactData)) {
+            if (contact.getContactData().equalsIgnoreCase(contactData)) {
                 return contact;
             }
         }

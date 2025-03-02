@@ -22,6 +22,7 @@ import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.UserGuardian;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class LogsActivity extends BaseAppCompatActivity implements LogSelectListener, SwipeRefreshLayout.OnRefreshListener, BBLog.LogAddedListener {
@@ -78,10 +79,17 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
         mCopyAllBtn.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
-                String completeLog = "";
-                for (LogListItem log : mLogItems)
-                    completeLog = completeLog + log.getLogItem().getVerbosity() + " | " + log.getLogItem().getTag() + " | " + log.getLogItem().getMessage() + "\n";
-                ClipBoardUtil.copyToClipboard(LogsActivity.this, "CompleteLog", completeLog);
+                new UserGuardian(LogsActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+                    @Override
+                    public void onConfirmed() {
+                        copyCompleteLog();
+                    }
+
+                    @Override
+                    public void onCancelled() {
+
+                    }
+                }).securityCopyLog();
             }
         });
 
@@ -94,6 +102,13 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
 
         // Update the list
         updateLogsDisplayList();
+    }
+
+    private void copyCompleteLog() {
+        String completeLog = "";
+        for (LogListItem log : mLogItems)
+            completeLog = completeLog + log.getLogItem().getVerbosity() + " | " + log.getLogItem().getTag() + " | " + log.getLogItem().getMessage() + "\n";
+        ClipBoardUtil.copyToClipboard(LogsActivity.this, "CompleteLog", completeLog);
     }
 
     private void updateLogsDisplayList() {
