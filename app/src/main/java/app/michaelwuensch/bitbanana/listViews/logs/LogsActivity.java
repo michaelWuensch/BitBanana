@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -36,6 +37,7 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
     private List<LogListItem> mLogItems;
     private BBButton mClearBtn;
     private BBButton mCopyAllBtn;
+    private SearchView mSearchView;
 
     private TextView mEmptyListText;
 
@@ -106,7 +108,12 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
 
     private void copyCompleteLog() {
         String completeLog = "";
-        for (LogListItem log : mLogItems)
+        List<LogListItem> logs;
+        if (isSearchQueryActive())
+            logs = filter(mLogItems, mSearchView.getQuery().toString());
+        else
+            logs = mLogItems;
+        for (LogListItem log : logs)
             completeLog = completeLog + log.getLogItem().getVerbosity() + " | " + log.getLogItem().getTag() + " | " + log.getLogItem().getMessage() + "\n";
         ClipBoardUtil.copyToClipboard(LogsActivity.this, "CompleteLog", completeLog);
     }
@@ -119,25 +126,77 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
                 LogListItem currItem = new LogListItem(log);
                 mLogItems.add(currItem);
             }
+
+            List<LogListItem> finalLogs;
+            if (isSearchQueryActive())
+                finalLogs = filter(mLogItems, mSearchView.getQuery().toString());
+            else
+                finalLogs = mLogItems;
+
             // Show "No Logs" if the list is empty
-            if (mLogItems.isEmpty()) {
+            if (finalLogs.isEmpty()) {
                 mEmptyListText.setVisibility(View.VISIBLE);
             } else {
                 mEmptyListText.setVisibility(View.GONE);
             }
 
             // Update the list view
-            mAdapter.replaceAll(mLogItems);
+            mAdapter.replaceAll(finalLogs);
         }
         // Remove refreshing symbol
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void filterLogToQuery(String query) {
+        final List<LogListItem> filteredLogList = filter(mLogItems, query);
+        if (filteredLogList.isEmpty()) {
+            mEmptyListText.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListText.setVisibility(View.GONE);
+        }
+        mAdapter.replaceAll(filteredLogList);
+    }
+
+    private static List<LogListItem> filter(List<LogListItem> logListItems, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<LogListItem> filteredLogList = new ArrayList<>();
+        for (LogListItem logListItem : logListItems) {
+            final String text = logListItem.getLogItem().getTag().toLowerCase() + "|" + logListItem.getLogItem().getMessage().toLowerCase();
+            if (text.contains(lowerCaseQuery)) {
+                filteredLogList.add(logListItem);
+            }
+        }
+        return filteredLogList;
+    }
+
+    private boolean isSearchQueryActive() {
+        return mSearchView != null && !mSearchView.getQuery().toString().isEmpty();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        return true;
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.searchButton);
+        mSearchView = (SearchView) menuItem.getActionView();
+        mSearchView.setQueryHint(getResources().getString(R.string.search));
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterLogToQuery(newText);
+                mRecyclerView.scrollToPosition(0);
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -175,7 +234,10 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
             public void run() {
                 // Code that must run on the main/UI thread
                 mAdapter.add(item);
+                mLogItems.add(item);
                 mEmptyListText.setVisibility(View.GONE);
+                if (isSearchQueryActive())
+                    filterLogToQuery(mSearchView.getQuery().toString());
             }
         });
     }
