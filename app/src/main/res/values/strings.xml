@@ -287,6 +287,7 @@
     <string name="guardian_remove_watchtower">By removing the watchtower, all current sessions associated with the tower will be terminated. Some sessions are not yet exhausted. Remaining backups will get lost and won\'t be refunded, even if you paid for the service.</string>
     <string name="guardian_custodial_lnd_accounts">You only have access to an account on the LND node. Unless you are the node operator, this arrangement is custodial. The person managing the node has control over your money and can view your transaction history. Only deposit what you\'re willing to trust with that person.</string>
     <string name="guardian_release_utxo">This UTXO was not locked by you using the BitBanana UI and is likely locked for a good reason. Unlock it only if you are sure it\’s necessary.</string>
+    <string name="guardian_copy_logs">Please be aware that this copied log can contain sensitive data. Double-check and edit out any confidential information before you share it with anyone.</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>

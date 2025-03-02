@@ -40,6 +40,7 @@ public class UserGuardian {
     private static final String DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED = "guardianCustodialLndAccountRestricted";
     private static final String DIALOG_REMOVE_WATCHTOWER = "guardianRemoveWatchtower";
     private static final String DIALOG_RELEASE_UTXO_FROM_3RD_PARTY = "releaseUtxoFrom3rdParty";
+    private static final String DIALOG_COPY_LOG = "guardianCopyLog";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -81,6 +82,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_CUSTODIAL_LND_ACCOUNT_RESTRICTED, true)
                 .putBoolean(DIALOG_REMOVE_WATCHTOWER, true)
                 .putBoolean(DIALOG_RELEASE_UTXO_FROM_3RD_PARTY, true)
+                .putBoolean(DIALOG_COPY_LOG, true)
                 .apply();
     }
 
@@ -330,6 +332,17 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_RELEASE_UTXO_FROM_3RD_PARTY;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(mContext.getResources().getString(R.string.guardian_release_utxo));
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user before releasing an UTXO that was NOT leased manually using the BitBanana UI.
+     * Hopefully this prevents users from messing with internal lnd stuff like PBSTs.
+     */
+    public void securityCopyLog() {
+        mCurrentDialogName = DIALOG_COPY_LOG;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        adb.setMessage(mContext.getResources().getString(R.string.guardian_copy_logs));
         showGuardianDialog(adb);
     }
 
