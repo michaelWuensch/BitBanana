@@ -703,6 +703,8 @@ public class CoreLightningApi extends Api {
                     if (data == null || data.getPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
+                    } else if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) {
+                        return Single.just(data.getPage());
                     } else {
                         // Fetch the next page and concatenate results
                         return listLnPayments(data.getLastIndexOffset(), pageSize)
