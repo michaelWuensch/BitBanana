@@ -39,5 +39,6 @@ public class CoreLightningBackend extends Backend {
         FeatureUtxoSelectOnSend = new BackendFeature(true);
         FeatureUtxoSelectOnChannelOpen = new BackendFeature(true);
         FeatureSendAllOnChain = new BackendFeature(true);
+        FeatureShowBackendLog = new BackendFeature(true);
     }
 }

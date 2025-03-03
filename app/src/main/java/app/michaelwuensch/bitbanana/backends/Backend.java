@@ -54,6 +54,7 @@ public class Backend {
     protected BackendFeature FeatureUtxoSelectOnSend = new BackendFeature(false);
     protected BackendFeature FeatureUtxoSelectOnChannelOpen = new BackendFeature(false);
     protected BackendFeature FeatureSendAllOnChain = new BackendFeature(false);
+    protected BackendFeature FeatureShowBackendLog = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -197,5 +198,9 @@ public class Backend {
 
     public boolean supportsSendAllOnChain() {
         return FeatureSendAllOnChain.isAvailable();
+    }
+
+    public boolean supportsShowBackendLog() {
+        return FeatureShowBackendLog.isAvailable();
     }
 }

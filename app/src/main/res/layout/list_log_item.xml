@@ -11,7 +11,7 @@
         android:id="@+id/logContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_clickable_item_dark"
+        android:background="@drawable/bg_clickable_item"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingVertical="2dp"

@@ -5,11 +5,12 @@ import java.util.Random;
 
 public class BBLogItem implements Serializable {
 
-    private final String Message;
+    private String Message;
     private final String Tag;
     private final long Timestamp;
     private final Verbosity Verbosity;
     private final long RandomID;
+    private final boolean AllInfoInMessage;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -20,6 +21,7 @@ public class BBLogItem implements Serializable {
         this.Tag = builder.Tag;
         this.Timestamp = builder.Timestamp;
         this.Verbosity = builder.Verbosity;
+        this.AllInfoInMessage = builder.AllInfoInMessage;
 
         Random random = new Random();
         this.RandomID = random.nextLong();
@@ -45,6 +47,18 @@ public class BBLogItem implements Serializable {
         return RandomID;
     }
 
+    public boolean hasTag() {
+        return Tag != null && !Tag.isEmpty();
+    }
+
+    public boolean isAllInfoInMessage() {
+        return AllInfoInMessage;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -53,6 +67,7 @@ public class BBLogItem implements Serializable {
         private String Tag;
         private long Timestamp;
         private Verbosity Verbosity;
+        private boolean AllInfoInMessage;
 
         private Builder() {
             // required parameters
@@ -81,6 +96,11 @@ public class BBLogItem implements Serializable {
             Verbosity = verbosity;
             return this;
         }
+
+        public Builder setIseAllInfoInMessage(boolean allInfoInMessage) {
+            AllInfoInMessage = allInfoInMessage;
+            return this;
+        }
     }
 
     public enum Verbosity {
@@ -89,5 +109,22 @@ public class BBLogItem implements Serializable {
         INFO,
         WARNING,
         ERROR;
+
+        public String getDisplayName() {
+            switch (this) {
+                case VERBOSE:
+                    return "Verbose";
+                case DEBUG:
+                    return "Debug";
+                case INFO:
+                    return "Info";
+                case WARNING:
+                    return "Warning";
+                case ERROR:
+                    return "Error";
+                default:
+                    return "Debug";
+            }
+        }
     }
 }

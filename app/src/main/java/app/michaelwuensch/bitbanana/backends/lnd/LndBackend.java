@@ -64,6 +64,7 @@ public class LndBackend extends Backend {
         FeatureUtxoSelectOnSend = new BackendFeature(true, "0.18.3");
         FeatureUtxoSelectOnChannelOpen = new BackendFeature(true);
         FeatureSendAllOnChain = new BackendFeature(true);
+        FeatureShowBackendLog = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {

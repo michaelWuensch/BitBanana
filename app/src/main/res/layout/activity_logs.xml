@@ -8,60 +8,113 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp">
 
         <LinearLayout
-            android:id="@+id/buttonLayout"
+            android:id="@+id/optionsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
 
-            <app.michaelwuensch.bitbanana.customView.BBButton
-                android:id="@+id/clearButton"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                app:bbbutton_text="@string/clear" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/logTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_rectangle_seablue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed"
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@color/sea_blue">
 
-            <app.michaelwuensch.bitbanana.customView.BBButton
-                android:id="@+id/copyButton"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/button_height"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                app:bbbutton_text="@string/copy_all" />
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/logBitBanana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/app_name" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/logBackend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/verify" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_spinner">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/verbositySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:popupBackground="@drawable/bg_spinner_popup" />
+            </RelativeLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/listEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="1dp"
             android:text="@string/logs_no_logs"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/buttonLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonLayout" />
+            app:layout_constraintTop_toBottomOf="@id/optionsLayout" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonLayout">
+            android:layout_marginTop="15dp"
+            app:layout_constraintBottom_toTopOf="@id/buttonLayout"
+            app:layout_constraintTop_toBottomOf="@id/optionsLayout">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/logsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_rectangle_seablue"
                 android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
                 android:scrollbars="vertical" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/clearButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_text="@string/clear" />
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/copyButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_text="@string/copy_all" />
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
