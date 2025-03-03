@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.backends;
 
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Bolt12Offer;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
@@ -156,6 +157,10 @@ public class Api {
     }
 
     public Single<List<Bolt12Offer>> listBolt12Offers() {
+        return Single.error(unsupportedException());
+    }
+
+    public Single<List<BBLogItem>> listBackendLogs() {
         return Single.error(unsupportedException());
     }
 

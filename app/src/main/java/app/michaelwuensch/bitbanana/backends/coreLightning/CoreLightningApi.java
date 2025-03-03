@@ -17,6 +17,8 @@ import com.github.ElementsProject.lightning.cln.Feerate;
 import com.github.ElementsProject.lightning.cln.FetchinvoiceRequest;
 import com.github.ElementsProject.lightning.cln.FundchannelRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
+import com.github.ElementsProject.lightning.cln.GetlogLog;
+import com.github.ElementsProject.lightning.cln.GetlogRequest;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
 import com.github.ElementsProject.lightning.cln.ListchannelsRequest;
@@ -66,6 +68,7 @@ import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightn
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Bolt12Offer;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
@@ -1195,6 +1198,52 @@ public class CoreLightningApi extends Api {
                     return response.getInvoice();
                 })
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice from offer failed: " + throwable.fillInStackTrace()));
+    }
+
+    @Override
+    public Single<List<BBLogItem>> listBackendLogs() {
+        GetlogRequest request = GetlogRequest.newBuilder()
+                .setLevel(GetlogRequest.GetlogLevel.TRACE)
+                .build();
+
+        return CoreLightningNodeService().getLog(request)
+                .map(response -> {
+                    List<BBLogItem> logList = new ArrayList<>();
+
+                    for (GetlogLog log : response.getLogList()) {
+                        if (log.getItemType() == GetlogLog.GetlogLogType.SKIPPED)
+                            continue;
+                        long timestamp = (long) (Double.parseDouble(log.getTime()) * 1000000000.0);
+                        BBLogItem.Verbosity verbosity;
+                        switch (log.getItemType()) {
+                            case TRACE:
+                                verbosity = BBLogItem.Verbosity.VERBOSE;
+                                break;
+                            case DEBUG:
+                                verbosity = BBLogItem.Verbosity.DEBUG;
+                                break;
+                            case INFO:
+                                verbosity = BBLogItem.Verbosity.INFO;
+                                break;
+                            case UNUSUAL:
+                                verbosity = BBLogItem.Verbosity.WARNING;
+                                break;
+                            case BROKEN:
+                                verbosity = BBLogItem.Verbosity.ERROR;
+                                break;
+                            default:
+                                verbosity = BBLogItem.Verbosity.VERBOSE;
+                        }
+                        logList.add(BBLogItem.newBuilder()
+                                .setVerbosity(verbosity)
+                                .setTag(log.getSource())
+                                .setMessage(log.getLog())
+                                .setTimestamp(timestamp)
+                                .build());
+                    }
+                    return logList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching logs failed: " + throwable.fillInStackTrace()));
     }
 
     private Amount amountFromMsat(long msat) {

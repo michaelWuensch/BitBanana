@@ -16,6 +16,7 @@ import com.github.lightningnetwork.lnd.lnrpc.FailedUpdate;
 import com.github.lightningnetwork.lnd.lnrpc.Feature;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingEvent;
 import com.github.lightningnetwork.lnd.lnrpc.ForwardingHistoryRequest;
+import com.github.lightningnetwork.lnd.lnrpc.GetDebugInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetInfoRequest;
 import com.github.lightningnetwork.lnd.lnrpc.GetTransactionsRequest;
 import com.github.lightningnetwork.lnd.lnrpc.HTLCAttempt;
@@ -79,6 +80,7 @@ import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
 import app.michaelwuensch.bitbanana.models.Channels.CloseChannelRequest;
@@ -1315,5 +1317,69 @@ public class LndApi extends Api {
         return LndConnection.getInstance().getWalletKitService().releaseOutput(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "Releasing output failed: " + throwable.getMessage()));
+    }
+
+    @Override
+    public Single<List<BBLogItem>> listBackendLogs() {
+        GetDebugInfoRequest request = GetDebugInfoRequest.newBuilder().build();
+
+        return LndConnection.getInstance().getLightningService().getDebugInfo(request)
+                .map(response -> {
+                    List<BBLogItem> logList = new ArrayList<>();
+
+                    long timestamp = 0;
+                    for (String log : response.getLogList()) {
+                        timestamp++;
+                        BBLogItem currLogItem = lndLogToBBLogItem(log, timestamp);
+                        if (!logList.isEmpty() && currLogItem.hasTag()) {
+                            int lastElementIndex = logList.size() - 1;
+                            BBLogItem tempLastElement = logList.get(lastElementIndex);
+                            tempLastElement.setMessage(tempLastElement.getMessage() + "\n" + currLogItem.getMessage());
+                            logList.set(lastElementIndex, tempLastElement);
+                        } else {
+                            logList.add(currLogItem);
+                        }
+                    }
+                    return logList;
+                })
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching logs failed: " + throwable.fillInStackTrace()));
+    }
+
+    private BBLogItem lndLogToBBLogItem(String log, long timestamp) {
+        String[] parts = log.split(" ");
+
+        BBLogItem.Verbosity verbosity = BBLogItem.Verbosity.VERBOSE;
+        if (parts.length > 2) {
+            switch (parts[2]) {
+                case "[DBG]":
+                    verbosity = BBLogItem.Verbosity.DEBUG;
+                    break;
+                case "[INF]":
+                    verbosity = BBLogItem.Verbosity.INFO;
+                    break;
+                case "[WRN]":
+                    verbosity = BBLogItem.Verbosity.WARNING;
+                    break;
+                case "[ERR]":
+                    verbosity = BBLogItem.Verbosity.ERROR;
+                    break;
+            }
+        }
+
+        // LND returns some logs in multiple String Array items. We want to combine them. As a dummy we set the tag which we do not actually use. This way we can see if it is just an additional line or a new log.
+        if (parts.length < 3 || (!parts[2].equals("[DBG]") && !parts[2].equals("[INF]") && !parts[2].equals("[WRN]") && !parts[2].equals("[ERR]")))
+            return BBLogItem.newBuilder()
+                    .setVerbosity(verbosity)
+                    .setMessage(log)
+                    .setTag("additionalLine")
+                    .setTimestamp(timestamp)
+                    .build();
+
+        return BBLogItem.newBuilder()
+                .setVerbosity(verbosity)
+                .setMessage(log)
+                .setTimestamp(timestamp)
+                .setIseAllInfoInMessage(true)
+                .build();
     }
 }

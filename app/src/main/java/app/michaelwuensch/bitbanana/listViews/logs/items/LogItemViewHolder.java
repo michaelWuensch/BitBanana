@@ -29,16 +29,13 @@ public class LogItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindLogListItem(LogListItem logListItem, int position) {
-        /*
-        if (position % 2 == 0) {
-            mContent.setBackground(mLogMessage.getResources().getDrawable(R.drawable.bg_clickable_item));
-        } else {
-            mContent.setBackground(mLogMessage.getResources().getDrawable(R.drawable.bg_clickable_item_dark));
-        }
-         */
 
         BBLogItem logItem = logListItem.getLogItem();
-        mLogMessage.setText(logItem.getTag() + " | " + logItem.getMessage());
+        if (logItem.hasTag())
+            mLogMessage.setText(logItem.getTag() + " | " + logItem.getMessage());
+        else
+            mLogMessage.setText(logItem.getMessage());
+
         switch (logItem.getVerbosity()) {
             case VERBOSE:
                 mLogMessage.setTextColor(mLogMessage.getResources().getColor(R.color.gray));
