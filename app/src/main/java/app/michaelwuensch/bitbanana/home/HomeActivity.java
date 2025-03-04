@@ -871,7 +871,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             case CONNECTION_SUCCESS:
                 // Warn the user if the connect node runs old software version that is no longer supported.
                 if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(BackendManager.getCurrentBackend().getMinRequiredVersion()) < 0) {
-                    BBLog.e(LOG_TAG, Wallet.getInstance().getCurrentNodeInfo().getFullVersionString());
+                    BBLog.w(LOG_TAG, "Deprecated backend version used: " + BackendManager.getCurrentBackend().getNodeImplementationName() + " " + Wallet.getInstance().getCurrentNodeInfo().getFullVersionString());
                     new UserGuardian(this).securityOldNodeSoftwareVersion(BackendManager.getCurrentBackend().getNodeImplementationName(), BackendManager.getCurrentBackend().getMinRequiredVersionName());
                 }
                 break;
