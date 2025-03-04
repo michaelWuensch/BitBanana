@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import java.nio.charset.StandardCharsets;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
@@ -115,6 +117,20 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
                 String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
                 DataBackupUtil.restoreBackup(decryptedBackup, mBackupVersion);
                 mAdapter.setBackupRestoreFinished(true, 0);
+
+                // Override actionbar on back pressed to to ensure everything gets restarted cleanly.
+                if (requireActivity() instanceof BaseAppCompatActivity) {
+                    // Add a back-press callback to the dispatcher
+                    ((BaseAppCompatActivity) requireActivity()).getOnBackPressedDispatcher().addCallback(
+                            getViewLifecycleOwner(),
+                            new OnBackPressedCallback(true) {
+                                @Override
+                                public void handleOnBackPressed() {
+                                    onFinish();
+                                }
+                            }
+                    );
+                }
             } else {
                 mAdapter.setBackupRestoreFinished(false, R.string.backup_data_restore_failed_description);
             }
