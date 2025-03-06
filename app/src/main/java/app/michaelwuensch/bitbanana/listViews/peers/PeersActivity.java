@@ -102,6 +102,9 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         }
         // Register listeners
         Wallet_NodesAndPeers.getInstance().registerPeerUpdateListener(this);
+
+        // Show loading spinner
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -117,7 +120,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (Wallet.getInstance().isConnectedToNode()) {
 
-                BBLog.v(LOG_TAG, "Update Peer list.");
+                BBLog.v(LOG_TAG, "Updating peer list...");
 
                 mCompositeDisposable.add(BackendManager.api().listPeers()
                         .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
@@ -164,13 +167,17 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                                                 }))
                                                 .subscribe());
                                     }
+
+                                    // Remove refreshing symbol
+                                    mSwipeRefreshLayout.setRefreshing(false);
+
+                                    BBLog.v(LOG_TAG, "Peer list successfully updated.");
                                 }
                                 , throwable -> {
+                                    // Remove refreshing symbol
+                                    mSwipeRefreshLayout.setRefreshing(false);
                                     BBLog.w(LOG_TAG, "Fetching peer list failed." + throwable.getMessage());
                                 }));
-
-                // Remove refreshing symbol
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         }
     }

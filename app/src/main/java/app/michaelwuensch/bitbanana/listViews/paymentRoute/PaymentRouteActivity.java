@@ -85,7 +85,7 @@ public class PaymentRouteActivity extends BaseAppCompatActivity {
             public void run() {
                 updateRouteView();
             }
-        }, 400);
+        }, 10);
     }
 
     private void updateRouteView() {
