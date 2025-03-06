@@ -249,8 +249,11 @@ public class Wallet_Channels {
         compositeDisposable.add(LndConnection.getInstance().getRouterService().subscribeHtlcEvents(SubscribeHtlcEventsRequest.newBuilder().build())
                 .subscribe(htlcEvent -> {
                     BBLog.d(LOG_TAG, "Received htlc subscription event. Type: " + htlcEvent.getEventType().toString());
-                    Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
-                    updateLNDChannelsWithDebounce(); // Always update channels if a htlc event occurs.
+                    BBLog.v(LOG_TAG, htlcEvent.toString());
+                    if (htlcEvent.hasSettleEvent() || (htlcEvent.hasFinalHtlcEvent() && htlcEvent.getFinalHtlcEvent().getSettled())) {
+                        Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
+                        updateLNDChannelsWithDebounce(); // Always update channels if a htlc event occurs.
+                    }
                     broadcastHtlcEvent(htlcEvent);
                 }));
     }
