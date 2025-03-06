@@ -135,6 +135,9 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                 Wallet_Channels.getInstance().fetchChannels();
             }
         }
+
+        // Show loading spinner
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     private void updateChannelsView() {

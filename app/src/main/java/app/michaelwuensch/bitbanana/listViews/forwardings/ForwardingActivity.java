@@ -151,6 +151,9 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
                         mPeriod = 50 * 365 * 24 * 60 * 60;
                         break;
                 }
+                // Show loading spinner
+                mSwipeRefreshLayout.setRefreshing(true);
+
                 refreshData();
             }
 
@@ -164,6 +167,9 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
             }
         });
+
+        // Show loading spinners
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
