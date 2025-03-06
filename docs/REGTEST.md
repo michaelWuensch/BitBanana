@@ -18,7 +18,7 @@ To connect BitBanana with a simulated LND node:
 2. Select "LND Connect" in the sub tab.
 3. Copy the connect string using the copy icon.
 4. Open BitBanana
-5. Paste the copied connect string in BitBanaa on the connect remote node screen or on the general scan screen.
+5. Paste the copied connect string in BitBanana on the connect remote node screen or on the general scan screen.
 6. In BitBanana, tap on the currently active node name at the top of the home screen. Then choose "Manage...". Choose the freshly added node. Then tap on "Change data".
 7. If you are using an Android Studio Emulator, replace the IP address with `10.0.2.2`. If you are using an android phone, replace the IP address with the IP address of the computer running polar.
 8. Scroll down and make sure both Tor & Certificate verification are turned off.
