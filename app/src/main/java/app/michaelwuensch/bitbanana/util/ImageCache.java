@@ -48,7 +48,7 @@ public class ImageCache {
     }
 
     public Bitmap getImageFromMemoryCache(String key) {
-        if (key != null) {
+        if (mLruCache != null && key != null) {
             return mLruCache.get(key);
         } else {
             return null;
