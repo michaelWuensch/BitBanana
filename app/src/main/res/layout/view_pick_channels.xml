@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rectangle_seablue"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="10dp">
+
+    <app.michaelwuensch.bitbanana.customView.ClickableConstraintLayoutGroup
+        android:id="@+id/mainGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="viewLabel, summary, arrowImage"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/viewLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLength="50"
+        android:text="@string/channel_selection"
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/summary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:maxLength="50"
+        android:text="@string/automatic"
+        android:textAlignment="textEnd"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/viewLabel"
+        app:layout_constraintEnd_toStartOf="@+id/arrowImage"
+        app:layout_constraintStart_toEndOf="@id/viewLabel"
+        app:layout_constraintTop_toTopOf="@+id/viewLabel" />
+
+    <ImageView
+        android:id="@+id/arrowImage"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/summary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/summary"
+        app:srcCompat="@drawable/ic_arrow_down_24dp"
+        app:tint="@color/banana_yellow" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/expandableContentGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="expandableContent"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/expandableContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/summary">
+
+        <LinearLayout
+            android:id="@+id/firstHopLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/firstHopLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/first_hop"
+                    tools:text="First Hop:" />
+            </LinearLayout>
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/selectButtonFirstHop"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                app:bbbutton_bright="true"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_textSize="16sp"
+                tools:bbbutton_text="Select ..." />
+
+            <FrameLayout
+                android:id="@+id/firstHopSelectionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_clickable_item_bright"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/firstHopSelectedChannelName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingHorizontal="15dp"
+                        tools:text="Channel Name" />
+
+                    <app.michaelwuensch.bitbanana.customView.BBButton
+                        android:id="@+id/removeFirstHopBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        app:bbbutton_bright="true"
+                        app:bbbutton_contentColor="@color/white"
+                        app:bbbutton_horizontalContentPadding="0dp"
+                        app:bbbutton_image="@drawable/ic_delete_24" />
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lastHopLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lastHopLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/last_hop"
+                    tools:text="Last Hop:" />
+
+                <ImageButton
+                    android:id="@+id/lastHopHelpButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="5dp"
+                    android:background="?actionBarItemBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_help_black_24dp"
+                    app:tint="@color/gray" />
+            </LinearLayout>
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/selectButtonLastHop"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                app:bbbutton_bright="true"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_textSize="16sp"
+                tools:bbbutton_text="Select ..." />
+
+            <FrameLayout
+                android:id="@+id/lastHopSelectionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_clickable_item_bright"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lastHopSelectedChannelName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingHorizontal="15dp"
+                        tools:text="Channel Name" />
+
+                    <app.michaelwuensch.bitbanana.customView.BBButton
+                        android:id="@+id/removeLastHopBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        app:bbbutton_bright="true"
+                        app:bbbutton_contentColor="@color/white"
+                        app:bbbutton_horizontalContentPadding="0dp"
+                        app:bbbutton_image="@drawable/ic_delete_24" />
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/lineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/expandableContent"
+        app:srcCompat="@color/gray"
+        tools:ignore="ContentDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>

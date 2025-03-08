@@ -71,9 +71,13 @@
                     android:id="@+id/utxoOptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="visible"
-                    tools:visibility="visible" />
+                    android:layout_marginTop="10dp" />
+
+                <app.michaelwuensch.bitbanana.customView.PickChannelsView
+                    android:id="@+id/pickChannels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
 
                 <RelativeLayout
                     android:id="@+id/sendFeeTopLayout"

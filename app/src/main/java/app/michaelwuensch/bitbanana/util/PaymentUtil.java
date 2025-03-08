@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.util;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
@@ -10,6 +11,7 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.App;
+import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
@@ -29,12 +31,14 @@ public class PaymentUtil {
      *
      * @param decodedBolt11 The decodedBolt11 invoice that will get paid
      */
-    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount) {
+    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT11_INVOICE)
                 .setBolt11(decodedBolt11)
                 .setAmount(amount)
                 .setMaxFee(calculateAbsoluteFeeLimit(amount))
+                .setFirstHop(firstHop)
+                .setLastHop(lastHop)
                 .build();
     }
 
@@ -52,7 +56,7 @@ public class PaymentUtil {
                 .build();
     }
 
-    public static SendLnPaymentRequest prepareKeysendPayment(String pubkey, long amount, String message) {
+    public static SendLnPaymentRequest prepareKeysendPayment(String pubkey, long amount, String message, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
 
         // Create the preimage upfront
         SecureRandom random = new SecureRandom();
@@ -82,6 +86,8 @@ public class PaymentUtil {
                 .setCustomRecords(customRecords)
                 .setAmount(amount)
                 .setMaxFee(feeLimit)
+                .setFirstHop(firstHop)
+                .setLastHop(lastHop)
                 .build();
     }
 
