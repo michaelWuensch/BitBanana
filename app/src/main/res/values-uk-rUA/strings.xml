@@ -798,4 +798,12 @@
     <string name="clear">Очистити</string>
     <string name="settings_featureLogs_summary">Якщо ввімкнено, BitBanana записуватиме журнали, які можна переглянути в розділі Журнал головного меню. Увімкніть його, лише якщо ви вирішуєте проблему та потребуєте перевірки журналів.</string>
     <string name="guardian_copy_logs">Майте на увазі, що цей скопійований журнал може містити конфіденційні дані. Ретельно перевірте та відредагуйте конфіденційну інформацію, перш ніж ділитися нею з кимось.</string>
+    <string name="error_channel_selection_offline">Ви не можете вибрати канали, які наразі офлайн.</string>
+    <string name="channel_selection">Вибір каналу</string>
+    <string name="help_dialog_lastHop">Використовуйте цей параметр останнього переходу, лише коли ви хочете перебалансувати канали. Для цього ви можете ефективно надсилати кошти собі. Створіть рахунок-фактуру та сплатіть його за допомогою певного набору власних каналів, вибравши один із високою вихідною пропускною здатністю для першого стрибка та один із високим вхідним балансом для останнього стрибка. Цей підхід стягує плату, але дозволяє перебалансувати канал.</string>
+    <string name="last_hop">Останній стрибок</string>
+    <string name="first_hop">Перший хоп</string>
+    <string name="error_channel_selection_pending">Ви не можете вибрати канали, які ще очікують на розгляд.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Вихідний баланс вибраного каналу недостатній.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Вхідний баланс вибраного каналу недостатній.</string>
 </resources>
