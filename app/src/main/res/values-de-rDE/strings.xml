@@ -943,4 +943,7 @@
     <string name="first_hop">Erster Hop</string>
     <string name="error_channel_selection_offline">Du kannst keine Kanäle auswählen, die gerade offline sind.</string>
     <string name="last_hop">Letzter Hop</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Der Ausgangssaldo des gewählten Kanals ist unzureichend.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Der Eingangssaldo des gewählten Kanals ist unzureichend.</string>
+    <string name="channel_selection">Kanalauswahl</string>
 </resources>
