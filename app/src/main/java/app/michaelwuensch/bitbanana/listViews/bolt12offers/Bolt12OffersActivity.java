@@ -94,12 +94,15 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
 
         // Update the list
         updateBolt12OffersDisplayList();
+        fetchBolt12Offers();
+    }
+
+    private void fetchBolt12Offers() {
+        BBLog.d(LOG_TAG, "Updating bolt12 offers list...");
         Wallet_Bolt12Offers.getInstance().fetchBolt12Offers();
     }
 
     private void updateBolt12OffersDisplayList() {
-        BBLog.v(LOG_TAG, "Update bolt12 Offers list.");
-
         mBolt12OffersItems.clear();
         if (Wallet_Bolt12Offers.getInstance().getBolt12OffersList() != null) {
             for (Bolt12Offer offer : Wallet_Bolt12Offers.getInstance().getBolt12OffersList()) {
@@ -109,18 +112,10 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
         }
 
         // Show "No payment codes" if the list is empty
-        if (mBolt12OffersItems.size() == 0) {
+        if (mBolt12OffersItems.isEmpty()) {
             mEmptyListText.setVisibility(View.VISIBLE);
         } else {
             mEmptyListText.setVisibility(View.GONE);
-        }
-
-        // Set number in activity title
-        if (mBolt12OffersItems.size() > 0) {
-            String title = getResources().getString(R.string.activity_bolt12_offers); // + " (" + mBolt12OffersItems.size() + ")";
-            setTitle(title);
-        } else {
-            setTitle(getResources().getString(R.string.activity_bolt12_offers));
         }
 
         // Update the list view
@@ -128,6 +123,8 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
 
         // Remove refreshing symbol
         mSwipeRefreshLayout.setRefreshing(false);
+
+        BBLog.d(LOG_TAG, "Bolt12 offers list successfully updated.");
     }
 
     @Override
@@ -193,7 +190,7 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
     @Override
     public void onRefresh() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && Wallet.getInstance().isConnectedToNode()) {
-            Wallet_Bolt12Offers.getInstance().fetchBolt12Offers();
+            fetchBolt12Offers();
         } else {
             mSwipeRefreshLayout.setRefreshing(false);
         }

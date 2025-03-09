@@ -136,6 +136,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<CurrentNodeInfo> getCurrentNodeInfo() {
+        BBLog.d(LOG_TAG, "getCurrentNodeInfo called.");
         return CoreLightningNodeService().getinfo(GetinfoRequest.newBuilder().build())
                 .map(response -> {
                     String pubkey = ApiUtil.StringFromHexByteString(response.getId());
@@ -161,11 +162,13 @@ public class CoreLightningApi extends Api {
                             .setAvatarMaterial(pubkey)
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "CoreLightning getInfo failed! " + throwable.toString()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getCurrentNodeInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getCurrentNodeInfo failed: " + throwable.toString()));
     }
 
     @Override
     public Single<NodeInfo> getNodeInfo(String pubKey) {
+        BBLog.d(LOG_TAG, "getNodeInfo called.");
         ListnodesRequest listnodesRequest = ListnodesRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(pubKey))
                 .build();
@@ -181,11 +184,13 @@ public class CoreLightningApi extends Api {
                             .setAddresses(addresses)
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "CoreLightning getNodeInfo failed! " + throwable.toString()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getNodeInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getNodeInfo failed: " + throwable.toString()));
     }
 
     @Override
     public Single<Balances> getBalances() {
+        BBLog.d(LOG_TAG, "getBalances called.");
         return CoreLightningNodeService().listFunds(ListfundsRequest.newBuilder().build())
                 .map(response -> {
                     long onChainConfirmed = 0;
@@ -214,18 +219,20 @@ public class CoreLightningApi extends Api {
                                 break;
                         }
                     }
-                    Balances balances = Balances.newBuilder()
+                    return Balances.newBuilder()
                             .setOnChainConfirmed(onChainConfirmed)
                             .setOnChainUnconfirmed(onChainUnconfirmed)
                             .setChannelBalance(channelBalance)
                             .setChannelBalancePendingOpen(channelBalancePending)
                             .build();
-                    return balances;
-                });
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getBalances success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getBalances failed: " + throwable.toString()));
     }
 
     @Override
     public Single<SignMessageResponse> signMessageWithNode(String message) {
+        BBLog.d(LOG_TAG, "signMessageWithNode called.");
         SignmessageRequest signMessageRequest = SignmessageRequest.newBuilder()
                 .setMessage(message)
                 .build();
@@ -238,10 +245,12 @@ public class CoreLightningApi extends Api {
                             .setZBase(response.getZbase())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "signMessageWithNode success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "signMessageWithNode failed: " + throwable.fillInStackTrace()));
     }
 
     public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
+        BBLog.d(LOG_TAG, "verifyMessageWithNode called.");
         CheckmessageRequest checkMessageRequest = CheckmessageRequest.newBuilder()
                 .setMessage(message)
                 .setZbase(signature)
@@ -254,10 +263,12 @@ public class CoreLightningApi extends Api {
                             .setPubKey(ApiUtil.StringFromHexByteString(response.getPubkey()))
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "verifyMessageWithNode success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "verifyMessageWithNode failed: " + throwable.fillInStackTrace()));
     }
 
     public Single<List<Utxo>> listUTXOs(long currentBlockHeight) {
+        BBLog.d(LOG_TAG, "listUTXOs called.");
         return CoreLightningNodeService().listFunds(ListfundsRequest.newBuilder().build())
                 .map(response -> {
                     List<Utxo> utxoList = new ArrayList<>();
@@ -279,14 +290,15 @@ public class CoreLightningApi extends Api {
                             utxoList.add(builder.build());
                         }
                     }
-
                     return utxoList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listUTXOs success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listUTXOs failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<OpenChannel>> listOpenChannels() {
+        BBLog.d(LOG_TAG, "listOpenChannels called.");
         return CoreLightningNodeService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<OpenChannel> openChannelsList = new ArrayList<>();
@@ -320,11 +332,13 @@ public class CoreLightningApi extends Api {
                                     .build());
                     return openChannelsList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "List open channels failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listOpenChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listOpenChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<PendingChannel>> listPendingChannels() {
+        BBLog.d(LOG_TAG, "listPendingChannels called.");
         return CoreLightningNodeService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build())
                 .map(response -> {
                             List<PendingChannel> pendingChannelsList = new ArrayList<>();
@@ -376,11 +390,13 @@ public class CoreLightningApi extends Api {
                             return pendingChannelsList;
                         }
                 )
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "List pending channels failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listPendingChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listPendingChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<ClosedChannel>> listClosedChannels() {
+        BBLog.d(LOG_TAG, "listClosedChannels called.");
         // closed channels only returns channels that are closed for more than 100 blocks, therefore we also need to get channels from listpeerchannels with state ONCHAIN
         Single<ListclosedchannelsResponse> clnClosedChannelsList = CoreLightningNodeService().listClosedChannels(ListclosedchannelsRequest.newBuilder().build());
         Single<ListpeerchannelsResponse> clnPeerChannelsList = CoreLightningNodeService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build());
@@ -427,11 +443,14 @@ public class CoreLightningApi extends Api {
                                     .build())
                             .build());
             return closedChannelsList;
-        });
+        })
+        .doOnSuccess(response -> BBLog.d(LOG_TAG, "listClosedChannels success."))
+        .doOnError(throwable -> BBLog.w(LOG_TAG, "listClosedChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<PublicChannelInfo> getPublicChannelInfo(ShortChannelId shortChannelId) {
+        BBLog.d(LOG_TAG, "getPublicChannelInfo called.");
         ListchannelsRequest request = ListchannelsRequest.newBuilder()
                 .setShortChannelId(shortChannelId.toString())
                 .build();
@@ -459,7 +478,8 @@ public class CoreLightningApi extends Api {
                                     .build())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getPublicChannelInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getPublicChannelInfo failed: " + throwable.fillInStackTrace()));
     }
 
     private LnInvoice getInvoiceFromCoreLightningInvoice(ListinvoicesInvoices invoice) {
@@ -535,6 +555,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listInvoices called.");
         return getInvoicesPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
                     if (data == null || data.getPage().isEmpty()) {
@@ -557,6 +578,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<LnInvoice> getInvoice(String paymentHash) {
+        BBLog.d(LOG_TAG, "getInvoice called.");
         ListinvoicesRequest invoiceRequest = ListinvoicesRequest.newBuilder()
                 .setPaymentHash(ApiUtil.ByteStringFromHexString(paymentHash))
                 .build();
@@ -568,11 +590,13 @@ public class CoreLightningApi extends Api {
                     else
                         throw new RuntimeException("Invoice not found.");
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching Invoice page failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getInvoice failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<OnChainTransaction>> listOnChainTransactions() {
+        BBLog.d(LOG_TAG, "listOnChainTransactions called.");
         if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.02.2")) <= 0)  // ToDo: remove when support for 24.02.2 is removed.
             return Single.just(new ArrayList<>());
         else {
@@ -647,10 +671,10 @@ public class CoreLightningApi extends Api {
                                     t.setFee(fee.getAmount());
                             }
                         }
-
                         return eventList;
                     })
-                    .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching on-chain transactions failed: " + throwable.fillInStackTrace()));
+                    .doOnSuccess(response -> BBLog.d(LOG_TAG, "listOnChainTransactions success."))
+                    .doOnError(throwable -> BBLog.w(LOG_TAG, "listOnChainTransactions failed: " + throwable.fillInStackTrace()));
         }
 
     }
@@ -698,6 +722,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listLnPayments called.");
         return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
                     if (data == null || data.getPageSize() == 0) {
@@ -756,6 +781,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<Forward>> listForwards(long firstIndexOffset, int pageSize, long startTime) {
+        BBLog.d(LOG_TAG, "listForwards called.");
         return getForwardPage(firstIndexOffset, pageSize, startTime)
                 .flatMap(data -> {
                     if (data == null || data.getPage().isEmpty()) {
@@ -778,6 +804,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Single<List<Peer>> listPeers() {
+        BBLog.d(LOG_TAG, "listPeers called.");
         ListpeersRequest request = ListpeersRequest.newBuilder()
                 .build();
 
@@ -806,11 +833,13 @@ public class CoreLightningApi extends Api {
                     }
                     return peerList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listPeers success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listPeers failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<Bolt12Offer>> listBolt12Offers() {
+        BBLog.d(LOG_TAG, "listBolt12Offers called.");
         ListoffersRequest request = ListoffersRequest.newBuilder()
                 .build();
 
@@ -829,32 +858,38 @@ public class CoreLightningApi extends Api {
                     }
                     return bolt12OfferList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching bolt12 offers failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listBolt12Offers success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listBolt12Offers failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable connectPeer(LightningNodeUri lightningNodeUri) {
+        BBLog.d(LOG_TAG, "connectPeer called.");
         ConnectRequest request = ConnectRequest.newBuilder()
                 .setId(lightningNodeUri.getAsString())
                 .build();
         return CoreLightningNodeService().connectPeer(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Connecting to peer failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "connectPeer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "connectPeer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable disconnectPeer(String pubKey) {
+        BBLog.d(LOG_TAG, "disconnectPeer called.");
         DisconnectRequest request = DisconnectRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(pubKey))
                 .setForce(false)
                 .build();
         return CoreLightningNodeService().disconnect(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Disconnecting from peer failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "disconnectPeer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "disconnectPeer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        BBLog.d(LOG_TAG, "createInvoice called.");
         AmountOrAny amountMsat = null;
         if (createInvoiceRequest.getAmount() == 0)
             amountMsat = AmountOrAny.newBuilder()
@@ -881,11 +916,13 @@ public class CoreLightningApi extends Api {
                             .setBolt11(response.getBolt11())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating invoice failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "createInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "createInvoice failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        BBLog.d(LOG_TAG, "getNewOnchainAddress called.");
         NewaddrRequest.NewaddrAddresstype addressType = NewaddrRequest.NewaddrAddresstype.P2TR;
         switch (newOnChainAddressRequest.getType()) {
             case SEGWIT_COMPATIBILITY:  // Core Lightning cannot produce legacy segwit addresses.
@@ -918,11 +955,13 @@ public class CoreLightningApi extends Api {
                             return response.getBech32();
                     }
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getNewOnchainAddress success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getNewOnchainAddress failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
+        BBLog.d(LOG_TAG, "sendLnPayment called.");
         switch (sendLnPaymentRequest.getPaymentType()) {
 
             case BOLT11_INVOICE:
@@ -955,7 +994,8 @@ public class CoreLightningApi extends Api {
                                             .build();
                             }
                         })
-                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+                        .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
 
             case BOLT12_INVOICE:
                 PayRequest.Builder bolt12requestBuilder = PayRequest.newBuilder()
@@ -981,7 +1021,8 @@ public class CoreLightningApi extends Api {
                                             .build();
                             }
                         })
-                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+                        .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
 
             case KEYSEND:
                 List<TlvEntry> tlvEntries = new ArrayList<>();
@@ -1039,7 +1080,8 @@ public class CoreLightningApi extends Api {
                                             .build();
                             }
                         })
-                        .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+                        .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                        .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
             default:
                 return Single.error(new IllegalStateException("Unknown payment type."));
         }
@@ -1047,6 +1089,7 @@ public class CoreLightningApi extends Api {
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+        BBLog.d(LOG_TAG, "sendOnChainPayment called.");
         WithdrawRequest.Builder requestBuilder = WithdrawRequest.newBuilder()
                 .setDestination(sendOnChainPaymentRequest.getAddress())
                 .setSatoshi(amountOrAllFromMsat(sendOnChainPaymentRequest.getAmount(), sendOnChainPaymentRequest.isSendAll(), false))
@@ -1066,11 +1109,13 @@ public class CoreLightningApi extends Api {
 
         return CoreLightningNodeService().withdraw(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "sendOnChainPayment success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "sendOnChainPayment failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest updateRoutingPolicyRequest) {
+        BBLog.d(LOG_TAG, "updateRoutingPolicy called.");
         String target = updateRoutingPolicyRequest.hasChannel() ? updateRoutingPolicyRequest.getChannel().getShortChannelId().toString() : "all";
         SetchannelRequest.Builder requestBuilder = SetchannelRequest.newBuilder()
                 .setId(target);
@@ -1086,14 +1131,15 @@ public class CoreLightningApi extends Api {
 
         return CoreLightningNodeService().setChannel(requestBuilder.build())
                 .map(response -> {
-                    List<String> errorList = new ArrayList<>();
-                    return errorList;
+                    return (List<String>) new ArrayList<String>();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Updating channel policy failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "updateRoutingPolicy success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "updateRoutingPolicy failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable openChannel(OpenChannelRequest openChannelRequest) {
+        BBLog.d(LOG_TAG, "openChannel called.");
         FundchannelRequest.Builder requestBuilder = FundchannelRequest.newBuilder()
                 .setId(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setAnnounce(!openChannelRequest.isPrivate())
@@ -1114,22 +1160,26 @@ public class CoreLightningApi extends Api {
 
         return CoreLightningNodeService().fundChannel(request)
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error opening channel: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "openChannel success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "openChannel failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable closeChannel(CloseChannelRequest closeChannelRequest) {
+        BBLog.d(LOG_TAG, "closeChannel called.");
         CloseRequest request = CloseRequest.newBuilder()
                 .setId(closeChannelRequest.getShortChannelId().toString())
                 .build();
 
         return CoreLightningNodeService().close(request)
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "closeChannel success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "closeChannel failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<Bolt12Offer> createBolt12Offer(CreateBolt12OfferRequest createBolt12OfferRequest) {
+        BBLog.d(LOG_TAG, "createBolt12Offer called.");
         String amountMsat = "any";
         if (createBolt12OfferRequest.getAmount() != 0)
             amountMsat = String.valueOf(createBolt12OfferRequest.getAmount());
@@ -1159,33 +1209,39 @@ public class CoreLightningApi extends Api {
                             .setWasAlreadyUsed(response.getUsed())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating offer failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "createBolt12Offer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "createBolt12Offer failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable disableBolt12Offer(String offerId) {
+        BBLog.d(LOG_TAG, "disableBolt12Offer called.");
         DisableofferRequest request = DisableofferRequest.newBuilder()
                 .setOfferId(ApiUtil.ByteStringFromHexString(offerId))
                 .build();
 
         return CoreLightningNodeService().disableOffer(request)
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error disabling offer: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "disableBolt12Offer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "disableBolt12Offer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable enableBolt12Offer(String offerId) {
+        BBLog.d(LOG_TAG, "enableBolt12Offer called.");
         EnableofferRequest request = EnableofferRequest.newBuilder()
                 .setOfferId(ApiUtil.ByteStringFromHexString(offerId))
                 .build();
 
         return CoreLightningNodeService().enableOffer(request)
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error enabling offer: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "enableBolt12Offer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "enableBolt12Offer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<String> fetchInvoiceFromBolt12Offer(FetchInvoiceFromOfferRequest fetchInvoiceFromOfferRequest) {
+        BBLog.d(LOG_TAG, "fetchInvoiceFromBolt12Offer called.");
         FetchinvoiceRequest.Builder requestBuilder = FetchinvoiceRequest.newBuilder()
                 .setOffer(fetchInvoiceFromOfferRequest.getDecodedBolt12().getBolt12String())
                 .setAmountMsat(Amount.newBuilder()
@@ -1199,11 +1255,13 @@ public class CoreLightningApi extends Api {
                 .map(response -> {
                     return response.getInvoice();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice from offer failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "fetchInvoiceFromBolt12Offer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "fetchInvoiceFromBolt12Offer failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<BBLogItem>> listBackendLogs() {
+        BBLog.d(LOG_TAG, "listBackendLogs called.");
         GetlogRequest request = GetlogRequest.newBuilder()
                 .setLevel(GetlogRequest.GetlogLevel.TRACE)
                 .build();
@@ -1245,7 +1303,8 @@ public class CoreLightningApi extends Api {
                     }
                     return logList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching logs failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listBackendLogs success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listBackendLogs failed: " + throwable.fillInStackTrace()));
     }
 
     private Amount amountFromMsat(long msat) {

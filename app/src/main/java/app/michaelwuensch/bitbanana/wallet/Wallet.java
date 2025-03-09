@@ -329,7 +329,7 @@ public class Wallet {
      * the first screen.
      */
     public void fetchWalletData() {
-        broadcastWalletLoadState(WalletLoadState.FETCHING_DATA);
+        setWalletLoadState(WalletLoadState.FETCHING_DATA);
 
         switch (BackendManager.getCurrentBackendType()) {
             case LND_GRPC:

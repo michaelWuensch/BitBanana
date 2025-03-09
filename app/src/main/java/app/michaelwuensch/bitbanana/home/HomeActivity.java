@@ -268,7 +268,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     (new Runnable() {
                         public void run() {
                             if (BackendManager.getBackendState() == BackendManager.BackendState.BACKEND_CONNECTED) {
-                                BBLog.v(LOG_TAG, "Scheduled node info check initiated.");
+                                BBLog.d(LOG_TAG, "Scheduled node info check initiated.");
                                 Wallet.getInstance().connectionTest(false);
                             }
                         }
