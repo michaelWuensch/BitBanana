@@ -153,12 +153,14 @@ public class LndConnection {
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .maxInboundMessageSize(10 * 1024 * 1024) // set max message size to 10 mb
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .maxInboundMessageSize(10 * 1024 * 1024) // set max message size to 10 mb
                         .build();
             }
 
