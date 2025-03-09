@@ -946,4 +946,5 @@
     <string name="error_channel_selection_insufficient_liquidity_outgoing">Der Ausgangssaldo des gewählten Kanals ist unzureichend.</string>
     <string name="error_channel_selection_insufficient_liquidity_incoming">Der Eingangssaldo des gewählten Kanals ist unzureichend.</string>
     <string name="channel_selection">Kanalauswahl</string>
+    <string name="help_dialog_lastHop">Verwende diese Option nur, wenn du deine Kanäle ausbalancieren willst. Um das zu tun, kannst du einfach Geld an dich selbst senden. Erstelle eine Rechnung und bezahle sie mit einem bestimmten Auswahl eigener Kanäle, wobei du für den ersten Hop einen Kanal mit hoher ausgehender Kapazität und für den letzten Hop einen Kanal mit hoher eingehender Kapazität auswählst. Bei diesem Ansatz fallen zwar Gebühren an, aber es wird ein Ausbalancieren der Kanäle erreicht.</string>
 </resources>
