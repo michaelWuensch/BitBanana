@@ -1,0 +1,7 @@
+- Pick first hop on lightning payments (LND)
+- Rebalance channels (LND, use first and last hop in circular payment)
+- Inspect LND and Core Lightning logs
+- Added search and verbosity filter to log view
+- Small UX improvements
+- Bug fixes
+- Updated translations
