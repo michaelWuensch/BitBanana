@@ -939,4 +939,8 @@
     <string name="settings_featureLogs_summary">Wenn diese Option aktiviert ist, erfasst BitBanana Logs, die im Abschnitt Logs im Hauptmenü angezeigt werden können. Aktiviere diese Funktion nur, wenn du ein Problem untersuchen willst und die Protokolle einsehen musst.</string>
     <string name="logs">Logs</string>
     <string name="guardian_copy_logs">Bitte beachte, dass der kopierte Log sensible Daten enthalten kann. Kontrolliere und lösche alle vertraulichen Informationen, bevor du die Daten an andere weitergibst.</string>
+    <string name="error_channel_selection_pending">Du kannst keine Kanäle auswählen, die noch nicht bestätigt sind.</string>
+    <string name="first_hop">Erster Hop</string>
+    <string name="error_channel_selection_offline">Du kannst keine Kanäle auswählen, die gerade offline sind.</string>
+    <string name="last_hop">Letzter Hop</string>
 </resources>
