@@ -84,7 +84,7 @@ public class ExchangeRateUtil {
                     sendBlockchainInfoRequest();
             }
 
-            BBLog.v(LOG_TAG, "Exchange rate request initiated");
+            BBLog.d(LOG_TAG, "Exchange rate request initiated");
         }
     }
 
@@ -132,7 +132,7 @@ public class ExchangeRateUtil {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                BBLog.v(LOG_TAG, "Received exchange rates from mempool instance");
+                BBLog.d(LOG_TAG, "Received exchange rates from mempool instance");
                 String responseData = response.body().string();
                 JSONObject responseJson = null;
                 try {
@@ -172,7 +172,7 @@ public class ExchangeRateUtil {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                BBLog.v(LOG_TAG, "Received exchange rates from blockchain.info");
+                BBLog.d(LOG_TAG, "Received exchange rates from blockchain.info");
                 String responseData = response.body().string();
                 JSONObject responseJson = null;
                 try {
@@ -211,7 +211,7 @@ public class ExchangeRateUtil {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                BBLog.v(LOG_TAG, "Received exchange rates from coinbase");
+                BBLog.d(LOG_TAG, "Received exchange rates from coinbase");
                 String responseData = response.body().string();
                 JSONObject responseJson = null;
                 try {

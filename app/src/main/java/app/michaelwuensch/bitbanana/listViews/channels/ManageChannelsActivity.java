@@ -158,7 +158,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         // This is necessary, as we might display outdated data otherwise.
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (Wallet.getInstance().isConnectedToNode()) {
-                Wallet_Channels.getInstance().fetchChannels();
+                fetchChannels();
             }
         }
 
@@ -186,6 +186,11 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mViewPager.setSwipeable(false);
         mViewPager.setForceNoSwipe(true);
         setTitle(getResources().getString(R.string.select) + " ...");
+    }
+
+    private void fetchChannels() {
+        BBLog.d(LOG_TAG, "Updating channels list...");
+        Wallet_Channels.getInstance().fetchChannels();
     }
 
     private void updateChannelsView() {
@@ -369,7 +374,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     public void onChannelsUpdated() {
         runOnUiThread(this::updateChannelsView);
         mSwipeRefreshLayout.setRefreshing(false);
-        BBLog.d(LOG_TAG, "Channels updated!");
+        BBLog.d(LOG_TAG, "Channels list successfully updated.");
     }
 
     @Override

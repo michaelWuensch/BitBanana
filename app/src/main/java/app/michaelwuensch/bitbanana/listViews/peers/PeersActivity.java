@@ -120,7 +120,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             if (Wallet.getInstance().isConnectedToNode()) {
 
-                BBLog.v(LOG_TAG, "Updating peer list...");
+                BBLog.d(LOG_TAG, "Updating peer list...");
 
                 mCompositeDisposable.add(BackendManager.api().listPeers()
                         .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
@@ -134,14 +134,14 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                                             peersToFetchInfo.add(peer.getPubKey());
                                     }
                                     // Show "No peers" if the list is empty
-                                    if (mPeersItems.size() == 0) {
+                                    if (mPeersItems.isEmpty()) {
                                         mEmptyListText.setVisibility(View.VISIBLE);
                                     } else {
                                         mEmptyListText.setVisibility(View.GONE);
                                     }
 
                                     // Set number in activity title
-                                    if (mPeersItems.size() > 0) {
+                                    if (!mPeersItems.isEmpty()) {
                                         String title = getResources().getString(R.string.activity_peers) + " (" + mPeersItems.size() + ")";
                                         setTitle(title);
                                     } else {
@@ -153,7 +153,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
 
 
                                     // Fetch aliases for peers if necessary
-                                    if (peersToFetchInfo.size() > 0) {
+                                    if (!peersToFetchInfo.isEmpty()) {
                                         BBLog.d(LOG_TAG, "Fetching node info for " + peersToFetchInfo.size() + " nodes.");
 
                                         mCompositeDisposable.add(Observable.range(0, peersToFetchInfo.size())
@@ -171,7 +171,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                                     // Remove refreshing symbol
                                     mSwipeRefreshLayout.setRefreshing(false);
 
-                                    BBLog.v(LOG_TAG, "Peer list successfully updated.");
+                                    BBLog.d(LOG_TAG, "Peer list successfully updated.");
                                 }
                                 , throwable -> {
                                     // Remove refreshing symbol

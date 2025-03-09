@@ -147,6 +147,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<CurrentNodeInfo> getCurrentNodeInfo() {
+        BBLog.d(LOG_TAG, "getCurrentNodeInfo called.");
         return LndConnection.getInstance().getLightningService().getInfo(GetInfoRequest.newBuilder().build())
                 .map(response -> {
                     LightningNodeUri[] lnUris;
@@ -178,11 +179,13 @@ public class LndApi extends Api {
                             .setAvatarMaterial(avatarMaterial)
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getInfo failed: " + throwable.toString()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getCurrentNodeInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getCurrentNodeInfo failed: " + throwable.toString()));
     }
 
     @Override
     public Single<NodeInfo> getNodeInfo(String pubKey) {
+        BBLog.d(LOG_TAG, "getNodeInfo called.");
         NodeInfoRequest nodeInfoRequest = NodeInfoRequest.newBuilder()
                 .setPubKey(pubKey)
                 .build();
@@ -200,31 +203,35 @@ public class LndApi extends Api {
                             .setTotalCapacity(response.getTotalCapacity() * 1000L)
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "LND getNodeInfo failed: " + throwable.toString()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getNodeInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getNodeInfo failed: " + throwable.toString()));
     }
 
     @Override
     public Single<Balances> getBalances() {
+        BBLog.d(LOG_TAG, "getBalances called.");
         Single<WalletBalanceResponse> walletBalanceSingle = LndConnection.getInstance().getLightningService().walletBalance(WalletBalanceRequest.newBuilder().build());
         Single<ChannelBalanceResponse> channelBalanceSingle = LndConnection.getInstance().getLightningService().channelBalance(ChannelBalanceRequest.newBuilder().build());
         Single<PendingChannelsResponse> pendingChannelsSingle = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
 
         return Single.zip(walletBalanceSingle, channelBalanceSingle, pendingChannelsSingle, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
+                    Balances balances = Balances.newBuilder()
+                            .setOnChainConfirmed(walletBalanceResponse.getConfirmedBalance() * 1000L)
+                            .setOnChainUnconfirmed(walletBalanceResponse.getUnconfirmedBalance() * 1000L)
+                            .setChannelBalance(channelBalanceResponse.getLocalBalance().getMsat())
+                            .setChannelBalancePendingOpen(channelBalanceResponse.getPendingOpenLocalBalance().getMsat())
+                            .setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance() * 1000L)
+                            .build();
 
-            Balances balances = Balances.newBuilder()
-                    .setOnChainConfirmed(walletBalanceResponse.getConfirmedBalance() * 1000L)
-                    .setOnChainUnconfirmed(walletBalanceResponse.getUnconfirmedBalance() * 1000L)
-                    .setChannelBalance(channelBalanceResponse.getLocalBalance().getMsat())
-                    .setChannelBalancePendingOpen(channelBalanceResponse.getPendingOpenLocalBalance().getMsat())
-                    .setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance() * 1000L)
-                    .build();
-
-            return balances;
-        });
+                    return balances;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getBalances success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getBalances failed: " + throwable.toString()));
     }
 
     @Override
     public Single<SignMessageResponse> signMessageWithNode(String message) {
+        BBLog.d(LOG_TAG, "signMessageWithNode called.");
         SignMessageRequest signMessageRequest = SignMessageRequest.newBuilder()
                 .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
                 .build();
@@ -236,11 +243,13 @@ public class LndApi extends Api {
                             .setZBase(response.getSignature())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sign message failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "signMessageWithNode success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "signMessageWithNode failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<VerifyMessageResponse> verifyMessageWithNode(String message, String signature) {
+        BBLog.d(LOG_TAG, "verifyMessageWithNode called.");
         VerifyMessageRequest verifyMessageRequest = VerifyMessageRequest.newBuilder()
                 .setMsg(ByteString.copyFrom(message, StandardCharsets.UTF_8))
                 .setSignatureBytes(ByteString.copyFrom(signature, StandardCharsets.UTF_8))
@@ -253,11 +262,13 @@ public class LndApi extends Api {
                             .setPubKey(response.getPubkey())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Verify message failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "verifyMessageWithNode success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "verifyMessageWithNode failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<app.michaelwuensch.bitbanana.models.Utxo>> listUTXOs(long currentBlockHeight) {
+        BBLog.d(LOG_TAG, "listUTXOs called.");
         ListUnspentRequest listUnspentRequest = ListUnspentRequest.newBuilder()
                 .setMaxConfs(999999999) // default is 0
                 .build();
@@ -268,45 +279,48 @@ public class LndApi extends Api {
         Single<ListLeasesResponse> listLeasesObservable = LndConnection.getInstance().getWalletKitService().listLeases(listLeasesRequest);
 
         return Single.zip(listUnspentObservable, listLeasesObservable, (listUnspentResponse, listLeasesResponse) -> {
-            List<app.michaelwuensch.bitbanana.models.Utxo> utxoList = new ArrayList<>();
-            for (Utxo utxo : listUnspentResponse.getUtxosList()) {
-                utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
-                        .setAddress(utxo.getAddress())
-                        .setAmount(utxo.getAmountSat() * 1000)
-                        .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
-                        .setConfirmations(utxo.getConfirmations())
-                        .setOutpoint(Outpoint.newBuilder()
-                                .setTransactionID(utxo.getOutpoint().getTxidStr())
-                                .setOutputIndex(utxo.getOutpoint().getOutputIndex())
-                                .build())
-                        .setLease(null)
-                        .build());
-            }
-            for (UtxoLease utxoLease : listLeasesResponse.getLockedUtxosList()) {
-                Lease lease = Lease.newBuilder()
-                        .setId(ApiUtil.StringFromHexByteString(utxoLease.getId()))
-                        .setExpiration(utxoLease.getExpiration())
-                        .setOutpoint(Outpoint.newBuilder()
-                                .setTransactionID(utxoLease.getOutpoint().getTxidStr())
-                                .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
-                                .build())
-                        .build();
-                utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
-                        //.setAddress(???)
-                        .setAmount(utxoLease.getValue() * 1000)
-                        .setOutpoint(Outpoint.newBuilder()
-                                .setTransactionID(utxoLease.getOutpoint().getTxidStr())
-                                .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
-                                .build())
-                        .setLease(lease)
-                        .build());
-            }
-            return utxoList;
-        }).doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching utxo list failed: " + throwable.fillInStackTrace()));
+                    List<app.michaelwuensch.bitbanana.models.Utxo> utxoList = new ArrayList<>();
+                    for (Utxo utxo : listUnspentResponse.getUtxosList()) {
+                        utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
+                                .setAddress(utxo.getAddress())
+                                .setAmount(utxo.getAmountSat() * 1000)
+                                .setBlockHeight(currentBlockHeight - utxo.getConfirmations())
+                                .setConfirmations(utxo.getConfirmations())
+                                .setOutpoint(Outpoint.newBuilder()
+                                        .setTransactionID(utxo.getOutpoint().getTxidStr())
+                                        .setOutputIndex(utxo.getOutpoint().getOutputIndex())
+                                        .build())
+                                .setLease(null)
+                                .build());
+                    }
+                    for (UtxoLease utxoLease : listLeasesResponse.getLockedUtxosList()) {
+                        Lease lease = Lease.newBuilder()
+                                .setId(ApiUtil.StringFromHexByteString(utxoLease.getId()))
+                                .setExpiration(utxoLease.getExpiration())
+                                .setOutpoint(Outpoint.newBuilder()
+                                        .setTransactionID(utxoLease.getOutpoint().getTxidStr())
+                                        .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
+                                        .build())
+                                .build();
+                        utxoList.add(app.michaelwuensch.bitbanana.models.Utxo.newBuilder()
+                                //.setAddress(???)
+                                .setAmount(utxoLease.getValue() * 1000)
+                                .setOutpoint(Outpoint.newBuilder()
+                                        .setTransactionID(utxoLease.getOutpoint().getTxidStr())
+                                        .setOutputIndex(utxoLease.getOutpoint().getOutputIndex())
+                                        .build())
+                                .setLease(lease)
+                                .build());
+                    }
+                    return utxoList;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listUTXOs success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listUTXOs failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<OpenChannel>> listOpenChannels() {
+        BBLog.d(LOG_TAG, "listOpenChannels called.");
         return LndConnection.getInstance().getLightningService().listChannels(ListChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<OpenChannel> openChannelsList = new ArrayList<>();
@@ -339,11 +353,13 @@ public class LndApi extends Api {
                                 .build());
                     return openChannelsList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "List open channels failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listOpenChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listOpenChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<PendingChannel>> listPendingChannels() {
+        BBLog.d(LOG_TAG, "listPendingChannels called.");
         return LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<PendingChannel> pendingChannelsList = new ArrayList<>();
@@ -412,11 +428,13 @@ public class LndApi extends Api {
                                 .build());
                     return pendingChannelsList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "List pending channels failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listPendingChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listPendingChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<ClosedChannel>> listClosedChannels() {
+        BBLog.d(LOG_TAG, "listClosedChannels called.");
         return LndConnection.getInstance().getLightningService().closedChannels(ClosedChannelsRequest.newBuilder().build())
                 .map(response -> {
                     List<ClosedChannel> closedChannelsList = new ArrayList<>();
@@ -463,11 +481,13 @@ public class LndApi extends Api {
                     }
                     return closedChannelsList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "List closed channels failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listClosedChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listClosedChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<PublicChannelInfo> getPublicChannelInfo(ShortChannelId shortChannelId) {
+        BBLog.d(LOG_TAG, "getPublicChannelInfo called.");
         ChanInfoRequest request = ChanInfoRequest.newBuilder()
                 .setChanId(ApiUtil.LongFromScid(shortChannelId))
                 .build();
@@ -506,11 +526,13 @@ public class LndApi extends Api {
                             .setNode2RoutingPolicy(Node2Policy.build())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getPublicChannelInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getPublicChannelInfo failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<String>> updateRoutingPolicy(UpdateRoutingPolicyRequest updateRoutingPolicyRequest) {
+        BBLog.d(LOG_TAG, "updateRoutingPolicy called.");
         PolicyUpdateRequest.Builder LNDRequest = PolicyUpdateRequest.newBuilder();
         if (updateRoutingPolicyRequest.hasChannel()) {
             LNDRequest.setChanPoint(ChannelPoint.newBuilder()
@@ -551,7 +573,8 @@ public class LndApi extends Api {
                     }
                     return errorList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetch public channel info failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "updateRoutingPolicy success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "updateRoutingPolicy failed: " + throwable.fillInStackTrace()));
     }
 
     private LnInvoice getInvoiceFromLNDInvoice(Invoice lndInvoice) {
@@ -609,6 +632,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<LnInvoice> getInvoice(String paymentHash) {
+        BBLog.d(LOG_TAG, "getInvoice called.");
         LookupInvoiceMsg request = LookupInvoiceMsg.newBuilder()
                 .setPaymentHash(ApiUtil.ByteStringFromHexString(paymentHash))
                 .build();
@@ -617,11 +641,13 @@ public class LndApi extends Api {
                 .map(response -> {
                     return getInvoiceFromLNDInvoice(response);
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching invoice failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getInvoice failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listInvoices called.");
         return getInvoicesPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
                     if (data == null || data.getPage().isEmpty()) {
@@ -644,11 +670,13 @@ public class LndApi extends Api {
 
     @Override
     public Observable<LnInvoice> subscribeToInvoices() {
+        BBLog.d(LOG_TAG, "subscribeToInvoices called.");
         return LndConnection.getInstance().getLightningService().subscribeInvoices(InvoiceSubscription.newBuilder().build())
                 .map(invoice -> {
                     return getInvoiceFromLNDInvoice(invoice);
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Invoice subscription failed: " + throwable.fillInStackTrace()));
+                .doOnSubscribe(response -> BBLog.d(LOG_TAG, "subscribeToInvoices success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "subscribeToInvoices failed: " + throwable.fillInStackTrace()));
     }
 
     private OnChainTransaction getOnChainTransactionFromLNDTransaction(Transaction lndTransaction) {
@@ -664,6 +692,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<List<OnChainTransaction>> listOnChainTransactions() {
+        BBLog.d(LOG_TAG, "listOnChainTransactions called.");
         GetTransactionsRequest request = GetTransactionsRequest.newBuilder()
                 .setEndHeight(-1) //include unconfirmed
                 .build();
@@ -675,11 +704,13 @@ public class LndApi extends Api {
                         transactionList.add(getOnChainTransactionFromLNDTransaction(transaction));
                     return transactionList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching OnChainTransactions failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listOnChainTransactions success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listOnChainTransactions failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Observable<OnChainTransaction> subscribeToOnChainTransactions() {
+        BBLog.d(LOG_TAG, "subscribeToOnChainTransactions called.");
         GetTransactionsRequest request = GetTransactionsRequest.newBuilder()
                 .setEndHeight(-1) //include unconfirmed
                 .build();
@@ -687,7 +718,8 @@ public class LndApi extends Api {
                 .map(transaction -> {
                     return getOnChainTransactionFromLNDTransaction(transaction);
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "OnChainTransaction subscription failed: " + throwable.fillInStackTrace()));
+                .doOnSubscribe(response -> BBLog.d(LOG_TAG, "subscribeToOnChainTransactions success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "subscribeToOnChainTransactions failed: " + throwable.fillInStackTrace()));
     }
 
     private LnPayment getLnPaymentFromLNDPayment(Payment lndPayment) {
@@ -788,6 +820,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listLnPayments called.");
         return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
                     if (data == null || data.getPage().isEmpty()) {
@@ -841,6 +874,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<List<Forward>> listForwards(long firstIndexOffset, int pageSize, long startTime) {
+        BBLog.d(LOG_TAG, "listForwards called.");
         return getForwardPage(firstIndexOffset, pageSize, startTime)
                 .flatMap(data -> {
                     if (data == null || data.getPage().isEmpty()) {
@@ -863,6 +897,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<List<Peer>> listPeers() {
+        BBLog.d(LOG_TAG, "listPeers called.");
         ListPeersRequest request = ListPeersRequest.newBuilder()
                 .build();
 
@@ -895,7 +930,8 @@ public class LndApi extends Api {
                     }
                     return peerList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching peers failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listPeers success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listPeers failed: " + throwable.fillInStackTrace()));
     }
 
 
@@ -943,6 +979,7 @@ public class LndApi extends Api {
 
     @Override
     public Single<List<Watchtower>> listWatchtowers() {
+        BBLog.d(LOG_TAG, "listWatchtowers called.");
         ListTowersRequest request = ListTowersRequest.newBuilder()
                 .setIncludeSessions(true)
                 .build();
@@ -955,11 +992,13 @@ public class LndApi extends Api {
                     }
                     return watchtowerList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching watchtowers failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listWatchtowers success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listWatchtowers failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<Watchtower> getWatchtower(String pubKey) {
+        BBLog.d(LOG_TAG, "getWatchtower called.");
         GetTowerInfoRequest request = GetTowerInfoRequest.newBuilder()
                 .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
                 .setIncludeSessions(true)
@@ -969,11 +1008,13 @@ public class LndApi extends Api {
                 .map(response -> {
                     return LndWatchtowerToBBWatchtower(response);
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching watchtower info failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getWatchtower success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getWatchtower failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable addWatchtower(String pubKey, String address) {
+        BBLog.d(LOG_TAG, "addWatchtower called.");
         AddTowerRequest request = AddTowerRequest.newBuilder()
                 .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
                 .setAddress(address)
@@ -981,11 +1022,13 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getWatchtowerClientService().addTower(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Adding watchtower failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "addWatchtower success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "addWatchtower failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<String> deactivateWatchtower(String pubKey) {
+        BBLog.d(LOG_TAG, "deactivateWatchtower called.");
         DeactivateTowerRequest request = DeactivateTowerRequest.newBuilder()
                 .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
                 .build();
@@ -994,22 +1037,26 @@ public class LndApi extends Api {
                 .map(response -> {
                     return response.getStatus();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Deactivating watchtower failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "deactivateWatchtower success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "deactivateWatchtower failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable removeWatchtower(String pubKey) {
+        BBLog.d(LOG_TAG, "removeWatchtower called.");
         RemoveTowerRequest request = RemoveTowerRequest.newBuilder()
                 .setPubkey(ApiUtil.ByteStringFromHexString(pubKey))
                 .build();
 
         return LndConnection.getInstance().getWatchtowerClientService().removeTower(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Removing watchtower failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "removeWatchtower success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "removeWatchtower failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<LightningNodeUri> getOwnWatchtowerInfo() {
+        BBLog.d(LOG_TAG, "getOwnWatchtowerInfo called.");
         com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest request = com.github.lightningnetwork.lnd.watchtowerrpc.GetInfoRequest.newBuilder()
                 .build();
 
@@ -1020,11 +1067,13 @@ public class LndApi extends Api {
                     } else
                         return Single.error(new IllegalStateException("URIs list is empty"));
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching own watchtower info failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getOwnWatchtowerInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getOwnWatchtowerInfo failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        BBLog.d(LOG_TAG, "createInvoice called.");
         Invoice request = Invoice.newBuilder()
                 .setValueMsat(createInvoiceRequest.getAmount())
                 .setMemo(createInvoiceRequest.getDescription())
@@ -1038,11 +1087,13 @@ public class LndApi extends Api {
                             .setBolt11(response.getPaymentRequest())
                             .build();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating invoice failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "createInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "createInvoice failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        BBLog.d(LOG_TAG, "getNewOnchainAddress called.");
         int addressType = 5;
         switch (newOnChainAddressRequest.getType()) {
             case SEGWIT_COMPATIBILITY:
@@ -1062,11 +1113,13 @@ public class LndApi extends Api {
                 .map(response -> {
                     return response.getAddress();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Creating new OnChainAddress failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getNewOnchainAddress success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getNewOnchainAddress failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
+        BBLog.d(LOG_TAG, "sendLnPayment called.");
         SendPaymentRequest request = null;
         switch (sendLnPaymentRequest.getPaymentType()) {
             case BOLT11_INVOICE:
@@ -1152,11 +1205,13 @@ public class LndApi extends Api {
                     }
                 })
                 .firstOrError()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error sending lightning payment: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable sendOnChainPayment(SendOnChainPaymentRequest sendOnChainPaymentRequest) {
+        BBLog.d(LOG_TAG, "sendOnChainPayment called.");
         SendCoinsRequest.Builder requestBuilder = SendCoinsRequest.newBuilder()
                 .setAddr(sendOnChainPaymentRequest.getAddress())
                 .setSendAll(sendOnChainPaymentRequest.isSendAll())
@@ -1180,11 +1235,13 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getLightningService().sendCoins(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Sending on chain payment failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "sendOnChainPayment success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "sendOnChainPayment failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable connectPeer(LightningNodeUri lightningNodeUri) {
+        BBLog.d(LOG_TAG, "connectPeer called.");
         LightningAddress.Builder lightningAddressBuilder = LightningAddress.newBuilder()
                 .setPubkey(lightningNodeUri.getPubKey());
 
@@ -1199,38 +1256,45 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getLightningService().connectPeer(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Connecting to peer failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "connectPeer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "connectPeer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable disconnectPeer(String pubKey) {
+        BBLog.d(LOG_TAG, "disconnectPeer called.");
         DisconnectPeerRequest request = DisconnectPeerRequest.newBuilder()
                 .setPubKey(pubKey)
                 .build();
 
         return LndConnection.getInstance().getLightningService().disconnectPeer(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Disconnecting from peer failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "disconnectPeer success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "disconnectPeer failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<FeeEstimateResponse> getFeeEstimates() {
+        BBLog.d(LOG_TAG, "getFeeEstimates called.");
         Single<EstimateFeeResponse> nextBlockSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(2).build());
         Single<EstimateFeeResponse> hourSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(6).build());
         Single<EstimateFeeResponse> daySingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(144).build());
         Single<EstimateFeeResponse> minimumSingle = LndConnection.getInstance().getWalletKitService().estimateFee(EstimateFeeRequest.newBuilder().setConfTarget(1008).build());
         return Single.zip(nextBlockSingle, hourSingle, daySingle, minimumSingle, (nextBlockResponse, hourResponse, dayResponse, minimumResponse) -> {
-            return FeeEstimateResponse.newBuilder()
-                    .setNextBlockFee((int) (UtilFunctions.satPerKwToSatPerVByte(nextBlockResponse.getSatPerKw())))
-                    .setHourFee((int) (UtilFunctions.satPerKwToSatPerVByte(hourResponse.getSatPerKw())))
-                    .setDayFee((int) (UtilFunctions.satPerKwToSatPerVByte(dayResponse.getSatPerKw())))
-                    .setMinimumFee((int) (UtilFunctions.satPerKwToSatPerVByte(minimumResponse.getSatPerKw())))
-                    .build();
-        });
+                    return FeeEstimateResponse.newBuilder()
+                            .setNextBlockFee((int) (UtilFunctions.satPerKwToSatPerVByte(nextBlockResponse.getSatPerKw())))
+                            .setHourFee((int) (UtilFunctions.satPerKwToSatPerVByte(hourResponse.getSatPerKw())))
+                            .setDayFee((int) (UtilFunctions.satPerKwToSatPerVByte(dayResponse.getSatPerKw())))
+                            .setMinimumFee((int) (UtilFunctions.satPerKwToSatPerVByte(minimumResponse.getSatPerKw())))
+                            .build();
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getFeeEstimates success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getFeeEstimates failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Single<Double> getTransactionSizeVByte(String address, long amount) {
+        BBLog.d(LOG_TAG, "getTransactionSizeVByte called.");
         com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest request = com.github.lightningnetwork.lnd.lnrpc.EstimateFeeRequest.newBuilder()
                 .setTargetConf(2)
                 .putAddrToAmount(address, amount / 1000)
@@ -1239,11 +1303,13 @@ public class LndApi extends Api {
                 .map(response -> {
                     return (double) response.getFeeSat() / (double) response.getSatPerVbyte();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Getting transaction size failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getTransactionSizeVByte success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getTransactionSizeVByte failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable openChannel(OpenChannelRequest openChannelRequest) {
+        BBLog.d(LOG_TAG, "openChannel called.");
         com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.Builder requestBuilder = com.github.lightningnetwork.lnd.lnrpc.OpenChannelRequest.newBuilder()
                 .setNodePubkey(ApiUtil.ByteStringFromHexString(openChannelRequest.getNodePubKey()))
                 .setSatPerVbyte(openChannelRequest.getSatPerVByte())
@@ -1267,11 +1333,13 @@ public class LndApi extends Api {
         return LndConnection.getInstance().getLightningService().openChannel(request)
                 .firstOrError()
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error opening channel: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "openChannel success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "openChannel failed: " + throwable.getMessage()));
     }
 
     @Override
     public Completable closeChannel(CloseChannelRequest closeChannelRequest) {
+        BBLog.d(LOG_TAG, "closeChannel called.");
         com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest request = com.github.lightningnetwork.lnd.lnrpc.CloseChannelRequest.newBuilder()
                 .setChannelPoint(ChannelPoint.newBuilder()
                         .setFundingTxidStr(closeChannelRequest.getFundingOutpoint().getTransactionID())
@@ -1283,11 +1351,13 @@ public class LndApi extends Api {
         return LndConnection.getInstance().getLightningService().closeChannel(request)
                 .firstOrError()
                 .ignoreElement()
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Error closing channel: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "closeChannel success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "closeChannel failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<Long> estimateRoutingFee(String PubKey, long amount) {
+        BBLog.d(LOG_TAG, "estimateRoutingFee called.");
         RouteFeeRequest request = RouteFeeRequest.newBuilder()
                 .setDest(ApiUtil.ByteStringFromHexString(PubKey))
                 .setAmtSat(Math.max(amount / 1000L, 1))
@@ -1296,11 +1366,13 @@ public class LndApi extends Api {
                 .map(response -> {
                     return response.getRoutingFeeMsat();
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Routing fee estimation failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "estimateRoutingFee success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "estimateRoutingFee failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
     public Completable leaseUTXO(LeaseUTXORequest leaseUTXORequest) {
+        BBLog.d(LOG_TAG, "leaseUTXO called.");
         LeaseOutputRequest request = LeaseOutputRequest.newBuilder()
                 .setOutpoint(OutPoint.newBuilder()
                         .setTxidStr(leaseUTXORequest.getOutpoint().getTransactionID())
@@ -1312,12 +1384,14 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getWalletKitService().leaseOutput(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Leasing output failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "leaseUTXO success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "leaseUTXO failed: " + throwable.getMessage()));
     }
 
 
     @Override
     public Completable releaseUTXO(ReleaseUTXORequest releaseUTXORequest) {
+        BBLog.d(LOG_TAG, "releaseUTXO called.");
         ReleaseOutputRequest request = ReleaseOutputRequest.newBuilder()
                 .setOutpoint(OutPoint.newBuilder()
                         .setTxidStr(releaseUTXORequest.getOutpoint().getTransactionID())
@@ -1328,11 +1402,13 @@ public class LndApi extends Api {
 
         return LndConnection.getInstance().getWalletKitService().releaseOutput(request)
                 .ignoreElement()  // This will convert a Single to a Completable, ignoring the result
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Releasing output failed: " + throwable.getMessage()));
+                .doOnComplete(() -> BBLog.d(LOG_TAG, "releaseUTXO success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "releaseUTXO failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<List<BBLogItem>> listBackendLogs() {
+        BBLog.d(LOG_TAG, "listBackendLogs called.");
         GetDebugInfoRequest request = GetDebugInfoRequest.newBuilder().build();
 
         return LndConnection.getInstance().getLightningService().getDebugInfo(request)
@@ -1354,7 +1430,8 @@ public class LndApi extends Api {
                     }
                     return logList;
                 })
-                .doOnError(throwable -> BBLog.w(LOG_TAG, "Fetching logs failed: " + throwable.fillInStackTrace()));
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listBackendLogs success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listBackendLogs failed: " + throwable.fillInStackTrace()));
     }
 
     private BBLogItem lndLogToBBLogItem(String log, long timestamp) {

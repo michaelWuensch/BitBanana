@@ -215,7 +215,11 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
                             }
                         }
                         updateLogsDisplayList();
-                    }, throwable -> BBLog.e(LOG_TAG, "Exception in fetch logs task: " + throwable.getMessage())));
+                    }, throwable -> {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        showError(throwable.getMessage(), 3000);
+                        BBLog.e(LOG_TAG, "Exception in fetch logs task: " + throwable.getMessage());
+                    }));
         }
     }
 

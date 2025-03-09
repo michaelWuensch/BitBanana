@@ -26,6 +26,7 @@ import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.Version;
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.MediaType;
@@ -56,37 +57,44 @@ public class LndHubApi extends Api {
 
     @Override
     public Single<CurrentNodeInfo> getCurrentNodeInfo() {
+        BBLog.d(LOG_TAG, "getInfo called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getinfo")
                 .build();
 
         return RxRestWrapper.makeRxCall(getClient(), request, null, response -> {
-            // The response does not return any useful data, therefore we fake it.
-            return CurrentNodeInfo.newBuilder()
-                    .setNetwork(BackendConfig.Network.MAINNET)
-                    .setVersion(new Version("1.0"))
-                    .setFullVersionString("")
-                    .setSynced(true)
-                    .setAvatarMaterial(BackendManager.getCurrentBackendConfig().getUser() + BackendManager.getCurrentBackendConfig().getPassword())
-                    .build();
-        });
+                    // The response does not return any useful data, therefore we fake it.
+                    return CurrentNodeInfo.newBuilder()
+                            .setNetwork(BackendConfig.Network.MAINNET)
+                            .setVersion(new Version("1.0"))
+                            .setFullVersionString("")
+                            .setSynced(true)
+                            .setAvatarMaterial(BackendManager.getCurrentBackendConfig().getUser() + BackendManager.getCurrentBackendConfig().getPassword())
+                            .build();
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getInfo success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getInfo failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<Balances> getBalances() {
+        BBLog.d(LOG_TAG, "getBalances called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "balance")
                 .build();
 
         return RxRestWrapper.makeRxCall(getClient(), request, LndHubBalanceResponse.class, response -> {
-            return Balances.newBuilder()
-                    .setChannelBalance(response.getBTC().getAvailableBalance() * 1000L)
-                    .build();
-        });
+                    return Balances.newBuilder()
+                            .setChannelBalance(response.getBTC().getAvailableBalance() * 1000L)
+                            .build();
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getBalances success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getBalances failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<CreateInvoiceResponse> createInvoice(CreateInvoiceRequest createInvoiceRequest) {
+        BBLog.d(LOG_TAG, "createInvoice called.");
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         JSONObject json = new JSONObject();
         try {
@@ -103,42 +111,48 @@ public class LndHubApi extends Api {
                 .build();
 
         return RxRestWrapper.makeRxCall(getClient(), request, LndHubAddInvoiceResponse.class, response -> {
-            return CreateInvoiceResponse.newBuilder()
-                    .setBolt11(response.getPaymentRequest())
-                    .build();
-        });
+                    return CreateInvoiceResponse.newBuilder()
+                            .setBolt11(response.getPaymentRequest())
+                            .build();
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "createInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "createInvoice failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<List<LnInvoice>> listInvoices(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listInvoices called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getuserinvoices")
                 .build();
         return RxRestWrapper.makeRxCall(getClient(), request, LndHubUserInvoice[].class, response -> {
-            List<LnInvoice> invoiceList = new ArrayList<>();
+                    List<LnInvoice> invoiceList = new ArrayList<>();
 
-            for (LndHubUserInvoice invoice : response) {
-                LnInvoice.Builder builder = LnInvoice.newBuilder()
-                        .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
-                        .setCreatedAt(invoice.getTimestamp())
-                        .setPaidAt(invoice.getTimestamp())
-                        .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
-                        .setMemo(invoice.getDescription())
-                        .setBolt11(invoice.getPaymentRequest())
-                        .setAmountRequested(invoice.getAmt() * 1000L)
-                        .setPaymentHash(invoice.getPaymentHash());
-                if (invoice.isPaid()) {
-                    builder.setAmountPaid(invoice.getAmt() * 1000L);
-                }
+                    for (LndHubUserInvoice invoice : response) {
+                        LnInvoice.Builder builder = LnInvoice.newBuilder()
+                                .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
+                                .setCreatedAt(invoice.getTimestamp())
+                                .setPaidAt(invoice.getTimestamp())
+                                .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
+                                .setMemo(invoice.getDescription())
+                                .setBolt11(invoice.getPaymentRequest())
+                                .setAmountRequested(invoice.getAmt() * 1000L)
+                                .setPaymentHash(invoice.getPaymentHash());
+                        if (invoice.isPaid()) {
+                            builder.setAmountPaid(invoice.getAmt() * 1000L);
+                        }
 
-                invoiceList.add(builder.build());
-            }
-            return invoiceList;
-        });
+                        invoiceList.add(builder.build());
+                    }
+                    return invoiceList;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listInvoices success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listInvoices failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<LnInvoice> getInvoice(String paymentHash) {
+        BBLog.d(LOG_TAG, "getInvoice called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getuserinvoices")
                 .build();
@@ -148,31 +162,34 @@ public class LndHubApi extends Api {
                 .create();
 
         return RxRestWrapper.makeRxCall(getClient(), gson, request, LndHubUserInvoice[].class, response -> {
-            for (LndHubUserInvoice invoice : response) {
-                if (invoice.getPaymentHash().equals(paymentHash)) {
-                    LnInvoice.Builder builder = LnInvoice.newBuilder()
-                            .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
-                            .setCreatedAt(invoice.getTimestamp())
-                            .setPaidAt(invoice.getTimestamp())
-                            .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
-                            .setMemo(invoice.getDescription())
-                            .setBolt11(invoice.getPaymentRequest())
-                            .setAmountRequested(invoice.getAmt() * 1000L)
-                            .setPaymentHash(invoice.getPaymentHash());
+                    for (LndHubUserInvoice invoice : response) {
+                        if (invoice.getPaymentHash().equals(paymentHash)) {
+                            LnInvoice.Builder builder = LnInvoice.newBuilder()
+                                    .setType(LnInvoice.InvoiceType.BOLT11_INVOICE)
+                                    .setCreatedAt(invoice.getTimestamp())
+                                    .setPaidAt(invoice.getTimestamp())
+                                    .setExpiresAt(invoice.getTimestamp() + invoice.getExpireTime())
+                                    .setMemo(invoice.getDescription())
+                                    .setBolt11(invoice.getPaymentRequest())
+                                    .setAmountRequested(invoice.getAmt() * 1000L)
+                                    .setPaymentHash(invoice.getPaymentHash());
 
-                    if (invoice.isPaid()) {
-                        builder.setAmountPaid(invoice.getAmt() * 1000L);
+                            if (invoice.isPaid()) {
+                                builder.setAmountPaid(invoice.getAmt() * 1000L);
+                            }
+
+                            return builder.build();
+                        }
                     }
-
-                    return builder.build();
-                }
-            }
-            return null;
-        });
+                    return null;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getInvoice success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getInvoice failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<List<LnPayment>> listLnPayments(long firstIndexOffset, int pageSize) {
+        BBLog.d(LOG_TAG, "listLnPayments called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "gettxs")
                 .build();
@@ -182,26 +199,29 @@ public class LndHubApi extends Api {
                 .create();
 
         return RxRestWrapper.makeRxCall(getClient(), gson, request, LndHubTx[].class, response -> {
-            List<LnPayment> paymentsList = new ArrayList<>();
+                    List<LnPayment> paymentsList = new ArrayList<>();
 
-            for (LndHubTx tx : response)
-                paymentsList.add(LnPayment.newBuilder()
-                        .setPaymentPreimage(tx.getPaymentPreimage())
-                        .setFee(Math.abs(tx.getFee() * 1000L))
-                        .setDescription(tx.getMemo())
-                        .setCreatedAt(tx.getTimestamp())
-                        .setAmountPaid(Math.abs(tx.getValue() * 1000L))
-                        .setBolt11(tx.getPaymentRequest())
-                        .setPaymentHash(tx.getPaymentHash())
-                        .setStatus(LnPayment.Status.SUCCEEDED)
-                        .build());
+                    for (LndHubTx tx : response)
+                        paymentsList.add(LnPayment.newBuilder()
+                                .setPaymentPreimage(tx.getPaymentPreimage())
+                                .setFee(Math.abs(tx.getFee() * 1000L))
+                                .setDescription(tx.getMemo())
+                                .setCreatedAt(tx.getTimestamp())
+                                .setAmountPaid(Math.abs(tx.getValue() * 1000L))
+                                .setBolt11(tx.getPaymentRequest())
+                                .setPaymentHash(tx.getPaymentHash())
+                                .setStatus(LnPayment.Status.SUCCEEDED)
+                                .build());
 
-            return paymentsList;
-        });
+                    return paymentsList;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listLnPayments success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listLnPayments failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
+        BBLog.d(LOG_TAG, "sendLnPayment called.");
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         JSONObject json = new JSONObject();
         try {
@@ -218,25 +238,30 @@ public class LndHubApi extends Api {
                 .build();
 
         return RxRestWrapper.makeRxCall(getClient(), request, null, response -> {
-            return SendLnPaymentResponse.newBuilder()
-                    .setAmount(sendLnPaymentRequest.getAmount())
-                    .build();
-        });
+                    return SendLnPaymentResponse.newBuilder()
+                            .setAmount(sendLnPaymentRequest.getAmount())
+                            .build();
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.getMessage()));
     }
 
     @Override
     public Single<String> getNewOnchainAddress(NewOnChainAddressRequest newOnChainAddressRequest) {
+        BBLog.d(LOG_TAG, "getNewOnchainAddress called.");
         okhttp3.Request request = new Request.Builder()
                 .url(getBaseUrl() + "getbtc")
                 .build();
 
         try {
             return RxRestWrapper.makeRxCall(getClient(), request, LndHubGetOnChainAddress[].class, response -> {
-                if (response.length > 0)
-                    return response[0].getAddress();
-                else
-                    throw new RuntimeException("Backend does not support creating on-chain addresses");
-            });
+                        if (response.length > 0)
+                            return response[0].getAddress();
+                        else
+                            throw new RuntimeException("Backend does not support creating on-chain addresses");
+                    })
+                    .doOnSuccess(response -> BBLog.d(LOG_TAG, "getNewOnchainAddress success."))
+                    .doOnError(throwable -> BBLog.w(LOG_TAG, "getNewOnchainAddress failed: " + throwable.getMessage()));
         } catch (Exception e) {
             return Single.error(new RuntimeException());
         }

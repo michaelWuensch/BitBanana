@@ -222,7 +222,8 @@ public class Wallet_Channels {
 
         // Delay each NodeInfo request for 100ms to not stress the node
         ArrayList<String> channelNodesList = new ArrayList<>(channelNodes);
-        BBLog.d(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
+        if (!channelNodesList.isEmpty())
+            BBLog.d(LOG_TAG, "Fetching node info for " + channelNodesList.size() + " nodes.");
 
         compositeDisposable.add(Observable.range(0, channelNodesList.size())
                 .concatMap(i -> Observable.just(i).delay(100, TimeUnit.MILLISECONDS))
@@ -272,27 +273,27 @@ public class Wallet_Channels {
     public void subscribeToChannelEvents() {
         compositeDisposable.add(LndConnection.getInstance().getLightningService().subscribeChannelEvents(ChannelEventSubscription.newBuilder().build())
                 .subscribe(channelEventUpdate -> {
-                    BBLog.d(LOG_TAG, "Received channel update event");
                     switch (channelEventUpdate.getChannelCase()) {
                         case OPEN_CHANNEL:
-                            BBLog.d(LOG_TAG, "Channel has been opened");
+                            BBLog.d(LOG_TAG, "ChannelEvent: Channel has been opened");
                             break;
                         case CLOSED_CHANNEL:
-                            BBLog.d(LOG_TAG, "Channel has been closed");
+                            BBLog.d(LOG_TAG, "ChannelEvent: Channel has been closed");
                             break;
                         case ACTIVE_CHANNEL:
-                            BBLog.d(LOG_TAG, "Channel went active");
+                            BBLog.d(LOG_TAG, "ChannelEvent: Channel went active");
                             break;
                         case INACTIVE_CHANNEL:
-                            BBLog.d(LOG_TAG, "Open channel went to inactive");
+                            BBLog.d(LOG_TAG, "ChannelEvent: Open channel went to inactive");
                             break;
                         case CHANNEL_NOT_SET:
-                            BBLog.d(LOG_TAG, "Received channel event update case: not set Channel");
+                            BBLog.d(LOG_TAG, "ChannelEvent: Channel not set");
                             break;
                         default:
-                            BBLog.d(LOG_TAG, "Unknown channel event: " + channelEventUpdate.getChannelCase());
+                            BBLog.d(LOG_TAG, "ChannelEvent: Unknown channel event: " + channelEventUpdate.getChannelCase());
                             break;
                     }
+                    BBLog.v(LOG_TAG, channelEventUpdate.toString());
 
                     updateLNDChannelsWithDebounce();
                     broadcastChannelEvent(channelEventUpdate);
