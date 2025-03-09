@@ -402,50 +402,72 @@ public class CoreLightningApi extends Api {
         Single<ListpeerchannelsResponse> clnPeerChannelsList = CoreLightningNodeService().listPeerChannels(ListpeerchannelsRequest.newBuilder().build());
 
         return Single.zip(clnClosedChannelsList, clnPeerChannelsList, (closedListResponse, peerListResponse) -> {
-            List<ClosedChannel> closedChannelsList = new ArrayList<>();
-            for (ListclosedchannelsClosedchannels channel : closedListResponse.getClosedchannelsList())
-                closedChannelsList.add(ClosedChannel.newBuilder()
-                        .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
-                        .setShortChannelId(ApiUtil.ScidFromString(channel.getShortChannelId()))
-                        .setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getLastCommitmentTxid()))
-                        //.setChannelType(???)
-                        .setOpenInitiator(channel.getOpener() == ChannelSide.LOCAL)
-                        .setCloseInitiator(channel.getCloser() == ChannelSide.LOCAL)
-                        //.setCloseType(???)
-                        //.setCloseHeight(???)
-                        .setPrivate(channel.getPrivate())
-                        .setCapacity(channel.getTotalMsat().getMsat())
-                        .setLocalBalance(channel.getFinalToUsMsat().getMsat())
-                        .setRemoteBalance(channel.getTotalMsat().getMsat() - channel.getFinalToUsMsat().getMsat())
-                        .setFundingOutpoint(Outpoint.newBuilder()
-                                .setTransactionID(ApiUtil.StringFromHexByteString(channel.getFundingTxid()))
-                                .setOutputIndex(channel.getFundingOutnum())
-                                .build())
+                    List<ClosedChannel> closedChannelsList = new ArrayList<>();
+                    for (ListclosedchannelsClosedchannels channel : closedListResponse.getClosedchannelsList()) {
+                        ClosedChannel.Builder listClosedChannelsClosedChannelBuilder = ClosedChannel.newBuilder()
+                                .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
+                                .setShortChannelId(ApiUtil.ScidFromString(null))
+                                .setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getLastCommitmentTxid()))
+                                //.setChannelType(???)
+                                .setOpenInitiator(channel.getOpener() == ChannelSide.LOCAL)
+                                .setCloseInitiator(channel.getCloser() == ChannelSide.LOCAL)
+                                //.setCloseType(???)
+                                //.setCloseHeight(???)
+                                .setPrivate(channel.getPrivate())
+                                .setCapacity(channel.getTotalMsat().getMsat())
+                                .setLocalBalance(channel.getFinalToUsMsat().getMsat())
+                                .setRemoteBalance(channel.getTotalMsat().getMsat() - channel.getFinalToUsMsat().getMsat())
+                                .setFundingOutpoint(Outpoint.newBuilder()
+                                        .setTransactionID(ApiUtil.StringFromHexByteString(channel.getFundingTxid()))
+                                        .setOutputIndex(channel.getFundingOutnum())
+                                        .build());
                         //.setSweepTransactionIds(???)
-                        .build());
-            for (ListpeerchannelsChannels channel : peerListResponse.getChannelsList())
-                if (channel.getState() == ListpeerchannelsChannels.ListpeerchannelsChannelsState.ONCHAIN)
-                    closedChannelsList.add(ClosedChannel.newBuilder()
-                            .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
-                            .setShortChannelId(ApiUtil.ScidFromString(channel.getShortChannelId()))
-                            //.setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getScratchTxid())) // correct ?
-                            //.setChannelType(???)
-                            .setOpenInitiator(channel.getOpener() == ChannelSide.LOCAL)
-                            .setCloseInitiator(channel.getCloser() == ChannelSide.LOCAL)
-                            //.setCloseType(???)
-                            .setPrivate(channel.getPrivate())
-                            .setCapacity(channel.getTotalMsat().getMsat())
-                            .setLocalBalance(channel.getToUsMsat().getMsat())
-                            .setRemoteBalance(channel.getTotalMsat().getMsat() - channel.getToUsMsat().getMsat())
-                            .setFundingOutpoint(Outpoint.newBuilder()
-                                    .setTransactionID(ApiUtil.StringFromHexByteString(channel.getFundingTxid()))
-                                    .setOutputIndex(channel.getFundingOutnum())
-                                    .build())
-                            .build());
-            return closedChannelsList;
-        })
-        .doOnSuccess(response -> BBLog.d(LOG_TAG, "listClosedChannels success."))
-        .doOnError(throwable -> BBLog.w(LOG_TAG, "listClosedChannels failed: " + throwable.fillInStackTrace()));
+
+                        if (channel.hasShortChannelId()) {
+                            // ShortChannelId is optional and would cause an error if unavailable
+                            listClosedChannelsClosedChannelBuilder.setShortChannelId(ApiUtil.ScidFromString(channel.getShortChannelId()));
+                        } else {
+                            if (channel.hasPeerId())
+                                BBLog.w(LOG_TAG, "listClosedChannels: ShortChannelId not available for closed channel with " + ApiUtil.StringFromHexByteString(channel.getPeerId()));
+                            else
+                                BBLog.w(LOG_TAG, "listClosedChannels: ShortChannelId not available for closed channel.");
+                        }
+
+                        closedChannelsList.add(listClosedChannelsClosedChannelBuilder
+                                .build());
+                    }
+                    for (ListpeerchannelsChannels channel : peerListResponse.getChannelsList())
+                        if (channel.getState() == ListpeerchannelsChannels.ListpeerchannelsChannelsState.ONCHAIN) {
+                            ClosedChannel.Builder listPeerClosedChannelBuilder = ClosedChannel.newBuilder()
+                                    .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
+                                    //.setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getScratchTxid())) // correct ?
+                                    //.setChannelType(???)
+                                    .setOpenInitiator(channel.getOpener() == ChannelSide.LOCAL)
+                                    .setCloseInitiator(channel.getCloser() == ChannelSide.LOCAL)
+                                    //.setCloseType(???)
+                                    .setPrivate(channel.getPrivate())
+                                    .setCapacity(channel.getTotalMsat().getMsat())
+                                    .setLocalBalance(channel.getToUsMsat().getMsat())
+                                    .setRemoteBalance(channel.getTotalMsat().getMsat() - channel.getToUsMsat().getMsat())
+                                    .setFundingOutpoint(Outpoint.newBuilder()
+                                            .setTransactionID(ApiUtil.StringFromHexByteString(channel.getFundingTxid()))
+                                            .setOutputIndex(channel.getFundingOutnum())
+                                            .build());
+
+                            if (channel.hasShortChannelId()) {
+                                // ShortChannelId is optional and would cause an error if unavailable
+                                listPeerClosedChannelBuilder.setShortChannelId(ApiUtil.ScidFromString(channel.getShortChannelId()));
+                            } else {
+                                BBLog.w(LOG_TAG, "listClosedChannels: ShortChannelId not available for closed peerChannel with " + ApiUtil.StringFromHexByteString(channel.getPeerId()));
+                            }
+
+                            closedChannelsList.add(listPeerClosedChannelBuilder
+                                    .build());
+                        }
+                    return closedChannelsList;
+                })
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "listClosedChannels success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "listClosedChannels failed: " + throwable.fillInStackTrace()));
     }
 
     @Override
