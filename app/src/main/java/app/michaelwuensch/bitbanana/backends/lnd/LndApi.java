@@ -1080,6 +1080,14 @@ public class LndApi extends Api {
                 if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
                     requestBuilder.setAmtMsat(sendLnPaymentRequest.getAmount());
 
+                if (sendLnPaymentRequest.hasFirstHop())
+                    requestBuilder.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop()));
+
+                if (sendLnPaymentRequest.hasLastHop()) {
+                    requestBuilder.setLastHopPubkey(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getLastHop()));
+                    requestBuilder.setAllowSelfPayment(true);
+                }
+
                 request = requestBuilder.build();
                 break;
             case KEYSEND:
@@ -1087,7 +1095,7 @@ public class LndApi extends Api {
                 for (CustomRecord record : sendLnPaymentRequest.getCustomRecords())
                     customRecords.put(record.getFieldNumber(), ApiUtil.ByteStringFromHexString(record.getValue()));
 
-                request = SendPaymentRequest.newBuilder()
+                SendPaymentRequest.Builder requestBuilderKeysend = SendPaymentRequest.newBuilder()
                         .setDest(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getDestinationPubKey()))
                         .setAmtMsat(sendLnPaymentRequest.getAmount())
                         .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
@@ -1095,8 +1103,12 @@ public class LndApi extends Api {
                         .setNoInflightUpdates(true)
                         .putAllDestCustomRecords(customRecords)
                         .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
-                        .setMaxParts(1) // KeySend does not support multi path payments
-                        .build();
+                        .setMaxParts(1); // KeySend does not support multi path payments
+
+                if (sendLnPaymentRequest.hasFirstHop())
+                    requestBuilderKeysend.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop()));
+
+                request = requestBuilderKeysend.build();
                 break;
         }
 

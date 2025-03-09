@@ -65,6 +65,8 @@ public class LndBackend extends Backend {
         FeatureUtxoSelectOnChannelOpen = new BackendFeature(true);
         FeatureSendAllOnChain = new BackendFeature(true);
         FeatureShowBackendLog = new BackendFeature(true);
+        FeaturePickFirstHop = new BackendFeature(true);
+        FeaturePickLastHop = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {
@@ -121,6 +123,8 @@ public class LndBackend extends Backend {
                             FeatureRoutingFeeEstimation = new BackendFeature(false);
                             FeatureEventSubscriptions = new BackendFeature(false);
                             FeatureIdentityScreen = new BackendFeature(false);
+                            FeaturePickFirstHop = new BackendFeature(false);
+                            FeaturePickLastHop = new BackendFeature(false);
                         }
                     }
                 }

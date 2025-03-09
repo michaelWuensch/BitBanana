@@ -124,6 +124,11 @@ public class FeatureManager {
         return getBackend().supportsKeysend();
     }
 
+    public static boolean isChannelPickingOnSendEnabled() {
+        boolean backendSupported = getBackend().supportsPickFirstHop() || getBackend().supportsPickLastHop();
+        return backendSupported;
+    }
+
     public static boolean isWatchtowersEnabled() {
         boolean backendSupported = getBackend().supportsWatchtowers();
         boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureWatchtowers", false);

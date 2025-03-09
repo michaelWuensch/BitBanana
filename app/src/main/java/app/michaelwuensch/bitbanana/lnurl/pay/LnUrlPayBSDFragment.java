@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.lnurl.pay;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -46,6 +49,7 @@ import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
+import app.michaelwuensch.bitbanana.customView.PickChannelsView;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.LnUrlpPayerData;
 import app.michaelwuensch.bitbanana.lnurl.pay.payerData.PayerDataView;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
@@ -53,6 +57,7 @@ import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -66,9 +71,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusListener {
+public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusListener, PickChannelsView.OnPickChannelViewButtonListener {
 
     private static final String LOG_TAG = LnUrlPayBSDFragment.class.getSimpleName();
+
+    private ActivityResultLauncher<Intent> mActivityResultLauncherSelectChannel;
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDResultView mResultView;
@@ -82,6 +89,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
     private BBButton mBtnSend;
     private TextView mTvSuccessActionText;
     private PayerDataView mPayerDataView;
+    private PickChannelsView mPickChannelsView;
 
     private String mServiceURLString;
 
@@ -131,12 +139,30 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
         mBtnSend = view.findViewById(R.id.sendButton);
         mTvSuccessActionText = view.findViewById(R.id.successActionText);
         mPayerDataView = view.findViewById(R.id.payerDataView);
+        mPickChannelsView = view.findViewById(R.id.pickChannels);
 
         mBSDScrollableMainView.setTitle(R.string.pay);
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
         mResultView.setOnOkListener(this::dismiss);
 
+        // Initialize the ActivityResultLauncher for Channel selection
+        mActivityResultLauncherSelectChannel = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // Pass result to the pick channels view
+                        mPickChannelsView.handleActivityResult(data);
+                    }
+                }
+        );
+
+        mPickChannelsView.setActivityResultLauncher(mActivityResultLauncherSelectChannel);
+        mPickChannelsView.setClearFocusListener(this);
+        mPickChannelsView.setVisibility(FeatureManager.isChannelPickingOnSendEnabled() ? View.VISIBLE : View.GONE);
+        mPickChannelsView.setPickChannelsViewButtonListener(this);
+        mPickChannelsView.setLastHopEnabled(false);
 
         // Handle comment field
         if (mPaymentData.isCommentAllowed()) {
@@ -376,7 +402,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                     BBLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                 } else {
-                    SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested());
+                    SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
                     BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
                     sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
                 }
@@ -587,5 +613,15 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
     @Override
     public void onClearFocus() {
         mAmountInput.clearFocus();
+    }
+
+    @Override
+    public long onSelectChannelClicked() {
+        return mAmountInput.getAmount();
+    }
+
+    @Override
+    public void onResetPickedChannelClicked() {
+
     }
 }

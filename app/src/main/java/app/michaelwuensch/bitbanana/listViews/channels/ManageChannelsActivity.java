@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.channels;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -52,6 +53,16 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     private static final String LOG_TAG = ManageChannelsActivity.class.getSimpleName();
 
+    public static final String EXTRA_CHANNELS_ACTIVITY_MODE = "channelsActivityMode";
+    public static final String EXTRA_SELECTED_CHANNEL = "selectedChannel";
+    public static final String EXTRA_HOP_TYPE = "hopType";
+    public static final String EXTRA_TRANSACTION_AMOUNT = "transactionAmount";
+
+    public static final int MODE_VIEW = 0;
+    public static final int MODE_SELECT = 1;
+    public static final int HOP_TYPE_FIRST_HOP = 0;
+    public static final int HOP_TYPE_LAST_HOP = 1;
+
     private static int REQUEST_CODE_OPEN_CHANNEL = 100;
 
     private TextView mEmptyListText;
@@ -62,13 +73,28 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private String mCurrentSearchString = "";
     private CustomViewPager mViewPager;
     private ChannelsPagerAdapter mPagerAdapter;
+    private FloatingActionButton mFab;
+    private TabLayout mTabLayout;
     private boolean isOpenChannelView = true;
     private long createOptionsMenuTimestamp;
+    private int mMode;
+    private int mSelectionHopType;
+    private long mTransactionAmountMSat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channels);
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_CHANNELS_ACTIVITY_MODE);
+            mSelectionHopType = extras.getInt(EXTRA_HOP_TYPE);
+            mTransactionAmountMSat = extras.getLong(EXTRA_TRANSACTION_AMOUNT);
+        } else {
+            mMode = 0;
+        }
 
         Wallet_Channels.getInstance().registerChannelsUpdatedSubscriptionListener(this);
 
@@ -85,16 +111,16 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         mViewPager = findViewById(R.id.channel_list_viewpager);
         mPagerAdapter = new ChannelsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
-        tabLayout.setupWithViewPager(mViewPager, true);
+        mTabLayout = findViewById(R.id.tabDots);
+        mTabLayout.setupWithViewPager(mViewPager, true);
 
         mChannelItems = new ArrayList<>();
         mClosedChannelItems = new ArrayList<>();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        mFab = findViewById(R.id.fab);
 
         if (FeatureManager.isOpenChannelEnabled()) {
-            fab.setOnClickListener(view -> {
+            mFab.setOnClickListener(view -> {
                 if (BackendManager.hasBackendConfigs()) {
                     Intent intent = new Intent(ManageChannelsActivity.this, ScanNodePubKeyActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_OPEN_CHANNEL);
@@ -103,7 +129,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                 }
             });
         } else {
-            fab.setVisibility(View.GONE);
+            mFab.setVisibility(View.GONE);
         }
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -136,8 +162,30 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             }
         }
 
+        switch (mMode) {
+            case MODE_VIEW:
+                setupViewMode();
+                break;
+            case MODE_SELECT:
+                setupSelectMode();
+                break;
+        }
+
         // Show loading spinner
         mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    private void setupViewMode() {
+
+    }
+
+    private void setupSelectMode() {
+        mChannelSummaryView.setVisibility(View.GONE);
+        mFab.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        mViewPager.setSwipeable(false);
+        mViewPager.setForceNoSwipe(true);
+        setTitle(getResources().getString(R.string.select) + " ...");
     }
 
     private void updateChannelsView() {
@@ -206,6 +254,11 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     }
 
     private void updateActivityTitle() {
+        if (mMode == MODE_SELECT) {
+            setTitle(getResources().getString(R.string.select) + " ...");
+            mEmptyListText.setVisibility(mChannelItems.isEmpty() ? View.VISIBLE : View.GONE);
+            return;
+        }
         // Update activity title and empty channel display.
         if (isOpenChannelView) {
             if (mChannelItems.size() > 0) {
@@ -230,13 +283,53 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     @Override
     public void onChannelSelect(Serializable channel, int type) {
-        if (channel != null) {
-            ChannelDetailBSDFragment channelDetailBSDFragment = new ChannelDetailBSDFragment();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL, channel);
-            bundle.putInt(ChannelDetailBSDFragment.ARGS_TYPE, type);
-            channelDetailBSDFragment.setArguments(bundle);
-            channelDetailBSDFragment.show(getSupportFragmentManager(), ChannelDetailBSDFragment.TAG);
+        switch (mMode) {
+            case MODE_VIEW:
+                if (channel != null) {
+                    ChannelDetailBSDFragment channelDetailBSDFragment = new ChannelDetailBSDFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ChannelDetailBSDFragment.ARGS_CHANNEL, channel);
+                    bundle.putInt(ChannelDetailBSDFragment.ARGS_TYPE, type);
+                    channelDetailBSDFragment.setArguments(bundle);
+                    channelDetailBSDFragment.show(getSupportFragmentManager(), ChannelDetailBSDFragment.TAG);
+                }
+                break;
+            case MODE_SELECT:
+                if (channel != null) {
+                    if (type == ChannelListItem.TYPE_PENDING_CHANNEL) {
+                        showError(getString(R.string.error_channel_selection_pending), 3000);
+                        return;
+                    }
+
+                    if (type == ChannelListItem.TYPE_OPEN_CHANNEL) {
+                        OpenChannel openChannel = (OpenChannel) channel;
+                        if (!openChannel.isActive()) {
+                            showError(getString(R.string.error_channel_selection_offline), 3000);
+                            return;
+                        }
+
+                        switch (mSelectionHopType) {
+                            case HOP_TYPE_FIRST_HOP:
+                                if (mTransactionAmountMSat > openChannel.getLocalBalance()) {
+                                    showError(getString(R.string.error_channel_selection_insufficient_liquidity_outgoing), 3000);
+                                    return;
+                                }
+                                break;
+                            case HOP_TYPE_LAST_HOP:
+                                if (mTransactionAmountMSat > openChannel.getRemoteBalance()) {
+                                    showError(getString(R.string.error_channel_selection_insufficient_liquidity_incoming), 3000);
+                                    return;
+                                }
+                        }
+
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra(EXTRA_HOP_TYPE, mSelectionHopType);
+                        resultIntent.putExtra(EXTRA_SELECTED_CHANNEL, (Serializable) channel);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                        finish();
+                    }
+                }
+                break;
         }
     }
 
@@ -291,7 +384,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        if (FeatureManager.isHelpButtonsEnabled())
+        if (FeatureManager.isHelpButtonsEnabled() && mMode == MODE_VIEW)
             getMenuInflater().inflate(R.menu.help_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         SearchView searchView = (SearchView) menuItem.getActionView();

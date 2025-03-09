@@ -3,6 +3,8 @@ package app.michaelwuensch.bitbanana.models;
 import java.io.Serializable;
 import java.util.List;
 
+import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+
 public class SendLnPaymentRequest implements Serializable {
 
     private final PaymentType PaymentType;
@@ -13,6 +15,10 @@ public class SendLnPaymentRequest implements Serializable {
     private final String DestinationPubKey;
     private final String Preimage;
     private final String PaymentHash;
+    private final ShortChannelId FirstHop;
+    private final boolean HasFirstHop;
+    private final String LastHop;
+    private final boolean HasLastHop;
     private final List<CustomRecord> CustomRecords;
 
     public static Builder newBuilder() {
@@ -28,6 +34,10 @@ public class SendLnPaymentRequest implements Serializable {
         this.DestinationPubKey = builder.DestinationPubKey;
         this.Preimage = builder.Preimage;
         this.PaymentHash = builder.PaymentHash;
+        this.FirstHop = builder.FirstHop;
+        this.HasFirstHop = builder.HasFirstHop;
+        this.LastHop = builder.LastHop;
+        this.HasLastHop = builder.HasLastHop;
         this.CustomRecords = builder.CustomRecords;
     }
 
@@ -72,6 +82,28 @@ public class SendLnPaymentRequest implements Serializable {
         return PaymentHash;
     }
 
+    /**
+     * The short channel id of the first hop.
+     */
+    public ShortChannelId getFirstHop() {
+        return FirstHop;
+    }
+
+    public boolean hasFirstHop() {
+        return HasFirstHop;
+    }
+
+    /**
+     * The pub key of the last hop.
+     */
+    public String getLastHop() {
+        return LastHop;
+    }
+
+    public boolean hasLastHop() {
+        return HasLastHop;
+    }
+
     public List<CustomRecord> getCustomRecords() {
         return CustomRecords;
     }
@@ -88,6 +120,10 @@ public class SendLnPaymentRequest implements Serializable {
         private String DestinationPubKey;
         private String Preimage;
         private String PaymentHash;
+        private ShortChannelId FirstHop;
+        private boolean HasFirstHop;
+        private String LastHop;
+        private boolean HasLastHop;
         private List<CustomRecord> CustomRecords;
 
         private Builder() {
@@ -144,6 +180,18 @@ public class SendLnPaymentRequest implements Serializable {
 
         public Builder setPaymentHash(String paymentHash) {
             PaymentHash = paymentHash;
+            return this;
+        }
+
+        public Builder setFirstHop(ShortChannelId firstHop) {
+            FirstHop = firstHop;
+            HasFirstHop = firstHop != null;
+            return this;
+        }
+
+        public Builder setLastHop(String lastHopPubKey) {
+            LastHop = lastHopPubKey;
+            HasLastHop = lastHopPubKey != null;
             return this;
         }
 

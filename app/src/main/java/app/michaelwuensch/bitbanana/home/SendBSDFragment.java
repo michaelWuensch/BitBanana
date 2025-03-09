@@ -40,6 +40,7 @@ import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.customView.ClearFocusListener;
 import app.michaelwuensch.bitbanana.customView.LightningFeeView;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
+import app.michaelwuensch.bitbanana.customView.PickChannelsView;
 import app.michaelwuensch.bitbanana.customView.UtxoOptionsView;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
 import app.michaelwuensch.bitbanana.models.Bip21Invoice;
@@ -61,11 +62,12 @@ import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
 
-public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoViewButtonListener, ClearFocusListener {
+public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoViewButtonListener, ClearFocusListener, PickChannelsView.OnPickChannelViewButtonListener {
 
     private static final String LOG_TAG = SendBSDFragment.class.getSimpleName();
 
-    private ActivityResultLauncher<Intent> mActivityResultLauncher;
+    private ActivityResultLauncher<Intent> mActivityResultLauncherSelectUTXOs;
+    private ActivityResultLauncher<Intent> mActivityResultLauncherSelectChannel;
 
     private BSDScrollableMainView mBSDScrollableMainView;
     private BSDProgressView mProgressScreen;
@@ -81,6 +83,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
     private BBButton mFallbackButton;
     private BBTextInputBox mPcvComment;
     private UtxoOptionsView mUtxoOptionsView;
+    private PickChannelsView mPickChannelsView;
 
     private DecodedBolt11 mDecodedBolt11;
     private DecodedBolt12 mDecodedBolt12;
@@ -181,6 +184,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         mPayeeView = view.findViewById(R.id.payeeView);
         mPcvComment = view.findViewById(R.id.paymentComment);
         mUtxoOptionsView = view.findViewById(R.id.utxoOptions);
+        mPickChannelsView = view.findViewById(R.id.pickChannels);
         mAmountInput = view.findViewById(R.id.amountInput);
 
         mPayeeView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
@@ -251,8 +255,8 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
         mHandler = new Handler();
 
-        // Initialize the ActivityResultLauncher
-        mActivityResultLauncher = registerForActivityResult(
+        // Initialize the ActivityResultLauncher for UTXO selection
+        mActivityResultLauncherSelectUTXOs = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
@@ -269,8 +273,24 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
                     }
                 }
         );
-        mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncher);
+
+        // Initialize the ActivityResultLauncher for Channel selection
+        mActivityResultLauncherSelectChannel = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // Pass result to the pick channels view
+                        mPickChannelsView.handleActivityResult(data);
+                    }
+                }
+        );
+
+        mUtxoOptionsView.setActivityResultLauncher(mActivityResultLauncherSelectUTXOs);
         mUtxoOptionsView.setClearFocusListener(this);
+
+        mPickChannelsView.setActivityResultLauncher(mActivityResultLauncherSelectChannel);
+        mPickChannelsView.setClearFocusListener(this);
 
         if (mOnChain) {
             mAmountInput.setOnChain(true);
@@ -287,6 +307,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             mPcvComment.setVisibility(View.GONE);
             mUtxoOptionsView.setVisibility(FeatureManager.isUtxoSelectionOnSendEnabled() ? View.VISIBLE : View.GONE);
             mUtxoOptionsView.setUtxoViewButtonListener(this);
+            mPickChannelsView.setVisibility(View.GONE);
 
             if (mDescription == null) {
                 mDescriptionView.setVisibility(View.GONE);
@@ -345,6 +366,8 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
             mUtxoOptionsView.setVisibility(View.GONE);
+            mPickChannelsView.setVisibility(FeatureManager.isChannelPickingOnSendEnabled() ? View.VISIBLE : View.GONE);
+            mPickChannelsView.setPickChannelsViewButtonListener(this);
 
             if (mIsBolt12Offer) {
                 // Bolt 12
@@ -394,6 +417,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
                     mPayeeView.setContent(ContactsManager.getInstance().getNameByContactData(mKeysendPubkey));
                     mPcvComment.setupCharLimit(200);
                     mPcvComment.setVisibility(View.VISIBLE);
+                    mPickChannelsView.setLastHopEnabled(false);
                 } else {
                     mPayeeView.setContent(ContactsManager.getInstance().getNameByContactData(mDecodedBolt11.getDestinationPubKey()));
                     mPcvComment.setVisibility(View.GONE);
@@ -551,9 +575,9 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
         SendLnPaymentRequest sendLnPaymentRequest = null;
         if (mIsKeysend)
-            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, getSendAmount(), mPcvComment.getData());
+            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, getSendAmount(), mPcvComment.getData(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
         else {
-            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount());
+            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
         }
         sendLightningPayment(sendLnPaymentRequest);
     }
@@ -744,5 +768,15 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
     public void onClearFocus() {
         mAmountInput.clearFocus();
         hideKeyboard();
+    }
+
+    @Override
+    public long onSelectChannelClicked() {
+        return getSendAmount();
+    }
+
+    @Override
+    public void onResetPickedChannelClicked() {
+
     }
 }

@@ -55,6 +55,8 @@ public class Backend {
     protected BackendFeature FeatureUtxoSelectOnChannelOpen = new BackendFeature(false);
     protected BackendFeature FeatureSendAllOnChain = new BackendFeature(false);
     protected BackendFeature FeatureShowBackendLog = new BackendFeature(false);
+    protected BackendFeature FeaturePickFirstHop = new BackendFeature(false);
+    protected BackendFeature FeaturePickLastHop = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -202,5 +204,13 @@ public class Backend {
 
     public boolean supportsShowBackendLog() {
         return FeatureShowBackendLog.isAvailable();
+    }
+
+    public boolean supportsPickFirstHop() {
+        return FeaturePickFirstHop.isAvailable();
+    }
+
+    public boolean supportsPickLastHop() {
+        return FeaturePickLastHop.isAvailable();
     }
 }

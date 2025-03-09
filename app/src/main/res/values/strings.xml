@@ -497,6 +497,10 @@
     <string name="error_invalid_peer_connection_data">Please ensure the data is in one of the following formats:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="error_offer_already_exists">An identical payment code already exists.</string>
     <string name="error_invalid_contact_data">Invalid format.\nPlease use one of the following:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- Payment Code</string>
+    <string name="error_channel_selection_pending">You cannot select channels that are still pending.</string>
+    <string name="error_channel_selection_offline">You cannot select channels that are currently offline.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">The selected channel\'s outgoing balance is insufficient.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">The selected channel\'s incoming balance is insufficient.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -599,6 +603,7 @@
     <string name="help_dialog_allFunds_1">If this box is selected, BitBanana will use all of your on-chain funds.</string>
     <string name="help_dialog_allFunds_1_utxo_selection">If this box is selected, BitBanana will spend all the funds from your chosen UTXOs.</string>
     <string name="help_dialog_allFunds_2">However, if you have open channels, a portion of these funds may be held as emergency reserves to ensure stable channel operation. You might also get some of those funds back as change.</string>
+    <string name="help_dialog_lastHop">Only use this last hop option when you want to rebalance your channels. To do so, you can effectively send funds to yourself. Generate an invoice and pay it with a specific set of own channels, picking one with high outgoing capacity for the first hop and one with high incoming balance for the last hop. This approach incurs fees but achieves channel rebalancing.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -900,5 +905,9 @@
 
     <string name="logs">Logs</string>
     <string name="logs_no_logs">No logs</string>
+
+    <string name="channel_selection">Channel selection</string>
+    <string name="first_hop">First Hop</string>
+    <string name="last_hop">Last Hop</string>
 
 </resources>
