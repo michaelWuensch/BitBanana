@@ -320,7 +320,7 @@ public class AdvancedChannelDetailsActivity extends BaseAppCompatActivity {
         mDetailCapacity.setVisibility(View.VISIBLE);
 
         // channel lifetime
-        if (channel.hasCloseHeight()) {
+        if (channel.hasCloseHeight() && channel.getShortChannelId() != null) {
             int openHeight = channel.getShortChannelId().getBlockHeight();
             int closeHeight = channel.getCloseHeight();
             int ageInBlocks = closeHeight - openHeight;
