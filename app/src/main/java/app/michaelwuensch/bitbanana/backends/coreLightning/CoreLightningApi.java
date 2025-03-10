@@ -406,7 +406,6 @@ public class CoreLightningApi extends Api {
                     for (ListclosedchannelsClosedchannels channel : closedListResponse.getClosedchannelsList()) {
                         ClosedChannel.Builder listClosedChannelsClosedChannelBuilder = ClosedChannel.newBuilder()
                                 .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
-                                .setShortChannelId(ApiUtil.ScidFromString(null))
                                 .setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getLastCommitmentTxid()))
                                 //.setChannelType(???)
                                 .setOpenInitiator(channel.getOpener() == ChannelSide.LOCAL)
