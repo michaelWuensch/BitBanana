@@ -1,0 +1,2 @@
+- Fixed Core Lightning getting stuck on load
+
