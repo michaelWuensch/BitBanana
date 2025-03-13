@@ -577,7 +577,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         if (mIsKeysend)
             sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, getSendAmount(), mPcvComment.getData(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
         else {
-            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
+            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey(), -1);
         }
         sendLightningPayment(sendLnPaymentRequest);
     }

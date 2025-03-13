@@ -370,7 +370,11 @@
             android:name="app.michaelwuensch.bitbanana.listViews.peers.itemDetails.PeerDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
-
+        <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.channels.RebalanceActivity"
+            android:label="@string/rebalance"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
         <activity
             android:name=".decoyApps.CalcActivity"
             android:screenOrientation="portrait"

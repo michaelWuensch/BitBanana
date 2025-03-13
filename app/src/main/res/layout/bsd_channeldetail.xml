@@ -395,17 +395,6 @@
                         app:tint="@color/white" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    android:id="@+id/spacer"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/closingTxLayout">
-
-                </View>
-
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline_50"
                     android:layout_width="wrap_content"
@@ -414,13 +403,26 @@
                     app:layout_constraintGuide_percent="0.50" />
 
                 <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/rebalanceButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    app:bbbutton_text="@string/rebalance"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/closingTxLayout"
+                    tools:visibility="visible" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
                     android:id="@+id/channelCloseButton"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="20dp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spacer"
+                    app:layout_constraintTop_toBottomOf="@+id/rebalanceButton"
                     tools:bbbutton_text="Close Channel"
                     tools:visibility="visible" />
 

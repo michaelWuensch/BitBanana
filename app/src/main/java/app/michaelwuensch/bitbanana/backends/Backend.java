@@ -57,6 +57,7 @@ public class Backend {
     protected BackendFeature FeatureShowBackendLog = new BackendFeature(false);
     protected BackendFeature FeaturePickFirstHop = new BackendFeature(false);
     protected BackendFeature FeaturePickLastHop = new BackendFeature(false);
+    protected BackendFeature FeatureRebalanceChannel = new BackendFeature(false);
 
     public Backend() {
         this(null);
@@ -212,5 +213,9 @@ public class Backend {
 
     public boolean supportsPickLastHop() {
         return FeaturePickLastHop.isAvailable();
+    }
+
+    public boolean supportsRebalanceChannel() {
+        return FeatureRebalanceChannel.isAvailable();
     }
 }
