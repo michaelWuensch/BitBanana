@@ -63,7 +63,6 @@ import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -380,13 +379,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 DecodedBolt11 decodedBolt11 = InvoiceUtil.decodeBolt11(lnUrlPaySecondResponse.getPaymentRequest());
                 BBLog.v(LOG_TAG, decodedBolt11.toString());
 
-                String metadataHash;
-                if (mPayerData == null) {
-                    metadataHash = mPaymentData.getMetadataHash();
-                } else {
-                    metadataHash = UtilFunctions.sha256Hash(mPaymentData.getMetadata() + mPayerData.getAsJsonString());
-                }
-
                 if (decodedBolt11.isExpired()) {
                     // Show error: payment request expired.
                     BBLog.e(LOG_TAG, "LNURL: Payment request expired.");
@@ -397,9 +389,6 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                 } else if (decodedBolt11.getAmountRequested() != mAmountInput.getAmount()) {
                     BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
-                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                } else if (decodedBolt11.getDescriptionHash() == null || !decodedBolt11.getDescriptionHash().equals(metadataHash)) {
-                    BBLog.e(LOG_TAG, "LNURL: The hash in the invoice does not match the hash of from the metadata send before.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                 } else {
                     SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
