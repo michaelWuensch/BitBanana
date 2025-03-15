@@ -66,7 +66,6 @@ public class LndBackend extends Backend {
         FeatureSendAllOnChain = new BackendFeature(true);
         FeatureShowBackendLog = new BackendFeature(true);
         FeaturePickFirstHop = new BackendFeature(true);
-        FeaturePickLastHop = new BackendFeature(true);
         FeatureRebalanceChannel = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
@@ -125,7 +124,6 @@ public class LndBackend extends Backend {
                             FeatureEventSubscriptions = new BackendFeature(false);
                             FeatureIdentityScreen = new BackendFeature(false);
                             FeaturePickFirstHop = new BackendFeature(false);
-                            FeaturePickLastHop = new BackendFeature(false);
                         }
                     }
                 }
