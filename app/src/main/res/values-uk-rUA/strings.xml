@@ -806,4 +806,12 @@
     <string name="error_channel_selection_pending">Ви не можете вибрати канали, які ще очікують на розгляд.</string>
     <string name="error_channel_selection_insufficient_liquidity_outgoing">Вихідний баланс вибраного каналу недостатній.</string>
     <string name="error_channel_selection_insufficient_liquidity_incoming">Вхідний баланс вибраного каналу недостатній.</string>
+    <string name="max_fee">Максимальна плата</string>
+    <string name="error_channel_rebalance_no_fee_rate">Ви повинні визначити максимальну ставку комісії.</string>
+    <string name="error_channel_rebalance_insufficient_funds">Сервер відповів помилкою \"недостатньо коштів\". Можливо, деякі обмеження каналу не дозволяють каналу витрачати більшу частину свого балансу.</string>
+    <string name="help">Довідка</string>
+    <string name="adjust">Налаштувати</string>
+    <string name="help_dialog_rebalancing">Ребалансування каналів тримає ваші платіжні канали готовими до роботи! Якщо на одній стороні закінчуються кошти, ваш канал може відправляти платежі лише в одному напрямку, і платежі можуть почати збоїти. Відправлення коштів за круговим маршрутом перерозподіляє баланси без необхідності проведення транзакцій у ланцюжку. Цей вид дозволяє виконувати такі циклічні платежі. Для досягнення найкращих результатів виберіть канал з надлишком вихідної ліквідності і об\'єднайте його з іншим каналом, який може обробляти більше вхідних коштів.</string>
+    <string name="rebalance">Відновити баланс</string>
+    <string name="fee_paid">Сплачена комісія</string>
 </resources>
