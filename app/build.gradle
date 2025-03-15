@@ -15,7 +15,7 @@ android {
         versionName "0.9.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "bitbanana-" + versionName + "_" + versionCode)
+        setProperty("archivesBaseName", "bitbanana-" + versionName)
 
         /* The following command will prevent any language from being packaged, that is not mentioned here.
          We want to keep all languages that we actually have translations for, so listed are basically the ones found in the strings folder.
