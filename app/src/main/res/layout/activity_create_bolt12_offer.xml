@@ -46,6 +46,6 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"
-        app:bbbutton_text="@string/save"
+        app:bbbutton_text="@string/activity_bolt12_create_offer"
         app:layout_constraintBottom_toBottomOf="parent" />
 </LinearLayout>
