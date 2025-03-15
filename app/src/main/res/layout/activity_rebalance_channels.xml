@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.setup.ManualSetup">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/inputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/deep_sea_blue"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/channelALabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    tools:text="Channel A" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/channelASelectButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="10dp"
+                    tools:bbbutton_text="Select ..." />
+
+                <app.michaelwuensch.bitbanana.customView.BBRebalance_ChannelView
+                    android:id="@+id/channelA"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/channelBLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textSize="18sp"
+                    tools:text="Channel B" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/channelBSelectButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="10dp"
+                    tools:bbbutton_text="Select ..." />
+
+                <app.michaelwuensch.bitbanana.customView.BBRebalance_ChannelView
+                    android:id="@+id/channelB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/adjustLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/adjust"
+                    android:textSize="18sp" />
+
+                <SeekBar
+                    android:id="@+id/slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp" />
+
+                <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                    android:id="@+id/maxFeeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:inputLabel="@string/max_fee"
+                    app:inputLabelDetails="(percent)" />
+
+                <TextView
+                    android:id="@+id/summaryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/summary"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_clickable_item"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/amountAndDirectionLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/amount"
+                            tools:text="Amount (A --> B)" />
+
+                        <app.michaelwuensch.bitbanana.customView.AmountView
+                            android:id="@+id/rebalanceAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/rebalanceFeeLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/fee" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/maximum_abbreviation" />
+
+                        <app.michaelwuensch.bitbanana.customView.AmountView
+                            android:id="@+id/rebalanceFee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            app:amountView_msatPrecision="false"
+                            app:canBlur="false" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/rebalanceButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="40dp"
+                    app:bbbutton_text="@string/rebalance" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+        <LinearLayout
+            android:id="@+id/resultContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="25dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/okButton"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/resultHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/success"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                android:textSize="36sp" />
+
+            <ImageView
+                android:id="@+id/resultTypeIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/outline_balance_24"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/resultDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    tools:text="Paid fee:" />
+
+                <app.michaelwuensch.bitbanana.customView.AmountView
+                    android:id="@+id/successFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    app:amountView_msatPrecision="false"
+                    app:canBlur="false"
+                    app:textSize="24sp" />
+            </LinearLayout>
+
+            <app.michaelwuensch.bitbanana.customView.BBRebalance_ChannelView
+                android:id="@+id/channelASuccessScreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp" />
+
+            <app.michaelwuensch.bitbanana.customView.BBRebalance_ChannelView
+                android:id="@+id/channelBSuccessScreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+
+        </LinearLayout>
+
+        <app.michaelwuensch.bitbanana.customView.BBButton
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="15dp"
+            android:visibility="gone"
+            app:bbbutton_text="@string/ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -19,12 +19,14 @@ import androidx.core.content.ContextCompat;
 import androidx.transition.TransitionManager;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDProgressView;
 import app.michaelwuensch.bitbanana.customView.BSDResultView;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.listViews.channels.RebalanceActivity;
 import app.michaelwuensch.bitbanana.listViews.channels.items.ChannelListItem;
 import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
@@ -34,6 +36,7 @@ import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
+import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 
@@ -59,6 +62,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
     private TextView mChannelVisibility;
     private ImageView mChannelVisibilitySeparatorLine;
     private TextView mFundingTx;
+    private BBButton mRebalanceButton;
     private BBButton mCloseChannelButton;
 
     private ConstraintLayout mChannelDetailsLayout;
@@ -97,6 +101,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
         mClosingTxLayout = view.findViewById(R.id.closingTxLayout);
         mClosingTxText = view.findViewById(R.id.closingTxText);
         mClosingTxCopyIcon = view.findViewById(R.id.closingTxCopyIcon);
+        mRebalanceButton = view.findViewById(R.id.rebalanceButton);
         mCloseChannelButton = view.findViewById(R.id.channelCloseButton);
         mForceClosingTxTimeLabel = view.findViewById(R.id.closingTxTimeLabel);
         mForceClosingTxTimeText = view.findViewById(R.id.closingTxTimeText);
@@ -173,6 +178,17 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
 
         long availableCapacity = channel.getCapacity() - channel.getCommitFee();
         setBalances(channel.getLocalBalance(), channel.getRemoteBalance(), availableCapacity);
+
+        mRebalanceButton.setVisibility(BackendManager.getCurrentBackend().supportsRebalanceChannel() && channel.isActive() ? View.VISIBLE : View.GONE);
+        mRebalanceButton.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+                Intent intent = new Intent(getActivity(), RebalanceActivity.class);
+                intent.putExtra(RebalanceActivity.EXTRA_CHANNEL_A, getArguments().getSerializable(ARGS_CHANNEL));
+                startActivity(intent);
+                dismiss();
+            }
+        });
     }
 
     private void bindPendingChannel(PendingChannel channel) {

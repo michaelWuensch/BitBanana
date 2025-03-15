@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
 
@@ -43,7 +42,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
 
@@ -76,7 +74,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
 

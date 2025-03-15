@@ -1170,6 +1170,8 @@ public class LndApi extends Api {
                     switch (response.getStatus()) {
                         case SUCCEEDED:
                             return SendLnPaymentResponse.newBuilder()
+                                    .setAmount(response.getValueMsat())
+                                    .setFee(response.getFeeMsat())
                                     .setPaymentPreimage(response.getPaymentPreimage())
                                     .build();
                         case FAILED:

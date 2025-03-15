@@ -181,7 +181,7 @@ public class PickChannelsView extends ConstraintLayout {
         if (mActivityResultLauncher != null && mOnPickChannelViewButtonListener != null) {
             Intent intent = new Intent(getContext(), ManageChannelsActivity.class);
             intent.putExtra(ManageChannelsActivity.EXTRA_CHANNELS_ACTIVITY_MODE, ManageChannelsActivity.MODE_SELECT);
-            intent.putExtra(ManageChannelsActivity.EXTRA_HOP_TYPE, ManageChannelsActivity.HOP_TYPE_FIRST_HOP);
+            intent.putExtra(ManageChannelsActivity.EXTRA_SELECTION_TYPE, ManageChannelsActivity.SELECTION_TYPE_FIRST_HOP);
             intent.putExtra(ManageChannelsActivity.EXTRA_TRANSACTION_AMOUNT, mOnPickChannelViewButtonListener.onSelectChannelClicked());
             mActivityResultLauncher.launch(intent);
         }
@@ -191,7 +191,7 @@ public class PickChannelsView extends ConstraintLayout {
         if (mActivityResultLauncher != null && mOnPickChannelViewButtonListener != null) {
             Intent intent = new Intent(getContext(), ManageChannelsActivity.class);
             intent.putExtra(ManageChannelsActivity.EXTRA_CHANNELS_ACTIVITY_MODE, ManageChannelsActivity.MODE_SELECT);
-            intent.putExtra(ManageChannelsActivity.EXTRA_HOP_TYPE, ManageChannelsActivity.HOP_TYPE_LAST_HOP);
+            intent.putExtra(ManageChannelsActivity.EXTRA_SELECTION_TYPE, ManageChannelsActivity.SELECTION_TYPE_LAST_HOP);
             intent.putExtra(ManageChannelsActivity.EXTRA_TRANSACTION_AMOUNT, mOnPickChannelViewButtonListener.onSelectChannelClicked());
             mActivityResultLauncher.launch(intent);
         }
@@ -230,16 +230,16 @@ public class PickChannelsView extends ConstraintLayout {
 
         OpenChannel channel = (OpenChannel) data.getSerializableExtra(ManageChannelsActivity.EXTRA_SELECTED_CHANNEL);
 
-        int hopType = data.getIntExtra(ManageChannelsActivity.EXTRA_HOP_TYPE, 0);
+        int hopType = data.getIntExtra(ManageChannelsActivity.EXTRA_SELECTION_TYPE, 0);
 
         switch (hopType) {
-            case ManageChannelsActivity.HOP_TYPE_FIRST_HOP:
+            case ManageChannelsActivity.SELECTION_TYPE_FIRST_HOP:
                 mSelectedFirstHop = channel.getShortChannelId();
                 mBtnSelectFirstHop.setVisibility(GONE);
                 mFirstHopSelectionLayout.setVisibility(VISIBLE);
                 mTvFirstHopSelectedChannelName.setText(AliasManager.getInstance().getAlias(channel.getRemotePubKey()));
                 break;
-            case ManageChannelsActivity.HOP_TYPE_LAST_HOP:
+            case ManageChannelsActivity.SELECTION_TYPE_LAST_HOP:
                 mSelectedLastHopPubKey = channel.getRemotePubKey();
                 mBtnSelectLastHop.setVisibility(GONE);
                 mLastHopSelectionLayout.setVisibility(VISIBLE);

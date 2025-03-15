@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -55,13 +56,15 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
     public static final String EXTRA_CHANNELS_ACTIVITY_MODE = "channelsActivityMode";
     public static final String EXTRA_SELECTED_CHANNEL = "selectedChannel";
-    public static final String EXTRA_HOP_TYPE = "hopType";
+    public static final String EXTRA_SELECTION_TYPE = "hopType";
     public static final String EXTRA_TRANSACTION_AMOUNT = "transactionAmount";
 
     public static final int MODE_VIEW = 0;
     public static final int MODE_SELECT = 1;
-    public static final int HOP_TYPE_FIRST_HOP = 0;
-    public static final int HOP_TYPE_LAST_HOP = 1;
+    public static final int SELECTION_TYPE_FIRST_HOP = 0;
+    public static final int SELECTION_TYPE_LAST_HOP = 1;
+    public static final int SELECTION_TYPE_REBALANCE_A = 2;
+    public static final int SELECTION_TYPE_REBALANCE_B = 3;
 
     private static int REQUEST_CODE_OPEN_CHANNEL = 100;
 
@@ -78,7 +81,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private boolean isOpenChannelView = true;
     private long createOptionsMenuTimestamp;
     private int mMode;
-    private int mSelectionHopType;
+    private int mSelectionType;
     private long mTransactionAmountMSat;
 
     @Override
@@ -90,7 +93,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mMode = extras.getInt(EXTRA_CHANNELS_ACTIVITY_MODE);
-            mSelectionHopType = extras.getInt(EXTRA_HOP_TYPE);
+            mSelectionType = extras.getInt(EXTRA_SELECTION_TYPE);
             mTransactionAmountMSat = extras.getLong(EXTRA_TRANSACTION_AMOUNT);
         } else {
             mMode = 0;
@@ -313,14 +316,14 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                             return;
                         }
 
-                        switch (mSelectionHopType) {
-                            case HOP_TYPE_FIRST_HOP:
+                        switch (mSelectionType) {
+                            case SELECTION_TYPE_FIRST_HOP:
                                 if (mTransactionAmountMSat > openChannel.getLocalBalance()) {
                                     showError(getString(R.string.error_channel_selection_insufficient_liquidity_outgoing), 3000);
                                     return;
                                 }
                                 break;
-                            case HOP_TYPE_LAST_HOP:
+                            case SELECTION_TYPE_LAST_HOP:
                                 if (mTransactionAmountMSat > openChannel.getRemoteBalance()) {
                                     showError(getString(R.string.error_channel_selection_insufficient_liquidity_incoming), 3000);
                                     return;
@@ -328,7 +331,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
                         }
 
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra(EXTRA_HOP_TYPE, mSelectionHopType);
+                        resultIntent.putExtra(EXTRA_SELECTION_TYPE, mSelectionType);
                         resultIntent.putExtra(EXTRA_SELECTED_CHANNEL, (Serializable) channel);
                         setResult(Activity.RESULT_OK, resultIntent);
                         finish();
@@ -389,8 +392,26 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        if (FeatureManager.isHelpButtonsEnabled() && mMode == MODE_VIEW)
-            getMenuInflater().inflate(R.menu.help_menu, menu);
+
+        boolean showHelp = FeatureManager.isHelpButtonsEnabled() && mMode == MODE_VIEW;
+        boolean showRebalance = BackendManager.getCurrentBackend().supportsRebalanceChannel() && mMode == MODE_VIEW;
+        boolean needsExpandableMenu = showHelp && showRebalance;
+        if (needsExpandableMenu) {
+            getMenuInflater().inflate(R.menu.manage_channels_menu, menu);
+            // Display icons in expandable menu
+            if (menu instanceof MenuBuilder) {
+                MenuBuilder m = (MenuBuilder) menu;
+
+                //noinspection RestrictedApi
+                m.setOptionalIconsVisible(true);
+            }
+        } else {
+            if (showHelp)
+                getMenuInflater().inflate(R.menu.help_menu, menu);
+            if (showRebalance)
+                getMenuInflater().inflate(R.menu.rebalance_menu, menu);
+        }
+
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint(getResources().getString(R.string.search));
@@ -461,6 +482,11 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (id == R.id.helpButton) {
             HelpDialogUtil.showDialogWithLink(ManageChannelsActivity.this, R.string.help_dialog_channels, "LIGHTNINGNETWORk.PLUS", RefConstants.URL_LNPLUS);
             return true;
+        }
+
+        if (id == R.id.rebalanceMenuButton) {
+            Intent intent = new Intent(ManageChannelsActivity.this, RebalanceActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -28,15 +28,16 @@ public class PaymentUtil {
 
     /**
      * Used to send a lightning payment for a bolt 11 invoice.
+     * Use -1 for custom fee rate if you want to use the default fee rate from the app settings.
      *
      * @param decodedBolt11 The decodedBolt11 invoice that will get paid
      */
-    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
+    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop, float customFeeRateInPercent) {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT11_INVOICE)
                 .setBolt11(decodedBolt11)
                 .setAmount(amount)
-                .setMaxFee(calculateAbsoluteFeeLimit(amount))
+                .setMaxFee(calculateAbsoluteFeeLimit(amount, customFeeRateInPercent))
                 .setFirstHop(firstHop)
                 .setLastHop(lastHop)
                 .build();
@@ -52,7 +53,7 @@ public class PaymentUtil {
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT12_INVOICE)
                 .setBolt12InvoiceString(bolt12Invoice)
                 .setAmount(amount)
-                .setMaxFee(calculateAbsoluteFeeLimit(amount))
+                .setMaxFee(calculateAbsoluteFeeLimit(amount, -1))
                 .build();
     }
 
@@ -76,7 +77,7 @@ public class PaymentUtil {
                     .build());
         }
 
-        long feeLimit = calculateAbsoluteFeeLimit(amount);
+        long feeLimit = calculateAbsoluteFeeLimit(amount, -1);
 
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.KEYSEND)
@@ -129,13 +130,29 @@ public class PaymentUtil {
      * @param amountMSatToSend Amount that should be send with the transaction
      * @return maximum number of msats in fee
      */
-    public static long calculateAbsoluteFeeLimit(long amountMSatToSend) {
+    public static long calculateAbsoluteFeeLimit(long amountMSatToSend, float customFeeRateInPercent) {
         long absFee;
-        if (amountMSatToSend <= RefConstants.LN_PAYMENT_FEE_THRESHOLD * 1000) {
-            absFee = (long) (Math.sqrt(amountMSatToSend));
-        } else {
-            absFee = (long) (getRelativeSettingsFeeLimit() * amountMSatToSend);
+
+        // No custom fee rate was set, go with our default procedure to calculate the fee using the settings default
+        if (customFeeRateInPercent < 0) {
+            if (amountMSatToSend <= RefConstants.LN_PAYMENT_FEE_THRESHOLD * 1000)
+                absFee = (long) (Math.sqrt(amountMSatToSend));
+            else
+                absFee = (long) (getRelativeSettingsFeeLimit() * amountMSatToSend);
+
+            return Math.max(absFee, 3000L);
         }
+
+        // We explicitly set the fee rate to 0. Only consider zero fee routes
+        if (customFeeRateInPercent == 0)
+            return 0;
+
+        // A custom non zero fee rate was set, apply our default procedure for small amounts, and apply the custom fee rate for bigger values
+        if (amountMSatToSend <= RefConstants.LN_PAYMENT_FEE_THRESHOLD * 1000)
+            absFee = (long) (Math.sqrt(amountMSatToSend));
+        else
+            absFee = (long) ((customFeeRateInPercent / 100f) * amountMSatToSend);
+
         return Math.max(absFee, 3000L);
     }
 
@@ -149,11 +166,6 @@ public class PaymentUtil {
         }
         return feeMultiplier;
     }
-
-    public static float calculateRelativeFeeLimit(long amountSatToSend) {
-        return (float) calculateAbsoluteFeeLimit(amountSatToSend) / (float) amountSatToSend;
-    }
-
 
     public interface OnPaymentResult {
         void onSuccess(SendLnPaymentResponse sendLnPaymentResponse);

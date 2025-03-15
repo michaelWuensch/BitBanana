@@ -147,6 +147,8 @@
     <string name="change">Change</string>
     <string name="clear">Clear</string>
     <string name="copy_all">Copy all</string>
+    <string name="help">Help</string>
+    <string name="adjust">Adjust</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -501,6 +503,8 @@
     <string name="error_channel_selection_offline">You cannot select channels that are currently offline.</string>
     <string name="error_channel_selection_insufficient_liquidity_outgoing">The selected channel\'s outgoing balance is insufficient.</string>
     <string name="error_channel_selection_insufficient_liquidity_incoming">The selected channel\'s incoming balance is insufficient.</string>
+    <string name="error_channel_rebalance_no_fee_rate">You must define a maximum fee rate.</string>
+    <string name="error_channel_rebalance_insufficient_funds">The backend responded with an \"insufficient funds\" error. Maybe some channel constraints prevent a channel from spending most of its balance.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -604,6 +608,7 @@
     <string name="help_dialog_allFunds_1_utxo_selection">If this box is selected, BitBanana will spend all the funds from your chosen UTXOs.</string>
     <string name="help_dialog_allFunds_2">However, if you have open channels, a portion of these funds may be held as emergency reserves to ensure stable channel operation. You might also get some of those funds back as change.</string>
     <string name="help_dialog_lastHop">Only use this last hop option when you want to rebalance your channels. To do so, you can effectively send funds to yourself. Generate an invoice and pay it with a specific set of own channels, picking one with high outgoing capacity for the first hop and one with high incoming balance for the last hop. This approach incurs fees but achieves channel rebalancing.</string>
+    <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel can only send in one direction, and payments may start to fail. Sending funds in a circular route redistributes balances without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with surplus outgoing liquidity and pair it with another that can handle more incoming funds.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -909,5 +914,9 @@
     <string name="channel_selection">Channel selection</string>
     <string name="first_hop">First Hop</string>
     <string name="last_hop">Last Hop</string>
+
+    <string name="rebalance">Rebalance</string>
+    <string name="max_fee">Maximum fee</string>
+    <string name="fee_paid">Paid fee</string>
 
 </resources>
