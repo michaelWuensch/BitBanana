@@ -1008,4 +1008,12 @@
     <string name="use_all_selected_funds">Usar todos os fundos selecionados</string>
     <string name="logs">Registros</string>
     <string name="guardian_copy_logs">Por favor note que este registro copiado pode conter dados sensíveis. Analise-o e edite qualquer informação confidencial antes de compartilhar com alguém.</string>
+    <string name="help">Ajuda</string>
+    <string name="adjust">Ajustar</string>
+    <string name="error_channel_rebalance_insufficient_funds">O backend respondeu com um erro de “fundos insuficientes”. Talvez algumas restrições de um canal estejam prevenindo o canal de gastar a maior parte de seu balanço.</string>
+    <string name="error_channel_rebalance_no_fee_rate">Você deve definir uma taxa máxima de cobrança.</string>
+    <string name="rebalance">Rebalancear</string>
+    <string name="max_fee">Taxa máxima</string>
+    <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém seus canais de pagamento prontos para a ação! Se um lado estiver baixo, seu canal pode enviar apenas em uma direção, e os pagamentos podem começar a falhar. Enviar fundos em uma rota circular redistribui balanços sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
+    <string name="fee_paid">Taxas pagas</string>
 </resources>
