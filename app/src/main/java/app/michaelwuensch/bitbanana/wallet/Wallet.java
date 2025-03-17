@@ -119,6 +119,7 @@ public class Wallet {
         // The info request works without authentication. Therefore we need another call and use balances.
         // Without doing this here we would end up with a multicall, that tries to authenticate multiple times.
         compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     setWalletLoadState(WalletLoadState.UNLOCKED);
                     connectionTest(true);
@@ -141,6 +142,7 @@ public class Wallet {
 
         compositeDisposable.add(LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getStateResponse -> {
 
                     switch (getStateResponse.getState()) {
@@ -173,6 +175,7 @@ public class Wallet {
                 .build();
 
         compositeDisposable.add(LndConnection.getInstance().getWalletUnlockerService().unlockWallet(unlockRequest)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unlockWalletResponse -> {
                     BBLog.d(LOG_TAG, "successfully unlocked");
                     setWalletLoadState(WalletLoadState.UNLOCKED);
@@ -217,6 +220,7 @@ public class Wallet {
 
         compositeDisposable.add(BackendManager.api().getCurrentNodeInfo()
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mCurrentNodeInfo = response;
 
@@ -388,8 +392,24 @@ public class Wallet {
                 break;
             case LND_HUB:
                 compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             // Everything fetched, now show the wallet!
+                            setWalletLoadState(WalletLoadState.WALLET_LOADED);
+                        }, throwable -> {
+                            setWalletLoadState(WalletLoadState.ERROR);
+                            broadcastWalletLoadError("Exception loading required data on startup: " + throwable.getMessage());
+                            BBLog.e(LOG_TAG, "Exception loading required data on startup: " + throwable.getMessage());
+                        }));
+
+                // Fetch the transaction history
+                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                break;
+            case NOSTR_WALLET_CONNECT:
+                compositeDisposable.add(Wallet_Balance.getInstance().fetchBalanceSingle()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            // Everything fetched. Show the wallet!
                             setWalletLoadState(WalletLoadState.WALLET_LOADED);
                         }, throwable -> {
                             setWalletLoadState(WalletLoadState.ERROR);

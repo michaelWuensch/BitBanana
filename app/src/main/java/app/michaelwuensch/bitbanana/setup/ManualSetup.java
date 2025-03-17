@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBButton;
@@ -47,6 +49,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private static final String LOG_TAG = ManualSetup.class.getSimpleName();
 
     private BBInputFieldView mEtName;
+    private BBInputFieldView mEtFullConnectString;
     private BBInputFieldView mEtHost;
     private BBInputFieldView mEtPort;
     private BBInputFieldView mEtAuthenticationToken;
@@ -54,6 +57,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtClientCertificate;
     private BBInputFieldView mEtClientKey;
     private BBInputFieldView mEtUser;
+    private View mVpnAutomationLayout;
     private View mViewPasswordLayout;
     private BBInputFieldView mEtPassword;
     private ImageButton mIbPasswordVisibility;
@@ -64,6 +68,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private ImageButton mVpnHelpButton;
     private String mWalletUUID;
     private BackendConfig mOriginalBackendConfig;
+    private View mSpTypeLayout;
     private Spinner mSpType;
     private View mVerifyCertVisibilityLayout;
     private boolean pwVisible = false;
@@ -83,6 +88,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         setContentView(R.layout.activity_manual_setup);
 
         mEtName = findViewById(R.id.inputName);
+        mEtFullConnectString = findViewById(R.id.inputFullConnectString);
         mEtHost = findViewById(R.id.inputHost);
         mEtPort = findViewById(R.id.inputPort);
         mEtAuthenticationToken = findViewById(R.id.inputAuthenticationToken);
@@ -95,9 +101,11 @@ public class ManualSetup extends BaseAppCompatActivity {
         mIbPasswordVisibility = findViewById(R.id.passwordVisibilityToggle);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
+        mVpnAutomationLayout = findViewById(R.id.vpnAutomationLayout);
         mVpnConfigView = findViewById(R.id.vpnConfigView);
         mBtnSave = findViewById(R.id.saveButton);
         mVpnHelpButton = findViewById(R.id.vpnHelpButton);
+        mSpTypeLayout = findViewById(R.id.typeSpinnerLayout);
         mSpType = findViewById(R.id.typeSpinner);
         mVerifyCertVisibilityLayout = findViewById(R.id.verifyCertVisibilityLayout);
 
@@ -121,10 +129,11 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
-        String[] items = new String[3];
+        String[] items = new String[4];
         items[0] = BackendConfig.BackendType.LND_GRPC.getDisplayName();
         items[1] = BackendConfig.BackendType.CORE_LIGHTNING_GRPC.getDisplayName();
         items[2] = BackendConfig.BackendType.LND_HUB.getDisplayName();
+        items[3] = BackendConfig.BackendType.NOSTR_WALLET_CONNECT.getDisplayName();
 
         mSpType.setAdapter(new ArrayAdapter<String>(this, R.layout.spinner_item, items));
         mSpType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,6 +142,8 @@ public class ManualSetup extends BaseAppCompatActivity {
                 switch (position) {
                     case 0:
                         // Lnd gRPC
+                        mEtFullConnectString.setVisibility(View.GONE);
+                        mEtHost.setVisibility(View.VISIBLE);
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtAuthenticationToken.setVisibility(View.VISIBLE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
@@ -140,10 +151,14 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.GONE);
                         mViewPasswordLayout.setVisibility(View.GONE);
+                        mVpnAutomationLayout.setVisibility(View.VISIBLE);
+                        mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         // Core Lightning gRPC
+                        mEtFullConnectString.setVisibility(View.GONE);
+                        mEtHost.setVisibility(View.VISIBLE);
                         mEtPort.setVisibility(View.VISIBLE);
                         mEtAuthenticationToken.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.VISIBLE);
@@ -151,10 +166,14 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.VISIBLE);
                         mEtUser.setVisibility(View.GONE);
                         mViewPasswordLayout.setVisibility(View.GONE);
+                        mVpnAutomationLayout.setVisibility(View.VISIBLE);
+                        mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         // Lnd Hub
+                        mEtFullConnectString.setVisibility(View.GONE);
+                        mEtHost.setVisibility(View.VISIBLE);
                         mEtPort.setVisibility(View.GONE);
                         mEtAuthenticationToken.setVisibility(View.GONE);
                         mEtServerCertificate.setVisibility(View.GONE);
@@ -162,7 +181,27 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.VISIBLE);
                         mViewPasswordLayout.setVisibility(View.VISIBLE);
+                        mVpnAutomationLayout.setVisibility(View.VISIBLE);
+                        mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        // Nostr Wallet Connect
+                        mEtFullConnectString.setVisibility(View.VISIBLE);
+                        mEtHost.setVisibility(View.GONE);
+                        mEtPort.setVisibility(View.GONE);
+                        mEtAuthenticationToken.setVisibility(View.GONE);
+                        mEtServerCertificate.setVisibility(View.GONE);
+                        mEtClientCertificate.setVisibility(View.GONE);
+                        mEtClientKey.setVisibility(View.GONE);
+                        mEtUser.setVisibility(View.GONE);
+                        mViewPasswordLayout.setVisibility(View.GONE);
+                        mVpnAutomationLayout.setVisibility(View.GONE);
+                        mSwTor.setVisibility(View.GONE);
+                        mVerifyCertVisibilityLayout.setVisibility(View.GONE);
+
+                        mEtFullConnectString.setDescription("Nostr Wallet Connect URL");
+                        mEtFullConnectString.getEditText().setHint("nostr+walletconnect://");
                         break;
                 }
             }
@@ -172,7 +211,6 @@ public class ManualSetup extends BaseAppCompatActivity {
 
             }
         });
-
 
         // Fill in vales if existing wallet is edited
         if (mWalletUUID != null) {
@@ -188,8 +226,12 @@ public class ManualSetup extends BaseAppCompatActivity {
                 case LND_HUB:
                     mSpType.setSelection(2);
                     break;
+                case NOSTR_WALLET_CONNECT:
+                    mSpType.setSelection(3);
+                    break;
             }
             mEtName.setValue(BackendConfig.getAlias());
+            mEtFullConnectString.setValue(BackendConfig.getFullConnectString());
             mEtHost.setValue(BackendConfig.getHost());
             mEtPort.setValue(String.valueOf(BackendConfig.getPort()));
             mEtAuthenticationToken.setValue(BackendConfig.getAuthenticationToken());
@@ -212,6 +254,15 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
             mEtUser.setValue(BackendConfig.getUser());
             mEtPassword.setValue(BackendConfig.getPassword());
+
+            // Delay is necessary to hide the Type Spinner. Without set selection function doesn't work.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSpTypeLayout.setVisibility(View.GONE);
+                }
+            }, 1);
+
         } else {
             mVpnConfigView.setupWithVpnConfig(null); // This makes sure start on open and stop on close are set to true;
             mSpType.setSelection(0);
@@ -281,8 +332,12 @@ public class ManualSetup extends BaseAppCompatActivity {
             case 2:
                 backendConfig.setBackendType(BackendConfig.BackendType.LND_HUB);
                 break;
+            case 3:
+                backendConfig.setBackendType(BackendConfig.BackendType.NOSTR_WALLET_CONNECT);
+                break;
         }
         backendConfig.setHost(mEtHost.getData());
+        backendConfig.setFullConnectString(mEtFullConnectString.getData());
         try {
             backendConfig.setPort(Integer.parseInt(mEtPort.getData()));
         } catch (Exception ignored) {
@@ -304,6 +359,8 @@ public class ManualSetup extends BaseAppCompatActivity {
             backendConfig.setTempAccessToken(mOriginalBackendConfig.getTempAccessToken());
             backendConfig.setTempRefreshToken(mOriginalBackendConfig.getTempRefreshToken());
             backendConfig.setAvatarMaterial(mOriginalBackendConfig.getAvatarMaterial());
+            backendConfig.setQuickReceiveType(mOriginalBackendConfig.getQuickReceiveType());
+            backendConfig.setQuickReceiveString(mOriginalBackendConfig.getQuickReceiveString());
         }
         return backendConfig;
     }
@@ -313,13 +370,15 @@ public class ManualSetup extends BaseAppCompatActivity {
             showError(getString(R.string.error_input_field_empty, getString(R.string.name)), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
-        if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
-            showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
-            return;
-        }
 
         if (mSpType.getSelectedItemPosition() == 0) {
             // LND grpc
+
+            if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+
             if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
                 return;
@@ -337,6 +396,11 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (mSpType.getSelectedItemPosition() == 1) {
             // CoreLightning grpc
+            if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+
             if (mEtPort.getData() == null || mEtPort.getData().isEmpty()) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.port)), RefConstants.ERROR_DURATION_SHORT);
                 return;
@@ -360,12 +424,28 @@ public class ManualSetup extends BaseAppCompatActivity {
 
         if (mSpType.getSelectedItemPosition() == 2) {
             // LNDHub
+            if (mEtHost.getData() == null || mEtHost.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, getString(R.string.host)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+
             if ((mEtUser.getData() == null || mEtUser.getData().isEmpty())) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.username)), RefConstants.ERROR_DURATION_SHORT);
                 return;
             }
             if ((mEtPassword.getData() == null || mEtPassword.getData().isEmpty())) {
                 showError(getString(R.string.error_input_field_empty, getString(R.string.password)), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+        }
+
+        if (mSpType.getSelectedItemPosition() == 3) {
+            if (mEtFullConnectString.getData() == null || mEtFullConnectString.getData().isEmpty()) {
+                showError(getString(R.string.error_input_field_empty, "Nostr Wallet Connect String"), RefConstants.ERROR_DURATION_SHORT);
+                return;
+            }
+            if (new NostrWalletConnectUrlParser(mEtFullConnectString.getData()).parse().hasError()) {
+                showError(getString(R.string.error_connection_invalidNostrWalletConnectString), RefConstants.ERROR_DURATION_MEDIUM);
                 return;
             }
         }
@@ -451,6 +531,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         } else {
             // we are in add manually mode
             if (mEtName.getData() != null ||
+                    mEtFullConnectString.getData() != null ||
                     mEtHost.getData() != null ||
                     mEtPort.getData() != null ||
                     mEtAuthenticationToken.getData() != null ||

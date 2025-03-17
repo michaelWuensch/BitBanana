@@ -25,6 +25,7 @@ import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBButton;
@@ -109,11 +110,17 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Host
             BBInfoLineView ilHost = findViewById(R.id.host);
-            ilHost.setData(getWalletConfig().getHostWithOverride());
+            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                ilHost.setVisibility(View.VISIBLE);
+                ilHost.setData(getWalletConfig().getHostWithOverride());
+            } else {
+                ilHost.setVisibility(View.GONE);
+            }
 
             // Port
             BBInfoLineView ilPort = findViewById(R.id.port);
-            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.LND_HUB) {
+            if (getWalletConfig().getBackendType() == BackendConfig.BackendType.LND_GRPC
+                    || getWalletConfig().getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
                 ilPort.setVisibility(View.VISIBLE);
                 ilPort.setData(String.valueOf(getWalletConfig().getPort()));
             } else {
@@ -167,12 +174,42 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // VPN
             BBInfoLineView ilVpn = findViewById(R.id.vpn);
-            ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
+            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                ilVpn.setVisibility(View.VISIBLE);
+                ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
+            } else {
+                ilVpn.setVisibility(View.GONE);
+            }
 
             // Tor
             BBInfoLineView ilTor = findViewById(R.id.tor);
-            String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
-            ilTor.setData(torData);
+            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                ilTor.setVisibility(View.VISIBLE);
+                String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+                ilTor.setData(torData);
+            } else {
+                ilTor.setVisibility(View.GONE);
+            }
+
+            // Pubkey
+            BBInfoLineView ilPubkey = findViewById(R.id.pubkey);
+            if (getWalletConfig().getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                ilPubkey.setVisibility(View.VISIBLE);
+                String pubkeyData = new NostrWalletConnectUrlParser(getWalletConfig().getFullConnectString()).parse().getPubKey();
+                ilPubkey.setData(pubkeyData);
+            } else {
+                ilPubkey.setVisibility(View.GONE);
+            }
+
+            // Relay
+            BBInfoLineView ilRelay = findViewById(R.id.relay);
+            if (getWalletConfig().getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                ilRelay.setVisibility(View.VISIBLE);
+                String relayData = new NostrWalletConnectUrlParser(getWalletConfig().getFullConnectString()).parse().getRelay();
+                ilRelay.setData(relayData);
+            } else {
+                ilRelay.setVisibility(View.GONE);
+            }
 
             BBButton changeBtn = findViewById(R.id.buttonChangeConnection);
             changeBtn.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.customView;
 
+import static androidx.core.content.ContextCompat.getColor;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -72,6 +74,8 @@ public class BBInputFieldView extends LinearLayout {
             }
         });
 
+        getEditText().setHintTextColor(getColor(context, R.color.gray_50));
+
         // Apply attributes from XML
         if (attrs != null) {
             // Obtain the custom attribute value from the XML attributes
@@ -106,6 +110,10 @@ public class BBInputFieldView extends LinearLayout {
 
     public void setDescription(String description) {
         mTvLabel.setText(description);
+    }
+
+    public void setDescription(int resId) {
+        mTvLabel.setText(resId);
     }
 
     public void setDescriptionDetail(String description) {

@@ -16,6 +16,7 @@ public class UriUtil {
     public static final String URI_PREFIX_LND_HUB = "lndhub://";
     public static final String URI_PREFIX_CORE_LIGHTNING_GRPC = "cln-grpc://";
     public static final String URI_PREFIX_C_LIGHTNING_REST = "c-lightning-rest://";
+    public static final String URI_NOSTR_WALLET_CONNECT = "nostr+walletconnect://";
 
     public static String generateLightningUri(@NonNull String data) {
         if (isLightningUri(data)) {
@@ -84,6 +85,10 @@ public class UriUtil {
         return hasPrefix(URI_PREFIX_C_LIGHTNING_REST, data);
     }
 
+    public static boolean isNostrWalletConnectUri(String data) {
+        return hasPrefix(URI_NOSTR_WALLET_CONNECT, data);
+    }
+
     public static String removeURI(@NonNull String data) {
         if (isLightningUri(data)) {
             return data.substring(URI_PREFIX_LIGHTNING.length());
@@ -105,6 +110,8 @@ public class UriUtil {
             return data.substring(URI_PREFIX_CORE_LIGHTNING_GRPC.length());
         } else if (isCLightningRestUri(data)) {
             return data.substring(URI_PREFIX_C_LIGHTNING_REST.length());
+        } else if (isNostrWalletConnectUri(data)) {
+            return data.substring(URI_NOSTR_WALLET_CONNECT.length());
         } else {
             return data;
         }

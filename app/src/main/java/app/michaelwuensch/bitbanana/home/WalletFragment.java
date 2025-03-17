@@ -144,6 +144,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                         if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted())
                             new UserGuardian(getContext()).securityCustodialLndAccountRestrictedInfoButton();
                         break;
+                    case NOSTR_WALLET_CONNECT:
+                        new UserGuardian(getContext()).securityCustodialNwcInfoButton();
+                        break;
                 }
             }
         });
@@ -411,9 +414,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
     private void updateCustodialWarningVisibility() {
         boolean isLndHub = BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_HUB;
+        boolean isNwc = BackendManager.getCurrentBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT;
         boolean isAccountRestrictedLnd = BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC
                 && ((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted();
-        mCustodialButton.setVisibility(isLndHub || isAccountRestrictedLnd ? View.VISIBLE : View.GONE);
+        mCustodialButton.setVisibility(isLndHub || isNwc || isAccountRestrictedLnd ? View.VISIBLE : View.GONE);
     }
 
     private void showCustodialWarning() {

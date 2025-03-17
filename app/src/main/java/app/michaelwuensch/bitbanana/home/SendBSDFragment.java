@@ -60,6 +60,7 @@ import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 
 public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.OnUtxoViewButtonListener, ClearFocusListener, PickChannelsView.OnPickChannelViewButtonListener {
@@ -492,6 +493,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
                 .build();
 
         getCompositeDisposable().add(BackendManager.api().sendOnChainPayment(sendOnChainPaymentRequest)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "On-chain payment successful.");
 
@@ -555,6 +557,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
         getCompositeDisposable().add(BackendManager.api().fetchInvoiceFromBolt12Offer(requestBuilder.build())
                 .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                             prepareBolt12Payment(response);
                         }
@@ -723,6 +726,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             return;
         }
         getCompositeDisposable().add(BackendManager.api().getTransactionSizeVByte(address, amount)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> setCalculatedFeeAmountOnChain((long) response.doubleValue()),
                         throwable -> {
                             BBLog.w(LOG_TAG, "Exception in on-chain transaction size request task.");
@@ -742,6 +746,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         else
             pubKey = mDecodedBolt11.getDestinationPubKey();
         getCompositeDisposable().add(BackendManager.api().estimateRoutingFee(pubKey, getSendAmount())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> setCalculatedFeeAmountLightning(response),
                         throwable -> {
                             BBLog.w(LOG_TAG, "Exception in lightning routing fee request task.");

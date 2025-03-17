@@ -218,4 +218,9 @@ public class Backend {
     public boolean supportsRebalanceChannel() {
         return FeatureRebalanceChannel.isAvailable();
     }
+
+    public Backend updateFeatureKeySend(boolean enabled) {
+        FeatureKeysend = new BackendFeature(enabled);
+        return this;
+    }
 }

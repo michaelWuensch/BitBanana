@@ -18,6 +18,7 @@ import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.Version;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class Wallet_TransactionHistory {
@@ -166,6 +167,7 @@ public class Wallet_TransactionHistory {
         }
 
         compositeDisposable.add(BackendManager.api().listOnChainTransactions()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mOnChainTransactionList = response;
                     mTransactionUpdated = true;
@@ -178,6 +180,7 @@ public class Wallet_TransactionHistory {
      */
     public void fetchInvoicesList() {
         compositeDisposable.add(BackendManager.api().listInvoices(0, 500)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mInvoiceList = Lists.reverse(response); // we want most recent on top.
                     mInvoicesUpdated = true;
@@ -196,6 +199,7 @@ public class Wallet_TransactionHistory {
             pageSize = 100000;
 
         compositeDisposable.add(BackendManager.api().listLnPayments(0, pageSize)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mPaymentsList = Lists.reverse(response); // we want most recent on top.
                     mPaymentsUpdated = true;
