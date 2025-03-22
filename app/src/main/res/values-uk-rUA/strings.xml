@@ -169,7 +169,7 @@
     <string name="error_emptyClipboardPayment">Ваш буфер обміну не містить платіжних даних.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обміну не містить даних про з\'єднання.</string>
     <string name="error_qr_code_result_null">Не вдається прочитати QR-код, спробуйте ще раз.</string>
-    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nВикористовуйте один із таких форматів:\n\n- Рядок Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- Підключення до сервера BtcPay (config=…)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nБудь ласка, використовуйте один з наступних форматів:\n\n- Рядок Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Не вдалося отримати конфігурацію з BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Недійсний рядок lndconnect.\nПереконайтеся, що ви використовуєте такий формат:\n\nlndconnect://[ip]:[порт]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Сертифікат недійсний.</string>
@@ -254,7 +254,7 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">Дійсні QR-коди, які містять:\n\n- Адреса блискавки\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- Код платежу</string>
-    <string name="help_dialog_scanConnectionInfo">Дійсні QR-коди, які містять: \n\n- Рядок Lndconnect (lndconnect://…) \n- Core Lightning grpc (cln-grpc://…) \n- LndHub (lndhub://…) \n- Підключення до сервера BtcPay (config=…) \n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Дійсними є QR-коди, що містять наступне:\n\n- Lndconnect рядок (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
@@ -814,4 +814,9 @@
     <string name="help_dialog_rebalancing">Ребалансування каналів тримає ваші платіжні канали готовими до роботи! Якщо на одній стороні закінчуються кошти, ваш канал може відправляти платежі лише в одному напрямку, і платежі можуть почати збоїти. Відправлення коштів за круговим маршрутом перерозподіляє баланси без необхідності проведення транзакцій у ланцюжку. Цей вид дозволяє виконувати такі циклічні платежі. Для досягнення найкращих результатів виберіть канал з надлишком вихідної ліквідності і об\'єднайте його з іншим каналом, який може обробляти більше вхідних коштів.</string>
     <string name="rebalance">Відновити баланс</string>
     <string name="fee_paid">Сплачена комісія</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використовуєте такий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[СЕКРЕТ]</string>
+    <string name="nostr_relay">Готові</string>
+    <string name="guardian_remoteConnect_nwc">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nПерш ніж додавати гаманець, перевірте відкритий ключ.</string>
+    <string name="error_nwc_setup_failed">Не вдалося ініціювати підключення Nostr Wallet Connect.</string>
+    <string name="guardian_custodial_nwc">Ви підключені до гаманця за допомогою протоколу Nostr Wallet Connect. Якщо ви не є власником сервісу Nostr Wallet Connect, ця домовленість є кастодіальною. Організація, що керує сервісом, має контроль над вашими грошима і може переглядати історію ваших транзакцій. Вносьте на депозит тільки те, що ви готові їм довірити.</string>
 </resources>
