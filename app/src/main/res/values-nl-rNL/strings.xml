@@ -182,12 +182,7 @@
     <string name="error_emptyClipboardPayment">Je klembord bevat geen betalingsdata.</string>
     <string name="error_emptyClipboardConnect">Je klembord bevat geen verbindingsdata.</string>
     <string name="error_qr_code_result_null">Kan QR-Code niet lezen, probeer opnieuw.</string>
-    <string name="error_connection_unsupported_format">Niet ondersteund verbindingsformat.
-\nGebruik een van de volgende formats:
-\n
-\n- Lndconnect string (lndconnect://...)
-\n- BtcPay Server verbinding (config=...)
-\n- Volledige inhoud van je BTCPay Server configbestand</string>
+    <string name="error_connection_unsupported_format">Niet ondersteund verbindingsformat. \nGebruik een van de volgende formats: \n \n- Lndconnect string (lndconnect://...) \n- BtcPay Server verbinding (config=...) \n- Volledige inhoud van je BTCPay Server configbestand</string>
     <string name="error_unableToFetchBTCPayConfig">Kan de configuratie van BTCPay Server niet ophalen.</string>
     <string name="error_connection_invalidLndConnectString">Ongeldige lndconnect string.
 \nControleer of je het volgende format gebruikt:
