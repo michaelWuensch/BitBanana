@@ -491,14 +491,7 @@
     <string name="error_useRegtestRequest">Está conectado a uma rede REGTEST. Por favor use as solicitações de pagamento ou endereços REGTEST.</string>
     <string name="error_emptyClipboardPayment">A sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado.
-\nPor favor, use um dos seguintes formatos:
-\n
-\n- String Lndconnect (lndconnect://...)
-\n- grpc Core Lightning (cln-grpc://…)
-\n- LndHub (lndhub://…)
-\n- Conexão de BtcPay Server (config=...)
-\n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
     <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. 
 \nCertifique-se de usar o formato seguinte:
 \n
