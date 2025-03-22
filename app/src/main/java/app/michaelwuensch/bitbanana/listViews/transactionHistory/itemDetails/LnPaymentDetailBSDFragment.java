@@ -33,8 +33,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private ImageView mPayeeCopyIcon;
     private TextView mAmountLabel;
     private AmountView mAmount;
-    private TextView mMemoLabel;
-    private TextView mMemo;
+    private TextView mDescriptionLabel;
+    private TextView mDescription;
     private TextView mPayerNoteLabel;
     private TextView mPayerNote;
     private TextView mFeeLabel;
@@ -57,8 +57,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mPayeeCopyIcon = view.findViewById(R.id.payeeCopyIcon);
         mAmountLabel = view.findViewById(R.id.amountLabel);
         mAmount = view.findViewById(R.id.amount);
-        mMemoLabel = view.findViewById(R.id.memoLabel);
-        mMemo = view.findViewById(R.id.memo);
+        mDescriptionLabel = view.findViewById(R.id.descriptionLabel);
+        mDescription = view.findViewById(R.id.description);
         mPayerNoteLabel = view.findViewById(R.id.payerNoteLabel);
         mPayerNote = view.findViewById(R.id.payerNote);
         mFeeLabel = view.findViewById(R.id.feeLabel);
@@ -85,8 +85,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mPayeeLabel.setText(payeeLabel);
         String amountLabel = getString(R.string.amount) + ":";
         mAmountLabel.setText(amountLabel);
-        String memoLabel = getString(R.string.memo) + ":";
-        mMemoLabel.setText(memoLabel);
+        String descriptionLabel = getString(R.string.description) + ":";
+        mDescriptionLabel.setText(descriptionLabel);
         String payerNoteLabel = getString(R.string.bolt12_payer_note) + ":";
         mPayerNoteLabel.setText(payerNoteLabel);
         String feeLabel = getString(R.string.fee) + ":";
@@ -128,14 +128,14 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
 
 
         if (payment.hasDescription()) {
-            mMemo.setText(payment.getDescription());
+            mDescription.setText(payment.getDescription());
         } else {
             if (payment.hasKeysendMessage())
-                mMemo.setText(payment.getKeysendMessage());
+                mDescription.setText(payment.getKeysendMessage());
             else {
                 // Nothing there, hide the view
-                mMemo.setVisibility(View.GONE);
-                mMemoLabel.setVisibility(View.GONE);
+                mDescription.setVisibility(View.GONE);
+                mDescriptionLabel.setVisibility(View.GONE);
             }
         }
 

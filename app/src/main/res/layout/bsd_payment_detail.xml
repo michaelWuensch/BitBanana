@@ -54,17 +54,17 @@
             app:textSize="15sp" />
 
         <TextView
-            android:id="@+id/memoLabel"
+            android:id="@+id/descriptionLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fee"
-            tools:text="Memo:" />
+            tools:text="Description:" />
 
         <TextView
-            android:id="@+id/memo"
+            android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
@@ -72,7 +72,7 @@
             android:textAlignment="viewEnd"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/memoLabel"
+            app:layout_constraintStart_toEndOf="@id/descriptionLabel"
             app:layout_constraintTop_toBottomOf="@+id/fee"
             tools:text="Some description!" />
 
@@ -83,7 +83,7 @@
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/memo"
+            app:layout_constraintTop_toBottomOf="@+id/description"
             tools:text="Payer note:" />
 
         <TextView
@@ -96,7 +96,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/payerNoteLabel"
-            app:layout_constraintTop_toBottomOf="@+id/memo"
+            app:layout_constraintTop_toBottomOf="@+id/description"
             tools:text="Some description!" />
 
         <TextView
