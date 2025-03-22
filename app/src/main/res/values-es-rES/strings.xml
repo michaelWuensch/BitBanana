@@ -157,14 +157,7 @@
     <string name="error_emptyClipboardPayment">Su portapapeles no contiene ningún dato de pago.</string>
     <string name="error_emptyClipboardConnect">Su portapapeles no contiene ningún dato de conexión.</string>
     <string name="error_qr_code_result_null">Ocurrió un error al leer Código de QR, por favor vuelve a intentar.</string>
-    <string name="error_connection_unsupported_format">Formato de conexión no admitido.
-\nUtilice uno de los siguientes formatos:
-\n
-\n- Cadena Lndconnect (lndconnect://…)
-\n- Grupo Core Lightning (cln-grpc://…)
-\n- LndHub (lndhub://…)
-\n- Conexión al servidor BtcPay (config=…)
-\n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
+    <string name="error_connection_unsupported_format">Formato de conexión no admitido. \nUtilice uno de los siguientes formatos: \n \n- Cadena Lndconnect (lndconnect://…) \n- Grupo Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexión al servidor BtcPay (config=…) \n- Contenido completo de su archivo de configuración del servidor BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Ocurrió un error al importar configuración de BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Cadena lndconnect no válida.
 \nAsegúrate de haber utilizado el siguiente formato:
