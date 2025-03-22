@@ -156,14 +156,7 @@
     <string name="error_emptyClipboardPayment">Sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_emptyClipboardConnect">Sua área de transferência não contém nenhum dado de conexão.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado.
-\nPor favor, use um dos seguintes formatos:
-\n
-\n- String Lndconnect (lndconnect://...)
-\n- grpc Core Lightning (cln-grpc://…)
-\n- LndHub (lndhub://…)
-\n- Conexão de BtcPay Server (config=...)
-\n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
 \nCertifique-se de usar o seguinte formato:
