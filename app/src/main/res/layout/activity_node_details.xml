@@ -167,6 +167,22 @@
                     android:layout_height="wrap_content"
                     app:infoLine_label="@string/settings_tor" />
 
+                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
+                    android:id="@+id/pubkey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:infoLine_dataWidth="120dp"
+                    app:infoLine_ellipsizeMiddle="true"
+                    app:infoLine_label="@string/pubkey" />
+
+                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
+                    android:id="@+id/relay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:infoLine_dataWidth="210dp"
+                    app:infoLine_ellipsizeMiddle="true"
+                    app:infoLine_label="@string/nostr_relay" />
+
             </LinearLayout>
 
 

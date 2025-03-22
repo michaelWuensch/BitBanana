@@ -20,6 +20,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.btcPay.BTCPayConfigParser;
 import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectStringParser;
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import okhttp3.Call;
@@ -44,6 +45,8 @@ public class RemoteConnectUtil {
             listener.onError(ctx.getResources().getString(R.string.error_connection_no_c_lightning_rest_support), RefConstants.ERROR_DURATION_LONG);
         } else if (UriUtil.isLNDHUBUri(data)) {
             decodeLndHubConnectString(ctx, data, listener);
+        } else if (UriUtil.isNostrWalletConnectUri(data)) {
+            decodeNostrWalletConnectString(ctx, data, listener);
         } else if (data.startsWith("config=")) {
             // URL to BTCPayConfigJson
             String configUrl = data.replace("config=", "");
@@ -156,6 +159,20 @@ public class RemoteConnectUtil {
         }
     }
 
+    private static void decodeNostrWalletConnectString(Context ctx, String data, OnRemoteConnectDecodedListener listener) {
+        NostrWalletConnectUrlParser parser = new NostrWalletConnectUrlParser(data).parse();
+
+        if (parser.hasError()) {
+            switch (parser.getError()) {
+                case LndHubConnectStringParser.ERROR_INVALID_CONNECT_STRING:
+                    listener.onError(ctx.getResources().getString(R.string.error_connection_invalidNostrWalletConnectString), RefConstants.ERROR_DURATION_LONG);
+                    break;
+            }
+        } else {
+            listener.onValidConnectData(parser.getBackendConfig());
+        }
+    }
+
     private static void decodeBtcPay(Context ctx, @NonNull String btcPayConfigurationJson, OnRemoteConnectDecodedListener listener) {
         BTCPayConfigParser btcPayConfigParser = new BTCPayConfigParser(btcPayConfigurationJson).parse();
 
@@ -209,7 +226,12 @@ public class RemoteConnectUtil {
             if (walletUUID == null) {
                 config.setPort(port);
                 if (config.getAlias() == null)
-                    config.setAlias(config.getHost());
+                    if (config.getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
+                        String pubkey = new NostrWalletConnectUrlParser(config.getFullConnectString()).parse().getPubKey();
+                        config.setAlias("NWC(" + pubkey.substring(0, 6) + "..." + ")");
+                    } else {
+                        config.setAlias(config.getHost());
+                    }
                 if (!config.hasVpnConfig())
                     config.setVpnConfig(new VPNConfig());
                 if (config.getLocation() == null)
@@ -226,6 +248,7 @@ public class RemoteConnectUtil {
                         case MANUAL_INPUT:
                             backendConfig.setAlias(config.getAlias());
                             backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setFullConnectString(config.getFullConnectString());
                             backendConfig.setHost(config.getHost());
                             backendConfig.setPort(port);
                             backendConfig.setServerCert(config.getServerCert());
@@ -266,6 +289,10 @@ public class RemoteConnectUtil {
                             backendConfig.setHost(config.getHost());
                             backendConfig.setPort(port);
                             backendConfig.setAuthenticationToken(config.getAuthenticationToken());
+                            break;
+                        case NOSTR_WALLET_CONNECT:
+                            backendConfig.setBackendType(config.getBackendType());
+                            backendConfig.setFullConnectString(config.getFullConnectString());
                             break;
                         default:
                             // Override everything and use the new one.

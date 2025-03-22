@@ -34,6 +34,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 
@@ -103,6 +104,11 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             // Generate lightning request data to encode
             mDataToEncodeInQRCode = UriUtil.generateLightningUri(mLnInvoice.getBolt11String());
             mDataToCopyOrShare = mDataToEncodeInQRCode;
+
+            // Update transaction history so it shows the new invoice when we close the activity.
+            if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+            }
         }
 
 
@@ -239,6 +245,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
             // ToDo: Implement checking for on-chain payments
         } else {
             mCompositeDisposable.add(BackendManager.api().getInvoice(mLnInvoice.getPaymentHash())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .delaySubscription(500, TimeUnit.MILLISECONDS) // Delay is important to prevent endless loop if it fails.
                     .subscribe(response -> {
                         if (response == null) {

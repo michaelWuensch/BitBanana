@@ -33,6 +33,7 @@ import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 
 public class ReceiveBSDFragment extends BaseBSDFragment {
@@ -282,6 +283,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
                 BBLog.d(LOG_TAG, "OnChain generating...");
                 getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             Bip21Invoice bip21Invoice = Bip21Invoice.newBuilder()
                                     .setAddress(response)
@@ -308,8 +310,8 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                         .build();
 
                 getCompositeDisposable().add(BackendManager.api().createInvoice(invoiceRequest)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
-
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
                             intent.putExtra("lnInvoice", InvoiceUtil.decodeBolt11(response.getBolt11()));

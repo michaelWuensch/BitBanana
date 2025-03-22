@@ -205,6 +205,17 @@ public class UserGuardian {
     }
 
     /**
+     * Warn the user if he is trying to connect to a nostr wallet connect remote server.
+     */
+    public void securityConnectToNostrWalletConnect(String pubkey) {
+        mCurrentDialogName = DIALOG_REMOTE_CONNECT;
+        AlertDialog.Builder adb = createDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_remoteConnect_nwc, pubkey);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
      * Warn the user about using a node the runs old unsupported software.
      */
     public void securityOldNodeSoftwareVersion(String nodeSoftwareName, String versionName) {
@@ -278,6 +289,17 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_CUSTODIAL_LNDHUB;
         AlertDialog.Builder adb = createDialog(false);
         String message = mContext.getResources().getString(R.string.guardian_custodial_lndhub);
+        adb.setMessage(message);
+        showGuardianDialog(adb, true);
+    }
+
+    /**
+     * Warn the user before connecting to a nostr wallet connect wallet as this might be custodial and the user might risk funds.
+     */
+    public void securityCustodialNwcInfoButton() {
+        mCurrentDialogName = DIALOG_CUSTODIAL_LNDHUB;
+        AlertDialog.Builder adb = createDialog(false);
+        String message = mContext.getResources().getString(R.string.guardian_custodial_nwc);
         adb.setMessage(message);
         showGuardianDialog(adb, true);
     }

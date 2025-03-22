@@ -36,6 +36,13 @@ public class BackendConfig implements Comparable<BackendConfig> {
     private BackendType backendType;
 
     /**
+     * This string contains all information that we need to connect to the backend.
+     * It is only intended to be used for backends where we never get the information in a separate manner but only in a connect string.
+     * An example for this is NWC.
+     */
+    private String fullConnectString;
+
+    /**
      * The host where the backend is available.
      */
     private String host;
@@ -131,6 +138,16 @@ public class BackendConfig implements Comparable<BackendConfig> {
      */
     private String avatarMaterial;
 
+    /**
+     * The quick receive type. Do we just show the quickReceiveString or should it be combined with a bip21 invoice, etc.?
+     */
+    private QuickReceiveType quickReceiveType;
+
+    /**
+     * The string that will be used to diplay a QR-Code for quick receive.
+     */
+    private String quickReceiveString;
+
 
     public BackendConfig() {
 
@@ -168,6 +185,14 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.backendType = backendType;
     }
 
+    public String getFullConnectString() {
+        return this.fullConnectString;
+    }
+
+    public void setFullConnectString(String fullConnectString) {
+        this.fullConnectString = fullConnectString;
+    }
+
     public String getHost() {
         return host;
     }
@@ -176,6 +201,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
      *  If no override is present, the original host will be returned
      */
     public String getHostWithOverride() {
+        if (host == null)
+            return null;
         String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
         if (source.isEmpty())
             return host;
@@ -322,6 +349,22 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.avatarMaterial = avatarMaterial;
     }
 
+    public QuickReceiveType getQuickReceiveType() {
+        return quickReceiveType;
+    }
+
+    public void setQuickReceiveType(QuickReceiveType quickReceiveType) {
+        this.quickReceiveType = quickReceiveType;
+    }
+
+    public String getQuickReceiveString() {
+        return quickReceiveString;
+    }
+
+    public void setQuickReceiveString(String quickReceiveString) {
+        this.quickReceiveString = quickReceiveString;
+    }
+
     public boolean isLocal() {
         if (this.location != null)
             return this.location == Location.LOCAL;
@@ -343,6 +386,7 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setId(getId());
         copy.setLocation(getLocation());
         copy.setNetwork(getNetwork());
+        copy.setFullConnectString(getFullConnectString());
         copy.setHost(getHost());
         copy.setPort(getPort());
         copy.setAlias(getAlias());
@@ -359,6 +403,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setTempAccessToken(getTempAccessToken());
         copy.setTempRefreshToken(getTempRefreshToken());
         copy.setAvatarMaterial(getAvatarMaterial());
+        copy.setQuickReceiveType(getQuickReceiveType());
+        copy.setQuickReceiveString(getQuickReceiveString());
         return copy;
     }
 
@@ -393,7 +439,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
         NONE,
         LND_GRPC,
         CORE_LIGHTNING_GRPC,
-        LND_HUB;
+        LND_HUB,
+        NOSTR_WALLET_CONNECT;
 
         public static BackendType parseFromString(String enumAsString) {
             try {
@@ -411,6 +458,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
                     return "Core Lightning (gRPC)";
                 case LND_HUB:
                     return "LndHub";
+                case NOSTR_WALLET_CONNECT:
+                    return "Nostr Wallet Connect";
                 default:
                     return App.getAppContext().getString(R.string.none);
             }
@@ -476,6 +525,23 @@ public class BackendConfig implements Comparable<BackendConfig> {
         LND_CONNECT,
         CLN_GRPC,
         LND_HUB_CONNECT,
-        BTC_PAY_DATA;
+        BTC_PAY_DATA,
+        NOSTR_WALLET_CONNECT;
+    }
+
+    /**
+     * The quick receive type. Do we just show the quickReceiveString or should it be combined with a bip21 invoice, etc.?
+     * Null if no quick receive is setup.
+     */
+    public enum QuickReceiveType {
+        SIMPLE_STRING;
+
+        public static QuickReceiveType parseFromString(String enumAsString) {
+            try {
+                return valueOf(enumAsString);
+            } catch (Exception ex) {
+                return SIMPLE_STRING;
+            }
+        }
     }
 }

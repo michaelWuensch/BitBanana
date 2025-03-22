@@ -56,8 +56,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     testOptions {
@@ -155,6 +159,9 @@ dependencies {
     implementation("io.matthewnelson.kmp-tor:resource-exec-tor:408.13.0")
     implementation("io.matthewnelson.kmp-tor:runtime:2.0.0-alpha02")
     implementation("io.matthewnelson.kmp-tor:runtime-service:2.0.0-alpha02")
+
+    // Nostr Wallet Connect (NWC) implementations
+    implementation("org.rust-nostr:nostr-sdk:0.39.0")
 
     // gRPC implementation to communicate with lnd
     implementation 'io.grpc:grpc-okhttp:1.68.2'

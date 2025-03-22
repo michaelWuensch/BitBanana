@@ -16,6 +16,8 @@ import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
 import app.michaelwuensch.bitbanana.backends.lndHub.LndHubBackend;
 import app.michaelwuensch.bitbanana.backends.lndHub.LndHubHttpClient;
+import app.michaelwuensch.bitbanana.backends.nostrWalletConnect.NostrWalletConnectBackend;
+import app.michaelwuensch.bitbanana.backends.nostrWalletConnect.NostrWalletConnectClient;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkUtil;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
@@ -36,6 +38,7 @@ public class BackendManager {
     public static final int ERROR_TOR_BOOTSTRAPPING_FAILED = 4;
     public static final int ERROR_UNKNOWN_BACKEND_TYPE = 5;
     public static final int ERROR_GRPC_CREATING_STUBS = 6;
+    public static final int ERROR_NWC_CONNECTION_FAILED = 7;
 
     private static final String LOG_TAG = BackendManager.class.getSimpleName();
 
@@ -192,6 +195,9 @@ public class BackendManager {
             case LND_HUB:
                 LndHubHttpClient.getInstance().createHttpClient();
                 break;
+            case NOSTR_WALLET_CONNECT:
+                NostrWalletConnectClient.getInstance().openConnection();
+                break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
@@ -258,6 +264,8 @@ public class BackendManager {
                     return new CoreLightningBackend(getCurrentBackendConfig());
                 case LND_HUB:
                     return new LndHubBackend(getCurrentBackendConfig());
+                case NOSTR_WALLET_CONNECT:
+                    return new NostrWalletConnectBackend(getCurrentBackendConfig());
             }
         }
         return new DemoBackend(null);
@@ -312,6 +320,9 @@ public class BackendManager {
                 break;
             case ERROR_GRPC_CREATING_STUBS:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_grpc_setup_failed), errorCode);
+                break;
+            case ERROR_NWC_CONNECTION_FAILED:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_nwc_setup_failed), errorCode);
                 break;
         }
     }

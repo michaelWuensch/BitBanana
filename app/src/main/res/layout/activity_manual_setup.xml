@@ -60,6 +60,15 @@
             </LinearLayout>
 
             <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                android:id="@+id/inputFullConnectString"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:inputLabelDetails=""
+                app:maxLines="10"
+                tools:inputLabel="Specific Connect String" />
+
+            <app.michaelwuensch.bitbanana.customView.BBInputFieldView
                 android:id="@+id/inputHost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,45 +164,52 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <LinearLayout
+                android:id="@+id/vpnAutomationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingTop="15dp">
 
-                <TextView
-                    android:id="@+id/vpnAutomationLabel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:text="@string/vpn_automation"
-                    android:textSize="18sp"
-                    tools:ignore="HardcodedText" />
+                    android:orientation="horizontal">
 
-                <android.widget.Space
-                    android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/vpnAutomationLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="@string/vpn_automation"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
+
+                    <android.widget.Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/vpnHelpButton"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="-5dp"
+                        android:background="?actionBarItemBackground"
+                        app:srcCompat="@drawable/ic_help_black_24dp"
+                        app:tint="@color/gray" />
+
+                </LinearLayout>
+
+
+                <app.michaelwuensch.bitbanana.setup.VPNConfigView
+                    android:id="@+id/vpnConfigView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/vpnHelpButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="-5dp"
-                    android:background="?actionBarItemBackground"
-                    app:srcCompat="@drawable/ic_help_black_24dp"
-                    app:tint="@color/gray" />
+                    android:layout_marginTop="5dp" />
 
             </LinearLayout>
-
-
-            <app.michaelwuensch.bitbanana.setup.VPNConfigView
-                android:id="@+id/vpnConfigView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/torSwitch"
@@ -220,7 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="30dp"
                 app:bbbutton_text="@string/save" />
 
         </LinearLayout>

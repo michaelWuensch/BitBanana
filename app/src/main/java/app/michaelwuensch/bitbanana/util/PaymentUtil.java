@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentResponse;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class PaymentUtil {
@@ -108,6 +109,7 @@ public class PaymentUtil {
         }
 
         compositeDisposable.add(BackendManager.api().sendLnPayment(sendLnPaymentRequest)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.didSucceed()) {
                         // updated the history, so it is shown the next time the user views it

@@ -47,6 +47,7 @@ import app.michaelwuensch.bitbanana.IdentityActivity;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
@@ -689,7 +690,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void addWallet(BackendConfig backendConfig) {
-        new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
+        UserGuardian ug = new UserGuardian(HomeActivity.this, new UserGuardian.OnGuardianConfirmedListener() {
             @Override
             public void onConfirmed() {
                 RemoteConnectUtil.saveRemoteConfiguration(HomeActivity.this, backendConfig, null, new RemoteConnectUtil.OnSaveRemoteConfigurationListener() {
@@ -711,7 +712,11 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             public void onCancelled() {
                 activateBackend();
             }
-        }).securityConnectToRemoteServer(backendConfig.getHost());
+        });
+        if (backendConfig.getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT)
+            ug.securityConnectToNostrWalletConnect(new NostrWalletConnectUrlParser(backendConfig.getFullConnectString()).parse().getPubKey());
+        else
+            ug.securityConnectToRemoteServer(backendConfig.getHost());
     }
 
     @Override

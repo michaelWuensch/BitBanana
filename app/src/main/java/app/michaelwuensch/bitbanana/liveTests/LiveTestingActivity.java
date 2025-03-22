@@ -183,6 +183,9 @@ public class LiveTestingActivity extends BaseAppCompatActivity {
         // LNDHub connect
         test.execute("lndhub://username:password@https://getalby.com/lndhub/", BitcoinStringAnalyzerTest.RESULT_CONNECT_DATA);
 
+        // Nostr Wallet Connect
+        test.execute("nostr+walletconnect://b889ff5b1513b641e2a139f661a661364979c5beee91842f8f0ef42ab558e9d4?relay=wss%3A%2F%2Frelay.getalby.com/v1&secret=71a8c14c1407c113601079c4302dab36460f0ccd0ad506f1f2dc73b5100e4f3c", BitcoinStringAnalyzerTest.RESULT_CONNECT_DATA);
+
         // ToDo: BTC Pay connect
 
         // NodeUris
