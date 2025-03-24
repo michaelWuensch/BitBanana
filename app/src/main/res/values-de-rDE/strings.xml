@@ -216,7 +216,7 @@
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
-    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt. \nBitte verwende eines der folgenden Formate: \n \n- Lndconnect string (lndconnect://...) \n- Core Lightning grpc (cln-grpc://…) \n- LndHub (lndhub://…) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt. \nBitte verwende eines der folgenden Formate: \n \n- Lndconnect string (lndconnect://...) \n- Core Lightning grpc (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
@@ -342,7 +342,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Zahlungscode</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.
@@ -942,4 +942,23 @@
     <string name="help_dialog_lastHop">Verwende diese Option nur, wenn du deine Kanäle ausbalancieren willst. Um das zu tun, kannst du einfach Geld an dich selbst senden. Erstelle eine Rechnung und bezahle sie mit einem bestimmten Auswahl eigener Kanäle, wobei du für den ersten Hop einen Kanal mit hoher ausgehender Kapazität und für den letzten Hop einen Kanal mit hoher eingehender Kapazität auswählst. Bei diesem Ansatz fallen zwar Gebühren an, aber es wird ein Ausbalancieren der Kanäle erreicht.</string>
     <string name="help">Hilfe</string>
     <string name="adjust">Anpassen</string>
+    <string name="error_channel_rebalance_no_fee_rate">Du musst einen maximalen Gebührensatz festlegen.</string>
+    <string name="error_nwc_setup_failed">Verbindung mit Nostr Wallet Connect konnte nicht hergestellt werden.</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Ungültige Nostr Wallet Connect Daten.\n\nBitte stelle sicher, dass du das folgende Format verwendet hast:\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="nostr_relay">Relay</string>
+    <string name="sort_by_name_asc">Name (A-Z)</string>
+    <string name="sort_by_name_desc">Name (Z-A)</string>
+    <string name="sort_by_capacity_asc">Kapazität (kleinste zuerst)</string>
+    <string name="sort_by_capacity_desc">Kapazität (größte zuerst)</string>
+    <string name="sort_by_inbound_capacity_asc">Empfangskapazität (kleinste zuerst)</string>
+    <string name="sort_by_inbound_capacity_desc">Empfangskapazität (größte zuerst)</string>
+    <string name="sort_by_outbound_capacity_asc">Sendekapazität (kleinste zuerst)</string>
+    <string name="sort_by_symmetry_asc">Symmetrie (unausgewogen zuerst)</string>
+    <string name="sort_by_symmetry_desc">Symmetrie (ausgewogen zuerst)</string>
+    <string name="sort_by_age_asc">Alter (neueste zuerst)</string>
+    <string name="sort_by_value_asc">Wert (kleinster zuerst)</string>
+    <string name="sort_by_value_desc">Wert (größter zuerst)</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="sort_by_outbound_capacity_desc">Sendekapazität (größte zuerst)</string>
+    <string name="sort_by_age_desc">Alter (älteste zuerst)</string>
 </resources>
