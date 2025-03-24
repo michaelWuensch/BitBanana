@@ -935,5 +935,9 @@
     <string name="sort_by_outbound_capacity_desc">Sending Capacity (largest first)</string>
     <string name="sort_by_symmetry_asc">Symmetry (imbalanced first)</string>
     <string name="sort_by_symmetry_desc">Symmetry (balanced first)</string>
+    <string name="sort_by_age_asc">Age (newest first)</string>
+    <string name="sort_by_age_desc">Age (oldest first)</string>
+    <string name="sort_by_value_asc">Value (smallest first)</string>
+    <string name="sort_by_value_desc">Value (largest first)</string>
 
 </resources>
