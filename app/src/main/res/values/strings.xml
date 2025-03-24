@@ -484,7 +484,7 @@
     <string name="error_funds_not_confirmed_yet">You have sufficient on-chain funds, but their confirmation is still pending. Please wait for your on-chain funds to confirm. You can track the status of your funds through the UTXO view or transaction history.</string>
     <string name="error_insufficient_on_chain_funds">Insufficient on-chain funds. Maximum available:</string>
     <string name="error_insufficient_lightning_sending_liquidity">Insufficient lightning liquidity for sending. Open additional channels to increase it.\nCurrent maximum:</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximum Amount: %1$s\n\nInsufficient lightning liquidity. Increase your channel receiving capacity to raise this limit.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximum Amount: %1$s\n\nInsufficient lightning liquidity. Increase the receiving capacity of your channels to raise this limit.</string>
     <string name="error_tor_might_cause_problem">Tor could cause this issue. Please try to deactivate tor in the settings.</string>
     <string name="error_grpc_setup_failed">Failed to initiate gRPC connection.</string>
     <string name="error_nwc_setup_failed">Failed to initiate Nostr Wallet Connect connection.</string>
@@ -614,7 +614,7 @@
     <string name="help_dialog_allFunds_1_utxo_selection">If this box is selected, BitBanana will spend all the funds from your chosen UTXOs.</string>
     <string name="help_dialog_allFunds_2">However, if you have open channels, a portion of these funds may be held as emergency reserves to ensure stable channel operation. You might also get some of those funds back as change.</string>
     <string name="help_dialog_lastHop">Only use this last hop option when you want to rebalance your channels. To do so, you can effectively send funds to yourself. Generate an invoice and pay it with a specific set of own channels, picking one with high outgoing capacity for the first hop and one with high incoming balance for the last hop. This approach incurs fees but achieves channel rebalancing.</string>
-    <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel can only send in one direction, and payments may start to fail. Sending funds in a circular route redistributes balances without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with high sending capacity and pair it with another that has excess receiving capacity.</string>
+    <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel will only work in one direction, and payments may start to fail. Sending a lightning payment in a circular route to yourself redistributes balances between your channels without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with high sending capacity and pair it with another that has excess receiving capacity.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
