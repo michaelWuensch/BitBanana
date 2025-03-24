@@ -395,8 +395,8 @@
     <string name="signature_valid">Підпис дійсний!</string>
     <string name="signature_to_verify">Підпис для перевірки</string>
     <string name="verify_message">Підтвердити повідомлення</string>
-    <string name="channel_summary_total_inbound">Всього вхідних</string>
-    <string name="channel_summary_total_unavailable">Повний офлайн</string>
+    <string name="channel_summary_total_inbound">Приймальна ємність</string>
+    <string name="channel_summary_total_unavailable">Офлайн</string>
     <string name="explanation_channel_commitment_type">Кожна сторона має зобов’язану транзакцію, яку лише вона може транслювати в блокчейн, щоб отримати свою частку біткойнів. Різні типи транзакцій зобов’язань призводять до того, що канали мають різні властивості.</string>
     <string name="peers_add">Додати однолітка</string>
     <string name="peer_ping">Пінг</string>
@@ -502,7 +502,7 @@
     <string name="advanced_channel_details_explanation_remote_minHTLC">Найменше значення, яке ваш партнер готовий переслати на цьому каналі в одній транзакції.</string>
     <string name="backup_data_password_confirm">Підтвердьте свій пароль</string>
     <string name="backup_data_create_headline">Резервне копіювання</string>
-    <string name="channel_summary_total_outbound">Всього вихідних</string>
+    <string name="channel_summary_total_outbound">Ємність відправлення</string>
     <string name="message_to_sign">Повідомлення для підпису</string>
     <string name="signature_invalid">Підпис недійсний!</string>
     <string name="timelock_delta">Блокування часу Delta</string>
