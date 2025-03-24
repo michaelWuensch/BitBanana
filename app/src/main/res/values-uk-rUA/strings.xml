@@ -819,4 +819,19 @@
     <string name="guardian_remoteConnect_nwc">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nПерш ніж додавати гаманець, перевірте відкритий ключ.</string>
     <string name="error_nwc_setup_failed">Не вдалося ініціювати підключення Nostr Wallet Connect.</string>
     <string name="guardian_custodial_nwc">Ви підключені до гаманця за допомогою протоколу Nostr Wallet Connect. Якщо ви не є власником сервісу Nostr Wallet Connect, ця домовленість є кастодіальною. Організація, що керує сервісом, має контроль над вашими грошима і може переглядати історію ваших транзакцій. Вносьте на депозит тільки те, що ви готові їм довірити.</string>
+    <string name="sort_by_name_asc">Ім\'я (A-Z)</string>
+    <string name="sort_by_capacity_asc">Ємність (спочатку найменша)</string>
+    <string name="sort_by_inbound_capacity_asc">Ємність прийому (спочатку найменша)</string>
+    <string name="sort_by_outbound_capacity_asc">Ємність надсилання (спочатку найменша)</string>
+    <string name="sort_by_symmetry_asc">Симетрія (спочатку незбалансована)</string>
+    <string name="sort_by_age_asc">Вік (спочатку найновіші)</string>
+    <string name="sort_by_age_desc">Вік (спочатку найстарші)</string>
+    <string name="sort_by_value_desc">Значення (спочатку найбільше)</string>
+    <string name="sort_by">Сортувати за</string>
+    <string name="sort_by_value_asc">Значення (спочатку найменше)</string>
+    <string name="sort_by_capacity_desc">Ємність (спочатку найбільша)</string>
+    <string name="sort_by_inbound_capacity_desc">Ємність прийому (спочатку найбільша)</string>
+    <string name="sort_by_name_desc">Ім\'я (Z-A)</string>
+    <string name="sort_by_outbound_capacity_desc">Ємність надсилання (спочатку найбільша)</string>
+    <string name="sort_by_symmetry_desc">Симетрія (спочатку збалансована)</string>
 </resources>
