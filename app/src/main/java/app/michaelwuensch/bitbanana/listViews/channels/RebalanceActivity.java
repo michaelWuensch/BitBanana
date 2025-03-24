@@ -68,6 +68,7 @@ public class RebalanceActivity extends BaseAppCompatActivity {
     private TextView mAmountLabel;
     private AmountView mRebalanceAmount;
     private AmountView mRebalanceFee;
+    private BBButton mResetButton;
     private BBButton mRebalanceButton;
     private ConstraintLayout mContentLayout;
     private View mResultView;
@@ -107,6 +108,7 @@ public class RebalanceActivity extends BaseAppCompatActivity {
         mAmountLabel = findViewById(R.id.amountAndDirectionLabel);
         mRebalanceAmount = findViewById(R.id.rebalanceAmount);
         mRebalanceFee = findViewById(R.id.rebalanceFee);
+        mResetButton = findViewById(R.id.resetButton);
         mRebalanceButton = findViewById(R.id.rebalanceButton);
         mContentLayout = findViewById(R.id.contentLayout);
         mInputLayout = findViewById(R.id.inputLayout);
@@ -186,7 +188,7 @@ public class RebalanceActivity extends BaseAppCompatActivity {
 
         mMaxFeeInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         mMaxFeeInput.setDescriptionDetail("(" + getResources().getString(R.string.percent) + ")");
-        String lightning_feeLimit = PrefsUtil.getPrefs().getString("lightning_feeLimit", "1%");
+        String lightning_feeLimit = PrefsUtil.getPrefs().getString(PrefsUtil.REBALANCE_FEE_LIMIT_PERCENT, "0.5%");
         String feePercent = lightning_feeLimit.replace("%", "");
         mMaxFeeInput.setValue(feePercent);
         mMaxFeeInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -197,12 +199,21 @@ public class RebalanceActivity extends BaseAppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                PrefsUtil.editPrefs().putString(PrefsUtil.REBALANCE_FEE_LIMIT_PERCENT, charSequence.toString() + "%").apply();
                 updateBalancing(mSlider.getProgress() * 1000L);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        mResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSlider.setProgress(0);
+                updateBalancing(0);
             }
         });
 
