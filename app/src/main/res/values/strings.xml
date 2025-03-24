@@ -149,6 +149,7 @@
     <string name="copy_all">Copy all</string>
     <string name="help">Help</string>
     <string name="adjust">Adjust</string>
+    <string name="sort_by">Sort by</string>
     <string name="nostr_relay">Relay</string>
 
     <string name="activity_receive">Receive</string>
@@ -923,5 +924,20 @@
     <string name="rebalance">Rebalance</string>
     <string name="max_fee">Maximum fee</string>
     <string name="fee_paid">Paid fee</string>
+
+    <string name="sort_by_name_asc">Name (A-Z)</string>
+    <string name="sort_by_name_desc">Name (Z-A)</string>
+    <string name="sort_by_capacity_asc">Capacity (smallest first)</string>
+    <string name="sort_by_capacity_desc">Capacity (largest first)</string>
+    <string name="sort_by_inbound_capacity_asc">Receiving Capacity (smallest first)</string>
+    <string name="sort_by_inbound_capacity_desc">Receiving Capacity (largest first)</string>
+    <string name="sort_by_outbound_capacity_asc">Sending Capacity (smallest first)</string>
+    <string name="sort_by_outbound_capacity_desc">Sending Capacity (largest first)</string>
+    <string name="sort_by_symmetry_asc">Symmetry (imbalanced first)</string>
+    <string name="sort_by_symmetry_desc">Symmetry (balanced first)</string>
+    <string name="sort_by_age_asc">Age (newest first)</string>
+    <string name="sort_by_age_desc">Age (oldest first)</string>
+    <string name="sort_by_value_asc">Value (smallest first)</string>
+    <string name="sort_by_value_desc">Value (largest first)</string>
 
 </resources>

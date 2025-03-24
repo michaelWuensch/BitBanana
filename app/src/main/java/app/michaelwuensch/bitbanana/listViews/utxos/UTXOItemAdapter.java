@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,14 +19,49 @@ import app.michaelwuensch.bitbanana.models.Outpoint;
 
 
 public class UTXOItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<UTXOListItem> mItems;
-    private Set<Integer> selectedPositions = new HashSet<>(); // Tracks selected items
+
+    private final SortedList<UTXOListItem> mSortedList = new SortedList<>(UTXOListItem.class, new SortedList.Callback<UTXOListItem>() {
+        @Override
+        public int compare(UTXOListItem i1, UTXOListItem i2) {
+            return i1.compareTo(i2);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {
+            notifyItemRangeChanged(position, count);
+        }
+
+        @Override
+        public boolean areContentsTheSame(UTXOListItem oldItem, UTXOListItem newItem) {
+            return oldItem.equalsWithSameContent(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(UTXOListItem item1, UTXOListItem item2) {
+            return item1.equals(item2);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            notifyItemRangeInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            notifyItemRangeRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+    });
+    private Set<String> selectedOutpoints = new HashSet<>(); // Tracks selected items by their outpoints
     private UTXOSelectListener mUtxoSelectListener;
     private int mMode;
 
     // Construct the adapter with a data list
-    public UTXOItemAdapter(List<UTXOListItem> dataset, UTXOSelectListener utxoSelectListener, int mode) {
-        mItems = dataset;
+    public UTXOItemAdapter(UTXOSelectListener utxoSelectListener, int mode) {
         mUtxoSelectListener = utxoSelectListener;
         mMode = mode;
     }
@@ -33,15 +69,11 @@ public class UTXOItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setPreselectedItems(List<Outpoint> preselectedItems) {
         if (preselectedItems == null || preselectedItems.isEmpty())
             return;
-        selectedPositions.clear();
-        for (int i = 0; i < mItems.size(); i++) {
-            for (Outpoint outpoint : preselectedItems) {
-                if (outpoint.toString().equals(mItems.get(i).getUtxo().getOutpoint().toString())) {
-                    selectedPositions.add(i);
-                    notifyItemChanged(i);
-                }
-            }
+        selectedOutpoints.clear();
+        for (Outpoint outpoint : preselectedItems) {
+            selectedOutpoints.add(outpoint.toString());
         }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -55,29 +87,30 @@ public class UTXOItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         UTXOItemViewHolder utxoItemViewHolder = (UTXOItemViewHolder) holder;
-        UTXOListItem utxoListItem = mItems.get(position);
+        UTXOListItem utxoListItem = mSortedList.get(position);
         utxoItemViewHolder.bindUTXOListItem(utxoListItem);
         utxoItemViewHolder.addOnUTXOSelectListener(mUtxoSelectListener);
 
         if (mMode == UTXOsActivity.MODE_SELECT) {
 
-            // Highlight the selected item
-            holder.itemView.setSelected(selectedPositions.contains(position));
+            // Highlight the selected item using outpoint instead of position
+            holder.itemView.setSelected(selectedOutpoints.contains(utxoListItem.getUtxo().getOutpoint().toString()));
 
             // Handle item click to toggle selection
             holder.itemView.setOnClickListener(v -> {
-                if (!mItems.get(position).getUtxo().isLeased()) {
-                    if (selectedPositions.contains(position)) {
-                        selectedPositions.remove(position); // Unselect if already selected
+                if (!utxoListItem.getUtxo().isLeased()) {
+                    String outpoint = utxoListItem.getUtxo().getOutpoint().toString();
+                    if (selectedOutpoints.contains(outpoint)) {
+                        selectedOutpoints.remove(outpoint); // Unselect if already selected
                     } else {
-                        selectedPositions.add(position); // Select if not selected
+                        selectedOutpoints.add(outpoint); // Select if not selected
                     }
 
                     // Notify the adapter to update the item's appearance
-                    notifyItemChanged(position);
+                    notifyItemChanged(mSortedList.indexOf(utxoListItem));
                 }
                 // Make sure it still transfers the click event to UTXOsActivity.
-                mUtxoSelectListener.onUtxoSelect(mItems.get(position).getUtxo());
+                mUtxoSelectListener.onUtxoSelect(utxoListItem.getUtxo());
             });
         }
     }
@@ -85,14 +118,21 @@ public class UTXOItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mSortedList.size();
     }
 
     public List<UTXOListItem> getSelectedItems() {
         List<UTXOListItem> selectedItems = new ArrayList<>();
-        for (int position : selectedPositions) {
-            selectedItems.add(mItems.get(position));
+        for (int i = 0; i < mSortedList.size(); i++) {
+            UTXOListItem item = mSortedList.get(i);
+            if (selectedOutpoints.contains(item.getUtxo().getOutpoint().toString())) {
+                selectedItems.add(item);
+            }
         }
         return selectedItems;
+    }
+
+    public void replaceAll(List<UTXOListItem> items) {
+        mSortedList.replaceAll(items);
     }
 }

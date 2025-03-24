@@ -2,12 +2,14 @@ package app.michaelwuensch.bitbanana.listViews.utxos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -58,6 +61,15 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     private int mMode;
     private long mTransactionAmountMSat;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public static UTXOListItem.SortCriteria getCurrentSortCriteria() {
+        String savedCriteria = PrefsUtil.getPrefs().getString(PrefsUtil.UTXO_SORT_CRITERIA, UTXOListItem.SortCriteria.AGE_ASC.name());
+        return UTXOListItem.SortCriteria.valueOf(savedCriteria);
+    }
+
+    private static void setCurrentSortCriteria(UTXOListItem.SortCriteria criteria) {
+        PrefsUtil.editPrefs().putString(PrefsUtil.UTXO_SORT_CRITERIA, criteria.name()).apply();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +109,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create and set adapter
-        mAdapter = new UTXOItemAdapter(mUTXOItems, this, mMode);
+        mAdapter = new UTXOItemAdapter(this, mMode);
         mRecyclerView.setAdapter(mAdapter);
 
         switch (mMode) {
@@ -134,15 +146,14 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                 mEmptyListText.setVisibility(View.GONE);
             }
 
+            mAdapter.replaceAll(mUTXOItems);
+
             // Apply preselection if necessary
             if (mPreselectedUTXOs != null && !mPreselectedUTXOs.isEmpty()) {
                 mAdapter.setPreselectedItems(mPreselectedUTXOs);
                 mPreselectedUTXOs = null;
                 updateUiToSelection();
             }
-
-            // Update the list view
-            mAdapter.notifyDataSetChanged();
         }
         // Remove refreshing symbol
         mSwipeRefreshLayout.setRefreshing(false);
@@ -214,10 +225,64 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        updateSortMenuTitles(menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void updateSortMenuTitles(Menu menu) {
+        // Get the sort submenu
+        MenuItem sortMenuItem = menu.findItem(R.id.sortMenu);
+        if (sortMenuItem != null && sortMenuItem.hasSubMenu()) {
+            Menu sortSubMenu = sortMenuItem.getSubMenu();
+
+            // Reset all menu items
+            sortSubMenu.findItem(R.id.sort_by_age_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_age_desc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_value_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_value_desc).setIcon(R.drawable.ic_transparent_24dp);
+
+            // Add arrow to current sort criteria
+            UTXOListItem.SortCriteria currentCriteria = getCurrentSortCriteria();
+            int menuItemId = -1;
+
+            switch (currentCriteria) {
+                case AGE_ASC:
+                    menuItemId = R.id.sort_by_age_asc;
+                    break;
+                case AGE_DESC:
+                    menuItemId = R.id.sort_by_age_desc;
+                    break;
+                case VALUE_ASC:
+                    menuItemId = R.id.sort_by_value_asc;
+                    break;
+                case VALUE_DESC:
+                    menuItemId = R.id.sort_by_value_desc;
+                    break;
+            }
+
+            if (menuItemId != -1) {
+                MenuItem item = sortSubMenu.findItem(menuItemId);
+                item.setIcon(R.drawable.baseline_check_24);
+                item.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.utxo_sorting_menu, menu);
         if (FeatureManager.isHelpButtonsEnabled())
-            getMenuInflater().inflate(R.menu.help_menu, menu);
+            getMenuInflater().inflate(R.menu.help_menu_no_action, menu);
+
+        // Display icons in expandable menu
+        if (menu instanceof MenuBuilder) {
+            MenuBuilder m = (MenuBuilder) menu;
+
+            //noinspection RestrictedApi
+            m.setOptionalIconsVisible(true);
+        }
         return true;
     }
 
@@ -237,9 +302,33 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
             }
 
             return true;
+        } else if (id == R.id.sort_by_age_asc) {
+            setCurrentSortCriteria(UTXOListItem.SortCriteria.AGE_ASC);
+            updateUTXOsDisplayList();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_age_desc) {
+            setCurrentSortCriteria(UTXOListItem.SortCriteria.AGE_DESC);
+            updateUTXOsDisplayList();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_value_asc) {
+            setCurrentSortCriteria(UTXOListItem.SortCriteria.VALUE_ASC);
+            updateUTXOsDisplayList();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_value_desc) {
+            setCurrentSortCriteria(UTXOListItem.SortCriteria.VALUE_DESC);
+            updateUTXOsDisplayList();
+            scrollToTop();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void scrollToTop() {
+        mRecyclerView.scrollToPosition(0);
     }
 
     @Override

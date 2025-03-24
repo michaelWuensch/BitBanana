@@ -59,6 +59,8 @@ public class PrefsUtil {
     public static final String FEE_ESTIMATE_MINIMUM = "feeEstimateMinimum";
     public static final String FEE_ESTIMATE_TIMESTAMP = "feeEstimateTimestamp";
     public static final String CURRENT_CURRENCY_INDEX = "currentCurrencyIndex";
+    public static final String CHANNEL_SORT_CRITERIA = "channelSortCriteria";
+    public static final String UTXO_SORT_CRITERIA = "utxoSortCriteria";
 
 
     // default values

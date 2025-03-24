@@ -7,5 +7,5 @@
         android:icon="@drawable/outline_balance_24"
         android:title="Rebalance"
         app:iconTint="@color/white"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 </menu>
