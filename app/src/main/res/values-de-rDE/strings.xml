@@ -502,12 +502,7 @@
     <string name="help_dialog_sign_verify">Indem du eine Nachricht mit deinem Knoten signierst, kannst du beweisen, dass du der Eigentümer dieses Knotens bist. Da die Signatur den öffentlichen Schlüssel des Knotens enthält, können andere eine solche signierte Nachricht überprüfen.
 \n
 \nDiese Funktion kann in verschiedenen Szenarien verwendet werden, z. B. zum Nachweis der Identität oder zum Einloggen mit deinem Knoten bei einigen Diensten.</string>
-    <string name="help_dialog_channels">Die Liste der Lightning Channels stellt dein Lightning-Guthaben dar. Lightning-Kanäle sind notwendig, um am Lightning-Netzwerk teilzunehmen, das schnelle und günstige Bitcoin-Zahlungen ermöglicht.
-\n
-\nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", müsst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", müsst du einen bestehenden Kanal schließen.
-\nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten!
-\n
-\nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von lightningnetwork.plus.</string>
+    <string name="help_dialog_channels">Die Liste der Lightning Channels stellt dein Lightning-Guthaben dar. Lightning-Kanäle sind notwendig, um am Lightning-Netzwerk teilzunehmen, das schnelle und günstige Bitcoin-Zahlungen ermöglicht. \n \nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", musst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", musst du einen bestehenden Kanal schließen. \nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten! \n \nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von lightningnetwork.plus.</string>
     <string name="forwarding_volume_description">Im ausgewählten Zeitraum weitergeleitet</string>
     <string name="message_to_sign">Zu signierende Nachricht</string>
     <string name="sign_message">Nachricht signieren</string>
@@ -668,11 +663,7 @@
     <string name="network">Netzwerk</string>
     <string name="peer_last_errors">Letzte Fehler</string>
     <string name="reliability">Zuverlässigkeit</string>
-    <string name="help_dialog_peers">In dieser Liste werden alle Peers angezeigt, die derzeit mit deinem Knoten verbunden sind. Peers sind im Wesentlichen andere Knoten innerhalb des Netzwerks. Sie arbeiten zusammen, indem sie Informationen austauschen und sicherstellen, dass jeder Knoten einen klaren Überblick über den Status des Netzwerks hat.
-\n
-\nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist.
-\n
-\nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und über diese Schnittstelle auf weitere Details über deine Peers zuzugreifen.</string>
+    <string name="help_dialog_peers">In dieser Liste werden alle Peers angezeigt, die derzeit mit deinem Knoten verbunden sind. Peers sind im Wesentlichen andere Knoten innerhalb des Netzwerks. Sie arbeiten zusammen, indem sie Informationen austauschen und sicherstellen, dass jeder Knoten einen klaren Überblick über den Status des Netzwerks hat. \n \nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist. \n \nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du in dieser Ansicht die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und weitere Details über deine Peers zu erfahren.</string>
     <string name="settings_featurePeers">Peer-Verwaltung</string>
     <string name="forwarding_avg_earned_description">Durchschnittliche Einnahmen pro Ereignis</string>
     <string name="peer_total_capacity_explanation">Gesamtkapazität des Knotens, die sich aus der Summe der Kanalkapazitäten ergibt.</string>
@@ -840,12 +831,7 @@
 \nTechnisch gesehen kann eine Gebühr nur für den ausgehenden Kanal festgelegt werden; für ein ausgewähltes Kanalpaar (eingehend und ausgehend) passt die Gebühr für den eingehenden Kanal die Gebühr für den ausgehenden Kanal durch eine einfache Addition an. Daher führt eine negative Zahl zu einer Ermäßigung der Gebühr für den ausgehenden Kanal, während eine positive Zahl zu einer Erhöhung der Gebühr führt. Aus Sicherheitsgründen kann die gesamte Routing-Gebühr nicht negativ sein, um sicherzustellen, dass kein Gelde durch das Routing verloren geht.
 \n
 \nGrundgebühr und Gebührensatz funktionieren auf die gleiche Weise wie bei den Ausgangsgebühren.</string>
-    <string name="help_dialog_watchtowers">Damit ein Watchtower funktionieren kann, müssen einige Daten mit ihm ausgetauscht werden. Dies führt dazu, dass einige Informationen an den Betreiber des Watchtowers weitergegeben werden. Die folgenden unverschlüsselten Daten werden offengelegt:
-\n- Häufigkeit der Kanalaktualisierungen
-\n
-\nDer Kontostand des Kanals bleibt vertraulich, es sei denn, dein Partner betrügt und der Watchtower entdeckt dies. In diesem Fall wirst du die Kontostände offenlegen, um den Schutz deines Geldes zu gewährleisten.
-\n
-\nBeachte, dass ein Watchtower dein Geld nicht an sich nehmen kann. Im Falle eines Vertragsbruchs durch deinen Kanalpartner kann er lediglich eine Bestrafungstransaktion einleiten, bei der die Gelder direkt an dich gehen.</string>
+    <string name="help_dialog_watchtowers">Damit ein Watchtower funktionieren kann, müssen einige Daten mit ihm geteilt werden. Dies führt dazu, dass einige Informationen an den Betreiber des Watchtowers weitergegeben werden. Die folgenden unverschlüsselten Daten werden offengelegt: \n- Häufigkeit der Kanalaktualisierungen \n \nDer Kontostand des Kanals bleibt vertraulich, es sei denn, dein Partner betrügt und der Watchtower entdeckt es. In diesem Fall wirst du den Kontostande offenlegen, um den Schutz deines Guthabens zu gewährleisten. \n \nBeachte, dass ein Watchtower dein Geld nicht stehlen kann. Im Falle eines Vertragsbruchs durch deinen Kanalpartner kann er lediglich eine Bestrafungstransaktion einleiten, bei der das Guthaben direkt an dich geht.</string>
     <string name="help_dialog_own_watchtower">Das ist dein Watchtower im Lightning-Netzwerk.
 \n
 \nWenn du auf das Bild des Avatars tippst, wird ein QR-Code eingeblendet.
@@ -925,7 +911,7 @@
     <string name="help_dialog_allFunds_1_utxo_selection">Wenn dieses Kästchen aktiviert ist, wird BitBanana das gesamte Guthaben der von dir gewählten UTXOs ausgeben.</string>
     <string name="use_all_selected_funds">Gesamtes ausgewähltes Guthaben verwenden</string>
     <string name="help_dialog_allFunds_2">Wenn du jedoch offene Kanäle hast, kann ein Teil dieses Guthabens als Notreserve gehalten werden, um einen stabilen Kanalbetrieb zu gewährleisten. Du könntest auch einen Teil dieses Guthabens als Wechselgeld zurückbekommen.</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximaler Betrag: %1$s\n\nUngenügende Lightning-Liquidität. Erhöhe deine eingehende Kanalkapazität um dieses Limit zu erhöhen.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximaler Betrag: %1$s\n\nDie Lightning-Liquidität reicht nicht aus. Erhöhe die Empfangskapazität deiner Kanäle um dieses Limit zu erhöhen.</string>
     <string name="logs_no_logs">Keine Logs</string>
     <string name="clear">Löschen</string>
     <string name="copy_all">Alles kopieren</string>
