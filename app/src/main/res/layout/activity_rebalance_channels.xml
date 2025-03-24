@@ -75,11 +75,27 @@
                     android:text="@string/adjust"
                     android:textSize="18sp" />
 
-                <SeekBar
-                    android:id="@+id/slider"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="15dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <app.michaelwuensch.bitbanana.customView.BBButton
+                        android:id="@+id/resetButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:bbbutton_contentColor="@color/white"
+                        app:bbbutton_horizontalContentPadding="0dp"
+                        app:bbbutton_image="@drawable/baseline_refresh_24" />
+                </LinearLayout>
+
 
                 <app.michaelwuensch.bitbanana.customView.BBInputFieldView
                     android:id="@+id/maxFeeInput"
