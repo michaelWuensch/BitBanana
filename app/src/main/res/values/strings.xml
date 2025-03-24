@@ -792,9 +792,9 @@
     <string name="signature_invalid">Signature is invalid!</string>
     <string name="signature_pubkey">Pubkey:</string>
 
-    <string name="channel_summary_total_outbound">Total outbound</string>
-    <string name="channel_summary_total_inbound">Total inbound</string>
-    <string name="channel_summary_total_unavailable">Total offline</string>
+    <string name="channel_summary_total_outbound">Sending capacity</string>
+    <string name="channel_summary_total_inbound">Receiving capacity</string>
+    <string name="channel_summary_total_unavailable">Offline</string>
 
     <string name="fee_base">Base Fee</string>
     <string name="fee_rate">Fee Rate</string>
