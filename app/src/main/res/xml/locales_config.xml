@@ -12,6 +12,7 @@
     <locale android:name="ko"/> <!-- Korean -->
     <locale android:name="pt-BR"/> <!-- Portuguese (Brazil) -->
     <locale android:name="pt-PT"/> <!-- Portuguese (Portugal) -->
+    <locale android:name="ru"/> <!-- Russian -->
     <locale android:name="es"/> <!-- Spanish -->
     <locale android:name="ta"/> <!-- Tamil -->
     <locale android:name="uk"/> <!-- Ukrainian -->
