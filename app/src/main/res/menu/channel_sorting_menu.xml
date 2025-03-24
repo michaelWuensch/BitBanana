@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sortMenu"
+        android:icon="@drawable/baseline_sort_24"
+        android:title="@string/sort_by"
+        app:iconTint="@color/white"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/sort_by_name_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_name_asc" />
+            <item
+                android:id="@+id/sort_by_name_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_name_desc" />
+            <item
+                android:id="@+id/sort_by_capacity_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_capacity_asc" />
+            <item
+                android:id="@+id/sort_by_capacity_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_capacity_desc" />
+            <item
+                android:id="@+id/sort_by_inbound_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_inbound_capacity_asc" />
+            <item
+                android:id="@+id/sort_by_inbound_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_inbound_capacity_desc" />
+            <item
+                android:id="@+id/sort_by_outbound_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_outbound_capacity_asc" />
+            <item
+                android:id="@+id/sort_by_outbound_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_outbound_capacity_desc" />
+            <item
+                android:id="@+id/sort_by_symmetry_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_symmetry_asc" />
+            <item
+                android:id="@+id/sort_by_symmetry_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_symmetry_desc" />
+        </menu>
+    </item>
+</menu>

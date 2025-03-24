@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 
-import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public abstract class ChannelListItem implements Comparable<ChannelListItem> {
 
@@ -16,38 +16,57 @@ public abstract class ChannelListItem implements Comparable<ChannelListItem> {
 
     abstract public Serializable getSerializedChannel();
 
+    abstract public String getAlias();
+
+    abstract public long getCapacity();
+
+    abstract public long getLocalBalance();
+
+    abstract public long getRemoteBalance();
+
+    abstract public double getBalanceRatio();
+
+    public enum SortCriteria {
+        NAME_ASC,
+        NAME_DESC,
+        CAPACITY_ASC,
+        CAPACITY_DESC,
+        INBOUND_CAPACITY_ASC,
+        INBOUND_CAPACITY_DESC,
+        OUTBOUND_CAPACITY_ASC,
+        OUTBOUND_CAPACITY_DESC,
+        SYMMETRY_ASC,
+        SYMMETRY_DESC
+    }
+
     @Override
-    public int compareTo(ChannelListItem channelListItem) {
-        ChannelListItem other = channelListItem;
+    public int compareTo(ChannelListItem other) {
+        SortCriteria currentCriteria = SortCriteria.valueOf(PrefsUtil.getPrefs().getString(PrefsUtil.CHANNEL_SORT_CRITERIA, SortCriteria.NAME_ASC.name()));
 
-        String ownPubkey = "";
-        switch (this.getType()) {
-            case TYPE_OPEN_CHANNEL:
-                ownPubkey = ((OpenChannelItem) this).getChannel().getRemotePubKey();
-                break;
-            case TYPE_PENDING_CHANNEL:
-                ownPubkey = ((PendingChannelItem) this).getChannel().getRemotePubKey();
-                break;
-            case TYPE_CLOSED_CHANNEL:
-                ownPubkey = ((ClosedChannelItem) this).getChannel().getRemotePubKey();
+        switch (currentCriteria) {
+            case NAME_ASC:
+                return getAlias().compareToIgnoreCase(other.getAlias());
+            case NAME_DESC:
+                return other.getAlias().compareToIgnoreCase(getAlias());
+            case CAPACITY_ASC:
+                return Long.compare(getCapacity(), other.getCapacity());
+            case CAPACITY_DESC:
+                return Long.compare(other.getCapacity(), getCapacity());
+            case INBOUND_CAPACITY_ASC:
+                return Long.compare(getRemoteBalance(), other.getRemoteBalance());
+            case INBOUND_CAPACITY_DESC:
+                return Long.compare(other.getRemoteBalance(), getRemoteBalance());
+            case OUTBOUND_CAPACITY_ASC:
+                return Long.compare(getLocalBalance(), other.getLocalBalance());
+            case OUTBOUND_CAPACITY_DESC:
+                return Long.compare(other.getLocalBalance(), getLocalBalance());
+            case SYMMETRY_ASC:
+                return Double.compare(getBalanceRatio(), other.getBalanceRatio());
+            case SYMMETRY_DESC:
+                return Double.compare(other.getBalanceRatio(), getBalanceRatio());
+            default:
+                return 0;
         }
-
-        String otherPubkey = "";
-        switch (other.getType()) {
-            case TYPE_OPEN_CHANNEL:
-                otherPubkey = ((OpenChannelItem) other).getChannel().getRemotePubKey();
-                break;
-            case TYPE_PENDING_CHANNEL:
-                otherPubkey = ((PendingChannelItem) other).getChannel().getRemotePubKey();
-                break;
-            case TYPE_CLOSED_CHANNEL:
-                otherPubkey = ((ClosedChannelItem) other).getChannel().getRemotePubKey();
-        }
-
-        String ownAlias = AliasManager.getInstance().getAlias(ownPubkey).toLowerCase();
-        String otherAlias = AliasManager.getInstance().getAlias(otherPubkey).toLowerCase();
-
-        return ownAlias.compareTo(otherAlias);
     }
 
     public boolean equalsWithSameContent(@Nullable Object obj) {

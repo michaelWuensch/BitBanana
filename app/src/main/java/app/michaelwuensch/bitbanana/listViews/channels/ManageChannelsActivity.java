@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.listViews.channels;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
@@ -83,6 +85,15 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     private int mMode;
     private int mSelectionType;
     private long mTransactionAmountMSat;
+
+    public static ChannelListItem.SortCriteria getCurrentSortCriteria() {
+        String savedCriteria = PrefsUtil.getPrefs().getString(PrefsUtil.CHANNEL_SORT_CRITERIA, ChannelListItem.SortCriteria.NAME_ASC.name());
+        return ChannelListItem.SortCriteria.valueOf(savedCriteria);
+    }
+
+    private static void setCurrentSortCriteria(ChannelListItem.SortCriteria criteria) {
+        PrefsUtil.editPrefs().putString(PrefsUtil.CHANNEL_SORT_CRITERIA, criteria.name()).apply();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -390,26 +401,93 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        updateSortMenuTitles(menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void updateSortMenuTitles(Menu menu) {
+        // Get the sort submenu
+        MenuItem sortMenuItem = menu.findItem(R.id.sortMenu);
+        if (sortMenuItem != null && sortMenuItem.hasSubMenu()) {
+            Menu sortSubMenu = sortMenuItem.getSubMenu();
+
+            // Reset all menu items
+            sortSubMenu.findItem(R.id.sort_by_name_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_name_desc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_capacity_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_capacity_desc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_inbound_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_inbound_desc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_outbound_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_outbound_desc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_symmetry_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_symmetry_desc).setIcon(R.drawable.ic_transparent_24dp);
+
+            // Add arrow to current sort criteria
+            ChannelListItem.SortCriteria currentCriteria = getCurrentSortCriteria();
+            int menuItemId = -1;
+
+            switch (currentCriteria) {
+                case NAME_ASC:
+                    menuItemId = R.id.sort_by_name_asc;
+                    break;
+                case NAME_DESC:
+                    menuItemId = R.id.sort_by_name_desc;
+                    break;
+                case CAPACITY_ASC:
+                    menuItemId = R.id.sort_by_capacity_asc;
+                    break;
+                case CAPACITY_DESC:
+                    menuItemId = R.id.sort_by_capacity_desc;
+                    break;
+                case INBOUND_CAPACITY_ASC:
+                    menuItemId = R.id.sort_by_inbound_asc;
+                    break;
+                case INBOUND_CAPACITY_DESC:
+                    menuItemId = R.id.sort_by_inbound_desc;
+                    break;
+                case OUTBOUND_CAPACITY_ASC:
+                    menuItemId = R.id.sort_by_outbound_asc;
+                    break;
+                case OUTBOUND_CAPACITY_DESC:
+                    menuItemId = R.id.sort_by_outbound_desc;
+                    break;
+                case SYMMETRY_ASC:
+                    menuItemId = R.id.sort_by_symmetry_asc;
+                    break;
+                case SYMMETRY_DESC:
+                    menuItemId = R.id.sort_by_symmetry_desc;
+                    break;
+            }
+
+            if (menuItemId != -1) {
+                MenuItem item = sortSubMenu.findItem(menuItemId);
+                item.setIcon(R.drawable.baseline_check_24);
+                item.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
 
         boolean showHelp = FeatureManager.isHelpButtonsEnabled() && mMode == MODE_VIEW;
         boolean showRebalance = BackendManager.getCurrentBackend().supportsRebalanceChannel() && mMode == MODE_VIEW;
-        boolean needsExpandableMenu = showHelp && showRebalance;
-        if (needsExpandableMenu) {
-            getMenuInflater().inflate(R.menu.manage_channels_menu, menu);
-            // Display icons in expandable menu
-            if (menu instanceof MenuBuilder) {
-                MenuBuilder m = (MenuBuilder) menu;
 
-                //noinspection RestrictedApi
-                m.setOptionalIconsVisible(true);
-            }
-        } else {
-            if (showHelp)
-                getMenuInflater().inflate(R.menu.help_menu, menu);
-            if (showRebalance)
-                getMenuInflater().inflate(R.menu.rebalance_menu, menu);
+        getMenuInflater().inflate(R.menu.channel_sorting_menu, menu);
+        if (showRebalance)
+            getMenuInflater().inflate(R.menu.rebalance_menu, menu);
+        if (showHelp)
+            getMenuInflater().inflate(R.menu.help_menu_no_action, menu);
+
+        // Display icons in expandable menu
+        if (menu instanceof MenuBuilder) {
+            MenuBuilder m = (MenuBuilder) menu;
+
+            //noinspection RestrictedApi
+            m.setOptionalIconsVisible(true);
         }
 
         MenuItem menuItem = menu.findItem(R.id.searchButton);
@@ -482,9 +560,57 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         if (id == R.id.helpButton) {
             HelpDialogUtil.showDialogWithLink(ManageChannelsActivity.this, R.string.help_dialog_channels, "LIGHTNINGNETWORk.PLUS", RefConstants.URL_LNPLUS);
             return true;
-        }
-
-        if (id == R.id.rebalanceMenuButton) {
+        } else if (id == R.id.sort_by_name_asc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.NAME_ASC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_name_desc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.NAME_DESC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_capacity_asc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.CAPACITY_ASC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_capacity_desc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.CAPACITY_DESC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_inbound_asc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.INBOUND_CAPACITY_ASC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_inbound_desc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.INBOUND_CAPACITY_DESC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_outbound_asc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.OUTBOUND_CAPACITY_ASC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_outbound_desc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.OUTBOUND_CAPACITY_DESC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_symmetry_asc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.SYMMETRY_ASC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_symmetry_desc) {
+            setCurrentSortCriteria(ChannelListItem.SortCriteria.SYMMETRY_DESC);
+            updateChannelsView();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.rebalanceMenuButton) {
             Intent intent = new Intent(ManageChannelsActivity.this, RebalanceActivity.class);
             startActivity(intent);
         }
@@ -492,6 +618,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         return super.onOptionsItemSelected(item);
     }
 
+    private void scrollToTop() {
+        mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
+        mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
+    }
 
     public class ChannelsPagerAdapter extends FragmentPagerAdapter {
         private ChannelListFragment mOpenChannelsList;

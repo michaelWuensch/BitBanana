@@ -2,15 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/rebalanceMenuButton"
-        android:background="?selectableItemBackgroundBorderless"
-        android:icon="@drawable/outline_balance_24"
-        android:title="Rebalance"
-        app:iconTint="@color/white" />
-    <item
         android:id="@+id/helpButton"
         android:background="?selectableItemBackgroundBorderless"
         android:icon="@drawable/ic_help_black_24dp"
         android:title="@string/help"
-        app:iconTint="@color/white" />
+        app:iconTint="@color/white"
+        app:showAsAction="never" />
 </menu>
