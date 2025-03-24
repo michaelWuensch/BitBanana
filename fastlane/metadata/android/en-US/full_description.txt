@@ -17,6 +17,3 @@ Features:
 - Tor support
 - 100% open source
 ... and many other features to explore!
-
-The source code can be found at:
-https://github.com/michaelWuensch/BitBanana
