@@ -936,8 +936,8 @@
     <string name="first_hop">Erster Hop</string>
     <string name="error_channel_selection_offline">Du kannst keine Kanäle auswählen, die gerade offline sind.</string>
     <string name="last_hop">Letzter Hop</string>
-    <string name="error_channel_selection_insufficient_liquidity_outgoing">Der Ausgangssaldo des gewählten Kanals ist unzureichend.</string>
-    <string name="error_channel_selection_insufficient_liquidity_incoming">Der Eingangssaldo des gewählten Kanals ist unzureichend.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Die Sendekapazität des gewählten Kanals reicht nicht aus.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Die Empfangskapazität des gewählten Kanals reicht nicht aus.</string>
     <string name="channel_selection">Kanalauswahl</string>
     <string name="help_dialog_lastHop">Verwende diese Option nur, wenn du deine Kanäle ausbalancieren willst. Um das zu tun, kannst du einfach Geld an dich selbst senden. Erstelle eine Rechnung und bezahle sie mit einem bestimmten Auswahl eigener Kanäle, wobei du für den ersten Hop einen Kanal mit hoher ausgehender Kapazität und für den letzten Hop einen Kanal mit hoher eingehender Kapazität auswählst. Bei diesem Ansatz fallen zwar Gebühren an, aber es wird ein Ausbalancieren der Kanäle erreicht.</string>
     <string name="help">Hilfe</string>
@@ -967,4 +967,5 @@
     <string name="guardian_remoteConnect_nwc">Bist du sicher, dass du eine Verbindung herstellen willst zu \n\n%1$s\n\nBitte überprüfe den öffentlichen Schlüssel, bevor du die Wallet hinzufügst.</string>
     <string name="guardian_custodial_nwc">Du bist mit einer Wallet verbunden, die das Nostr Wallet Connect Protokoll verwendet. Sofern du nicht der Betreiber des Nostr Wallet Connect-Dienstes bist, handelt es sich um eine Vermögensverwaltung. Das Unternehmen oder die Person, die den Dienst verwaltet, hat die Kontrolle über dein Geld und kann deinen Transaktionsverlauf einsehen. Zahle nur so viel ein, wie du bereit bist, dem Anbieter zu vertrauen.</string>
     <string name="error_channel_rebalance_insufficient_funds">Das Backend hat mit einem Fehler „unzureichende Mittel“ geantwortet. Vielleicht verhindern einige Kanalbeschränkungen, dass ein Kanal den Großteil seines Guthabens ausgeben kann.</string>
+    <string name="help_dialog_rebalancing">Durch das Ausbalancieren deiner Kanäle hältst du deine Zahlungskanäle einsatzbereit! Wenn auf einer Seite das Guthaben zur Neige geht, funktioniert ein Kanal nur noch in eine Richtung, und Zahlungen können unter Umständen fehlschlagen. Indem du eine Lightning Zahlung im Kreis and dich selbst schickst, werden die Guthaben zwischen deinen Kanälen ausgeglichen, ohne dass On-Chain-Transaktionen erforderlich sind. Mit dieser Ansicht kannst du so eine Zahlung durchführen. Die besten Ergebnisse erzielst du, wenn du einen Kanal mit einer hohen Sendekapazität wählst und ihn mit einem anderen kombinierst, der eine hohe Empfangskapazität aufweist.</string>
 </resources>
