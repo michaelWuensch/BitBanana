@@ -216,14 +216,7 @@
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
-    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt.
-\nBitte verwende eines der folgenden Formate:
-\n
-\n- Lndconnect string (lndconnect://...)
-\n- Core Lightning grpc (cln-grpc://…)
-\n- LndHub (lndhub://…)
-\n- BtcPay Server Verbindung (config=...)
-\n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt. \nBitte verwende eines der folgenden Formate: \n \n- Lndconnect string (lndconnect://...) \n- Core Lightning grpc (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
@@ -349,7 +342,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Zahlungscode</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.
@@ -497,8 +490,8 @@
     <string name="signature_valid">Signatur ist gültig!</string>
     <string name="signature_invalid">Signatur ist ungültig!</string>
     <string name="signature_pubkey">Pubkey:</string>
-    <string name="channel_summary_total_outbound">Ausgehend insgesamt</string>
-    <string name="channel_summary_total_unavailable">Offline insgesamt</string>
+    <string name="channel_summary_total_outbound">Sendekapazität</string>
+    <string name="channel_summary_total_unavailable">Offline</string>
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
         <item quantity="other">%d Blöcke</item>
@@ -509,17 +502,12 @@
     <string name="help_dialog_sign_verify">Indem du eine Nachricht mit deinem Knoten signierst, kannst du beweisen, dass du der Eigentümer dieses Knotens bist. Da die Signatur den öffentlichen Schlüssel des Knotens enthält, können andere eine solche signierte Nachricht überprüfen.
 \n
 \nDiese Funktion kann in verschiedenen Szenarien verwendet werden, z. B. zum Nachweis der Identität oder zum Einloggen mit deinem Knoten bei einigen Diensten.</string>
-    <string name="help_dialog_channels">Die Liste der Lightning Channels stellt dein Lightning-Guthaben dar. Lightning-Kanäle sind notwendig, um am Lightning-Netzwerk teilzunehmen, das schnelle und günstige Bitcoin-Zahlungen ermöglicht.
-\n
-\nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", müsst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", müsst du einen bestehenden Kanal schließen.
-\nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten!
-\n
-\nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von lightningnetwork.plus.</string>
+    <string name="help_dialog_channels">Die Liste der Lightning Channels stellt dein Lightning-Guthaben dar. Lightning-Kanäle sind notwendig, um am Lightning-Netzwerk teilzunehmen, das schnelle und günstige Bitcoin-Zahlungen ermöglicht. \n \nUm On-Chain-Guthaben in Lightning-Guthaben zu \"konvertieren\", musst du einen Kanal öffnen. Um Lightning-Guthaben wieder in On-Chain-Guthaben zu \"konvertieren\", musst du einen bestehenden Kanal schließen. \nBeide Vorgänge, das Öffnen und Schließen von Kanälen, werden durch eine On-Chain-Transaktion erreicht, die Gebühren kostet. Versuche daher, Kanäle so lange wie möglich offen zu halten! \n \nEin einfacher Weg, um mit dem Öffnen von Kanälen zu beginnen, ist die Verwendung von lightningnetwork.plus.</string>
     <string name="forwarding_volume_description">Im ausgewählten Zeitraum weitergeleitet</string>
     <string name="message_to_sign">Zu signierende Nachricht</string>
     <string name="sign_message">Nachricht signieren</string>
     <string name="signature_to_verify">Zu verifizierende Signatur</string>
-    <string name="channel_summary_total_inbound">Eingehend insgesamt</string>
+    <string name="channel_summary_total_inbound">Empfangskapazität</string>
     <string name="verify">Verifizieren</string>
     <string name="verify_message">Nachricht verifizieren</string>
     <string name="settings_receiveAddressDisplayValues_1">Natives SegWit (Bech32)</string>
@@ -675,11 +663,7 @@
     <string name="network">Netzwerk</string>
     <string name="peer_last_errors">Letzte Fehler</string>
     <string name="reliability">Zuverlässigkeit</string>
-    <string name="help_dialog_peers">In dieser Liste werden alle Peers angezeigt, die derzeit mit deinem Knoten verbunden sind. Peers sind im Wesentlichen andere Knoten innerhalb des Netzwerks. Sie arbeiten zusammen, indem sie Informationen austauschen und sicherstellen, dass jeder Knoten einen klaren Überblick über den Status des Netzwerks hat.
-\n
-\nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist.
-\n
-\nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und über diese Schnittstelle auf weitere Details über deine Peers zuzugreifen.</string>
+    <string name="help_dialog_peers">In dieser Liste werden alle Peers angezeigt, die derzeit mit deinem Knoten verbunden sind. Peers sind im Wesentlichen andere Knoten innerhalb des Netzwerks. Sie arbeiten zusammen, indem sie Informationen austauschen und sicherstellen, dass jeder Knoten einen klaren Überblick über den Status des Netzwerks hat. \n \nWenn dein Knoten beispielsweise etwas ändern möchte, wie z. B. die Aktualisierung einer Kanalrichtlinie, benachrichtigt er alle Peers, mit denen er verbunden ist. Diese Peers wiederum leiten die Informationen an ihre eigenen verbundenen Peers weiter, wodurch ein Dominoeffekt entsteht, der sicherstellt, dass das gesamte Netzwerk informiert ist. \n \nDein Knoten stellt automatisch Verbindungen mit Peers her, wobei in der Regel die Peers bevorzugt werden, mit denen du aktive Kanäle hast. Dennoch hast du in dieser Ansicht die Möglichkeit, Verbindungen manuell herzustellen oder zu unterbrechen und weitere Details über deine Peers zu erfahren.</string>
     <string name="settings_featurePeers">Peer-Verwaltung</string>
     <string name="forwarding_avg_earned_description">Durchschnittliche Einnahmen pro Ereignis</string>
     <string name="peer_total_capacity_explanation">Gesamtkapazität des Knotens, die sich aus der Summe der Kanalkapazitäten ergibt.</string>
@@ -847,12 +831,7 @@
 \nTechnisch gesehen kann eine Gebühr nur für den ausgehenden Kanal festgelegt werden; für ein ausgewähltes Kanalpaar (eingehend und ausgehend) passt die Gebühr für den eingehenden Kanal die Gebühr für den ausgehenden Kanal durch eine einfache Addition an. Daher führt eine negative Zahl zu einer Ermäßigung der Gebühr für den ausgehenden Kanal, während eine positive Zahl zu einer Erhöhung der Gebühr führt. Aus Sicherheitsgründen kann die gesamte Routing-Gebühr nicht negativ sein, um sicherzustellen, dass kein Gelde durch das Routing verloren geht.
 \n
 \nGrundgebühr und Gebührensatz funktionieren auf die gleiche Weise wie bei den Ausgangsgebühren.</string>
-    <string name="help_dialog_watchtowers">Damit ein Watchtower funktionieren kann, müssen einige Daten mit ihm ausgetauscht werden. Dies führt dazu, dass einige Informationen an den Betreiber des Watchtowers weitergegeben werden. Die folgenden unverschlüsselten Daten werden offengelegt:
-\n- Häufigkeit der Kanalaktualisierungen
-\n
-\nDer Kontostand des Kanals bleibt vertraulich, es sei denn, dein Partner betrügt und der Watchtower entdeckt dies. In diesem Fall wirst du die Kontostände offenlegen, um den Schutz deines Geldes zu gewährleisten.
-\n
-\nBeachte, dass ein Watchtower dein Geld nicht an sich nehmen kann. Im Falle eines Vertragsbruchs durch deinen Kanalpartner kann er lediglich eine Bestrafungstransaktion einleiten, bei der die Gelder direkt an dich gehen.</string>
+    <string name="help_dialog_watchtowers">Damit ein Watchtower funktionieren kann, müssen einige Daten mit ihm geteilt werden. Dies führt dazu, dass einige Informationen an den Betreiber des Watchtowers weitergegeben werden. Die folgenden unverschlüsselten Daten werden offengelegt: \n- Häufigkeit der Kanalaktualisierungen \n \nDer Kontostand des Kanals bleibt vertraulich, es sei denn, dein Partner betrügt und der Watchtower entdeckt es. In diesem Fall wirst du den Kontostande offenlegen, um den Schutz deines Guthabens zu gewährleisten. \n \nBeachte, dass ein Watchtower dein Geld nicht stehlen kann. Im Falle eines Vertragsbruchs durch deinen Kanalpartner kann er lediglich eine Bestrafungstransaktion einleiten, bei der das Guthaben direkt an dich geht.</string>
     <string name="help_dialog_own_watchtower">Das ist dein Watchtower im Lightning-Netzwerk.
 \n
 \nWenn du auf das Bild des Avatars tippst, wird ein QR-Code eingeblendet.
@@ -932,7 +911,7 @@
     <string name="help_dialog_allFunds_1_utxo_selection">Wenn dieses Kästchen aktiviert ist, wird BitBanana das gesamte Guthaben der von dir gewählten UTXOs ausgeben.</string>
     <string name="use_all_selected_funds">Gesamtes ausgewähltes Guthaben verwenden</string>
     <string name="help_dialog_allFunds_2">Wenn du jedoch offene Kanäle hast, kann ein Teil dieses Guthabens als Notreserve gehalten werden, um einen stabilen Kanalbetrieb zu gewährleisten. Du könntest auch einen Teil dieses Guthabens als Wechselgeld zurückbekommen.</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximaler Betrag: %1$s\n\nUngenügende Lightning-Liquidität. Erhöhe deine eingehende Kanalkapazität um dieses Limit zu erhöhen.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximaler Betrag: %1$s\n\nDie Lightning-Liquidität reicht nicht aus. Erhöhe die Empfangskapazität deiner Kanäle um dieses Limit zu erhöhen.</string>
     <string name="logs_no_logs">Keine Logs</string>
     <string name="clear">Löschen</string>
     <string name="copy_all">Alles kopieren</string>
@@ -943,8 +922,40 @@
     <string name="first_hop">Erster Hop</string>
     <string name="error_channel_selection_offline">Du kannst keine Kanäle auswählen, die gerade offline sind.</string>
     <string name="last_hop">Letzter Hop</string>
-    <string name="error_channel_selection_insufficient_liquidity_outgoing">Der Ausgangssaldo des gewählten Kanals ist unzureichend.</string>
-    <string name="error_channel_selection_insufficient_liquidity_incoming">Der Eingangssaldo des gewählten Kanals ist unzureichend.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Die Sendekapazität des gewählten Kanals reicht nicht aus.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Die Empfangskapazität des gewählten Kanals reicht nicht aus.</string>
     <string name="channel_selection">Kanalauswahl</string>
     <string name="help_dialog_lastHop">Verwende diese Option nur, wenn du deine Kanäle ausbalancieren willst. Um das zu tun, kannst du einfach Geld an dich selbst senden. Erstelle eine Rechnung und bezahle sie mit einem bestimmten Auswahl eigener Kanäle, wobei du für den ersten Hop einen Kanal mit hoher ausgehender Kapazität und für den letzten Hop einen Kanal mit hoher eingehender Kapazität auswählst. Bei diesem Ansatz fallen zwar Gebühren an, aber es wird ein Ausbalancieren der Kanäle erreicht.</string>
+    <string name="help">Hilfe</string>
+    <string name="adjust">Anpassen</string>
+    <string name="error_channel_rebalance_no_fee_rate">Du musst einen maximalen Gebührensatz festlegen.</string>
+    <string name="error_nwc_setup_failed">Verbindung mit Nostr Wallet Connect konnte nicht hergestellt werden.</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Ungültige Nostr Wallet Connect Daten.\n\nBitte stelle sicher, dass du das folgende Format verwendet hast:\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="nostr_relay">Relay</string>
+    <string name="sort_by_name_asc">Name (A-Z)</string>
+    <string name="sort_by_name_desc">Name (Z-A)</string>
+    <string name="sort_by_capacity_asc">Kapazität (kleinste zuerst)</string>
+    <string name="sort_by_capacity_desc">Kapazität (größte zuerst)</string>
+    <string name="sort_by_inbound_capacity_asc">Empfangskapazität (kleinste zuerst)</string>
+    <string name="sort_by_inbound_capacity_desc">Empfangskapazität (größte zuerst)</string>
+    <string name="sort_by_outbound_capacity_asc">Sendekapazität (kleinste zuerst)</string>
+    <string name="sort_by_symmetry_asc">Symmetrie (unausgewogen zuerst)</string>
+    <string name="sort_by_symmetry_desc">Symmetrie (ausgewogen zuerst)</string>
+    <string name="sort_by_age_asc">Alter (neueste zuerst)</string>
+    <string name="sort_by_value_asc">Wert (kleinster zuerst)</string>
+    <string name="sort_by_value_desc">Wert (größter zuerst)</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="sort_by_outbound_capacity_desc">Sendekapazität (größte zuerst)</string>
+    <string name="sort_by_age_desc">Alter (älteste zuerst)</string>
+    <string name="rebalance">Ausbalancieren</string>
+    <string name="max_fee">Maximale Gebühr</string>
+    <string name="fee_paid">Bezahlte Gebühr</string>
+    <string name="guardian_remoteConnect_nwc">Bist du sicher, dass du eine Verbindung herstellen willst zu \n\n%1$s\n\nBitte überprüfe den öffentlichen Schlüssel, bevor du die Wallet hinzufügst.</string>
+    <string name="guardian_custodial_nwc">Du bist mit einer Wallet verbunden, die das Nostr Wallet Connect Protokoll verwendet. Sofern du nicht der Betreiber des Nostr Wallet Connect-Dienstes bist, handelt es sich um eine Vermögensverwaltung. Das Unternehmen oder die Person, die den Dienst verwaltet, hat die Kontrolle über dein Geld und kann deinen Transaktionsverlauf einsehen. Zahle nur so viel ein, wie du bereit bist, dem Anbieter zu vertrauen.</string>
+    <string name="error_channel_rebalance_insufficient_funds">Das Backend hat mit einem Fehler „unzureichende Mittel“ geantwortet. Vielleicht verhindern einige Kanalbeschränkungen, dass ein Kanal den Großteil seines Guthabens ausgeben kann.</string>
+    <string name="help_dialog_rebalancing">Durch das Ausbalancieren deiner Kanäle hältst du deine Zahlungskanäle einsatzbereit! Wenn auf einer Seite das Guthaben zur Neige geht, funktioniert ein Kanal nur noch in eine Richtung, und Zahlungen können unter Umständen fehlschlagen. Indem du eine Lightning Zahlung im Kreis and dich selbst schickst, werden die Guthaben zwischen deinen Kanälen ausgeglichen, ohne dass On-Chain-Transaktionen erforderlich sind. Mit dieser Ansicht kannst du so eine Zahlung durchführen. Die besten Ergebnisse erzielst du, wenn du einen Kanal mit einer hohen Sendekapazität wählst und ihn mit einem anderen kombinierst, der eine hohe Empfangskapazität aufweist.</string>
+    <string name="settings_backendTimeout_dialogMessage">Gibt die Anzahl der Sekunden an, die die App auf eine Backend-Antwort wartet. Wenn vor Ablauf dieser Zeit keine Antwort eintrifft, schlägt die Anfrage fehl. Bei langsamen Internetverbindungen kann es sinnvoll sein, dieses Limit zu erhöhen. Wenn du Tor benutzt, multipliziert die App diese Zahl mit 3, um die Latenzzeit von Tor zu kompensieren.</string>
+    <string name="settings_paymentTimeout">Zeitlimit für Zahlungen</string>
+    <string name="settings_paymentTimeout_dialogMessage">Mit dieser Einstellung wird die maximale Anzahl von Sekunden festgelegt, die die App für den Versuch einer Lightning-Zahlung aufwendet. Wenn innerhalb dieser Zeit keine Zahlungsmöglichkeit gefunden wird, wird die Zahlung abgebrochen. Falls es oft zu Zeitüberschreitungen kommt, versuche dieses Limit zu erhöhen.</string>
+    <string name="settings_backendTimeout">Backend-Timeout</string>
 </resources>

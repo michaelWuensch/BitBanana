@@ -59,7 +59,7 @@
     <string name="confirmations">Confirmações</string>
     <string name="activity_receive">Receber</string>
     <string name="activity_send">Pagar</string>
-    <string name="activity_connectRemoteNode">Conectar ao nó remoto</string>
+    <string name="activity_connectRemoteNode">Adicionar nó</string>
     <string name="activity_manage_channels">Canais</string>
     <string name="activity_advanced_settings">Configurações Avançadas</string>
     <string name="activity_identity">Nó</string>
@@ -156,14 +156,7 @@
     <string name="error_emptyClipboardPayment">Sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_emptyClipboardConnect">Sua área de transferência não contém nenhum dado de conexão.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado.
-\nPor favor, use um dos seguintes formatos:
-\n
-\n- String Lndconnect (lndconnect://...)
-\n- grpc Core Lightning (cln-grpc://…)
-\n- LndHub (lndhub://…)
-\n- Conexão de BtcPay Server (config=...)
-\n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
 \nCertifique-se de usar o seguinte formato:
@@ -320,7 +313,7 @@
 \n
 \nEste avatar é único.
 \nEle foi gerado automaticamente baseado em sua chave pública e não pode ser alterado.</string>
-    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain. \nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.\n\nAo bloquear UTXOs específicas aqui, você garante que que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas você tem a opção de desbloqueá-las manualmente quando necessário.</string>
+    <string name="help_dialog_utxos">Esta lista de UTXOs representa todos os seus fundos on-chain. \nDe forma similar a moedas, saídas de transação não gastas só podem ser gastas como um todo. Como UTXOs podem ter qualquer valor você simplesmente irá receber troco em forma de outra UTXO ao enviar transações.</string>
     <string name="help_dialog_sign_verify">Ao assinar uma mensagem com seu nó, você prova que é o dono deste nó. Como a assinatura contém a chave pública do nó, outros podem verificar esta mensagem assinada.
 \n
 \nEsta ferramenta pode ser usada em diferentes cenários como provando a identidade ou para fazer login com seu nó em alguns serviços.</string>
@@ -455,7 +448,7 @@
     </plurals>
     <string name="fee_tier_slow_title">Lento</string>
     <string name="fee_tier_medium_title">Médio</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- String Lndconnect (lndconnect://...) \n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- String Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
     <string name="change_data">Mudar dados</string>
     <string name="invoice_detail">Detalhes da cobrança</string>
     <string name="string_analyzer_unrecognized_data">Dados não reconhecidos.</string>
@@ -467,7 +460,7 @@
     <string name="clipboard_error_heading">Dados da área de transferência encontrados, mas são inválidos:</string>
     <string name="third_party_licenses">Licenças de terceiros</string>
     <string name="send_money">Enviar dinheiro</string>
-    <string name="regtest_blockexplorer_unavailable">Exploradores de blocos não estão disponíveis no modo REGTEST.</string>
+    <string name="regtest_blockexplorer_unavailable">Como está conectado a uma rede REGTEST, isto irá funcionar apenas se você configurar um explorador de blocos personalizado nas configurações.</string>
     <string name="contact_already_exists">Este contato já existe!</string>
     <string name="no_contacts">Nenhum contato</string>
     <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como a commit fee ou reserva local do canal) nem todos os fundos são gastáveis.</string>
@@ -529,7 +522,7 @@
     <string name="lnurl_pay_save_secret">IMPORTANTE:
 \nO código foi copiado para sua área de transferência. Por favor o salve se precisar dele depois. Este diálogo não será exibido novamente.</string>
     <string name="choose_action">Escolha a ação</string>
-    <string name="activity_manage_channels_closed">Canais Fechados</string>
+    <string name="activity_manage_channels_closed">Fechado</string>
     <string name="drawer_menu_routing">Roteamento</string>
     <string name="error_node_not_yet_ready">Seu nó não está totalmente sincronizado ainda. Por favor tente novamente mais tarde.</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">Seu explorador de blocos atualmente selecionado (%1$s) não suporta %2$s.
@@ -640,7 +633,7 @@
     <string name="ok">OK</string>
     <string name="signature_pubkey">Pubkey:</string>
     <string name="pubkey">Pubkey</string>
-    <string name="settings_featureCoinControl_summary">Gerenciamento avançado de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos. A seleção de moeda é automatizada se estiver desativada.</string>
+    <string name="settings_featureCoinControl_summary">Gerenciamento avançado de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos ou abrir canais.</string>
     <string name="settings_featureHelpButtons_summary">Os úteis botões \? ao redor do app ajudam novos usuários com explicações detalhadas.</string>
     <string name="htlc_max">Máx. HTLC</string>
     <string name="peer">Par</string>
@@ -979,4 +972,41 @@
     <string name="unlock_utxo">Desbloquear</string>
     <string name="locked">Bloqueado</string>
     <string name="locked_until">Bloqueado até</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Quantia máxima: %1$s\n\nLiquidez Lightning insuficiente. Aumente a capacidade de renda do canal para aumentar este limite.</string>
+    <string name="help_dialog_utxos_select">Ao selecionar UTXOs específicas, você pode aumentar sua privacidade ou economizar em taxas em alguns casos.</string>
+    <string name="utxo_selection">Seleção de UTXO</string>
+    <string name="automatic">Automático</string>
+    <string name="confirm_selection">Confirmar seleção</string>
+    <string name="clear">Limpar</string>
+    <string name="copy_all">Copiar todos</string>
+    <string name="help_dialog_allFunds_1_utxo_selection">Se esta caixa for selecionada, o BitBanana vai gastar todos os fundos de suas UTXOs escolhidas.</string>
+    <string name="help_dialog_allFunds_2">Porém, se você tem canais abertos, uma porção destes fundos pode ser guardada como reservas de emergência para garantir a operação estável do canal. Você pode obter de volta alguns desses fundos como troco.</string>
+    <string name="logs_no_logs">Sem registros</string>
+    <string name="channel_selection">Seleção de canal</string>
+    <string name="first_hop">Primeiro Hop</string>
+    <string name="last_hop">Último Hop</string>
+    <string name="help_dialog_allFunds_1">Se esta caixa for selecionada, o BitBanana vai usar todos seus fundos on-chain.</string>
+    <string name="select">Selecionar</string>
+    <string name="total">Total</string>
+    <string name="change">Mudar</string>
+    <string name="reset">Reiniciar</string>
+    <string name="error_channel_selection_pending">Você não pode selecionar canais que ainda estão pendentes.</string>
+    <string name="error_channel_selection_offline">Você não pode selecionar canais que estão atualmente off-line.</string>
+    <string name="help_dialog_utxos_locking">Ao bloquear UTXOs específicas aqui, você garante que que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas você tem a opção de desbloqueá-las manualmente quando necessário.</string>
+    <string name="settings_featureLogs_summary">Se ativado, o BitBanana vai gravar registros que podem ser visualizados na seção Registros do menu principal. Ative apenas se estiver tentando resolver um problema e precisa inspecionar os registros.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">O balanço de entrada do canal selecionado é insuficiente.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">O balanço de saída do canal selecionado é insuficiente.</string>
+    <string name="help_dialog_lastHop">Apenas use essa última opção quando quiser rebalancear seus canais. Para fazê-lo, você pode basicamente enviar fundos a si próprio. Gere uma fatura e a pague com um conjunto específico de canais próprios, escolhendo um com grande capacidade de entrada para o primeiro hop e um com grande capacidade de saída para o último. Esta técnica resulta em taxas, mas garante o rebalanceamento dos canais.</string>
+    <string name="use_all_funds">Usar todos os fundos</string>
+    <string name="use_all_selected_funds">Usar todos os fundos selecionados</string>
+    <string name="logs">Registros</string>
+    <string name="guardian_copy_logs">Por favor note que este registro copiado pode conter dados sensíveis. Analise-o e edite qualquer informação confidencial antes de compartilhar com alguém.</string>
+    <string name="help">Ajuda</string>
+    <string name="adjust">Ajustar</string>
+    <string name="error_channel_rebalance_insufficient_funds">O backend respondeu com um erro de “fundos insuficientes”. Talvez algumas restrições de um canal estejam prevenindo o canal de gastar a maior parte de seu balanço.</string>
+    <string name="error_channel_rebalance_no_fee_rate">Você deve definir uma taxa máxima de cobrança.</string>
+    <string name="rebalance">Rebalancear</string>
+    <string name="max_fee">Taxa máxima</string>
+    <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém seus canais de pagamento prontos para a ação! Se um lado estiver baixo, seu canal pode enviar apenas em uma direção, e os pagamentos podem começar a falhar. Enviar fundos em uma rota circular redistribui balanços sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
+    <string name="fee_paid">Taxas pagas</string>
 </resources>

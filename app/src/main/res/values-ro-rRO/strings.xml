@@ -144,12 +144,7 @@
     <string name="error_emptyClipboardPayment">Clipboardul nu conține informații despre plăți.</string>
     <string name="error_emptyClipboardConnect">Clipboardul nu conține informații despre conexiuni.</string>
     <string name="error_qr_code_result_null">Imposibil de citit codul QR, încearcă din nou.</string>
-    <string name="error_connection_unsupported_format">Format de conexiune nesuportat
-\nUtilizează unul din următoarele formate:
-\n
-\n- Adresă Lndconnect (lndconnect://...)
-\n- Conexiune BtcPay Server (config=...)
-\n- Conținutul complet al fișierului de configurare BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Format de conexiune nesuportat \nUtilizează unul din următoarele formate: \n \n- Adresă Lndconnect (lndconnect://...) \n- Conexiune BtcPay Server (config=...) \n- Conținutul complet al fișierului de configurare BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Nu s-a reușit descărcarea configurării de la serverul BTCPay.</string>
     <string name="error_connection_invalidLndConnectString">Adresă lndconnect nevalabilă.
 \nAsigură-te că ai utilizat următorul format:

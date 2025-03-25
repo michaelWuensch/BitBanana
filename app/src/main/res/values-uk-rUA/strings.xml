@@ -169,7 +169,7 @@
     <string name="error_emptyClipboardPayment">Ваш буфер обміну не містить платіжних даних.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обміну не містить даних про з\'єднання.</string>
     <string name="error_qr_code_result_null">Не вдається прочитати QR-код, спробуйте ще раз.</string>
-    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nВикористовуйте один із таких форматів:\n\n- Рядок Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- Підключення до сервера BtcPay (config=…)\n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nБудь ласка, використовуйте один з наступних форматів:\n\n- Рядок Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Не вдалося отримати конфігурацію з BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Недійсний рядок lndconnect.\nПереконайтеся, що ви використовуєте такий формат:\n\nlndconnect://[ip]:[порт]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Сертифікат недійсний.</string>
@@ -254,7 +254,7 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">Дійсні QR-коди, які містять:\n\n- Адреса блискавки\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- Код платежу</string>
-    <string name="help_dialog_scanConnectionInfo">Дійсні QR-коди, які містять: \n\n- Рядок Lndconnect (lndconnect://…) \n- Core Lightning grpc (cln-grpc://…) \n- LndHub (lndhub://…) \n- Підключення до сервера BtcPay (config=…) \n- Повний вміст конфігураційного файлу сервера BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Дійсними є QR-коди, що містять наступне:\n\n- Lndconnect рядок (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
@@ -395,8 +395,8 @@
     <string name="signature_valid">Підпис дійсний!</string>
     <string name="signature_to_verify">Підпис для перевірки</string>
     <string name="verify_message">Підтвердити повідомлення</string>
-    <string name="channel_summary_total_inbound">Всього вхідних</string>
-    <string name="channel_summary_total_unavailable">Повний офлайн</string>
+    <string name="channel_summary_total_inbound">Приймальна ємність</string>
+    <string name="channel_summary_total_unavailable">Офлайн</string>
     <string name="explanation_channel_commitment_type">Кожна сторона має зобов’язану транзакцію, яку лише вона може транслювати в блокчейн, щоб отримати свою частку біткойнів. Різні типи транзакцій зобов’язань призводять до того, що канали мають різні властивості.</string>
     <string name="peers_add">Додати однолітка</string>
     <string name="peer_ping">Пінг</string>
@@ -502,7 +502,7 @@
     <string name="advanced_channel_details_explanation_remote_minHTLC">Найменше значення, яке ваш партнер готовий переслати на цьому каналі в одній транзакції.</string>
     <string name="backup_data_password_confirm">Підтвердьте свій пароль</string>
     <string name="backup_data_create_headline">Резервне копіювання</string>
-    <string name="channel_summary_total_outbound">Всього вихідних</string>
+    <string name="channel_summary_total_outbound">Ємність відправлення</string>
     <string name="message_to_sign">Повідомлення для підпису</string>
     <string name="signature_invalid">Підпис недійсний!</string>
     <string name="timelock_delta">Блокування часу Delta</string>
@@ -786,7 +786,7 @@
     <string name="help_dialog_utxos_locking">Заблокувавши тут певні UTXO, ви гарантуєте, що вони не будуть вибрані для транзакцій у мережі або відкриття каналів. UTXO, заблоковані за допомогою BitBanana, залишатимуться заблокованими протягом 24 годин, але у вас є можливість розблокувати їх вручну, коли це буде потрібно.</string>
     <string name="help_dialog_utxos_select">Вибравши конкретні UTXO, ви можете покращити свою конфіденційність або заощадити в деяких випадках.</string>
     <string name="total">Всього</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Максимальна сума: %1$s\n\nНедостатня блискавична ліквідність. Щоб збільшити цей ліміт, збільште дохід свого каналу.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Максимальна сума: %1$s\n\nНедостатня блискавична ліквідність. Збільште пропускну спроможність своїх каналів, щоб збільшити цей ліміт.</string>
     <string name="help_dialog_allFunds_2">Однак, якщо у вас є відкриті канали, частина цих коштів може зберігатися як надзвичайний резерв для забезпечення стабільної роботи каналу. Ви також можете отримати частину цих коштів назад як здачу.</string>
     <string name="use_all_selected_funds">Використовуйте всі вибрані кошти</string>
     <string name="help_dialog_allFunds_1_utxo_selection">Якщо позначено цей прапорець, BitBanana витратить усі кошти з вибраних вами UTXO.</string>
@@ -804,6 +804,34 @@
     <string name="last_hop">Останній стрибок</string>
     <string name="first_hop">Перший хоп</string>
     <string name="error_channel_selection_pending">Ви не можете вибрати канали, які ще очікують на розгляд.</string>
-    <string name="error_channel_selection_insufficient_liquidity_outgoing">Вихідний баланс вибраного каналу недостатній.</string>
-    <string name="error_channel_selection_insufficient_liquidity_incoming">Вхідний баланс вибраного каналу недостатній.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Пропускна здатність вибраного каналу недостатня.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Ємність прийому вибраного каналу недостатня.</string>
+    <string name="max_fee">Максимальна плата</string>
+    <string name="error_channel_rebalance_no_fee_rate">Ви повинні визначити максимальну ставку комісії.</string>
+    <string name="error_channel_rebalance_insufficient_funds">Сервер відповів помилкою \"недостатньо коштів\". Можливо, деякі обмеження каналу не дозволяють каналу витрачати більшу частину свого балансу.</string>
+    <string name="help">Довідка</string>
+    <string name="adjust">Налаштувати</string>
+    <string name="help_dialog_rebalancing">Ребалансування каналів тримає ваші платіжні канали готовими до роботи! Якщо на одній стороні закінчуються кошти, ваш канал працюватиме лише в одному напрямку, і платежі можуть почати збоїти. Відправлення блискавичного платежу за круговим маршрутом до себе перерозподіляє баланси між вашими каналами без необхідності проведення транзакцій у ланцюжку. Цей вид дозволяє вам виконати такий круговий платіж. Для досягнення найкращих результатів оберіть канал з високою пропускною здатністю і об\'єднайте його з іншим каналом, який має надлишкову пропускну здатність.</string>
+    <string name="rebalance">Відновити баланс</string>
+    <string name="fee_paid">Сплачена комісія</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використовуєте такий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[СЕКРЕТ]</string>
+    <string name="nostr_relay">Готові</string>
+    <string name="guardian_remoteConnect_nwc">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nПерш ніж додавати гаманець, перевірте відкритий ключ.</string>
+    <string name="error_nwc_setup_failed">Не вдалося ініціювати підключення Nostr Wallet Connect.</string>
+    <string name="guardian_custodial_nwc">Ви підключені до гаманця за допомогою протоколу Nostr Wallet Connect. Якщо ви не є власником сервісу Nostr Wallet Connect, ця домовленість є кастодіальною. Організація, що керує сервісом, має контроль над вашими грошима і може переглядати історію ваших транзакцій. Вносьте на депозит тільки те, що ви готові їм довірити.</string>
+    <string name="sort_by_name_asc">Ім\'я (A-Z)</string>
+    <string name="sort_by_capacity_asc">Ємність (спочатку найменша)</string>
+    <string name="sort_by_inbound_capacity_asc">Ємність прийому (спочатку найменша)</string>
+    <string name="sort_by_outbound_capacity_asc">Ємність надсилання (спочатку найменша)</string>
+    <string name="sort_by_symmetry_asc">Симетрія (спочатку незбалансована)</string>
+    <string name="sort_by_age_asc">Вік (спочатку найновіші)</string>
+    <string name="sort_by_age_desc">Вік (спочатку найстарші)</string>
+    <string name="sort_by_value_desc">Значення (спочатку найбільше)</string>
+    <string name="sort_by">Сортувати за</string>
+    <string name="sort_by_value_asc">Значення (спочатку найменше)</string>
+    <string name="sort_by_capacity_desc">Ємність (спочатку найбільша)</string>
+    <string name="sort_by_inbound_capacity_desc">Ємність прийому (спочатку найбільша)</string>
+    <string name="sort_by_name_desc">Ім\'я (Z-A)</string>
+    <string name="sort_by_outbound_capacity_desc">Ємність надсилання (спочатку найбільша)</string>
+    <string name="sort_by_symmetry_desc">Симетрія (спочатку збалансована)</string>
 </resources>

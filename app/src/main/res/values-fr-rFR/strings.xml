@@ -192,12 +192,7 @@
     <string name="error_emptyClipboardPayment">Votre presse-papier ne contient aucune information de paiement.</string>
     <string name="error_emptyClipboardConnect">Votre presse-papier ne contient aucune information de connexion.</string>
     <string name="error_qr_code_result_null">Impossible de lire le QR Code. Veuillez réessayer.</string>
-    <string name="error_connection_unsupported_format">Format de connexion non pris en charge.
-\nVeuillez utiliser un des formats suivants :
-\n
-\n- Chaîne lndconnect (lndconnect://...)
-\n- Configuration de BTCPay Server (config=...)
-\n- contenu de votre fichier de configuration BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Format de connexion non pris en charge. \nVeuillez utiliser un des formats suivants : \n \n- Chaîne lndconnect (lndconnect://...) \n- Configuration de BTCPay Server (config=...) \n- contenu de votre fichier de configuration BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Impossible de récupérer la configuration de BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Chaîne lndconnect invalide.
 \nAssurez-vous d\'utiliser le format suivant :
