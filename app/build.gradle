@@ -88,7 +88,7 @@ licenseReport {
     copyHtmlReportToAssets = false
     copyJsonReportToAssets = false
 }
- */
+
 
 // Copy the licenses file into the res dir if it exists
 copy {
@@ -96,6 +96,7 @@ copy {
     into "$projectDir/src/main/res/raw/"
     rename "licenseReleaseReport.json", "license_report.json"
 }
+ */
 
 //  Needed for gRPC
 sourceSets {
