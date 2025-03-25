@@ -169,7 +169,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
                 .build();
 
         getCompositeDisposable().add(BackendManager.api().releaseUTXO(request)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     Wallet_TransactionHistory.getInstance().fetchUTXOs();
                     Wallet_Balance.getInstance().fetchBalances(); // This is needed so send limits will get updated.
@@ -186,7 +186,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
                 .setExpiration(60 * 60 * 24)
                 .build();
         getCompositeDisposable().add(BackendManager.api().leaseUTXO(request)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     Wallet_TransactionHistory.getInstance().fetchUTXOs();
                     Wallet_Balance.getInstance().fetchBalances(); // This is needed so send limits will get updated.

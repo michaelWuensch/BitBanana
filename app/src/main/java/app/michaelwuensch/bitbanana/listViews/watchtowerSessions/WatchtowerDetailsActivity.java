@@ -193,7 +193,7 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
 
     private void deactivateWatchtower() {
         mCompositeDisposable.add(BackendManager.api().deactivateWatchtower(mWatchtower.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     BBLog.d(LOG_TAG, "Successfully deactivated watchtower. New state: " + response);
                     reloadWatchtowerInfo();
@@ -205,7 +205,7 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
 
     private void reactivateWatchtower() {
         mCompositeDisposable.add(BackendManager.api().addWatchtower(mWatchtower.getPubKey(), mWatchtower.getAddress().get(0))
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully added watchtower.");
                     reloadWatchtowerInfo();
@@ -234,7 +234,7 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
 
     private void removeWatchtowerPart2() {
         mCompositeDisposable.add(BackendManager.api().removeWatchtower(mWatchtower.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully removed watchtower.");
                     Intent intentRemoveWatchtower = new Intent();
@@ -249,7 +249,7 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
 
     private void reloadWatchtowerInfo() {
         mCompositeDisposable.add(BackendManager.api().getWatchtower(mWatchtower.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     BBLog.d(LOG_TAG, "Successfully fetched watchtower info.");
                     mWatchtower = response;

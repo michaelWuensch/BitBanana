@@ -139,7 +139,7 @@ public class WatchtowersActivity extends BaseAppCompatActivity implements Watcht
                 BBLog.v(LOG_TAG, "Update Watchtower list.");
 
                 mCompositeDisposable.add(BackendManager.api().listWatchtowers()
-                        .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                        .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                         .subscribe(response -> {
                                     BBLog.d(LOG_TAG, "List watchtowers successful.");
                                     mFab.setVisibility(View.VISIBLE);
@@ -284,7 +284,7 @@ public class WatchtowersActivity extends BaseAppCompatActivity implements Watcht
                 LightningNodeUri nodeUri = (LightningNodeUri) data.getSerializableExtra(ScanWatchtowerActivity.EXTRA_NODE_URI);
                 if (nodeUri != null) {
                     mCompositeDisposable.add(BackendManager.api().addWatchtower(nodeUri.getPubKey(), nodeUri.getHost() + ":" + nodeUri.getPort())
-                            .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                            .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                             .subscribe(() -> {
                                 BBLog.d(LOG_TAG, "Successfully added watchtower.");
                                 updateWatchtowersDisplayList();

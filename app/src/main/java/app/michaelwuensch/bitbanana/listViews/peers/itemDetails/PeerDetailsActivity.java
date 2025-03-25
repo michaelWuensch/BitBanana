@@ -157,7 +157,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
         // Channel count & total Capacity
         mCompositeDisposable.add(BackendManager.api().getNodeInfo(mPeer.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     if (response.hasNumChannels()) {
                         mTotalChannels.setVisibility(View.VISIBLE);
@@ -251,7 +251,7 @@ public class PeerDetailsActivity extends BaseAppCompatActivity {
 
     private void disconnect() {
         mCompositeDisposable.add(BackendManager.api().disconnectPeer(mPeer.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully disconnected peer");
                     Intent intentDeletePeer = new Intent();

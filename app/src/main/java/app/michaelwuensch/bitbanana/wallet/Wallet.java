@@ -141,7 +141,7 @@ public class Wallet {
         }
 
         compositeDisposable.add(LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getStateResponse -> {
 
@@ -219,7 +219,7 @@ public class Wallet {
         }
 
         compositeDisposable.add(BackendManager.api().getCurrentNodeInfo()
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mCurrentNodeInfo = response;

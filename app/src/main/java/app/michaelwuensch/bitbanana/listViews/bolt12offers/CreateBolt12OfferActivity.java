@@ -49,7 +49,7 @@ public class CreateBolt12OfferActivity extends BaseAppCompatActivity {
                         .setSingleUse(mSingleUse.isChecked())
                         .build();
                 new CompositeDisposable().add(BackendManager.api().createBolt12Offer(request)
-                        .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                        .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                         .subscribe(response -> {
                                     finish();
                                 }

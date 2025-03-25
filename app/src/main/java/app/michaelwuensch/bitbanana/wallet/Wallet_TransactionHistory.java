@@ -210,7 +210,7 @@ public class Wallet_TransactionHistory {
     public void fetchUTXOs() {
         if (Wallet.getInstance().isInfoFetched()) {
             compositeDisposable.add(BackendManager.api().listUTXOs(Wallet.getInstance().getCurrentNodeInfo().getBlockHeight())
-                    .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                    .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .subscribe(response -> {
                                 mUTXOsList = response;
                                 broadcastUtxoListUpdated();

@@ -396,6 +396,11 @@
     <string name="settings_stealth_mode_summary">Enable stealth mode to protect against physical searches of your device</string>
     <string name="settings_on_off">On / Off</string>
 
+    <string name="settings_backendTimeout">Backend timeout</string>
+    <string name="settings_backendTimeout_dialogMessage">Specifies the number of seconds the app will wait for a backend response. If no response arrives before this time elapses, the request fails. For slow internet connections, consider increasing this limit. When using Tor, the app multiplies this number by 3 to account for Tor\’s latency.</string>
+    <string name="settings_paymentTimeout">Payment timeout</string>
+    <string name="settings_paymentTimeout_dialogMessage">This setting defines the maximum number of seconds the app will spend attempting a Lightning payment. If no route is found within that time, the payment is canceled. If you often see timeouts, try increasing this limit.</string>
+
     <string name="error">Error</string>
     <string name="error_blockExplorer_title">Block Explorer</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">"Your currently selected block explorer (%1$s) does not support %2$s. \nPlease go to settings and choose another block explorer to continue."</string>

@@ -62,6 +62,8 @@ public class PrefsUtil {
     public static final String CHANNEL_SORT_CRITERIA = "channelSortCriteria";
     public static final String UTXO_SORT_CRITERIA = "utxoSortCriteria";
     public static final String REBALANCE_FEE_LIMIT_PERCENT = "rebalanceFeeLimitPercent";
+    public static final String BACKEND_TIMEOUT = "backendTimeout";
+    public static final String PAYMENT_TIMEOUT = "paymentTimeout";
 
 
     // default values
@@ -254,5 +256,33 @@ public class PrefsUtil {
 
     public static long getLockScreenTimeout() {
         return Long.parseLong(getPrefs().getString("lockScreenTimeoutPref", "30"));
+    }
+
+    public static int getBackendTimeout() {
+        int timeout = 0;
+        try {
+            timeout = Integer.parseInt(getPrefs().getString(BACKEND_TIMEOUT, "20"));
+        } catch (NumberFormatException e) {
+            return 20;
+        }
+        if (timeout < 10)
+            return 10;
+        if (timeout > 300)
+            return 300;
+        return timeout;
+    }
+
+    public static int getPaymentTimeout() {
+        int timeout = 0;
+        try {
+            timeout = Integer.parseInt(getPrefs().getString(PAYMENT_TIMEOUT, "60"));
+        } catch (NumberFormatException e) {
+            return 60;
+        }
+        if (timeout < 20)
+            return 20;
+        if (timeout > 300)
+            return 300;
+        return timeout;
     }
 }

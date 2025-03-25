@@ -95,7 +95,7 @@ public class Wallet_Channels {
 
     public void openChannel(LightningNodeUri nodeUri, OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().listPeers()
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     boolean connected = false;
                     for (Peer node : response) {
@@ -124,7 +124,7 @@ public class Wallet_Channels {
 
     public void openChannelConnected(OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().openChannel(openChannelRequest)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Channel open successfully initiated!");
                     broadcastChannelOpenUpdate(openChannelRequest.getNodePubKey(), ChannelOpenUpdateListener.SUCCESS, null);
@@ -151,7 +151,7 @@ public class Wallet_Channels {
         if (fakeSuccess)
             timeout = 5;
         else
-            timeout = ApiUtil.timeout_long();
+            timeout = ApiUtil.getBackendTimeout();
 
         CloseChannelRequest closeChannelRequest = CloseChannelRequest.newBuilder()
                 .setShortChannelId(channel.getShortChannelId())

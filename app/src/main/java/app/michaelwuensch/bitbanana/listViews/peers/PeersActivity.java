@@ -123,7 +123,7 @@ public class PeersActivity extends BaseAppCompatActivity implements PeerSelectLi
                 BBLog.d(LOG_TAG, "Updating peer list...");
 
                 mCompositeDisposable.add(BackendManager.api().listPeers()
-                        .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                        .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                         .subscribe(response -> {
                                     mPeersItems.clear();
                                     ArrayList<String> peersToFetchInfo = new ArrayList<>();

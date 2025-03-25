@@ -556,7 +556,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             requestBuilder.setComment(mPcvComment.getData());
 
         getCompositeDisposable().add(BackendManager.api().fetchInvoiceFromBolt12Offer(requestBuilder.build())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                             prepareBolt12Payment(response);

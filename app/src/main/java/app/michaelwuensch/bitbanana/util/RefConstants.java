@@ -60,9 +60,6 @@ public class RefConstants {
     public static final int BACKEND_CONFIG_JSON_VERSION = 0;
 
     // API request timeouts (in seconds)
-    public static final int TIMEOUT_SHORT = 5;
-    public static final int TIMEOUT_MEDIUM = 10;
-    public static final int TIMEOUT_LONG = 20;
     public static final int TOR_TIMEOUT_MULTIPLIER = 3;
 
     // Error message durations (in milliseconds)

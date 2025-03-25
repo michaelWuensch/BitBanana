@@ -2,10 +2,13 @@ package app.michaelwuensch.bitbanana.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -32,6 +35,8 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
     private Preference mPrefCustomBlockExplorer;
     private Preference mPrefCustomExchangeRateProvider;
     private Preference mPrefCustomFeeEstimationProvider;
+    private EditTextPreference mEtBackendTimeout;
+    private EditTextPreference mEtPaymentTimeout;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -117,6 +122,62 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        mEtBackendTimeout = findPreference("backendTimeout");
+        mEtBackendTimeout.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+            @Override
+            public void onBindEditText(@NonNull EditText editText) {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setText(String.valueOf(PrefsUtil.getBackendTimeout()));
+            }
+        });
+        mEtBackendTimeout.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                int timeout = 0;
+                try {
+                    timeout = Integer.parseInt(newValue.toString());
+                } catch (NumberFormatException ignored) {
+                    timeout = 20;
+                }
+                if (timeout < 10) {
+                    timeout = 10;
+                }
+                if (timeout > 300)
+                    timeout = 300;
+                PrefsUtil.editPrefs().putString(PrefsUtil.BACKEND_TIMEOUT, String.valueOf(timeout)).commit();
+                setTimeoutSummaries();
+                return false;
+            }
+        });
+
+        mEtPaymentTimeout = findPreference("paymentTimeout");
+        mEtPaymentTimeout.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+            @Override
+            public void onBindEditText(@NonNull EditText editText) {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setText(String.valueOf(PrefsUtil.getPaymentTimeout()));
+            }
+        });
+        mEtPaymentTimeout.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                int timeout = 0;
+                try {
+                    timeout = Integer.parseInt(newValue.toString());
+                } catch (NumberFormatException ignored) {
+                    timeout = 60;
+                }
+                if (timeout < 20) {
+                    timeout = 20;
+                }
+                if (timeout > 300)
+                    timeout = 300;
+                PrefsUtil.editPrefs().putString(PrefsUtil.PAYMENT_TIMEOUT, String.valueOf(timeout)).commit();
+                setTimeoutSummaries();
+                return false;
+            }
+        });
+
         // Create invoice expiry display entries. For the sake of plurals this has to be done by code.
         mListLnExpiry = findPreference("lightning_expiry");
         createLnExpiryDisplayEntries();
@@ -128,6 +189,7 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         });
 
         setFeeSummary(mListFeeLimit, mListFeeLimit.getValue());
+        setTimeoutSummaries();
 
         // On change unspecified amount invoices
         mSwUnspecifiedAmountInvoices = findPreference("unspecifiedAmountInvoices");
@@ -254,6 +316,13 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
         String s = value.replace("%", "%%");
         String string = getString(R.string.fee_limit_threshold, RefConstants.LN_PAYMENT_FEE_THRESHOLD, s);
         preference.setSummary(string);
+    }
+
+    private void setTimeoutSummaries() {
+        int requestTimeoutSeconds = PrefsUtil.getBackendTimeout();
+        mEtBackendTimeout.setSummary(getResources().getQuantityString(R.plurals.duration_second, requestTimeoutSeconds, requestTimeoutSeconds));
+        int paymentTimeoutSeconds = PrefsUtil.getPaymentTimeout();
+        mEtPaymentTimeout.setSummary(getResources().getQuantityString(R.plurals.duration_second, paymentTimeoutSeconds, paymentTimeoutSeconds));
     }
 
     private void createLnExpiryDisplayEntries() {

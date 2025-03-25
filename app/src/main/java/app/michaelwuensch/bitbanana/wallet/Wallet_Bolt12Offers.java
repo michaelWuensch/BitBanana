@@ -49,7 +49,7 @@ public class Wallet_Bolt12Offers {
 
     public void fetchBolt12Offers() {
         compositeDisposable.add(BackendManager.api().listBolt12Offers()
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                             mOffersList = response;
                             broadcastBolt12OffersListUpdated();
