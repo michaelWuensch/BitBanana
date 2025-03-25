@@ -1,0 +1,7 @@
+- Massive channel rebalancing UX improvements
+- Nostr Wallet Connect support
+- Channel sorting
+- UTXO sorting
+- Fixed payment failures for certain Lightning addresses
+- Exposed timeout setting for backend communication and lightning payments
+- Updated Translations
