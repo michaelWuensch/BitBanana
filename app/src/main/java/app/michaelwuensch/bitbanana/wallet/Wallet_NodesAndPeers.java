@@ -55,7 +55,7 @@ public class Wallet_NodesAndPeers {
         }
 
         compositeDisposable.add(BackendManager.api().connectPeer(nodeUri)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(() -> {
                     BBLog.d(LOG_TAG, "Successfully connected to peer.");
                     broadcastPeerConnectedSuccess();
@@ -84,7 +84,7 @@ public class Wallet_NodesAndPeers {
 
     private void fetchNodeInfoToConnectPeer(LightningNodeUri nodeUri, @Nullable OpenChannelRequest openChannelRequest) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(nodeUri.getPubKey())
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     if (response.getAddresses() != null && response.getAddresses().size() > 0) {
                         String tempUri = nodeUri.getPubKey() + "@" + response.getAddresses().get(0);
@@ -113,7 +113,7 @@ public class Wallet_NodesAndPeers {
      */
     public void fetchNodeInfo(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
         compositeDisposable.add(BackendManager.api().getNodeInfo(pubkey)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                     BBLog.v(LOG_TAG, "Fetched Node info from " + response.getAlias());
                     AliasManager.getInstance().saveAlias(response.getPubKey(), response.getAlias());

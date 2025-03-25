@@ -315,7 +315,7 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
     private void fetchForwardingHistory(int pageSize, long startTime) {
         CompositeDisposable compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(BackendManager.api().listForwards(0, pageSize, startTime)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
                             mForwardsList = response;
                             compositeDisposable.dispose();

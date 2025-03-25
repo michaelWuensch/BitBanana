@@ -156,7 +156,7 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
     private void switchEnabledState() {
         if (mBolt12Offer.getIsActive()) {
             mCompositeDisposable.add(BackendManager.api().disableBolt12Offer(mBolt12Offer.getOfferId())
-                    .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                    .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .subscribe(() -> {
                         mDetailActive.setValue(getResources().getString(R.string.no));
                         mBtnSwitchEnabledState.setText(getString(R.string.enable));
@@ -167,7 +167,7 @@ public class Bolt12OfferDetailsActivity extends BaseAppCompatActivity {
                     }));
         } else {
             mCompositeDisposable.add(BackendManager.api().enableBolt12Offer(mBolt12Offer.getOfferId())
-                    .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                    .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .subscribe(() -> {
                         mDetailActive.setValue(getResources().getString(R.string.yes));
                         mBtnSwitchEnabledState.setText(getString(R.string.disable));

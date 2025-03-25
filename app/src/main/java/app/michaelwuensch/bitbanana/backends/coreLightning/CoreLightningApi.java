@@ -67,7 +67,6 @@ import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.coreLightning.connection.CoreLightningConnection;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Bolt12Offer;
@@ -110,7 +109,6 @@ import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
@@ -991,7 +989,7 @@ public class CoreLightningApi extends Api {
                         .setMaxfee(Amount.newBuilder()
                                 .setMsat(sendLnPaymentRequest.getMaxFee())
                                 .build())
-                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier());
+                        .setRetryFor(ApiUtil.getPaymentTimeout());
 
                 if (sendLnPaymentRequest.getBolt11() != null) {
                     if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
@@ -1024,7 +1022,7 @@ public class CoreLightningApi extends Api {
                         .setMaxfee(Amount.newBuilder()
                                 .setMsat(sendLnPaymentRequest.getMaxFee())
                                 .build())
-                        .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier());
+                        .setRetryFor(ApiUtil.getPaymentTimeout());
 
                 PayRequest bolt12request = bolt12requestBuilder.build();
 
@@ -1065,7 +1063,7 @@ public class CoreLightningApi extends Api {
                             .setMaxfee(Amount.newBuilder()
                                     .setMsat(sendLnPaymentRequest.getMaxFee())
                                     .build())
-                            .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                            .setRetryFor(ApiUtil.getPaymentTimeout())
                             .setExtratlvs(TlvStream.newBuilder()
                                     .addAllEntries(tlvEntries)
                                     .build())
@@ -1080,7 +1078,7 @@ public class CoreLightningApi extends Api {
                             .setExemptfee(Amount.newBuilder()
                                     .setMsat(0)
                                     .build())
-                            .setRetryFor(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                            .setRetryFor(ApiUtil.getPaymentTimeout())
                             .setExtratlvs(TlvStream.newBuilder()
                                     .addAllEntries(tlvEntries)
                                     .build())

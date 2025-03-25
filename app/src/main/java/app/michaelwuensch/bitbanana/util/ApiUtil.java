@@ -8,16 +8,14 @@ import app.michaelwuensch.bitbanana.models.Outpoint;
 
 public class ApiUtil {
 
-    public static long timeout_short() {
-        return RefConstants.TIMEOUT_SHORT * TorManager.getInstance().getTorTimeoutMultiplier();
+    private static final String LOG_TAG = ApiUtil.class.getSimpleName();
+
+    public static long getBackendTimeout() {
+        return (long) PrefsUtil.getBackendTimeout() * TorManager.getInstance().getTorTimeoutMultiplier();
     }
 
-    public static long timeout_medium() {
-        return RefConstants.TIMEOUT_MEDIUM * TorManager.getInstance().getTorTimeoutMultiplier();
-    }
-
-    public static long timeout_long() {
-        return RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier();
+    public static int getPaymentTimeout() {
+        return PrefsUtil.getPaymentTimeout();
     }
 
     public static String StringFromHexByteString(ByteString hexByteString) {

@@ -79,7 +79,6 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.Api;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.BBLogItem;
 import app.michaelwuensch.bitbanana.models.Balances;
 import app.michaelwuensch.bitbanana.models.Channels.ChannelConstraints;
@@ -124,7 +123,6 @@ import app.michaelwuensch.bitbanana.models.WatchtowerSession;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
@@ -1127,7 +1125,7 @@ public class LndApi extends Api {
                         .setPaymentRequest(sendLnPaymentRequest.getBolt11().getBolt11String())
                         .setFeeLimitMsat(sendLnPaymentRequest.getMaxFee())
                         .setNoInflightUpdates(true)
-                        .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setTimeoutSeconds(ApiUtil.getPaymentTimeout())
                         .setMaxParts(10);
 
                 if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
@@ -1155,7 +1153,7 @@ public class LndApi extends Api {
                         .setPaymentHash(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getPaymentHash()))
                         .setNoInflightUpdates(true)
                         .putAllDestCustomRecords(customRecords)
-                        .setTimeoutSeconds(RefConstants.TIMEOUT_LONG * TorManager.getInstance().getTorTimeoutMultiplier())
+                        .setTimeoutSeconds(ApiUtil.getPaymentTimeout())
                         .setMaxParts(1); // KeySend does not support multi path payments
 
                 if (sendLnPaymentRequest.hasFirstHop())

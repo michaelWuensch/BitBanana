@@ -56,6 +56,12 @@
             android:title="@string/settings_hapticPin"
             app:iconSpaceReserved="false" />
 
+        <EditTextPreference
+            android:dialogMessage="@string/settings_backendTimeout_dialogMessage"
+            android:key="backendTimeout"
+            android:title="@string/settings_backendTimeout"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -76,6 +82,7 @@
     <PreferenceCategory
         android:title="@string/lightning"
         app:iconSpaceReserved="false">
+
         <ListPreference
             android:defaultValue="86400"
             android:entryValues="@array/lnRequestExpiry"
@@ -97,6 +104,12 @@
             android:defaultValue="false"
             android:key="unspecifiedAmountInvoices"
             android:title="@string/settings_unspecifiedAmountInvoices"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            android:dialogMessage="@string/settings_paymentTimeout_dialogMessage"
+            android:key="paymentTimeout"
+            android:title="@string/settings_paymentTimeout"
             app:iconSpaceReserved="false" />
 
         <!--

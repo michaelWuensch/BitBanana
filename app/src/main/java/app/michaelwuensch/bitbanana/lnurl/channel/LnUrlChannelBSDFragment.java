@@ -138,7 +138,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
         }
 
         getCompositeDisposable().add(BackendManager.api().listPeers()
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     boolean connected = false;
@@ -168,7 +168,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
 
     private void connectPeer(LightningNodeUri nodeUri) {
         getCompositeDisposable().add(BackendManager.api().connectPeer(nodeUri)
-                .timeout(ApiUtil.timeout_long(), TimeUnit.SECONDS)
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     BBLog.v(TAG, "Successfully connected to peer");
