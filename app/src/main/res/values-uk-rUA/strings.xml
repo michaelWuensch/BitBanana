@@ -834,4 +834,8 @@
     <string name="sort_by_name_desc">Ім\'я (Z-A)</string>
     <string name="sort_by_outbound_capacity_desc">Ємність надсилання (спочатку найбільша)</string>
     <string name="sort_by_symmetry_desc">Симетрія (спочатку збалансована)</string>
+    <string name="settings_paymentTimeout">Час очікування платежу</string>
+    <string name="settings_backendTimeout">Час очікування сервера</string>
+    <string name="settings_paymentTimeout_dialogMessage">Цей параметр визначає максимальну кількість секунд, протягом яких додаток намагатиметься здійснити Lightning-платіж. Якщо протягом цього часу маршрут не буде знайдено, платіж буде скасовано. Якщо ви часто бачите таймаути, спробуйте збільшити цей ліміт.</string>
+    <string name="settings_backendTimeout_dialogMessage">Вказує кількість секунд, протягом яких додаток чекатиме на відповідь від бекенда. Якщо відповідь не надійде до закінчення цього часу, запит буде відхилено. Для повільних інтернет-з\'єднань рекомендується збільшити цей ліміт. При використанні Tor додаток множить це число на 3, щоб врахувати затримку Tors.</string>
 </resources>
