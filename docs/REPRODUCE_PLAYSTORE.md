@@ -56,7 +56,7 @@ docker run --rm -v "$(pwd)":/app-src --device /dev/fuse --cap-add SYS_ADMIN bitb
 
 After that's done, you have your app bundle! It's located in:
 
-`./app/build/outputs/bundle/release/bitbanana-{VERSION FROM STEP 1}_{BUILD NUMBER FROM STEP 1}-release.aab`
+`./app/build/outputs/bundle/release/bitbanana-{VERSION FROM STEP 1}-release.aab`
 
 ### 5. Create device specific apk set
 
@@ -76,7 +76,7 @@ Now let's use bundletool to generate the set of APKs that should be installed on
 mkdir -p ./reproducible-builds/apks/built-apks
 
 # Generate a set of APKs in an output directory
-bundletool build-apks --bundle=./app/build/outputs/bundle/release/bitbanana-{VERSION FROM STEP 1}_{BUILD NUMBER FROM STEP 1}-release.aab --output-format=DIRECTORY --output=./reproducible-builds/apks/built-apks --connected-device
+bundletool build-apks --bundle=./app/build/outputs/bundle/release/bitbanana-{VERSION FROM STEP 1}-release.aab --output-format=DIRECTORY --output=./reproducible-builds/apks/built-apks --connected-device
 ```
 
 After that the directory `$HOME/bitbanana/reproducible-builds/apks/built-apks` should now look something like this:
