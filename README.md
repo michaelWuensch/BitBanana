@@ -98,6 +98,13 @@ BitBanana is fully self-custodial. When using the app there is absolutely no int
 If you are having problems with BitBanana, please report the issue in [GitHub][issues] or on [discord][discord] with screenshots and/or how to reproduce the bug/error.
 
 
+## Code of conduct
+
+If you participate in any communication please follow our [Code of Conduct](docs/CODE_OF_CONDUCT.md).  
+
+In short:   
+Please behave as you would expect others to behave towards you.
+
 
 ## Contribute
 
