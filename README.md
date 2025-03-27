@@ -25,8 +25,14 @@ There are of course a lot more possible ways to run a node, so please refer to t
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana)
+[<img src="https://www.openapk.net/images/openapk-badge.png"
+     alt="Get it on OpenApk"
+     height="80">](https://www.openapk.net/bitbanana/app.michaelwuensch.bitbanana/)
+[<img src="https://www.androidfreeware.net/images/androidfreeware-badge.png"
+     alt="Get it on Android Freeware"
+     height="80">](https://www.androidfreeware.net/download-bitbanana-apk.html)
 
-Or download the latest APK from the [Releases Section](https://github.com/michaelWuensch/BitBanana/releases/latest).
+Or download the latest APK from the [Releases Section](https://github.com/michaelWuensch/BitBanana/releases/latest) on GitHub.
 
 ## Features
 **General**
