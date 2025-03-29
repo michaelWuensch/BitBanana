@@ -207,7 +207,7 @@
     <string name="maximum_abbreviation">макс</string>
     <string name="pubkey">Публичный ключ</string>
     <string name="manually">Вручную</string>
-    <string name="settings_custom">По-своему…</string>
+    <string name="settings_custom">Другой…</string>
     <string name="currency">Валюта</string>
     <string name="currencies">Валюты</string>
     <string name="activity_manage_contacts">Управление контактами</string>
@@ -240,9 +240,9 @@
     <string name="lnurl_payer_data_description">Информация о получателе</string>
     <string name="contact_name">Имя контакта</string>
     <string name="contact_already_exists">Этот контакт уже существует!</string>
-    <string name="manual_send_input_hint">Address or payment data</string>
-    <string name="advanced_channel_details_initiator">Initiator</string>
-    <string name="advanced_channel_details_close_initiator">Close Initiator</string>
+    <string name="manual_send_input_hint">Адрес или платёжные данные</string>
+    <string name="advanced_channel_details_initiator">Инициатор</string>
+    <string name="advanced_channel_details_close_initiator">Закрыть инициатора</string>
     <string name="backup_data_creation_process">Создание резервной копии</string>
     <string name="backup_data_invalid_file_chosen">Это не правильный файл резервной копии. Пожалуйста, выберите файл, который был создан с этим приложением.</string>
     <string name="htlc_min">Мин. HTLC</string>
@@ -255,8 +255,8 @@
     <string name="settings_restartRequired">BitBanana будет перезапущен, чтобы сделать это изменение. Вы хотите продолжить?</string>
     <string name="settings_lockScreenTimeout">Таймаут автоблокировки</string>
     <string name="settings_receiveAddressDisplayValues_1">Родной SegWit (Bech32)</string>
-    <string name="help_dialog_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
-    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s sent an invalid payment request.</string>
+    <string name="help_dialog_maxHTLC">Максимальная сумма которую вы готовы переотправлять на этом канале за одну транзакцию.\n\nОставьте это поле пустым если вы не хотите менять текущее установленное значение.</string>
+    <string name="lnurl_pay_received_invalid_payment_request" comment="Parameters are:  %1$s = name of service (host)">%1$s отправил неверный платёжный запрос.</string>
     <string name="lnurl_pay_save_secret">ВАЖНО:\nЭтот код был скопирован в ваш буфер обмена. Пожалуйста, сохраните его если он понадобится позже. Этот диалог больше не будет показан.</string>
     <string name="data">Данные</string>
     <string name="contact_type_ln_node">Узел Lightning</string>
@@ -277,12 +277,12 @@
     <string name="error_payment_invalid_details">Реквизиты оплаты не совпадают с данными, указанными счётом, который вы пытаетесь оплатить.</string>
     <string name="error_payment_timeout">Таймаут. Маршрут не найден.</string>
     <string name="error_payment_no_route">Не найден маршрут, который соответствует вашему пределу комиссии %1$.1f%%. Увеличение предела комиссии в настройках или открытие новых каналов может решить проблему.</string>
-    <string name="error_no_permission_to_read_file">Access Denied: Unable to read the file. We recommend moving it to a different location, such as the \"Downloads\" folder, and accessing it from there.</string>
-    <string name="help_dialog_scanContact">QR-коды, содержащие следующие данные являются действительными:\n\n- Lightning адрес\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- Платёжный код</string>
+    <string name="error_no_permission_to_read_file">Доступ отказан: невозможно прочитать файл. Мы рекомендуем перенести его в другое место, например, папку «Загрузки» и взять его оттуда.</string>
+    <string name="help_dialog_scanContact">QR-коды, содержащие следующее являются действительными:\n\n- Lightning адрес\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- Платёжный код</string>
     <string name="fee_limit_exceeded">Комиссия за этот платёж (%1$.1f%%) превышает установленный предел (%2$.1f%%).\n\nВы действительно хотите оплатить этот счёт?</string>
-    <string name="help_dialog_scanConnectionInfo">QR-коды, содержащие следующие версии:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Полное содержимое файла конфигурации BTCPay сервера</string>
+    <string name="help_dialog_scanConnectionInfo">QR-коды, содержащие следующее являются действительными:\n\n- Строка Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr кошелёк строка подключения (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay строка подключения (config=…)\n- Полное содержимое файла конфигурации BTCPay сервера</string>
     <string name="help_dialog_connect_node_help">К сожалению, эти QR-коды настолько велики, что некоторые устройства не могут их просканировать. Если это именно для вас, вам придется вернуться к копированию/вставке.\n\nЕсли вам нужна дальнейшая помощь, обратитесь к нашей документации по установке.</string>
-    <string name="help_dialog_scan_watchtower">QR-Codes containing the following are valid:\n\n- pubkey@host:port</string>
+    <string name="help_dialog_scan_watchtower">QR-коды, содержащие следующее являются действительными:\n\n- публичный_ключ@хост:порт</string>
     <string name="name">Название</string>
     <string name="client_key">Ключ Клиента</string>
     <string name="spinner_manage_nodes">Управление…</string>
@@ -292,7 +292,7 @@
     <string name="lnurl_service_not_responding">%s не отвечает</string>
     <string name="lnurl_service">Сервис</string>
     <string name="lnurl_service_provided_invalid_data">Сервис, с которым вы взаимодействуете с предоставленными неверными данными.</string>
-    <string name="lnurl_pay_insufficient_channel_balance">The amount to pay is bigger than what you can send over lightning with your current open channels.</string>
+    <string name="lnurl_pay_insufficient_channel_balance">Сумма для оплаты больше чем вы можете отправить через lightning с помощью ваших текущих открытых каналов.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Ваш платёж был успешным, но секрет, который вы получили, не может быть расшифрован.</string>
     <string name="lnurl_pay_save_url">ВАЖНО:\nURL адрес был скопирован в буфер обмена. Пожалуйста, сохраните его если он понадобится позже. Этот диалог больше не будет показан.</string>
     <string name="drawer_menu_channels">Каналы</string>
@@ -304,13 +304,13 @@
     <string name="clipboard_error_heading">Данные буфера обмена найдены, но неверные:</string>
     <string name="clipboard_scan_lnurl">Буфер обмена содержит данные LNURL. Вы хотите его использовать?</string>
     <string name="add_contact">Добавить контакт</string>
-    <string name="advanced_channel_details_explanation_capacity">The total amount of funds held in this channel. Due to some constraints (like commit fee or local channel reserve) not all of the funds are spendable.</string>
-    <string name="advanced_channel_details_explanation_activity">The total percentage of sent and received funds divided by the total capacity of the channel. A channel with an activity over 100 means that more funds traveled through the channel than it can hold. This metric is designed to show how effective a given channel is.</string>
+    <string name="advanced_channel_details_explanation_capacity">Общая сумма средств проводимых в этом канале. Из-за некоторых ограничений (таких как комиссия за подтверждение или локальный резерв канала) не все средства могут быть потрачены.</string>
+    <string name="advanced_channel_details_explanation_activity">Общий процент отправленных и полученных средств, делённых на общую мощность канала. Канал с активностю более 100 означает, что по каналу прошло больше средств чем он может держать. Эта метрика предназначена показывать насколько эффективен данный канал.</string>
     <string name="advanced_channel_details_lifetime">Длительность</string>
     <string name="advanced_channel_details_initiator_peer">Узел</string>
     <string name="advanced_channel_details_explanation_initiator">Кто открыл канал?</string>
     <string name="advanced_channel_details_explanation_close_initiator">Кто закрыл канал?</string>
-    <string name="advanced_channel_details_time_lock">Time Lock</string>
+    <string name="advanced_channel_details_time_lock">Время блокировки</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
     <string name="advanced_channel_details_inbound_routing_fee">Inbound Routing Fee</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.</string>
@@ -327,8 +327,8 @@
     <string name="sign_message">Подписать сообщение</string>
     <string name="signature_to_verify">Подпись для проверки</string>
     <string name="signature_invalid">Подпись недействительна!</string>
-    <string name="channel_summary_total_outbound">Всего исходящих</string>
-    <string name="channel_summary_total_inbound">Всего входящих</string>
+    <string name="channel_summary_total_outbound">Ёмкость на отправку</string>
+    <string name="channel_summary_total_inbound">Ёмкость на получение</string>
     <string name="fee_base">Базовая комиссия</string>
     <string name="routing_policy_update_success">Правила маршрутизации успешно обновлены.</string>
     <string name="stealth_mode_explanation_popup">Теперь BitBanana выглядит как простой калькулятор. Чтобы получить доступ к BitBanana, используйте этот калькулятор и выполните вычисление, равное 21.</string>
@@ -340,7 +340,7 @@
     <string name="peer_total_channels">Всего каналов</string>
     <string name="peer_total_capacity_explanation">Общая ёмкость узлов, выведенная от суммы ёмкости каналов.</string>
     <string name="peer_features">Возможности</string>
-    <string name="lnurl_auth_login_info">Do you want to use your node to log in to that service?</string>
+    <string name="lnurl_auth_login_info">Вы хотите использовать свой узел для входа на этот сервис?</string>
     <string name="lnurl_auth_auth_info">Вы хотите использовать ваш узел для аутентификации с этим сервисом?</string>
     <string name="vpn_start_on_open">Начать при открытии</string>
     <string name="vpn_tunnel_name">Туннель</string>
@@ -374,7 +374,7 @@
     <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Правила маршрутизации обновлены, но для %1$d каналов новые правила не могут быть применены.</string>
     <string name="error_duplication">Не удалось дублировать.</string>
     <string name="fee_tier_slow_description">Медленная транзакция</string>
-    <string name="help_dialog_base_fee">Regardless of the transaction\'s value, you\'ll receive a set base fee for every transaction you forward through the channel. Your total received fee is the sum of this base fee and the fee rate.</string>
+    <string name="help_dialog_base_fee">Независимо от суммы транзакции, вы получите установленную базовую комиссию для каждой транзакции которую вы пересылаете через канал. Ваша общий полученная комиссия это сумма этого базового комиссии и ставки комиссии.</string>
     <string name="lnurl_payer_data_identifier">Адрес Lightning</string>
     <string name="lnurl_payer_data_email">Email адрес</string>
     <string name="support_help_description">Почитайте нашу документацию.</string>
@@ -419,10 +419,10 @@
     <string name="error_connection_internal_server_clearnet">Узел доступен, но возвращает внутреннюю ошибку. Эта ошибка может быть вызвана неправильным портом. Когда вы пытаетесь подключиться к узлу при очистке, отключение Tor в настройках подключения узлов может решить вашу проблему.</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">Введенная строка подключения для cln-grpc является недопустимой, так как параметры не кодируются в формате base64url.</string>
     <string name="error_lightning_uri_invalid">Неверный формат.\nПожалуйста, используйте один из следующих:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="error_funds_not_confirmed_yet">You have sufficient on-chain funds, but their confirmation is still pending. Please wait for your on-chain funds to confirm. You can track the status of your funds through the UTXO view or transaction history.</string>
+    <string name="error_funds_not_confirmed_yet">У вас достаточно средств на блокчейне, но их подтверждение всё ещё ожидается. Пожалуйста, дождитесь подтверждения ваших средств на блокчейне. Вы можете отслеживать состояние ваших средств на странице Монет UTXO или Истории транзакций.</string>
     <string name="fee_limit_title">Предупреждение об пределе комиссии</string>
     <string name="peer_ping_explanation">Время, которое требуется узлу для ответа.</string>
-    <string name="balance_details_on_chain_unconfirmed">On-Chain pending:</string>
+    <string name="balance_details_on_chain_unconfirmed">Ожидается на блокчейне:</string>
     <string name="error_connection_tor_unreachable">Подключение к Tor не удалось.\nПожалуйста, включите Tor в настройках соединения узла.</string>
     <plurals name="blocks">
         <item quantity="one">%d Блок</item>
@@ -455,7 +455,7 @@
     <string name="settings_avatarStyleDisplayValues_0">Смешанный</string>
     <string name="error_bolt12_expired">Этот код платежа истёк.</string>
     <string name="error_get_peers">Не удалось получить список контрагентов.</string>
-    <string name="error_channel_selection_insufficient_liquidity_outgoing">The selected channel\'s outgoing balance is insufficient.</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">Ёмкость для отправки выбранного канала недостаточна.</string>
     <string name="error_channel_rebalance_no_fee_rate">Необходимо указать максимальную ставку комиссии.</string>
     <plurals name="duration_hour">
         <item quantity="one">%d Час</item>
@@ -501,23 +501,23 @@
     <string name="error_blockExplorer_title">Обозреватель блоков</string>
     <string name="error_paymentRequestExpired">Срок действия этого запроса платежа истёк.</string>
     <string name="error_invalid_ln_address_format">Неверный формат для адреса Lightning. Lightning адрес выглядит как адрес электронной почты.\n\nимя_пользователя@домен</string>
-    <string name="error_invalid_contact_data">Invalid format.\nPlease use one of the following:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- Payment Code</string>
+    <string name="error_invalid_contact_data">Неправильный формат.\nПожалуйста, используйте один из:\n\n- Адрес Lightning\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- Платёжный код</string>
     <string name="help_dialog_utxos_select">Выбирая определенные UTXO вы можете улучшить вашу конфиденциальность или сэкономить комиссию.</string>
-    <string name="help_dialog_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.\n\nKeep this field empty if you don\'t want to change the current set value.</string>
+    <string name="help_dialog_minHTLC">Наименьшая сумма которую вы готовы пересылать на этом канале за одну транзакцию.\n\nОставьте это поле пустым если вы не хотите менять текущее установленное значение.</string>
     <string name="lnurl_payer_data_choose">Выберите, какие данные нужно отправить:</string>
     <string name="message_to_sign">Сообщение для подписания</string>
     <string name="watchtower_session_backups">Резервные копии</string>
     <string name="watchtower_session_max_backups">Макс резервных копий</string>
     <string name="error_connection_clngrpc_missingClientCert">Обязательный клиентский сертификат отсутствует.</string>
     <string name="help_dialog_inbound_fee">Переотправка платежа использует два канала: входящий канал для получения определённой суммы и исходящий канал для отправки той же суммы другому получателю.\n\nКомиссии входящих каналов позволяют операторам узлов более эффективно сигнализировать, где происходят нехватки ликвидности средств. Регулируя это значение, вы можете повлиять на вероятность выбора канала в качестве входящего канала в маршрутизации. Указанное значение представляет собой плату, которую вы взимаете, или скидку, которую вы предложите когда канал будет выбран в качестве входящего канала.\n\nТехнически, комиссия может быть установлена только для исходящего канала; Таким образом, для выбранной пары каналов (входящего и исходящего) входядная комиссия эффективно подстраивает исходящую комиссию с помощью простого добавления. Следовательно, отрицательное число приводит к скидке на исходящий платёж, в то время как положительное число увеличит его. Для безопасности общая комиссия за маршрутизацию не может быть отрицательной, гарантируя что средства не теряются на маршрутизацию.\n\nБазовая комиссия и ставка комиссии работают так же, как и для исходящей комиссии.</string>
-    <string name="help_dialog_settings_features">BitBanana\'s commitment to also serving experts means offering a rich set of features. However, we recognize that not everyone may require all of these functionalities. With our customizable settings, you have the flexibility to hide any features that are not relevant to your needs, ensuring a tailored experience.</string>
-    <string name="help_dialog_stealth_mode">Utilize stealth mode to defend your phone against quick physical searches, creating the illusion that BitBanana isn\'t present on your device. This is achieved by replacing your app\'s icon and name and launching a decoy app. However, note that the app\'s icon and name won\'t be changed in the app list in your system settings.\n\nIt is not a perfect solution, but it helps to make the presence of your Bitcoin software less obvious.</string>
+    <string name="help_dialog_settings_features">Предназначение BitBanana также использоваться экспертами означает предлагать богатый набор возможностей. Тем не менее, мы признаём, что не всем может потребоваться все эти функциональности. С этими настройками у вас есть гибкость, чтобы скрыть любые возможности, которые не соответствуют вашим потребностям.</string>
+    <string name="help_dialog_stealth_mode">Используйте невидимый режим чтобы защитить свой телефон от быстрого поиска при физическом доступе , создавая иллюзию что BitBanana не присутствует на вашем устройстве. Это достигается путём замены значка и названия вашего приложения и запуска приложения обманки. Тем не менее, обратите внимание, что значок и имя приложения не будут изменены в списке приложений в настройках вашей системы.\n\nЭто не идеальное решение, но оно помогает сделать наличие вашего биткойнского приложения менее очевидным.</string>
     <string name="fee_estimated_duration">Оценка времени длставки: %1$s</string>
-    <string name="help_dialog_peers">This list displays all the peers currently connected to your node. Peers are essentially other nodes operating within the network. They collaborate by exchanging information, ensuring each node has a clear view of the network\'s status.\n\nAs an example, when your node wants to change something, such as updating a channel policy, it notifies all the peers it\'s connected to. These peers, in turn, relay the information to their own connected peers, creating a ripple effect that ensures the entire network is informed.\n\nYour node establishes connections with peers automatically, typically prioritizing those peers with whom you have active channels. Nevertheless, you maintain the flexibility to manually establish or break connections and access more details about your peers through this interface.</string>
-    <string name="help_dialog_vpn_automation">This setting makes using a VPN more convenient by automating it. You can still connect using a VPN even if you do not choose anything here, but then you have to start and stop the VPN manually whenever you want to connect.</string>
+    <string name="help_dialog_peers">Этот список отображает всех участников, которые в настоящее время подключены к вашему узлу. Участники, по сути, являются другими узлами, работающими в сети. Они сотрудничают, обмениваясь информацией, гарантируя что каждый узел имеет чёткое представление о состоянии сети.\n\nНапример, когда ваш узел хочет что-то изменить, как то обновление политики канала, он уведомляет всех участников к которым он подключён. Эти участники в свою очередь передают информацию своим собственным подключенным участникам, создавая волновой эффект, который гарантирует информирование всей сети.\n\nВаш узел автоматически устанавливает соединения со участниками, обычно уделяя приоритет тем участникам, с которыми у вас есть активные каналы. Тем не менее, вы сохраняете гибкость для ручного подключения или отключения и видеть более подробную информацию о ваших участниках через этот интерфейс.</string>
+    <string name="help_dialog_vpn_automation">Эта настройка делает использование VPN удобнее автоматизируя его. Вы все ещё можете подключиться используя VPN даже если вы ничего не выбирете здесь, но тогда вам нужно запустить и остановить VPN вручную когда хотите подключиться.</string>
     <string name="help_dialog_node_nickname">Это название используется только для организации ваших узлов в BitBanana. Это не имеет никакого эффекта.</string>
-    <string name="help_dialog_lnurl_auth">Your node serves as a private authentication method for accessing a service. The procedure is based on message-signing and does not share any information about your node. If your node stops operating, you will lose the ability to log in to the associated account.</string>
-    <string name="help_dialog_own_watchtower">This is your watchtower on the lightning network.\n\nWhen you tap on the avatar image you will reveal a QR-Code.\nThis code can be scanned by others to add your watchtower to their list, allowing it to oversee their channels. Be careful, this consumes resources, so avoid sharing this connection data publicly on the internet.\n\nThis avatar is unique.\nIt was automatically generated based on your public key and cannot be changed.</string>
+    <string name="help_dialog_lnurl_auth">Ваш узел служит приватным методом аутентификации для доступа к сервису. Процедура основана на подписании сообщений и не делится никакой информацией о вашем узле. Если ваш узел прекратит работу, вы потеряете возможность войти в соответствующую учётную запись.</string>
+    <string name="help_dialog_own_watchtower">Это ваша дозорная башня в сети Lightning.\n\nКогда вы нажимаете на изображение аватара вам покажет QR-код.\nЭтот код может быть отсканирован другими, чтобы добавить вашу дозорную башню в свой список, позволяя ему контролировать свои каналы. Будьте осторожны, это потребляет ресурсы, поэтому избегайте обмена данными об этом подключении публично в Интернете.\n\nЭтот аватар уникален.\nОн был автоматически сгенерирован на основе вашего открытого ключа и не может быть изменён.</string>
     <string name="help_dialog_bolt12_description">Любой, кто использует код платежа, будет видеть это описание.</string>
     <string name="help_dialog_offers">Платёжные коды могут быть использованы многократно. Любой с кодом может сделать платёж без необходимости немедленного участия. Тем не менее, ваш узел должен быть в сети, чтобы платёж прошёл. Кроме того, платёжные коды предлагают расширенные возможности, такие как периодические платежи и повышенная конфиденциальность для получателя.</string>
     <string name="help_dialog_settings_currencies">Нажатие на любую сумму позволяет вам изменять валюты, которые вы установили здесь. Если вы выберете только единицы Bitcoin, приложение перестанет связываться с поставщиками обменного курса.</string>
@@ -527,7 +527,7 @@
     <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Ставка комиссии слишком велика. Максимально разрешено %1$.2f%%.</string>
     <string name="help_dialog_lastHop">Используйте эту опцию только когда вы хотите восстановить баланс ваших каналов. Для этого вы можете эффективно отправлять средства сам. Сгенерировать счет и оплатить его определенным набором собственных каналов, выбирает один с высокой исходящей пропускной способностью для первого прыжка, а другой с высоким входящим балансом для последнего прыжка. Такой подход требует комиссионных вознаграждений, но достигает перебалансировки каналов.</string>
     <string name="guardian_certificate_verification">Если проверка сертификата отключена, вы уязвимы для атаки \"человек посередине\". Делайте это только в том случае, если вы знаете что делаете. \n\n\n Рекомендуется вместо этого правильно установить настройку сертификата. Добавьте имя хоста в tlsextradomain в файле lnd.conf, прежде чем воссоздать сертификат.</string>
-    <string name="help_dialog_rebalancing">Перебалансировка каналов позволит вашим платёжным каналам быть готовыми! Если на однай стороне мало средств, ваш канал может отправлять только в одном направлении, а платежи могут отваливаться. Отправка средств в круговом маршруте перераспределяет балансы без необходимости транзакций в блокчейне. Этот страница позволяет вам производить такой круговой платеж. Для лучшего результата выберите канал с избыточной ликвидностью средств и подключите его к другому каналу, который может обрабатывать больше поступающих средств.</string>
+    <string name="help_dialog_rebalancing">Перебалансировка каналов позволит вашим платёжным каналам быть готовыми! Если на одной стороне мало средств, ваш канал может отправлять только в одном направлении, а платежи могут отваливаться. Отправка lightning платежа в круговом маршруте на себя перераспределяет балансы между ваших каналов без необходимости транзакций в блокчейне. Этот страница позволяет вам производить такой круговой платеж. Для лучшего результата выберите канал с избыточной ликвидностью средств и подключите его к другому каналу, который может обрабатывать больше поступающих средств.</string>
     <string name="node_name">Название узла</string>
     <string name="open_node">Выбрать этот узел</string>
     <string name="connectionData">Данные о подключении</string>
@@ -542,12 +542,12 @@
     <string name="clipboard_scan_node_pubkey">Ваш буфер обмена содержит публичный ключ узла. Открыть канал?</string>
     <string name="choose_action">Выберите действие</string>
     <string name="contact_type">Тип контакта</string>
-    <string name="advanced_channel_details_explanation_close_type">Channels can be closed in different ways. The optimal way is a cooperative close. If one party decides to close the channel without the cooperation of the other party, a so called \"force close\" happens. A force close will normally result in higher fees and the close initiator will have to wait quite some time until he can access his funds. If one party attempts to cheat and gets caught, we have a breach close.</string>
-    <string name="advanced_channel_details_explanation_commit_fee">The amount to be paid in fees when closing the channel. This can change over time as the fees are subject to the transaction fees of the bitcoin base layer.</string>
+    <string name="advanced_channel_details_explanation_close_type">Каналы могут быть закрыты по разному. Оптимальный путь это кооперативное закрытие. Если одна сторона решает закрыть канал без сотрудничества другой стороны, происходит так называемая «принудительное закрытие». Принудительное закрытие обычно приводит к более высокой комиссии, а инициатору закрытия придётся ждать довольно много времени, пока он не сможет получить доступ к своим средствам. Если одна сторона пытается обмануть и попалась, у нас есть закрытие по нарушению.</string>
+    <string name="advanced_channel_details_explanation_commit_fee">Сумма которая должна быть оплачена в комиссиях при закрытии канала. Это может измениться со временем, так как комиссии взимаются с комиссии за транзакцию базового уровня биткойна.</string>
     <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
     <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
     <string name="advanced_channel_details_explanation_inbound_routing_fee">Forwarding a payment involves two channels: an inbound channel for receiving a specific amount and an outbound channel for sending the same amount to another peer. This is the fee that will be charged when the channel is selected as inbound channel.\n\nTechnically, a fee can only be set for the outbound channel; thus, for a selected channel pair (inbound &amp; outbound) the inbound fee effectively adjusts the outbound fee by a simple addition. Therefore, a negative number results in a discount on outbound fee, while a positive number will increase it. For security, the total routing fee cannot be negative, ensuring that funds are not lost through routing.\n\nBase fee and fee rate work the same way as they do for outbound fees.</string>
-    <string name="advanced_channel_details_explanation_remote_maxHTLC">The maximum value your peer is willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_remote_maxHTLC">Максимальная сумма которую ваш контрагент хочет пересылать по этому каналу в одной транзакции.</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_restore_success">Резервная копия восстановлена</string>
     <string name="backup_data_version_too_old">Резервная копия была сделана с более новой версией. Пожалуйста, обновите приложение перед импортом резервной копии.</string>
@@ -557,7 +557,7 @@
     <string name="sign">Подписать</string>
     <string name="generated_signature">Сгенерированная подпись:</string>
     <string name="signature_valid">Подпись действительна!</string>
-    <string name="channel_summary_total_unavailable">Всего оффлайн</string>
+    <string name="channel_summary_total_unavailable">Не в сети</string>
     <string name="fee_rate">Ставка Комиссии</string>
     <string name="inbound_fee_rate">Ставка входящей комиссии</string>
     <string name="timelock_delta">Timelock Delta</string>
@@ -572,7 +572,7 @@
     <string name="stealth_mode_disable_instruction_calc">Выполните вычисление, которое приводит к 21</string>
     <string name="peers_add">Добавить узел</string>
     <string name="peer_last_flap_explanation">Elapsed time since the peer\'s most recent offline event.</string>
-    <string name="balance_details_on_chain_confirmed">On-Chain confirmed:</string>
+    <string name="balance_details_on_chain_confirmed">Подтверждено на блокчейне:</string>
     <string name="authenticate">Аутентификация</string>
     <string name="lnurl_auth_success">Аутентификация прошла успешно!</string>
     <string name="vpn_automation">Автоматизация VPN</string>
@@ -649,23 +649,23 @@
     <string name="error_channel_close">Не удалось закрыть канал: %s</string>
     <string name="error_pin_deactivation_attempt">Похоже, кто-то пытался деактивировать ваш PIN-код. Теперь приложение закроется.\nВы можете переустановить приложение и использовать процесс восстановления для восстановления доступа к вашим средствам.</string>
     <string name="error_empty_node_name">Пустое имя не допускается.</string>
-    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s seems to block request coming from the Tor network. You might try switching Tor off in the settings or contact the service and request them to update their cloudflare rules.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s кажется, блокирует запросы из сети Tor. Вы можете попробовать выключить Tor в настройках или связаться со службой поддержки и попросить их обновить свои правила CloudFlare.</string>
     <string name="error_tor_exchange_rate">Не удалось получить обменный курс. Сервис, который вы используете, блокирует запрос, исходящий из сети Tor. Попробуйте переключить провайдер обменного курса в расширенных настройках.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Не удалось прочитать ответ от %1$s.</string>
     <string name="error_invalid_fee_preset_value">Значение должно быть больше нуля.</string>
     <string name="error_invalid_bolt12_offer_format">Неверный код платежа.</string>
     <string name="error_block_explorer_setup_invalid">Настройка обозревателя блоков недействительна.</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Maximum Amount: %1$s\n\nInsufficient lightning liquidity. Increase your channel income capacity to raise this limit.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Максимальная сумма: %1$s\n\nНедостаточная ликвидность lightning. Увеличьте ёмкость для получения ваших каналов чтобы поднять этот предел.</string>
     <string name="error_nwc_setup_failed">Не удалось запустить соединение с кошельком Nostr.</string>
     <string name="error_tor_bootstrapping_failed">Ошибка загрузки Tor.</string>
     <string name="error_input_macaroon_hex">Макарон должен быть указан в шестнадцатеричном формате.</string>
     <string name="error_reading_qrCode_in_image">Не удается отсканировать или обнаружить QR-код на изображении.</string>
     <string name="error_exchange_rate_requires_tor_toast">Не удалось получить обменный курс. Выбранный провайдер требует обработки.</string>
     <string name="error_insufficient_funds">Этот платеж превышает ваш доступный баланс.</string>
-    <string name="error_invalid_peer_connection_data">Please ensure the data is in one of the following formats:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="error_channel_selection_pending">You cannot select channels that are still pending.</string>
-    <string name="error_channel_selection_offline">You cannot select channels that are currently offline.</string>
-    <string name="error_channel_selection_insufficient_liquidity_incoming">Входящий баланс выбранного канала является недостаточным.</string>
+    <string name="error_invalid_peer_connection_data">Пожалуйста, убедитесь что данные в формате:\n\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт</string>
+    <string name="error_channel_selection_pending">Вы не можете выбрать каналы, которые все ещё ожидаются.</string>
+    <string name="error_channel_selection_offline">Вы не можете выбрать каналы которые сейчас отключены.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">Ёмкость для получения выбранного канала недостаточна.</string>
     <string name="error_channel_rebalance_insufficient_funds">Бэкенд ответил с ошибкой «нехватка средств». Возможно, некоторые ограничения каналов мешают каналу тратить большую часть своего баланса.</string>
     <string name="fee_tier_medium_title">Средний</string>
     <string name="fee_limit_exceeded_payment">Комиссия за этот платёж (%1$d сатошей) будет выше, чем сумма платежа (%2$d сатошей).\n\nВы действительно хотите оплатить этот счёт?</string>
@@ -687,8 +687,8 @@
     <string name="error_connection_tor_bootstrapping">Тор не смог загрузиться.\n\nBitBanana поддерживает Tor самостоятельно. Если вы используете Orbot, пожалуйста удалите BitBanana из активированного списка или полностью выключите Orbot.</string>
     <string name="help_dialog_channels">Список lighting каналов представляет собой ваши средства. Lightning каналы необходимы для участия в lightning сети, позволяющей мгновенные и дешёвые платежи биткойнов.\n\nДля \"конвертации\" средств из блокчейна в Lightning средства, вы должны открыть канал. Чтобы «конвертировать» Lightning средства обратно в блокчейн средства, вы должны закрыть существующий канал.\nКак операция, открытие и закрытие каналов достигаются посредством транзакции на блокчейне, которая требует комиссии. Поэтому постарайтесь держать каналы открытыми как можно дольше!\n\nПростой способ начать работу с каналами открытия - использовать lightningnetwork.plus.</string>
     <string name="help_dialog_payer_data_settings">Некоторые получатели поддерживают или даже требуют от вас отправлять дополнительную информацию о себе. Для удобства вы можете установить значения по умолчанию здесь, так что вам не нужно вводить эту информацию каждый раз. Эти данные хранятся только локально на телефоне.\n\nПожалуйста, обратите внимание, что даже при наборе по умолчанию вы все еще сможете изменять данные при выполнении платежа. Вы также сможете выбрать, какие данные отправляются вообще.\n\nВы несёте ответственность за решение об использовании реальных или поддельных данных. Как правило, мы рекомендуем отправлять реальные данные только в том случае, если это необходимо по какой-либо причине. (Например, когда вы получите код по почте и т.д.)</string>
-    <string name="help_dialog_payer_data_payment">This payee supports or even requires you to send him additional information about yourself.\n\nYou are responsible for deciding whether to use real or fake data. As rule of thumb, we advise only sending real data if it is necessary for some reason. (E.g. when you will receive a code by mail, etc.)\n\nIf a checkmark cannot be unchecked then this data is marked as mandatory by the payee. If you don\'t want to send that data you\'ll have to cancel the payment.</string>
-    <string name="help_dialog_fee_rate">The fee rate is a fee that scales with the value of the transaction you forward through the channel. Your total received fee is the sum of this fee rate and the base fee.</string>
+    <string name="help_dialog_payer_data_payment">Этот получатель поддерживает или даже требует, чтобы вы отправили ему дополнительную информацию о себе.\n\nВы несёте ответственность за решение использовать ли реальные или поддельные данные. Как правило мы советуем отправлять реальные данные только если это необходимо по какой-то причине. (Н.п. когда вы получите код по почте и т.д.)\n\nЕсли эту галочку не можно снять, то эти данные помечены как обязательные получателя. Если вы не хотите отправлять эти данные, вам придётся отменить платёж.</string>
+    <string name="help_dialog_fee_rate">Ставка комиссии - это плата, которая масштабируется с суммой транзакции, которую вы отправляете через канал. Ваша общая полученная комиссия это сумма этой ставки и базовой комиссии.</string>
     <string name="vpn_install_vpn_app_hint" comment="Parameters are:  %1$s: appName">Чтобы использовать этот VPN, вам сначала необходимо установить приложение %1$s.</string>
     <string name="advanced_channel_details_routing_fee">Комиссия маршрутизации</string>
     <string name="lnurl_auth_link_info">Вы хотите связать свою существующую учётную запись со своим узлом?</string>
@@ -710,10 +710,10 @@
     <string name="peer_total_channels_explanation">Общее количество публичных каналов, поддерживаемых этим узлом.</string>
     <string name="lnurl_auth_register_info">Вы хотите использовать ваш узел для регистрации учётной записи на этом сервисе?</string>
     <string name="duplication_successful">Дублирование прошло успешно.</string>
-    <string name="help_dialog_scanNodePublicKey">QR-коды, содержащие следующие данные:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
-    <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
-    <string name="help_dialog_scanPeer">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
-    <string name="lnurl_channel_pending_hint">The channel is opening. This may take a while.\nYou can check the channels state in your channels overview.</string>
+    <string name="help_dialog_scanNodePublicKey">QR-коды, содержащие следующее являются действительными:\n\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- LNURL канал</string>
+    <string name="help_dialog_scanGeneric">Здесь всё разрешено.\nПросто отсканируйте QR-код и BitBanana автоматически определит какое действие совершить в зависимости от данных.</string>
+    <string name="help_dialog_scanPeer">QR-коды, содержащие следующее являются действительными:\n\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт</string>
+    <string name="lnurl_channel_pending_hint">Канал открывается. Это может занять некоторое время.\nВы можете проверить состояние каналов на странице Каналы.</string>
     <string name="lnurl_pay_comment_for_payee">Примечание для получателя</string>
     <string name="lnurl_invalid_response">Сервис ответил с неверным ответом.</string>
     <string name="lnurl_payer_data_not_supported">Этот платёж требует типа аутентификации, который ещё не поддерживается BitBanana.</string>
@@ -731,7 +731,7 @@
     <string name="settings_featureHelpButtons_summary">Кнопки с подсказками по всему приложению помогают новым пользователям подробными пояснениями.</string>
     <string name="settings_featurePeers">Управление узлами</string>
     <string name="error_provided_data_invalid">Предоставленные данные недействительны.</string>
-    <string name="error_invalid_watchtower_connection_data">Please ensure the data is in the following format:\n\n- pubkey@host:port</string>
+    <string name="error_invalid_watchtower_connection_data">Пожалуйста, убедитесь что данные в формате:\n\n- публичный_ключ@хост:порт</string>
     <string name="error_feature_not_supported_by_backend">При использовании %1$sBitBanana не поддерживает следующую возможность: %2$s</string>
     <string name="error_fee_estimation_requires_tor_toast">Не удалось получить оценку комиссии. Выбранный провайдер требует Tor.</string>
     <string name="error_offer_already_exists">Такой код платежа уже существует.</string>
@@ -747,10 +747,10 @@
     <string name="clipboard_scan_connect">Буфер обмена содержит данные подключения. Вы хотите добавить новый узел?</string>
     <string name="third_party_licenses">Сторонние лицензии</string>
     <string name="licenses">Лицензии</string>
-    <string name="advanced_channel_details_explanation_lifetime">This shows how long this channel already exists.</string>
-    <string name="advanced_channel_details_explanation_lifetime_closed">This shows the duration for which this channel has been active.</string>
+    <string name="advanced_channel_details_explanation_lifetime">Это показывает как долго этот канал уже существует.</string>
+    <string name="advanced_channel_details_explanation_lifetime_closed">Это показывает как долго этот канал был активен.</string>
     <string name="balance_details_lightning_pending">Ожидающих каналов:</string>
-    <string name="error_insufficient_lightning_sending_liquidity">Insufficient lightning liquidity for sending. Open additional channels to increase it.\nCurrent maximum:</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Недостаточная ликвидности lightning для отправки. Откройте дополнительные каналы чтобы увеличить её.\nТекущий максимум:</string>
     <string name="error_grpc_setup_failed">Не удалось запустить gRPC соединение.</string>
     <string name="error_unknown_backend">Неизвестный тип бэкэнда.</string>
     <string name="error_unsupported_network">Сеть Bitcoin, к которой вы подключены, не поддерживается.</string>
@@ -762,7 +762,7 @@
     <string name="biometricNotSetup">Для использования этой функции необходимо настроить биометрическую аутентификацию в настройках системы Android.</string>
     <string name="invoice_detail">Подробности счёта-фактуры</string>
     <string name="app_reset_message">Приложение было сброшено, поскольку последнее обновление включало некоторые структурные изменения.\nК сожалению, вам придется снова пройти процесс настройки.</string>
-    <string name="lnurl_channel_opening_question">Do you really want to open a channel with:</string>
+    <string name="lnurl_channel_opening_question">Вы действительно хотите открыть канал со:</string>
     <string name="backup_data_create_headline">Backup</string>
     <string name="backup_data_backupVersion_too_old">Эта версия была создана с очень старой версией BitBanana. К сожалению, она больше не поддерживается.</string>
     <string name="vpn_no_vpn">Без VPN</string>
@@ -793,9 +793,9 @@
     <string name="error_only_payment_data_allowed">Здесь разрешены только платежные данные.</string>
     <string name="error_payment_no_route_small_amount">Маршрут не найден. Вы пытаетесь отправить настолько маленькое сумму, что многие каналы не могут маршрутизировать его. Пожалуйста, проверьте настройки маршрутизации для своих каналов и при необходимости постройте значение MinHTLC.</string>
     <string name="error_node_not_yet_ready">Ваш узел еще не полностью синхронизирован. Попробуй ещё раз позже.</string>
-    <string name="error_tor_might_cause_problem">Tor could cause this issue. Please try to deactivate tor in the settings.</string>
+    <string name="error_tor_might_cause_problem">Эту проблему может вызвать Tor . Пожалуйста, попробуйте отключить его в настройках.</string>
     <string name="biometricPrompt_title">Биометрическая аутентификация</string>
-    <string name="help_dialog_watchtowers">For a watchtower to function, some data must be exchanged with it. This results in some information being disclosed to the watchtower\'s maintainer. The following non encrypted data will be disclosed:\n- Frequency of channel updates\n\nChannel balances stay confidential unless your partner cheats and the watchtower detects it. In this scenario, you\'ll reveal the balances to ensure the protection of your funds.\n\nKeep in mind that a watchtower service cannot take your funds. Their only action during a breach is to initiate a punishment transaction, with the funds going directly to you.</string>
+    <string name="help_dialog_watchtowers">Чтобы дозорная башня функционировала, некоторые данные должны быть обменены вместе с ней. Это приводит к тому, что некоторая информация будет раскрыта для сопровождающего дозорной башни. Будут раскрыты следующие незашифрованные данные:\n- Частота обновлений канала\n\nБалансы каналов оставаются конфиденциальными, пока ваш партнёр не вздумает обманывать, а дозорная башня обнаружит это. В этом случае вы раскроете балансы чтобы обеспечить защиту ваших средств.\n\nИмейте в виду, что служба дозорной башни не может забрать ваши средства. Их единственное действие во время обнаружения нарушения это инициировать штрафную тразакцию, причём средства пойдут непосредственно к вам.</string>
     <string name="advanced_channel_details_initiator_you">Вы</string>
     <string name="auth_link_account">Привязать учётную запись</string>
     <string name="register">Регистрация</string>
@@ -806,7 +806,7 @@
     <string name="settings_on_off">Вкл/Выкл</string>
     <string name="error">Ошибка</string>
     <string name="error_connection_network_unreachable">Невозможно добраться до хоста.\n\nПожалуйста, убедитесь что у вас есть подключение к Интернету.</string>
-    <string name="error_channel_close_timeout">Канал не может быть открыт в срок.</string>
+    <string name="error_channel_close_timeout">Канал не может быть закрыт в срок.</string>
     <string name="advanced_channel_details_lifetime_closed">Время жизни</string>
     <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
     <string name="backup_data_restore_failed_description">Скорее всего, вы ввели неверный пароль.</string>
@@ -819,4 +819,21 @@
     <string name="settings_tor_summary">Анонимизировать весь веб-трафик, используя сеть Tor. Это влияет только на получение обменных курсов или взаимодействие с службами LNURL. Использовать или нет Tor для подключения к узлу может быть настроено для каждого узла в его настройках подключения.</string>
     <string name="settings_scramblePin">Перемешать экран PIN-кода</string>
     <string name="settings_hideAllBalances_explanation">Все балансы размыты, а общий баланс скрыт за логотипом BitBanan. Просто нажмите на любое размытое поле или логотип BitBanana, чтобы временно раскрыть ваш баланс.</string>
+    <string name="sort_by">Сортировка по</string>
+    <string name="sort_by_age_asc">Возраст (сначала новые)</string>
+    <string name="sort_by_symmetry_asc">Симетрия (сначала несбалансированные)</string>
+    <string name="sort_by_symmetry_desc">Симетрия (сначала сбалансированные)</string>
+    <string name="settings_backendTimeout">Таймаут бэкенда</string>
+    <string name="settings_paymentTimeout">Таймаут платежа</string>
+    <string name="sort_by_name_asc">Название (A-Z)</string>
+    <string name="sort_by_name_desc">Название (Z-A)</string>
+    <string name="sort_by_capacity_desc">Ёмкость (с наибольшей)</string>
+    <string name="sort_by_capacity_asc">Ёмкость (с наименьшей)</string>
+    <string name="sort_by_inbound_capacity_asc">Ёмкость на получение (с наименьшей)</string>
+    <string name="sort_by_inbound_capacity_desc">Ёмкость на получение (с наибольшей)</string>
+    <string name="sort_by_outbound_capacity_asc">Ёмкость на отправку (с наименьшей)</string>
+    <string name="sort_by_outbound_capacity_desc">Ёмкость на отправку (с наибольшей)</string>
+    <string name="sort_by_age_desc">Возраст (сначала старые)</string>
+    <string name="sort_by_value_asc">Сумма (с наименьшей)</string>
+    <string name="sort_by_value_desc">Сумма (с наибольшей)</string>
 </resources>
