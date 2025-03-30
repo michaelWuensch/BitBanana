@@ -1009,4 +1009,6 @@
     <string name="max_fee">Taxa máxima</string>
     <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém seus canais de pagamento prontos para a ação! Se um lado estiver baixo, seu canal pode enviar apenas em uma direção, e os pagamentos podem começar a falhar. Enviar fundos em uma rota circular redistribui balanços sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
     <string name="fee_paid">Taxas pagas</string>
+    <string name="guardian_remoteConnect_nwc">Você tem certeza que quer conectar ao \n\n%1$s\n\nPor favor verifique a chave pública antes de adicionar a carteira.</string>
+    <string name="sort_by">Classificar por</string>
 </resources>
