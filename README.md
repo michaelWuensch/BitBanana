@@ -16,8 +16,7 @@ BitBanana forked from Zap Android. You can find more information about this on t
 
 ## Getting started
 
-The easiest way to get started is using [Start9](https://start9.com/) or [Umbrel](https://getumbrel.com/) to run LND or Core Lightning on a raspberry pi and then connect BitBanana to that node.
-There are of course a lot more possible ways to run a node, so please refer to the [setup](https://github.com/michaelWuensch/BitBanana/wiki/Setup) section in the Wiki if you need help to get started.
+Download and install the app from [GitHub](https://github.com/michaelWuensch/BitBanana/releases/latest) or any of the following sources.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -32,7 +31,7 @@ There are of course a lot more possible ways to run a node, so please refer to t
      alt="Get it on Android Freeware"
      height="80">](https://www.androidfreeware.net/download-bitbanana-apk.html)
 
-Or download the latest APK from the [Releases Section](https://github.com/michaelWuensch/BitBanana/releases/latest) on GitHub.
+For setup instructions and to get everything up and running, check out our [documentation](https://docs.bitbanana.app/).
 
 ## Features
 **General**
@@ -141,6 +140,15 @@ See these [reproduce](docs/REPRODUCE.md) instructions.
 
 ## Maintainers
 - [Michael Wünsch](https://github.com/michaelWuensch)
+
+##  Acknowledgements
+
+We are incredibly thankful to GitBook and Weblate for supporting our project by providing their services free of charge.
+
+- [GitBook](https://www.gitbook.com/) helps us maintain and share our documentation effectively.
+- [Weblate](https://weblate.org/) makes it easy for our community to contribute translations and keep our project accessible to users worldwide.
+
+Their support is invaluable and greatly appreciated! 🙌
 
 ## License
 
