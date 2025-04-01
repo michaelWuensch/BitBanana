@@ -12,6 +12,8 @@ public class BTCPayConfigJson {
     List<BTCPayConfig> configurations;
 
     public BTCPayConfig getConfiguration(@NonNull String type, @NonNull String cryptoCode) {
+        if (configurations == null)
+            return null;
         for (BTCPayConfig btcPayConfig : configurations) {
             if (btcPayConfig.getType().toLowerCase().equals(type.toLowerCase())
                     && btcPayConfig.getCryptoCode().toLowerCase().equals(cryptoCode.toLowerCase())) {
