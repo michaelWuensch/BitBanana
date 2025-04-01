@@ -61,9 +61,9 @@ public class StaticInternetIdentifierReader {
                 }
                 if (!result.isAuthenticData()) {
                     // Response was not secured with DNSSEC.
-                    BBLog.e(LOG_TAG, "Bip353DNSLookup result is not authentic. DNSSEC failed.");
+                    BBLog.w(LOG_TAG, "Bip353DNSLookup result is not authentic. DNSSEC failed.");
                     mainHandler.post(() -> {
-                        listener.onError("Bip353DNSLookup result is not authentic. DNSSEC failed.", RefConstants.ERROR_DURATION_MEDIUM);
+                        checkLnurl(lnAddress, ctx, listener);
                     });
                     return;
                 }
@@ -80,7 +80,7 @@ public class StaticInternetIdentifierReader {
                                 || rrsig.algorithm == DnssecConstants.SignatureAlgorithm.DSA_NSEC3_SHA1) {
                             BBLog.w(LOG_TAG, "Bip353DNSLookup denied: DNSSEC signature uses SHA-1.");
                             mainHandler.post(() -> {
-                                listener.onError("Bip353DNSLookup denied: DNSSEC signature uses SHA-1.", RefConstants.ERROR_DURATION_MEDIUM);
+                                checkLnurl(lnAddress, ctx, listener);
                             });
                             return;
                         }
@@ -100,7 +100,7 @@ public class StaticInternetIdentifierReader {
                 }
 
                 if (validTXTs.isEmpty()) {
-                    BBLog.d(LOG_TAG, "Bip353DNSLookup: No valid txt entry.");
+                    BBLog.w(LOG_TAG, "Bip353DNSLookup: No valid txt entry.");
                     mainHandler.post(() -> {
                         checkLnurl(lnAddress, ctx, listener);
                     });
@@ -109,7 +109,7 @@ public class StaticInternetIdentifierReader {
                 if (validTXTs.size() > 1) {
                     BBLog.w(LOG_TAG, "Bip353DNSLookup: More than one valid entry. This is not allowed.");
                     mainHandler.post(() -> {
-                        listener.onError("Bip353DNSLookup: More than one valid entry. This is not allowed.", RefConstants.ERROR_DURATION_MEDIUM);
+                        checkLnurl(lnAddress, ctx, listener);
                     });
                     return;
                 }
