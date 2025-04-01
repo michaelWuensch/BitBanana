@@ -54,7 +54,7 @@ public class LnAddress implements Serializable {
             - the string has no white spaces
             - username is a lowercase alphanumeric (including "." and "_") string of at least one character
             - username is followed by exactly one "@"
-            - domain name has at leas one "."
+            - domain name has at least one "."
             - domain name uses only alphanumeric character (including "-")
         */
         String regexPattern = "^[a-z0-9_.]+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]+$";
@@ -70,7 +70,7 @@ public class LnAddress implements Serializable {
             - the string has no white spaces
             - username is an alphanumeric (including ".", "_" and "-") string of at least one character
             - username is followed by exactly one "@"
-            - domain name has at leas one "."
+            - domain name has at least one "."
             - domain name uses only alphanumeric character (including "-")
         */
         String regexPattern = "^₿?[a-zA-Z0-9_.-]+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]+$";
