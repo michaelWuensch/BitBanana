@@ -288,7 +288,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                             Bip21Invoice bip21Invoice = Bip21Invoice.newBuilder()
                                     .setAddress(response)
                                     .setAmount(mAmountInput.getAmount())
-                                    .setMessage(mDescriptionView.getData())
+                                    .setMessageURLEncode(mDescriptionView.getData())
                                     .build();
                             Intent intent = new Intent(getActivity(), GeneratedRequestActivity.class);
                             intent.putExtra("onChain", mOnChain);
