@@ -103,4 +103,12 @@
     <string name="percent">Procent</string>
     <string name="disconnect">Afbryd</string>
     <string name="network">Netværk</string>
+    <string name="advanced_channel_details_explanation_initiator">Hvem åbnede kanalen?</string>
+    <string name="advanced_channel_details_initiator_you">Dig</string>
+    <string name="advanced_channel_details_initiator_peer">Peer</string>
+    <string name="advanced_channel_details_lifetime">Alder</string>
+    <string name="advanced_channel_details_activity">Aktivitet</string>
+    <string name="advanced_channel_details_explanation_close_initiator">Hvem lukkede kanalen?</string>
+    <string name="lightning">Lightning</string>
+    <string name="ln_address">Lightning addresse</string>
 </resources>
