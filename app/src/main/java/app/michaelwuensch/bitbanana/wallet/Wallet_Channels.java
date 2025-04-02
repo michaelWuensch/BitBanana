@@ -253,7 +253,7 @@ public class Wallet_Channels {
                     BBLog.v(LOG_TAG, htlcEvent.toString());
                     if (htlcEvent.hasSettleEvent() || (htlcEvent.hasFinalHtlcEvent() && htlcEvent.getFinalHtlcEvent().getSettled())) {
                         Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a htlc event occurs.
-                        updateLNDChannelsWithDebounce(); // Always update channels if a htlc event occurs.
+                        updateChannelsWithDebounce(); // Always update channels if a htlc event occurs.
                     }
                     broadcastHtlcEvent(htlcEvent);
                 }));
@@ -295,13 +295,13 @@ public class Wallet_Channels {
                     }
                     BBLog.v(LOG_TAG, channelEventUpdate.toString());
 
-                    updateLNDChannelsWithDebounce();
+                    updateChannelsWithDebounce();
                     broadcastChannelEvent(channelEventUpdate);
                 }));
     }
 
-    public void updateLNDChannelsWithDebounce() {
-        BBLog.d(LOG_TAG, "Fetch channels from LND. (debounce)");
+    public void updateChannelsWithDebounce() {
+        BBLog.d(LOG_TAG, "Fetch channels. (debounce)");
 
         mChannelsUpdateDebounceHandler.attempt(this::fetchChannels, DebounceHandler.DEBOUNCE_1_SECOND);
     }

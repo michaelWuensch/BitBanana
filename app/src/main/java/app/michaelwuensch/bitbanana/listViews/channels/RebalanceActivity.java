@@ -356,8 +356,7 @@ public class RebalanceActivity extends BaseAppCompatActivity {
             public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 BBLog.i(LOG_TAG, "Rebalance success!");
                 showSuccessScreen(sendLnPaymentResponse);
-                if (!BackendManager.getCurrentBackend().supportsEventSubscriptions())
-                    Wallet_Channels.getInstance().fetchChannels();
+                Wallet_Channels.getInstance().updateChannelsWithDebounce();
             }
 
             @SuppressLint("StringFormatInvalid")
