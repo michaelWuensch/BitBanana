@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Field;
@@ -58,7 +59,25 @@ public class GenericFallbackDeserializer<T> implements JsonDeserializer<T> {
 
     private Object parseElementAsStringOrDefault(JsonElement element, Class<?> fieldType, JsonDeserializationContext context) {
         if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-            return element.getAsString();
+            JsonPrimitive primitive = element.getAsJsonPrimitive();
+
+            String value = primitive.getAsString();
+
+            // Convert strings to numbers if needed
+            try {
+                if (fieldType == Long.class || fieldType == long.class) {
+                    return Long.parseLong(value);
+                } else if (fieldType == Integer.class || fieldType == int.class) {
+                    return Integer.parseInt(value);
+                } else if (fieldType == Double.class || fieldType == double.class) {
+                    return Double.parseDouble(value);
+                }
+            } catch (NumberFormatException e) {
+                throw new JsonParseException("Failed to parse string to " + fieldType.getSimpleName() + ": " + value, e);
+            }
+
+            // Otherwise, return the string itself
+            return value;
         } else if (element.isJsonObject()) {
             JsonObject obj = element.getAsJsonObject();
             if (obj.has("type") && "Buffer".equals(obj.get("type").getAsString()) && obj.has("data")) {
