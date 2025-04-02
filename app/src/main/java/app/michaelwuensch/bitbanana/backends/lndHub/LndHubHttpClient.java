@@ -15,6 +15,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lndHub.models.LndHubAuthResponse;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import okhttp3.Authenticator;
 import okhttp3.Interceptor;
@@ -44,7 +45,7 @@ public class LndHubHttpClient {
             mHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AccessTokenInterceptor())
                     .authenticator(new TokenRefreshAuthenticator())
-                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .proxy(torProxy)
                     .build();
             BBLog.d(LOG_TAG, "LndHubHttpClient created. Socks Proxy Port: " + TorManager.getInstance().getSocksProxyPort());
@@ -52,6 +53,7 @@ public class LndHubHttpClient {
             mHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AccessTokenInterceptor())
                     .authenticator(new TokenRefreshAuthenticator())
+                    .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .build();
             BBLog.d(LOG_TAG, "LndHubHttpClient created.");
         }
