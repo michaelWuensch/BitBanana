@@ -87,4 +87,19 @@
     <string name="channel_remote_balance">Ekstern Balance</string>
     <string name="channel_no_alias">Unavngivet</string>
     <string name="channel_close_time">Closing Time Delay</string>
+    <string name="manually">Manuelt</string>
+    <string name="available">Til rådighed</string>
+    <string name="node">Node</string>
+    <string name="pubkey">Offentlig nøgle</string>
+    <string name="you">Du</string>
+    <string name="description">Beskrivelse</string>
+    <string name="maximum_abbreviation">maksimum</string>
+    <string name="save">Gem</string>
+    <string name="send">Send</string>
+    <string name="scan">Scan</string>
+    <string name="notConnected">Ikke forbundet</string>
+    <string name="documentation">Dokumentation</string>
+    <string name="ok">OK</string>
+    <string name="percent">Procent</string>
+    <string name="disconnect">Afbryd</string>
 </resources>
