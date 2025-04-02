@@ -5,14 +5,21 @@ import androidx.annotation.NonNull;
 import com.google.common.net.UrlEscapers;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 
 public class Bip21Invoice implements Serializable {
 
+    private static final String LOG_TAG = Bip21Invoice.class.getSimpleName();
+
     private final String Address;
     private final long Amount;
+    private final String Label;
+    private final boolean hasLabel;
     private final String Message;
     private final boolean hasMessage;
     /**
@@ -28,6 +35,8 @@ public class Bip21Invoice implements Serializable {
     private Bip21Invoice(Builder builder) {
         this.Address = builder.Address;
         this.Amount = builder.Amount;
+        this.Label = builder.Label;
+        this.hasLabel = builder.hasLabel;
         this.Message = builder.Message;
         this.hasMessage = builder.hasMessage;
         this.Lightning = builder.Lightning;
@@ -49,11 +58,41 @@ public class Bip21Invoice implements Serializable {
         return Amount != 0;
     }
 
+    public String getLabel() {
+        return Label;
+    }
+
+    public String getLabelURLDecoded() {
+        if (!hasLabel)
+            return Label;
+        try {
+            return URLDecoder.decode(Label, "UTF-8");
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while decoding label: " + e.getMessage());
+            return Label;
+        }
+    }
+
+    public boolean hasLabel() {
+        return hasLabel;
+    }
+
     public String getMessage() {
         return Message;
     }
 
-    public boolean hasDescription() {
+    public String getMessageURLDecoded() {
+        if (!hasMessage)
+            return Message;
+        try {
+            return URLDecoder.decode(Message, "UTF-8");
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "Error while decoding message: " + e.getMessage());
+            return Message;
+        }
+    }
+
+    public boolean hasMessage() {
         return hasMessage;
     }
 
@@ -88,6 +127,8 @@ public class Bip21Invoice implements Serializable {
 
         private String Address;
         private long Amount;
+        private String Label;
+        private boolean hasLabel;
         private String Message;
         private boolean hasMessage;
         private String Lightning;
@@ -117,6 +158,32 @@ public class Bip21Invoice implements Serializable {
         public Builder setMessage(String message) {
             Message = message;
             hasMessage = message != null && !message.isEmpty();
+            return this;
+        }
+
+        public Builder setMessageURLEncode(String message) {
+            try {
+                Message = URLEncoder.encode(message, "UTF-8");
+                hasMessage = message != null && !message.isEmpty();
+            } catch (Exception e) {
+                BBLog.w(LOG_TAG, "Error while encoding message: " + e.getMessage());
+            }
+            return this;
+        }
+
+        public Builder setLabel(String label) {
+            Label = label;
+            hasLabel = label != null && !label.isEmpty();
+            return this;
+        }
+
+        public Builder setLabelURLEncode(String label) {
+            try {
+                Label = URLEncoder.encode(label, "UTF-8");
+                hasLabel = label != null && !label.isEmpty();
+            } catch (Exception e) {
+                BBLog.w(LOG_TAG, "Error while encoding label: " + e.getMessage());
+            }
             return this;
         }
 

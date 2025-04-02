@@ -92,8 +92,8 @@ public class RefConstants {
     public static final int LN_MAX_PARTS = 10;
 
     // URLS
-    public static final String URL_HELP = "https://github.com/michaelWuensch/BitBanana/wiki";
-    public static final String URL_HELP_SETUP = "https://github.com/michaelWuensch/BitBanana/wiki/Setup";
+    public static final String URL_HELP = "https://docs.bitbanana.app/";
+    public static final String URL_HELP_SETUP = "https://docs.bitbanana.app/";
     public static final String URL_PRIVACY = "https://bitbanana.app/privacy";
     public static final String URL_CONTRIBUTE = "https://bitbanana.app/contribute";
     public static final String URL_DONATE = "https://bitbanana.app/donate";

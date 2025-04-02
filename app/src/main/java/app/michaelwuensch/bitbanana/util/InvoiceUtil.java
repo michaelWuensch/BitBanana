@@ -136,6 +136,7 @@ public class InvoiceUtil {
 
                     long onChainInvoiceAmount = 0L;
                     String onChainInvoiceMessage = null;
+                    String bip21Label = null;
                     String lightningInvoice = null;
                     String bolt12Offer = null;
                     String lnurl = null;
@@ -145,8 +146,13 @@ public class InvoiceUtil {
                         String[] valuePairs = bitcoinURI.getQuery().split("&");
                         for (String pair : valuePairs) {
                             String[] param = pair.split("=");
+                            if (param.length < 2)
+                                continue;
                             if (param[0].equals("amount")) {
                                 onChainInvoiceAmount = (long) (Double.parseDouble(param[1]) * 1e8 * 1000L);
+                            }
+                            if (param[0].equals("label")) {
+                                bip21Label = param[1];
                             }
                             if (param[0].equals("message")) {
                                 onChainInvoiceMessage = param[1];
@@ -165,6 +171,7 @@ public class InvoiceUtil {
                         Bip21Invoice onChainInvoice = Bip21Invoice.newBuilder()
                                 .setAddress(onChainAddress)
                                 .setAmount(onChainInvoiceAmount)
+                                .setLabel(bip21Label)
                                 .setMessage(onChainInvoiceMessage)
                                 .build();
 

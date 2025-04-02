@@ -129,7 +129,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
         intent.putExtra("onChain", true);
         intent.putExtra("onChainAddress", onChainInvoice.getAddress());
         intent.putExtra("onChainAmount", onChainInvoice.getAmount());
-        intent.putExtra("onChainMessage", onChainInvoice.getMessage());
+        intent.putExtra("onChainMessage", onChainInvoice.getMessageURLDecoded());
         SendBSDFragment sendBottomSheetDialog = new SendBSDFragment();
         sendBottomSheetDialog.setArguments(intent.getExtras());
         return sendBottomSheetDialog;
