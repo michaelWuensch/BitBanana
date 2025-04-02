@@ -339,7 +339,7 @@ public class ChannelDetailBSDFragment extends BaseBSDFragment implements Wallet_
         if (getActivity() != null && mChannelPoint.equals(channelPoint)) {
 
             // fetch channels after closing finished
-            Wallet_Channels.getInstance().updateLNDChannelsWithDebounce();
+            Wallet_Channels.getInstance().updateChannelsWithDebounce();
 
             getActivity().runOnUiThread(() -> {
                 if (status == Wallet_Channels.ChannelCloseUpdateListener.SUCCESS) {

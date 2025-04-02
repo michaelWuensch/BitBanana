@@ -301,7 +301,7 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
         if (mLightningNodeUri.getPubKey().equals(nodePubKey)) {
             if (status == Wallet_Channels.ChannelOpenUpdateListener.SUCCESS) {
                 // fetch channels after open
-                Wallet_Channels.getInstance().updateLNDChannelsWithDebounce();
+                Wallet_Channels.getInstance().updateChannelsWithDebounce();
                 getActivity().runOnUiThread(this::switchToSuccessScreen);
             } else {
                 getActivity().runOnUiThread(() -> switchToFailedScreen(getDetailedErrorMessage(status, message)));
