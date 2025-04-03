@@ -39,6 +39,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.customView.BBAmountInput;
@@ -64,6 +65,8 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PaymentUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
+import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -412,6 +415,16 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             @Override
             public void onSuccess(SendLnPaymentResponse sendLnPaymentResponse) {
                 mHandler.postDelayed(() -> executeSuccessAction(successAction, sendLnPaymentResponse), 300);
+                if (!BackendManager.getCurrentBackend().supportsEventSubscriptions()) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // We delay it as the node might not return the correct results if we call this to early (CoreLightning)
+                            Wallet_Balance.getInstance().fetchBalances();
+                            Wallet_TransactionHistory.getInstance().fetchTransactionHistory();
+                        }
+                    }, 500);
+                }
             }
 
             @SuppressLint("StringFormatInvalid")
