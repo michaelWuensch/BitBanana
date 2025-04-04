@@ -189,4 +189,13 @@
     <string name="activity_peers">Połączenia</string>
     <string name="forwarded">Przekazano</string>
     <string name="summary">Podsumowanie</string>
+    <string name="remove">Usuń</string>
+    <string name="deactivate">Dezaktywuj</string>
+    <string name="terminated">Zakończony</string>
+    <string name="exhausted">Wyczerpany</string>
+    <string name="id">ID</string>
+    <string name="reactivate">Reaktywuj</string>
+    <string name="inactive">Nieaktywny</string>
+    <string name="active">Aktywny</string>
+    <string name="requested_payment">Zażądano</string>
 </resources>
