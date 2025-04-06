@@ -490,7 +490,7 @@
     <string name="stealth_mode_description_calc">BitBanana теперь похожа на калькулятор!</string>
     <string name="peer_ping">Пинг</string>
     <string name="channel_close_force_confirmation">Вы действительно хотите принудительно закрыть канал со:\n\n%1$s\n\nВаши средства будут заблокированы для %2$s.</string>
-    <string name="receive_on_chain_request">Заброс через блокчейн</string>
+    <string name="receive_on_chain_request">Запрос через блокчейн</string>
     <string name="guardian_remoteConnect">Вы уверены, что хотите подключиться к \n\n%1$s\n\nвнимательно проверьте имя хоста.</string>
     <string name="settings_customBlockExplorer_address_suffix">Суффикс адреса</string>
     <string name="settings_customBlockExplorer_transaction_suffix">Суффикс транзакции</string>
@@ -703,7 +703,7 @@
     <string name="channel_open_error">Ошибка открытия канала</string>
     <string name="settings_scan_clipboard">Проверить буфер обмена</string>
     <string name="settings_removePin">Удалить PIN-код</string>
-    <string name="backup_data_restore_headline">Востановить</string>
+    <string name="backup_data_restore_headline">Восстановить</string>
     <string name="drawer_menu_backup">Резервная копия</string>
     <string name="backup_data_password_empty">Пароль должен содержать не менее 8 символов.</string>
     <string name="backup_data_restore_failed_title">Не удалось восстановить</string>
@@ -763,7 +763,7 @@
     <string name="invoice_detail">Подробности счёта-фактуры</string>
     <string name="app_reset_message">Приложение было сброшено, поскольку последнее обновление включало некоторые структурные изменения.\nК сожалению, вам придется снова пройти процесс настройки.</string>
     <string name="lnurl_channel_opening_question">Вы действительно хотите открыть канал со:</string>
-    <string name="backup_data_create_headline">Backup</string>
+    <string name="backup_data_create_headline">Резервная копия</string>
     <string name="backup_data_backupVersion_too_old">Эта версия была создана с очень старой версией BitBanana. К сожалению, она больше не поддерживается.</string>
     <string name="vpn_no_vpn">Без VPN</string>
     <string name="connection_state_disconnecting">Очистить последнее соединение…</string>
