@@ -156,7 +156,7 @@
     <string name="error_emptyClipboardPayment">Sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_emptyClipboardConnect">Sua área de transferência não contém nenhum dado de conexão.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
 \nCertifique-se de usar o seguinte formato:
@@ -448,7 +448,7 @@
     </plurals>
     <string name="fee_tier_slow_title">Lento</string>
     <string name="fee_tier_medium_title">Médio</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- String Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- String Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu arquivo de configuração do servidor BTCPay</string>
     <string name="change_data">Mudar dados</string>
     <string name="invoice_detail">Detalhes da cobrança</string>
     <string name="string_analyzer_unrecognized_data">Dados não reconhecidos.</string>
@@ -474,9 +474,9 @@
     <string name="backup_data_no_data">Nenhum dado para fazer backup.</string>
     <string name="backup_data_invalid_file_chosen">Este não é um arquivo de backup válido. Por favor escolha um arquivo que foi criado com este app.</string>
     <string name="error_channel_open">Não pôde abrir canal com o nó conectado: %s</string>
-    <string name="channel_summary_total_outbound">Total enviado</string>
+    <string name="channel_summary_total_outbound">Capacidade de envio</string>
     <string name="error_lnd_connection_failed">Conexão a LND falhou, por favor tente novamente.</string>
-    <string name="channel_summary_total_inbound">Total recebido</string>
+    <string name="channel_summary_total_inbound">Capacidade de recebimento</string>
     <string name="error_channel_close">Não pôde fechar o canal: %s</string>
     <string name="clipboard_scan_payment">Sua área de transferência contém informações de pagamento. Deseja iniciar um pagamento\?</string>
     <string name="lnurl_withdraw_success">Saque
@@ -628,7 +628,7 @@
     <string name="drawer_menu_backup">Backup</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="advanced_channel_details_commit_fee">Commit Fee</string>
-    <string name="channel_summary_total_unavailable">Total off-line</string>
+    <string name="channel_summary_total_unavailable">Off-line</string>
     <string name="settings_receiveAddressDisplayValues_2">Taproot (Bech32m)</string>
     <string name="ok">OK</string>
     <string name="signature_pubkey">Pubkey:</string>
@@ -1007,8 +1007,29 @@
     <string name="error_channel_rebalance_no_fee_rate">Você deve definir uma taxa máxima de cobrança.</string>
     <string name="rebalance">Rebalancear</string>
     <string name="max_fee">Taxa máxima</string>
-    <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém seus canais de pagamento prontos para a ação! Se um lado estiver baixo, seu canal pode enviar apenas em uma direção, e os pagamentos podem começar a falhar. Enviar fundos em uma rota circular redistribui balanços sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
+    <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém seus canais de pagamento prontos para a ação! Se um lado estiver baixo, seu canal funcionará apenas em uma direção, e os pagamentos podem começar a falhar. Enviar um pagamento Lightning em uma rota circular para si mesmo redistribui balanços entre seus canais sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
     <string name="fee_paid">Taxas pagas</string>
     <string name="guardian_remoteConnect_nwc">Você tem certeza que quer conectar ao \n\n%1$s\n\nPor favor verifique a chave pública antes de adicionar a carteira.</string>
     <string name="sort_by">Classificar por</string>
+    <string name="error_nwc_setup_failed">Falha ao iniciar conexão Nostr Wallet Connect.</string>
+    <string name="guardian_custodial_nwc">Você está conectado a uma carteira usando o protocolo Nostr Wallet Connect. A não ser que seja o host desse serviço, esse arranjo é custodial. A entidade gerenciando o serviço tem controle sobre seu dinheiro e pode ver seu histórico de transação. Apenas deposite o quanto confiar a eles.</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="settings_backendTimeout_dialogMessage">Especifica o número de segundos que o app aguardará por uma resposta do backend. Se nenhuma resposta chegar antes do tempo acabar, a solicitação falhará. Para conexões a internet lentas, considere aumentar esse limite. Ao usar o Tor, o app multiplica esse número por 3 para compensar a latência do Tor.</string>
+    <string name="settings_paymentTimeout_dialogMessage">Esse ajuste define o número máximo de segundos que o app vai gastar tentando um pagamento Lightning. Se nenhuma rota for encontrada nesse tempo, o pagamento será cancelado. Se o tempo expira com frequência, tente aumentar esse limite.</string>
+    <string name="settings_paymentTimeout">Tempo-limite de pagamento</string>
+    <string name="settings_backendTimeout">Tempo-limite do backend</string>
+    <string name="sort_by_capacity_desc">Capacidade (maior primeiro)</string>
+    <string name="sort_by_inbound_capacity_asc">Capacidade de recebimento (menor primeiro)</string>
+    <string name="sort_by_inbound_capacity_desc">Capacidade de recebimento (maior primeiro)</string>
+    <string name="sort_by_name_asc">Nome (A-Z)</string>
+    <string name="sort_by_name_desc">Nome (Z-A)</string>
+    <string name="sort_by_capacity_asc">Capacidade (menor primeiro)</string>
+    <string name="sort_by_outbound_capacity_asc">Capacidade de envio (menor primeiro)</string>
+    <string name="sort_by_age_asc">Idade (mais novo primeiro)</string>
+    <string name="sort_by_outbound_capacity_desc">Capacidade de envio (maior primeiro)</string>
+    <string name="sort_by_symmetry_asc">Simetria (desbalanceado primeiro)</string>
+    <string name="sort_by_age_desc">Idade (mais velho primeiro)</string>
+    <string name="sort_by_value_asc">Valor (menor primeiro)</string>
+    <string name="sort_by_symmetry_desc">Simetria (balanceado primeiro)</string>
+    <string name="sort_by_value_desc">Valor (maior primeiro)</string>
 </resources>
