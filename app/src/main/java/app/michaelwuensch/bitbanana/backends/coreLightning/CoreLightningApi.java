@@ -3,10 +3,11 @@ package app.michaelwuensch.bitbanana.backends.coreLightning;
 import com.github.ElementsProject.lightning.cln.Amount;
 import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
-import com.github.ElementsProject.lightning.cln.BkprlistincomeIncome_events;
+import com.github.ElementsProject.lightning.cln.BkprlistincomeIncomeEvents;
 import com.github.ElementsProject.lightning.cln.BkprlistincomeRequest;
 import com.github.ElementsProject.lightning.cln.BkprlistincomeResponse;
 import com.github.ElementsProject.lightning.cln.ChannelSide;
+import com.github.ElementsProject.lightning.cln.ChannelState;
 import com.github.ElementsProject.lightning.cln.CheckmessageRequest;
 import com.github.ElementsProject.lightning.cln.CloseRequest;
 import com.github.ElementsProject.lightning.cln.ConnectRequest;
@@ -301,7 +302,7 @@ public class CoreLightningApi extends Api {
                 .map(response -> {
                     List<OpenChannel> openChannelsList = new ArrayList<>();
                     for (ListpeerchannelsChannels channel : response.getChannelsList())
-                        if (channel.getState() == ListpeerchannelsChannels.ListpeerchannelsChannelsState.CHANNELD_NORMAL)
+                        if (channel.getState() == ChannelState.ChanneldNormal)
                             openChannelsList.add(OpenChannel.newBuilder()
                                     .setActive(channel.getPeerConnected())
                                     .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
@@ -341,24 +342,24 @@ public class CoreLightningApi extends Api {
                 .map(response -> {
                             List<PendingChannel> pendingChannelsList = new ArrayList<>();
                             for (ListpeerchannelsChannels channel : response.getChannelsList())
-                                if (channel.getState() != ListpeerchannelsChannels.ListpeerchannelsChannelsState.CHANNELD_NORMAL
-                                        && channel.getState() != ListpeerchannelsChannels.ListpeerchannelsChannelsState.ONCHAIN) {
+                                if (channel.getState() != ChannelState.ChanneldNormal
+                                        && channel.getState() != ChannelState.Onchain) {
                                     PendingChannel.PendingType pendingType;
                                     switch (channel.getState()) {
-                                        case OPENINGD:
-                                        case CHANNELD_AWAITING_LOCKIN:
-                                        case DUALOPEND_OPEN_INIT:
-                                        case DUALOPEND_OPEN_COMMITTED:
-                                        case DUALOPEND_AWAITING_LOCKIN:
+                                        case Openingd:
+                                        case ChanneldAwaitingLockin:
+                                        case DualopendOpenInit:
+                                        case DualopendOpenCommitted:
+                                        case DualopendAwaitingLockin:
                                             pendingType = PendingChannel.PendingType.PENDING_OPEN;
                                             break;
-                                        case CHANNELD_SHUTTING_DOWN:
-                                        case CLOSINGD_SIGEXCHANGE:
-                                        case CLOSINGD_COMPLETE:
+                                        case ChanneldShuttingDown:
+                                        case ClosingdSigexchange:
+                                        case ClosingdComplete:
                                             pendingType = PendingChannel.PendingType.PENDING_CLOSE;
                                             break;
-                                        case AWAITING_UNILATERAL:
-                                        case FUNDING_SPEND_SEEN:
+                                        case AwaitingUnilateral:
+                                        case FundingSpendSeen:
                                             pendingType = PendingChannel.PendingType.PENDING_FORCE_CLOSE;
                                             break;
                                         default:
@@ -434,7 +435,7 @@ public class CoreLightningApi extends Api {
                                 .build());
                     }
                     for (ListpeerchannelsChannels channel : peerListResponse.getChannelsList())
-                        if (channel.getState() == ListpeerchannelsChannels.ListpeerchannelsChannelsState.ONCHAIN) {
+                        if (channel.getState() == ChannelState.Onchain) {
                             ClosedChannel.Builder listPeerClosedChannelBuilder = ClosedChannel.newBuilder()
                                     .setRemotePubKey(ApiUtil.StringFromHexByteString(channel.getPeerId()))
                                     //.setCloseTransactionId(ApiUtil.StringFromHexByteString(channel.getScratchTxid())) // correct ?
@@ -628,7 +629,7 @@ public class CoreLightningApi extends Api {
 
             return Single.zip(bkprIncomeRequest, transactionsRequest, (bkprResponse, transactionsResponse) -> {
                         List<OnChainTransaction> eventList = new ArrayList<>();
-                        for (BkprlistincomeIncome_events incomeEvent : bkprResponse.getIncomeEventsList()) {
+                        for (BkprlistincomeIncomeEvents incomeEvent : bkprResponse.getIncomeEventsList()) {
                             /*
                             BBLog.e(LOG_TAG, "account: " + incomeEvent.getAccount());
                             BBLog.e(LOG_TAG, "type: " + incomeEvent.getTag());

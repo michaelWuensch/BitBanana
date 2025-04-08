@@ -125,13 +125,13 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.FetchinvoiceResponse> fetchInvoice(com.github.ElementsProject.lightning.cln.FetchinvoiceRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Fundchannel_cancelResponse> fundChannel_Cancel(com.github.ElementsProject.lightning.cln.Fundchannel_cancelRequest request);
+    Single<com.github.ElementsProject.lightning.cln.FundchannelCancelResponse> fundChannelCancel(com.github.ElementsProject.lightning.cln.FundchannelCancelRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Fundchannel_completeResponse> fundChannel_Complete(com.github.ElementsProject.lightning.cln.Fundchannel_completeRequest request);
+    Single<com.github.ElementsProject.lightning.cln.FundchannelCompleteResponse> fundChannelComplete(com.github.ElementsProject.lightning.cln.FundchannelCompleteRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.FundchannelResponse> fundChannel(com.github.ElementsProject.lightning.cln.FundchannelRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Fundchannel_startResponse> fundChannel_Start(com.github.ElementsProject.lightning.cln.Fundchannel_startRequest request);
+    Single<com.github.ElementsProject.lightning.cln.FundchannelStartResponse> fundChannelStart(com.github.ElementsProject.lightning.cln.FundchannelStartRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.GetlogResponse> getLog(com.github.ElementsProject.lightning.cln.GetlogRequest request);
 
@@ -155,15 +155,15 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.OfferResponse> offer(com.github.ElementsProject.lightning.cln.OfferRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Openchannel_abortResponse> openChannel_Abort(com.github.ElementsProject.lightning.cln.Openchannel_abortRequest request);
+    Single<com.github.ElementsProject.lightning.cln.OpenchannelAbortResponse> openChannelAbort(com.github.ElementsProject.lightning.cln.OpenchannelAbortRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Openchannel_bumpResponse> openChannel_Bump(com.github.ElementsProject.lightning.cln.Openchannel_bumpRequest request);
+    Single<com.github.ElementsProject.lightning.cln.OpenchannelBumpResponse> openChannelBump(com.github.ElementsProject.lightning.cln.OpenchannelBumpRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Openchannel_initResponse> openChannel_Init(com.github.ElementsProject.lightning.cln.Openchannel_initRequest request);
+    Single<com.github.ElementsProject.lightning.cln.OpenchannelInitResponse> openChannelInit(com.github.ElementsProject.lightning.cln.OpenchannelInitRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Openchannel_signedResponse> openChannel_Signed(com.github.ElementsProject.lightning.cln.Openchannel_signedRequest request);
+    Single<com.github.ElementsProject.lightning.cln.OpenchannelSignedResponse> openChannelSigned(com.github.ElementsProject.lightning.cln.OpenchannelSignedRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Openchannel_updateResponse> openChannel_Update(com.github.ElementsProject.lightning.cln.Openchannel_updateRequest request);
+    Single<com.github.ElementsProject.lightning.cln.OpenchannelUpdateResponse> openChannelUpdate(com.github.ElementsProject.lightning.cln.OpenchannelUpdateRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.PingResponse> ping(com.github.ElementsProject.lightning.cln.PingRequest request);
 
@@ -189,11 +189,11 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.SignmessageResponse> signMessage(com.github.ElementsProject.lightning.cln.SignmessageRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Splice_initResponse> splice_Init(com.github.ElementsProject.lightning.cln.Splice_initRequest request);
+    Single<com.github.ElementsProject.lightning.cln.SpliceInitResponse> spliceInit(com.github.ElementsProject.lightning.cln.SpliceInitRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Splice_signedResponse> splice_Signed(com.github.ElementsProject.lightning.cln.Splice_signedRequest request);
+    Single<com.github.ElementsProject.lightning.cln.SpliceSignedResponse> spliceSigned(com.github.ElementsProject.lightning.cln.SpliceSignedRequest request);
 
-    Single<com.github.ElementsProject.lightning.cln.Splice_updateResponse> splice_Update(com.github.ElementsProject.lightning.cln.Splice_updateRequest request);
+    Single<com.github.ElementsProject.lightning.cln.SpliceUpdateResponse> spliceUpdate(com.github.ElementsProject.lightning.cln.SpliceUpdateRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.DevspliceResponse> devSplice(com.github.ElementsProject.lightning.cln.DevspliceRequest request);
 
@@ -269,6 +269,8 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.InjectpaymentonionResponse> injectPaymentOnion(com.github.ElementsProject.lightning.cln.InjectpaymentonionRequest request);
 
+    Single<com.github.ElementsProject.lightning.cln.InjectonionmessageResponse> injectOnionMessage(com.github.ElementsProject.lightning.cln.InjectonionmessageRequest request);
+
     Single<com.github.ElementsProject.lightning.cln.XpayResponse> xpay(com.github.ElementsProject.lightning.cln.XpayRequest request);
 
     Observable<com.github.ElementsProject.lightning.cln.BlockAddedNotification> subscribeBlockAdded(com.github.ElementsProject.lightning.cln.StreamBlockAddedRequest request);
@@ -280,4 +282,6 @@ public interface CoreLightningNodeService {
     Observable<com.github.ElementsProject.lightning.cln.PeerConnectNotification> subscribeConnect(com.github.ElementsProject.lightning.cln.StreamConnectRequest request);
 
     Observable<com.github.ElementsProject.lightning.cln.CustomMsgNotification> subscribeCustomMsg(com.github.ElementsProject.lightning.cln.StreamCustomMsgRequest request);
+
+    Observable<com.github.ElementsProject.lightning.cln.ChannelStateChangedNotification> subscribeChannelStateChanged(com.github.ElementsProject.lightning.cln.StreamChannelStateChangedRequest request);
 }
