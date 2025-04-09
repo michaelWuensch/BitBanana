@@ -119,8 +119,8 @@
     <string name="signature_pubkey">Pubkey:</string>
     <string name="generated_signature">Assinatura gerada:</string>
     <string name="signature_to_verify">Assinatura a verificar</string>
-    <string name="channel_summary_total_outbound">Total enviado</string>
-    <string name="channel_summary_total_inbound">Total recebido</string>
+    <string name="channel_summary_total_outbound">Capacidade de envio</string>
+    <string name="channel_summary_total_inbound">Capacidade de recebimento</string>
     <string name="description">Descrição</string>
     <string name="activity_manage_nodes">Gerir Nós</string>
     <string name="channel_close_type_force_close">Fechamento Forçado</string>
@@ -213,7 +213,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- LNURL-Channel</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- Cadeia Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:
 \n
 \n+ instantâneo
@@ -276,7 +276,7 @@
     <string name="settings_category_help">Ajuda</string>
     <string name="error_connection_internal_server">O nó é alcançável mas retorna um erro interno. Este erro talvez seja causado pelo uso de uma porta errada.</string>
     <string name="backup_data_create_failed">Backup falhou</string>
-    <string name="channel_summary_total_unavailable">Total off-line</string>
+    <string name="channel_summary_total_unavailable">Off-line</string>
     <string name="channel_no_alias">Sem nome</string>
     <string name="settings_tor">Tor</string>
     <string name="connectionData">Dados de conexão</string>
@@ -491,7 +491,7 @@
     <string name="error_useRegtestRequest">Está conectado a uma rede REGTEST. Por favor use as solicitações de pagamento ou endereços REGTEST.</string>
     <string name="error_emptyClipboardPayment">A sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
     <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. 
 \nCertifique-se de usar o formato seguinte:
 \n
@@ -672,7 +672,7 @@
     <string name="macaroon">Macaroon</string>
     <string name="certificate">Certificado</string>
     <string name="spinner_manage_nodes">Gerir…</string>
-    <string name="settings_featureCoinControl_summary">Gestão avançada de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos. A seleção de moeda é automatizada se estiver desativada.</string>
+    <string name="settings_featureCoinControl_summary">Gestão avançada de fundos on-chain. Provê uma lista de todas as UTXOs e permite selecionar específicas ao enviar fundos ou abrir canais.</string>
     <string name="settings_custom">Personalizado…</string>
     <string name="settings_featurePeers_summary">Embora o gestão de pares seja automatizada, esta função ainda fornece controles manuais para ver e gerir os seus pares conectados.</string>
     <string name="error_block_explorer_setup_invalid">Configuração do explorador de blocos inválida.</string>
@@ -1018,4 +1018,32 @@
     <string name="offer_id">ID de Oferta</string>
     <string name="guardian_copy_logs">Por favor note que este registo copiado pode conter dados sensíveis. Analise-o e edite qualquer informação confidencial antes de partilhar com alguém.</string>
     <string name="settings_currency_none">Nenhuma</string>
+    <string name="settings_featureWatchtowers">Gestão de Torres de Guarda</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="nostr_relay">Reposição</string>
+    <string name="guardian_custodial_nwc">Está conectado a uma carteira usando o protocolo Nostr Wallet Connect. A não ser que seja o host desse serviço, este arranjo é custodial. A entidade a gerir o serviço tem controle sobre o seu dinheiro e pode ver o seu histórico de transação. Apenas deposite o quanto lhes confiar.</string>
+    <string name="help_dialog_utxos_locking">Ao bloquear UTXOs específicas aqui, garante que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas tem a opção de desbloqueá-las manualmente quando necessário.</string>
+    <string name="sort_by_age_desc">Idade (mais velho primeiro)</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">O balanço de saída do canal selecionado é insuficiente.</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">O balanço de entrada do canal selecionado é insuficiente.</string>
+    <string name="help_dialog_rebalancing">O rebalanceamento do canal mantém os seus canais de pagamento prontos para a ação! Se um lado estiver baixo, o seu canal funcionará apenas numa direção e os pagamentos podem começar a falhar. Enviar um pagamento Lightning numa rota circular para si mesmo redistribui balanços entre os seus canais sem a necessidade de transações on-chain. Esta visão permite realizar um pagamento circular. Para melhores resultados, escolha um canal com superávit de liquidez de saída e o emparelhe a outro que possa aguentar mais fundos de entrada.</string>
+    <string name="settings_backendTimeout">Tempo-limite do backend</string>
+    <string name="settings_paymentTimeout">Tempo-limite de pagamento</string>
+    <string name="error_nwc_setup_failed">Falha ao iniciar conexão Nostr Wallet Connect.</string>
+    <string name="sort_by_name_asc">Nome (A-Z)</string>
+    <string name="sort_by_name_desc">Nome (Z-A)</string>
+    <string name="sort_by_capacity_asc">Capacidade (menor primeiro)</string>
+    <string name="sort_by_capacity_desc">Capacidade (maior primeiro)</string>
+    <string name="sort_by_inbound_capacity_asc">Capacidade de recebimento (menor primeiro)</string>
+    <string name="sort_by_inbound_capacity_desc">Capacidade de recebimento (maior primeiro)</string>
+    <string name="sort_by_outbound_capacity_asc">Capacidade de envio (menor primeiro)</string>
+    <string name="sort_by_outbound_capacity_desc">Capacidade de envio (maior primeiro)</string>
+    <string name="sort_by_symmetry_asc">Simetria (desbalanceado primeiro)</string>
+    <string name="sort_by_symmetry_desc">Simetria (balanceado primeiro)</string>
+    <string name="sort_by_age_asc">Idade (mais novo primeiro)</string>
+    <string name="sort_by_value_asc">Valor (menor primeiro)</string>
+    <string name="sort_by_value_desc">Valor (maior primeiro)</string>
+    <string name="settings_backendTimeout_dialogMessage">Especifica a quantidade de segundos que a app aguardará por uma resposta do backend. Se nenhuma resposta chegar antes do tempo acabar, a solicitação falhará. Para conexões a internet lentas, considere aumentar este limite. Ao usar o Tor, a app multiplica este número por 3 para compensar a latência do Tor.</string>
+    <string name="settings_paymentTimeout_dialogMessage">Este ajuste define a quantidade máxima de segundos que o app vai gastar a tentar um pagamento Lightning. Se nenhuma rota for encontrada nesse tempo, o pagamento será cancelado. Se o tempo expira com frequência, tente aumentar este limite.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Quantia máxima: %1$s\n\nLiquidez Lightning insuficiente. Aumente a capacidade de renda do canal para aumentar este limite.</string>
 </resources>
