@@ -312,9 +312,9 @@
     <string name="advanced_channel_details_explanation_close_initiator">Кто закрыл канал?</string>
     <string name="advanced_channel_details_time_lock">Время блокировки</string>
     <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
-    <string name="advanced_channel_details_inbound_routing_fee">Inbound Routing Fee</string>
+    <string name="advanced_channel_details_inbound_routing_fee">Комиссия входящей маршрутизации</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.</string>
-    <string name="advanced_channel_details_explanation_remote_minHTLC">The smallest value your peer is willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_remote_minHTLC">Наименьшее значение которое ваш контрагент готов пересылать на этом канале в одной транзакции.</string>
     <string name="backup_data_confirm">Я согласен</string>
     <string name="backup_data_password_enter">Введите ваш пароль</string>
     <string name="backup_data_password_confirm">Подтвердите пароль</string>
@@ -332,9 +332,9 @@
     <string name="fee_base">Базовая комиссия</string>
     <string name="routing_policy_update_success">Правила маршрутизации успешно обновлены.</string>
     <string name="stealth_mode_explanation_popup">Теперь BitBanana выглядит как простой калькулятор. Чтобы получить доступ к BitBanana, используйте этот калькулятор и выполните вычисление, равное 21.</string>
-    <string name="peer_flap_count">Flap count</string>
-    <string name="peer_flap_count_explanation">Total occurrences of this peer going offline or coming online, documented across restarts. The count reduces gradually if the peer has not recently flapped, allowing forgiveness for historically high flap counts.</string>
-    <string name="peer_last_flap">Last flap</string>
+    <string name="peer_flap_count">Обрывы соединения</string>
+    <string name="peer_flap_count_explanation">Количество раз когда этот узел выходил или входил в сеть, задокументированные в перезапусках. Количество постепенно уменьшается если узел недавно терялся из сети, что позволяет прощать множество обрывов в прошлом.</string>
+    <string name="peer_last_flap">Последний обрыв</string>
     <string name="peer_mutual_channels_explanation">Количество каналов, открытых этим узлом.</string>
     <string name="balance_details_lightning">Открытых каналов:</string>
     <string name="peer_total_channels">Всего каналов</string>
@@ -369,7 +369,7 @@
     <string name="macaroon">Макарон</string>
     <string name="no_nodes">Нет узлов</string>
     <string name="useTor">Использовать Tor</string>
-    <string name="advanced_channel_details_local_channel_reserve">Local Channel Reserve</string>
+    <string name="advanced_channel_details_local_channel_reserve">Резерв локального канала</string>
     <string name="error_lnd_connection_failed">Подключение к LND не удалось, попробуйте ещё раз.</string>
     <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Правила маршрутизации обновлены, но для %1$d каналов новые правила не могут быть применены.</string>
     <string name="error_duplication">Не удалось дублировать.</string>
@@ -571,7 +571,7 @@
     <string name="stealth_mode_disable">Отключить скрытый режим:</string>
     <string name="stealth_mode_disable_instruction_calc">Выполните вычисление, которое приводит к 21</string>
     <string name="peers_add">Добавить узел</string>
-    <string name="peer_last_flap_explanation">Elapsed time since the peer\'s most recent offline event.</string>
+    <string name="peer_last_flap_explanation">Прошедшее время с последнего офлайнового события у этого участника.</string>
     <string name="balance_details_on_chain_confirmed">Подтверждено на блокчейне:</string>
     <string name="authenticate">Аутентификация</string>
     <string name="lnurl_auth_success">Аутентификация прошла успешно!</string>
@@ -756,7 +756,7 @@
     <string name="error_unsupported_network">Сеть Bitcoin, к которой вы подключены, не поддерживается.</string>
     <string name="bolt12_payer_note">Примечание плательщика</string>
     <string name="settings_avatarStyle">Стиль аватара</string>
-    <string name="advanced_channel_details_explanation_visibility">A channel can be public or private. Private channels are not more secure, they are just not visible to the network.</string>
+    <string name="advanced_channel_details_explanation_visibility">Канал может быть публичным или приватным. Приватные каналы не являются более безопасными, они просто не видны в сети.</string>
     <string name="settings_receiveAddressDisplayValues_2">Формат Taproot (Bech32m)</string>
     <string name="error_useRegtestRequest">Вы подключены к сети REGTEST. Пожалуйста, используйте REGTEST адреса или платёжные запросы.</string>
     <string name="biometricNotSetup">Для использования этой функции необходимо настроить биометрическую аутентификацию в настройках системы Android.</string>
@@ -808,7 +808,7 @@
     <string name="error_connection_network_unreachable">Невозможно добраться до хоста.\n\nПожалуйста, убедитесь что у вас есть подключение к Интернету.</string>
     <string name="error_channel_close_timeout">Канал не может быть закрыт в срок.</string>
     <string name="advanced_channel_details_lifetime_closed">Время жизни</string>
-    <string name="advanced_channel_details_remote_channel_reserve">Remote Channel Reserve</string>
+    <string name="advanced_channel_details_remote_channel_reserve">Резерв удалённого канала</string>
     <string name="backup_data_restore_failed_description">Скорее всего, вы ввели неверный пароль.</string>
     <string name="peer_last_errors">Последние ошибки</string>
     <string name="verify_certificate">Проверка сертификата</string>
@@ -836,4 +836,6 @@
     <string name="sort_by_age_desc">Возраст (сначала старые)</string>
     <string name="sort_by_value_asc">Сумма (с наименьшей)</string>
     <string name="sort_by_value_desc">Сумма (с наибольшей)</string>
+    <string name="settings_backendTimeout_dialogMessage">Указывает сколько секунд приложению ждать ответа от бэкэнда сервера. Если ответа нет до истечения, запрос не прошёл. Для медленных подключений к Интернету подумайте о увеличении этого предела. При использовании Tor приложение умножает это число на 3 чтобы учесть задержку самого Tor.</string>
+    <string name="settings_paymentTimeout_dialogMessage">Эта настройка определяет наидольшее число секунд, которые приложение потратит на попытку платежа в Lightning. Если в этот срок маршрут не найден то оплата отменяется. Если вы часто видите тайм-ауты то попробуйте увеличить этот предел.</string>
 </resources>
