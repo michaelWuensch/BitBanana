@@ -137,6 +137,10 @@ BitBanana is reproducible.
 You want to verify that the app distributed in the app store is actually built from the source available here on github?  
 See these [reproduce](docs/REPRODUCE.md) instructions.
 
+BitBanana is also one of the rare wallets that has passed WalletScrutiny.com's detailed reproducibility check:
+
+<img src="https://walletscrutiny.com/images/social/android/app.michaelwuensch.bitbanana.png">
+
 
 ## Maintainers
 - [Michael Wünsch](https://github.com/michaelWuensch)
