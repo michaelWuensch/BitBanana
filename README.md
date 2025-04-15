@@ -139,7 +139,7 @@ See these [reproduce](docs/REPRODUCE.md) instructions.
 
 BitBanana is also one of the rare wallets that has passed WalletScrutiny.com's detailed reproducibility check:
 
-<img src="https://walletscrutiny.com/images/social/android/app.michaelwuensch.bitbanana.png">
+[![BitBanana Badge](https://walletscrutiny.com/images/social/android/app.michaelwuensch.bitbanana.png)](https://walletscrutiny.com/android/app.michaelwuensch.bitbanana/)
 
 
 ## Maintainers
