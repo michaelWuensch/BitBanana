@@ -7,13 +7,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
 import androidx.transition.TransitionManager;
 
 import java.io.Serializable;
@@ -31,9 +32,11 @@ public class UtxoOptionsView extends ConstraintLayout {
     private TextView mTvUtxoSummary;
     private ImageView mArrowImage;
     private ClickableConstraintLayoutGroup mGroupMain;
-    private Group mGroupExpandableContent;
+    private View mExpandableContent;
+    private View mButtonLayout;
     private BBButton mBtnSelect;
     private BBButton mBtnReset;
+    private SwitchCompat mSwSelectAll;
     private LinearLayout mUtxoContainer;
     private OnUtxoViewButtonListener mOnUtxoViewButtonListener;
     private ClearFocusListener mClearFocusListener;
@@ -61,9 +64,11 @@ public class UtxoOptionsView extends ConstraintLayout {
         View view = inflate(getContext(), R.layout.view_utxo_options, this);
 
         mGroupMain = view.findViewById(R.id.mainGroup);
-        mGroupExpandableContent = view.findViewById(R.id.expandableContentGroup);
+        mExpandableContent = view.findViewById(R.id.expandableContent);
         mTvUtxoSummary = view.findViewById(R.id.utxoSummary);
         mArrowImage = view.findViewById(R.id.arrowImage);
+        mButtonLayout = view.findViewById(R.id.buttonLayout);
+        mSwSelectAll = view.findViewById(R.id.selectAllSwitch);
         mBtnSelect = view.findViewById(R.id.selectButton);
         mBtnReset = view.findViewById(R.id.resetButton);
         mUtxoContainer = view.findViewById(R.id.utxoContainer);
@@ -98,6 +103,8 @@ public class UtxoOptionsView extends ConstraintLayout {
         mGroupMain.setOnAllClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
+                if (mSwSelectAll.getVisibility() == VISIBLE) // Consolidate mode
+                    return;
                 hideKeyboard();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -107,6 +114,30 @@ public class UtxoOptionsView extends ConstraintLayout {
                 }, 100);
             }
         });
+
+        mSwSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mButtonLayout.setVisibility(GONE);
+                    mUtxoContainer.setVisibility(GONE);
+                } else {
+                    mButtonLayout.setVisibility(VISIBLE);
+                    if (mSelectedUTXOs == null || mSelectedUTXOs.isEmpty())
+                        mUtxoContainer.setVisibility(GONE);
+                    else
+                        mUtxoContainer.setVisibility(VISIBLE);
+                }
+                mOnUtxoViewButtonListener.onSelectAllUTXOsToggled(b);
+            }
+        });
+    }
+
+    public void setConsolidationMode(boolean isConsolidation) {
+        setExpandState(true, false);
+        mArrowImage.setVisibility(isConsolidation ? GONE : VISIBLE);
+        mTvUtxoSummary.setVisibility(isConsolidation ? GONE : VISIBLE);
+        mSwSelectAll.setVisibility(isConsolidation ? VISIBLE : GONE);
     }
 
     public void setActivityResultLauncher(ActivityResultLauncher<Intent> activityResultLauncher) {
@@ -114,22 +145,31 @@ public class UtxoOptionsView extends ConstraintLayout {
     }
 
     private void toggleExpandState() {
-        boolean isExpandedContentVisible = mGroupExpandableContent.getVisibility() == View.VISIBLE;
-        setExpandState(!isExpandedContentVisible);
+        boolean isExpandedContentVisible = mExpandableContent.getVisibility() == View.VISIBLE;
+        setExpandState(!isExpandedContentVisible, true);
     }
 
-    private void setExpandState(boolean expand) {
-        TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
+    private void setExpandState(boolean expand, boolean animate) {
+        if (animate)
+            TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
         mArrowImage.setImageResource(expand ? R.drawable.ic_arrow_up_24dp : R.drawable.ic_arrow_down_24dp);
-        mGroupExpandableContent.setVisibility(expand ? View.VISIBLE : View.GONE);
+        mExpandableContent.setVisibility(expand ? View.VISIBLE : View.GONE);
         if (mSelectedUTXOs == null || mSelectedUTXOs.isEmpty())
             mUtxoContainer.setVisibility(GONE);
         if (mClearFocusListener != null)
             mClearFocusListener.onClearFocus();
     }
 
+    public void setSelectAll() {
+        mSwSelectAll.setChecked(true);
+    }
+
     public List<Outpoint> getSelectedUTXOs() {
         return mSelectedUTXOs;
+    }
+
+    public boolean getIsSelectAllChecked() {
+        return mSwSelectAll.isChecked();
     }
 
     // Handle the result
@@ -180,6 +220,8 @@ public class UtxoOptionsView extends ConstraintLayout {
         long onSelectUtxosClicked();
 
         void onResetUtxoViewClicked();
+
+        void onSelectAllUTXOsToggled(boolean newIsChecked);
     }
 
     // Set the listener

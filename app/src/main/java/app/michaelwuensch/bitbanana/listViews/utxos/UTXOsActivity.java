@@ -273,6 +273,8 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.utxo_sorting_menu, menu);
+        if (FeatureManager.isUtxoSelectionOnSendEnabled() && mMode == MODE_VIEW)
+            getMenuInflater().inflate(R.menu.consolidate_menu, menu);
         if (FeatureManager.isHelpButtonsEnabled())
             getMenuInflater().inflate(R.menu.help_menu_no_action, menu);
 
@@ -301,6 +303,10 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
                     break;
             }
 
+            return true;
+        } else if (id == R.id.consolidateMenu) {
+            Intent intent = new Intent(UTXOsActivity.this, ConsolidateUTXOsActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.sort_by_age_asc) {
             setCurrentSortCriteria(UTXOListItem.SortCriteria.AGE_ASC);

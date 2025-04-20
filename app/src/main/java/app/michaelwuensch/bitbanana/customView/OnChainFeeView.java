@@ -239,7 +239,7 @@ public class OnChainFeeView extends ConstraintLayout implements FeeEstimationUti
     /**
      * Show or hide tabs to choose fee tier
      */
-    private void toggleFeeTierView(boolean hide) {
+    public void toggleFeeTierView(boolean hide) {
         TransitionManager.beginDelayedTransition((ViewGroup) getRootView());
         mFeeArrowUnitImage.setImageResource(hide ? R.drawable.ic_arrow_down_24dp : R.drawable.ic_arrow_up_24dp);
         mGroupSendFeeDuration.setVisibility(hide ? View.GONE : View.VISIBLE);

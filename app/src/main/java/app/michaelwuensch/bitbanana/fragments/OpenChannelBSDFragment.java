@@ -407,6 +407,11 @@ public class OpenChannelBSDFragment extends BaseBSDFragment implements UtxoOptio
     }
 
     @Override
+    public void onSelectAllUTXOsToggled(boolean newIsChecked) {
+
+    }
+
+    @Override
     public void onClearFocus() {
         mAmountInput.clearFocus();
     }

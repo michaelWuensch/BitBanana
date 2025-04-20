@@ -314,6 +314,11 @@
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.listViews.utxos.ConsolidateUTXOsActivity"
+            android:label="@string/consolidate_utxos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.bolt12offers.Bolt12QRActivity"
             android:label="@string/bolt12_offer"
             android:screenOrientation="portrait"

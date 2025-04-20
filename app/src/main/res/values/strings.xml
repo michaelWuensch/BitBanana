@@ -294,6 +294,7 @@
     <string name="guardian_custodial_lnd_accounts">You only have access to an account on the LND node. Unless you are the node operator, this arrangement is custodial. The person managing the node has control over your money and can view your transaction history. Only deposit what you\'re willing to trust with that person.</string>
     <string name="guardian_release_utxo">This UTXO was not locked by you using the BitBanana UI and is likely locked for a good reason. Unlock it only if you are sure it\’s necessary.</string>
     <string name="guardian_copy_logs">Please be aware that this copied log can contain sensitive data. Double-check and edit out any confidential information before you share it with anyone.</string>
+    <string name="guardian_consolidate_utxos">Consolidating UTXOs can weaken your privacy by linking addresses. It reveals that the input addresses likely belong to the same entity, making your transaction history easier to analyze and trace on the blockchain.</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>
@@ -620,6 +621,7 @@
     <string name="help_dialog_allFunds_2">However, if you have open channels, a portion of these funds may be held as emergency reserves to ensure stable channel operation. You might also get some of those funds back as change.</string>
     <string name="help_dialog_lastHop">Only use this last hop option when you want to rebalance your channels. To do so, you can effectively send funds to yourself. Generate an invoice and pay it with a specific set of own channels, picking one with high outgoing capacity for the first hop and one with high incoming balance for the last hop. This approach incurs fees but achieves channel rebalancing.</string>
     <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel will only work in one direction, and payments may start to fail. Sending a lightning payment in a circular route to yourself redistributes balances between your channels without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with high sending capacity and pair it with another that has excess receiving capacity.</string>
+    <string name="help_dialog_utxos_consolidate">When you consolidate UTXOs, you\'re combining several unspent outputs into one bigger one. This makes future transactions cheaper since on-chain transaction fees are determined by size in bytes and not by the value. Consolidating during low-fee periods allows users to pay for the blockchain space they need while it\'s cheap, helping to minimize future fees during high-fee periods. Keep in mind, however, that consolidation costs a fee and can weaken your privacy by linking addresses.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -944,5 +946,11 @@
     <string name="sort_by_age_desc">Age (oldest first)</string>
     <string name="sort_by_value_asc">Value (smallest first)</string>
     <string name="sort_by_value_desc">Value (largest first)</string>
+
+    <string name="consolidate">Consolidate</string>
+    <string name="consolidate_utxos">Consolidate UTXOs</string>
+    <string name="all_utxos">All UTXOs</string>
+    <string name="consolidate_utxos_summary">Consolidate %1$d UTXOs</string>
+    <string name="consolidation_failed">Consolidation failed</string>
 
 </resources>

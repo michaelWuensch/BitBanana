@@ -55,62 +55,69 @@
         app:srcCompat="@drawable/ic_arrow_down_24dp"
         app:tint="@color/banana_yellow" />
 
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/expandableContentGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="utxoContainer, buttonLayout"
-        tools:visibility="visible" />
-
     <LinearLayout
-        android:id="@+id/utxoContainer"
+        android:id="@+id/expandableContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/utxoSummary">
+        app:layout_constraintTop_toBottomOf="@id/utxoOptionLabel"
+        tools:visibility="visible">
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/selectAllSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/all_utxos"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/utxoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/selectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                app:bbbutton_bright="true"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_textSize="16sp"
+                tools:bbbutton_text="Select ..." />
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                app:bbbutton_bright="true"
+                app:bbbutton_horizontalContentPadding="5dp"
+                app:bbbutton_text="@string/reset"
+                app:bbbutton_textSize="16sp" />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/utxoContainer">
-
-        <app.michaelwuensch.bitbanana.customView.BBButton
-            android:id="@+id/selectButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            app:bbbutton_bright="true"
-            app:bbbutton_horizontalContentPadding="5dp"
-            app:bbbutton_textSize="16sp"
-            tools:bbbutton_text="Select ..." />
-
-        <app.michaelwuensch.bitbanana.customView.BBButton
-            android:id="@+id/resetButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="0dp"
-            android:layout_weight="1"
-            app:bbbutton_bright="true"
-            app:bbbutton_horizontalContentPadding="5dp"
-            app:bbbutton_text="@string/reset"
-            app:bbbutton_textSize="16sp" />
-
-    </LinearLayout>
-
 
     <ImageView
         android:id="@+id/lineBottom"
@@ -120,7 +127,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonLayout"
+        app:layout_constraintTop_toBottomOf="@id/expandableContent"
         app:srcCompat="@color/gray"
         tools:ignore="ContentDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

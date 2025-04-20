@@ -6,6 +6,7 @@ import app.michaelwuensch.bitbanana.models.Channels.ClosedChannel;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
 import app.michaelwuensch.bitbanana.models.Channels.PendingChannel;
 import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
@@ -197,5 +198,24 @@ public class WalletUtil {
             BBLog.w(LOG_TAG, "Block height of 0 was returned as the wallet info is not yet available!");
             return 0;
         }
+    }
+
+    public static NewOnChainAddressRequest getNewOnChainAddressRequest () {
+        NewOnChainAddressRequest.Type addressType;
+        String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
+        if (addressTypeString.equals("bech32")) {
+            addressType = NewOnChainAddressRequest.Type.SEGWIT;
+        } else {
+            if (addressTypeString.equals("bech32m")) {
+                addressType = NewOnChainAddressRequest.Type.TAPROOT;
+            } else {
+                addressType = NewOnChainAddressRequest.Type.SEGWIT_COMPATIBILITY;
+            }
+        }
+
+        return NewOnChainAddressRequest.newBuilder()
+                .setType(addressType)
+                .setUnused(true)
+                .build();
     }
 }

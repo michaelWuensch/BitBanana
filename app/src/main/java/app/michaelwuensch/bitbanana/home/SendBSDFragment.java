@@ -770,6 +770,11 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
     }
 
     @Override
+    public void onSelectAllUTXOsToggled(boolean newIsChecked) {
+
+    }
+
+    @Override
     public void onClearFocus() {
         mAmountInput.clearFocus();
         hideKeyboard();

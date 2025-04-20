@@ -41,6 +41,7 @@ public class UserGuardian {
     private static final String DIALOG_REMOVE_WATCHTOWER = "guardianRemoveWatchtower";
     private static final String DIALOG_RELEASE_UTXO_FROM_3RD_PARTY = "releaseUtxoFrom3rdParty";
     private static final String DIALOG_COPY_LOG = "guardianCopyLog";
+    private static final String DIALOG_CONSOLIDATE = "guardianConsolidate";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -83,6 +84,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_REMOVE_WATCHTOWER, true)
                 .putBoolean(DIALOG_RELEASE_UTXO_FROM_3RD_PARTY, true)
                 .putBoolean(DIALOG_COPY_LOG, true)
+                .putBoolean(DIALOG_CONSOLIDATE, true)
                 .apply();
     }
 
@@ -333,6 +335,16 @@ public class UserGuardian {
         mCurrentDialogName = DIALOG_EXTERNAL_LINK;
         AlertDialog.Builder adb = createDontShowAgainDialog(true);
         adb.setMessage(R.string.guardian_externalLink);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user about potential loss of privacy when consolidating UTXOs.
+     */
+    public void privacyConsolidateUTXOs() {
+        mCurrentDialogName = DIALOG_CONSOLIDATE;
+        AlertDialog.Builder adb = createDontShowAgainDialog(true);
+        adb.setMessage(R.string.guardian_consolidate_utxos);
         showGuardianDialog(adb);
     }
 

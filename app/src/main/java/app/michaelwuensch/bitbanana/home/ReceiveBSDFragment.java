@@ -24,7 +24,6 @@ import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.models.Bip21Invoice;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
-import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
@@ -261,28 +260,8 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
-
                 // generate onChain request
-
-                NewOnChainAddressRequest.Type addressType;
-                String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
-                if (addressTypeString.equals("bech32")) {
-                    addressType = NewOnChainAddressRequest.Type.SEGWIT;
-                } else {
-                    if (addressTypeString.equals("bech32m")) {
-                        addressType = NewOnChainAddressRequest.Type.TAPROOT;
-                    } else {
-                        addressType = NewOnChainAddressRequest.Type.SEGWIT_COMPATIBILITY;
-                    }
-                }
-
-                NewOnChainAddressRequest newOnChainAddressRequest = NewOnChainAddressRequest.newBuilder()
-                        .setType(addressType)
-                        .setUnused(true)
-                        .build();
-
-                BBLog.d(LOG_TAG, "OnChain generating...");
-                getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
+                getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(WalletUtil.getNewOnChainAddressRequest())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             Bip21Invoice bip21Invoice = Bip21Invoice.newBuilder()
