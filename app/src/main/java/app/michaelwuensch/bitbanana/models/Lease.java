@@ -7,6 +7,7 @@ public class Lease implements Serializable {
     private final Outpoint Outpoint;
     private final String Id;
     private final long Expiration;
+    private final boolean hasExpiration;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -16,6 +17,7 @@ public class Lease implements Serializable {
         this.Outpoint = builder.Outpoint;
         this.Id = builder.Id;
         this.Expiration = builder.Expiration;
+        this.hasExpiration = builder.hasExpiration;
     }
 
     /**
@@ -39,6 +41,10 @@ public class Lease implements Serializable {
         return Expiration;
     }
 
+    public boolean hasExpiration() {
+        return hasExpiration;
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -46,6 +52,7 @@ public class Lease implements Serializable {
         private Outpoint Outpoint;
         private String Id;
         private long Expiration;
+        private boolean hasExpiration;
 
 
         private Builder() {
@@ -77,6 +84,7 @@ public class Lease implements Serializable {
          */
         public Builder setExpiration(long expiration) {
             Expiration = expiration;
+            hasExpiration = true;
             return this;
         }
     }

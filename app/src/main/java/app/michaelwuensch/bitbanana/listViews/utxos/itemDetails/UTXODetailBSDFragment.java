@@ -130,7 +130,17 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
 
         mAmount.setAmountMsat(mUTXO.getAmount());
 
-        mAddress.setText(mUTXO.getAddress());
+        if (mUTXO.hasAddress()) {
+            mAddress.setText(mUTXO.getAddress());
+            mAddressLabel.setVisibility(View.VISIBLE);
+            mAddress.setVisibility(View.VISIBLE);
+            mAddressCopyButton.setVisibility(View.VISIBLE);
+        } else {
+            mAddressLabel.setVisibility(View.GONE);
+            mAddress.setVisibility(View.GONE);
+            mAddressCopyButton.setVisibility(View.GONE);
+        }
+
         mTransactionID.setText(mUTXO.getOutpoint().getTransactionID());
 
         mTransactionID.setOnClickListener(view -> new BlockExplorer().showTransaction(mUTXO.getOutpoint().getTransactionID(), getActivity()));
@@ -142,19 +152,18 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
 
         if (mUTXO.isLeased()) {
             mLockUnlockButton.setText(getResources().getString(R.string.unlock_utxo));
-            mAddressLabel.setVisibility(View.GONE);
-            mAddress.setVisibility(View.GONE);
-            mAddressCopyButton.setVisibility(View.GONE);
             mConfirmationsLabel.setVisibility(View.GONE);
             mConfirmations.setVisibility(View.GONE);
-            mLeasedTimeoutLabel.setVisibility(View.VISIBLE);
-            mLeasedTimeout.setVisibility(View.VISIBLE);
-            mLeasedTimeout.setText(TimeFormatUtil.formatTimeAndDateLong(mUTXO.getLease().getExpiration(), getContext()));
+            if (mUTXO.getLease().hasExpiration()) {
+                mLeasedTimeoutLabel.setVisibility(View.VISIBLE);
+                mLeasedTimeout.setVisibility(View.VISIBLE);
+                mLeasedTimeout.setText(TimeFormatUtil.formatTimeAndDateLong(mUTXO.getLease().getExpiration(), getContext()));
+            } else {
+                mLeasedTimeoutLabel.setVisibility(View.GONE);
+                mLeasedTimeout.setVisibility(View.GONE);
+            }
         } else {
             mLockUnlockButton.setText(getResources().getString(R.string.lock_utxo));
-            mAddressLabel.setVisibility(View.VISIBLE);
-            mAddress.setVisibility(View.VISIBLE);
-            mAddressCopyButton.setVisibility(View.VISIBLE);
             mConfirmationsLabel.setVisibility(View.VISIBLE);
             mConfirmations.setVisibility(View.VISIBLE);
             mLeasedTimeoutLabel.setVisibility(View.GONE);

@@ -88,6 +88,7 @@ import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.FetchInvoiceFromOfferRequest;
 import app.michaelwuensch.bitbanana.models.Forward;
+import app.michaelwuensch.bitbanana.models.Lease;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.models.LnPayment;
@@ -281,6 +282,20 @@ public class CoreLightningApi extends Api {
                                             .setOutputIndex(output.getOutput())
                                             .build())
                                     .setBlockHeight(output.getBlockheight());
+                            if (output.getReserved()) {
+                                Lease.Builder leaseBuilder = Lease.newBuilder()
+                                        .setOutpoint(Outpoint.newBuilder()
+                                                .setTransactionID(ApiUtil.StringFromHexByteString(output.getTxid()))
+                                                .setOutputIndex(output.getOutput())
+                                                .build());
+
+                                if (output.hasReservedToBlock()) {
+                                    int nrBlocks = output.getReservedToBlock() - Wallet.getInstance().getCurrentNodeInfo().getBlockHeight();
+                                    leaseBuilder.setExpiration((System.currentTimeMillis() / 1000) + (nrBlocks * 60 * 10));
+                                }
+
+                                builder.setLease(leaseBuilder.build());
+                            }
                             if (output.getBlockheight() == 0) {
                                 builder.setConfirmations(0);
                             } else {

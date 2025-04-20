@@ -46,10 +46,10 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
         mLeasedIcon.setVisibility(utxo.isLeased() ? View.VISIBLE : View.GONE);
 
         // Set utxo address
-        if (utxo.isLeased())
-            mUTXOAddress.setText(R.string.locked);
-        else
+        if (utxo.hasAddress())
             mUTXOAddress.setText(utxo.getAddress());
+        else if (utxo.isLeased())
+            mUTXOAddress.setText(R.string.locked);
 
         // Set utxo amount
         mUTXOAmount.setAmountMsat(utxo.getAmount());

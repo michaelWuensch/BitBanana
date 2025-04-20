@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Utxo implements Serializable {
 
     private final String Address;
+    private final boolean hasAddress;
     private final long Amount;
     private final long BlockHeight;
     private final long Confirmations;
@@ -18,6 +19,7 @@ public class Utxo implements Serializable {
 
     private Utxo(Builder builder) {
         this.Address = builder.Address;
+        this.hasAddress = builder.hasAddress;
         this.Amount = builder.Amount;
         this.Outpoint = builder.Outpoint;
         this.BlockHeight = builder.BlockHeight;
@@ -28,6 +30,10 @@ public class Utxo implements Serializable {
 
     public String getAddress() {
         return Address;
+    }
+
+    public boolean hasAddress() {
+        return hasAddress;
     }
 
     /**
@@ -64,6 +70,7 @@ public class Utxo implements Serializable {
     public static class Builder {
 
         private String Address;
+        private boolean hasAddress;
         private long Amount;
         private long BlockHeight;
         private long Confirmations;
@@ -81,6 +88,7 @@ public class Utxo implements Serializable {
 
         public Builder setAddress(String address) {
             this.Address = address;
+            this.hasAddress = address != null && !address.isEmpty();
             return this;
         }
 
