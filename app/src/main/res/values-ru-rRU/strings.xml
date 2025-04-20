@@ -571,7 +571,7 @@
     <string name="stealth_mode_disable">Отключить скрытый режим:</string>
     <string name="stealth_mode_disable_instruction_calc">Выполните вычисление, которое приводит к 21</string>
     <string name="peers_add">Добавить узел</string>
-    <string name="peer_last_flap_explanation">Прошедшее время с последнего офлайнового события у этого участника.</string>
+    <string name="peer_last_flap_explanation">Прошедшее время с последнего обрыва этого узла.</string>
     <string name="balance_details_on_chain_confirmed">Подтверждено на блокчейне:</string>
     <string name="authenticate">Аутентификация</string>
     <string name="lnurl_auth_success">Аутентификация прошла успешно!</string>
@@ -838,4 +838,9 @@
     <string name="sort_by_value_desc">Сумма (с наибольшей)</string>
     <string name="settings_backendTimeout_dialogMessage">Указывает сколько секунд приложению ждать ответа от бэкэнда сервера. Если ответа нет до истечения, запрос не прошёл. Для медленных подключений к Интернету подумайте о увеличении этого предела. При использовании Tor приложение умножает это число на 3 чтобы учесть задержку самого Tor.</string>
     <string name="settings_paymentTimeout_dialogMessage">Эта настройка определяет наидольшее число секунд, которые приложение потратит на попытку платежа в Lightning. Если в этот срок маршрут не найден то оплата отменяется. Если вы часто видите тайм-ауты то попробуйте увеличить этот предел.</string>
+    <string name="all_utxos">Все UTXO</string>
+    <string name="consolidate_utxos_summary">Консолидировать %1$d UTXO</string>
+    <string name="consolidation_failed">Консолидация не удалась</string>
+    <string name="consolidate">Консолидировать</string>
+    <string name="consolidate_utxos">Консолидировать UTXO</string>
 </resources>
