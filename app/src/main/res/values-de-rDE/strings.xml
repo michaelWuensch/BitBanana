@@ -958,4 +958,11 @@
     <string name="settings_paymentTimeout">Zeitlimit für Zahlungen</string>
     <string name="settings_paymentTimeout_dialogMessage">Mit dieser Einstellung wird die maximale Anzahl von Sekunden festgelegt, die die App für den Versuch einer Lightning-Zahlung aufwendet. Wenn innerhalb dieser Zeit keine Zahlungsmöglichkeit gefunden wird, wird die Zahlung abgebrochen. Falls es oft zu Zeitüberschreitungen kommt, versuche dieses Limit zu erhöhen.</string>
     <string name="settings_backendTimeout">Backend-Timeout</string>
+    <string name="consolidate">Konsolidieren</string>
+    <string name="consolidate_utxos">UTXOs konsolidieren</string>
+    <string name="all_utxos">Alle UTXOs</string>
+    <string name="consolidate_utxos_summary">%1$d UTXOs konsolidieren</string>
+    <string name="consolidation_failed">Konsolidierung fehlgeschlagen</string>
+    <string name="help_dialog_utxos_consolidate">Wenn du UTXOs konsolidierst, fasst du mehrere nicht verbrauchte Outputs zu einem größeren zusammen. Dies macht zukünftige Transaktionen billiger, da die On-Chain-Transaktionsgebühren sich nach der Größe in Bytes und nicht nach dem Wert richten. Die Konsolidierung in Zeiten niedriger Gebühren ermöglicht es den Nutzern, für den benötigten Blockchain-Speicherplatz zu zahlen, solange er billig ist, und hilft so, die zukünftigen Gebühren in Zeiten hoher Gebühren zu minimieren. Dabei ist allerdings zu beachten, dass die Konsolidierung eine Gebühr kostet und durch die Verknüpfung von Adressen Ihre Privatsphäre schwächen kann.</string>
+    <string name="guardian_consolidate_utxos">Die Konsolidierung von UTXOs kann deine Privatsphäre durch die Verknüpfung von Adressen schwächen. Es offenbart, dass die eingehenden Adressen wahrscheinlich zur selben Person gehören, wodurch dein Transaktionsverlauf in der Blockchain leichter zu analysieren und nachzuverfolgen ist.</string>
 </resources>
