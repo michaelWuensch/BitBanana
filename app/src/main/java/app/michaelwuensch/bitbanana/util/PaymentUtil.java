@@ -49,12 +49,14 @@ public class PaymentUtil {
      *
      * @param bolt12Invoice The fetched bolt 12 invoice that will get paid
      */
-    public static SendLnPaymentRequest prepareBolt12InvoicePayment(@NonNull String bolt12Invoice, long amount) {
+    public static SendLnPaymentRequest prepareBolt12InvoicePayment(@NonNull String bolt12Invoice, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT12_INVOICE)
                 .setBolt12InvoiceString(bolt12Invoice)
                 .setAmount(amount)
                 .setMaxFee(calculateAbsoluteFeeLimit(amount, -1))
+                .setFirstHop(firstHop)
+                .setLastHop(lastHop)
                 .build();
     }
 

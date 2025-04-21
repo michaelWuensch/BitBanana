@@ -26,6 +26,7 @@ import androidx.transition.TransitionManager;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
@@ -367,7 +368,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
             mProgressScreen.setProgressTypeIcon(R.drawable.ic_nav_wallet_black_24dp);
             mBSDScrollableMainView.setTitle(R.string.send_lightningPayment);
             mUtxoOptionsView.setVisibility(View.GONE);
-            mPickChannelsView.setVisibility(FeatureManager.isChannelPickingOnSendEnabled() ? View.VISIBLE : View.GONE);
+            mPickChannelsView.setVisibility(FeatureManager.isChannelPickingOnSendEnabled() && !(mIsKeysend && BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) ? View.VISIBLE : View.GONE);
             mPickChannelsView.setPickChannelsViewButtonListener(this);
 
             if (mIsBolt12Offer) {
@@ -568,7 +569,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
     }
 
     private void prepareBolt12Payment(String fetchedInvoice) {
-        SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt12InvoicePayment(fetchedInvoice, getSendAmount());
+        SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt12InvoicePayment(fetchedInvoice, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
         sendLightningPayment(sendLnPaymentRequest);
     }
 

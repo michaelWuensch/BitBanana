@@ -3,6 +3,10 @@ package app.michaelwuensch.bitbanana.backends.coreLightning;
 import com.github.ElementsProject.lightning.cln.Amount;
 import com.github.ElementsProject.lightning.cln.AmountOrAll;
 import com.github.ElementsProject.lightning.cln.AmountOrAny;
+import com.github.ElementsProject.lightning.cln.AskrenecreatelayerRequest;
+import com.github.ElementsProject.lightning.cln.AskreneremovelayerRequest;
+import com.github.ElementsProject.lightning.cln.AskreneremovelayerResponse;
+import com.github.ElementsProject.lightning.cln.AskreneupdatechannelRequest;
 import com.github.ElementsProject.lightning.cln.BkprlistincomeIncomeEvents;
 import com.github.ElementsProject.lightning.cln.BkprlistincomeRequest;
 import com.github.ElementsProject.lightning.cln.BkprlistincomeResponse;
@@ -56,6 +60,7 @@ import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 import com.github.ElementsProject.lightning.cln.TlvEntry;
 import com.github.ElementsProject.lightning.cln.TlvStream;
 import com.github.ElementsProject.lightning.cln.WithdrawRequest;
+import com.github.ElementsProject.lightning.cln.XpayRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +119,7 @@ import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import app.michaelwuensch.bitbanana.util.Version;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Channels;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -125,6 +131,8 @@ import io.reactivex.rxjava3.core.Single;
  */
 public class CoreLightningApi extends Api {
     private static final String LOG_TAG = CoreLightningApi.class.getSimpleName();
+
+    private static final String CHANNEL_PICKER_ASK_RENE_LAYER = "BBChannelPicker";
 
     public CoreLightningApi() {
 
@@ -994,71 +1002,194 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "getNewOnchainAddress failed: " + throwable.fillInStackTrace()));
     }
 
+
+    private Single<Boolean> setupXpayLayers(SendLnPaymentRequest request) {
+        if (request.hasFirstHop() || request.hasLastHop()) {
+            BBLog.v(LOG_TAG, "Creating additional ask rene layer...");
+
+            List<OpenChannel> openChannels = Wallet_Channels.getInstance().getOpenChannelsList();
+            List<OpenChannel> outgoingChannelsToBlock = new ArrayList<>();
+            List<OpenChannel> incomingChannelsToBlock = new ArrayList<>();
+            if (request.hasFirstHop())
+                for (OpenChannel channel : openChannels)
+                    if (!channel.getShortChannelId().toString().equals(request.getFirstHop().toString()))
+                        outgoingChannelsToBlock.add(channel);
+            if (request.hasLastHop())
+                for (OpenChannel channel : openChannels)
+                    if (!channel.getRemotePubKey().equals(request.getLastHop()))
+                        incomingChannelsToBlock.add(channel);
+
+            return CoreLightningNodeService().askReneRemoveLayer(
+                            AskreneremovelayerRequest.newBuilder().setLayer(CHANNEL_PICKER_ASK_RENE_LAYER).build())
+                    .doOnSuccess(response -> BBLog.d(LOG_TAG, "askrene removed layer."))
+                    .doOnError(throwable -> BBLog.w(LOG_TAG, "askrene remove layer failed: " + throwable.fillInStackTrace()))
+                    .onErrorResumeNext(throwable -> {
+                        BBLog.w(LOG_TAG, "askrene remove layer failed, continuing: " + throwable.getMessage());
+                        return Single.just(AskreneremovelayerResponse.getDefaultInstance()); // or null/empty
+                    })
+                    .flatMap(ignore -> CoreLightningNodeService().askReneCreateLayer(
+                            AskrenecreatelayerRequest.newBuilder().setLayer(CHANNEL_PICKER_ASK_RENE_LAYER).build()))
+                    .doOnSuccess(response -> BBLog.d(LOG_TAG, "askrene layer created."))
+                    .doOnError(throwable -> BBLog.w(LOG_TAG, "askrene create layer failed: " + throwable.fillInStackTrace()))
+                    .flatMap(ignore -> {
+                        String myNodePubkey = Wallet.getInstance().getCurrentNodeInfo().getPubKey();
+
+                        List<Single<?>> updateRequests = new ArrayList<>();
+
+                        // Outgoing channels to block
+                        for (OpenChannel channel : outgoingChannelsToBlock) {
+                            String remoteNodePubkey = channel.getRemotePubKey();
+                            int outgoingDirection = myNodePubkey.compareTo(remoteNodePubkey) < 0 ? 0 : 1;
+
+                            AskreneupdatechannelRequest requestPerChannel = AskreneupdatechannelRequest.newBuilder()
+                                    .setLayer(CHANNEL_PICKER_ASK_RENE_LAYER)
+                                    .setShortChannelIdDir(channel.getShortChannelId().toString() + "/" + outgoingDirection)
+                                    .setEnabled(false)
+                                    .build();
+
+                            updateRequests.add(CoreLightningNodeService().askReneUpdateChannel(requestPerChannel)
+                                    .doOnSuccess(resp -> BBLog.v(LOG_TAG, "AskRene outgoing channel updated: " + channel.getShortChannelId()))
+                                    .doOnError(throwable -> BBLog.w(LOG_TAG, "Failed to update outgoing channel " + channel.getShortChannelId() + ": " + throwable.getMessage())));
+                        }
+
+                        // Incoming channels to block
+                        for (OpenChannel channel : incomingChannelsToBlock) {
+                            String remoteNodePubkey = channel.getRemotePubKey();
+                            int incomingDirection = myNodePubkey.compareTo(remoteNodePubkey) < 0 ? 1 : 0;
+
+                            AskreneupdatechannelRequest requestPerChannel = AskreneupdatechannelRequest.newBuilder()
+                                    .setLayer(CHANNEL_PICKER_ASK_RENE_LAYER)
+                                    .setShortChannelIdDir(channel.getShortChannelId().toString() + "/" + incomingDirection)
+                                    .setEnabled(false)
+                                    .build();
+
+                            updateRequests.add(CoreLightningNodeService().askReneUpdateChannel(requestPerChannel)
+                                    .doOnSuccess(resp -> BBLog.v(LOG_TAG, "AskRene incoming channel updated: " + channel.getShortChannelId()))
+                                    .doOnError(throwable -> BBLog.w(LOG_TAG, "Failed to update incoming channel " + channel.getShortChannelId() + ": " + throwable.getMessage())));
+                        }
+
+                        // Run all updates in parallel and wait for completion
+                        return Single.zip(updateRequests, results -> true);
+                    });
+        } else {
+            return Single.just(false); // skip layer setup
+        }
+    }
+
+    private Single<SendLnPaymentResponse> performXpay(SendLnPaymentRequest request) {
+        BBLog.d(LOG_TAG, "Performing Xpay...");
+        XpayRequest.Builder requestBuilder = XpayRequest.newBuilder()
+                .setMaxfee(Amount.newBuilder()
+                        .setMsat(request.getMaxFee())
+                        .build())
+                .setRetryFor(ApiUtil.getPaymentTimeout());
+
+        switch (request.getPaymentType()) {
+            case BOLT11_INVOICE:
+                requestBuilder.setInvstring(request.getBolt11().getBolt11String());
+                break;
+            case BOLT12_INVOICE:
+                requestBuilder.setInvstring(request.getBolt12InvoiceString());
+                break;
+        }
+
+        if (request.getBolt11() != null && request.getBolt11().hasNoAmountSpecified()) {
+            requestBuilder.setAmountMsat(Amount.newBuilder()
+                    .setMsat(request.getAmount()));
+        }
+
+        if (request.hasFirstHop() || request.hasLastHop()) {
+            requestBuilder.addLayers(CHANNEL_PICKER_ASK_RENE_LAYER);
+        }
+
+        return CoreLightningNodeService().xpay(requestBuilder.build())
+                .map(response -> SendLnPaymentResponse.newBuilder()
+                        .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                        .build())
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
+    }
+
     @Override
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
         BBLog.d(LOG_TAG, "sendLnPayment called.");
         switch (sendLnPaymentRequest.getPaymentType()) {
 
             case BOLT11_INVOICE:
-                PayRequest.Builder requestBuilder = PayRequest.newBuilder()
-                        .setBolt11(sendLnPaymentRequest.getBolt11().getBolt11String())
-                        .setMaxfee(Amount.newBuilder()
-                                .setMsat(sendLnPaymentRequest.getMaxFee())
-                                .build())
-                        .setRetryFor(ApiUtil.getPaymentTimeout());
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("25.02")) >= 0) {
+                    // xpay
+                    BBLog.v(LOG_TAG, "Using xpay...");
+                    return setupXpayLayers(sendLnPaymentRequest)
+                            .flatMap(ignore -> performXpay(sendLnPaymentRequest));
+                } else { // ToDo: remove when support for 24.11.2 is removed.
+                    // old pay
+                    PayRequest.Builder requestBuilder = PayRequest.newBuilder()
+                            .setBolt11(sendLnPaymentRequest.getBolt11().getBolt11String())
+                            .setMaxfee(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getMaxFee())
+                                    .build())
+                            .setRetryFor(ApiUtil.getPaymentTimeout());
 
-                if (sendLnPaymentRequest.getBolt11() != null) {
-                    if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
-                        requestBuilder.setAmountMsat(Amount.newBuilder()
-                                .setMsat(sendLnPaymentRequest.getAmount()));
+                    if (sendLnPaymentRequest.getBolt11() != null) {
+                        if (sendLnPaymentRequest.getBolt11().hasNoAmountSpecified())
+                            requestBuilder.setAmountMsat(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getAmount()));
+                    }
+
+                    PayRequest request = requestBuilder.build();
+
+                    return CoreLightningNodeService().pay(request)
+                            .map(response -> {
+                                switch (response.getStatus()) {
+                                    case COMPLETE:
+                                        return SendLnPaymentResponse.newBuilder()
+                                                .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                                                .build();
+                                    default:
+                                        return SendLnPaymentResponse.newBuilder()
+                                                .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                                .setAmount(response.getAmountMsat().getMsat())
+                                                .build();
+                                }
+                            })
+                            .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                            .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
                 }
 
-                PayRequest request = requestBuilder.build();
-
-                return CoreLightningNodeService().pay(request)
-                        .map(response -> {
-                            switch (response.getStatus()) {
-                                case COMPLETE:
-                                    return SendLnPaymentResponse.newBuilder()
-                                            .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
-                                            .build();
-                                default:
-                                    return SendLnPaymentResponse.newBuilder()
-                                            .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
-                                            .setAmount(response.getAmountMsat().getMsat())
-                                            .build();
-                            }
-                        })
-                        .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
-                        .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
-
             case BOLT12_INVOICE:
-                PayRequest.Builder bolt12requestBuilder = PayRequest.newBuilder()
-                        .setBolt11(sendLnPaymentRequest.getBolt12InvoiceString())
-                        .setMaxfee(Amount.newBuilder()
-                                .setMsat(sendLnPaymentRequest.getMaxFee())
-                                .build())
-                        .setRetryFor(ApiUtil.getPaymentTimeout());
+                if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("25.02")) >= 0) {
+                    // xpay
+                    BBLog.v(LOG_TAG, "Using xpay...");
+                    return setupXpayLayers(sendLnPaymentRequest)
+                            .flatMap(ignore -> performXpay(sendLnPaymentRequest));
+                } else { // ToDo: remove when support for 24.11.2 is removed.
+                    // old pay
+                    PayRequest.Builder bolt12requestBuilder = PayRequest.newBuilder()
+                            .setBolt11(sendLnPaymentRequest.getBolt12InvoiceString())
+                            .setMaxfee(Amount.newBuilder()
+                                    .setMsat(sendLnPaymentRequest.getMaxFee())
+                                    .build())
+                            .setRetryFor(ApiUtil.getPaymentTimeout());
 
-                PayRequest bolt12request = bolt12requestBuilder.build();
+                    PayRequest bolt12request = bolt12requestBuilder.build();
 
-                return CoreLightningNodeService().pay(bolt12request)
-                        .map(response -> {
-                            switch (response.getStatus()) {
-                                case COMPLETE:
-                                    return SendLnPaymentResponse.newBuilder()
-                                            .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
-                                            .build();
-                                default:
-                                    return SendLnPaymentResponse.newBuilder()
-                                            .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
-                                            .setAmount(response.getAmountMsat().getMsat())
-                                            .build();
-                            }
-                        })
-                        .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
-                        .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
-
+                    return CoreLightningNodeService().pay(bolt12request)
+                            .map(response -> {
+                                switch (response.getStatus()) {
+                                    case COMPLETE:
+                                        return SendLnPaymentResponse.newBuilder()
+                                                .setPaymentPreimage(ApiUtil.StringFromHexByteString(response.getPaymentPreimage()))
+                                                .build();
+                                    default:
+                                        return SendLnPaymentResponse.newBuilder()
+                                                .setFailureReason(SendLnPaymentResponse.FailureReason.UNKNOWN)
+                                                .setAmount(response.getAmountMsat().getMsat())
+                                                .build();
+                                }
+                            })
+                            .doOnSuccess(response -> BBLog.d(LOG_TAG, "sendLnPayment success."))
+                            .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
+                }
             case KEYSEND:
                 List<TlvEntry> tlvEntries = new ArrayList<>();
                 for (CustomRecord cr : sendLnPaymentRequest.getCustomRecords()) {
