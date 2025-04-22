@@ -48,7 +48,7 @@
     <string name="continue_string">Continuar</string>
     <string name="activity_receive">Recibir</string>
     <string name="activity_send">Pagar</string>
-    <string name="activity_connectRemoteNode">Conectar a Nodo Remoto</string>
+    <string name="activity_connectRemoteNode">Añadir nodo</string>
     <string name="activity_advanced_settings">Configuraciones Avanzadas</string>
     <string name="activity_identity">Identity</string>
     <string name="navigation_history">Historia</string>
@@ -148,7 +148,7 @@
     <string name="settings_addressType">Tipo de dirección Bitcoin</string>
     <string name="settings_lnRequestExpiryTitle">Vencimiento de Solicitud Relámpago</string>
     <string name="settings_lnFeeLimitTitle">Límite de la tarifa de pago</string>
-    <string name="error_blockExplorer_title">Explorador de Bloques</string>
+    <string name="error_blockExplorer_title">Explorador de Bloque</string>
     <string name="error_blockExplorer_message" comment="Parameters are:  %1$s: Name of selected block explorer, %2$s: 'mainnet' or 'testnet'">El explorador de bloques seleccionado actualmente (%1$s) no es compatible con %2$s. \n\nVaya a la configuración y elija otro explorador de bloques para continuar.</string>
     <string name="error_paymentRequestExpired">Esta solicitud de pago ha expirado.</string>
     <string name="error_useTestnetRequest">Estás conectado a la TESTNET. Por favor usa direcciones y solicitudes de pago para TESTNET.</string>
@@ -238,7 +238,7 @@
     <string name="invoice_detail">Detalle de factura</string>
     <string name="transaction_detail">Detalles de la Transacción</string>
     <string name="app_reset_message">La aplicación se ha restablecido ya que la última actualización incluyó algunos cambios estructurales.\nDesafortunadamente tendrá que realizar el proceso de configuración inicial nuevamente.</string>
-    <string name="settings_featureCoinControl_summary">Gestión avanzada de los fondos en la cadena. Proporciona una lista de todos los UTXOs y permite seleccionar los específicos al enviar los fondos. La selección de las monedas se automatiza si se desactiva.</string>
+    <string name="settings_featureCoinControl_summary">Gestión avanzada de los fondos en la cadena. Proporciona una lista de todos los UTXOs y permite seleccionar opcionalmente seleccionar UTXO específicos cuando envíen fondos o abriendo canales.</string>
     <string name="channel_visibility_public">público</string>
     <string name="settings_scan_clipboard">Revisar el portapapeles</string>
     <string name="save">Guardar</string>
@@ -275,7 +275,7 @@
     <string name="ok">DE ACUERDO</string>
     <string name="send">Enviar</string>
     <string name="manually">Manualmente</string>
-    <string name="activity_manage_channels_closed">Canales cerrados</string>
+    <string name="activity_manage_channels_closed">Cerrado</string>
     <string name="navigation_node">Nodo</string>
     <string name="settings_tor">Tor</string>
     <string name="activity_manage_contacts_send_mode">Enviar a…</string>
@@ -951,4 +951,21 @@
     <string name="settings_no_fee_limit">Sin límite</string>
     <string name="help_dialog_settings_currencies">Al pulsar cualquier campo con un importe, podrá cambiar entre las divisas que haya configurado. Si solo selecciona unidades de Bitcoin, la aplicación dejará de comunicarse con los proveedores de tipos de cambio.</string>
     <string name="stealth_mode_explanation_popup">A partir de ahora, BitBanana se parece a una calculadora simple. Para acceder a BitBanana, use esa calculadora y realice un cálculo que sea igual a 21.</string>
+    <string name="immediately">Inmediatamente</string>
+    <string name="help">Ayuda</string>
+    <string name="adjust">Ajustar</string>
+    <string name="automatic">Automático</string>
+    <string name="select">Seleccionar</string>
+    <string name="confirm_selection">Confirmar selección</string>
+    <string name="reset">Restablecer</string>
+    <string name="total">Total</string>
+    <string name="change">Cambiar</string>
+    <string name="activity_payment_route">Ruta de Pago</string>
+    <string name="clear">Purgar</string>
+    <string name="copy_all">Copiar todo</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="guardian_remoteConnect_nwc">¿Seguro que quiere conectar a\n\n%1$s\n\nCompruebe la clave pública antes de añadir el monedero.</string>
+    <string name="forwarded">Reenviado</string>
+    <string name="summary">Resumen</string>
+    <string name="settings_lockScreenTimeout">Tiempo de espera auto-bloqueado</string>
 </resources>
