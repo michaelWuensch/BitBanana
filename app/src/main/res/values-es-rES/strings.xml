@@ -31,7 +31,7 @@
     <string name="pay">Pagar</string>
     <string name="date">Fecha</string>
     <string name="expiry">Vencimiento</string>
-    <string name="expired">Expirado</string>
+    <string name="expired">Vencido</string>
     <string name="remaining">restante</string>
     <string name="address">Dirección</string>
     <string name="transactionID">ID de transacción</string>
@@ -41,7 +41,7 @@
     <string name="scan_qr_code">Escanear código QR</string>
     <string name="node">Nodo</string>
     <string name="amount_invalid">La cantidad no es válida.</string>
-    <string name="success">Éxito</string>
+    <string name="success">Logrado</string>
     <string name="suggested_peers">Nodos Sugeridos</string>
     <string name="none">Ninguno</string>
     <string name="install">Instalar</string>
