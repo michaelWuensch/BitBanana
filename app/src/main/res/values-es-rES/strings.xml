@@ -50,7 +50,7 @@
     <string name="activity_send">Pagar</string>
     <string name="activity_connectRemoteNode">Añadir nodo</string>
     <string name="activity_advanced_settings">Configuración avanzada</string>
-    <string name="activity_identity">Identity</string>
+    <string name="activity_identity">Nodo</string>
     <string name="navigation_history">Histórico</string>
     <string name="navigation_settings">Configuración</string>
     <string name="pin_create">Crear PIN</string>
@@ -104,7 +104,7 @@
     <string name="send_lightningPayment">Enviar pago relámpago</string>
     <string name="send_onChainPayment">Enviar pago en cadena</string>
     <string name="send_sendPayment">Enviar pago</string>
-    <string name="send_success">Pago\nexitoso</string>
+    <string name="send_success">Pago\ncorrecto</string>
     <string name="send_fail">Pago 
 \nfallido</string>
     <string name="receive_generateRequest">Generar Solicitud</string>
@@ -249,7 +249,7 @@
     <string name="settings_featureHelpButtons_summary">¿Lo práctico\? Los botones de la aplicación ayudan a los nuevos usuarios con explicaciones detalladas.</string>
     <string name="settings_payer_data">Identificación del pago</string>
     <string name="peer">Par</string>
-    <string name="activity_backup">Copia de Seguridad</string>
+    <string name="activity_backup">Respaldar</string>
     <string name="settings_scan_clipboard_summary">Comprueba automáticamente en el portapapeles los datos que BitBanana puede manejar.</string>
     <string name="no">No</string>
     <string name="unknown">Desconocido</string>
