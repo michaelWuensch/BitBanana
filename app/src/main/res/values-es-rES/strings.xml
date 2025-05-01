@@ -8,24 +8,24 @@
     <string name="details">Detalles</string>
     <string name="amount">Monto</string>
     <string name="memo">Memorándum</string>
-    <string name="shareDialogTitle">Elegir App</string>
-    <string name="yes">Si</string>
-    <string name="copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="shareDialogTitle">Elegir aplicación</string>
+    <string name="yes">Sí</string>
+    <string name="copied_to_clipboard">Copiado en el portapapeles</string>
     <string name="receive">Recibir</string>
     <string name="optional">opcional</string>
     <string name="next">Siguiente</string>
     <string name="coming_soon">Pronto…</string>
-    <string name="needHelp">Necesitas ayuda?</string>
+    <string name="needHelp">¿Necesita ayuda?</string>
     <string name="offline">desconectado</string>
     <string name="sent">Enviado</string>
     <string name="received">Recibido</string>
     <string name="today">Hoy</string>
     <string name="yesterday">Ayer</string>
     <string name="fee">Tarifa</string>
-    <string name="confirmExit">Quieres salir de BitBanana?</string>
+    <string name="confirmExit">¿Realmente quiere salir de BitBanana?</string>
     <string name="or">o</string>
-    <string name="max_amount">Monto Máximo:</string>
-    <string name="min_amount">Monto Mínimo:</string>
+    <string name="max_amount">Monto máximo:</string>
+    <string name="min_amount">Monto mínimo:</string>
     <string name="retry">Reintentar</string>
     <string name="loading">Cargando</string>
     <string name="pay">Pagar</string>
@@ -34,7 +34,7 @@
     <string name="expired">Vencido</string>
     <string name="remaining">restante</string>
     <string name="address">Dirección</string>
-    <string name="transactionID">ID de transacción</string>
+    <string name="transactionID">Id. de transacción</string>
     <string name="channel">Canal</string>
     <string name="event">Evento</string>
     <string name="channel_event">Evento de canal</string>
@@ -42,22 +42,22 @@
     <string name="node">Nodo</string>
     <string name="amount_invalid">La cantidad no es válida.</string>
     <string name="success">Logrado</string>
-    <string name="suggested_peers">Nodos Sugeridos</string>
+    <string name="suggested_peers">Pares sugeridos</string>
     <string name="none">Ninguno</string>
     <string name="install">Instalar</string>
     <string name="continue_string">Continuar</string>
     <string name="activity_receive">Recibir</string>
     <string name="activity_send">Pagar</string>
     <string name="activity_connectRemoteNode">Añadir nodo</string>
-    <string name="activity_advanced_settings">Configuraciones Avanzadas</string>
+    <string name="activity_advanced_settings">Configuración avanzada</string>
     <string name="activity_identity">Identity</string>
-    <string name="navigation_history">Historia</string>
+    <string name="navigation_history">Histórico</string>
     <string name="navigation_settings">Configuración</string>
     <string name="pin_create">Crear PIN</string>
     <string name="pin_confirm">Confirmar PIN</string>
-    <string name="pin_enter">Ingrese su PIN</string>
-    <string name="pin_enter_old">Ingrese su PIN antiguo</string>
-    <string name="pin_enter_new">Ingrese un nuevo PIN</string>
+    <string name="pin_enter">Introducir PIN</string>
+    <string name="pin_enter_old">Introducir PIN antiguo</string>
+    <string name="pin_enter_new">Introducir PIN nuevo</string>
     <string name="pin_confirm_new">Confirmar PIN nuevo</string>
     <string name="pin_entered_wrong">PIN incorrecto</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Espere %1$s segundos.</string>
@@ -68,14 +68,14 @@
     <string name="closed_channel">Canal cerrado</string>
     <string name="force_closed_channel">Canal cerrado forzadamente</string>
     <string name="filter_transactions">Filtrar transacciones</string>
-    <string name="normal_payments">Pagos Normales</string>
+    <string name="normal_payments">Pagos normales</string>
     <string name="expired_requests">Solicitud vencida</string>
     <string name="no_transactions">Sin transacciones</string>
     <string name="channel_capacity">Capacidad</string>
-    <string name="channel_local_balance">Tu Balance</string>
-    <string name="channel_remote_balance">Balance Remoto</string>
-    <string name="channel_no_alias">Sin Nombre</string>
-    <string name="channel_remote_public_key">Public Key Remota</string>
+    <string name="channel_local_balance">Su saldo</string>
+    <string name="channel_remote_balance">Saldo remoto</string>
+    <string name="channel_no_alias">Sin nombre</string>
+    <string name="channel_remote_public_key">Clave pública remota</string>
     <string name="channel_funding_transaction">Financiando Transacción</string>
     <string name="channel_state_open">Abierto</string>
     <string name="channel_state_offline">Desconectado</string>
@@ -84,23 +84,23 @@
     <string name="channel_state_pending_force_closing">Cerrando a fuerza</string>
     <string name="channel_state_waiting_close">Esperando cierre</string>
     <string name="no_channels">Sin canales</string>
-    <string name="channel_closing_transaction">Cerrando Transacción</string>
-    <string name="channel_close">Cerrar Canal</string>
+    <string name="channel_closing_transaction">Cerrando transacción</string>
+    <string name="channel_close">Cerrar canal</string>
     <string name="channel_close_success">Cierre de canal iniciado exitosamente</string>
-    <string name="channel_close_force">Forzar Cierre de Canal</string>
+    <string name="channel_close_force">Forzar cierre de canal</string>
     <string name="channel_close_error">Error de cierre de canal</string>
     <string name="channel_close_confirmation">Realmente desea cerrar el canal con\n\n%s\n</string>
     <string name="channel_close_force_confirmation">Realmente desea forzar el cierre de canal con:\n\n%1$s\n\nLos fondos serán bloqueados por %2$s.</string>
     <string name="channel_close_time">Tiempo hasta que cierre</string>
-    <string name="channel_open">Abrir Canal</string>
+    <string name="channel_open">Abrir canal</string>
     <string name="channel_open_success">Apertura de canal iniciada con éxito</string>
     <string name="channel_open_error">Error de apertura de canal</string>
-    <string name="setup_connect_heading">¿Cómo quieres usar BitBanana?</string>
+    <string name="setup_connect_heading">¿Cómo quiere usar BitBanana?</string>
     <string name="setup_connect_local_description">Crear una cartera en este teléfono.</string>
-    <string name="setup_connect_local_button">Crear Cartera</string>
-    <string name="setup_connect_remote_description">Controla a distancia tu propio nodo.</string>
-    <string name="setup_connect_remote_button">Conectarse a un Nodo Remoto</string>
-    <string name="demo_setupNodeBtn">Setup Wallet</string>
+    <string name="setup_connect_local_button">Crear cartera</string>
+    <string name="setup_connect_remote_description">Controle a distancia su propio nodo.</string>
+    <string name="setup_connect_remote_button">Conectarse a un nodo remoto</string>
+    <string name="demo_setupNodeBtn">Conectar nodo</string>
     <string name="send_lightningPayment">Enviar pago relámpago</string>
     <string name="send_onChainPayment">Enviar pago en cadena</string>
     <string name="send_sendPayment">Enviar pago</string>
@@ -245,7 +245,7 @@
     <string name="documentation">Documentación</string>
     <string name="withdraw">Retirar</string>
     <string name="activity_utxos">Monedas (UTXO)</string>
-    <string name="demo_setupNodeFirstAvatar">Primero debes conectarte a un nodo, antes de poder ver la información de tu nodo y tu avatar.</string>
+    <string name="demo_setupNodeFirstAvatar">Primero debe conectarse a un nodo para poder ver la información del nodo y su avatar.</string>
     <string name="settings_featureHelpButtons_summary">¿Lo práctico\? Los botones de la aplicación ayudan a los nuevos usuarios con explicaciones detalladas.</string>
     <string name="settings_payer_data">Identificación del pago</string>
     <string name="peer">Par</string>
@@ -254,33 +254,33 @@
     <string name="no">No</string>
     <string name="unknown">Desconocido</string>
     <string name="settings_featureRoutingSummary_summary">Proporciona acceso a todos los eventos de enrutamiento junto con un resumen.</string>
-    <string name="activity_routing_policy">Política del enrutamiento</string>
+    <string name="activity_routing_policy">Directiva de enrutamiento</string>
     <string name="channel_visibility">Visibilidad</string>
-    <string name="activity_manage_contacts_open_channel_mode">Canal abierto con…</string>
+    <string name="activity_manage_contacts_open_channel_mode">Abrir canal con…</string>
     <string name="settings_systemLanguage">Idioma del sistema</string>
     <string name="settings_removePin">Quitar el pin</string>
     <string name="guardian_zero_amount_invoice">Esta factura no especifica el importe. Aunque es muy poco probable, las facturas sin un importe específico pueden usarse y, en ese caso, el destinatario recibirá menos de lo esperado. Si es posible utiliza una factura con un total específico.</string>
     <string name="settings_addPin">Proteger con un PIN</string>
-    <string name="demo_setupNodeFirst">Primero tienes que conectarte a un nodo.</string>
+    <string name="demo_setupNodeFirst">Primero tiene que conectarse a un nodo.</string>
     <string name="scan">Escanear</string>
     <string name="description">Descripción</string>
     <string name="settings_featureCoinControl">Monedero</string>
     <string name="channel_close_type_breach">No cumplir</string>
-    <string name="payee">Recipiente</string>
+    <string name="payee">Beneficiario</string>
     <string name="channel_close_type_coop">Cooperativa</string>
     <string name="settings_changePin">Cambiar/eliminar el PIN</string>
     <string name="settings_featureRoutingSummary">Resumen del enrutamiento</string>
     <string name="pubkey">Clave pública</string>
-    <string name="support">Soporte</string>
-    <string name="ok">DE ACUERDO</string>
+    <string name="support">Asistencia</string>
+    <string name="ok">Aceptar</string>
     <string name="send">Enviar</string>
     <string name="manually">Manualmente</string>
     <string name="activity_manage_channels_closed">Cerrado</string>
     <string name="navigation_node">Nodo</string>
     <string name="settings_tor">Tor</string>
     <string name="activity_manage_contacts_send_mode">Enviar a…</string>
-    <string name="activity_contact_details">Detalles de los contactos</string>
-    <string name="activity_manage_nodes">Administrar los nodos</string>
+    <string name="activity_contact_details">Detalles del contacto</string>
+    <string name="activity_manage_nodes">Gestionar nodos</string>
     <string name="activity_manage_channels">Canales</string>
     <string name="notConnected">No conectado</string>
     <string name="confirmations">Confirmaciones</string>
@@ -290,7 +290,7 @@
     <string name="settings_features">Características</string>
     <string name="percent">Por ciento</string>
     <string name="lightning">Iluminación</string>
-    <string name="you">Tu</string>
+    <string name="you">Usted</string>
     <string name="send_SendOnChainInstead">Enviar en cadena</string>
     <string name="private_channel">Canal privado</string>
     <string name="search">Buscar</string>
@@ -298,7 +298,7 @@
     <string name="channel_close_type">Tipo de cierre</string>
     <string name="settings_tor_summary">Anonimizar todo el tráfico web usando la red Tor. Esto sólo afecta a cosas como obtener los tipos de cambio o interactuar con los servicios LNURL. El uso o no de Tor para conectarse a un nodo puede establecerse individualmente para cada nodo en la configuración de la conexión.</string>
     <string name="channel_visibility_private">privado</string>
-    <string name="settings">Ajustes</string>
+    <string name="settings">Configuración</string>
     <string name="guardian_backup_overrides_existing_data">¡Algunos datos ya existen!
 \nAl restaurar una copia de seguridad se borrarán todos los datos siguientes antes de la restauración:
 \n
@@ -306,15 +306,15 @@
 \n- Contactos
 \n
 \n¿Continuar\?</string>
-    <string name="pin_changed">¡Código Pin cambiado!</string>
-    <string name="activity_manage_contacts">Gestionar los contactos</string>
+    <string name="pin_changed">Cambió el PIN.</string>
+    <string name="activity_manage_contacts">Gestionar contactos</string>
     <string name="channel_close_type_force_close">Forzar el cierre</string>
     <string name="activity_manual_setup">Datos de la conexión</string>
     <string name="guardian_certificate_verification">Si la verificación de los certificados está desactivada, es vulnerable a un ataque. Haz esto sólo si sabes lo que estás haciendo.
 \n
 \nEn su lugar, te recomendamos configurar correctamente el certificado.
 \nEsto significa que el certificado de tu nodo debe incluir el nombre del host que estás utilizando en esta conexión. Añade el nombre del host a tlsextradomain en lnd.conf antes de volver a crear el certificado.</string>
-    <string name="activity_node_details">Detalles de los nodos</string>
+    <string name="activity_node_details">Detalles del nodo</string>
     <string name="privacy">Privacidad</string>
     <string name="settings_features_summary">Personaliza la aplicación según tus necesidades activando o desactivando las funciones.</string>
     <string name="maximum_abbreviation">máximo</string>
@@ -621,7 +621,7 @@
     <string name="advanced_channel_details_lifetime">Edad</string>
     <string name="advanced_channel_details_explanation_lifetime">Esto demuestra la larga existencia de este canal.</string>
     <string name="advanced_channel_details_explanation_lifetime_closed">Muestra la duración de la actividad de este canal.</string>
-    <string name="advanced_channel_details_initiator_you">Tú</string>
+    <string name="advanced_channel_details_initiator_you">Usted</string>
     <string name="advanced_channel_details_close_initiator">Cerrar el iniciador</string>
     <string name="advanced_channel_details_time_lock">Bloqueo horario</string>
     <string name="lnurl_service_provided_invalid_data">El servicio con el que está interactuando proporcionó datos no válidos.</string>
@@ -842,7 +842,7 @@
 \n
 \nEl nodo al que estás conectado está operando con una versión obsoleta de %1$s. Las versiones anteriores a %2$s ya no son soportadas por BitBanana.</string>
     <string name="error_insufficient_funds">Este pago excede su saldo disponible.</string>
-    <string name="backend">Backend</string>
+    <string name="backend">Motor</string>
     <string name="error_connection_rest_authentication">Error al autenticarse con la API Rest.</string>
     <string name="error_connection_host_verification_failed_lnd">Error en la verificación del nombre de host.
 \n
@@ -945,8 +945,8 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Código de pago</string>
-    <string name="currencies">Divisas</string>
-    <string name="currency">Divisa</string>
+    <string name="currencies">Monedas</string>
+    <string name="currency">Moneda</string>
     <string name="settings_currency_none">Ninguna</string>
     <string name="settings_no_fee_limit">Sin límite</string>
     <string name="help_dialog_settings_currencies">Al pulsar cualquier campo con un importe, podrá cambiar entre las divisas que haya configurado. Si solo selecciona unidades de Bitcoin, la aplicación dejará de comunicarse con los proveedores de tipos de cambio.</string>
@@ -960,8 +960,8 @@
     <string name="reset">Restablecer</string>
     <string name="total">Total</string>
     <string name="change">Cambiar</string>
-    <string name="activity_payment_route">Ruta de Pago</string>
-    <string name="clear">Purgar</string>
+    <string name="activity_payment_route">Ruta de pago</string>
+    <string name="clear">Vaciar</string>
     <string name="copy_all">Copiar todo</string>
     <string name="sort_by">Ordenar por</string>
     <string name="guardian_remoteConnect_nwc">¿Seguro que quiere conectar a\n\n%1$s\n\nCompruebe la clave pública antes de añadir el monedero.</string>
