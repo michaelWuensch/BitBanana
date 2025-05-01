@@ -1032,4 +1032,11 @@
     <string name="sort_by_value_asc">Valor (menor primeiro)</string>
     <string name="sort_by_symmetry_desc">Simetria (balanceado primeiro)</string>
     <string name="sort_by_value_desc">Valor (maior primeiro)</string>
+    <string name="consolidate_utxos">Consolidar UTXOs</string>
+    <string name="consolidate_utxos_summary">Consolidar %1$d UTXOs</string>
+    <string name="consolidation_failed">Consolidação falhou</string>
+    <string name="guardian_consolidate_utxos">Consolidar UTXOs pode diminuir sua privacidade ao ligar endereços. Isso revela que os endereços de entrada provavelmente pertencem à mesma entidade, fazendo seu histórico de transação mais fácil de analisar e rastrear na blockchain.</string>
+    <string name="all_utxos">Todas as UTXOs</string>
+    <string name="consolidate">Consolidar</string>
+    <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, você está combinando várias saídas não gastas em uma maior. Isso faz futuras transações mais baratas, uma vez que as taxas de transação são determinadas pelo seu tamanho em bytes, e não por valor. Consolidar durante períodos de baixa taxa permite que usuários paguem pelo espaço da blockchain de que precisam enquanto for barato, ajudando a minimizar taxas futuras durante períodos de alta taxa. Tenha em mente, no entanto, que a consolidação custa uma taxa e pode diminuir sua privacidade ao ligar endereços.</string>
 </resources>
