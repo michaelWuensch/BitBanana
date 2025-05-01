@@ -311,9 +311,9 @@
     <string name="advanced_channel_details_explanation_initiator">Кто открыл канал?</string>
     <string name="advanced_channel_details_explanation_close_initiator">Кто закрыл канал?</string>
     <string name="advanced_channel_details_time_lock">Время блокировки</string>
-    <string name="advanced_channel_details_explanation_local_routing_fee">The fees you will receive when you forward a transaction through this channel. The total fee you will receive is the sum of the base fee and the fee rate.\nThe base fee is what you get for each forwarding, no matter what the amount of the transaction is.\nThe amount received through the fee rate depends on the amount of the transaction.</string>
+    <string name="advanced_channel_details_explanation_local_routing_fee">Комиссии которые вы получите при пересылке транзакции через этот канал. Общая комиссия которую вы получите, представляет собой сумму базовой комиссии и ставки комиссии.\nБазовая комиссия — это то, что вы получаете за каждую пересылку независимо от суммы транзакции.\nСумма, полученная через ставку комиссии, зависит от суммы транзакции.</string>
     <string name="advanced_channel_details_inbound_routing_fee">Комиссия входящей маршрутизации</string>
-    <string name="advanced_channel_details_explanation_local_minHTLC">The smallest value you are willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_local_minHTLC">Наименьшая сумма которую вы готовы переслать по этому каналу за одну транзакцию.</string>
     <string name="advanced_channel_details_explanation_remote_minHTLC">Наименьшее значение которое ваш контрагент готов пересылать на этом канале в одной транзакции.</string>
     <string name="backup_data_confirm">Я согласен</string>
     <string name="backup_data_password_enter">Введите ваш пароль</string>
@@ -401,8 +401,8 @@
     <string name="fee_not_available">н/д</string>
     <string name="fee_limit_threshold">Предел комиссии для платежей выше %1$d сатаров: %2$s</string>
     <string name="help_dialog_scanPaymentRequest">QR-коды, содержащие следующее являются действительными:\n\n- Bitcoin адрес\n- Запрос оплаты Bitcoin\n- платёжный запрос Lightning</string>
-    <string name="advanced_channel_details_explanation_local_channel_reserve">The minimum amount this node is required to reserve in this channels balance. You will not be able to spend this amount. This makes sure you will always have something to lose if you try to cheat your channel partner.</string>
-    <string name="advanced_channel_details_explanation_remote_channel_reserve">The minimum amount the other node is required to reserve in this channels balance. This makes sure the other node will always have something to lose it tries to cheat you.</string>
+    <string name="advanced_channel_details_explanation_local_channel_reserve">Минимальная сумма которую этот узел должен зарезервировать на балансе этого канала. Вы не сможете потратить эту сумму. Это гарантирует что вам всегда будет что терять если вы попытаетесь обмануть своего партнёра по каналу.</string>
+    <string name="advanced_channel_details_explanation_remote_channel_reserve">Минимальная сумма которую другой узел должен зарезервировать на балансе этого канала. Это гарантирует что другой узел всегда что-то потеряет если вздумает вас обмануть.</string>
     <string name="forwarding_avg_earned_description">Получено в среднем за одно событие</string>
     <string name="forwarding_avg_volume_description">Маршрутизация в среднем за событие</string>
     <string name="message_to_verify">Сообщение для проверки</string>
@@ -485,7 +485,7 @@
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
     <string name="change_data">Изменить данные</string>
-    <string name="advanced_channel_details_explanation_local_maxHTLC">The maximum value you are willing to forward on this channel in a single transaction.</string>
+    <string name="advanced_channel_details_explanation_local_maxHTLC">Максимальная сумма которую вы готовы переслать по этому каналу за одну транзакцию.</string>
     <string name="backup_data_confirm_headline">Пожалуйста подтвердите</string>
     <string name="stealth_mode_description_calc">BitBanana теперь похожа на калькулятор!</string>
     <string name="peer_ping">Пинг</string>
@@ -544,11 +544,11 @@
     <string name="contact_type">Тип контакта</string>
     <string name="advanced_channel_details_explanation_close_type">Каналы могут быть закрыты по разному. Оптимальный путь это кооперативное закрытие. Если одна сторона решает закрыть канал без сотрудничества другой стороны, происходит так называемая «принудительное закрытие». Принудительное закрытие обычно приводит к более высокой комиссии, а инициатору закрытия придётся ждать довольно много времени, пока он не сможет получить доступ к своим средствам. Если одна сторона пытается обмануть и попалась, у нас есть закрытие по нарушению.</string>
     <string name="advanced_channel_details_explanation_commit_fee">Сумма которая должна быть оплачена в комиссиях при закрытии канала. Это может измениться со временем, так как комиссии взимаются с комиссии за транзакцию базового уровня биткойна.</string>
-    <string name="advanced_channel_details_explanation_time_lock">In the event of an uncooperative close (force close) of this channel, the time lock is the number of blocks you will have to wait before you can access your funds again.</string>
-    <string name="advanced_channel_details_explanation_remote_routing_fee">The fees the other node will receive when it forwards a transaction through this channel. This only applies to forwarding transactions. You will not have to pay anything if you use this channel for your transactions.</string>
-    <string name="advanced_channel_details_explanation_inbound_routing_fee">Forwarding a payment involves two channels: an inbound channel for receiving a specific amount and an outbound channel for sending the same amount to another peer. This is the fee that will be charged when the channel is selected as inbound channel.\n\nTechnically, a fee can only be set for the outbound channel; thus, for a selected channel pair (inbound &amp; outbound) the inbound fee effectively adjusts the outbound fee by a simple addition. Therefore, a negative number results in a discount on outbound fee, while a positive number will increase it. For security, the total routing fee cannot be negative, ensuring that funds are not lost through routing.\n\nBase fee and fee rate work the same way as they do for outbound fees.</string>
+    <string name="advanced_channel_details_explanation_time_lock">В случае закрытия этого канала без сотрудничества (принудительного закрытия) то время блокировки будет количеством блоков, которые вам придется подождать, прежде чем вы снова сможете получить доступ к своим средствам.</string>
+    <string name="advanced_channel_details_explanation_remote_routing_fee">Комиссии которые получит другой узел когда он пересылает транзакцию через этот канал. Это относится только к пересылаемым транзакциям. Вам не придется ничего платить, если вы используете этот канал для своих транзакций.</string>
+    <string name="advanced_channel_details_explanation_inbound_routing_fee">Пересылка платежа включает два канала: входящий канал для получения определенной суммы и исходящий канал для отправки той же суммы другому узлу. Это комиссия которая будет взиматься, когда канал выбран в качестве входящего канала.\n\nТехнически, комиссия может быть установлена только для исходящего канала; таким образом, для выбранной пары каналов (входящий и исходящий) входящая плата фактически корректирует исходящую плату путем простого сложения. Таким образом, отрицательное число приводит к скидке на исходящую плату, в то время как положительное число увеличивает ее. В целях безопасности общая комиссия за маршрутизацию не может быть отрицательной, что гарантирует, что средства не будут потеряны из-за маршрутизации.\n\nБазовая комиссия и ставка платы работают так же как и для исходящих сборов.</string>
     <string name="advanced_channel_details_explanation_remote_maxHTLC">Максимальная сумма которую ваш контрагент хочет пересылать по этому каналу в одной транзакции.</string>
-    <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
+    <string name="backup_data_confirm_description">Я уже сделал резервную копию своей сид-фразы и каналов и понимаю, что эта резервная копия НЕ поможет восстановить мои средства.\n\nЯ понимаю, что эта резервная копия по-прежнему содержит всю необходимую информацию для доступа к моим средствам, если узел в данный момент находится в сети. Поэтому я буду использовать безопасный пароль на следующем шаге.</string>
     <string name="backup_data_restore_success">Резервная копия восстановлена</string>
     <string name="backup_data_version_too_old">Резервная копия была сделана с более новой версией. Пожалуйста, обновите приложение перед импортом резервной копии.</string>
     <string name="forwarding_no_forwarding_events">Нет событий переотправки за выбранный период</string>
@@ -560,7 +560,7 @@
     <string name="channel_summary_total_unavailable">Не в сети</string>
     <string name="fee_rate">Ставка Комиссии</string>
     <string name="inbound_fee_rate">Ставка входящей комиссии</string>
-    <string name="timelock_delta">Timelock Delta</string>
+    <string name="timelock_delta">Ожидание блокировки средств (подтверждённых блоков)</string>
     <string name="submit_routing_policy">Обновить правила маршрутизации</string>
     <string name="routing_policy_applies_for_all_channels">Внимание! При утверждении эти настройки будут применены ко всем вашим каналам!</string>
     <string name="explanation_channel_commitment_type">У каждой стороны есть транзакция по обязательству, которая только она может транслировать в блокчейн, чтобы забрать свою долю биткоинов. Различные типы сделок с обязательствами приводят к тому, что каналы имеют разные свойства.</string>
@@ -843,4 +843,6 @@
     <string name="consolidation_failed">Консолидация не удалась</string>
     <string name="consolidate">Консолидировать</string>
     <string name="consolidate_utxos">Консолидировать UTXO</string>
+    <string name="guardian_consolidate_utxos">Объединение (консолидация) выходов UTXO может ослабить вашу конфиденциальность связывая адреса. Это показывает что входные адреса вероятно принадлежат одному и тому же субъекту, что упрощает анализ и отслеживание истории транзакций в блокчейне.</string>
+    <string name="help_dialog_utxos_consolidate">Когда вы консолидируете выходы UTXO, то вы объединяете несколько неизрасходованных выходов в один большой. Это делает будущие транзакции дешевле, поскольку комиссии за транзакции в цепочке определяются размером в байтах, а не суммой. Консолидация в периоды низких комиссий позволяет пользователям платить за необходимое им место в блокчейне, пока оно дешево, что помогает минимизировать будущие комиссии в периоды высоких комиссий. Однако имейте в виду, что консолидация стоит свою комиссию и может ослабить вашу конфиденциальность из-за связывания адресов.</string>
 </resources>
