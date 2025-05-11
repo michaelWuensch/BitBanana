@@ -1,1 +1,1 @@
-Lightning Node Management for Android
+Unleash your Bitcoin Lightning node!
