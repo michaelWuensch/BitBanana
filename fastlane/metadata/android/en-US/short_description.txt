@@ -1,1 +1,1 @@
-Lightning Node Management for Android
+Bitcoin wallet with Lightning node management
