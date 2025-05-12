@@ -56,7 +56,7 @@
     <string name="activity_send">Сплатити</string>
     <string name="activity_connectRemoteNode">Додати вузол</string>
     <string name="activity_advanced_settings">Розширені налаштування</string>
-    <string name="activity_identity">Identity</string>
+    <string name="activity_identity">Вузол</string>
     <string name="navigation_history">Історія</string>
     <string name="navigation_settings">Налаштування</string>
     <string name="pin_create">Створити пінкод</string>
@@ -120,7 +120,7 @@
     <string name="receive_noIncomeBalance">Щоб отримати біткоіни через Lightning, принаймні один з ваших каналів потребує деякого балансі на стороні контрагентів.\n\nЩоб досягти цього, потрібно спочатку витратити щось на Lightning мережу\n\n.У зоні керування каналами ви завжди можете бачити, скільки зараз ви можете надіслати або отримати через мережу Lightning. </string>
     <string name="receive_requestFullfilled">Рахунок\nсплачено</string>
     <string name="guardian_doNotShowAgain">Не показувати знову.</string>
-    <string name="guardian_Title">УВАГА</string>
+    <string name="guardian_Title">Увага</string>
     <string name="guardian_reset">Усі попередження про безпеку знову ввімкнено.</string>
     <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">Якщо ви скопіюєте ці дані в свій буфер обміну, інші додатки (також шкідливі) зможуть отримати до них доступ і змінити їх.\n\nЩоб переконатися, що нічого не змінилося під час вставки, порівняйте початок із:\n\n%1$s\n</string>
     <string name="guardian_copyToClipboard_lightning">Якщо ви скопіюєте ці дані в свій буфер обміну, інші додатки (також шкідливі) зможуть отримати до них доступ і змінити їх.\n\nЩоб переконатися, що нічого не змінилося під час вставки, порівняйте кінець із:\n\n%1$s\n</string>
@@ -171,7 +171,7 @@
     <string name="error_qr_code_result_null">Не вдається прочитати QR-код, спробуйте ще раз.</string>
     <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nБудь ласка, використовуйте один з наступних форматів:\n\n- Рядок Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Не вдалося отримати конфігурацію з BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">Недійсний рядок lndconnect.\nПереконайтеся, що ви використовуєте такий формат:\n\nlndconnect://[ip]:[порт]?cert=[…]&amp;macaroon=[…]</string>
+    <string name="error_connection_invalidLndConnectString">Недійсний рядок lndconnect.\nПереконайтеся, що ви використали наступний формат:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Сертифікат недійсний.</string>
     <string name="error_connection_no_macaroon">Інформація про ваше з\'єднання не містить макарунів. Це обов\'язково.</string>
     <string name="error_connection_invalid_macaroon">Макарон недійсний.</string>
@@ -259,7 +259,7 @@
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
     <string name="change_data">Змінити дані</string>
-    <string name="connectionData">Дані підключення</string>
+    <string name="connectionData">Даних підключення</string>
     <string name="host">Хост</string>
     <string name="port">Порт</string>
     <string name="certificate">Сертифікат</string>
@@ -269,7 +269,7 @@
     <string name="lnurl_service_not_responding">%s не відповідає</string>
     <string name="lnurl_service">Підтримка</string>
     <string name="drawer_menu_channels">Канали</string>
-    <string name="login_verb">авторизуватися</string>
+    <string name="login_verb">Авторизуватися</string>
     <string name="error_connection_no_internet">Немає підключення до Інтернету!</string>
     <string name="server_certificate">Сертифікат хоста</string>
     <string name="drawer_menu_routing">Маршрутизація</string>
@@ -303,7 +303,7 @@
     <string name="lnurl_payer_data_identifier_explanation">Адреса блискавки схожа на адресу електронної пошти, але для біткойнів!</string>
     <string name="drawer_menu_buy">Купуйте Bitcoin</string>
     <string name="drawer_menu_coin_control">Монети (UTXO)</string>
-    <string name="drawer_menu_category_app">додаток</string>
+    <string name="drawer_menu_category_app">Додаток</string>
     <string name="identity_switch_tor">Tor</string>
     <string name="clipboard_error_heading">Знайдено дані буфера обміну, але вони недійсні:</string>
     <string name="advanced_channel_details_explanation_local_maxHTLC">Максимальна вартість, яку ви готові переслати на цей канал за одну транзакцію.</string>
@@ -317,7 +317,7 @@
     <string name="peer_ping_explanation">Час, потрібний однолітку для відповіді.</string>
     <string name="balance_details_lightning">Відкриті канали:</string>
     <string name="balance_details_lightning_pending">Канали, що очікують на розгляд:</string>
-    <string name="register">зареєструватися</string>
+    <string name="register">Зареєструватися</string>
     <string name="auth_link_account">Пов\'язати з обліковим записом</string>
     <string name="vpn">VPN</string>
     <string name="vpn_automation">Автоматизація VPN</string>
@@ -326,30 +326,30 @@
     <string name="bolt12">Болт 12</string>
     <string name="pubkey">pubkey</string>
     <string name="off">Вимкнено</string>
-    <string name="available">в наявності</string>
+    <string name="available">В наявності</string>
     <string name="note">Примітка</string>
     <string name="settings_mediumFee">Середня транзакція</string>
     <string name="backup_data_restore_success">Резервну копію відновлено</string>
-    <string name="remove">видалити</string>
+    <string name="remove">Вилучити</string>
     <string name="deactivate">Дезактивувати</string>
     <string name="reactivate">Повторно активувати</string>
     <string name="active">Активний</string>
     <string name="inactive">Неактивний</string>
     <string name="terminated">Припинено</string>
-    <string name="exhausted">виснажений</string>
+    <string name="exhausted">Виснажений</string>
     <string name="id">ID</string>
     <string name="state">Держава</string>
     <string name="activity_manage_channels_closed">Зачинено</string>
     <string name="verify">Підтвердити</string>
     <string name="type">Тип</string>
-    <string name="duplicate">дублікат</string>
+    <string name="duplicate">Дублікат</string>
     <string name="settings_hideBalanceType_total">Тільки загальний баланс</string>
     <string name="settings_hideBalanceType_all">Всі залишки</string>
     <string name="settings_featurePeers_summary">Незважаючи на те, що керування одноранговими вузлами є автоматизованим, ця функція все ще пропонує ручне керування для перегляду та керування підключеними одноранговими вузлами.</string>
     <string name="settings_featureSignVerify_summary">Дозволяє підписувати та перевіряти повідомлення за допомогою вашого вузла.</string>
-    <string name="peer_features">особливості</string>
+    <string name="peer_features">Особливості</string>
     <string name="drawer_menu_nodes">Вузли</string>
-    <string name="signature_pubkey">Pubkey:</string>
+    <string name="signature_pubkey">Pub key:</string>
     <string name="error_connection_rest_authentication">Не вдалося автентифікувати за допомогою Rest API.</string>
     <string name="error_only_payment_data_allowed">Тут дозволені лише платіжні дані.</string>
     <string name="error_node_not_yet_ready">Ваш вузол ще не повністю синхронізовано. Спробуйте пізніше.</string>
@@ -372,7 +372,7 @@
     <string name="support_help_description">Відвідайте нашу документацію.</string>
     <string name="clipboard_scan_payment">Ваш буфер обміну містить платіжну інформацію. Ви хочете ініціювати платіж?</string>
     <string name="manual_send_input_hint">Адреса або платіжні дані</string>
-    <string name="advanced_channel_details_activity">діяльність</string>
+    <string name="advanced_channel_details_activity">Діяльність</string>
     <string name="advanced_channel_details_explanation_lifetime">Це показує, як довго цей канал уже існує.</string>
     <string name="advanced_channel_details_lifetime_closed">Тривалість життя</string>
     <string name="advanced_channel_details_initiator_you">Ви</string>
@@ -462,9 +462,9 @@
     <string name="settings_custom_exchange_rate_provider_host_description">Укажіть адресу хосту для вашого постачальника обмінних курсів. Коли ви самостійно розміщуєте постачальника обмінних курсів, ваша конфіденційність повністю зберігається.</string>
     <string name="settings_requires_tor_toast">Для цього потрібен Tor. Увімкніть це в налаштуваннях.</string>
     <string name="settings_feeEstimationProvider">Оцінка гонорару</string>
-    <string name="settings_node_fee_estimates">внутрішній</string>
+    <string name="settings_node_fee_estimates">Внутрішній</string>
     <string name="settings_receiveAddressDisplayValues_1">Рідний SegWit (Bech32)</string>
-    <string name="settings_avatarStyleDisplayValues_0">змішаний</string>
+    <string name="settings_avatarStyleDisplayValues_0">Змішаний</string>
     <string name="settings_avatarStyleDisplayValues_3">Люди</string>
     <string name="settings_lnPrivateChannelHints">Включайте підказки щодо маршруту для приватних каналів у рахунках</string>
     <string name="settings_on_off">Увімк. / Вимк</string>
@@ -525,7 +525,7 @@
     <string name="own_watchtower_tap_hint">Натисніть на аватар, щоб відкрити інформацію про свою сторожову вежу!</string>
     <string name="lnd_watchtower_client_inactive">Клієнт Watchtower наразі неактивний. Переконайтеся, що lnd запущено з прапорцем --wtclient.active.</string>
     <string name="watchtower_sessions">Сеанси</string>
-    <string name="description">опис</string>
+    <string name="description">Опис</string>
     <string name="activity_node_details">Деталі вузла</string>
     <string name="activity_manage_contacts">Керувати контактами</string>
     <string name="activity_utxos">Монети (UTXO)</string>
@@ -545,7 +545,7 @@
     <string name="drawer_menu_contacts">Контакти</string>
     <string name="send_SendOnChainInstead">Надіслати On-Chain</string>
     <string name="lightning">Блискавка</string>
-    <string name="open">ВІДЧИНЕНО</string>
+    <string name="open">Відчинено</string>
     <string name="search">Пошук</string>
     <string name="send_money">Надіслати гроші</string>
     <string name="contact_name">Контактне ім\'я</string>
@@ -560,12 +560,12 @@
     <string name="disconnect">Відключити</string>
     <string name="identity_switch_public">Громадський</string>
     <string name="choose_action">Виберіть дію</string>
-    <string name="payee">одержувач</string>
+    <string name="payee">Одержувач</string>
     <string name="password">Пароль</string>
     <string name="label">Мітка</string>
     <string name="username">Ім\'я користувача</string>
     <string name="privacy">Конфіденційність</string>
-    <string name="used">б/в</string>
+    <string name="used">Використано</string>
     <string name="disable">Вимкнути</string>
     <string name="notConnected">Не підключено</string>
     <plurals name="blocks">
@@ -588,7 +588,7 @@
     <string name="error_connection_clngrpc_invalidCertificateOrKey">Наданий сертифікат або ключ недійсні.</string>
     <string name="error_lightning_uri_invalid">Недійсний формат.\nБудь ласка, скористайтеся одним із наведених нижче способів.\n- pubkey\n- pubkey@host\n- pubkey@host:порт</string>
     <string name="settings_custom_fee_estimation_provider_host_description">Будь ласка, надайте адресу хосту для вашого постачальника оцінки комісії. Коли ви самостійно розміщуєте постачальника оцінки комісії, ваша конфіденційність повністю зберігається.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Недійсний рядок підключення cln-grpc.\nПереконайтеся, що ви використовуєте такий формат:\n\ncln-grpc://[ip]:[порт]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Недійсний рядок підключення cln-grpc.\nПереконайтеся, що ви використали такий формат:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
     <string name="error_funds_not_confirmed_yet">У вас достатньо коштів у мережі, але їх підтвердження ще очікується. Будь ласка, зачекайте підтвердження ваших коштів у ланцюжку. Ви можете відстежувати статус своїх коштів через перегляд або транзакцію UTXO.</string>
     <string name="error_connection_host_verification_failed_lnd">Помилка перевірки імені хоста. \n\nІм\'я хоста вашого з\'єднання не збігається з ім\'ям хоста, указаним у сертифікаті хоста. \n\nПотрібно або вимкнути перевірку сертифіката в налаштуваннях з’єднання вузлів, або повторно створити сертифікат. Переконайтеся, що ім’я хоста додано до lnd.conf як tlsextradomain перед його повторним створенням.</string>
     <string name="error_connection_lnd_unavailable">Помилка підключення. Доступ до хосту доступний, але служба вузла не відповідає. \n\nБудь ласка, переконайтеся, що вузол працює, чи номер порту (%1$s) правильний і що перенаправлення портів налаштовано.</string>
@@ -679,13 +679,13 @@
     <string name="reliability">Надійність</string>
     <string name="network">Мережа</string>
     <string name="activity_forwarding">Маршрутизація</string>
-    <string name="settings_features">особливості</string>
+    <string name="settings_features">Особливості</string>
     <string name="lnurl_withdraw_insufficient_channel_balance">Сума виведення більша, ніж ви можете отримати за блискавичну суму з поточними відкритими каналами.</string>
     <string name="stealth_mode_enable_instruction">Закрийте програму</string>
     <string name="percent">Відсоток</string>
     <string name="channel_close_type_coop">Кооператив</string>
     <string name="channel_close_type_force_close">Примусово закрити</string>
-    <string name="save">зберегти</string>
+    <string name="save">Зберегти</string>
     <string name="manually">Вручну</string>
     <string name="contribute">Внести свій внесок</string>
     <string name="sign">Знак</string>
@@ -722,7 +722,7 @@
     <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">Поточна оцінка комісії передбачає, що ця трансакція зі ставкою комісії %1$d sat/vB може ніколи не бути підтверджена. Подумайте про збільшення комісії, щоб ваша транзакція не зависла надовго. \n\nВсе одно продовжити?</string>
     <string name="settings_tor_summary">Анонімізуйте весь веб-трафік за допомогою мережі Tor. Це стосується лише таких речей, як отримання курсів валют або взаємодія зі службами LNURL. Чи використовується Tor для підключення до вузла, можна встановити для кожного вузла окремо в його налаштуваннях з’єднання.</string>
     <string name="settings_scan_clipboard">Перевірте буфер обміну</string>
-    <string name="settings_currency_none">жодного</string>
+    <string name="settings_currency_none">Жодного</string>
     <string name="settings_features_summary">Персоналізуйте програму відповідно до своїх потреб, увімкнувши або вимкнувши функції.</string>
     <string name="settings_featurePeers">Рівний управління</string>
     <string name="settings_customBlockExplorer_host_description">Будь ласка, надайте адресу хосту для вашого користувацького провідника. Коли ви самостійно розміщуєте провідник блоків, ваша конфіденційність повністю зберігається.</string>
@@ -814,7 +814,7 @@
     <string name="help_dialog_rebalancing">Ребалансування каналів тримає ваші платіжні канали готовими до роботи! Якщо на одній стороні закінчуються кошти, ваш канал працюватиме лише в одному напрямку, і платежі можуть почати збоїти. Відправлення блискавичного платежу за круговим маршрутом до себе перерозподіляє баланси між вашими каналами без необхідності проведення транзакцій у ланцюжку. Цей вид дозволяє вам виконати такий круговий платіж. Для досягнення найкращих результатів оберіть канал з високою пропускною здатністю і об\'єднайте його з іншим каналом, який має надлишкову пропускну здатність.</string>
     <string name="rebalance">Відновити баланс</string>
     <string name="fee_paid">Сплачена комісія</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використовуєте такий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[СЕКРЕТ]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використали такий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="nostr_relay">Готові</string>
     <string name="guardian_remoteConnect_nwc">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nПерш ніж додавати гаманець, перевірте відкритий ключ.</string>
     <string name="error_nwc_setup_failed">Не вдалося ініціювати підключення Nostr Wallet Connect.</string>
