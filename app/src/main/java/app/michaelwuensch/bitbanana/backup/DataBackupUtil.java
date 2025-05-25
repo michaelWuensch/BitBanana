@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,14 @@ public class DataBackupUtil {
         }
         // Settings
         Map<String, ?> allEntries = PrefsUtil.getPrefs().getAll();
-        String settingsJsonString = "\"settings\":" + new Gson().toJson(allEntries);
+        Map<String, Object> filteredEntries = new HashMap<>();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (entry.getKey().startsWith("fiat_")) // don't include fiat exchange rates in backup
+                continue;
+            filteredEntries.put(entry.getKey(), entry.getValue());
+        }
+
+        String settingsJsonString = "\"settings\":" + new Gson().toJson(filteredEntries);
         backupJson = backupJson + settingsJsonString + ",";
 
         backupJson = backupJson.substring(0, backupJson.length() - 1) + "}";
@@ -124,6 +132,8 @@ public class DataBackupUtil {
                         if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore the for backups.
                             continue;
                         if (entry.getKey().equals("language")) // language change causes problems during restore...
+                            continue;
+                        if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
                             continue;
 
                         if (value instanceof Boolean) {
