@@ -39,6 +39,7 @@ import app.michaelwuensch.bitbanana.connection.BlindHostnameVerifier;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorProxyDetector;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
@@ -153,14 +154,14 @@ public class LndConnection {
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
-                        .maxInboundMessageSize(10 * 1024 * 1024) // set max message size to 10 mb
+                        .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
-                        .maxInboundMessageSize(10 * 1024 * 1024) // set max message size to 10 mb
+                        .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             }
 

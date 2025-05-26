@@ -54,13 +54,15 @@ public class RefConstants {
     public static final int DATA_BACKUP_LAST_SUPPORTED_VERSION = 0;
     public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
 
-
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;
     public static final int BACKEND_CONFIG_JSON_VERSION = 0;
 
-    // API request timeouts (in seconds)
+    // API request timeouts
     public static final int TOR_TIMEOUT_MULTIPLIER = 3;
+
+    // Maximum gRPC message size
+    public static final int MAX_GRPC_MESSAGE_SIZE = 10 * 1024 * 1024;
 
     // Error message durations (in milliseconds)
     public static final int ERROR_DURATION_SHORT = 3000;
