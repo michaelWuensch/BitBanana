@@ -24,6 +24,8 @@ import com.github.ElementsProject.lightning.cln.FundchannelRequest;
 import com.github.ElementsProject.lightning.cln.GetinfoRequest;
 import com.github.ElementsProject.lightning.cln.GetlogLog;
 import com.github.ElementsProject.lightning.cln.GetlogRequest;
+import com.github.ElementsProject.lightning.cln.GetroutesRequest;
+import com.github.ElementsProject.lightning.cln.GetroutesRoutesPath;
 import com.github.ElementsProject.lightning.cln.InvoiceRequest;
 import com.github.ElementsProject.lightning.cln.KeysendRequest;
 import com.github.ElementsProject.lightning.cln.ListchannelsRequest;
@@ -55,10 +57,13 @@ import com.github.ElementsProject.lightning.cln.ListtransactionsTransactions;
 import com.github.ElementsProject.lightning.cln.NewaddrRequest;
 import com.github.ElementsProject.lightning.cln.OfferRequest;
 import com.github.ElementsProject.lightning.cln.PayRequest;
+import com.github.ElementsProject.lightning.cln.SendpayRequest;
+import com.github.ElementsProject.lightning.cln.SendpayRoute;
 import com.github.ElementsProject.lightning.cln.SetchannelRequest;
 import com.github.ElementsProject.lightning.cln.SignmessageRequest;
 import com.github.ElementsProject.lightning.cln.TlvEntry;
 import com.github.ElementsProject.lightning.cln.TlvStream;
+import com.github.ElementsProject.lightning.cln.WaitsendpayRequest;
 import com.github.ElementsProject.lightning.cln.WithdrawRequest;
 import com.github.ElementsProject.lightning.cln.XpayRequest;
 
@@ -1110,6 +1115,114 @@ public class CoreLightningApi extends Api {
                 .doOnError(throwable -> BBLog.w(LOG_TAG, "sendLnPayment failed: " + throwable.fillInStackTrace()));
     }
 
+    private Single<SendLnPaymentResponse> performRebalance(SendLnPaymentRequest request) {
+        /* Core Lightnings API was not build for this... we have to use many tricks and create a big mess to make this work.
+        Xpay cannot be used when you do a selfpayment, as it then does not route anything.
+        Therefore we have to use getroutes (using the ask rene layers) and sendpay using that route.
+        getroutes does not allow to make a circular route either. Therefore we have to make the getroutes requests from the remote node of our first hop to ourself and add the first hop manually.
+        Then the routes that are returned from getroutes are formated differently than the one sendpay needs. Therefore we have to convert it.
+        And finally sendpay returns successful as soon as it starts trying to send it, not when it actually is successful. So we use the waitsendpay for this.
+         */
+        BBLog.d(LOG_TAG, "Performing Rebalance...");
+        List<OpenChannel> openChannels = Wallet_Channels.getInstance().getOpenChannelsList();
+        String firstPubkey = "";
+        for (OpenChannel channel : openChannels)
+            if (channel.getShortChannelId().toString().equals(request.getFirstHop().getShortChannelId().toString()))
+                firstPubkey = channel.getRemotePubKey();
+
+        GetroutesRequest getRoutesRequest = GetroutesRequest.newBuilder()
+                .setSource(ApiUtil.ByteStringFromHexString(firstPubkey))
+                .setDestination(ApiUtil.ByteStringFromHexString(Wallet.getInstance().getCurrentNodeInfo().getPubKey()))
+                .setAmountMsat(Amount.newBuilder()
+                        .setMsat(request.getAmount()))
+                .setMaxfeeMsat(Amount.newBuilder()
+                        .setMsat(request.getMaxFee())
+                        .build())
+                .setFinalCltv(request.getBolt11().getMinFinalExpiryDelta())
+                .addLayers(CHANNEL_PICKER_ASK_RENE_LAYER)
+                .build();
+
+        return CoreLightningNodeService().getRoutes(getRoutesRequest)
+                .doOnSuccess(response -> BBLog.d(LOG_TAG, "getRoutes success."))
+                .doOnError(throwable -> BBLog.w(LOG_TAG, "getRoutes failed: " + throwable.fillInStackTrace()))
+                .flatMap(getRoutesResponse -> {
+                    if (getRoutesResponse.getRoutesCount() == 0) {
+                        return Single.error(new RuntimeException("No routes found"));
+                    }
+
+                    // BBLog.i(LOG_TAG, "Route: " + getRoutesResponse.toString());
+
+                    List<SendpayRoute> sendpayRoute = new ArrayList<>();
+
+                    // Add first hop manually
+                    sendpayRoute.add(SendpayRoute.newBuilder()
+                            .setAmountMsat(Amount.newBuilder()
+                                    .setMsat(getRoutesResponse.getRoutes(0).getPath(0).getAmountMsat().getMsat()))
+                            .setDelay(getRoutesResponse.getRoutes(0).getPath(0).getDelay())
+                            .setId(ApiUtil.ByteStringFromHexString(request.getFirstHop().getRemotePubKey()))
+                            .setChannel(request.getFirstHop().getShortChannelId().toString())
+                            .build());
+
+                    // convert and add the route
+                    List<GetroutesRoutesPath> pathList = getRoutesResponse.getRoutes(0).getPathList();
+                    for (int i = 0; i < pathList.size(); i++) {
+                        GetroutesRoutesPath hop = pathList.get(i);
+
+                        SendpayRoute.Builder routeBuilder = SendpayRoute.newBuilder()
+                                .setId(hop.getNextNodeId())
+                                .setChannel(hop.getShortChannelIdDir().split("/")[0]);
+
+                        if (i == pathList.size() - 1) {
+                            // This is the last hop
+                            routeBuilder.setAmountMsat(Amount.newBuilder()
+                                            .setMsat(getRoutesResponse.getRoutes(0).getAmountMsat().getMsat()))
+                                    .setDelay(getRoutesResponse.getRoutes(0).getFinalCltv());
+                        } else {
+                            routeBuilder.setAmountMsat(Amount.newBuilder()
+                                            .setMsat(pathList.get(i + 1).getAmountMsat().getMsat()))
+                                    .setDelay(pathList.get(i + 1).getDelay());
+                        }
+
+                        sendpayRoute.add(routeBuilder.build());
+                    }
+
+                    // BBLog.i(LOG_TAG, "Route for sendpay: " + sendpayRoute.toString());
+
+                    SendpayRequest sendpayRequest = SendpayRequest.newBuilder()
+                            .addAllRoute(sendpayRoute)
+                            .setPaymentHash(ApiUtil.ByteStringFromHexString(request.getBolt11().getPaymentHash()))
+                            .setPaymentSecret(ApiUtil.ByteStringFromHexString(request.getBolt11().getPaymentSecret()))
+                            .setBolt11(request.getBolt11().getBolt11String())
+                            .build();
+
+                    BBLog.d(LOG_TAG, "sending payment... ");
+
+                    return CoreLightningNodeService().sendPay(sendpayRequest)
+                            .doOnSuccess(spResponse -> BBLog.d(LOG_TAG, "sendPay success."))
+                            .doOnError(error -> BBLog.e(LOG_TAG, "sendPay failed: " + error.getMessage()))
+                            .flatMap(spResponse -> {
+                                WaitsendpayRequest waitsendpayRequest = WaitsendpayRequest.newBuilder()
+                                        .setPaymentHash(ApiUtil.ByteStringFromHexString(request.getBolt11().getPaymentHash()))
+                                        .build();
+                                return CoreLightningNodeService().waitSendPay(waitsendpayRequest)
+                                        .doOnSuccess(wspResponse -> BBLog.d(LOG_TAG, "waitSendPay success."))
+                                        .doOnError(error -> BBLog.e(LOG_TAG, "waitSendPay failed: " + error.getMessage()))
+                                        .map(wspResponse -> SendLnPaymentResponse.newBuilder().setFee(wspResponse.getAmountSentMsat().getMsat() - wspResponse.getAmountMsat().getMsat()).build())
+                                        .onErrorReturn(error -> {
+                                            // Return a custom error response
+                                            SendLnPaymentResponse.FailureReason failureReason = SendLnPaymentResponse.FailureReason.UNKNOWN;
+
+                                            if (error.getMessage() != null && error.getMessage().contains("WIRE_TEMPORARY_CHANNEL_FAILURE"))
+                                                failureReason = SendLnPaymentResponse.FailureReason.NO_ROUTE;
+                                            return SendLnPaymentResponse.newBuilder()
+                                                    .setFailureReason(failureReason)
+                                                    .setFailureMessage(error.getMessage())
+                                                    .build();
+                                        });
+                            });
+                });
+    }
+
     @Override
     public Single<SendLnPaymentResponse> sendLnPayment(SendLnPaymentRequest sendLnPaymentRequest) {
         BBLog.d(LOG_TAG, "sendLnPayment called.");
@@ -1120,7 +1233,12 @@ public class CoreLightningApi extends Api {
                     // xpay
                     BBLog.v(LOG_TAG, "Using xpay...");
                     return setupXpayLayers(sendLnPaymentRequest)
-                            .flatMap(ignore -> performXpay(sendLnPaymentRequest));
+                            .flatMap(ignore -> {
+                                if (!sendLnPaymentRequest.hasLastHop())
+                                    return performXpay(sendLnPaymentRequest);
+                                else
+                                    return performRebalance(sendLnPaymentRequest);
+                            });
                 } else { // ToDo: remove when support for 24.11.2 is removed.
                     // old pay
                     PayRequest.Builder requestBuilder = PayRequest.newBuilder()

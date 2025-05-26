@@ -41,5 +41,6 @@ public class CoreLightningBackend extends Backend {
         FeatureSendAllOnChain = new BackendFeature(true);
         FeatureShowBackendLog = new BackendFeature(true);
         FeaturePickFirstHop = new BackendFeature(true, "25.02");
+        FeatureRebalanceChannel = new BackendFeature(true, "25.02");
     }
 }
