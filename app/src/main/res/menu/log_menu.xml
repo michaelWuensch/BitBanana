@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sortMenu"
+        android:icon="@drawable/baseline_sort_24"
+        android:title="@string/sort_by"
+        app:iconTint="@color/white"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/sort_by_age_asc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_age_asc" />
+            <item
+                android:id="@+id/sort_by_age_desc"
+                android:icon="@drawable/ic_transparent_24dp"
+                android:title="@string/sort_by_age_desc" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/autoScrollToggle"
+        android:checkable="true"
+        android:checked="false"
+        android:title="@string/auto_scroll"
+        app:showAsAction="never" />
+</menu>

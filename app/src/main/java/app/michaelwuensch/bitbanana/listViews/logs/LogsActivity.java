@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.logs;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +56,23 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
     private TextView mEmptyListText;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public static LogListItem.SortCriteria getCurrentSortCriteria() {
+        String savedCriteria = PrefsUtil.getPrefs().getString(PrefsUtil.LOG_SORT_CRITERIA, LogListItem.SortCriteria.AGE_DESC.name());
+        return LogListItem.SortCriteria.valueOf(savedCriteria);
+    }
+
+    private static void setCurrentSortCriteria(LogListItem.SortCriteria criteria) {
+        PrefsUtil.editPrefs().putString(PrefsUtil.LOG_SORT_CRITERIA, criteria.name()).apply();
+    }
+
+    private static boolean getLogAutoscrollEnabled() {
+        return PrefsUtil.getPrefs().getBoolean(PrefsUtil.LOG_AUTO_SCROLL, false);
+    }
+
+    private static void setLogAutoscrollEnabled(boolean enabled) {
+        PrefsUtil.editPrefs().putBoolean(PrefsUtil.LOG_AUTO_SCROLL, enabled).apply();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,10 +297,55 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        updateSortMenuTitles(menu);
+        updateCheckableOptions(menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void updateSortMenuTitles(Menu menu) {
+        // Get the sort submenu
+        MenuItem sortMenuItem = menu.findItem(R.id.sortMenu);
+        if (sortMenuItem != null && sortMenuItem.hasSubMenu()) {
+            Menu sortSubMenu = sortMenuItem.getSubMenu();
+
+            // Reset all menu items
+            sortSubMenu.findItem(R.id.sort_by_age_asc).setIcon(R.drawable.ic_transparent_24dp);
+            sortSubMenu.findItem(R.id.sort_by_age_desc).setIcon(R.drawable.ic_transparent_24dp);
+
+            // Add arrow to current sort criteria
+            LogListItem.SortCriteria currentCriteria = getCurrentSortCriteria();
+            int menuItemId = -1;
+
+            switch (currentCriteria) {
+                case AGE_ASC:
+                    menuItemId = R.id.sort_by_age_asc;
+                    break;
+                case AGE_DESC:
+                    menuItemId = R.id.sort_by_age_desc;
+                    break;
+            }
+
+            if (menuItemId != -1) {
+                MenuItem item = sortSubMenu.findItem(menuItemId);
+                item.setIcon(R.drawable.baseline_check_24);
+                item.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+            }
+        }
+    }
+
+    private void updateCheckableOptions(Menu menu) {
+        MenuItem autoScrollItem = menu.findItem(R.id.autoScrollToggle);
+        if (autoScrollItem != null)
+            autoScrollItem.setChecked(getLogAutoscrollEnabled());
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         getMenuInflater().inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.log_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.searchButton);
         mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setQueryHint(getResources().getString(R.string.search));
@@ -314,8 +377,30 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
         // Handle action bar item clicks here.
         int id = item.getItemId();
 
+        if (id == R.id.sort_by_age_asc) {
+            setCurrentSortCriteria(LogListItem.SortCriteria.AGE_ASC);
+            updateLogsDisplayList();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.sort_by_age_desc) {
+            setCurrentSortCriteria(LogListItem.SortCriteria.AGE_DESC);
+            updateLogsDisplayList();
+            scrollToTop();
+            return true;
+        } else if (id == R.id.autoScrollToggle) {
+            setLogAutoscrollEnabled(!item.isChecked());
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void scrollToTop() {
+        mRecyclerView.scrollToPosition(0);
+    }
+
+    private void scrollToBottom() {
+        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override
@@ -361,6 +446,18 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
                         }
                         mAdapter.add(item);
                         mEmptyListText.setVisibility(View.GONE);
+                    }
+
+                    if (getLogAutoscrollEnabled()) {
+                        LogListItem.SortCriteria currentCriteria = LogListItem.SortCriteria.valueOf(PrefsUtil.getPrefs().getString(PrefsUtil.LOG_SORT_CRITERIA, LogListItem.SortCriteria.AGE_DESC.name()));
+                        switch (currentCriteria) {
+                            case AGE_ASC:
+                                scrollToTop();
+                                break;
+                            case AGE_DESC:
+                                scrollToBottom();
+                                break;
+                        }
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.listViews.logs.items;
 
 import app.michaelwuensch.bitbanana.models.BBLogItem;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class LogListItem implements Comparable<LogListItem> {
 
@@ -14,6 +15,11 @@ public class LogListItem implements Comparable<LogListItem> {
         return mLogItem;
     }
 
+    public enum SortCriteria {
+        AGE_ASC,
+        AGE_DESC,
+    }
+
     public boolean equalsWithSameContent(Object o) {
         if (!equals(o)) {
             return false;
@@ -25,7 +31,16 @@ public class LogListItem implements Comparable<LogListItem> {
     @Override
     public int compareTo(LogListItem o) {
         LogListItem other = (LogListItem) o;
-        return Long.compare(this.mLogItem.getTimestamp(), other.mLogItem.getTimestamp());
+
+        SortCriteria currentCriteria = SortCriteria.valueOf(PrefsUtil.getPrefs().getString(PrefsUtil.LOG_SORT_CRITERIA, SortCriteria.AGE_DESC.name()));
+        switch (currentCriteria) {
+            case AGE_ASC:
+                return Long.compare(other.mLogItem.getTimestamp(), this.mLogItem.getTimestamp());
+            case AGE_DESC:
+                return Long.compare(this.mLogItem.getTimestamp(), other.mLogItem.getTimestamp());
+            default:
+                return 0;
+        }
     }
 
     @Override

@@ -953,4 +953,6 @@
     <string name="consolidate_utxos_summary">Consolidate %1$d UTXOs</string>
     <string name="consolidation_failed">Consolidation failed</string>
 
+    <string name="auto_scroll">Auto-Scroll</string>
+
 </resources>
