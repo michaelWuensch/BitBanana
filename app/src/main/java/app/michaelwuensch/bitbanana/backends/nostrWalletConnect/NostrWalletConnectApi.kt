@@ -41,7 +41,7 @@ class NostrWalletConnectApi : Api() {
         return RxNwcWrapper.makeRxCall(
             call = { client!!.getInfo() }, mapper = { response ->
                 var network = BackendConfig.Network.MAINNET
-                when (response.network.lowercase()) {
+                when (response.network?.lowercase()) {
                     "mainnet" -> network = BackendConfig.Network.MAINNET
                     "testnet" -> network = BackendConfig.Network.TESTNET
                     "regtest" -> network = BackendConfig.Network.REGTEST
@@ -128,11 +128,11 @@ class NostrWalletConnectApi : Api() {
                     .setBolt11(response.invoice)
                     .setAmountRequested(response.amount.toLong())
                     .setPaymentHash(response.paymentHash)
-                if (response.settledAt != null) {
+                if (response.settledAt != null && response.settledAt!!.asSecs() != 0L.toULong()) {
                     builder.setPaidAt(response.settledAt!!.asSecs().toLong())
                     builder.setAmountPaid(response.amount.toLong())
                 }
-                if (response.expiresAt != null) {
+                if (response.expiresAt != null && response.expiresAt!!.asSecs() != 0L.toULong()) {
                     builder.setExpiresAt(response.expiresAt!!.asSecs().toLong())
                 }
                 builder.build()
@@ -171,11 +171,11 @@ class NostrWalletConnectApi : Api() {
                         .setBolt11(invoice.invoice)
                         .setAmountRequested(invoice.amount.toLong())
                         .setPaymentHash(invoice.paymentHash)
-                    if (invoice.settledAt != null) {
+                    if (invoice.settledAt != null && invoice.settledAt!!.asSecs() != 0L.toULong()) {
                         builder.setPaidAt(invoice.settledAt!!.asSecs().toLong())
                         builder.setAmountPaid(invoice.amount.toLong())
                     }
-                    if (invoice.expiresAt != null) {
+                    if (invoice.expiresAt != null && invoice.expiresAt!!.asSecs() != 0L.toULong()) {
                         builder.setExpiresAt(invoice.expiresAt!!.asSecs().toLong())
                     }
 
