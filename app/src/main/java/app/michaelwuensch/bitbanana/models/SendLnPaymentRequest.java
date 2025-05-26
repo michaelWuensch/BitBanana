@@ -3,7 +3,7 @@ package app.michaelwuensch.bitbanana.models;
 import java.io.Serializable;
 import java.util.List;
 
-import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.Channels.SelectedChannel;
 
 public class SendLnPaymentRequest implements Serializable {
 
@@ -15,9 +15,9 @@ public class SendLnPaymentRequest implements Serializable {
     private final String DestinationPubKey;
     private final String Preimage;
     private final String PaymentHash;
-    private final ShortChannelId FirstHop;
+    private final SelectedChannel FirstHop;
     private final boolean HasFirstHop;
-    private final String LastHop;
+    private final SelectedChannel LastHop;
     private final boolean HasLastHop;
     private final List<CustomRecord> CustomRecords;
 
@@ -83,9 +83,9 @@ public class SendLnPaymentRequest implements Serializable {
     }
 
     /**
-     * The short channel id of the first hop.
+     * The selected channel for the first hop.
      */
-    public ShortChannelId getFirstHop() {
+    public SelectedChannel getFirstHop() {
         return FirstHop;
     }
 
@@ -94,9 +94,9 @@ public class SendLnPaymentRequest implements Serializable {
     }
 
     /**
-     * The pub key of the last hop.
+     * The selected channel for the last hop.
      */
-    public String getLastHop() {
+    public SelectedChannel getLastHop() {
         return LastHop;
     }
 
@@ -120,9 +120,9 @@ public class SendLnPaymentRequest implements Serializable {
         private String DestinationPubKey;
         private String Preimage;
         private String PaymentHash;
-        private ShortChannelId FirstHop;
+        private SelectedChannel FirstHop;
         private boolean HasFirstHop;
-        private String LastHop;
+        private SelectedChannel LastHop;
         private boolean HasLastHop;
         private List<CustomRecord> CustomRecords;
 
@@ -183,13 +183,13 @@ public class SendLnPaymentRequest implements Serializable {
             return this;
         }
 
-        public Builder setFirstHop(ShortChannelId firstHop) {
+        public Builder setFirstHop(SelectedChannel firstHop) {
             FirstHop = firstHop;
             HasFirstHop = firstHop != null;
             return this;
         }
 
-        public Builder setLastHop(String lastHopPubKey) {
+        public Builder setLastHop(SelectedChannel lastHopPubKey) {
             LastHop = lastHopPubKey;
             HasLastHop = lastHopPubKey != null;
             return this;

@@ -11,7 +11,7 @@ import java.util.List;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.App;
-import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.Channels.SelectedChannel;
 import app.michaelwuensch.bitbanana.models.CustomRecord;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
@@ -33,7 +33,7 @@ public class PaymentUtil {
      *
      * @param decodedBolt11 The decodedBolt11 invoice that will get paid
      */
-    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop, float customFeeRateInPercent) {
+    public static SendLnPaymentRequest prepareBolt11InvoicePayment(@NonNull DecodedBolt11 decodedBolt11, long amount, @Nullable SelectedChannel firstHop, @Nullable SelectedChannel lastHop, float customFeeRateInPercent) {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT11_INVOICE)
                 .setBolt11(decodedBolt11)
@@ -49,7 +49,7 @@ public class PaymentUtil {
      *
      * @param bolt12Invoice The fetched bolt 12 invoice that will get paid
      */
-    public static SendLnPaymentRequest prepareBolt12InvoicePayment(@NonNull String bolt12Invoice, long amount, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
+    public static SendLnPaymentRequest prepareBolt12InvoicePayment(@NonNull String bolt12Invoice, long amount, @Nullable SelectedChannel firstHop, @Nullable SelectedChannel lastHop) {
         return SendLnPaymentRequest.newBuilder()
                 .setPaymentType(SendLnPaymentRequest.PaymentType.BOLT12_INVOICE)
                 .setBolt12InvoiceString(bolt12Invoice)
@@ -60,7 +60,7 @@ public class PaymentUtil {
                 .build();
     }
 
-    public static SendLnPaymentRequest prepareKeysendPayment(String pubkey, long amount, String message, @Nullable ShortChannelId firstHop, @Nullable String lastHop) {
+    public static SendLnPaymentRequest prepareKeysendPayment(String pubkey, long amount, String message, @Nullable SelectedChannel firstHop, @Nullable SelectedChannel lastHop) {
 
         // Create the preimage upfront
         SecureRandom random = new SecureRandom();

@@ -20,7 +20,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
-import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.Channels.SelectedChannel;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
@@ -50,8 +50,8 @@ public class PickChannelsView extends ConstraintLayout {
 
     private ActivityResultLauncher<Intent> mActivityResultLauncher;
 
-    private ShortChannelId mSelectedFirstHop;
-    private String mSelectedLastHopPubKey;
+    private SelectedChannel mSelectedFirstHop;
+    private SelectedChannel mSelectedLastHop;
 
     public PickChannelsView(Context context) {
         super(context);
@@ -214,12 +214,12 @@ public class PickChannelsView extends ConstraintLayout {
             mClearFocusListener.onClearFocus();
     }
 
-    public ShortChannelId getFirstHop() {
+    public SelectedChannel getFirstHop() {
         return mSelectedFirstHop;
     }
 
-    public String getLastHopPubkey() {
-        return mSelectedLastHopPubKey;
+    public SelectedChannel getLastHop() {
+        return mSelectedLastHop;
     }
 
     // Handle the result
@@ -234,13 +234,21 @@ public class PickChannelsView extends ConstraintLayout {
 
         switch (hopType) {
             case ManageChannelsActivity.SELECTION_TYPE_FIRST_HOP:
-                mSelectedFirstHop = channel.getShortChannelId();
+                mSelectedFirstHop = SelectedChannel.newBuilder()
+                        .setShortChannelId(channel.getShortChannelId())
+                        .setRemotePubKey(channel.getRemotePubKey())
+                        .build();
+                ;
                 mBtnSelectFirstHop.setVisibility(GONE);
                 mFirstHopSelectionLayout.setVisibility(VISIBLE);
                 mTvFirstHopSelectedChannelName.setText(AliasManager.getInstance().getAlias(channel.getRemotePubKey()));
                 break;
             case ManageChannelsActivity.SELECTION_TYPE_LAST_HOP:
-                mSelectedLastHopPubKey = channel.getRemotePubKey();
+                mSelectedLastHop = SelectedChannel.newBuilder()
+                        .setShortChannelId(channel.getShortChannelId())
+                        .setRemotePubKey(channel.getRemotePubKey())
+                        .build();
+                ;
                 mBtnSelectLastHop.setVisibility(GONE);
                 mLastHopSelectionLayout.setVisibility(VISIBLE);
                 mTvLastHopSelectedChannelName.setText(AliasManager.getInstance().getAlias(channel.getRemotePubKey()));
@@ -255,14 +263,14 @@ public class PickChannelsView extends ConstraintLayout {
         mBtnSelectFirstHop.setVisibility(VISIBLE);
         mFirstHopSelectionLayout.setVisibility(GONE);
 
-        if (mSelectedLastHopPubKey == null)
+        if (mSelectedLastHop == null)
             mTvSummary.setText(R.string.automatic);
         if (mOnPickChannelViewButtonListener != null)
             mOnPickChannelViewButtonListener.onResetPickedChannelClicked();
     }
 
     private void resetLastHop() {
-        mSelectedLastHopPubKey = null;
+        mSelectedLastHop = null;
         mBtnSelectLastHop.setVisibility(VISIBLE);
         mLastHopSelectionLayout.setVisibility(GONE);
 
