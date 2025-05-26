@@ -1132,10 +1132,10 @@ public class LndApi extends Api {
                     requestBuilder.setAmtMsat(sendLnPaymentRequest.getAmount());
 
                 if (sendLnPaymentRequest.hasFirstHop())
-                    requestBuilder.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop()));
+                    requestBuilder.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop().getShortChannelId()));
 
                 if (sendLnPaymentRequest.hasLastHop()) {
-                    requestBuilder.setLastHopPubkey(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getLastHop()));
+                    requestBuilder.setLastHopPubkey(ApiUtil.ByteStringFromHexString(sendLnPaymentRequest.getLastHop().getRemotePubKey()));
                     requestBuilder.setAllowSelfPayment(true);
                 }
 
@@ -1157,7 +1157,7 @@ public class LndApi extends Api {
                         .setMaxParts(1); // KeySend does not support multi path payments
 
                 if (sendLnPaymentRequest.hasFirstHop())
-                    requestBuilderKeysend.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop()));
+                    requestBuilderKeysend.addOutgoingChanIds(ApiUtil.LongFromScid(sendLnPaymentRequest.getFirstHop().getShortChannelId()));
 
                 request = requestBuilderKeysend.build();
                 break;

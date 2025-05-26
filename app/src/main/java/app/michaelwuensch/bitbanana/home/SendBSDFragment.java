@@ -569,7 +569,7 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
     }
 
     private void prepareBolt12Payment(String fetchedInvoice) {
-        SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt12InvoicePayment(fetchedInvoice, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
+        SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt12InvoicePayment(fetchedInvoice, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHop());
         sendLightningPayment(sendLnPaymentRequest);
     }
 
@@ -579,9 +579,9 @@ public class SendBSDFragment extends BaseBSDFragment implements UtxoOptionsView.
 
         SendLnPaymentRequest sendLnPaymentRequest = null;
         if (mIsKeysend)
-            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, getSendAmount(), mPcvComment.getData(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey());
+            sendLnPaymentRequest = PaymentUtil.prepareKeysendPayment(mKeysendPubkey, getSendAmount(), mPcvComment.getData(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHop());
         else {
-            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey(), -1);
+            sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, getSendAmount(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHop(), -1);
         }
         sendLightningPayment(sendLnPaymentRequest);
     }

@@ -1012,11 +1012,11 @@ public class CoreLightningApi extends Api {
             List<OpenChannel> incomingChannelsToBlock = new ArrayList<>();
             if (request.hasFirstHop())
                 for (OpenChannel channel : openChannels)
-                    if (!channel.getShortChannelId().toString().equals(request.getFirstHop().toString()))
+                    if (!channel.getShortChannelId().toString().equals(request.getFirstHop().getShortChannelId().toString()))
                         outgoingChannelsToBlock.add(channel);
             if (request.hasLastHop())
                 for (OpenChannel channel : openChannels)
-                    if (!channel.getRemotePubKey().equals(request.getLastHop()))
+                    if (!channel.getShortChannelId().toString().equals(request.getLastHop().getShortChannelId().toString()))
                         incomingChannelsToBlock.add(channel);
 
             return CoreLightningNodeService().askReneRemoveLayer(

@@ -394,7 +394,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                     BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
                 } else {
-                    SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHopPubkey(), -1);
+                    SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHop(), -1);
                     BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
                     sendPayment(lnUrlPaySecondResponse.getSuccessAction(), sendPaymentRequest);
                 }

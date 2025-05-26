@@ -13,6 +13,7 @@ import app.michaelwuensch.bitbanana.connection.BlindHostnameVerifier;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorProxyDetector;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.RefConstants;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
@@ -64,6 +65,7 @@ public class CoreLightningConnection {
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
@@ -71,6 +73,7 @@ public class CoreLightningConnection {
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
                         .overrideAuthority("cln") // the grpc plugin for core lightning does not know the domain, therefore it uses 'cln' by default. See https://docs.corelightning.org/docs/grpc.
+                        .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             }
 

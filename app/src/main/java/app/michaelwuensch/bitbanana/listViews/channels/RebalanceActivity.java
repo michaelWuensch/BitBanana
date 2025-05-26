@@ -30,7 +30,7 @@ import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.customView.BBRebalance_ChannelView;
 import app.michaelwuensch.bitbanana.models.Channels.OpenChannel;
-import app.michaelwuensch.bitbanana.models.Channels.ShortChannelId;
+import app.michaelwuensch.bitbanana.models.Channels.SelectedChannel;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
 import app.michaelwuensch.bitbanana.models.DecodedBolt11;
 import app.michaelwuensch.bitbanana.models.SendLnPaymentRequest;
@@ -343,8 +343,12 @@ public class RebalanceActivity extends BaseAppCompatActivity {
     }
 
     private void prepareLightningPayment() {
-        ShortChannelId firstHop = isAtoB ? mChannelA.getShortChannelId() : mChannelB.getShortChannelId();
-        String lastHop = isAtoB ? mChannelB.getRemotePubKey() : mChannelA.getRemotePubKey();
+        SelectedChannel firstHop = isAtoB
+                ? SelectedChannel.newBuilder().setShortChannelId(mChannelA.getShortChannelId()).setRemotePubKey(mChannelA.getRemotePubKey()).build()
+                : SelectedChannel.newBuilder().setShortChannelId(mChannelB.getShortChannelId()).setRemotePubKey(mChannelB.getRemotePubKey()).build();
+        SelectedChannel lastHop = isAtoB
+                ? SelectedChannel.newBuilder().setShortChannelId(mChannelB.getShortChannelId()).setRemotePubKey(mChannelB.getRemotePubKey()).build()
+                : SelectedChannel.newBuilder().setShortChannelId(mChannelA.getShortChannelId()).setRemotePubKey(mChannelA.getRemotePubKey()).build();
         SendLnPaymentRequest sendLnPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(mDecodedBolt11, mDecodedBolt11.getAmountRequested(), firstHop, lastHop, getMaxFeePercent());
         sendLightningPayment(sendLnPaymentRequest);
     }
