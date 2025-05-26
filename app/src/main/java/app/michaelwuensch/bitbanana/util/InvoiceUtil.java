@@ -412,6 +412,7 @@ public class InvoiceUtil {
             Bolt11Invoice decoded = Bolt11Invoice.Companion.read(bolt11).get();
             long amount = decoded.getAmount() == null ? 0 : decoded.getAmount().getMsat();
             long expiry = decoded.getExpirySeconds() == null ? 3600 : decoded.getExpirySeconds(); // 3600 is default if not specified, see bolt11 specs
+            int minFinalExpiryDelta = decoded.getMinFinalExpiryDelta() == null ? 18 : decoded.getMinFinalExpiryDelta().toInt(); // 18 is default if not specified, see bolt11 specs
             String descriptionHash = decoded.getDescriptionHash() == null ? null : decoded.getDescriptionHash().toHex();
             return DecodedBolt11.newBuilder()
                     .setBolt11String(bolt11)
@@ -423,6 +424,7 @@ public class InvoiceUtil {
                     .setDescription(decoded.getDescription())
                     .setDescriptionHash(descriptionHash)
                     .setExpiry(expiry)
+                    .setMinFinalExpiryDelta(minFinalExpiryDelta)
                     .build();
         } catch (Exception e) {
             throw new Exception(e.getMessage());

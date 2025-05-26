@@ -14,6 +14,8 @@ public class DecodedBolt11 implements Serializable {
     private final String Description;
     private final boolean hasDescription;
     private final String DescriptionHash;
+    private final int MinFinalExpiryDelta;
+    private final boolean hasMinFinalExpiryDelta;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -30,6 +32,8 @@ public class DecodedBolt11 implements Serializable {
         this.Description = builder.Description;
         this.hasDescription = builder.hasDescription;
         this.DescriptionHash = builder.DescriptionHash;
+        this.MinFinalExpiryDelta = builder.MinFinalExpiryDelta;
+        this.hasMinFinalExpiryDelta = builder.hasMinFinalExpiryDelta;
     }
 
     public String getBolt11String() {
@@ -113,6 +117,16 @@ public class DecodedBolt11 implements Serializable {
         return DescriptionHash;
     }
 
+    /**
+     * Also known as min_final_cltv_expiry_delta in bolt11 spec.
+     * This is the minimum number of blocks the final HTLC (payment) should be locked for before it can be considered expired.
+     */
+    public int getMinFinalExpiryDelta() {
+        if (hasMinFinalExpiryDelta)
+            return MinFinalExpiryDelta;
+        else
+            return 18; // This is the default in bolt11 spec.
+    }
 
     //Builder Class
     public static class Builder {
@@ -127,6 +141,8 @@ public class DecodedBolt11 implements Serializable {
         private String Description;
         private boolean hasDescription;
         private String DescriptionHash;
+        private int MinFinalExpiryDelta;
+        private boolean hasMinFinalExpiryDelta;
 
         private Builder() {
             // required parameters
@@ -194,6 +210,12 @@ public class DecodedBolt11 implements Serializable {
 
         public Builder setDescriptionHash(String descriptionHash) {
             DescriptionHash = descriptionHash;
+            return this;
+        }
+
+        public Builder setMinFinalExpiryDelta(int minFinalExpiryDelta) {
+            MinFinalExpiryDelta = minFinalExpiryDelta;
+            hasMinFinalExpiryDelta = minFinalExpiryDelta != 0;
             return this;
         }
     }
