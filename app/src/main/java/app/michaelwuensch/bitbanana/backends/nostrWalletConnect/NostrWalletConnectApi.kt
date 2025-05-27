@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.backends.nostrWalletConnect
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser
 import app.michaelwuensch.bitbanana.backends.Api
 import app.michaelwuensch.bitbanana.backends.BackendManager
 import app.michaelwuensch.bitbanana.models.Balances
@@ -58,7 +59,7 @@ class NostrWalletConnectApi : Api() {
                     .setFullVersionString("")
                     .setSynced(true)
                     .setAvatarMaterial(
-                        "NWC" + response.pubkey
+                        "NWC" + response.pubkey + NostrWalletConnectUrlParser(BackendManager.getCurrentBackendConfig().fullConnectString).parse().secret
                     )
                     .build()
             })
