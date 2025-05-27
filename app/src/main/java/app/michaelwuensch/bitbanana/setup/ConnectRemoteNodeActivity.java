@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.baseClasses.BaseScannerActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
@@ -88,7 +89,7 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
 
     private void connectIfUserConfirms(BackendConfig backendConfig) {
         // Ask user to confirm the connection to remote host
-        new UserGuardian(this, new UserGuardian.OnGuardianConfirmedListener() {
+        UserGuardian ug = new UserGuardian(this, new UserGuardian.OnGuardianConfirmedListener() {
             @Override
             public void onConfirmed() {
                 connect(backendConfig);
@@ -98,7 +99,11 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
             public void onCancelled() {
 
             }
-        }).securityConnectToRemoteServer(backendConfig.getHost());
+        });
+        if (backendConfig.getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT)
+            ug.securityConnectToNostrWalletConnect(new NostrWalletConnectUrlParser(backendConfig.getFullConnectString()).parse().getPubKey());
+        else
+            ug.securityConnectToRemoteServer(backendConfig.getHost());
     }
 
     private void connect(BackendConfig backendConfig) {
