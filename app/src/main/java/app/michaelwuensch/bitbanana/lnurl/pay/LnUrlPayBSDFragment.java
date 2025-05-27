@@ -453,7 +453,10 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                             errorMessage = errorPrefix + "\n\n" + getResources().getString(R.string.error_payment_canceled);
                             break;
                         default:
-                            errorMessage = errorPrefix + "\n\n" + error;
+                            if (sendLnPaymentResponse.getFailureMessage() != null)
+                                errorMessage = errorPrefix + "\n\n" + sendLnPaymentResponse.getFailureMessage();
+                            else
+                                errorMessage = errorPrefix + "\n\n" + error;
                             break;
                     }
                 } else {

@@ -48,6 +48,8 @@ public interface LndWalletKitService {
 
     Single<com.github.lightningnetwork.lnd.walletrpc.BumpFeeResponse> bumpFee(com.github.lightningnetwork.lnd.walletrpc.BumpFeeRequest request);
 
+    Single<com.github.lightningnetwork.lnd.walletrpc.BumpForceCloseFeeResponse> bumpForceCloseFee(com.github.lightningnetwork.lnd.walletrpc.BumpForceCloseFeeRequest request);
+
     Single<com.github.lightningnetwork.lnd.walletrpc.ListSweepsResponse> listSweeps(com.github.lightningnetwork.lnd.walletrpc.ListSweepsRequest request);
 
     Single<com.github.lightningnetwork.lnd.walletrpc.LabelTransactionResponse> labelTransaction(com.github.lightningnetwork.lnd.walletrpc.LabelTransactionRequest request);

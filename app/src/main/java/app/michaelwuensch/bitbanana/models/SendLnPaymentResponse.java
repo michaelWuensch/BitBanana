@@ -8,6 +8,7 @@ public class SendLnPaymentResponse implements Serializable {
     private final String PaymentPreimage;
     private final long Amount;
     private final long Fee;
+    private final String FailureMessage;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -18,6 +19,7 @@ public class SendLnPaymentResponse implements Serializable {
         this.PaymentPreimage = builder.PaymentPreimage;
         this.Amount = builder.Amount;
         this.Fee = builder.Fee;
+        this.FailureMessage = builder.FailureMessage;
     }
 
     public FailureReason getFailureReason() {
@@ -40,6 +42,10 @@ public class SendLnPaymentResponse implements Serializable {
         return Fee;
     }
 
+    public String getFailureMessage() {
+        return FailureMessage;
+    }
+
 
     //Builder Class
     public static class Builder {
@@ -48,6 +54,7 @@ public class SendLnPaymentResponse implements Serializable {
         private String PaymentPreimage;
         private long Amount;
         private long Fee;
+        private String FailureMessage;
 
 
         private Builder() {
@@ -75,6 +82,11 @@ public class SendLnPaymentResponse implements Serializable {
 
         public Builder setFee(long fee) {
             Fee = fee;
+            return this;
+        }
+
+        public Builder setFailureMessage(String failureMessage) {
+            FailureMessage = failureMessage;
             return this;
         }
     }

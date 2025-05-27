@@ -223,14 +223,14 @@ service WalletKit {
     */
     rpc SendOutputs (SendOutputsRequest) returns (SendOutputsResponse);
 
-    /*
+    /* lncli: `wallet estimatefeerate`
     EstimateFee attempts to query the internal fee estimator of the wallet to
     determine the fee (in sat/kw) to attach to a transaction in order to
     achieve the confirmation target.
     */
     rpc EstimateFee (EstimateFeeRequest) returns (EstimateFeeResponse);
 
-    /* lncli: `pendingsweeps`
+    /* lncli: `wallet pendingsweeps`
     PendingSweeps returns lists of on-chain outputs that lnd is currently
     attempting to sweep within its central batching engine. Outputs with similar
     fee rates are batched together in order to sweep them within a single
@@ -273,6 +273,13 @@ service WalletKit {
     the control of the wallet.
     */
     rpc BumpFee (BumpFeeRequest) returns (BumpFeeResponse);
+
+    /* lncli: `wallet bumpforceclosefee`
+   BumpForceCloseFee is an endpoint that allows users to bump the fee of a
+   channel force close. This only works for channels with option_anchors.
+   */
+    rpc BumpForceCloseFee (BumpForceCloseFeeRequest)
+        returns (BumpForceCloseFeeResponse);
 
     /* lncli: `wallet listsweeps`
     ListSweeps returns a list of the sweep transactions our node has produced.
@@ -408,6 +415,8 @@ message ReleaseOutputRequest {
 }
 
 message ReleaseOutputResponse {
+    // The status of the release operation.
+    string status = 1;
 }
 
 message KeyReq {
@@ -693,6 +702,8 @@ message ImportPublicKeyRequest {
     AddressType address_type = 2;
 }
 message ImportPublicKeyResponse {
+    // The status of the import operation.
+    string status = 1;
 }
 
 message ImportTapscriptRequest {
@@ -1162,6 +1173,12 @@ message PendingSweep {
     The deadline height used for this output when perform fee bumping.
     */
     uint32 deadline_height = 14;
+
+    /*
+    The block height which the input's locktime will expire at. Zero if the
+    input has no locktime.
+    */
+    uint32 maturity_height = 15;
 }
 
 message PendingSweepsRequest {
@@ -1178,9 +1195,8 @@ message BumpFeeRequest {
     // The input we're attempting to bump the fee of.
     lnrpc.OutPoint outpoint = 1;
 
-    // Optional. The deadline in number of blocks that the input should be spent
-    // within. When not set, for new inputs, the default value (1008) is used;
-    // for existing inputs, their current values will be retained.
+    // Optional. The conf target the underlying fee estimator will use to
+    // estimate the starting fee rate for the fee function.
     uint32 target_conf = 2;
 
     /*
@@ -1207,7 +1223,7 @@ message BumpFeeRequest {
 
     /*
     Optional. Whether this input will be swept immediately. When set to true,
-    the sweeper will sweep this input without waiting for the next batch.
+    the sweeper will sweep this input without waiting for the next block.
     */
     bool immediate = 6;
 
@@ -1220,10 +1236,61 @@ message BumpFeeRequest {
     retained.
     */
     uint64 budget = 7;
+
+    // Optional. The deadline delta in number of blocks that the output
+    // should be spent within. This translates internally to the width of the
+    // fee function that the sweeper will use to bump the fee rate. When the
+    // deadline is reached, ALL the budget will be spent as fees.
+    uint32 deadline_delta = 8;
 }
 
 message BumpFeeResponse {
     // The status of the bump fee operation.
+    string status = 1;
+}
+
+message BumpForceCloseFeeRequest {
+    // The channel point which force close transaction we are attempting to
+    // bump the fee rate for.
+    lnrpc.ChannelPoint chan_point = 1;
+
+    // Optional. The deadline delta in number of blocks that the anchor output
+    // should be spent within to bump the closing transaction. When the
+    // deadline is reached, ALL the budget will be spent as fees
+    uint32 deadline_delta = 2;
+
+    /*
+    Optional. The starting fee rate, expressed in sat/vbyte. This value will be
+    used by the sweeper's fee function as its starting fee rate. When not set,
+    the sweeper will use the estimated fee rate using the target_conf as the
+    starting fee rate.
+    */
+    uint64 starting_feerate = 3;
+
+    /*
+    Optional. Whether this cpfp transaction will be triggered immediately. When
+    set to true, the sweeper will consider all currently registered sweeps and
+    trigger new batch transactions including the sweeping of the anchor output
+    related to the selected force close transaction.
+    */
+    bool immediate = 4;
+
+    /*
+    Optional. The max amount in sats that can be used as the fees. For already
+    registered anchor outputs if not set explicitly the old value will be used.
+    For channel force closes which have no HTLCs in their commitment transaction
+    this value has to be set to an appropriate amount to pay for the cpfp
+    transaction of the force closed channel otherwise the fee bumping will fail.
+    */
+    uint64 budget = 5;
+
+    // Optional. The conf target the underlying fee estimator will use to
+    // estimate the starting fee rate for the fee function.
+    uint32 target_conf = 6;
+}
+
+message BumpForceCloseFeeResponse {
+    // The status of the force close fee bump operation.
     string status = 1;
 }
 
@@ -1272,6 +1339,8 @@ message LabelTransactionRequest {
 }
 
 message LabelTransactionResponse {
+    // The status of the label operation.
+    string status = 1;
 }
 
 // The possible change address types for default accounts and single imported
@@ -1342,6 +1411,12 @@ message FundPsbtRequest {
         input with.
         */
         uint64 sat_per_vbyte = 4;
+
+        /*
+        The fee rate, expressed in sat/kWU, that should be used to spend the
+        input with.
+        */
+        uint64 sat_per_kw = 11;
     }
 
     /*
@@ -1365,6 +1440,19 @@ message FundPsbtRequest {
 
     // The strategy to use for selecting coins during funding the PSBT.
     lnrpc.CoinSelectionStrategy coin_selection_strategy = 10;
+
+    // The max fee to total output amount ratio that this psbt should adhere to.
+    double max_fee_ratio = 12;
+
+    // The custom lock ID to use for the inputs in the funded PSBT. The value
+    // if set must be exactly 32 bytes long. If empty, the default lock ID will
+    // be used.
+    bytes custom_lock_id = 13;
+
+    // If set, then the inputs in the funded PSBT will be locked for the
+    // specified duration. The lock duration is specified in seconds. If not
+    // set, the default lock duration will be used.
+    uint64 lock_expiration_seconds = 14;
 }
 message FundPsbtResponse {
     /*

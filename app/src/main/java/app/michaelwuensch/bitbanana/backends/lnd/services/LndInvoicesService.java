@@ -14,4 +14,6 @@ public interface LndInvoicesService {
     Single<com.github.lightningnetwork.lnd.invoicesrpc.SettleInvoiceResp> settleInvoice(com.github.lightningnetwork.lnd.invoicesrpc.SettleInvoiceMsg request);
 
     Single<com.github.lightningnetwork.lnd.lnrpc.Invoice> lookupInvoiceV2(com.github.lightningnetwork.lnd.invoicesrpc.LookupInvoiceMsg request);
+
+    // skipped HtlcModifier
 }
