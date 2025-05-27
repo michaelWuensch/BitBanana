@@ -104,4 +104,14 @@ public class RemoteLndRouterService implements LndRouterService {
         return DefaultSingle.createDefault(emitter -> asyncStub.updateChanStatus(request, new RemoteSingleObserver<>(emitter)));
     }
 
+    @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.AddAliasesResponse> xAddLocalChanAliases(com.github.lightningnetwork.lnd.routerrpc.AddAliasesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.xAddLocalChanAliases(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.lightningnetwork.lnd.routerrpc.DeleteAliasesResponse> xDeleteLocalChanAliases(com.github.lightningnetwork.lnd.routerrpc.DeleteAliasesRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.xDeleteLocalChanAliases(request, new RemoteSingleObserver<>(emitter)));
+    }
+
 }

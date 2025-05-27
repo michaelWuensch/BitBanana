@@ -40,4 +40,8 @@ public interface LndRouterService {
     // skipped HtlcInterceptor
 
     Single<com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusResponse> updateChanStatus(com.github.lightningnetwork.lnd.routerrpc.UpdateChanStatusRequest request);
+
+    Single<com.github.lightningnetwork.lnd.routerrpc.AddAliasesResponse> xAddLocalChanAliases(com.github.lightningnetwork.lnd.routerrpc.AddAliasesRequest request);
+
+    Single<com.github.lightningnetwork.lnd.routerrpc.DeleteAliasesResponse> xDeleteLocalChanAliases(com.github.lightningnetwork.lnd.routerrpc.DeleteAliasesRequest request);
 }

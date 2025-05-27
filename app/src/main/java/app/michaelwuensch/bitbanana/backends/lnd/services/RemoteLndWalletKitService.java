@@ -127,6 +127,11 @@ public class RemoteLndWalletKitService implements LndWalletKitService {
     }
 
     @Override
+    public Single<com.github.lightningnetwork.lnd.walletrpc.BumpForceCloseFeeResponse> bumpForceCloseFee(com.github.lightningnetwork.lnd.walletrpc.BumpForceCloseFeeRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.bumpForceCloseFee(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.lightningnetwork.lnd.walletrpc.ListSweepsResponse> listSweeps(com.github.lightningnetwork.lnd.walletrpc.ListSweepsRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.listSweeps(request, new RemoteSingleObserver<>(emitter)));
     }
