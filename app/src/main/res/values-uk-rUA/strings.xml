@@ -845,4 +845,5 @@
     <string name="all_utxos">Усі UTXO</string>
     <string name="consolidation_failed">Консолідація не вдалася</string>
     <string name="consolidate">Консолідувати</string>
+    <string name="auto_scroll">Автоматичне прокручування</string>
 </resources>
