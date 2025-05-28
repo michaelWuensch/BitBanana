@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textSize="16sp"
-        tools:text="@string/clearnet_ssl" />
+        tools:text="@string/clearnet_tls" />
 
     <TextView
         android:id="@+id/targetLabel"
@@ -113,6 +113,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textSize="16sp"
-        tools:text="@string/connection_security_info_clearnet_ssl_not_verified" />
+        tools:text="@string/connection_security_info_clearnet_tls_not_verified" />
 
 </LinearLayout>
