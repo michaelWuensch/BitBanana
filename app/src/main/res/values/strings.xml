@@ -151,6 +151,11 @@
     <string name="adjust">Adjust</string>
     <string name="sort_by">Sort by</string>
     <string name="nostr_relay">Relay</string>
+    <string name="security">Security</string>
+    <string name="target">Target</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+    <string name="status">Status</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -954,5 +959,18 @@
     <string name="consolidation_failed">Consolidation failed</string>
 
     <string name="auto_scroll">Auto-Scroll</string>
+
+    <string name="connection_information">Connection Information</string>
+    <string name="connection_type">Connection Type</string>
+    <string name="nostr_wallet_connect" translatable="false">Nostr Wallet Connect</string>
+    <string name="clearnet_ssl">Clearnet (SSL)</string>
+    <string name="target_remote_lightning_node_lnd">Remote Lightning Node (LND)</string>
+    <string name="target_remote_lightning_node_core_lightning">Remote Lightning Node (Core Lightning)</string>
+    <string name="target_remote_wallet_service">Remote Wallet Service</string>
+    <string name="connection_security_info_tor">Tor provides anonymity and encryption at the routing level. No TLS certificates are required.</string>
+    <string name="connection_security_info_nwc">NWC ensures secure, end-to-end encrypted communication using public key cryptography. No TLS certificates are required.</string>
+    <string name="connection_security_info_clearnet_ssl_verified">A secure (SSL) connection is established, and the server’s identity (certificate) is verified using your system\'s default CA store.</string>
+    <string name="connection_security_info_clearnet_sll_verified_pinned">A secure (SSL) connection is established, and the server’s identity is verified using your pinned certificate.</string>
+    <string name="connection_security_info_clearnet_ssl_not_verified">A secure (SSL) connection is established, but the server’s identity (certificate) is not verified and may not be trusted.</string>
 
 </resources>

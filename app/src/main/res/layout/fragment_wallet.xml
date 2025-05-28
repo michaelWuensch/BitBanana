@@ -44,32 +44,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/walletNameWidthDummy"
-            android:layout_width="wrap_content"
+        <app.michaelwuensch.bitbanana.customView.ConnectionStatusIndicator
+            android:id="@+id/connectionStatusIndicator"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxWidth="180dp"
-            android:textColor="@color/red"
-            android:textSize="18sp"
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="wallet name" />
-
-        <ImageView
-            android:id="@+id/statusDot"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/walletNameWidthDummy"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_status_dot_black_24dp"
-            app:tint="@color/banana_yellow" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/historyButton"
