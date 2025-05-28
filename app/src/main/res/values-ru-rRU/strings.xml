@@ -307,7 +307,7 @@
     <string name="advanced_channel_details_explanation_capacity">Общая сумма средств проводимых в этом канале. Из-за некоторых ограничений (таких как комиссия за подтверждение или локальный резерв канала) не все средства могут быть потрачены.</string>
     <string name="advanced_channel_details_explanation_activity">Общий процент отправленных и полученных средств, делённых на общую мощность канала. Канал с активностю более 100 означает, что по каналу прошло больше средств чем он может держать. Эта метрика предназначена показывать насколько эффективен данный канал.</string>
     <string name="advanced_channel_details_lifetime">Длительность</string>
-    <string name="advanced_channel_details_initiator_peer">Узел</string>
+    <string name="advanced_channel_details_initiator_peer">Участник</string>
     <string name="advanced_channel_details_explanation_initiator">Кто открыл канал?</string>
     <string name="advanced_channel_details_explanation_close_initiator">Кто закрыл канал?</string>
     <string name="advanced_channel_details_time_lock">Время блокировки</string>
@@ -845,4 +845,5 @@
     <string name="consolidate_utxos">Консолидировать UTXO</string>
     <string name="guardian_consolidate_utxos">Объединение (консолидация) выходов UTXO может ослабить вашу конфиденциальность связывая адреса. Это показывает что входные адреса вероятно принадлежат одному и тому же субъекту, что упрощает анализ и отслеживание истории транзакций в блокчейне.</string>
     <string name="help_dialog_utxos_consolidate">Когда вы консолидируете выходы UTXO, то вы объединяете несколько неизрасходованных выходов в один большой. Это делает будущие транзакции дешевле, поскольку комиссии за транзакции в цепочке определяются размером в байтах, а не суммой. Консолидация в периоды низких комиссий позволяет пользователям платить за необходимое им место в блокчейне, пока оно дешево, что помогает минимизировать будущие комиссии в периоды высоких комиссий. Однако имейте в виду, что консолидация стоит свою комиссию и может ослабить вашу конфиденциальность из-за связывания адресов.</string>
+    <string name="auto_scroll">Автопрокрутка</string>
 </resources>
