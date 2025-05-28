@@ -92,7 +92,7 @@ public class ConnectionInfoDialog extends LinearLayout {
                 if (backendConfig.getUseTor())
                     mConnectionType.setText(R.string.settings_tor);
                 else
-                    mConnectionType.setText(R.string.clearnet_ssl);
+                    mConnectionType.setText(R.string.clearnet_tls);
                 break;
             case NOSTR_WALLET_CONNECT:
                 mConnectionType.setText(R.string.nostr_wallet_connect);
@@ -151,17 +151,20 @@ public class ConnectionInfoDialog extends LinearLayout {
     }
 
     private void setSecurityClearnetSSLVerified() {
-        mSecurity.setText(R.string.connection_security_info_clearnet_ssl_verified);
+        String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_verified);
+        mSecurity.setText(securityString);
         mSecurityDot.setText("🟢");
     }
 
     private void setSecurityClearnetSSLVerifiedPinned() {
-        mSecurity.setText(R.string.connection_security_info_clearnet_sll_verified_pinned);
+        String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_verified_pinned);
+        mSecurity.setText(securityString);
         mSecurityDot.setText("🟢");
     }
 
     private void setSecurityClearnetSSLUnverified() {
-        mSecurity.setText(R.string.connection_security_info_clearnet_ssl_not_verified);
+        String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_not_verified);
+        mSecurity.setText(securityString);
         mSecurityDot.setText("🟡");
     }
 
