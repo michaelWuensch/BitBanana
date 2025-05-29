@@ -859,8 +859,11 @@
     <string name="connection_security_info_clearnet_tls">Встановлено безпечне TLS-з\'єднання.</string>
     <string name="connection_type">Тип підключення</string>
     <string name="target_remote_lightning_node_core_lightning">Віддалений вузол блискавки (Core Lightning)</string>
-    <string name="connection_security_info_clearnet_tls_not_verified">Ідентифікацію (сертифікат) сервера не перевірено, і йому може бути ненадійно.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Але ідентифікація (сертифікат) сервера не перевірена і може бути недостовірною.</string>
     <string name="connection_security_info_clearnet_tls_verified">Ідентифікація (сертифікат) сервера перевіряється за допомогою сховища CA вашої системи за замовчуванням.</string>
     <string name="clearnet_tls">Клірнет (TLS)</string>
     <string name="connection_security_info_clearnet_tls_verified_pinned">Ідентифікацію сервера перевіряють за допомогою вашого закріпленого сертифіката.</string>
+    <string name="connection_security_info_clearnet_http">Це незахищене з\'єднання, що використовує звичайний текст HTTP.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Емітент сертифіката</string>
+    <string name="connection_security_Info_tls_self_signed">самопідписаний</string>
 </resources>
