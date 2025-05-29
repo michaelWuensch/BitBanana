@@ -97,4 +97,14 @@
     <string name="id">شناسه</string>
     <string name="deactivate">غیر فعال کردن</string>
     <string name="exhausted">خسته</string>
+    <string name="select">انتخاب کنید</string>
+    <string name="confirm_selection">تایید انتخاب</string>
+    <string name="reset">بازنشانی</string>
+    <string name="total">مجموع</string>
+    <string name="clear">پاک کردن</string>
+    <string name="help">کمک</string>
+    <string name="adjust">تنظیم</string>
+    <string name="sort_by">مرتب سازی بر اساس</string>
+    <string name="copy_all">همه را کپی کنید</string>
+    <string name="change">تغییر</string>
 </resources>
