@@ -846,4 +846,21 @@
     <string name="consolidation_failed">Консолідація не вдалася</string>
     <string name="consolidate">Консолідувати</string>
     <string name="auto_scroll">Автоматичне прокручування</string>
+    <string name="security">Безпека</string>
+    <string name="target">Ціль</string>
+    <string name="connected">Підключено</string>
+    <string name="status">Статус</string>
+    <string name="connection_information">Інформація про підключення</string>
+    <string name="target_remote_lightning_node_lnd">Віддалений вузол блискавки (LND)</string>
+    <string name="target_remote_wallet_service">Віддалений сервіс гаманців</string>
+    <string name="connection_security_info_tor">Tor забезпечує анонімність та шифрування на рівні маршрутизації. Сертифікати TLS не потрібні.</string>
+    <string name="connection_security_info_nwc">NWC забезпечує безпечний, наскрізний зашифрований зв\'язок за допомогою криптографії з відкритим ключем. Сертифікати TLS не потрібні.</string>
+    <string name="disconnected">Відключено</string>
+    <string name="connection_security_info_clearnet_tls">Встановлено безпечне TLS-з\'єднання.</string>
+    <string name="connection_type">Тип підключення</string>
+    <string name="target_remote_lightning_node_core_lightning">Віддалений вузол блискавки (Core Lightning)</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Ідентифікацію (сертифікат) сервера не перевірено, і йому може бути ненадійно.</string>
+    <string name="connection_security_info_clearnet_tls_verified">Ідентифікація (сертифікат) сервера перевіряється за допомогою сховища CA вашої системи за замовчуванням.</string>
+    <string name="clearnet_tls">Клірнет (TLS)</string>
+    <string name="connection_security_info_clearnet_tls_verified_pinned">Ідентифікацію сервера перевіряють за допомогою вашого закріпленого сертифіката.</string>
 </resources>
