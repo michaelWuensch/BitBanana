@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
+import app.michaelwuensch.bitbanana.backends.CertificateInfoStore;
 
 public class ConnectionInfoDialog extends LinearLayout {
 
@@ -21,6 +22,8 @@ public class ConnectionInfoDialog extends LinearLayout {
     private TextView mSecurityLabel;
     private TextView mSecurityDot;
     private TextView mSecurity;
+
+    private BackendConfig mBackendConfig;
 
     public ConnectionInfoDialog(Context context) {
         super(context);
@@ -81,15 +84,24 @@ public class ConnectionInfoDialog extends LinearLayout {
                 mStatus.setText(R.string.connected);
                 break;
         }
+
+        if (mBackendConfig != null)
+            updateInfo();
     }
 
     public void setBackendConfig(BackendConfig backendConfig) {
+        mBackendConfig = backendConfig;
+        if (mBackendConfig != null)
+            updateInfo();
+    }
+
+    public void updateInfo() {
         // Connection Type
-        switch (backendConfig.getBackendType()) {
+        switch (mBackendConfig.getBackendType()) {
             case LND_GRPC:
             case CORE_LIGHTNING_GRPC:
             case LND_HUB:
-                if (backendConfig.getUseTor())
+                if (mBackendConfig.getUseTor())
                     mConnectionType.setText(R.string.settings_tor);
                 else
                     mConnectionType.setText(R.string.clearnet_tls);
@@ -101,7 +113,7 @@ public class ConnectionInfoDialog extends LinearLayout {
         }
 
         // Target
-        switch (backendConfig.getBackendType()) {
+        switch (mBackendConfig.getBackendType()) {
             case LND_GRPC:
                 mTarget.setText(R.string.target_remote_lightning_node_lnd);
                 break;
@@ -115,13 +127,13 @@ public class ConnectionInfoDialog extends LinearLayout {
         }
 
         // Security
-        switch (backendConfig.getBackendType()) {
+        switch (mBackendConfig.getBackendType()) {
             case LND_GRPC:
             case CORE_LIGHTNING_GRPC:
-                if (backendConfig.getUseTor())
+                if (mBackendConfig.getUseTor())
                     setSecurityTor();
-                else if (backendConfig.getVerifyCertificate())
-                    if (backendConfig.getServerCert() != null)
+                else if (mBackendConfig.getVerifyCertificate())
+                    if (mBackendConfig.getServerCert() != null)
                         setSecurityClearnetSSLVerifiedPinned();
                     else
                         setSecurityClearnetSSLVerified();
@@ -132,8 +144,10 @@ public class ConnectionInfoDialog extends LinearLayout {
                 setSecurityNWC();
                 break;
             case LND_HUB:
-                if (backendConfig.getUseTor())
+                if (mBackendConfig.getUseTor())
                     setSecurityTor();
+                else if (mBackendConfig.getHost().contains("http:"))
+                    setSecurityClearnetPlainTextHTTP();
                 else
                     setSecurityClearnetSSLVerified();
                 break;
@@ -150,22 +164,39 @@ public class ConnectionInfoDialog extends LinearLayout {
         mSecurityDot.setText("🟢");
     }
 
+    private void setSecurityClearnetPlainTextHTTP() {
+        mSecurity.setText(getResources().getString(R.string.connection_security_info_clearnet_http));
+        mSecurityDot.setText("🔴");
+    }
+
     private void setSecurityClearnetSSLVerified() {
         String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_verified);
+        securityString = appendCertificateInfo(securityString);
         mSecurity.setText(securityString);
         mSecurityDot.setText("🟢");
     }
 
     private void setSecurityClearnetSSLVerifiedPinned() {
         String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_verified_pinned);
+        securityString = appendCertificateInfo(securityString);
         mSecurity.setText(securityString);
         mSecurityDot.setText("🟢");
     }
 
     private void setSecurityClearnetSSLUnverified() {
         String securityString = getResources().getString(R.string.connection_security_info_clearnet_tls) + " " + getResources().getString(R.string.connection_security_info_clearnet_tls_not_verified);
+        securityString = appendCertificateInfo(securityString);
         mSecurity.setText(securityString);
         mSecurityDot.setText("🟡");
+    }
+
+    private String appendCertificateInfo(String input) {
+        if (CertificateInfoStore.hasCertificate()) {
+            input = input + "\n\n" + getResources().getString(R.string.connection_security_info_tls_certificate_issuer) + ":\n" + CertificateInfoStore.getCertificateIssuerOrganization(true);
+            if (CertificateInfoStore.isSelfSigned())
+                input = input + " (" + getResources().getString(R.string.connection_security_Info_tls_self_signed) + ")";
+        }
+        return input;
     }
 
     public enum ConnectionStatus {

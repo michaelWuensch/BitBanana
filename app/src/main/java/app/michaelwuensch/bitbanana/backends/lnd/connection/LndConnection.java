@@ -4,9 +4,11 @@ package app.michaelwuensch.bitbanana.backends.lnd.connection;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.backends.InterceptingSSLSocketFactory;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndAutopilotService;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndChainKitService;
 import app.michaelwuensch.bitbanana.backends.lnd.services.LndChainNotifierService;
@@ -147,20 +149,23 @@ public class LndConnection {
 
         try {
 
+            SSLSocketFactory baseFactory = LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig());
+            SSLSocketFactory inspectingFactory = new InterceptingSSLSocketFactory(baseFactory);
+
             // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
             if (BackendManager.getCurrentBackendConfig().getUseTor()) {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(LndSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             }
