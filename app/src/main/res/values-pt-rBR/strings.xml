@@ -1041,4 +1041,21 @@
     <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, você está combinando várias saídas não gastas em uma maior. Isso faz futuras transações mais baratas, uma vez que as taxas de transação são determinadas pelo seu tamanho em bytes, e não por valor. Consolidar durante períodos de baixa taxa permite que usuários paguem pelo espaço da blockchain de que precisam enquanto for barato, ajudando a minimizar taxas futuras durante períodos de alta taxa. Tenha em mente, no entanto, que a consolidação custa uma taxa e pode diminuir sua privacidade ao ligar endereços.</string>
     <string name="nostr_relay">Relay</string>
     <string name="auto_scroll">Rolagem automática</string>
+    <string name="target">Alvo</string>
+    <string name="status">Estado</string>
+    <string name="target_remote_lightning_node_lnd">Nó Lightning Remoto (LND)</string>
+    <string name="target_remote_wallet_service">Serviço de Carteira Remoto</string>
+    <string name="connection_security_info_tor">Tor provê anonimidade e criptografia a nível do roteamento. Nenhum certificado TLS é necessário.</string>
+    <string name="clearnet_tls">Clearnet (TLS)</string>
+    <string name="connection_security_info_clearnet_tls">Uma conexão TLS segura é estabelecida.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">A identidade do servidor (certificado) não é verificada e não se pode confiar nela.</string>
+    <string name="connection_information">Informação de Conexão</string>
+    <string name="connection_security_info_clearnet_tls_verified">A identidade do servidor (certificado) é verificada usando a reserva de CA padrão do sistema.</string>
+    <string name="security">Segurança</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="target_remote_lightning_node_core_lightning">Nó Lightning Remoto (Core Lightning)</string>
+    <string name="connection_type">Tipo de Conexão</string>
+    <string name="connection_security_info_nwc">NWC garante uma comunicação criptografada de ponta a ponta e segura usando criptografia de chave pública. Nenhum certificado TLS é necessário.</string>
+    <string name="connection_security_info_clearnet_tls_verified_pinned">A identidade do servidor é verificada usando seu certificado autorizado.</string>
+    <string name="connected">Conectado</string>
 </resources>
