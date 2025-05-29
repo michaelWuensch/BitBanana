@@ -972,6 +972,8 @@
     <string name="connection_security_info_clearnet_tls">A secure TLS connection is established.</string>
     <string name="connection_security_info_clearnet_tls_verified">The server’s identity (certificate) is verified using your system\'s default CA store.</string>
     <string name="connection_security_info_clearnet_tls_verified_pinned">The server’s identity is verified using your pinned certificate.</string>
-    <string name="connection_security_info_clearnet_tls_not_verified">The server’s identity (certificate) is not verified and may not be trusted.</string>
-
+    <string name="connection_security_info_clearnet_tls_not_verified">But the server’s identity (certificate) is not verified and may not be trusted.</string>
+    <string name="connection_security_Info_tls_self_signed">self-signed</string>
+    <string name="connection_security_info_clearnet_http">This is an insecure connection using plain-text HTTP.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Certificate Issuer</string>
 </resources>

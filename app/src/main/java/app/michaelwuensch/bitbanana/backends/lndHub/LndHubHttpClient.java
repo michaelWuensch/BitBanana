@@ -9,10 +9,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.backends.CertificateInfoStore;
 import app.michaelwuensch.bitbanana.backends.lndHub.models.LndHubAuthResponse;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
@@ -44,6 +47,7 @@ public class LndHubHttpClient {
 
             mHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AccessTokenInterceptor())
+                    .addNetworkInterceptor(new CertificateCapturingInterceptor())
                     .authenticator(new TokenRefreshAuthenticator())
                     .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .proxy(torProxy)
@@ -52,6 +56,7 @@ public class LndHubHttpClient {
         } else {
             mHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AccessTokenInterceptor())
+                    .addNetworkInterceptor(new CertificateCapturingInterceptor())
                     .authenticator(new TokenRefreshAuthenticator())
                     .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                     .build();
@@ -225,6 +230,22 @@ public class LndHubHttpClient {
                 e.printStackTrace();
             }
             return null;
+        }
+    }
+
+    public class CertificateCapturingInterceptor implements Interceptor {
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Response response = chain.proceed(chain.request());
+
+            if (response.handshake() != null && !response.handshake().peerCertificates().isEmpty()) {
+                Certificate cert = response.handshake().peerCertificates().get(0);
+                if (cert instanceof X509Certificate x509Cert) {
+                    CertificateInfoStore.setServerCertificate(x509Cert);
+                }
+            }
+            return response;
         }
     }
 }

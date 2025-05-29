@@ -4,9 +4,11 @@ package app.michaelwuensch.bitbanana.backends.coreLightning.connection;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.backends.InterceptingSSLSocketFactory;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.CoreLightningNodeService;
 import app.michaelwuensch.bitbanana.backends.coreLightning.services.RemoteCoreLightningNodeService;
 import app.michaelwuensch.bitbanana.connection.BlindHostnameVerifier;
@@ -58,20 +60,23 @@ public class CoreLightningConnection {
 
         try {
 
+            SSLSocketFactory baseFactory = CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig());
+            SSLSocketFactory inspectingFactory = new InterceptingSSLSocketFactory(baseFactory);
+
             // Channels are expensive to create. We want to create it once and then reuse it on all our requests.
             if (BackendManager.getCurrentBackendConfig().getUseTor()) {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             } else {
                 mSecureChannel = OkHttpChannelBuilder
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
-                        .sslSocketFactory(CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig())) // null = default SSLSocketFactory
+                        .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
                         .overrideAuthority("cln") // the grpc plugin for core lightning does not know the domain, therefore it uses 'cln' by default. See https://docs.corelightning.org/docs/grpc.
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();

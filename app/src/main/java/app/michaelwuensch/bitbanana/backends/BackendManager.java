@@ -237,6 +237,7 @@ public class BackendManager {
 
             Wallet.getInstance().reset();
             currentBackendConfig = null;
+            CertificateInfoStore.clear();
             currentBackend = new Backend(null);
             BBLog.d(LOG_TAG, backendConfigAlias + " deactivated.");
             setBackendState(BackendState.NO_BACKEND_SELECTED);
