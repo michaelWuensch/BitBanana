@@ -107,4 +107,16 @@
     <string name="sort_by">مرتب سازی بر اساس</string>
     <string name="copy_all">همه را کپی کنید</string>
     <string name="change">تغییر</string>
+    <string name="nostr_relay">رله</string>
+    <string name="security">امنیت</string>
+    <string name="target">هدف</string>
+    <string name="disconnected">قطع ارتباط</string>
+    <string name="connected">متصل</string>
+    <string name="activity_receive">دریافت</string>
+    <string name="activity_send">پرداخت</string>
+    <string name="activity_connectRemoteNode">اضافه کردن گره</string>
+    <string name="activity_contact_details">اطلاعات تماس</string>
+    <string name="activity_manual_setup">داده‌های اتصال</string>
+    <string name="activity_backup">پشتیبان گیری</string>
+    <string name="activity_manage_contacts_open_channel_mode">باز کردن کانال با…</string>
 </resources>
