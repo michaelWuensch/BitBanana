@@ -1048,7 +1048,7 @@
     <string name="connection_security_info_tor">Tor provê anonimidade e criptografia a nível do roteamento. Nenhum certificado TLS é necessário.</string>
     <string name="clearnet_tls">Clearnet (TLS)</string>
     <string name="connection_security_info_clearnet_tls">Uma conexão TLS segura é estabelecida.</string>
-    <string name="connection_security_info_clearnet_tls_not_verified">A identidade do servidor (certificado) não é verificada e não se pode confiar nela.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Mas a identidade do servidor (certificado) não é verificada e não se pode confiar nela.</string>
     <string name="connection_information">Informação de Conexão</string>
     <string name="connection_security_info_clearnet_tls_verified">A identidade do servidor (certificado) é verificada usando a reserva de CA padrão do sistema.</string>
     <string name="security">Segurança</string>
@@ -1058,4 +1058,7 @@
     <string name="connection_security_info_nwc">NWC garante uma comunicação criptografada de ponta a ponta e segura usando criptografia de chave pública. Nenhum certificado TLS é necessário.</string>
     <string name="connection_security_info_clearnet_tls_verified_pinned">A identidade do servidor é verificada usando seu certificado autorizado.</string>
     <string name="connected">Conectado</string>
+    <string name="connection_security_Info_tls_self_signed">autoassinado</string>
+    <string name="connection_security_info_clearnet_http">Esta é uma conexão insegura usando HTTP em texto não formatado.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Emissor de Certificado</string>
 </resources>
