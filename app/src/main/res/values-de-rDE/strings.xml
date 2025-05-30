@@ -140,11 +140,11 @@
     <string name="setup_connect_heading">Wie möchtest du BitBanana verwenden?</string>
     <string name="setup_connect_local_description">Eine Wallet auf diesem Smartphone erstellen.</string>
     <string name="setup_connect_local_button">Wallet erstellen</string>
-    <string name="setup_connect_remote_description">Eine eigene Node fernsteuern.</string>
+    <string name="setup_connect_remote_description">Einen eigenen Node fernsteuern.</string>
     <string name="setup_connect_remote_button">Mit Node verbinden</string>
     <string name="demo_setupNodeBtn">Node verbinden</string>
-    <string name="demo_setupNodeFirst">Du musst dich zuerst mit einer Node verbinden.</string>
-    <string name="demo_setupNodeFirstAvatar">Du musst dich zuerst mit einer Node verbinden, bevor du deine Identität und deinen Avatar sehen kannst.</string>
+    <string name="demo_setupNodeFirst">Du musst dich zuerst mit einem Node verbinden.</string>
+    <string name="demo_setupNodeFirstAvatar">Du musst dich zuerst mit einem Node verbinden, bevor du deine Identität und deinen Avatar sehen kannst.</string>
     <string name="send_lightningPayment">Lightning Zahlung senden</string>
     <string name="send_onChainPayment">On-chain Zahlung senden</string>
     <string name="send_sendPayment">Zahlung senden</string>
@@ -231,7 +231,7 @@
     <string name="error_connection_host_verification_failed">Hostname konnte nicht verifiziert werden.
 \n
 \nDer Hostname deiner Verbindung stimmt nicht mit dem Hostnamen des bereitgestellten Host-Zertifikats überein.</string>
-    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden. Bitte aktualisiere die Verbindungseinstellungen deiner Node, falls deine Node mittlerweile unter einem anderen Namen oder einer anderen Adresse erreichbar ist.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) konnte nicht aufgelöst werden. Bitte aktualisiere die Verbindungseinstellungen deines Nodes, falls dein Node mittlerweile unter einem anderen Namen oder einer anderen Adresse erreichbar ist.</string>
     <string name="error_connection_lnd_unavailable">Verbindung fehlgeschlagen. Auf den Host kann zugegriffen werden, aber der Knoten antwortet nicht.
 \n
 \nBitte überprüfe, ob der Knoten betriebsbereit ist, ob die Port-Nummer (%1$s) korrekt ist und ob die Port-Weiterleitung eingerichtet ist.</string>
@@ -245,7 +245,7 @@
     <string name="error_connection_wallet_locked">Bitte entsperre die Wallet.</string>
     <string name="error_connection_btcpay_invalid_json">Die BTCPay Serverkonfiguration hat eine ungültige JSON syntax.</string>
     <string name="error_connection_btcpay_invalid_config">Die BTCPay Serverkonfiguration enthält keine Konfiguration für BTC GRPC.</string>
-    <string name="error_connection_internal_server">Die Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
+    <string name="error_connection_internal_server">Der Node ist erreichbar, aber antwortet mit einem internen Fehler. Dieser Fehler wird eventuell durch einen falschen Port verursacht.</string>
     <string name="error_connection_internal_server_clearnet">Der Knoten ist erreichbar, liefert aber einen internen Fehler. Dieser fehler könnte durch einen falschen Port verursacht sein. Da du versuchst dich mit einem Knoten im öffentlichen Netz zu verbinden, könnte es helfen, Tor in den Verbindungseinstellungen des Knotens auszuschalten.</string>
     <string name="error_wrong_password">Falsches Passwort</string>
     <string name="error_lightning_uri_invalid">Ungültiges Format.
@@ -253,7 +253,7 @@
 \n- pubkey
 \n- pubkey@host
 \n- pubkey@host:port</string>
-    <string name="error_channel_open_node_setup">Du musst dich zuerst mit einer Node verbinden, um einen Kanal zu öffnen.</string>
+    <string name="error_channel_open_node_setup">Du musst dich zuerst mit einem Node verbinden, um einen Kanal zu öffnen.</string>
     <string name="error_connect_peer">Es konnte keine Verbindung zum Peer aufgebaut werden.</string>
     <string name="error_connect_peer_refused">Die Verbindung wurde vom Peer abgelehnt.</string>
     <string name="error_connect_peer_self">Du kannst keine Verbindung zu dir selbst aufbauen.</string>
@@ -276,7 +276,7 @@
     <string name="error_payment_insufficient_balance">Der Betrag, den du bezahlen möchtest, ist größer als der maximale Betrag, den du mit deinen momentan offenen Kanälen senden kannst.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Bitte stelle sicher, dass der Empfänger die \"Keysend\" Funktion aktiviert hat.</string>
     <string name="error_only_payment_data_allowed">Nur Zahlungsdaten sind hier erlaubt.</string>
-    <string name="error_node_not_yet_ready">Deine Node ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
+    <string name="error_node_not_yet_ready">Dein Node ist noch nicht ganz synchronisiert. Bitte versuch es später noch einmal.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s scheint Anfragen aus dem Tor Netzwerk zu blockieren. Du kannst versuchen Tor in den Einstellungen auszuschalten oder den Dienst zu kontaktieren damit sie ihre Cloudflare Einstellungen ändern.</string>
     <string name="error_tor_exchange_rate">Die Wechselkurse konnten nicht aktualisiert werden. Der Dienst, den du verwendest, scheint Anfragen aus dem Tor Netzwerk zu blockieren. Versuche den Wechselkursanbieter in den erweiterten Einstellungen zu ändern.</string>
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Die Antwort von %1$s konnte nicht gelesen werden.</string>
@@ -969,7 +969,7 @@
     <string name="connection_security_info_clearnet_tls_verified_pinned">Die Identität des Servers wird anhand deines gepinnten Zertifikats überprüft.</string>
     <string name="clearnet_tls">Clearnet (TLS)</string>
     <string name="target_remote_lightning_node_lnd">Ferngesteuerter Lightning Node (LND)</string>
-    <string name="connection_security_info_clearnet_tls_not_verified">Die Identität des Servers (Zertifikat) wird nicht überprüft und ist möglicherweise nicht vertrauenswürdig.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Aber die Identität des Servers (Zertifikat) wird nicht überprüft und ist möglicherweise nicht vertrauenswürdig.</string>
     <string name="security">Sicherheit</string>
     <string name="target">Ziel</string>
     <string name="connected">Verbunden</string>
@@ -983,4 +983,7 @@
     <string name="connection_security_info_clearnet_tls">Es wird eine sichere TLS-Verbindung hergestellt.</string>
     <string name="target_remote_lightning_node_core_lightning">Ferngesteuerter Lightning Node (Core Lightning)</string>
     <string name="connection_security_info_clearnet_tls_verified">Die Identität des Servers (Zertifikat) wird mithilfe des Standard-CA-Stores deines Systems überprüft.</string>
+    <string name="connection_security_Info_tls_self_signed">selbstsigniert</string>
+    <string name="connection_security_info_clearnet_http">Dies ist eine unsichere Verbindung über unverschlüsseltes HTTP.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Zertifikatsaussteller</string>
 </resources>
