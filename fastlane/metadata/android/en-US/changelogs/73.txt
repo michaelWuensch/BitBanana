@@ -1,0 +1,10 @@
+- Simplified UTXO consolidation
+- Added extended connection info via connection status indicator
+- Core Lightning: Channel rebalancing feature added
+- Core Lightning: Pick first hop on lightning payments
+- Core Lightning: Reserved UTXOs now displayed as locked
+- Improved compatibility with NWC
+- Log view enhancements: Added sorting and auto-scroll options
+- Added full Polish language support
+- Updated translations
+- Bug fixes
