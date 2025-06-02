@@ -196,7 +196,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.GONE);
                         mViewPasswordLayout.setVisibility(View.GONE);
-                        mVpnAutomationLayout.setVisibility(View.GONE);
+                        mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.GONE);
                         mVerifyCertVisibilityLayout.setVisibility(View.GONE);
 

@@ -174,12 +174,8 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // VPN
             BBInfoLineView ilVpn = findViewById(R.id.vpn);
-            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
-                ilVpn.setVisibility(View.VISIBLE);
-                ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
-            } else {
-                ilVpn.setVisibility(View.GONE);
-            }
+            ilVpn.setVisibility(View.VISIBLE);
+            ilVpn.setData(getWalletConfig().getVpnConfig().getVpnType().getDisplayName());
 
             // Tor
             BBInfoLineView ilTor = findViewById(R.id.tor);

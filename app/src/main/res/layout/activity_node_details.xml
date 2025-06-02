@@ -156,18 +156,6 @@
                     app:infoLine_label="@string/username" />
 
                 <app.michaelwuensch.bitbanana.customView.BBInfoLineView
-                    android:id="@+id/vpn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:infoLine_label="@string/vpn" />
-
-                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
-                    android:id="@+id/tor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:infoLine_label="@string/settings_tor" />
-
-                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
                     android:id="@+id/pubkey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,6 +171,17 @@
                     app:infoLine_ellipsizeMiddle="true"
                     app:infoLine_label="@string/nostr_relay" />
 
+                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
+                    android:id="@+id/vpn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:infoLine_label="@string/vpn" />
+
+                <app.michaelwuensch.bitbanana.customView.BBInfoLineView
+                    android:id="@+id/tor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:infoLine_label="@string/settings_tor" />
             </LinearLayout>
 
 
