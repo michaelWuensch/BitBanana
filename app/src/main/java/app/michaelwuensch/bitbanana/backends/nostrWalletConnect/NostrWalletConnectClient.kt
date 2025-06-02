@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.backends.nostrWalletConnect
 
 import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser
 import app.michaelwuensch.bitbanana.backends.BackendManager
+import app.michaelwuensch.bitbanana.util.ApiUtil
 import app.michaelwuensch.bitbanana.util.BBLog
 import rust.nostr.sdk.ConnectionMode.Direct
 import rust.nostr.sdk.NostrSdkException
@@ -45,7 +46,7 @@ class NostrWalletConnectClient private constructor() {
         try {
             nostrWalletConnectOptions = NostrWalletConnectOptions()
                 .connectionMode(Direct)
-                .timeout(Duration.ofSeconds(20))
+                .timeout(Duration.ofSeconds(ApiUtil.getBackendTimeout()))
         } catch (e: NostrSdkException) {
             BBLog.e(LOG_TAG, "Error creating NostrWalletConnectOptions. Reason: " + e.message)
             BackendManager.setError(BackendManager.ERROR_NWC_CONNECTION_FAILED)
