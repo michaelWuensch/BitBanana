@@ -213,7 +213,8 @@ public class RebalanceActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSlider.setProgress(0);
-                updateBalancing(0);
+                if (mChannelA != null & mChannelB != null)
+                    updateBalancing(0);
             }
         });
 
