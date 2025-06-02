@@ -258,6 +258,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
     private void generateRequest() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            mBtnGenerateRequest.showProgress();
             // The wallet is setup. Communicate with LND and generate the request.
             if (mOnChain) {
                 // generate onChain request
@@ -277,6 +278,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                         }, throwable -> {
                             showError(getString(R.string.receive_generateRequest_failed), 3000);
                             BBLog.e(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                            mBtnGenerateRequest.hideProgress();
                         }));
 
             } else {
@@ -299,6 +301,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                         }, throwable -> {
                             showError(getString(R.string.receive_generateRequest_failed), 3000);
                             BBLog.e(LOG_TAG, "Add invoice request failed: " + throwable.getMessage());
+                            mBtnGenerateRequest.hideProgress();
                         }));
             }
         } else {
