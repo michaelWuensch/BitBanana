@@ -845,4 +845,25 @@
     <string name="all_utxos">Wszystkie UTXO</string>
     <string name="consolidate_utxos_summary">Konsoliduj %1$d UTXO</string>
     <string name="consolidation_failed">Konsolidacja nie powiodła się</string>
+    <string name="target">Cel</string>
+    <string name="security">Bezpieczeństwo</string>
+    <string name="disconnected">Odłączony</string>
+    <string name="connected">Podłączony</string>
+    <string name="status">Status</string>
+    <string name="auto_scroll">Auto-przewijanie</string>
+    <string name="connection_type">Typ połączenia</string>
+    <string name="target_remote_wallet_service">Zdalna usługa portfela</string>
+    <string name="connection_security_info_nwc">NWC zapewnia bezpieczną, szyfrowaną end-to-end komunikację przy użyciu kryptografii klucza publicznego. Certyfikaty TLS nie są wymagane.</string>
+    <string name="clearnet_tls">Clearnet (TLS)</string>
+    <string name="connection_security_info_clearnet_tls_verified">Tożsamość serwera (certyfikat) jest weryfikowana przy użyciu domyślnego magazynu CA twojego systemu.</string>
+    <string name="connection_security_info_clearnet_tls">Bezpieczne połączenie TLS ustanowione.</string>
+    <string name="connection_security_info_clearnet_tls_verified_pinned">Tożsamość serwera jest weryfikowana przy użyciu przypiętego (pinned) certyfikatu.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Jednak tożsamość serwera (certyfikat) nie jest weryfikowana i może nie być zaufana.</string>
+    <string name="connection_security_Info_tls_self_signed">Podpisany samodzielnie</string>
+    <string name="connection_security_info_clearnet_http">To jest niezabezpieczone połączenie przy użyciu nieszyfrowanego protokołu HTTP.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Wydawca certyfikatu</string>
+    <string name="connection_information">Informacje o połączeniu</string>
+    <string name="target_remote_lightning_node_lnd">Zdalny węzeł Lightning (LND)</string>
+    <string name="target_remote_lightning_node_core_lightning">Zdalny węzeł Lightning (Core Lightning)</string>
+    <string name="connection_security_info_tor">Tor zapewnia anonimowość i szyfrowanie na poziomie routowania. Certyfikaty TLS nie są wymagane.</string>
 </resources>
