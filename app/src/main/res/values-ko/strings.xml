@@ -257,7 +257,7 @@
     <string name="settings_customBlockExplorer_address_suffix_description">탐색기에서 주소를 쿼리할 때 호출되는 링크는 다음과 같습니다:\n호스트 + 주소 접미사 + 주소.</string>
     <string name="settings_featurePeers_summary">피어 관리는 자동화되어 있지만, 이 기능은 연결된 피어를 보고 관리할 수 있는 수동 제어 기능도 제공합니다.</string>
     <string name="settings_custom_fee_estimation_provider_host_description">수수료 견적 제공자의 호스트 주소를 입력하세요. 수수료 견적 제공자를 직접 호스팅하면 개인정보가 완전히 보호됩니다.</string>
-    <string name="error_connection_unsupported_format">지원되지 않는 연결 형식입니다.\n다음 형식 중 하나를 사용하세요:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
+    <string name="error_connection_unsupported_format">지원되지 않는 연결 형식입니다.\n다음 형식 중 하나를 사용하세요:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- 노스터 지갑 커텍트 (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
     <string name="settings_stealth_mode_summary">스텔스 모드를 활성화하여 기기의 물리적 검색으로부터 보호</string>
     <string name="error_zeroAmountPaymentRequest">이것은 제로 금액 결제 요청입니다. 비트바나나는 제로 금액 결제 요청과 관련된 보안 문제로 인해 제로 금액 결제 요청을 지원하지 않습니다.</string>
     <string name="error_connection_no_macaroon">연결 정보에 마카롱이 포함되어 있지 않습니다. 이는 필수 입력 사항입니다.</string>
@@ -405,7 +405,7 @@
     <string name="fee_tier_medium_description">중간 트랜잭션</string>
     <string name="error_payment_no_route">수수료 한도는 %1$.1f%%입니다. 준수하는 경로를 찾을 수 없습니다. 설정에서 수수료 한도를 높이거나 새 채널을 개설하면 문제가 해결될 수 있습니다.</string>
     <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s이(가) 토르 네트워크에서 오는 요청을 차단하는 것 같습니다. 설정에서 토르를 끄거나 서비스에 연락하여 클라우드플레어 규칙을 업데이트하도록 요청하세요.</string>
-    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">최대 금액: %1$s\n\n라이트닝 유동성이 부족합니다. 채널 수입 한도를 늘리면 이 한도를 높일 수 있습니다.</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">최대 금액: %1$s\n\n라이트닝 유동성이 부족합니다. 채널 수신 용량을 늘려 이 한도를 높일 수 있습니다.</string>
     <string name="error_tor_might_cause_problem">토르가 문제를 일으킬 수 있습니다. 설정에서 토르를 비활성화해 보세요.</string>
     <string name="error_invalid_peer_connection_data">데이터가 다음 형식 중 하나인지 확인하세요:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <plurals name="duration_second">
@@ -490,7 +490,7 @@
     <string name="backup_data_create_failed">백업 실패</string>
     <string name="message_to_verify">인증할 메시지</string>
     <string name="sign_message">서명 메시지</string>
-    <string name="channel_summary_total_inbound">총 인바운드</string>
+    <string name="channel_summary_total_inbound">수신 유동성</string>
     <string name="fee_rate">수수료율</string>
     <string name="inbound_fee_base">인바운드 기본 수수료</string>
     <string name="submit_routing_policy">라우팅 정책 업데이트</string>
@@ -647,7 +647,7 @@
     <string name="signature_valid">서명이 유효합니다!</string>
     <string name="signature_invalid">서명이 유효하지 않습니다!</string>
     <string name="signature_pubkey">공개키:</string>
-    <string name="channel_summary_total_outbound">총 아웃바운드</string>
+    <string name="channel_summary_total_outbound">전송 유동성</string>
     <string name="fee_base">기본 수수료</string>
     <string name="timelock_delta">타임락 델타</string>
     <string name="htlc_min">최소 HTLC</string>
@@ -703,7 +703,7 @@
     <string name="help_dialog_scanGeneric">여기에서는 무엇이든 허용됩니다.\nQR 코드를 스캔하기만 하면 비트바나나가 데이터에 따라 어떤 조치를 취할지 자동으로 결정합니다.</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">이 노드가 이 채널 잔액에 보유해야 하는 최소 금액입니다. 이 금액은 사용할 수 없습니다. 따라서 채널 파트너를 속이려고 하면 항상 잃을 것이 있습니다.</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">이 채널에서 단일 트랜잭션으로 전달할 수 있는 최소값입니다.</string>
-    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
+    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
     <string name="help_dialog_scanContact">다음이 포함된 QR 코드가 유효합니다:\n\n- 라이트닝 주소\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- 결제 코드</string>
     <string name="help_dialog_private_channels">비공개 채널은 더 안전한 것이 아니라 네트워크에 보이지 않을 뿐입니다.\n결제를 라우팅하지 않는 노드에 채널을 개설하거나 직접 결제를 라우팅하지 않는 경우에만 비공개 채널을 사용하세요.\n결제를 라우팅하려면 노드의 가동 시간이 매우 높아야 합니다. 모바일 기기나 자주 오프라인 상태인 기기에서 노드를 실행하는 경우 결제를 라우팅하지 말고 비공개 채널을 고수해야 합니다.</string>
     <string name="help_dialog_sign_verify">노드로 메시지에 서명하면 자신이 이 노드의 소유자임을 증명할 수 있습니다. 서명에는 노드의 공개키가 포함되어 있으므로 다른 사람들이 서명된 메시지를 확인할 수 있습니다.\n\n이 기능은 신원을 증명하거나 일부 서비스에서 노드로 로그인하는 등 다양한 시나리오에서 사용할 수 있습니다.</string>
@@ -747,7 +747,7 @@
     <string name="backup_data_backupVersion_too_old">이 버전은 아주 오래된 버전의 비트바나나로 제작되었습니다. 안타깝게도 더 이상 지원되지 않습니다.</string>
     <string name="backup_data_no_data">백업할 데이터가 없습니다.</string>
     <string name="message_to_sign">서명할 메시지</string>
-    <string name="channel_summary_total_unavailable">총 오프라인</string>
+    <string name="channel_summary_total_unavailable">오프라인</string>
     <string name="lnd_watchtower_client_inactive">와치타워 클라이언트가 현재 비활성 상태입니다. lnd가 --wtclient.active 플래그를 사용하여 시작되었는지 확인하세요.</string>
     <string name="explanation_channel_commitment_type">각 당사자는 자신의 비트코인 몫을 청구하기 위해 타임체인에 브로드캐스트할 수 있는 커밋 트랜잭션이 있습니다. 커밋 트랜잭션 유형에 따라 채널의 속성도 달라집니다.</string>
     <string name="explanation_timelock_delta">결제 경로에서 각 중간 단계는 트랜잭션을 성공적으로 처리해야 하는 특정 시간 창(블록 단위)을 정의합니다. 그렇지 않으면 만료로 인해 실패한 것으로 간주됩니다. 결제 실패 또는 비협조적인 행동이 발생하는 경우, 해당 단계의 참여자가 거래를 협력적으로 되돌리거나(HTLC 해제) 타임체인에서 비협조적으로 정산하는 등 필요한 조치를 취할 수 있기 때문에 이 시간 창은 매우 중요합니다.\n\n이러한 맥락에서 값이 높을수록 일시적인 노드 장애에 대한 채널의 복원력이 향상됩니다. 그러나 최악의 경우 결제가 장기간 지연될 수 있으므로 라우팅에 대한 채널의 매력이 떨어질 수 있습니다. 또한 드물지만 결제가 중단되는 경우 해당 전달 이벤트에 할당된 채널 참가자의 자금이 해당 기간 동안 잠기게 됩니다.\n\n144블록은 약 하루입니다.</string>
@@ -768,4 +768,78 @@
     <string name="locked">잠김</string>
     <string name="locked_until">다음까지 잠김</string>
     <string name="utxo_selection">UTXO 선택</string>
+    <string name="help">도움말</string>
+    <string name="adjust">조정</string>
+    <string name="error_channel_selection_pending">보류 중인 채널은 선택할 수 없습니다.</string>
+    <string name="auto_scroll">자동 스크롤</string>
+    <string name="security">보안</string>
+    <string name="target">대상</string>
+    <string name="disconnected">연결 해제</string>
+    <string name="connected">연결</string>
+    <string name="status">상태</string>
+    <string name="error_channel_selection_insufficient_liquidity_incoming">선택한 채널의 수신 유동성이 부족합니다.</string>
+    <string name="logs">로그</string>
+    <string name="sort_by_inbound_capacity_asc">수신 유동성 (가장 작은 것부터)</string>
+    <string name="sort_by_symmetry_asc">대칭 (불균형 우선)</string>
+    <string name="sort_by_symmetry_desc">대칭 (균형 우선)</string>
+    <string name="connection_information">연결 정보</string>
+    <string name="connection_type">연결 유형</string>
+    <string name="target_remote_lightning_node_lnd">원격 라이트닝 노드 (LND)</string>
+    <string name="target_remote_lightning_node_core_lightning">원격 라이트닝 노드 (코어 라이트닝)</string>
+    <string name="target_remote_wallet_service">원격 지갑 서비스</string>
+    <string name="connection_security_info_tor">토르는 라우팅 수준에서 익명성과 암호화를 제공합니다. TLS 인증서가 필요하지 않습니다.</string>
+    <string name="connection_security_info_nwc">NWC는 공개 키 암호화를 사용하여 안전한 엔드투엔드 암호화 통신을 보장합니다. TLS 인증서가 필요하지 않습니다.</string>
+    <string name="clearnet_tls">클리어넷 (TLS)</string>
+    <string name="connection_security_info_clearnet_tls">보안 TLS 연결이 설정됩니다.</string>
+    <string name="connection_security_info_clearnet_tls_verified">서버의 ID(인증서)는 시스템의 기본 CA 저장소를 사용하여 확인됩니다.</string>
+    <string name="connection_security_info_clearnet_tls_verified_pinned">고정된 인증서를 사용하여 서버의 신원을 확인합니다.</string>
+    <string name="guardian_custodial_nwc">당신은 노스터 지갑 커넥트 프로토콜을 사용하여 지갑에 연결됩니다. 당신이 노스터 지갑 커넥트 서비스의 호스트가 아닌 한, 이 방식은 수탁 방식입니다. 서비스를 관리하는 주체가 당신의 자금을 관리하고 거래 내역을 볼 수 있습니다. 신뢰할 수 있는 금액만 맡기시기 바랍니다.</string>
+    <string name="error_nwc_setup_failed">노스터 지갑 커넥트 연결을 시작하지 못했습니다.</string>
+    <string name="error_channel_selection_offline">현재 오프라인 상태인 채널은 선택할 수 없습니다.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">그러나 서버의 신원(인증서)이 확인되지 않았으며 신뢰할 수 없을 수 있습니다.</string>
+    <string name="connection_security_Info_tls_self_signed">셀프 서명</string>
+    <string name="connection_security_info_clearnet_http">일반 텍스트 HTTP를 사용하는 안전하지 않은 연결입니다.</string>
+    <string name="connection_security_info_tls_certificate_issuer">인증서 발급자</string>
+    <string name="copy_all">전체 복사</string>
+    <string name="error_channel_selection_insufficient_liquidity_outgoing">선택한 채널의 전송 유동성이 부족합니다.</string>
+    <string name="error_channel_rebalance_no_fee_rate">최대 수수료율을 정의해야 합니다.</string>
+    <string name="error_channel_rebalance_insufficient_funds">백엔드에서 “자금 부족” 오류로 응답했습니다. 일부 채널 제약으로 인해 채널이 잔액의 대부분을 사용하지 못할 수도 있습니다.</string>
+    <string name="sort_by">정렬 조건</string>
+    <string name="nostr_relay">중계</string>
+    <string name="guardian_remoteConnect_nwc">대상에 연결하시겠습니까 \n\n%1$s\n\n지갑을 추가하기 전에 공개 키를 확인해 주세요.</string>
+    <string name="error_connection_invalidNostrWalletConnectString">잘못된 노스터 지갑 커넥트 데이터입니다.\n다음 형식을 사용했는지 확인하세요:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="fee_paid">지불 수수료</string>
+    <string name="sort_by_inbound_capacity_desc">수신 유동성 (가장 큰 것부터)</string>
+    <string name="logs_no_logs">로그 없음</string>
+    <string name="first_hop">첫 번째 홉</string>
+    <string name="consolidate">통합</string>
+    <string name="consolidate_utxos">UTXO 통합</string>
+    <string name="all_utxos">전체 UTXO</string>
+    <string name="consolidation_failed">통합 실패</string>
+    <string name="consolidate_utxos_summary">%1$d UTXO 통합</string>
+    <string name="channel_selection">채널 선택</string>
+    <string name="settings_backendTimeout">백엔드 시간 초과</string>
+    <string name="settings_backendTimeout_dialogMessage">앱이 백엔드 응답을 기다릴 시간(초)을 지정합니다. 이 시간이 경과하기 전까지 응답이 도착하지 않으면 요청이 실패합니다. 인터넷 연결 속도가 느린 경우 이 제한을 늘리는 것이 좋습니다. 토르 사용 시 앱은 토르 지연 시간을 고려하기 위해 이 값에 3을 곱합니다.</string>
+    <string name="settings_paymentTimeout">지불 시간 초과</string>
+    <string name="last_hop">마지막 홉</string>
+    <string name="rebalance">리밸런스</string>
+    <string name="max_fee">최대 수수료</string>
+    <string name="sort_by_capacity_asc">유동성 (가장 작은 것부터)</string>
+    <string name="sort_by_name_asc">이름 (A-Z)</string>
+    <string name="sort_by_capacity_desc">유동성 (가장 큰 것부터)</string>
+    <string name="sort_by_name_desc">이름 (Z-A)</string>
+    <string name="sort_by_outbound_capacity_asc">전송 유동성 (가장 작은 것부터)</string>
+    <string name="sort_by_outbound_capacity_desc">전송 유동성 (가장 큰 것부터)</string>
+    <string name="sort_by_value_asc">값 (가장 작은 것부터)</string>
+    <string name="sort_by_value_desc">값 (가장 큰 것부터)</string>
+    <string name="sort_by_age_desc">연령 (나이 많은 순)</string>
+    <string name="sort_by_age_asc">연령 (나이 어린 순)</string>
+    <string name="clear">지우기</string>
+    <string name="help_dialog_lastHop">이 마지막 홉 옵션은 채널 잔액을 재조정하려는 경우에만 사용하세요. 이렇게 하면 자신에게 효과적으로 자금을 보낼 수 있습니다. 인보이스를 생성하고 첫 번째 홉에는 전송 유동성이 많은 채널을, 마지막 홉에는 수신 유동성이 많은 채널을 선택하여 특정 자체 채널 세트로 결제합니다. 이 방식은 수수료가 발생하지만 채널 리밸런싱을 달성할 수 있습니다.</string>
+    <string name="help_dialog_utxos_consolidate">UTXO를 통합하면 사용되지 않은 여러 개의 출력을 하나의 큰 출력으로 결합하는 것입니다. 온체인 트랜잭션 수수료는 값이 아닌 바이트 단위의 크기에 따라 결정되므로 향후 트랜잭션을 더 저렴하게 만들 수 있습니다. 수수료가 낮은 기간에 통합하면 사용자가 필요한 블록체인 공간을 저렴할 때 지불할 수 있어 수수료가 높은 기간에 향후 수수료를 최소화하는 데 도움이 됩니다. 그러나 통합에는 수수료가 부과되며 주소 연결로 인해 프라이버시가 약화될 수 있다는 점에 유의하세요.</string>
+    <string name="settings_featureLogs_summary">활성화하면 비트바나나는 메인 메뉴의 로그 섹션에서 볼 수 있는 로그를 기록합니다. 문제를 해결 중이고 로그를 검사해야 하는 경우에만 사용 설정하세요.</string>
+    <string name="guardian_consolidate_utxos">UTXO를 통합하면 주소가 연결되어 프라이버시가 약화될 수 있습니다. 입력된 주소가 동일한 주체에 속할 가능성이 높으므로 블록체인에서 거래 내역을 더 쉽게 분석하고 추적할 수 있습니다.</string>
+    <string name="guardian_copy_logs">복사된 로그에는 민감한 데이터가 포함될 수 있다는 점에 유의하세요. 기밀 정보를 다른 사람과 공유하기 전에 다시 한 번 확인하고 편집하세요.</string>
+    <string name="settings_paymentTimeout_dialogMessage">이 설정은 앱이 라이트닝 결제를 시도하는 데 걸리는 최대 시간(초)을 정의합니다. 해당 시간 내에 경로를 찾지 못하면 결제가 취소됩니다. 시간 초과가 자주 발생한다면 이 제한 시간을 늘려보세요.</string>
+    <string name="help_dialog_rebalancing">채널 재조정으로 결제 채널을 항상 준비된 상태로 유지하세요! 한쪽의 잔액이 부족하면 채널이 한 방향으로만 작동하고 결제가 실패할 수 있습니다. 자신에게 순환 결제를 보내면 온체인 트랜잭션 없이도 채널 간 잔액을 재분배할 수 있습니다. 이 보기를 사용하면 이러한 순환 결제를 수행할 수 있습니다. 최상의 결과를 얻으려면 전송 유동성이 큰 채널을 선택하고 수신 유동성이 초과된 다른 채널과 페어링하세요.</string>
 </resources>
