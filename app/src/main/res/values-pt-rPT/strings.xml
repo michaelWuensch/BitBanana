@@ -30,7 +30,7 @@
     <string name="retry">Tentar novamente</string>
     <string name="loading">Carregando</string>
     <string name="pay">Pagar</string>
-    <string name="expiry">Estado</string>
+    <string name="expiry">Expiração</string>
     <string name="expired">Expirado</string>
     <string name="remaining">restantes</string>
     <string name="address">Endereço</string>
@@ -73,12 +73,7 @@
 \n- Endereço Bitcoin
 \n- Solicitação de Pagamento Bitcoin
 \n- Solicitação de Pagamento Lightning</string>
-    <string name="help_dialog_scanContact">Códigos QR contendo o seguinte são válidos:
-\n
-\n- Endereço Lightning
-\n- pubkey
-\n- pubkey@host
-\n- pubkey@host:port</string>
+    <string name="help_dialog_scanContact">Códigos QR contendo o seguinte são válidos: \n \n- Endereço Lightning \n- pubkey \n- pubkey@host \n- pubkey@host:port\n- Código de pagamento</string>
     <string name="rename">Renomear</string>
     <string name="open_node">Selecionar este nó</string>
     <string name="third_party_licenses">Licenças de terceiros</string>
@@ -492,10 +487,7 @@
     <string name="error_emptyClipboardPayment">A sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
     <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
-    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. 
-\nCertifique-se de usar o formato seguinte:
-\n
-\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
+    <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. \nCertifique-se de usar o formato seguinte: \n \nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_no_macaroon">As suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
     <string name="error_connection_server_unreachable">Tempo esgotado.
@@ -626,12 +618,7 @@
     <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
     <string name="advanced_channel_details_initiator_peer">Par</string>
     <string name="advanced_channel_details_explanation_close_type">Canais podem ser fechados em diferentes formas. A forma ideal é um fechamento cooperativo. Se um lado decidir fechar um canal sem a cooperação do outro, um chamado \"fechamento forçado\" ocorre. Um fechamento forçado normalmente resulta em maiores taxas e o iniciador do fechamento terá de esperar um tempo até poder aceder os seus fundos. Se um lado tentar trapacear e for pego, temos um fechamento vazado.</string>
-    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar os seus fundos, nem o backup do canal para reaver as seus fundos Lightning. Os backups para reaver os seus fundos têm de ser feitos fora do BitBanana.
-\n
-\nEste backup contém apenas os seguintes dados:
-\n
-\n- Dados para conectar o BitBanana aos seus nós funcionais
-\n- Contatos</string>
+    <string name="backup_data_create_description">O principal objetivo deste backup é a migração do telefone. Ele não contém a semente para recuperar os seus fundos na cadeia, nem o backup do canal para recuperar os seus fundos Lightning. Os backups para recuperar os seus fundos devem ser feitos fora do BitBanana.\n\nEste backup contém apenas os seguintes dados:\n\n- Configurações do nó\n- Contactos\n- Configurações da aplicação</string>
     <string name="backup_data_restore_description">Restaure os seus nós conectados e contatos.
 \nSe os seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a poder reaceder os seus fundos.</string>
     <string name="backup_data_password_enter">Insira a sua palavra-passe</string>
@@ -851,10 +838,7 @@
     <string name="settings_avatarStyleDisplayValues_1">Robôs</string>
     <string name="settings_avatarStyleDisplayValues_2">Alienígenas</string>
     <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor verifique se o seu nó partilha pormenores de conexão cln-grpc e use estes para conexão.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Cadeia de conexão cln-grpc inválida.
-\nSe faz favor, certifique-se que usou o seguinte formato:
-\n
-\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Cadeia de conexão cln-grpc inválida. \nSe faz favor, certifique-se que usou o seguinte formato: \n \ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">A cadeia de conexão providenciada para cln-grpc é inválida já que os parâmetros não estão codificados no formato base64url.</string>
     <string name="error_unknown_backend">Tipo de backend desconhecido.</string>
     <string name="error_input_field_empty">O campo de entrada %1$s não pode estar vazio.</string>
@@ -951,7 +935,7 @@
     <string name="error_channel_rebalance_no_fee_rate">Deve definir uma taxa máxima de cobrança.</string>
     <string name="error_channel_rebalance_insufficient_funds">O backend respondeu com um erro de “fundos insuficientes”. Talvez algumas restrições de um canal estejam prevenindo o canal de gastar a maior parte do seu balanço.</string>
     <string name="help_dialog_watchtowers">Para a torre de guarda funcionar, alguns dados devem ser trocados com ela. Isto resulta em alguma informação sendo provida ao gestor da torre de guarda. Os seguintes dados não criptografados serão providos: \n- Frequência de atualizações do canal \n \nOs balanços do canal ficam confidenciais a não ser que o seu parceiro trapaceie e a torre de guarda detete. Neste cenário, revelará os balanços para garantir a proteção dos seus fundos. \n \nTenha em mente que um serviço de torre de guarda não pode tomar os seus fundos. A única ação dele durante uma quebra de segurança é iniciar uma transação de punição, com os fundos indo diretamente a si.</string>
-    <string name="help_dialog_own_watchtower">"Esta é a sua torre de guarda na rede Lightning. \n \nAo tocar na imagem de avatar,  revelará um código QR. \nEste código pode ser escaneado por outros para adicionar a sua torre de guarda à lista deles, permitindo-a supervisionar os seus canais. Tenha cuidado pois isto consome recursos, então evite partilhar estes dados de conexão publicamente na internet. \n \nO avatar é único. \nEle foi automaticamente gerado com base na sua chave pública e não pode ser trocado."</string>
+    <string name="help_dialog_own_watchtower">Esta é a sua torre de guarda na rede Lightning. \n \nAo tocar na imagem de avatar, revelará um código QR. \nEste código pode ser escaneado por outros para adicionar a sua torre de guarda à lista deles, permitindo-a supervisionar os seus canais. Tenha cuidado pois isto consome recursos, então evite partilhar estes dados de conexão publicamente na internet. \n \nO avatar é único. \nEle foi automaticamente gerado com base na sua chave pública e não pode ser trocado.</string>
     <string name="help_dialog_offers">Códigos de pagamento podem ser usados várias vezes. Qualquer um com o código pode fazer um pagamento para si sem requerer o seu envolvimento imediato. Entretanto, o seu nó deve estar on-line para que o pagamento avance. Além disso, códigos de pagamento oferecem funções avançadas como pagamentos recorrentes e privacidade aumentada ao recipiente.</string>
     <string name="help_dialog_settings_currencies">Tocar no campo de qualquer quantia permite que mude as moedas que configurou aqui. Se selecionar apenas unidades Bitcoin, o app irá parar de contatar os provedores de taxa de câmbio.</string>
     <string name="lnd_watchtower_client_inactive">O cliente da torre de guarda está atualmente inativo. Por favor certifique-se que o lnd é iniciado com a flag --wtclient.active.</string>
@@ -1046,4 +1030,32 @@
     <string name="settings_backendTimeout_dialogMessage">Especifica a quantidade de segundos que a app aguardará por uma resposta do backend. Se nenhuma resposta chegar antes do tempo acabar, a solicitação falhará. Para conexões a internet lentas, considere aumentar este limite. Ao usar o Tor, a app multiplica este número por 3 para compensar a latência do Tor.</string>
     <string name="settings_paymentTimeout_dialogMessage">Este ajuste define a quantidade máxima de segundos que o app vai gastar a tentar um pagamento Lightning. Se nenhuma rota for encontrada nesse tempo, o pagamento será cancelado. Se o tempo expira com frequência, tente aumentar este limite.</string>
     <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Quantia máxima: %1$s\n\nLiquidez Lightning insuficiente. Aumente a capacidade de renda do canal para aumentar este limite.</string>
+    <string name="auto_scroll">Scroll Automático</string>
+    <string name="target">Alvo</string>
+    <string name="security">Segurança</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="connected">Conectado</string>
+    <string name="status">Estado</string>
+    <string name="guardian_consolidate_utxos">A consolidação de UTXOs pode enfraquecer a sua privacidade ao ligar endereços. Isso revela que os endereços de entrada provavelmente pertencem à mesma entidade, tornando o seu histórico de transações mais fácil de analisar e rastrear na blockchain.</string>
+    <string name="all_utxos">Todos os UTXOs</string>
+    <string name="consolidate_utxos_summary">Consolidar %1$d UTXOs</string>
+    <string name="consolidation_failed">A consolidação falhou</string>
+    <string name="connection_information">Informações de ligação</string>
+    <string name="connection_type">Tipo de ligação</string>
+    <string name="target_remote_lightning_node_lnd">Nó Lightning Remoto (LND)</string>
+    <string name="target_remote_lightning_node_core_lightning">Nó Lightning Remoto (Core Lightning)</string>
+    <string name="target_remote_wallet_service">Serviço de Carteira Remoto</string>
+    <string name="connection_security_info_tor">O Tor oferece anonimato e encriptação ao nível do encaminhamento. Não são necessários certificados TLS.</string>
+    <string name="connection_security_info_nwc">A NWC garante uma comunicação segura e totalmente encriptada utilizando criptografia de chave pública. Não são necessários certificados TLS.</string>
+    <string name="connection_security_info_clearnet_tls_verified_pinned">A identidade do servidor é verificada usando o seu certificado fixado.</string>
+    <string name="clearnet_tls">Clearnet (TLS)</string>
+    <string name="connection_security_info_clearnet_tls">É estabelecida uma ligação TLS segura.</string>
+    <string name="connection_security_info_clearnet_tls_verified">A identidade do servidor (certificado) é verificada utilizando o armazenamento CA padrão do seu sistema.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Mas a identidade do servidor (certificado) não é verificada e pode não ser confiável.</string>
+    <string name="connection_security_Info_tls_self_signed">auto-assinado</string>
+    <string name="connection_security_info_clearnet_http">Esta é uma ligação insegura que utiliza HTTP de texto simples.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Emissor do certificado</string>
+    <string name="consolidate">Consolidar</string>
+    <string name="consolidate_utxos">Consolidar UTXOs</string>
+    <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, está a combinar várias saídas não gastas numa única saída maior. Isso torna as transações futuras mais baratas, uma vez que as taxas de transação na cadeia são determinadas pelo tamanho em bytes e não pelo valor. A consolidação durante períodos de taxas baixas permite que os utilizadores paguem pelo espaço de blockchain de que precisam enquanto está barato, ajudando a minimizar as taxas futuras durante períodos de taxas altas. No entanto, tenha em mente que a consolidação tem um custo e pode enfraquecer a sua privacidade ao vincular endereços.</string>
 </resources>
