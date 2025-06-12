@@ -157,7 +157,22 @@ public class CoreLightningApi extends Api {
                     if (response.getAddressCount() != 0) {
                         lnUris = new LightningNodeUri[response.getAddressCount()];
                         for (int i = 0; i < response.getAddressCount(); i++) {
-                            lnUris[i] = LightningNodeUriParser.parseNodeUri(response.getAddress(i).getAddress());
+                            if (!response.getAddress(i).hasAddress()) {
+                                BBLog.w(LOG_TAG, "An address in the NodeInfo has no address set. Falling back to PubKey only.");
+                                lnUris = new LightningNodeUri[1];
+                                lnUris[0] = LightningNodeUriParser.parseNodeUri(pubkey);
+                                break;
+                            }
+                            if (response.getAddress(i).getPort() != 0)
+                                lnUris[i] = LightningNodeUriParser.parseNodeUri(pubkey + "@" + response.getAddress(i).getAddress() + ":" + response.getAddress(i).getPort());
+                            else
+                                lnUris[i] = LightningNodeUriParser.parseNodeUri(pubkey + "@" + response.getAddress(i).getAddress());
+                            if (lnUris[i] == null) {
+                                BBLog.w(LOG_TAG, "LightningNodeUriParser failed to parse: " + pubkey + "@" + response.getAddress(i).getAddress() + ":" + response.getAddress(i).getPort() + ". Falling back to PubKey only.");
+                                lnUris = new LightningNodeUri[1];
+                                lnUris[0] = LightningNodeUriParser.parseNodeUri(pubkey);
+                                break;
+                            }
                         }
                     } else {
                         lnUris = new LightningNodeUri[1];
