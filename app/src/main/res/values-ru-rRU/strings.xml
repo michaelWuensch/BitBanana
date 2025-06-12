@@ -859,8 +859,11 @@
     <string name="connection_security_info_tor">Tor обеспечивает анонимность и шифрование на уровне маршрутизации. Сертификаты TLS не требуются.</string>
     <string name="security">Безопасность</string>
     <string name="connection_security_info_clearnet_tls">Установлено безопасное соединение через TLS.</string>
-    <string name="connection_security_info_clearnet_tls_not_verified">Достоверность сервера (его сертификат) не проверена и он не может быть доверенным.</string>
+    <string name="connection_security_info_clearnet_tls_not_verified">Но достоверность сервера (его сертификат) не проверена и он может быть недостоверным.</string>
     <string name="clearnet_tls">Прямое подключение (TLS)</string>
     <string name="connection_security_info_clearnet_tls_verified">Достоверность сервера (его сертификат) проверена используя сертификаты Удостоверяющих Центров (УЦ) от вашей системы.</string>
     <string name="connection_security_info_clearnet_tls_verified_pinned">Достоверность сервера (его сертификат) проверена используя сертификат который вы указали.</string>
+    <string name="connection_security_Info_tls_self_signed">самоподписанный</string>
+    <string name="connection_security_info_clearnet_http">Это небезопасное соединение, использующее простой текстовый протокол HTTP.</string>
+    <string name="connection_security_info_tls_certificate_issuer">Эмитент сертификата</string>
 </resources>
