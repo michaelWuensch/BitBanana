@@ -156,6 +156,7 @@
     <string name="disconnected">Disconnected</string>
     <string name="connected">Connected</string>
     <string name="status">Status</string>
+    <string name="info">Info</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -181,6 +182,7 @@
     <string name="activity_bolt12_offers">Payment Codes</string>
     <string name="activity_bolt12_create_offer">Create Payment Code</string>
     <string name="activity_payment_route">Payment Path</string>
+    <string name="activity_quick_receive_setup">Quick Receive</string>
 
     <string name="navigation_node">Node</string>
     <string name="navigation_history">History</string>
@@ -522,6 +524,8 @@
     <string name="error_channel_selection_insufficient_liquidity_incoming">The selected channel\'s receiving capacity is insufficient.</string>
     <string name="error_channel_rebalance_no_fee_rate">You must define a maximum fee rate.</string>
     <string name="error_channel_rebalance_insufficient_funds">The backend responded with an \"insufficient funds\" error. Maybe some channel constraints prevent a channel from spending most of its balance.</string>
+    <string name="error_no_bolt12_offer_selected">You have to select a payment code.</string>
+    <string name="error_selecting_inactive_bolt12_offer">You cannot select an inactive payment code.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -627,6 +631,7 @@
     <string name="help_dialog_lastHop">Only use this last hop option when you want to rebalance your channels. To do so, you can effectively send funds to yourself. Generate an invoice and pay it with a specific set of own channels, picking one with high outgoing capacity for the first hop and one with high incoming balance for the last hop. This approach incurs fees but achieves channel rebalancing.</string>
     <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel will only work in one direction, and payments may start to fail. Sending a lightning payment in a circular route to yourself redistributes balances between your channels without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with high sending capacity and pair it with another that has excess receiving capacity.</string>
     <string name="help_dialog_utxos_consolidate">When you consolidate UTXOs, you\'re combining several unspent outputs into one bigger one. This makes future transactions cheaper since on-chain transaction fees are determined by size in bytes and not by the value. Consolidating during low-fee periods allows users to pay for the blockchain space they need while it\'s cheap, helping to minimize future fees during high-fee periods. Keep in mind, however, that consolidation costs a fee and can weaken your privacy by linking addresses.</string>
+    <string name="help_dialog_quick_receive_setup">Receiving Bitcoin comes with choices: On-chain, Lightning, BOLT12, and more.\nThat\’s great, but it can take a few extra taps just to view your receive QR code. BitBanana speeds it up. Pick a default receive method here, and you\’re ready with one tap while still having the option to customize everything.\n\nNot sure how to set it up? The documentation below can guide you.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -976,4 +981,16 @@
     <string name="connection_security_Info_tls_self_signed">self-signed</string>
     <string name="connection_security_info_clearnet_http">This is an insecure connection using plain-text HTTP.</string>
     <string name="connection_security_info_tls_certificate_issuer">Certificate Issuer</string>
+
+    <string name="quick_receive_info_off">With Quick Receive turned off, you\'ll be asked to select what you want every time you press \'Receive\'.</string>
+    <string name="quick_receive_info_bolt12">Also referred to as BOLT 12, a Payment Code is a static, reusable identifier that requires no web service. It contains all the necessary information to send a payment directly over the Lightning Network.</string>
+    <string name="quick_receive_info_on_chain_address">This will use the next unused on-chain address.</string>
+    <string name="quick_receive_info_on_chain_address_part2">However, this method is not recommended as it doesn\’t support Lightning payments.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">This method uses the next unused on-chain address as a fallback when the sender doesn\’t support Lightning payments.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">This method uses the next unused on-chain address as a fallback when the sender doesn\’t support Payment Codes.</string>
+    <string name="quick_receive_type_on_chain_address">On-Chain Address</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">On-Chain + Lightning Address</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">On-Chain + Payment Code</string>
+    <string name="refer_to_docs_ln_address">Please refer to the documentation for guidance on how to get a Lightning Address.</string>
+
 </resources>

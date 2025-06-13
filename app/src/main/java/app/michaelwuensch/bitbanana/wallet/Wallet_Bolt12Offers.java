@@ -47,6 +47,17 @@ public class Wallet_Bolt12Offers {
         return mOffersList;
     }
 
+    public Bolt12Offer getBolt12OfferById(String id) {
+        if (mOffersList != null) {
+            for (Bolt12Offer offer : mOffersList) {
+                if (offer.getOfferId().equals(id)) {
+                    return offer;
+                }
+            }
+        }
+        return null;
+    }
+
     public void fetchBolt12Offers() {
         compositeDisposable.add(BackendManager.api().listBolt12Offers()
                 .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)

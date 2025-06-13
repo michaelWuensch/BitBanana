@@ -27,6 +27,8 @@ public class Bip21Invoice implements Serializable {
      */
     private final String Lightning;
     private final boolean hasLightning;
+    private final String Offer;
+    private final boolean hasOffer;
 
     public static Builder newBuilder() {
         return new Builder();
@@ -41,6 +43,8 @@ public class Bip21Invoice implements Serializable {
         this.hasMessage = builder.hasMessage;
         this.Lightning = builder.Lightning;
         this.hasLightning = builder.hasLightning;
+        this.Offer = builder.Offer;
+        this.hasOffer = builder.hasOffer;
     }
 
     public String getAddress() {
@@ -104,6 +108,14 @@ public class Bip21Invoice implements Serializable {
         return hasLightning;
     }
 
+    public String getOffer() {
+        return Offer;
+    }
+
+    public boolean hasOffer() {
+        return hasOffer;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -115,9 +127,11 @@ public class Bip21Invoice implements Serializable {
             String escapedMessage = UrlEscapers.urlPathSegmentEscaper().escape(Message);
             bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "message", escapedMessage);
         }
-        if (hasLightning) {
+        if (hasOffer)
+            bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "lno", Offer);
+        if (hasLightning)
             bitcoinInvoice = UriUtil.appendParameter(bitcoinInvoice, "lightning", Lightning);
-        }
+
 
         return bitcoinInvoice;
     }
@@ -133,6 +147,8 @@ public class Bip21Invoice implements Serializable {
         private boolean hasMessage;
         private String Lightning;
         private boolean hasLightning;
+        private String Offer;
+        private boolean hasOffer;
 
         private Builder() {
             // required parameters
@@ -190,6 +206,12 @@ public class Bip21Invoice implements Serializable {
         public Builder setLightning(String lightning) {
             Lightning = lightning;
             hasLightning = lightning != null && !lightning.isEmpty();
+            return this;
+        }
+
+        public Builder setOffer(String offer) {
+            Offer = offer;
+            hasOffer = offer != null && !offer.isEmpty();
             return this;
         }
     }

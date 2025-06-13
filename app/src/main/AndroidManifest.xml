@@ -289,6 +289,12 @@
             android:theme="@style/AppThemeWithActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name="app.michaelwuensch.bitbanana.setup.QuickReceiveSetup"
+            android:label="@string/activity_quick_receive_setup"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name="app.michaelwuensch.bitbanana.listViews.channels.itemDetails.AdvancedChannelDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />

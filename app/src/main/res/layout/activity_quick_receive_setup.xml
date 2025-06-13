@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.setup.QuickReceiveSetup">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/deep_sea_blue"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:id="@+id/typeSpinnerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vpnAutomationLabel">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+
+                    android:background="@drawable/border_spinner">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/typeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:popupBackground="@drawable/bg_spinner_popup" />
+                </RelativeLayout>
+
+                <app.michaelwuensch.bitbanana.customView.BBInputFieldView
+                    android:id="@+id/inputLnAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:inputLabel="@string/ln_address"
+                    app:inputLabelDetails=""
+                    app:maxLines="1" />
+
+                <LinearLayout
+                    android:id="@+id/bolt12Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bolt12_offer"
+                        android:textSize="18sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <app.michaelwuensch.bitbanana.customView.BBButton
+                            android:id="@+id/selectBolt12Button"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/button_height"
+                            android:layout_marginTop="10dp"
+
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:bbbutton_text="Select ..." />
+
+                        <LinearLayout
+                            android:id="@+id/selectedOfferLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/button_height"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_clickable_item"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/offerLabel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:ellipsize="middle"
+                                android:maxLines="1"
+                                android:paddingEnd="10dp" />
+
+                            <app.michaelwuensch.bitbanana.customView.BBButton
+                                android:id="@+id/removeSelectedOfferButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                app:bbbutton_bright="true"
+                                app:bbbutton_contentColor="@color/white"
+                                app:bbbutton_horizontalContentPadding="0dp"
+                                app:bbbutton_image="@drawable/ic_delete_24" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/infoLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/info"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/infoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    tools:text="@string/quick_receive_info_bolt12" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/documentationButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="15dp"
+                    app:bbbutton_text="@string/documentation" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <app.michaelwuensch.bitbanana.customView.BBButton
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                app:bbbutton_text="@string/save" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

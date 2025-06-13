@@ -55,7 +55,7 @@ public class BaseBSDFragment extends RxBSDFragment {
             ConstraintLayout csLayout = bottomSheet.findViewById(R.id.scrollableBsdRoot);
             ConstraintSet csRoot = new ConstraintSet();
             csRoot.clone(csLayout);
-            csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.7));
+            csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.8));
             csRoot.applyTo(csLayout);
 
             // Adjust Resize did not work correctly. It was not possible to scroll all the way down on a bottom sheet when soft keyboard was shown.
@@ -69,7 +69,7 @@ public class BaseBSDFragment extends RxBSDFragment {
                         csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.4));
                         csRoot.applyTo(csLayout);
                     } else {
-                        csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.7));
+                        csRoot.constrainMaxHeight(R.id.content, (int) (metrics.heightPixels * 0.8));
                         csRoot.applyTo(csLayout);
                     }
                 }

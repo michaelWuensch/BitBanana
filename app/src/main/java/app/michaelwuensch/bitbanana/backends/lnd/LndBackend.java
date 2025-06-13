@@ -67,6 +67,9 @@ public class LndBackend extends Backend {
         FeatureShowBackendLog = new BackendFeature(true);
         FeaturePickFirstHop = new BackendFeature(true);
         FeatureRebalanceChannel = new BackendFeature(true);
+        FeatureQuickReceive = new BackendFeature(true);
+        FeatureQuickReceiveLnAddress = new BackendFeature(true);
+        FeatureQuickReceiveOnChainAddress = new BackendFeature(true);
 
         // Based on the macaroon we now deactivate some of the features again if the permission is missing
         try {
@@ -81,11 +84,15 @@ public class LndBackend extends Backend {
                 if (!(hasReadPermission(permissions, "message") || hasWritePermission(permissions, "message")))
                     FeatureMessageSigningByNodePrivateKey = new BackendFeature(false);
 
-                if (!hasWritePermission(permissions, "address"))
+                if (!hasWritePermission(permissions, "address")) {
                     FeatureOnChainReceive = new BackendFeature(false);
+                    FeatureQuickReceiveOnChainAddress = new BackendFeature(false);
+                }
 
-                if (!hasWritePermission(permissions, "invoices"))
+                if (!hasWritePermission(permissions, "invoices")) {
                     FeatureBolt11Receive = new BackendFeature(false);
+                    FeatureQuickReceiveLnAddress = new BackendFeature(false);
+                }
 
                 if (!hasWritePermission(permissions, "offchain")) {
                     FeatureBolt11Sending = new BackendFeature(false);

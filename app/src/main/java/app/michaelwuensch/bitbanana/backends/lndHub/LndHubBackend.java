@@ -16,6 +16,8 @@ public class LndHubBackend extends Backend {
         FeatureBolt11Receive = new BackendFeature(true);
         FeatureBolt11Sending = new BackendFeature(!(isLnBits() && backendConfig.getUser().equals("invoice")));
         FeatureOnChainReceive = new BackendFeature(!(isLnBits() || isAlby()));
+        FeatureQuickReceive = new BackendFeature(true);
+        FeatureQuickReceiveLnAddress = new BackendFeature(true);
     }
 
     private boolean isLnBits() {

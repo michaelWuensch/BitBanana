@@ -8,6 +8,7 @@ import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HexUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 import rust.nostr.sdk.NostrWalletConnectUri;
 
 /**
@@ -152,9 +153,11 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
                 backendConfig.setLocation(BackendConfig.Location.REMOTE);
                 backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
                 backendConfig.setFullConnectString(mConnectionString);
-                if(mLud16 != null) {
-                    backendConfig.setQuickReceiveType(BackendConfig.QuickReceiveType.SIMPLE_STRING);
-                    backendConfig.setQuickReceiveString(mLud16);
+                if (mLud16 != null) {
+                    QuickReceiveConfig quickReceiveConfig = new QuickReceiveConfig();
+                    quickReceiveConfig.setQuickReceiveType(QuickReceiveConfig.QuickReceiveType.LN_ADDRESS);
+                    quickReceiveConfig.setLnAddress(mLud16);
+                    backendConfig.setQuickReceiveConfig(quickReceiveConfig);
                 }
 
                 setBackendConfig(backendConfig);

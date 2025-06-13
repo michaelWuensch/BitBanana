@@ -7,6 +7,7 @@ import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 
 /**
  * A BackendConfig contains all information that BitBanana needs to connect to a backend.
@@ -139,14 +140,9 @@ public class BackendConfig implements Comparable<BackendConfig> {
     private String avatarMaterial;
 
     /**
-     * The quick receive type. Do we just show the quickReceiveString or should it be combined with a bip21 invoice, etc.?
+     * The quickReceiveConfig is used by BitBanana to show a default receive QR Code instead of going through lots of options first..
      */
-    private QuickReceiveType quickReceiveType;
-
-    /**
-     * The string that will be used to diplay a QR-Code for quick receive.
-     */
-    private String quickReceiveString;
+    private QuickReceiveConfig quickReceiveConfig;
 
 
     public BackendConfig() {
@@ -349,20 +345,19 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.avatarMaterial = avatarMaterial;
     }
 
-    public QuickReceiveType getQuickReceiveType() {
-        return quickReceiveType;
+    public QuickReceiveConfig getQuickReceiveConfig() {
+        if (this.quickReceiveConfig == null)
+            return new QuickReceiveConfig();
+        else
+            return this.quickReceiveConfig;
     }
 
-    public void setQuickReceiveType(QuickReceiveType quickReceiveType) {
-        this.quickReceiveType = quickReceiveType;
+    public boolean hasQuickReceiveConfig() {
+        return this.quickReceiveConfig != null;
     }
 
-    public String getQuickReceiveString() {
-        return quickReceiveString;
-    }
-
-    public void setQuickReceiveString(String quickReceiveString) {
-        this.quickReceiveString = quickReceiveString;
+    public void setQuickReceiveConfig(QuickReceiveConfig quickReceiveConfig) {
+        this.quickReceiveConfig = quickReceiveConfig;
     }
 
     public boolean isLocal() {
@@ -403,8 +398,7 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setTempAccessToken(getTempAccessToken());
         copy.setTempRefreshToken(getTempRefreshToken());
         copy.setAvatarMaterial(getAvatarMaterial());
-        copy.setQuickReceiveType(getQuickReceiveType());
-        copy.setQuickReceiveString(getQuickReceiveString());
+        copy.setQuickReceiveConfig(getQuickReceiveConfig());
         return copy;
     }
 
@@ -527,21 +521,5 @@ public class BackendConfig implements Comparable<BackendConfig> {
         LND_HUB_CONNECT,
         BTC_PAY_DATA,
         NOSTR_WALLET_CONNECT;
-    }
-
-    /**
-     * The quick receive type. Do we just show the quickReceiveString or should it be combined with a bip21 invoice, etc.?
-     * Null if no quick receive is setup.
-     */
-    public enum QuickReceiveType {
-        SIMPLE_STRING;
-
-        public static QuickReceiveType parseFromString(String enumAsString) {
-            try {
-                return valueOf(enumAsString);
-            } catch (Exception ex) {
-                return SIMPLE_STRING;
-            }
-        }
     }
 }

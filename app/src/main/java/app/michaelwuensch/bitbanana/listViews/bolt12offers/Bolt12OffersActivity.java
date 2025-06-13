@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.bolt12offers;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,6 +37,10 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt12OfferSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_Bolt12Offers.Bolt12OffersSubscriptionListener {
 
     private static final String LOG_TAG = Bolt12OffersActivity.class.getSimpleName();
+    public static final String EXTRA_BOLT12_OFFERS_ACTIVITY_MODE = "bolt12OffersActivityMode";
+    public static final String EXTRA_SELECTED_OFFER = "selectedOffer";
+    public static final int MODE_VIEW = 0;
+    public static final int MODE_SELECT = 1;
 
     private RecyclerView mRecyclerView;
     private Bolt12OfferItemAdapter mAdapter;
@@ -45,12 +50,21 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
     private List<Bolt12OfferListItem> mBolt12OffersItems;
     private TextView mEmptyListText;
     private CompositeDisposable mCompositeDisposable;
+    private int mMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_bolt12_offers);
         mCompositeDisposable = new CompositeDisposable();
+
+        // Receive data from last activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_BOLT12_OFFERS_ACTIVITY_MODE);
+        } else {
+            mMode = 0;
+        }
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -73,6 +87,15 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
         mAdapter = new Bolt12OfferItemAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        switch (mMode) {
+            case MODE_VIEW:
+                setupViewMode();
+                break;
+            case MODE_SELECT:
+                setupSelectMode();
+                break;
+        }
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +109,14 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
                 }
             }
         });
+    }
+
+    private void setupViewMode() {
+    }
+
+    private void setupSelectMode() {
+        String title = getString(R.string.select) + " ...";
+        setTitle(title);
     }
 
     @Override
@@ -198,12 +229,30 @@ public class Bolt12OffersActivity extends BaseAppCompatActivity implements Bolt1
 
     @Override
     public void onOfferSelect(Serializable bolt12Offer) {
-        if (bolt12Offer != null) {
-            Intent intentOfferDetails = new Intent(this, Bolt12OfferDetailsActivity.class);
-            intentOfferDetails.putExtra("bolt12offer", bolt12Offer);
-            startActivity(intentOfferDetails);
+        switch (mMode) {
+            case MODE_VIEW:
+                if (bolt12Offer != null) {
+                    Intent intentOfferDetails = new Intent(this, Bolt12OfferDetailsActivity.class);
+                    intentOfferDetails.putExtra("bolt12offer", bolt12Offer);
+                    startActivity(intentOfferDetails);
+                }
+                break;
+            case MODE_SELECT:
+                if (bolt12Offer != null) {
+                    Bolt12Offer bolt12OfferDeserialized = (Bolt12Offer) bolt12Offer;
+                    if (!bolt12OfferDeserialized.getIsActive()) {
+                        showError(getString(R.string.error_selecting_inactive_bolt12_offer), 4000);
+                        return;
+                    }
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(EXTRA_SELECTED_OFFER, bolt12Offer);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
         }
     }
+
 
     @Override
     public void onQrCodeSelect(Serializable bolt12Offer) {

@@ -1,15 +1,23 @@
 package app.michaelwuensch.bitbanana.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
 import app.michaelwuensch.bitbanana.GeneratedRequestActivity;
 import app.michaelwuensch.bitbanana.R;
@@ -23,15 +31,23 @@ import app.michaelwuensch.bitbanana.customView.BBTextInputBox;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.listViews.channels.ManageChannelsActivity;
 import app.michaelwuensch.bitbanana.models.Bip21Invoice;
+import app.michaelwuensch.bitbanana.models.Bolt12Offer;
 import app.michaelwuensch.bitbanana.models.CreateInvoiceRequest;
+import app.michaelwuensch.bitbanana.models.NewOnChainAddressRequest;
+import app.michaelwuensch.bitbanana.qrCodeGen.QRCodeGenerator;
+import app.michaelwuensch.bitbanana.setup.QuickReceiveSetup;
 import app.michaelwuensch.bitbanana.util.BBLog;
+import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
+import app.michaelwuensch.bitbanana.wallet.Wallet_Bolt12Offers;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 
@@ -43,6 +59,14 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private BBAmountInput mAmountInput;
     private BBButton mBtnLn;
     private BBButton mBtnOnChain;
+    private BBButton mBtnCopy;
+    private BBButton mBtnShare;
+    private BBButton mBtnCustomize;
+    private QuickReceiveConfig mQuickReceiveConfig;
+    private View mQuickReceiveQRLayout;
+    private ImageFilterView mIvQRCode;
+    private ProgressBar mPbQRSpinner;
+    private Bitmap mBmpQRCode;
     private View mChooseTypeView;
     private View mCustomizeRequestLayout;
     private BBTextInputBox mDescriptionView;
@@ -51,6 +75,10 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
     private TextView mTvNoIncomingBalance;
     private BBButton mBtnManageChannels;
     private View mViewNoIncomingBalance;
+    private View mContentTopLayout;
+    private String mFinalShareString;
+    private String mFinalQRCodeString;
+    private ActivityResultLauncher<Intent> mActivityResultLauncherQuickReceiveSetup;
 
     @Nullable
     @Override
@@ -59,8 +87,15 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
 
         mBSDScrollableMainView = view.findViewById(R.id.scrollableBottomSheet);
         mAmountInput = view.findViewById(R.id.amountInput);
+        mQuickReceiveQRLayout = view.findViewById(R.id.quickReceiveQRLayout);
+        mIvQRCode = view.findViewById(R.id.quickReceiveQRCode);
+        mPbQRSpinner = view.findViewById(R.id.quickReceiveProgressBar);
+        mContentTopLayout = view.findViewById(R.id.contentTopLayout);
         mDescriptionView = view.findViewById(R.id.descriptionView);
         mBtnLn = view.findViewById(R.id.lnBtn);
+        mBtnCustomize = view.findViewById(R.id.customizeBtn);
+        mBtnCopy = view.findViewById(R.id.copyBtn);
+        mBtnShare = view.findViewById(R.id.shareBtn);
         mCustomizeRequestLayout = view.findViewById(R.id.customizeRequestLayout);
         mBtnOnChain = view.findViewById(R.id.onChainBtn);
         mChooseTypeView = view.findViewById(R.id.chooseTypeLayout);
@@ -70,9 +105,56 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBtnManageChannels = view.findViewById(R.id.manageChannels);
 
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
-        mBSDScrollableMainView.setHelpButtonVisibility(true);
         mBSDScrollableMainView.setHelpMessage(R.string.help_dialog_LightningVsOnChain);
         mBSDScrollableMainView.setTitle(R.string.receive);
+        mBSDScrollableMainView.setMoreButtonVisibility(true);
+        mBSDScrollableMainView.setMoreButtonStyle(BSDScrollableMainView.MoreButtonStyle.OPTIONS);
+
+        mBSDScrollableMainView.setOnMoreListener(new BSDScrollableMainView.OnMoreListener() {
+            @Override
+            public void onMore() {
+                Intent intent = new Intent(getActivity(), QuickReceiveSetup.class);
+                mActivityResultLauncherQuickReceiveSetup.launch(intent);
+            }
+        });
+
+        mBtnCustomize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchToCustomization(BackendManager.getCurrentBackend().supportsOnChainReceive() && BackendManager.getCurrentBackend().supportsBolt11Receive());
+            }
+        });
+
+        setupQuickReceive();
+
+        // Initialize the ActivityResultLauncher for the QuickReceive setup
+        mActivityResultLauncherQuickReceiveSetup = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    setupQuickReceive();
+                }
+        );
+
+        // Action when clicked on "share"
+        mBtnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mFinalShareString);
+                shareIntent.setType("text/plain");
+                String title = getResources().getString(R.string.shareDialogTitle);
+                startActivity(Intent.createChooser(shareIntent, title));
+            }
+        });
+
+        // Action when clicked on "copy"
+        mBtnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipBoardUtil.copyToClipboard(getContext(), "Request", mFinalShareString);
+            }
+        });
 
         // Action when clicked on "Lightning" Button
         mBtnLn.setOnClickListener(new View.OnClickListener() {
@@ -162,15 +244,138 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
             }
         });
 
+        return view;
+    }
+
+    private void setupQuickReceive() {
+        mBSDScrollableMainView.setHelpButtonVisibility(false);
+        mBSDScrollableMainView.setTitle(R.string.receive);
+        mBSDScrollableMainView.setTitleIconVisibility(false);
+        mCustomizeRequestLayout.setVisibility(View.GONE);
+        mChooseTypeView.setVisibility(View.GONE);
+        mQuickReceiveQRLayout.setVisibility(View.VISIBLE);
+
+        // Prepare the quickReceiveQRCode loading state
+        Bitmap whiteSquare = Bitmap.createBitmap(750, 750, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(whiteSquare);
+        canvas.drawColor(getResources().getColor(R.color.sea_blue_gradient));
+        mIvQRCode.setImageBitmap(whiteSquare);
+
+        setQuickReceiveReady(false);
+
+        // Setup quick receive view
+        if (!BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            switchToCustomization(false);
+        } else {
+            mQuickReceiveConfig = BackendConfigsManager.getInstance().getCurrentBackendConfig().getQuickReceiveConfig();
+            switch (mQuickReceiveConfig.getQuickReceiveType()) {
+                case OFF:
+                    switchToCustomization(false);
+                    break;
+                case LN_ADDRESS:
+                    mFinalShareString = mQuickReceiveConfig.getLnAddress();
+                    mFinalQRCodeString = UriUtil.URI_PREFIX_LIGHTNING + mQuickReceiveConfig.getLnAddress();
+                    mBmpQRCode = QRCodeGenerator.bitmapFromText(mFinalQRCodeString, 750);
+                    mIvQRCode.setImageBitmap(mBmpQRCode);
+                    setQuickReceiveReady(true);
+                    break;
+                case BOLT12:
+                    Bolt12Offer tempOffer = Wallet_Bolt12Offers.getInstance().getBolt12OfferById(mQuickReceiveConfig.getBolt12ID());
+                    if (tempOffer == null) {
+                        switchToCustomization(false);
+                        break;
+                    }
+                    mFinalShareString = UriUtil.URI_PREFIX_LIGHTNING + tempOffer.getDecodedBolt12().getBolt12String();
+                    mFinalQRCodeString = mFinalShareString;
+                    mBmpQRCode = QRCodeGenerator.bitmapFromText(mFinalQRCodeString, 750);
+                    mIvQRCode.setImageBitmap(mBmpQRCode);
+                    setQuickReceiveReady(true);
+                    break;
+                case ON_CHAIN_ADDRESS:
+                case ON_CHAIN_AND_LN_ADDRESS:
+                case ON_CHAIN_AND_BOLT12:
+                    NewOnChainAddressRequest.Type addressType;
+                    String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
+                    if (addressTypeString.equals("bech32")) {
+                        addressType = NewOnChainAddressRequest.Type.SEGWIT;
+                    } else {
+                        if (addressTypeString.equals("bech32m")) {
+                            addressType = NewOnChainAddressRequest.Type.TAPROOT;
+                        } else {
+                            addressType = NewOnChainAddressRequest.Type.SEGWIT_COMPATIBILITY;
+                        }
+                    }
+
+                    // ToDo: cln uses new address every time...
+                    NewOnChainAddressRequest newOnChainAddressRequest = NewOnChainAddressRequest.newBuilder()
+                            .setType(addressType)
+                            .setUnused(true)
+                            .build();
+
+                    getCompositeDisposable().add(BackendManager.api().getNewOnchainAddress(newOnChainAddressRequest)
+                            .subscribe(response -> {
+
+                                Bip21Invoice.Builder bip21InvoiceBuilder = Bip21Invoice.newBuilder()
+                                        .setAddress(response);
+
+                                switch (mQuickReceiveConfig.getQuickReceiveType()) {
+                                    case ON_CHAIN_ADDRESS:
+                                        mFinalShareString = response;
+                                        break;
+                                    case ON_CHAIN_AND_LN_ADDRESS:
+                                        bip21InvoiceBuilder.setLightning(mQuickReceiveConfig.getLnAddress());
+                                        mFinalShareString = bip21InvoiceBuilder.build().toString();
+                                        break;
+                                    case ON_CHAIN_AND_BOLT12:
+                                        Bolt12Offer tempOffer2 = Wallet_Bolt12Offers.getInstance().getBolt12OfferById(mQuickReceiveConfig.getBolt12ID());
+                                        if (tempOffer2 != null) {
+                                            bip21InvoiceBuilder.setOffer(tempOffer2.getDecodedBolt12().getBolt12String());
+                                        }
+                                        mFinalShareString = bip21InvoiceBuilder.build().toString();
+                                        break;
+                                }
+                                mFinalQRCodeString = bip21InvoiceBuilder.build().toString();
+                                mBmpQRCode = QRCodeGenerator.bitmapFromText(mFinalQRCodeString, 750);
+                                mIvQRCode.setImageBitmap(mBmpQRCode);
+                                setQuickReceiveReady(true);
+                            }, throwable -> {
+                                showError(getString(R.string.receive_generateRequest_failed), 3000);
+                                BBLog.e(LOG_TAG, "New address request failed: " + throwable.fillInStackTrace());
+                            }));
+                    break;
+            }
+        }
+    }
+
+    private void setQuickReceiveReady(boolean ready) {
+        mBtnCopy.setButtonEnabled(ready);
+        mBtnShare.setButtonEnabled(ready);
+        mPbQRSpinner.setVisibility(ready ? View.GONE : View.VISIBLE);
+    }
+
+    private void switchToCustomization(boolean animated) {
+        // Manage visibilities and animation
+        if (animated) {
+            AutoTransition autoTransition = new AutoTransition();
+            autoTransition.setDuration(200);
+            TransitionManager.beginDelayedTransition((ViewGroup) mContentTopLayout.getRootView(), autoTransition);
+        }
 
         if (!(BackendManager.getCurrentBackend().supportsOnChainReceive() && BackendManager.getCurrentBackend().supportsBolt11Receive())) {
             if (BackendManager.getCurrentBackend().supportsOnChainReceive())
                 switchToOnChain();
             if (BackendManager.getCurrentBackend().supportsBolt11Receive())
                 switchToLightning();
+        } else {
+            switchToSelectPaymentType();
         }
+    }
 
-        return view;
+    private void switchToSelectPaymentType() {
+        mBSDScrollableMainView.setHelpButtonVisibility(true);
+        mBSDScrollableMainView.setHelpButtonVisibility(true);
+        mQuickReceiveQRLayout.setVisibility(View.GONE);
+        mChooseTypeView.setVisibility(View.VISIBLE);
     }
 
     private void switchToOnChain() {
@@ -194,6 +399,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setTitleIconVisibility(true);
         mCustomizeRequestLayout.setVisibility(View.VISIBLE);
         mChooseTypeView.setVisibility(View.GONE);
+        mQuickReceiveQRLayout.setVisibility(View.GONE);
 
         // Request focus on amount input
         mAmountInput.requestFocusDelayed();
@@ -219,6 +425,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
         mBSDScrollableMainView.setTitle(R.string.receive_lightning_request);
 
         mChooseTypeView.setVisibility(View.GONE);
+        mQuickReceiveQRLayout.setVisibility(View.GONE);
 
         if (FeatureManager.isBolt11WithoutAmountEnabled()) {
             mBtnGenerateRequest.setButtonEnabled(true);

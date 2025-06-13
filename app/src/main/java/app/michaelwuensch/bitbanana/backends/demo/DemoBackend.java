@@ -30,5 +30,9 @@ public class DemoBackend extends Backend {
         FeatureBolt11Receive = new BackendFeature(true);
         FeatureOnChainReceive = new BackendFeature(true);
         FeatureBolt12Receive = new BackendFeature(true);
+        FeatureQuickReceive = new BackendFeature(true);
+        FeatureQuickReceiveLnAddress = new BackendFeature(true);
+        FeatureQuickReceiveOnChainAddress = new BackendFeature(true);
+        FeatureQuickReceiveBolt12 = new BackendFeature(true);
     }
 }

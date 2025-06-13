@@ -100,6 +100,16 @@ public class BSDScrollableMainView extends ConstraintLayout {
         mMoreButton.setVisibility(visible ? VISIBLE : GONE);
     }
 
+    public void setMoreButtonStyle(MoreButtonStyle style) {
+        switch (style) {
+            case MORE:
+                mMoreButton.setImageResource(R.drawable.ic_baseline_more_vert_24);
+                break;
+            case OPTIONS:
+                mMoreButton.setImageResource(R.drawable.baseline_settings_24);
+        }
+    }
+
     public void setTitleIcon(int resID) {
         mTitleIcon.setImageResource(resID);
     }
@@ -159,5 +169,10 @@ public class BSDScrollableMainView extends ConstraintLayout {
                 mContentView.smoothScrollTo(0, ((vTop + vBottom - sHeight + offset) / 2));
             }
         }, 250);
+    }
+
+    public enum MoreButtonStyle {
+        MORE,
+        OPTIONS;
     }
 }

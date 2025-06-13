@@ -1,7 +1,11 @@
 package app.michaelwuensch.bitbanana.backends;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.util.Version;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig.QuickReceiveType;
 
 public class Backend {
     protected BackendConfig mBackendConfig;
@@ -22,6 +26,11 @@ public class Backend {
     protected BackendFeature FeatureMessageSigningByNodePrivateKey = new BackendFeature(false);
     protected BackendFeature FeatureLnurlAuth = new BackendFeature(false);
     protected BackendFeature FeatureDisplayPaymentRoute = new BackendFeature(false);
+    protected BackendFeature FeatureQuickReceive = new BackendFeature(false);
+    protected BackendFeature FeatureQuickReceiveLnAddress = new BackendFeature(false);
+    protected BackendFeature FeatureQuickReceiveBolt12 = new BackendFeature(false);
+    protected BackendFeature FeatureQuickReceiveOnChainAddress = new BackendFeature(false);
+
 
     /**
      * If the backend has a function to get recommended on-chain fees
@@ -222,5 +231,22 @@ public class Backend {
     public Backend updateFeatureKeySend(boolean enabled) {
         FeatureKeysend = new BackendFeature(enabled);
         return this;
+    }
+
+    public List<QuickReceiveType> getSupportedQuickReceiveTypes() {
+        List<QuickReceiveType> quickReceiveTypes = new ArrayList<>();
+        quickReceiveTypes.add(QuickReceiveType.OFF);
+        if (FeatureQuickReceiveLnAddress.isAvailable())
+            quickReceiveTypes.add(QuickReceiveType.LN_ADDRESS);
+        if (FeatureQuickReceiveBolt12.isAvailable())
+            quickReceiveTypes.add(QuickReceiveType.BOLT12);
+        if (FeatureQuickReceiveOnChainAddress.isAvailable())
+            quickReceiveTypes.add(QuickReceiveType.ON_CHAIN_ADDRESS);
+        if (FeatureQuickReceiveLnAddress.isAvailable() && FeatureQuickReceiveOnChainAddress.isAvailable())
+            quickReceiveTypes.add(QuickReceiveType.ON_CHAIN_AND_LN_ADDRESS);
+        if (FeatureQuickReceiveBolt12.isAvailable() && FeatureQuickReceiveOnChainAddress.isAvailable())
+            quickReceiveTypes.add(QuickReceiveType.ON_CHAIN_AND_BOLT12);
+
+        return quickReceiveTypes;
     }
 }

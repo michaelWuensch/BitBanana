@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectStringPar
 import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -236,6 +237,8 @@ public class RemoteConnectUtil {
                     config.setVpnConfig(new VPNConfig());
                 if (config.getLocation() == null)
                     config.setLocation(BackendConfig.Location.REMOTE);
+                if (!config.hasQuickReceiveConfig())
+                    config.setQuickReceiveConfig(new QuickReceiveConfig());
                 id = backendConfigsManager.addBackendConfig(config).getId();
             } else {
                 id = walletUUID;
@@ -303,6 +306,8 @@ public class RemoteConnectUtil {
                     backendConfig.setVpnConfig(new VPNConfig());
                 if (backendConfig.getLocation() == null)
                     backendConfig.setLocation(BackendConfig.Location.REMOTE);
+                if (!backendConfig.hasQuickReceiveConfig())
+                    backendConfig.setQuickReceiveConfig(new QuickReceiveConfig());
                 backendConfigsManager.updateBackendConfig(backendConfig);
             }
             backendConfigsManager.apply();

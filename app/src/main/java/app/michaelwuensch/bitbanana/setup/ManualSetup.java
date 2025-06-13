@@ -43,6 +43,7 @@ import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterPortRange;
+import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 
 public class ManualSetup extends BaseAppCompatActivity {
 
@@ -212,7 +213,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
-        // Fill in vales if existing wallet is edited
+        // Fill in values if existing wallet is edited
         if (mWalletUUID != null) {
             BackendConfig BackendConfig = BackendConfigsManager.getInstance().getBackendConfigById(mWalletUUID);
             mOriginalBackendConfig = BackendConfig;
@@ -334,6 +335,16 @@ public class ManualSetup extends BaseAppCompatActivity {
                 break;
             case 3:
                 backendConfig.setBackendType(BackendConfig.BackendType.NOSTR_WALLET_CONNECT);
+                // For a freshly added NWC connection we want to auto add quick connection if lud16 is set.
+                if (mOriginalBackendConfig == null) {
+                    NostrWalletConnectUrlParser tempParser = new NostrWalletConnectUrlParser(mEtFullConnectString.getData()).parse();
+                    if (!tempParser.hasError()) {
+                        QuickReceiveConfig tempQuickReceiveConfig = tempParser.getBackendConfig().getQuickReceiveConfig();
+                        if (tempQuickReceiveConfig.getQuickReceiveType() != QuickReceiveConfig.QuickReceiveType.OFF) {
+                            backendConfig.setQuickReceiveConfig(tempQuickReceiveConfig);
+                        }
+                    }
+                }
                 break;
         }
         backendConfig.setHost(mEtHost.getData());
@@ -359,8 +370,9 @@ public class ManualSetup extends BaseAppCompatActivity {
             backendConfig.setTempAccessToken(mOriginalBackendConfig.getTempAccessToken());
             backendConfig.setTempRefreshToken(mOriginalBackendConfig.getTempRefreshToken());
             backendConfig.setAvatarMaterial(mOriginalBackendConfig.getAvatarMaterial());
-            backendConfig.setQuickReceiveType(mOriginalBackendConfig.getQuickReceiveType());
-            backendConfig.setQuickReceiveString(mOriginalBackendConfig.getQuickReceiveString());
+            // If we are editing a NWC connection we always want to keep the quick receive settings. The place to edit these is in the receive dialog.
+            if (mOriginalBackendConfig.hasQuickReceiveConfig())
+                backendConfig.setQuickReceiveConfig(mOriginalBackendConfig.getQuickReceiveConfig());
         }
         return backendConfig;
     }
