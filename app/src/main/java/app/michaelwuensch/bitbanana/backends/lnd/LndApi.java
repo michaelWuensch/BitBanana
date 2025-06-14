@@ -619,7 +619,7 @@ public class LndApi extends Api {
                     }
                     PagedResponse<LnInvoice> page = PagedResponse.<LnInvoice>newBuilder()
                             .setPage(invoicesList)
-                            .setPageSize(response.getInvoicesCount())
+                            .setOriginalBackendPageSize(response.getInvoicesCount())
                             .setFirstIndexOffset(response.getFirstIndexOffset())
                             .setLastIndexOffset(response.getLastIndexOffset())
                             .build();
@@ -648,10 +648,10 @@ public class LndApi extends Api {
         BBLog.d(LOG_TAG, "listInvoices called.");
         return getInvoicesPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
+                    } else if (data.getOriginalBackendPageSize() < pageSize) {
                         // Current page has fewer items than pageSize, no more data to fetch
                         return Single.just(data.getPage());
                     } else {
@@ -807,7 +807,7 @@ public class LndApi extends Api {
                     }
                     PagedResponse<LnPayment> page = PagedResponse.<LnPayment>newBuilder()
                             .setPage(paymentsList)
-                            .setPageSize(response.getPaymentsCount())
+                            .setOriginalBackendPageSize(response.getPaymentsCount())
                             .setFirstIndexOffset(response.getFirstIndexOffset())
                             .setLastIndexOffset(response.getLastIndexOffset())
                             .build();
@@ -821,10 +821,10 @@ public class LndApi extends Api {
         BBLog.d(LOG_TAG, "listLnPayments called.");
         return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
+                    } else if (data.getOriginalBackendPageSize() < pageSize) {
                         // Current page has fewer items than pageSize, no more data to fetch
                         return Single.just(data.getPage());
                     } else {
@@ -862,8 +862,8 @@ public class LndApi extends Api {
                     }
                     PagedResponse<Forward> page = PagedResponse.<Forward>newBuilder()
                             .setPage(forwardList)
-                            .setPageSize(response.getForwardingEventsCount())
-                            .setLastIndexOffset(firstIndexOffset + pageSize)
+                            .setOriginalBackendPageSize(response.getForwardingEventsCount())
+                            .setLastIndexOffset(response.getLastOffsetIndex())
                             .build();
                     return page;
                 })
@@ -875,10 +875,10 @@ public class LndApi extends Api {
         BBLog.d(LOG_TAG, "listForwards called.");
         return getForwardPage(firstIndexOffset, pageSize, startTime)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
+                    } else if (data.getOriginalBackendPageSize() < pageSize) {
                         // Current page has fewer items than pageSize, no more data to fetch
                         return Single.just(data.getPage());
                     } else {

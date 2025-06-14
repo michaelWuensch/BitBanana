@@ -604,11 +604,13 @@ public class CoreLightningApi extends Api {
                     List<LnInvoice> invoicesList = new ArrayList<>();
                     for (ListinvoicesInvoices invoice : response.getInvoicesList()) {
                         invoicesList.add(getInvoiceFromCoreLightningInvoice(invoice));
-                        lastIndexOffset = invoice.getCreatedIndex();
+                    }
+                    if (!response.getInvoicesList().isEmpty()) {
+                        lastIndexOffset = response.getInvoices(response.getInvoicesCount() - 1).getCreatedIndex();
                     }
                     PagedResponse<LnInvoice> page = PagedResponse.<LnInvoice>newBuilder()
                             .setPage(invoicesList)
-                            .setPageSize(response.getInvoicesCount())
+                            .setOriginalBackendPageSize(response.getInvoicesCount())
                             .setLastIndexOffset(lastIndexOffset)
                             .build();
                     return page;
@@ -621,10 +623,10 @@ public class CoreLightningApi extends Api {
         BBLog.d(LOG_TAG, "listInvoices called.");
         return getInvoicesPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
+                    } else if (data.getOriginalBackendPageSize() < pageSize) {
                         // Current page has fewer items than pageSize, no more data to fetch
                         return Single.just(data.getPage());
                     } else {
@@ -771,11 +773,14 @@ public class CoreLightningApi extends Api {
                                 //.setBolt12PayerNote()  This information is contained in the bolt12 string and will only be extracted when it needs to be displayed to improve performance.
                                 //.setKeysendMessage(???)
                                 .build());
-                        lastIndexOffset = payment.getUpdatedIndex();
                     }
+                    if (!response.getPaysList().isEmpty()) {
+                        lastIndexOffset = response.getPays(response.getPaysCount() - 1).getUpdatedIndex();
+                    }
+
                     PagedResponse<LnPayment> page = PagedResponse.<LnPayment>newBuilder()
                             .setPage(paymentsList)
-                            .setPageSize(response.getPaysCount())
+                            .setOriginalBackendPageSize(response.getPaysCount())
                             .setLastIndexOffset(lastIndexOffset)
                             .build();
                     return page;
@@ -788,7 +793,7 @@ public class CoreLightningApi extends Api {
         BBLog.d(LOG_TAG, "listLnPayments called.");
         return getLnPaymentPage(firstIndexOffset, pageSize)
                 .flatMap(data -> {
-                    if (data == null || data.getPageSize() == 0) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
                     } else if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("24.11")) <= 0) {
@@ -830,11 +835,14 @@ public class CoreLightningApi extends Api {
                                     .setFee(forwardingEvent.getFeeMsat().getMsat())
                                     .setTimestampNs(timestampNS)
                                     .build());
-                        lastIndexOffset = forwardingEvent.getCreatedIndex();
                     }
+                    if (!response.getForwardsList().isEmpty()) {
+                        lastIndexOffset = response.getForwards(response.getForwardsCount() - 1).getCreatedIndex();
+                    }
+
                     PagedResponse<Forward> page = PagedResponse.<Forward>newBuilder()
                             .setPage(forwardsList)
-                            .setPageSize(response.getForwardsCount())
+                            .setOriginalBackendPageSize(response.getForwardsCount())
                             .setLastIndexOffset(lastIndexOffset)
                             .build();
                     return page;
@@ -847,10 +855,10 @@ public class CoreLightningApi extends Api {
         BBLog.d(LOG_TAG, "listForwards called.");
         return getForwardPage(firstIndexOffset, pageSize, startTime)
                 .flatMap(data -> {
-                    if (data == null || data.getPage().isEmpty()) {
+                    if (data.getOriginalBackendPageSize() == 0) {
                         // No more pages, return an empty list
                         return Single.just(Collections.emptyList());
-                    } else if (data.getPageSize() < pageSize) {
+                    } else if (data.getOriginalBackendPageSize() < pageSize) {
                         // Current page has fewer items than pageSize, no more data to fetch
                         return Single.just(data.getPage());
                     } else {

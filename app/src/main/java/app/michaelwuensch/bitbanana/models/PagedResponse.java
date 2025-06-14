@@ -8,7 +8,7 @@ public class PagedResponse<T> implements Serializable {
     private final List<T> Page;
     private final long FirstIndexOffset;
     private final long LastIndexOffset;
-    private final int PageSize;
+    private final int OriginalBackendPageSize;
 
     public static <T> Builder<T> newBuilder() {
         return new Builder<>();
@@ -18,7 +18,7 @@ public class PagedResponse<T> implements Serializable {
         this.Page = builder.Page;
         this.FirstIndexOffset = builder.FirstIndexOffset;
         this.LastIndexOffset = builder.LastIndexOffset;
-        this.PageSize = builder.PageSize;
+        this.OriginalBackendPageSize = builder.OriginalBackendPageSize;
     }
 
     public List<T> getPage() {
@@ -38,8 +38,8 @@ public class PagedResponse<T> implements Serializable {
      * The reason is that in some case we want to filter out some of the returned results which would lead to termination of the queue.
      * Using this (and setting it correctly before) we can still filter out results and continue until we have iterated over all items.
      */
-    public int getPageSize() {
-        return PageSize;
+    public int getOriginalBackendPageSize() {
+        return OriginalBackendPageSize;
     }
 
     // Builder Class
@@ -48,7 +48,7 @@ public class PagedResponse<T> implements Serializable {
         private List<T> Page;
         private long FirstIndexOffset;
         private long LastIndexOffset;
-        private int PageSize;
+        private int OriginalBackendPageSize;
 
         private Builder() {
             // required parameters
@@ -74,10 +74,11 @@ public class PagedResponse<T> implements Serializable {
         }
 
         /**
-         * Set this to the actual size of returned elements, before you apply any further filtering.
+         * Set this to the number of elements returned by the backend.
+         * It is important that if BitBanana further filters the results, this value still contains the original number from the backend.
          */
-        public Builder<T> setPageSize(int pageSize) {
-            PageSize = pageSize;
+        public Builder<T> setOriginalBackendPageSize(int originalBackendPageSize) {
+            OriginalBackendPageSize = originalBackendPageSize;
             return this;
         }
     }
