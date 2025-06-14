@@ -9,6 +9,7 @@ public class ClosedChannel implements Serializable {
 
     private final String RemotePubKey;
     private final ShortChannelId ShortChannelId;
+    private final boolean hasShortChannelId;
     private final String CloseTransactionId;
     private final boolean hasCloseTransactionId;
     private final String ChannelType;
@@ -34,6 +35,7 @@ public class ClosedChannel implements Serializable {
     private ClosedChannel(Builder builder) {
         this.RemotePubKey = builder.RemotePubKey;
         this.ShortChannelId = builder.ShortChannelId;
+        this.hasShortChannelId = builder.hasShortChannelId;
         this.CloseTransactionId = builder.CloseTransactionId;
         this.hasCloseTransactionId = builder.hasCloseTransactionId;
         this.ChannelType = builder.ChannelType;
@@ -63,6 +65,10 @@ public class ClosedChannel implements Serializable {
      */
     public ShortChannelId getShortChannelId() {
         return ShortChannelId;
+    }
+
+    public boolean hasShortChannelId() {
+        return hasShortChannelId;
     }
 
     public String getCloseTransactionId() {
@@ -157,6 +163,7 @@ public class ClosedChannel implements Serializable {
 
         private String RemotePubKey;
         private ShortChannelId ShortChannelId;
+        private boolean hasShortChannelId;
         private String CloseTransactionId;
         private boolean hasCloseTransactionId;
         private String ChannelType;
@@ -199,6 +206,7 @@ public class ClosedChannel implements Serializable {
          */
         public Builder setShortChannelId(ShortChannelId shortChannelId) {
             ShortChannelId = shortChannelId;
+            hasShortChannelId = shortChannelId != null;
             return this;
         }
 

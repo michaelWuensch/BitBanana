@@ -41,8 +41,9 @@ public class WalletUtil {
 
         if (Wallet_Channels.getInstance().getClosedChannelsList() != null) {
             for (ClosedChannel closedChannel : Wallet_Channels.getInstance().getClosedChannelsList()) {
-                if (closedChannel.getShortChannelId().equals(shortChannelId))
-                    return closedChannel.getRemotePubKey();
+                if (closedChannel.hasShortChannelId())
+                    if (closedChannel.getShortChannelId().equals(shortChannelId))
+                        return closedChannel.getRemotePubKey();
             }
         }
 
@@ -200,7 +201,7 @@ public class WalletUtil {
         }
     }
 
-    public static NewOnChainAddressRequest getNewOnChainAddressRequest () {
+    public static NewOnChainAddressRequest getNewOnChainAddressRequest() {
         NewOnChainAddressRequest.Type addressType;
         String addressTypeString = PrefsUtil.getPrefs().getString("btcAddressType", "bech32m");
         if (addressTypeString.equals("bech32")) {
