@@ -166,7 +166,11 @@ public class PaymentUtil {
         String feePercent = lightning_feeLimit.replace("%", "");
         float feeMultiplier = 1f;
         if (!feePercent.equals(App.getAppContext().getResources().getString(R.string.none))) {
-            feeMultiplier = Float.parseFloat(feePercent) / 100f;
+            try {
+                feeMultiplier = Float.parseFloat(feePercent) / 100f;
+            } catch (NumberFormatException e) {
+                BBLog.d(LOG_TAG, "Failed to parse lightning fee limit from settings. Probably it was set to NONE in a different language");
+            }
         }
         return feeMultiplier;
     }
