@@ -22,8 +22,13 @@ public class DemoBackend extends Backend {
         FeatureRouting = new BackendFeature(true);
         FeatureRoutingPolicyManagement = new BackendFeature(true);
         FeatureCoinControl = new BackendFeature(true);
+        FeatureRebalanceChannel = new BackendFeature(true);
+        FeatureUtxoSelectOnSend = new BackendFeature(true);
+        FeatureSendAllOnChain = new BackendFeature(true);
         FeatureMessageSigningByNodePrivateKey = new BackendFeature(true);
         FeatureWatchtowers = new BackendFeature(true);
+        FeatureBolt11Receive = new BackendFeature(true);
+        FeatureOnChainReceive = new BackendFeature(true);
         FeatureBolt12Receive = new BackendFeature(true);
     }
 }

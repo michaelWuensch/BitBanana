@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOsActivity;
 import app.michaelwuensch.bitbanana.models.Outpoint;
 import app.michaelwuensch.bitbanana.models.Utxo;
@@ -137,7 +138,7 @@ public class UtxoOptionsView extends ConstraintLayout {
         setExpandState(true, false);
         mArrowImage.setVisibility(isConsolidation ? GONE : VISIBLE);
         mTvUtxoSummary.setVisibility(isConsolidation ? GONE : VISIBLE);
-        mSwSelectAll.setVisibility(isConsolidation ? VISIBLE : GONE);
+        mSwSelectAll.setVisibility(isConsolidation && BackendManager.getCurrentBackend().supportsSendAllOnChain() ? VISIBLE : GONE);
     }
 
     public void setActivityResultLauncher(ActivityResultLauncher<Intent> activityResultLauncher) {

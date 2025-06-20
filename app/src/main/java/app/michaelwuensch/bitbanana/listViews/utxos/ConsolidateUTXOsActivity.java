@@ -131,9 +131,11 @@ public class ConsolidateUTXOsActivity extends BaseAppCompatActivity implements U
     private void updateConsolidateUI() {
         if (mUtxoSelectionView.getIsSelectAllChecked()) {
             int tempNrOfConsolidatedInputs = 0;
-            for (Utxo utxo : Wallet_TransactionHistory.getInstance().getUTXOList()) {
-                if (utxo.getConfirmations() > 0 && !utxo.isLeased())
-                    tempNrOfConsolidatedInputs++;
+            if (Wallet_TransactionHistory.getInstance().getUTXOList() != null) {
+                for (Utxo utxo : Wallet_TransactionHistory.getInstance().getUTXOList()) {
+                    if (utxo.getConfirmations() > 0 && !utxo.isLeased())
+                        tempNrOfConsolidatedInputs++;
+                }
             }
             mNrOfConsolidatedInputs = tempNrOfConsolidatedInputs;
         } else {

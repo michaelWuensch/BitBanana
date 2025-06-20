@@ -186,7 +186,8 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
 
         // Show loading spinner
-        mSwipeRefreshLayout.setRefreshing(true);
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs())
+            mSwipeRefreshLayout.setRefreshing(true);
     }
 
     private void setupViewMode() {
