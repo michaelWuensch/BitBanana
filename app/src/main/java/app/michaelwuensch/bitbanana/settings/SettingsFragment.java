@@ -88,18 +88,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "payment identification"
-        final Preference prefPayerData = findPreference("goToPayerDataSettings");
-        prefPayerData.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsPayerDataActivity.class);
-                startActivity(intent);
-                return true;
-            }
-        });
-
-
         // Action when clicked on the pin preference
         mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

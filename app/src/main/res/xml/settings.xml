@@ -47,11 +47,6 @@
             android:title="@string/settings_scan_clipboard"
             app:iconSpaceReserved="false" />
 
-        <Preference
-            android:key="goToPayerDataSettings"
-            android:title="@string/settings_payer_data"
-            app:iconSpaceReserved="false" />
-
     </PreferenceCategory>
 
 
