@@ -1,0 +1,4 @@
+- Improved UX for receiving funds. One tap. Done.
+- VPN automation for NWC connections
+- Updated translations
+- Bug fixes
