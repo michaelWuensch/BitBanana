@@ -986,4 +986,19 @@
     <string name="connection_security_Info_tls_self_signed">selbstsigniert</string>
     <string name="connection_security_info_clearnet_http">Dies ist eine unsichere Verbindung über unverschlüsseltes HTTP.</string>
     <string name="connection_security_info_tls_certificate_issuer">Zertifikatsaussteller</string>
+    <string name="info">Info</string>
+    <string name="activity_quick_receive_setup">Schnelles Empfangen</string>
+    <string name="help_dialog_quick_receive_setup">Beim Empfang von Bitcoin hast du die Wahl: On-chain, Lightning, BOLT12 und mehr.\nDas ist großartig, aber es kann ein paar Extra-Taps benötigen, nur um deinen Empfangs-QR-Code zu sehen. BitBanana beschleunigt das. Hier kannst du eine Standard-Empfangsmethode auswählen und bist mit einem Fingertipp bereit, während du immer noch die Möglichkeit hast, alles individuell anzupassen.\n\nDu bist nicht sicher, wie du es einrichten sollst? Die Dokumentation unten hilft dir dabei.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">Diese Methode verwendet die nächste ungenutzte On-Chain-Adresse als Fallback, wenn der Absender keine Zahlungscodes unterstützt.</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">On-Chain + Zahlungscode</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">On-Chain + Lightning-Adresse</string>
+    <string name="quick_receive_type_on_chain_address">On-Chain-Adresse</string>
+    <string name="error_no_bolt12_offer_selected">Du musst einen Zahlungscode auswählen.</string>
+    <string name="quick_receive_info_on_chain_address">Es wird die nächste unbenutzte On-Chain-Adresse verwendet.</string>
+    <string name="quick_receive_info_off">Wenn Schnelles Empfangen ausgeschaltet ist, wirst du jedes Mal, wenn du auf \'Empfangen\' drückst, die gewünschten Optionen wählen müssen.</string>
+    <string name="quick_receive_info_bolt12">Der auch als BOLT 12 bezeichnete Zahlungscode ist eine statischer, wiederverwendbarer Code, der keinen Webdienst erfordert. Er enthält alle notwendigen Informationen, um dir eine Zahlung direkt über das Lightning Netzwerk zu senden.</string>
+    <string name="error_selecting_inactive_bolt12_offer">Du kannst keinen inaktiven Zahlungscode auswählen.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">Diese Methode verwendet die nächste ungenutzte On-Chain-Adresse als Fallback, wenn der Absender keine Lightning-Zahlungen unterstützt.</string>
+    <string name="quick_receive_info_on_chain_address_part2">Diese Methode wird jedoch nicht empfohlen, da sie keine Lightning-Zahlungen unterstützt.</string>
+    <string name="refer_to_docs_ln_address">Bitte schau in die Dokumentation, um zu erfahren, wie man eine Lightning-Adresse erhält.</string>
 </resources>
