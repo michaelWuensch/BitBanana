@@ -866,4 +866,19 @@
     <string name="connection_security_info_clearnet_http">Це незахищене з\'єднання, що використовує звичайний текст HTTP.</string>
     <string name="connection_security_info_tls_certificate_issuer">Емітент сертифіката</string>
     <string name="connection_security_Info_tls_self_signed">самопідписаний</string>
+    <string name="info">Інформація</string>
+    <string name="error_selecting_inactive_bolt12_offer">Ви не можете вибрати неактивний код оплати.</string>
+    <string name="quick_receive_info_on_chain_address_part2">Однак цей метод не рекомендується, оскільки він не підтримує платежі Lightning.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">Цей метод використовує наступну невикористану адресу в мережі як резервний варіант, коли відправник не підтримує платежі Lightning.</string>
+    <string name="quick_receive_type_on_chain_address">Адреса в мережі</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">Адреса в мережі + Lightning</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">В мережі + Код оплати</string>
+    <string name="activity_quick_receive_setup">Швидке отримання</string>
+    <string name="error_no_bolt12_offer_selected">Вам потрібно вибрати код оплати.</string>
+    <string name="help_dialog_quick_receive_setup">Отримання біткойнів пропонується з такими варіантами: у мережі, Lightning, BOLT12 та іншими.\nЦе чудово, але для перегляду QR-коду отримання може знадобитися кілька додаткових натискань. BitBanana пришвидшує цей процес. Виберіть тут метод отримання за замовчуванням, і ви готові одним натисканням, водночас маючи можливість налаштувати все.\n\nНе знаєте, як це налаштувати? Документація нижче може вам допомогти.</string>
+    <string name="quick_receive_info_off">Якщо функцію «Швидке отримання» вимкнено, вам буде запропоновано вибрати потрібний параметр щоразу, коли ви натискатимете кнопку «Отримати».</string>
+    <string name="quick_receive_info_bolt12">Також відомий як BOLT 12, платіжний код — це статичний, багаторазовий ідентифікатор, який не потребує веб-сервісу. Він містить всю необхідну інформацію для надсилання платежу безпосередньо через мережу Lightning.</string>
+    <string name="quick_receive_info_on_chain_address">Це використовуватиме наступну невикористану адресу в мережі.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">Цей метод використовує наступну невикористану адресу в мережі як резервний варіант, коли відправник не підтримує платіжні коди.</string>
+    <string name="refer_to_docs_ln_address">Будь ласка, зверніться до документації, щоб отримати інструкції щодо отримання адреси Lightning.</string>
 </resources>
