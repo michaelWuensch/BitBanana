@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.pin;
+package app.michaelwuensch.bitbanana.appLock;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
-public class PinSetupActivity extends BaseAppCompatActivity implements PinActivityInterface {
+public class PinSetupActivity extends BaseAppCompatActivity implements AppLockInterface {
 
     public static final int ADD_PIN = 0;
     public static final int CHANGE_PIN = 1;
@@ -43,7 +43,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
 
 
-        // Set pin fragment as beginning fragment
+        // Set create pin fragment as beginning fragment
         showCreatePin();
 
         switch (mSetupMode) {
@@ -65,7 +65,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         // save pin hash in encrypted prefs
         try {
             PrefsUtil.editEncryptedPrefs()
-                    .putString(PrefsUtil.PIN_HASH, UtilFunctions.pinHash(value))
+                    .putString(PrefsUtil.PIN_HASH, UtilFunctions.appLockDataHash(value))
                     .commit();
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
 
         if (mSetupMode == ADD_PIN) {
             try {
-                new KeystoreUtil().addPinActiveKey();
+                new KeystoreUtil().addAppLockActiveKey();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -89,7 +89,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
             // Show success message
             Toast.makeText(PinSetupActivity.this, R.string.pin_changed, Toast.LENGTH_SHORT).show();
 
-            // Reset the PIN timeout. We don't want to ask for PIN again...
+            // Reset the app lock timeout. We don't want to ask for PIN again...
             TimeOutUtil.getInstance().restartTimer();
 
             // Go to home screen
@@ -99,7 +99,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
         }
     }
 
-    public void correctPinEntered() {
+    public void correctAccessDataEntered() {
         if (mSetupMode == CHANGE_PIN) {
             showCreatePin();
         }
@@ -107,25 +107,25 @@ public class PinSetupActivity extends BaseAppCompatActivity implements PinActivi
 
     private void showCreatePin() {
         if (mSetupMode == CHANGE_PIN) {
-            changeFragment(PinFragment.newInstance(PinFragment.CREATE_MODE, getResources().getString(R.string.pin_enter_new)));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.CREATE_MODE, getResources().getString(R.string.pin_enter_new)));
         } else {
-            changeFragment(PinFragment.newInstance(PinFragment.CREATE_MODE, getResources().getString(R.string.pin_create)));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.CREATE_MODE, getResources().getString(R.string.pin_create)));
         }
     }
 
     private void showConfirmPin(String tempPin) {
         if (mSetupMode == CHANGE_PIN) {
-            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm_new), tempPin));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm_new), tempPin));
         } else {
-            changeFragment(PinFragment.newInstance(PinFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm), tempPin));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.CONFIRM_MODE, getResources().getString(R.string.pin_confirm), tempPin));
         }
     }
 
     private void showEnterPin() {
         if (mSetupMode == CHANGE_PIN) {
-            changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter_old), true));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.ENTER_MODE, getResources().getString(R.string.pin_enter_old)));
         } else {
-            changeFragment(PinFragment.newInstance(PinFragment.ENTER_MODE, getResources().getString(R.string.pin_enter)));
+            changeFragment(PinSetupFragment.newInstance(PinSetupFragment.ENTER_MODE, getResources().getString(R.string.pin_enter)));
         }
     }
 

@@ -26,18 +26,18 @@ public class RefConstants {
 
     // If any changes are done here, CURRENT_SETTINGS_VERSION has to be updated.
 
-    // PIN settings
+    // Password and PIN settings
     public static final int NUM_HASH_ITERATIONS = 5000;
 
     ///////////////////////////////////////////////////////////////////////////////////
     // All settings below here do not require an update of the CURRENT_SETTINGS_VERSION
     ///////////////////////////////////////////////////////////////////////////////////
 
-    // PIN settings
+    // App Lock settings
     public static final int PIN_MIN_LENGTH = 4;
     public static final int PIN_MAX_LENGTH = 10;
-    public static final int PIN_MAX_FAILS = 3;
-    public static final int PIN_DELAY_TIME = 30;
+    public static final int APP_LOCK_MAX_FAILS = 3;
+    public static final int APP_LOCK_DELAY_TIME = 30;
 
     /* This value has to be increased when something changes that affects the data backup.
     By keeping track of this number backwards compatibility can be ensured

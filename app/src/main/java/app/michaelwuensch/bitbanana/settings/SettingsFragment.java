@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
@@ -22,14 +21,11 @@ import java.security.cert.CertificateException;
 
 import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
-import app.michaelwuensch.bitbanana.pin.PinSetupActivity;
 import app.michaelwuensch.bitbanana.util.AppUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -38,18 +34,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SwitchPreference mSwTor;
     private Preference mCurrencyPref;
-    private Preference mPinPref;
+    private Preference mAppLockPref;
     private ListPreference mListLanguage;
-    private ListPreference mListLockScreenTimeout;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
         setPreferencesFromResource(R.xml.settings, rootKey);
 
-        mPinPref = findPreference("pinPref");
-        mListLockScreenTimeout = findPreference("lockScreenTimeoutPref");
-        lockScreenTimeoutDisplayEntries();
+        mAppLockPref = findPreference("appLockPref");
 
         // Action when clicked on "Features"
         final Preference prefFeaturesPresets = findPreference("goToFeaturesSettings");
@@ -62,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on "Features"
+        // Action when clicked on "Currencies"
         mCurrencyPref = findPreference("goToCurrencySettings");
         mCurrencyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -88,23 +81,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        // Action when clicked on the pin preference
-        mPinPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        // Action when clicked on the password/pin preference
+        mAppLockPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-                    if (PrefsUtil.isPinEnabled()) {
-                        Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                        intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.CHANGE_PIN);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getActivity(), PinSetupActivity.class);
-                        intent.putExtra(RefConstants.SETUP_MODE, PinSetupActivity.ADD_PIN);
-                        startActivity(intent);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), R.string.demo_setupNodeFirst, Toast.LENGTH_LONG).show();
-                }
+                Intent intent = new Intent(getActivity(), SettingsAppLockActivity.class);
+                startActivity(intent);
                 return true;
             }
         });
@@ -123,7 +105,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     e.printStackTrace();
                 }
                 try {
-                    new KeystoreUtil().removePinActiveKey();
+                    new KeystoreUtil().removeAppLockActiveKey();
                 } catch (KeyStoreException | CertificateException | IOException |
                          NoSuchAlgorithmException e) {
                     e.printStackTrace();
@@ -206,16 +188,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-
-        updateLockScreenTimeoutVisibility(PrefsUtil.isPinEnabled());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        pinOptionText();
         currencyPrefSummary();
-        updateLockScreenTimeoutVisibility(PrefsUtil.isPinEnabled());
+        updateAppLockText();
     }
 
     private void createLanguagesList() {
@@ -223,30 +202,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         CharSequence[] languageDisplayValues = getActivity().getResources().getStringArray(R.array.languageDisplayValues);
         languageDisplayValues[0] = getActivity().getResources().getString(R.string.settings_systemLanguage);
         mListLanguage.setEntries(languageDisplayValues);
-    }
-
-    private void pinOptionText() {
-        // Display add or change pin
-        if (PrefsUtil.isPinEnabled()) {
-            mPinPref.setTitle(R.string.settings_changePin);
-        } else {
-            mPinPref.setTitle(R.string.settings_addPin);
-        }
-    }
-
-    private void lockScreenTimeoutDisplayEntries() {
-        CharSequence[] lockScreenTimeoutDisplayEntries = new CharSequence[5];
-        lockScreenTimeoutDisplayEntries[0] = getActivity().getResources().getString(R.string.immediately);
-        lockScreenTimeoutDisplayEntries[1] = getActivity().getResources().getQuantityString(R.plurals.duration_second, 10, 10);
-        lockScreenTimeoutDisplayEntries[2] = getActivity().getResources().getQuantityString(R.plurals.duration_second, 30, 30);
-        lockScreenTimeoutDisplayEntries[3] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 1, 1);
-        lockScreenTimeoutDisplayEntries[4] = getActivity().getResources().getQuantityString(R.plurals.duration_minute, 5, 5);
-
-        mListLockScreenTimeout.setEntries(lockScreenTimeoutDisplayEntries);
-    }
-
-    private void updateLockScreenTimeoutVisibility(boolean isEnabled) {
-        mListLockScreenTimeout.setVisible(isEnabled);
     }
 
     private void currencyPrefSummary() {
@@ -264,5 +219,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private String CurrencyCodeToDisplayString(String code) {
         return code.replace("ccBTC", "BTC").replace("ccMBTC", "mBTC").replace("ccBIT", "bit").replace("ccSAT", "sat");
+    }
+
+    private void updateAppLockText() {
+        if (PrefsUtil.isPinEnabled()) {
+            mAppLockPref.setSummary(R.string.settings_app_lock_summary_pin_protected);
+        } else if (PrefsUtil.isPasswordEnabled()) {
+            mAppLockPref.setSummary(R.string.settings_app_lock_summary_password_protected);
+        } else {
+            String unprotectedString = getString(R.string.off) + " (" + getString(R.string.settings_app_lock_summary_unprotected) + ")";
+            mAppLockPref.setSummary(unprotectedString);
+        }
     }
 }

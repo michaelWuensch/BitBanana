@@ -15,7 +15,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeeEstimationUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -26,7 +25,6 @@ import app.michaelwuensch.bitbanana.util.UserGuardian;
 public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
 
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getSimpleName();
-    private SwitchPreference mSwScrambledPin;
     private SwitchPreference mSwScreenProtection;
     private SwitchPreference mSwUnspecifiedAmountInvoices;
     private ListPreference mListBlockExplorer;
@@ -220,38 +218,6 @@ public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
 
                         }
                     }).securityAllowUnspecifiedAmountInvoices();
-                    // the value is set from the guardian callback, that's why we don't change switch state here.
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        });
-
-        // Remove Biometrics setting if it is not available anyway on the device.
-        SwitchPreference swBiometrics = findPreference("biometricsEnabled");
-        if (!BiometricUtil.hardwareAvailable()) {
-            swBiometrics.setVisible(false);
-        }
-
-        // On change scramble pin option
-        mSwScrambledPin = findPreference("scramblePin");
-        mSwScrambledPin.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (mSwScrambledPin.isChecked()) {
-                    // Ask user to confirm disabling scramble
-                    new UserGuardian(getActivity(), new UserGuardian.OnGuardianConfirmedListener() {
-                        @Override
-                        public void onConfirmed() {
-                            mSwScrambledPin.setChecked(false);
-                        }
-
-                        @Override
-                        public void onCancelled() {
-
-                        }
-                    }).securityScrambledPin();
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {

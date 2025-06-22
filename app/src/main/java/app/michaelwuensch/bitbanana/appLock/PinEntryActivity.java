@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.pin;
+package app.michaelwuensch.bitbanana.appLock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,8 +31,8 @@ import java.util.concurrent.Executors;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
-import app.michaelwuensch.bitbanana.util.PinScreenUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.ScrambledNumpad;
@@ -52,6 +52,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     private ImageButton mBtnBiometrics;
     private ImageView[] mPinHints = new ImageView[10];
     private Button[] mBtnNumpad = new Button[10];
+    private View mPinInputLayout;
+    private View mLogo;
 
     private BiometricPrompt mBiometricPrompt;
     private BiometricPrompt.PromptInfo mPromptInfo;
@@ -88,10 +90,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         mNumpad = new ScrambledNumpad();
         mTvPrompt = findViewById(R.id.pinPrompt);
         mTvPrompt.setText(R.string.pin_enter);
+        mLogo = findViewById(R.id.pinLogo);
+        mPinInputLayout = findViewById(R.id.pinInputLayout);
 
         mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
 
-        mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
+        mNumFails = PrefsUtil.getPrefs().getInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0);
 
         mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.PIN_LENGTH, RefConstants.PIN_MIN_LENGTH);
 
@@ -143,11 +147,8 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         // Set all layout element states to the current user input (empty right now)
         displayUserInput();
 
-        // ToDo: Remove if nobody has the old version installed.
-        int ver = PrefsUtil.getPrefs().getInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION);
-
         // Make biometrics Button visible if enabled.
-        if (PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && ver >= 16) {
+        if (PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -171,15 +172,15 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
                 TimeOutUtil.getInstance().restartTimer();
 
-                PrefsUtil.editPrefs().putInt("numPINFails", 0).apply();
+                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0).apply();
 
                 if (mClearHistory) {
                     Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    PinScreenUtil.isPinScreenShown = false;
+                    AppLockUtil.isLockScreenShown = false;
                 } else {
-                    PinScreenUtil.isPinScreenShown = false;
+                    AppLockUtil.isLockScreenShown = false;
                     finish();
                 }
 
@@ -189,7 +190,10 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
 
-                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                        errorCode == BiometricPrompt.ERROR_CANCELED) {
+                    exitBiometricsPrompt();
                 } else {
                     // This has to happen on the UI thread. Only this thread can change the recycler view.
                     runOnUiThread(new Runnable() {
@@ -223,7 +227,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     }
                     dlg.show();
                 } else {
-                    mBiometricPrompt.authenticate(mPromptInfo);
+                    showBiometricsPrompt();
                 }
             }
         });
@@ -259,18 +263,18 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         });
 
         // If the user closed and restarted the app he still has to wait until the PIN input delay is over.
-        if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
+        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
 
             long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
 
-            if (timeDiff < RefConstants.PIN_DELAY_TIME * 1000) {
+            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
 
                 for (Button btn : mBtnNumpad) {
                     btn.setEnabled(false);
                     btn.setAlpha(0.3f);
                 }
 
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.PIN_DELAY_TIME * 1000 - timeDiff) / 1000)));
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000)));
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                 Handler handler = new Handler();
@@ -282,7 +286,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                             btn.setAlpha(1f);
                         }
                     }
-                }, RefConstants.PIN_DELAY_TIME * 1000 - timeDiff);
+                }, RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff);
             }
         }
 
@@ -350,7 +354,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
     public void pinEntered() {
         // Check if PIN was correct
         String userEnteredPin = mUserInput.toString();
-        String hashedInput = UtilFunctions.pinHash(userEnteredPin);
+        String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
         boolean correct = false;
         try {
             correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
@@ -360,22 +364,22 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         if (correct) {
             TimeOutUtil.getInstance().restartTimer();
 
-            PrefsUtil.editPrefs().putInt("numPINFails", 0)
+            PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
             if (mClearHistory) {
                 Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                PinScreenUtil.isPinScreenShown = false;
+                AppLockUtil.isLockScreenShown = false;
             } else {
-                PinScreenUtil.isPinScreenShown = false;
+                AppLockUtil.isLockScreenShown = false;
                 finish();
             }
         } else {
             mNumFails++;
 
-            PrefsUtil.editPrefs().putInt("numPINFails", mNumFails).apply();
+            PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, mNumFails).apply();
 
             final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.shake);
             View view = findViewById(R.id.pinInputLayout);
@@ -390,12 +394,12 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             displayUserInput();
 
 
-            if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
+            if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
                 for (Button btn : mBtnNumpad) {
                     btn.setEnabled(false);
                     btn.setAlpha(0.3f);
                 }
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.PIN_DELAY_TIME));
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.APP_LOCK_DELAY_TIME));
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
                 // Save timestamp. This way the delay can also be forced upon app restart.
@@ -410,7 +414,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                             btn.setAlpha(1f);
                         }
                     }
-                }, RefConstants.PIN_DELAY_TIME * 1000);
+                }, RefConstants.APP_LOCK_DELAY_TIME * 1000);
             } else {
                 Toast.makeText(this, R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
             }
@@ -423,8 +427,23 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         // Show biometric prompt if preferred
         if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
-            mBiometricPrompt.authenticate(mPromptInfo);
+            showBiometricsPrompt();
         }
     }
 
+    private void showBiometricsPrompt() {
+        mPinInputLayout.setVisibility(View.GONE);
+        mLogo.setVisibility(View.VISIBLE);
+        mBiometricPrompt.authenticate(mPromptInfo);
+    }
+
+    private void exitBiometricsPrompt() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mPinInputLayout.setVisibility(View.VISIBLE);
+                mLogo.setVisibility(View.GONE);
+            }
+        });
+    }
 }

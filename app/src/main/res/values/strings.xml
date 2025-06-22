@@ -195,10 +195,13 @@
     <string name="pin_enter_old">Enter old PIN</string>
     <string name="pin_enter_new">Enter new PIN</string>
     <string name="pin_confirm_new">Confirm new PIN</string>
+    <string name="password_enter_old">Enter old password</string>
+    <string name="password_enter_new">Enter new password</string>
+    <string name="password_confirm_new">Confirm new password</string>"
     <string name="pin_entered_wrong">Wrong PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Wait %1$s seconds.</string>
     <string name="pin_changed">PIN changed!</string>
-
+    <string name="password_changed">Password changed!</string>
 
     <string name="requested_payment">Requested</string>
     <string name="request_expired">Expired</string>
@@ -308,6 +311,8 @@
     <string name="settings_category_security">Security</string>
     <string name="settings_category_help">Help</string>
     <string name="settings_category_advanced">Advanced</string>
+    <string name="settings_category_pin_options">PIN Options</string>
+    <string name="settings_app_lock">App Lock</string>
     <string name="settings_btcUnit">Bitcoin Unit</string>
     <string name="settings_currency">Second Unit</string>
     <string name="settings_language">Language</string>
@@ -341,6 +346,12 @@
     <string name="settings_addPin">Protect with PIN</string>
     <string name="settings_removePin">Remove PIN</string>
     <string name="settings_lockScreenTimeout">Auto-Lock Timeout</string>
+    <string name="settings_add_password">Protect with password</string>
+    <string name="settings_remove_password">Remove password</string>
+    <string name="settings_change_password">Change/Remove password</string>
+    <string name="settings_app_lock_summary_unprotected">Unprotected</string>
+    <string name="settings_app_lock_summary_pin_protected">Protected with PIN</string>
+    <string name="settings_app_lock_summary_password_protected">Protected with password</string>
 
     <string name="settings_features">Features</string>
     <string name="settings_features_summary">Personalize the app to your needs by toggling features on or off.</string>
@@ -471,7 +482,7 @@
     <string name="error_channel_close_offline">Peer is offline. Only force close allowed.</string>
     <string name="error_channel_close_timeout">Channel could not be closed within deadline.</string>
     <string name="error_channel_close">Could not close channel: %s</string>
-    <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your PIN. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
+    <string name="error_pin_deactivation_attempt">It looks like someone tried to deactivate your app lock screen. The App will close now.\nYou can reinstall the app and use the recovery process to regain access to your funds.</string>
     <string name="error_empty_node_name">An empty name is not allowed.</string>
     <string name="error_invalid_bitcoin_request">Invalid bitcoin request.</string>
     <string name="error_payment_invalid_details">The payment details did not match the details specified by the invoice you are trying to pay.</string>
@@ -993,4 +1004,6 @@
     <string name="quick_receive_type_on_chain_and_bolt12">On-Chain + Payment Code</string>
     <string name="refer_to_docs_ln_address">Please refer to the documentation for guidance on how to get a Lightning Address.</string>
 
+    <string name="use_biometrics">Use biometrics</string>
+    <string name="unlock_app">Unlock</string>
 </resources>

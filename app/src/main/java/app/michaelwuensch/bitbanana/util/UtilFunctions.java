@@ -45,13 +45,14 @@ public class UtilFunctions {
         return sha256Hash(data + getAppSalt());
     }
 
-    public static String pinHash(String data) {
+    // Used for password and PIN
+    public static String appLockDataHash(String data) {
         //HmacSHA1 with PBKDF2 and AppSalt
         byte[] hash = new byte[0];
         try {
             hash = encodePbkdf2(data.toCharArray(), getAppSalt().getBytes(), RefConstants.NUM_HASH_ITERATIONS, 32);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException("Couldn't encode pin with PBKDF2", e);
+            throw new RuntimeException("Couldn't encode app lock data with PBKDF2", e);
         }
 
         return HexUtil.bytesToHex(hash);

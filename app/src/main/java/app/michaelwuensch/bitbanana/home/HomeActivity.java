@@ -92,7 +92,7 @@ import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.PinScreenUtil;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -297,7 +297,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
         // Test if PIN screen should be shown.
-        PinScreenUtil.askForAccess(this, false, () -> {
+        AppLockUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
         });
     }

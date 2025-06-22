@@ -29,12 +29,11 @@ import app.michaelwuensch.bitbanana.customView.ConnectionStatusIndicator;
 import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
-import app.michaelwuensch.bitbanana.setup.SetupActivity;
+import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
-import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
@@ -212,8 +211,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mBtnSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SetupActivity.class);
-                intent.putExtra(RefConstants.SETUP_MODE, SetupActivity.FULL_SETUP);
+                Intent intent = new Intent(getActivity(), ConnectRemoteNodeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }

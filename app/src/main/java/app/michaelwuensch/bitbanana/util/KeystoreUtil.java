@@ -14,31 +14,31 @@ import java.security.cert.CertificateException;
 import javax.crypto.KeyGenerator;
 
 public class KeystoreUtil {
-    private static final String KEY_PIN_ACTIVE = "PinActiveKey";
+    private static final String KEY_APP_LOCK_ACTIVE = "PinActiveKey";
     private static final String ANDROID_KEY_STORE_NAME = "AndroidKeyStore";
     private final static Object s_keyInitLock = new Object();
 
-    public void addPinActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException {
+    public void addAppLockActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
 
-        if (!keyStore.containsAlias(KEY_PIN_ACTIVE)) {
-            generateKey(KEY_PIN_ACTIVE);
+        if (!keyStore.containsAlias(KEY_APP_LOCK_ACTIVE)) {
+            generateKey(KEY_APP_LOCK_ACTIVE);
         }
     }
 
-    public void removePinActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public void removeAppLockActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         synchronized (s_keyInitLock) {
             KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
             keyStore.load(null);
-            keyStore.deleteEntry(KEY_PIN_ACTIVE);
+            keyStore.deleteEntry(KEY_APP_LOCK_ACTIVE);
         }
     }
 
-    public boolean isPinActive() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public boolean isAppLockActive() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
-        return keyStore.containsAlias(KEY_PIN_ACTIVE);
+        return keyStore.containsAlias(KEY_APP_LOCK_ACTIVE);
     }
 
     protected void generateKey(String keyAlias) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
