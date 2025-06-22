@@ -123,7 +123,7 @@
     <string name="receive_lightning_request">Cobrança via rede Lightning</string>
     <string name="receive_on_chain_request">Cobrança via rede Bitcoin</string>
     <string name="receive_noActiveChannels">Para poder receber Bitcoin pela rede Lightning, você precisa primeiro abrir canais.</string>
-    <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela rede Lightning, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isso, você precisa gastar algo na rede Lightning primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela rede Lightning.</string>
+    <string name="receive_noIncomeBalance">Para poder receber Bitcoin pela rede Lightning, pelo menos um dos seus canais precisa ter fundos no lado da contraparte.\n\nPara conseguir isto, você precisa gastar algo na rede Lightning primeiro.\n\nNa área de gerenciar canais, você pode sempre ver o quanto é capaz de enviar ou receber pela rede Lightning.</string>
     <string name="receive_requestFullfilled">Cobrança\npaga</string>
     <string name="guardian_doNotShowAgain">Não mostrar novamente.</string>
     <string name="guardian_Title">Atenção</string>
@@ -163,7 +163,7 @@
 \n
 \nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
-    <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
+    <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isto é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
     <string name="error_connection_invalid_host_or_port">O host ou a porta fornecida é inválida.</string>
     <string name="error_connection_invalid_macaroon2">Access denied!\n\nO macaroon é inválido.</string>
@@ -606,8 +606,7 @@
     <string name="lnurl_unsupported_type">Tipo LNURL não suportado</string>
     <string name="lnurl_service">Serviço</string>
     <string name="lnurl_service_provided_invalid_data">O serviço com o qual você está interagindo proveu dados inválidos.</string>
-    <string name="lnurl_channel_pending_hint">O canal está abrindo. Isso pode levar um tempo.
-\nVocê pode checar o estado dos canais no seu resumo de canais.</string>
+    <string name="lnurl_channel_pending_hint">O canal está abrindo. Isto pode levar um tempo. \nVocê pode checar o estado dos canais no seu resumo de canais.</string>
     <string name="lnurl_pay_insufficient_channel_balance">A quantia a pagar é maior do que o que você pode enviar usando Lightning com seus canais atualmente abertos.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Seu pagamento foi bem-sucedido, mas o segredo que você recebeu não pôde ser decodificado.</string>
     <string name="lnurl_invalid_response">O serviço respondeu com uma resposta inválida.</string>
@@ -796,9 +795,7 @@
     <string name="vpn_unable_to_start">Ops! Parece que a VPN não pode ser iniciada automaticamente.</string>
     <string name="vpn_unable_to_start_not_installed" comment="Parameters are:  %1$s: appName">Você terá de instalar o app %1$s para usar a VPN especificada nas suas configurações de conexão.</string>
     <string name="connection_state_connecting">Conectando…</string>
-    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Certifique-se de que o app %1$s esteja rodando em plano de fundo. Se sim, certifique-se de que todas as otimizações de bateria do Android estejam desativadas para %1$s e então reinicie o app %1$s. Use o botão abaixo para ir às configurações.
-\n
-\nSe isso também não ajudar, abra o app %1$s e inicie a VPN manualmente para resolver o problema.</string>
+    <string name="vpn_unable_to_start_unknown" comment="Parameters are:  %1$s: appName">Certifique-se de que o app %1$s esteja rodando em plano de fundo. Se sim, certifique-se de que todas as otimizações de bateria do Android estejam desativadas para %1$s e então reinicie o app %1$s. Use o botão abaixo para ir às configurações. \n \nSe isto também não ajudar, abra o app %1$s e inicie a VPN manualmente para resolver o problema.</string>
     <string name="vpn_change_battery_settings">Mudar configurações de bateria</string>
     <string name="unsaved_changes">Há alterações não salvas.</string>
     <string name="duplication_successful">Duplicação foi bem-sucedida.</string>
@@ -1035,10 +1032,10 @@
     <string name="consolidate_utxos">Consolidar UTXOs</string>
     <string name="consolidate_utxos_summary">Consolidar %1$d UTXOs</string>
     <string name="consolidation_failed">Consolidação falhou</string>
-    <string name="guardian_consolidate_utxos">Consolidar UTXOs pode diminuir sua privacidade ao ligar endereços. Isso revela que os endereços de entrada provavelmente pertencem à mesma entidade, fazendo seu histórico de transação mais fácil de analisar e rastrear na blockchain.</string>
+    <string name="guardian_consolidate_utxos">Consolidar UTXOs pode diminuir sua privacidade ao ligar endereços. Isto revela que os endereços de entrada provavelmente pertencem à mesma entidade, fazendo seu histórico de transação mais fácil de analisar e rastrear na blockchain.</string>
     <string name="all_utxos">Todas as UTXOs</string>
     <string name="consolidate">Consolidar</string>
-    <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, você está combinando várias saídas não gastas em uma maior. Isso faz futuras transações mais baratas, uma vez que as taxas de transação são determinadas pelo seu tamanho em bytes, e não por valor. Consolidar durante períodos de baixa taxa permite que usuários paguem pelo espaço da blockchain de que precisam enquanto for barato, ajudando a minimizar taxas futuras durante períodos de alta taxa. Tenha em mente, no entanto, que a consolidação custa uma taxa e pode diminuir sua privacidade ao ligar endereços.</string>
+    <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, você está combinando várias saídas não gastas em uma maior. Isto faz futuras transações mais baratas, uma vez que as taxas de transação são determinadas pelo seu tamanho em bytes, e não por valor. Consolidar durante períodos de baixa taxa permite que usuários paguem pelo espaço da blockchain de que precisam enquanto for barato, ajudando a minimizar taxas futuras durante períodos de alta taxa. Tenha em mente, no entanto, que a consolidação custa uma taxa e pode diminuir sua privacidade ao ligar endereços.</string>
     <string name="nostr_relay">Relay</string>
     <string name="auto_scroll">Rolagem automática</string>
     <string name="target">Alvo</string>
@@ -1061,4 +1058,19 @@
     <string name="connection_security_Info_tls_self_signed">autoassinado</string>
     <string name="connection_security_info_clearnet_http">Esta é uma conexão insegura usando HTTP em texto não formatado.</string>
     <string name="connection_security_info_tls_certificate_issuer">Emissor de Certificado</string>
+    <string name="info">Informações</string>
+    <string name="error_selecting_inactive_bolt12_offer">Você não pode selecionar um código de pagamento inativo.</string>
+    <string name="error_no_bolt12_offer_selected">Você precisa selecionar um código de pagamento.</string>
+    <string name="quick_receive_type_on_chain_address">Endereço On-Chain</string>
+    <string name="quick_receive_info_off">Com o Recebimento Rápido desligado, será solicitado que selecione o que você quer toda vez que apertar “Receber”.</string>
+    <string name="quick_receive_info_on_chain_address">Isto usará o próximo endereço on-chain não utilizado.</string>
+    <string name="quick_receive_info_on_chain_address_part2">No entanto, este método não é recomendado por não suportar pagamentos Lightning.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">Este método usará o próximo endereço on-chain não utilizado como uma alternativa quando o remetente não suportar pagamentos Lightning.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">Este método usará o próximo endereço on-chain não utilizado como uma alternativa quando o remetente não suportar códigos de pagamento.</string>
+    <string name="quick_receive_info_bolt12">Também chamado de BOLT12, um código de pagamento é um identificador estático e reutilizável que não requer serviço web. Ele contém toda informação necessária para enviar um pagamento diretamente pela rede Lightning.</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">On-Chain + Código de Pagamento</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">Endereço Lightning + On-Chain</string>
+    <string name="refer_to_docs_ln_address">Por favor, dirija-se à documentação para orientação sobre como obter um endereço Lightning.</string>
+    <string name="activity_quick_receive_setup">Recebimento Rápido</string>
+    <string name="help_dialog_quick_receive_setup">Receber Bitcoins vem com escolhas: on-chain, Lightning, BOLT12 e mais.\nIsto é bom, mas pode levar alguns toques a mais apenas para ver seu código QR de recebimento. O BitBanana acelera isto. Escolha um método de pagamento padrão aqui, e estará pronto com um toque enquanto ainda tem a opção de personalizar tudo.\n\nNão tem certeza de como configurar? A documentação abaixo pode o guiar.</string>
 </resources>
