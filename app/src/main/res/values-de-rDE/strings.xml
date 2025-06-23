@@ -436,7 +436,7 @@
     <string name="backup_data_create_headline">Backup</string>
     <string name="backup_data_restore_headline">Wiederherstellen</string>
     <string name="backup_data_password_enter">Passwort eingeben</string>
-    <string name="backup_data_password_confirm">Password bestätigen</string>
+    <string name="backup_data_password_confirm">Passwort bestätigen</string>
     <string name="backup_data_password_empty">Das Passwort mus mindestens 8 Zeichen lang sein.</string>
     <string name="backup_data_password_mismatch">Die Passwörter sind nicht identisch.</string>
     <string name="backup_data_creation_process">Backup wird erstellt</string>
