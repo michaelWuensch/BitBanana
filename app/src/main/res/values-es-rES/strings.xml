@@ -363,8 +363,7 @@
 \n- pubkey@host:puerto
 \n- Canal LNURL</string>
     <string name="error_channel_open_node_setup">Primero hay que conectarse a un nodo antes de abrir un canal.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora.
-\nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora. \nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
     <string name="error_invalid_bitcoin_request">Petición de bitcoin inválida.</string>
     <string name="settings_hideBalance">Ocultar el saldo</string>
     <string name="error_lightning_uri_invalid">Formato no válido.
