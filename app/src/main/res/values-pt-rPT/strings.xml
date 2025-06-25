@@ -516,8 +516,7 @@
     <string name="error_connect_peer">Não foi possível estabelecer uma conexão ao nó do par.</string>
     <string name="error_channel_close_timeout">Canal não pôde ser fechado dentro do prazo.</string>
     <string name="error_connect_peer_self">Não é possível conectar a si mesmo.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar o seu PIN. O app fechará agora.
-\nPode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar o seu PIN. O app fechará agora. \nPode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
     <string name="error_tor_exchange_rate">Taxa de câmbio não pôde ser obtida. O serviço que usa parece bloquear solicitações vindas da rede Tor. Tente mudar o provedor de taxa de câmbio nas configurações avançadas.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Segundo</item>
