@@ -532,8 +532,7 @@
     <string name="port">Porta</string>
     <string name="activity_contact_details">Detalhes do Contato</string>
     <string name="settings_scan_clipboard_summary">Automaticamente checar a área de transferência por dados com os quais o BitBanana pode lidar.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar seu PIN. O app fechará agora.
-\nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar seu PIN. O app fechará agora. \nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
     <string name="fee_limit_title">Alerta de Limite de Taxa</string>
     <string name="biometricPrompt_title">Autenticação Biométrica</string>
     <string name="help_dialog_scanPaymentRequest">Códigos QR contendo o seguinte são válidos:
