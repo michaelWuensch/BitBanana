@@ -21,7 +21,7 @@ public class TimeOutUtil {
 
     public void restartTimer() {
         appClosed = System.currentTimeMillis();
-        BBLog.d(LOG_TAG, "PIN timer restarted");
+        BBLog.d(LOG_TAG, "App lock timer restarted");
     }
 
     public boolean isTimedOut() {

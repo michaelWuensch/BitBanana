@@ -50,12 +50,6 @@
             android:title="@string/settings_custom_fee_estimation_provider"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="hapticPin"
-            android:title="@string/settings_hapticPin"
-            app:iconSpaceReserved="false" />
-
         <EditTextPreference
             android:dialogMessage="@string/settings_backendTimeout_dialogMessage"
             android:key="backendTimeout"
@@ -136,18 +130,6 @@
             android:key="goToDecoyAppSettings"
             android:summary="@string/settings_stealth_mode_summary"
             android:title="@string/settings_stealth_mode"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="biometricsEnabled"
-            android:title="@string/settings_enableBiometrics"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="scramblePin"
-            android:title="@string/settings_scramblePin"
             app:iconSpaceReserved="false" />
 
         <SwitchPreference

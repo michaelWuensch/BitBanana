@@ -55,16 +55,8 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            android:key="pinPref"
-            android:title="@string/settings_addPin"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            android:defaultValue="30"
-            android:entryValues="@array/lockScreenTimeout"
-            android:key="lockScreenTimeoutPref"
-            android:summary="%s"
-            android:title="@string/settings_lockScreenTimeout"
+            android:key="appLockPref"
+            android:title="@string/settings_app_lock"
             app:iconSpaceReserved="false" />
 
         <ListPreference

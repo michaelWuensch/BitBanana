@@ -151,11 +151,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.setup.SetupActivity"
+            android:name="app.michaelwuensch.bitbanana.appLock.PinSetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.pin.PinSetupActivity"
+            android:name="app.michaelwuensch.bitbanana.appLock.PasswordSetupActivity"
             android:label="Setup"
             android:screenOrientation="portrait" />
         <activity
@@ -164,7 +164,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppOverlayTheme" />
         <activity
-            android:name="app.michaelwuensch.bitbanana.pin.PinEntryActivity"
+            android:name="app.michaelwuensch.bitbanana.appLock.PinEntryActivity"
+            android:label="PIN"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.appLock.PasswordEntryActivity"
             android:label="PIN"
             android:screenOrientation="portrait" />
         <activity
@@ -195,6 +199,11 @@
         <activity
             android:name="app.michaelwuensch.bitbanana.settings.AdvancedSettingsActivity"
             android:label="@string/activity_advanced_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.settings.SettingsAppLockActivity"
+            android:label="@string/settings_app_lock"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
         <activity

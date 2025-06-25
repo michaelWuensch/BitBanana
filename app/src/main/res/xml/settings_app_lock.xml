@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:icon="@null"
+    android:key="topPrefScreen"
+    android:title="@string/navigation_settings">
+
+    <Preference
+        android:key="pinPref"
+        android:title="@string/settings_addPin"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="passwordPref"
+        android:title="@string/settings_add_password"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="biometricsEnabled"
+        android:title="@string/settings_enableBiometrics"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="30"
+        android:entryValues="@array/lockScreenTimeout"
+        android:key="lockScreenTimeoutPref"
+        android:summary="%s"
+        android:title="@string/settings_lockScreenTimeout"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
+        android:key="pinOptionsCategory"
+        android:title="@string/settings_category_pin_options"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="scramblePin"
+            android:title="@string/settings_scramblePin"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="hapticPin"
+            android:title="@string/settings_hapticPin"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.pin;
+package app.michaelwuensch.bitbanana.appLock;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -39,16 +39,15 @@ import app.michaelwuensch.bitbanana.util.ScrambledNumpad;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
-public class PinFragment extends Fragment {
+public class PinSetupFragment extends Fragment {
 
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
     public static final int ENTER_MODE = 2;
-    private static final String LOG_TAG = PinFragment.class.getSimpleName();
+    private static final String LOG_TAG = PinSetupFragment.class.getSimpleName();
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
     private static final String ARG_TEMP_PIN = "tempPin";
-    private static final String ARG_FORCE_BIOMETRICS_DISABLED = "forceBiometricsDisabled";
     private int mPinLength = 0;
 
     private ImageButton mBtnPinConfirm;
@@ -61,6 +60,7 @@ public class PinFragment extends Fragment {
     private BiometricPrompt mBiometricPrompt;
     private BiometricPrompt.PromptInfo mPromptInfo;
 
+    private View mPinInputLayout;
     private TextView mTvPrompt;
     private String mPromptString;
     private ScrambledNumpad mNumpad;
@@ -69,7 +69,6 @@ public class PinFragment extends Fragment {
     private int mMode;
     private int mNumFails;
     private String mTempPin;
-    private boolean mForceBiometricsDisabled;
 
 
     /**
@@ -80,29 +79,11 @@ public class PinFragment extends Fragment {
      * @param prompt Short text to describe what is happening.
      * @return A new instance of fragment PinFragment.
      */
-    public static PinFragment newInstance(int mode, String prompt) {
-        PinFragment fragment = new PinFragment();
+    public static PinSetupFragment newInstance(int mode, String prompt) {
+        PinSetupFragment fragment = new PinSetupFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_MODE, mode);
         args.putString(ARG_PROMPT, prompt);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param mode   set the mode to either create, confirm or enter pin.
-     * @param prompt Short text to describe what is happening.
-     * @return A new instance of fragment PinFragment.
-     */
-    public static PinFragment newInstance(int mode, String prompt, boolean forceBiometricsDisabled) {
-        PinFragment fragment = new PinFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_MODE, mode);
-        args.putString(ARG_PROMPT, prompt);
-        args.putBoolean(ARG_FORCE_BIOMETRICS_DISABLED, forceBiometricsDisabled);
         fragment.setArguments(args);
         return fragment;
     }
@@ -116,8 +97,8 @@ public class PinFragment extends Fragment {
      * @param tempPin Temporary pin used to confirm during pin confirmation
      * @return A new instance of fragment PinFragment.
      */
-    public static PinFragment newInstance(int mode, String prompt, String tempPin) {
-        PinFragment fragment = new PinFragment();
+    public static PinSetupFragment newInstance(int mode, String prompt, String tempPin) {
+        PinSetupFragment fragment = new PinSetupFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_MODE, mode);
         args.putString(ARG_PROMPT, prompt);
@@ -133,7 +114,6 @@ public class PinFragment extends Fragment {
             mMode = getArguments().getInt(ARG_MODE);
             mPromptString = getArguments().getString(ARG_PROMPT);
             mTempPin = getArguments().getString(ARG_TEMP_PIN);
-            mForceBiometricsDisabled = getArguments().getBoolean(ARG_FORCE_BIOMETRICS_DISABLED);
         }
     }
 
@@ -143,7 +123,7 @@ public class PinFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.pin_input, container, false);
 
-        mNumFails = PrefsUtil.getPrefs().getInt("numPINFails", 0);
+        mNumFails = PrefsUtil.getPrefs().getInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0);
 
         // Get PIN length
         if (mMode == CONFIRM_MODE) {
@@ -159,6 +139,7 @@ public class PinFragment extends Fragment {
         mNumpad = new ScrambledNumpad();
         mTvPrompt = view.findViewById(R.id.pinPrompt);
         mTvPrompt.setText(mPromptString);
+        mPinInputLayout = view.findViewById(R.id.pinInputLayout);
 
         mVibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -215,7 +196,7 @@ public class PinFragment extends Fragment {
 
 
         // Make biometrics Button visible if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && !mForceBiometricsDisabled) {
+        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -229,7 +210,7 @@ public class PinFragment extends Fragment {
                 .build();
 
 
-        mBiometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
+        mBiometricPrompt = new BiometricPrompt(requireActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
@@ -238,10 +219,10 @@ public class PinFragment extends Fragment {
                 // Go to next step
                 if (mMode == ENTER_MODE) {
 
-                    PrefsUtil.editPrefs().putInt("numPINFails", 0)
+                    PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                             .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                    ((PinActivityInterface) getActivity()).correctPinEntered();
+                    ((AppLockInterface) getActivity()).correctAccessDataEntered();
                 }
 
             }
@@ -250,7 +231,10 @@ public class PinFragment extends Fragment {
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
 
-                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                        errorCode == BiometricPrompt.ERROR_CANCELED) {
+                    exitBiometricsPrompt();
                 } else {
                     // This has to happen on the UI thread. Only this thread can change the recycler view.
                     getActivity().runOnUiThread(new Runnable() {
@@ -262,14 +246,6 @@ public class PinFragment extends Fragment {
             }
 
         });
-
-
-        // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable() && !mForceBiometricsDisabled) {
-            if (PrefsUtil.isBiometricPreferred()) {
-                initBiometricPrompt();
-            }
-        }
 
         // Call BiometricsPrompt on click on fingerprint symbol
         mBtnBiometrics.setOnClickListener(new OnClickListener() {
@@ -291,7 +267,7 @@ public class PinFragment extends Fragment {
                     }
                     dlg.show();
                 } else {
-                    mBiometricPrompt.authenticate(mPromptInfo);
+                    showBiometricsPrompt();
                 }
             }
         });
@@ -341,7 +317,7 @@ public class PinFragment extends Fragment {
                     e.printStackTrace();
                 }
                 try {
-                    new KeystoreUtil().removePinActiveKey();
+                    new KeystoreUtil().removeAppLockActiveKey();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -382,18 +358,18 @@ public class PinFragment extends Fragment {
 
 
         // If the user closed and restarted the activity he still has to wait until the PIN input delay is over.
-        if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
+        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
 
             long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
 
-            if (timeDiff < RefConstants.PIN_DELAY_TIME * 1000) {
+            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
 
                 for (Button btn : mBtnNumpad) {
                     btn.setEnabled(false);
                     btn.setAlpha(0.3f);
                 }
 
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.PIN_DELAY_TIME * 1000 - timeDiff) / 1000)));
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000)));
                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 
                 Handler handler = new Handler();
@@ -405,7 +381,7 @@ public class PinFragment extends Fragment {
                             btn.setAlpha(1f);
                         }
                     }
-                }, RefConstants.PIN_DELAY_TIME * 1000 - timeDiff);
+                }, RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff);
             }
         }
 
@@ -492,7 +468,7 @@ public class PinFragment extends Fragment {
         boolean correct = false;
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
-            String hashedInput = UtilFunctions.pinHash(userEnteredPin);
+            String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
             try {
                 correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
             } catch (GeneralSecurityException | IOException e) {
@@ -508,10 +484,10 @@ public class PinFragment extends Fragment {
             // Go to next step
             if (mMode == ENTER_MODE) {
 
-                PrefsUtil.editPrefs().putInt("numPINFails", 0)
+                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                         .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
-                ((PinActivityInterface) getActivity()).correctPinEntered();
+                ((AppLockInterface) getActivity()).correctAccessDataEntered();
             } else if (mMode == CONFIRM_MODE) {
                 ((PinSetupActivity) getActivity()).pinConfirmed(mUserInput.toString());
             }
@@ -519,7 +495,7 @@ public class PinFragment extends Fragment {
             if (mMode == ENTER_MODE) {
                 mNumFails++;
 
-                PrefsUtil.editPrefs().putInt("numPINFails", mNumFails)
+                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, mNumFails)
                         .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
                 final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
@@ -534,12 +510,12 @@ public class PinFragment extends Fragment {
                 mUserInput.setLength(0);
                 displayUserInput();
 
-                if (mNumFails >= RefConstants.PIN_MAX_FAILS) {
+                if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
                     for (Button btn : mBtnNumpad) {
                         btn.setEnabled(false);
                         btn.setAlpha(0.3f);
                     }
-                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.PIN_DELAY_TIME));
+                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.APP_LOCK_DELAY_TIME));
                     Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
 
                     // Save timestamp. This way the delay can also be forced upon restart of the activity.
@@ -554,7 +530,7 @@ public class PinFragment extends Fragment {
                                 btn.setAlpha(1f);
                             }
                         }
-                    }, RefConstants.PIN_DELAY_TIME * 1000);
+                    }, RefConstants.APP_LOCK_DELAY_TIME * 1000);
                 } else {
                     // Show error
                     Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
@@ -584,9 +560,17 @@ public class PinFragment extends Fragment {
         ((PinSetupActivity) getActivity()).pinCreated(mUserInput.toString());
     }
 
-    private void initBiometricPrompt() {
-        mBiometricPrompt.cancelAuthentication();
+    public void showBiometricsPrompt() {
+        mPinInputLayout.setVisibility(View.GONE);
         mBiometricPrompt.authenticate(mPromptInfo);
     }
 
+    private void exitBiometricsPrompt() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mPinInputLayout.setVisibility(View.VISIBLE);
+            }
+        });
+    }
 }

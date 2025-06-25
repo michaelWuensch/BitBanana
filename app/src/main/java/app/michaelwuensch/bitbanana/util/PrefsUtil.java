@@ -24,7 +24,6 @@ public class PrefsUtil {
 
     // shared preference references
     public static final String PREVENT_SCREEN_RECORDING = "preventScreenRecording";
-    public static final String PIN_HASH = "pin_hash";
     public static final String PIN_LENGTH = "pin_length";
     public static final String SETTINGS_VERSION = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
@@ -66,6 +65,7 @@ public class PrefsUtil {
     public static final String REBALANCE_FEE_LIMIT_PERCENT = "rebalanceFeeLimitPercent";
     public static final String BACKEND_TIMEOUT = "backendTimeout";
     public static final String PAYMENT_TIMEOUT = "paymentTimeout";
+    public static final String APP_NUM_UNLOCK_FAILS = "numAppUnlockFails";
 
 
     // default values
@@ -75,9 +75,13 @@ public class PrefsUtil {
     public static final String DEFAULT_FEE_PRESET_VALUE_SLOW = "144";
 
     // encrypted preferences references
+    public static final String PIN_HASH = "pin_hash";
+    public static final String PASSWORD_HASH = "password_hash";
     public static final String BACKEND_CONFIGS = "wallet_configs";
     public static final String CONTACTS = "contacts";
     public static final String RANDOM_SOURCE = "random_source";
+
+    private static SharedPreferences encryptedPrefs;
 
 
     // Access to default shared prefs
@@ -89,23 +93,23 @@ public class PrefsUtil {
         return getPrefs().edit();
     }
 
-    // Access encrypted preferences
-    public static SharedPreferences getEncryptedPrefs() throws GeneralSecurityException, IOException {
+    // Access encrypted preferences. This is a slow operation, therefore we save the result and do a lazy initialization from there on.
+    public static synchronized SharedPreferences getEncryptedPrefs() throws GeneralSecurityException, IOException {
+        if (encryptedPrefs == null) {
+            MasterKey masterKey = new MasterKey.Builder(App.getAppContext())
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
 
-        MasterKey masterKey = new MasterKey.Builder(App.getAppContext())
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build();
-
-        String sharedPrefsFile = "bb_secure_preferences";
-        SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
-                App.getAppContext(),
-                sharedPrefsFile,
-                masterKey,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        );
-
-        return sharedPreferences;
+            String sharedPrefsFile = "bb_secure_preferences";
+            encryptedPrefs = EncryptedSharedPreferences.create(
+                    App.getAppContext(),
+                    sharedPrefsFile,
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        }
+        return encryptedPrefs;
     }
 
     public static SharedPreferences.Editor putSerializable(String key, Serializable obj) {
@@ -156,6 +160,15 @@ public class PrefsUtil {
     public static boolean isPinEnabled() {
         try {
             return getEncryptedPrefs().contains(PIN_HASH);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+    public static boolean isPasswordEnabled() {
+        try {
+            return getEncryptedPrefs().contains(PASSWORD_HASH);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
             return true;

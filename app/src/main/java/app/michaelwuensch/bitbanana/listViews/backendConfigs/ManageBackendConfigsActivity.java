@@ -15,8 +15,8 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
-import app.michaelwuensch.bitbanana.setup.SetupActivity;
 
 public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
@@ -56,7 +56,7 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Add a new node by scanning
-                Intent intent = new Intent(ManageBackendConfigsActivity.this, SetupActivity.class);
+                Intent intent = new Intent(ManageBackendConfigsActivity.this, ConnectRemoteNodeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }

@@ -83,11 +83,11 @@ public class BBInputFieldView extends LinearLayout {
             String attrLabel = a.getString(R.styleable.BBInputFieldView_inputLabel);
             String attrLabelDetails = a.getString(R.styleable.BBInputFieldView_inputLabelDetails);
             boolean attrShowHelpButton = a.getBoolean(R.styleable.BBInputFieldView_showHelpButton, false);
-            mHelpStringResource = a.getString(R.styleable.BBInputFieldView_helpButtonText);
+            setHelpStringResource(a.getString(R.styleable.BBInputFieldView_helpButtonText));
             String attrDefaultValue = a.getString(R.styleable.BBInputFieldView_defaultInputValue);
-            mMinLines = a.getInt(R.styleable.BBInputFieldView_minLines, 1);
-            mMaxLines = a.getInt(R.styleable.BBInputFieldView_maxLines, 1);
-            mMaxLinesFocused = a.getInt(R.styleable.BBInputFieldView_maxLinesFocused, 1);
+            setMinLines(a.getInt(R.styleable.BBInputFieldView_minLines, 1));
+            setMaxLines(a.getInt(R.styleable.BBInputFieldView_maxLines, 1));
+            setMaxLinesFocused(a.getInt(R.styleable.BBInputFieldView_maxLinesFocused, 1));
             Drawable bg = a.getDrawable(R.styleable.BBInputFieldView_inputAreaBgDrawable);
 
             if (attrLabel != null)
@@ -97,15 +97,35 @@ public class BBInputFieldView extends LinearLayout {
             setShowHelpButton(attrShowHelpButton);
             if (attrDefaultValue != null)
                 setValue(attrDefaultValue);
-            if ((mMinLines > 1 || mMaxLines > 1) && mMaxLines >= mMinLines)
-                setLineCount(mMinLines, mMaxLines);
             if (bg != null) {
                 mEtInput.setBackground(bg);
             }
+            updateLineCount();
 
             // Don't forget to recycle the TypedArray
             a.recycle();
         }
+    }
+
+    public void setHelpStringResource(String helpStringResource) {
+        mHelpStringResource = helpStringResource;
+    }
+
+    public void setMinLines(int minLines) {
+        mMinLines = minLines;
+    }
+
+    public void setMaxLines(int maxLines) {
+        mMaxLines = maxLines;
+    }
+
+    public void setMaxLinesFocused(int maxLinesFocused) {
+        mMaxLinesFocused = maxLinesFocused;
+    }
+
+    public void updateLineCount() {
+        if ((mMinLines > 1 || mMaxLines > 1) && mMaxLines >= mMinLines)
+            setLineCount(mMinLines, mMaxLines);
     }
 
     public void setDescription(String description) {
