@@ -2,12 +2,10 @@ package app.michaelwuensch.bitbanana.settings;
 
 import android.os.Bundle;
 
-import androidx.preference.PreferenceFragmentCompat;
-
 import app.michaelwuensch.bitbanana.R;
 
 
-public class SettingsPayerDataFragment extends PreferenceFragmentCompat {
+public class SettingsPayerDataFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsPayerDataFragment.class.getSimpleName();
 

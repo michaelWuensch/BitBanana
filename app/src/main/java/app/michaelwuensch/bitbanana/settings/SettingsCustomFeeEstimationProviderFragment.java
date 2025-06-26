@@ -5,13 +5,12 @@ import android.widget.Toast;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 
-public class SettingsCustomFeeEstimationProviderFragment extends PreferenceFragmentCompat {
+public class SettingsCustomFeeEstimationProviderFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsCustomFeeEstimationProviderFragment.class.getSimpleName();
 

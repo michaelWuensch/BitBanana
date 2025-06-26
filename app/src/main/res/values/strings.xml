@@ -308,7 +308,7 @@
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>
-    <string name="settings_category_security">Security</string>
+    <string name="settings_category_security">Security &amp; Privacy</string>
     <string name="settings_category_help">Help</string>
     <string name="settings_category_advanced">Advanced</string>
     <string name="settings_category_pin_options">PIN Options</string>
@@ -346,6 +346,7 @@
     <string name="settings_addPin">Protect with PIN</string>
     <string name="settings_removePin">Remove PIN</string>
     <string name="settings_lockScreenTimeout">Auto-Lock Timeout</string>
+    <string name="settings_lockScreenTimeout_description">Delay before BitBanana locks after the app is minimized.</string>
     <string name="settings_add_password">Protect with password</string>
     <string name="settings_remove_password">Remove password</string>
     <string name="settings_change_password">Change/Remove password</string>

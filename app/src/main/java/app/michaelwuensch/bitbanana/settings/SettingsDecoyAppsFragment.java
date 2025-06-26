@@ -8,14 +8,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 
-public class SettingsDecoyAppsFragment extends PreferenceFragmentCompat {
+public class SettingsDecoyAppsFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsDecoyAppsFragment.class.getSimpleName();
     private SwitchPreference mSwOnOff;

@@ -23,6 +23,7 @@
 
     <ListPreference
         android:defaultValue="30"
+        android:dialogMessage="@string/settings_lockScreenTimeout_description"
         android:entryValues="@array/lockScreenTimeout"
         android:key="lockScreenTimeoutPref"
         android:summary="%s"

@@ -5,13 +5,12 @@ import android.widget.Toast;
 
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 
-public class SettingsCustomBlockExplorerFragment extends PreferenceFragmentCompat {
+public class SettingsCustomBlockExplorerFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsCustomBlockExplorerFragment.class.getSimpleName();
 

@@ -7,7 +7,6 @@ import android.widget.Toast;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import app.michaelwuensch.bitbanana.R;
@@ -20,7 +19,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 
 
-public class SettingsAppLockFragment extends PreferenceFragmentCompat {
+public class SettingsAppLockFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsAppLockFragment.class.getSimpleName();
 

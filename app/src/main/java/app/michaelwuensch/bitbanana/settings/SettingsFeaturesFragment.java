@@ -4,12 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import app.michaelwuensch.bitbanana.R;
 
 
-public class SettingsFeaturesFragment extends PreferenceFragmentCompat {
+public class SettingsFeaturesFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsFeaturesFragment.class.getSimpleName();
 
