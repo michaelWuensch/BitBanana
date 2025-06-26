@@ -31,6 +31,7 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
+import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -59,9 +60,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private BBInputFieldView mEtClientKey;
     private BBInputFieldView mEtUser;
     private View mVpnAutomationLayout;
-    private View mViewPasswordLayout;
-    private BBInputFieldView mEtPassword;
-    private ImageButton mIbPasswordVisibility;
+    private BBPasswordInputFieldView mEtPassword;
     private SwitchCompat mSwTor;
     private SwitchCompat mSwVerify;
     private VPNConfigView mVpnConfigView;
@@ -72,7 +71,6 @@ public class ManualSetup extends BaseAppCompatActivity {
     private View mSpTypeLayout;
     private Spinner mSpType;
     private View mVerifyCertVisibilityLayout;
-    private boolean pwVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +95,7 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtClientCertificate = findViewById(R.id.inputClientCertificate);
         mEtClientKey = findViewById(R.id.inputClientKey);
         mEtUser = findViewById(R.id.inputUser);
-        mViewPasswordLayout = findViewById(R.id.inputPasswordLayout);
         mEtPassword = findViewById(R.id.inputPassword);
-        mIbPasswordVisibility = findViewById(R.id.passwordVisibilityToggle);
         mSwTor = findViewById(R.id.torSwitch);
         mSwVerify = findViewById(R.id.verifyCertSwitch);
         mVpnAutomationLayout = findViewById(R.id.vpnAutomationLayout);
@@ -115,20 +111,6 @@ public class ManualSetup extends BaseAppCompatActivity {
         mEtPort.getEditText().setFilters(new InputFilter[]{new InputFilterPortRange()});
         mEtPort.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        mIbPasswordVisibility.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pwVisible) {
-                    mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    mIbPasswordVisibility.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_off_24));
-                } else {
-                    mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    mIbPasswordVisibility.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_24));
-                }
-                pwVisible = !pwVisible;
-            }
-        });
 
         String[] items = new String[4];
         items[0] = BackendConfig.BackendType.LND_GRPC.getDisplayName();
@@ -151,7 +133,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.GONE);
-                        mViewPasswordLayout.setVisibility(View.GONE);
+                        mEtPassword.setVisibility(View.GONE);
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
@@ -166,7 +148,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientCertificate.setVisibility(View.VISIBLE);
                         mEtClientKey.setVisibility(View.VISIBLE);
                         mEtUser.setVisibility(View.GONE);
-                        mViewPasswordLayout.setVisibility(View.GONE);
+                        mEtPassword.setVisibility(View.GONE);
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
@@ -181,7 +163,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.VISIBLE);
-                        mViewPasswordLayout.setVisibility(View.VISIBLE);
+                        mEtPassword.setVisibility(View.VISIBLE);
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.GONE);
@@ -196,7 +178,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mEtClientCertificate.setVisibility(View.GONE);
                         mEtClientKey.setVisibility(View.GONE);
                         mEtUser.setVisibility(View.GONE);
-                        mViewPasswordLayout.setVisibility(View.GONE);
+                        mEtPassword.setVisibility(View.GONE);
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.GONE);
                         mVerifyCertVisibilityLayout.setVisibility(View.GONE);

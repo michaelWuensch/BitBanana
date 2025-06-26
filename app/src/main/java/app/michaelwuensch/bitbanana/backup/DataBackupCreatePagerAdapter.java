@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class DataBackupCreatePagerAdapter extends PagerAdapter {
@@ -78,25 +78,25 @@ public class DataBackupCreatePagerAdapter extends PagerAdapter {
             backupView = inflater.inflate(R.layout.view_data_backup_password, container, false);
 
             BBButton buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
-            EditText pw1 = backupView.findViewById(R.id.pw1_input);
-            EditText pw2 = backupView.findViewById(R.id.pw2_input);
+            BBPasswordInputFieldView pw1 = backupView.findViewById(R.id.pw1_input);
+            BBPasswordInputFieldView pw2 = backupView.findViewById(R.id.pw2_input);
 
-            pw1.requestFocus();
+            pw1.getEditText().requestFocus();
 
             buttonCreate.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    if (pw1.getText().toString().equals(pw2.getText().toString())) {
-                        if (pw1.getText().toString().length() > 7) {
-                            String password = pw1.getText().toString();
-                            pw1.setText("");
-                            pw2.setText("");
+                    if (pw1.getData() != null && pw1.getData().length() > 7) {
+                        if (pw1.getData().equals(pw2.getData())) {
+                            String password = pw1.getData();
+                            pw1.setValue("");
+                            pw2.setValue("");
                             mBackupAction.onCreateBackupPasswordEntered(password);
                         } else {
-                            Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_mismatch), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_mismatch), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

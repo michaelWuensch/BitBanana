@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 
 public class DataBackupRestorePagerAdapter extends PagerAdapter {
@@ -51,10 +51,8 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             backupView = inflater.inflate(R.layout.view_data_backup_password, container, false);
 
             BBButton buttonCreate = backupView.findViewById(R.id.data_backup_continue_button);
-            EditText pw1 = backupView.findViewById(R.id.pw1_input);
-            EditText pw2 = backupView.findViewById(R.id.pw2_input);
-            TextView pw2Title = backupView.findViewById(R.id.pw2_title);
-            pw2Title.setVisibility(View.GONE);
+            BBPasswordInputFieldView pw1 = backupView.findViewById(R.id.pw1_input);
+            BBPasswordInputFieldView pw2 = backupView.findViewById(R.id.pw2_input);
             pw2.setVisibility(View.GONE);
 
             pw1.requestFocus();
@@ -62,10 +60,10 @@ public class DataBackupRestorePagerAdapter extends PagerAdapter {
             buttonCreate.setOnClickListener(new OnSingleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    if (pw1.getText().toString().length() > 7) {
-                        String password = pw1.getText().toString();
-                        pw1.setText("");
-                        pw2.setText("");
+                    if (pw1.getData() != null && pw1.getData().length() > 7) {
+                        String password = pw1.getData();
+                        pw1.setValue("");
+                        pw2.setValue("");
                         mBackupAction.onRestoreBackupPasswordEntered(password);
                     } else {
                         Toast.makeText(mContext, mContext.getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
