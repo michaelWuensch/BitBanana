@@ -84,6 +84,11 @@ public class BBPasswordInputFieldView extends ConstraintLayout {
         mPasswordVisibilityToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Save current selection
+                int selectionStart = getEditText().getSelectionStart();
+                int selectionEnd = getEditText().getSelectionEnd();
+
                 if (pwVisible) {
                     getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     mPasswordVisibilityToggle.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_off_24));
@@ -91,6 +96,10 @@ public class BBPasswordInputFieldView extends ConstraintLayout {
                     getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     mPasswordVisibilityToggle.setImageDrawable(getResources().getDrawable(R.drawable.outline_visibility_24));
                 }
+
+                // Restore selection
+                getEditText().setSelection(selectionStart, selectionEnd);
+
                 pwVisible = !pwVisible;
             }
         });
