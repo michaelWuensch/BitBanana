@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import app.michaelwuensch.bitbanana.R;
@@ -22,7 +21,7 @@ import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 
 
-public class AdvancedSettingsFragment extends PreferenceFragmentCompat {
+public class AdvancedSettingsFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = AdvancedSettingsFragment.class.getSimpleName();
     private SwitchPreference mSwScreenProtection;

@@ -10,7 +10,6 @@ import androidx.core.os.LocaleListCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import java.io.IOException;
@@ -28,7 +27,7 @@ import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName();
 

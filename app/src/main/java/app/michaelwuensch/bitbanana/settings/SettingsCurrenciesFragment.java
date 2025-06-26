@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +20,7 @@ import app.michaelwuensch.bitbanana.util.MonetaryUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 
-public class SettingsCurrenciesFragment extends PreferenceFragmentCompat {
+public class SettingsCurrenciesFragment extends BBPreferenceFragmentCompat {
 
     private static final String LOG_TAG = SettingsCurrenciesFragment.class.getSimpleName();
 
