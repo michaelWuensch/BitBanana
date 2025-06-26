@@ -169,6 +169,7 @@ public class PasswordSetupFragment extends Fragment {
                     // This has to happen on the UI thread. Only this thread can change the recycler view.
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
+                            exitBiometricsPrompt();
                             Toast.makeText(getActivity(), errString, Toast.LENGTH_SHORT).show();
                         }
                     });

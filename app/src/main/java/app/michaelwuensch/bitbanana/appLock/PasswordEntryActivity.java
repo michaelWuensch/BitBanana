@@ -138,6 +138,7 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
                     // This has to happen on the UI thread. Only this thread can change the recycler view.
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            exitBiometricsPrompt();
                             Toast.makeText(PasswordEntryActivity.this, errString, Toast.LENGTH_SHORT).show();
                         }
                     });
