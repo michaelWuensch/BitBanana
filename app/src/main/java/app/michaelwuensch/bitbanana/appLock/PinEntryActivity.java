@@ -198,6 +198,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
                     // This has to happen on the UI thread. Only this thread can change the recycler view.
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            exitBiometricsPrompt();
                             Toast.makeText(PinEntryActivity.this, errString, Toast.LENGTH_SHORT).show();
                         }
                     });
