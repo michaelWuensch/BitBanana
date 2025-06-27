@@ -3,7 +3,9 @@ package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 
 
 public class LnInvoiceViewHolder extends TransactionViewHolder {
@@ -25,15 +27,20 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
         setTimeOfDay(lnInvoiceItem.mCreationDate);
 
         // Set description
-        if (invoice.hasMemo()) {
+        String label = null;
+        if (FeatureManager.isLabelsEnabled()) {
+            label = LabelsUtil.getLabel(invoice);
+        }
+        if (label != null) {
+            setSecondaryDescription(label, true);
+        } else if (invoice.hasMemo()) {
             setSecondaryDescription(invoice.getMemo(), true);
+        } else if (invoice.hasKeysendMessage()) {
+            setSecondaryDescription(invoice.getKeysendMessage(), true);
+        } else if (invoice.hasBolt12PayerNote()) {
+            setSecondaryDescription(invoice.getBolt12PayerNote(), true);
         } else {
-            if (invoice.hasKeysendMessage())
-                setSecondaryDescription(invoice.getKeysendMessage(), true);
-            else if (invoice.hasBolt12PayerNote())
-                setSecondaryDescription(invoice.getBolt12PayerNote(), true);
-            else
-                setSecondaryDescription("", false);
+            setSecondaryDescription("", false);
         }
 
         if (invoice.isPaid()) {
@@ -59,5 +66,9 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
     public void refreshViewHolder() {
         bindLnInvoiceItem(mLnInvoiceItem);
         super.refreshViewHolder();
+    }
+
+    public void rebind() {
+        bindLnInvoiceItem(mLnInvoiceItem);
     }
 }

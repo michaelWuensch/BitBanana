@@ -17,12 +17,16 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.labels.LabelActivity;
+import app.michaelwuensch.bitbanana.labels.Labels;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.listViews.paymentRoute.PaymentRouteActivity;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
-public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
+public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements LabelsUtil.LabelChangedListener {
 
     public static final String TAG = LnPaymentDetailBSDFragment.class.getSimpleName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
@@ -45,6 +49,11 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
     private TextView mPreimage;
     private ImageView mPreimageCopyIcon;
     private BBButton mShowPaymentRouteButton;
+    private TextView mLabelLabel;
+    private TextView mLabel;
+    private BBButton mLabelButton;
+    private String mLabelString;
+    private LnPayment mLnPayment;
 
     @Nullable
     @Override
@@ -69,6 +78,10 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mPreimage = view.findViewById(R.id.preimage);
         mPreimageCopyIcon = view.findViewById(R.id.preimageCopyIcon);
         mShowPaymentRouteButton = view.findViewById(R.id.showPaymentRouteButton);
+        mLabelLabel = view.findViewById(R.id.labelLabel);
+        mLabel = view.findViewById(R.id.label);
+        mLabelButton = view.findViewById(R.id.labelButton);
+
 
         mBSDScrollableMainView.setSeparatorVisibility(true);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
@@ -76,10 +89,24 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         if (getArguments() != null) {
             bindPayment((LnPayment) getArguments().getSerializable(ARGS_TRANSACTION));
         }
+
+        mLabelButton.setVisibility(FeatureManager.isLabelsEnabled() ? View.VISIBLE : View.GONE);
+        mLabelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent labelIntent = new Intent(getContext(), LabelActivity.class);
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_ID, mLnPayment.getPaymentHash());
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_TYPE, Labels.LabelType.LN_PAYMENT);
+                if (mLabelString != null)
+                    labelIntent.putExtra(LabelActivity.EXTRA_LABEL, mLabelString);
+                startActivity(labelIntent);
+            }
+        });
         return view;
     }
 
     private void bindPayment(LnPayment payment) {
+        mLnPayment = payment;
 
         String payeeLabel = getString(R.string.payee) + ":";
         mPayeeLabel.setText(payeeLabel);
@@ -95,6 +122,8 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
         mDateLabel.setText(dateLabel);
         String preimageLabel = getString(R.string.preimage) + ":";
         mPreimageLabel.setText(preimageLabel);
+        String labelLabel = getString(R.string.label) + ":";
+        mLabelLabel.setText(labelLabel);
 
         mBSDScrollableMainView.setTitle(R.string.transaction_detail);
 
@@ -145,5 +174,40 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment {
             mPayerNote.setVisibility(View.GONE);
             mPayerNoteLabel.setVisibility(View.GONE);
         }
+        if (FeatureManager.isLabelsEnabled()) {
+            String label = LabelsUtil.getLabel(payment);
+            if (label != null) {
+                mLabelLabel.setVisibility(View.VISIBLE);
+                mLabel.setVisibility(View.VISIBLE);
+                mLabel.setText(label);
+                mLabelString = label;
+                mLabelButton.setText(getString(R.string.label_edit));
+            } else {
+                mLabelLabel.setVisibility(View.GONE);
+                mLabel.setVisibility(View.GONE);
+                mLabelString = null;
+                mLabelButton.setText(getString(R.string.label_add));
+            }
+        } else {
+            mLabelLabel.setVisibility(View.GONE);
+            mLabel.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LabelsUtil.getInstance().registerLabelChangedListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLabelChanged() {
+        bindPayment(mLnPayment);
     }
 }

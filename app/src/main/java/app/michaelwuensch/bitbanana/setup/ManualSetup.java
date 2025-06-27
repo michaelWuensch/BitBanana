@@ -355,6 +355,8 @@ public class ManualSetup extends BaseAppCompatActivity {
             // If we are editing a NWC connection we always want to keep the quick receive settings. The place to edit these is in the receive dialog.
             if (mOriginalBackendConfig.hasQuickReceiveConfig())
                 backendConfig.setQuickReceiveConfig(mOriginalBackendConfig.getQuickReceiveConfig());
+            if (mOriginalBackendConfig.hasLabels())
+                backendConfig.setLabels(mOriginalBackendConfig.getLabels());
         }
         return backendConfig;
     }

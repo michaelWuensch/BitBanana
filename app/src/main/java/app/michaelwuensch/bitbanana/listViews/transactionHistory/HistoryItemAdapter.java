@@ -128,6 +128,21 @@ public class HistoryItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    public void rebindVisibleViewHolders(RecyclerView recyclerView) {
+        int childCount = recyclerView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = recyclerView.getChildAt(i);
+            RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(child);
+            if (holder instanceof LnPaymentViewHolder) {
+                ((LnPaymentViewHolder) holder).rebind();
+            } else if (holder instanceof LnInvoiceViewHolder) {
+                ((LnInvoiceViewHolder) holder).rebind();
+            } else if (holder instanceof OnChainTransactionViewHolder) {
+                ((OnChainTransactionViewHolder) holder).rebind();
+            }
+        }
+    }
+
     public void replaceAll(List<HistoryListItem> items) {
         mSortedList.replaceAll(items);
     }

@@ -4,7 +4,9 @@ import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.models.LnPayment;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 
 public class LnPaymentViewHolder extends TransactionViewHolder {
 
@@ -38,15 +40,21 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         setAmount(payment.getAmountPaid() * -1, true);
         setFee(payment.getFee(), true);
 
-        if (payment.hasDescription()) {
+        // Set description
+        String label = null;
+        if (FeatureManager.isLabelsEnabled()) {
+            label = LabelsUtil.getLabel(payment);
+        }
+        if (label != null) {
+            setSecondaryDescription(label, true);
+        } else if (payment.hasDescription()) {
             setSecondaryDescription(payment.getDescription(), true);
-        } else {
-            if (payment.hasKeysendMessage())
-                setSecondaryDescription(payment.getKeysendMessage(), true);
-            else if (payment.hasBolt12PayerNote())
-                setSecondaryDescription(payment.getBolt12PayerNote(), true);
-            else
-                setSecondaryDescription("", false);
+        } else if (payment.hasKeysendMessage()) {
+            setSecondaryDescription(payment.getKeysendMessage(), true);
+        } else if (payment.hasBolt12PayerNote())
+            setSecondaryDescription(payment.getBolt12PayerNote(), true);
+        else {
+            setSecondaryDescription("", false);
         }
 
         // Set on click listener
@@ -57,5 +65,9 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
     public void refreshViewHolder() {
         bindLnPaymentItem(mLnPaymentItem);
         super.refreshViewHolder();
+    }
+
+    public void rebind() {
+        bindLnPaymentItem(mLnPaymentItem);
     }
 }

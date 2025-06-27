@@ -132,6 +132,14 @@ public class BBTextInputBox extends LinearLayout {
         return mEtComment.getText().toString();
     }
 
+    public EditText getEditText() {
+        return mEtComment;
+    }
+
+    public void setValue(String text) {
+        mEtComment.setText(text);
+    }
+
     public void setOnFocusChangedListener(onCommentFocusChangedListener listener) {
         mOnFocusChangedListener = listener;
     }

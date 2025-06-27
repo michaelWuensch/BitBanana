@@ -379,6 +379,8 @@
     <string name="settings_featureWatchtowers_summary">If your node remains offline for a longer duration, watchtowers will protect your funds from any fraudulent activity.</string>
     <string name="settings_featureSignVerify_summary">Allows to sign and verify messages with your node.</string>
     <string name="settings_featureLogs_summary">If enabled, BitBanana will record logs that can be viewed in the Log section in the main menu. Enable it only if you\'re troubleshooting an issue and need to inspect the logs.</string>
+    <string name="settings_featureLabels">Labels</string>
+    <string name="settings_featureLabels_summary">Stay organized by adding your own notes to transactions and other items, making them easier to track and understand.</string>
 
     <string name="settings_exchangeRateProvider">Exchange Rate Provider</string>
     <string name="settings_custom_exchange_rate_provider">Custom Exchange Rate Provider</string>
@@ -644,6 +646,7 @@
     <string name="help_dialog_rebalancing">Channel rebalancing keeps your payment channels ready for action! If one side runs low, your channel will only work in one direction, and payments may start to fail. Sending a lightning payment in a circular route to yourself redistributes balances between your channels without the need for on-chain transactions. This view lets you perform such a circular payment. For the best results, pick a channel with high sending capacity and pair it with another that has excess receiving capacity.</string>
     <string name="help_dialog_utxos_consolidate">When you consolidate UTXOs, you\'re combining several unspent outputs into one bigger one. This makes future transactions cheaper since on-chain transaction fees are determined by size in bytes and not by the value. Consolidating during low-fee periods allows users to pay for the blockchain space they need while it\'s cheap, helping to minimize future fees during high-fee periods. Keep in mind, however, that consolidation costs a fee and can weaken your privacy by linking addresses.</string>
     <string name="help_dialog_quick_receive_setup">Receiving Bitcoin comes with choices: On-chain, Lightning, BOLT12, and more.\nThat\’s great, but it can take a few extra taps just to view your receive QR code. BitBanana speeds it up. Pick a default receive method here, and you\’re ready with one tap while still having the option to customize everything.\n\nNot sure how to set it up? The documentation below can guide you.</string>
+    <string name="help_dialog_label">Labels let you add personal notes for easier tracking and context. They\'re saved locally in BitBanana, so they\’re only visible here and won\’t appear in other apps you use to access your node or wallet.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>
@@ -773,11 +776,11 @@
     <string name="advanced_channel_details_explanation_remote_minHTLC">The smallest value your peer is willing to forward on this channel in a single transaction.</string>
     <string name="advanced_channel_details_explanation_remote_maxHTLC">The maximum value your peer is willing to forward on this channel in a single transaction.</string>
 
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Node configs\n- Contacts\n- App Settings</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Node configs\n-Labels \n- Contacts\n- App Settings</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_confirm_headline">Please Confirm</string>
     <string name="backup_data_confirm">I confirm</string>
-    <string name="backup_data_restore_description">Restore your connected nodes, contacts and app settings.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
+    <string name="backup_data_restore_description">Restore your connected nodes, labels, contacts and app settings.\nIf your nodes are no longer online, this restore process will not help you regaining access to your funds.</string>
     <string name="backup_data_create_headline">Backup</string>
     <string name="backup_data_restore_headline">Restore</string>
     <string name="backup_data_password_enter">Enter your password</string>
@@ -1007,4 +1010,7 @@
 
     <string name="use_biometrics">Use biometrics</string>
     <string name="unlock_app">Unlock</string>
+
+    <string name="label_add">Add a label</string>
+    <string name="label_edit">Edit label</string>
 </resources>

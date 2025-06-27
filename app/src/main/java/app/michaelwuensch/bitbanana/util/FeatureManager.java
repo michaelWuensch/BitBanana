@@ -58,6 +58,11 @@ public class FeatureManager {
         return settingEnabled;
     }
 
+    public static boolean isLabelsEnabled() {
+        boolean settingEnabled = PrefsUtil.getPrefs().getBoolean("featureLabels", true);
+        return settingEnabled;
+    }
+
     public static boolean isChannelManagementEnabled() {
         return getBackend().supportsChannelManagement();
     }

@@ -59,6 +59,7 @@ For setup instructions and to get everything up and running, check out our [docu
 - [x] Bolt 12 support (Core Lightning only)
 - [x] NFC support
 - [x] Transaction filters
+- [x] Label transactions & UTXOs
 - [x] BTC, mBTC, bit & Satoshi units
 - [x] Display payment paths
 - [x] Fiat currency prices

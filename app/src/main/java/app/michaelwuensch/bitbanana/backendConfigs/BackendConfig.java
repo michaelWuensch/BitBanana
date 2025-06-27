@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
+import app.michaelwuensch.bitbanana.labels.Labels;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
@@ -143,6 +144,11 @@ public class BackendConfig implements Comparable<BackendConfig> {
      * The quickReceiveConfig is used by BitBanana to show a default receive QR Code instead of going through lots of options first..
      */
     private QuickReceiveConfig quickReceiveConfig;
+
+    /**
+     * The labels the user gave to transactions and UTXOs, etc.
+     */
+    private Labels labels;
 
 
     public BackendConfig() {
@@ -360,6 +366,20 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.quickReceiveConfig = quickReceiveConfig;
     }
 
+    public Labels getLabels() {
+        if (this.labels == null)
+            return new Labels();
+        return labels;
+    }
+
+    public boolean hasLabels() {
+        return this.labels != null;
+    }
+
+    public void setLabels(Labels labels) {
+        this.labels = labels;
+    }
+
     public boolean isLocal() {
         if (this.location != null)
             return this.location == Location.LOCAL;
@@ -399,6 +419,7 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setTempRefreshToken(getTempRefreshToken());
         copy.setAvatarMaterial(getAvatarMaterial());
         copy.setQuickReceiveConfig(getQuickReceiveConfig());
+        copy.setLabels(getLabels());
         return copy;
     }
 
