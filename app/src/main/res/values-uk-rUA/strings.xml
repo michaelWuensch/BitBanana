@@ -131,7 +131,7 @@
     <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Ви запитували суму як фіатну вартість, але ваші дані обмінного курсу старі (отримані %1$s годин тому).\nПереконайтесь, що у вас є підключення до Інтернету, або розглядайте запит безпосередньо в Bitcoin.\n\nВи все-таки хочете продовжувати?</string>
     <string name="guardian_remoteConnect">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nБудь ласка, уважно перевірте ім\'я хоста.</string>
     <string name="settings_category_general">Загальне</string>
-    <string name="settings_category_security">Безпека</string>
+    <string name="settings_category_security">Безпека та конфіденційність</string>
     <string name="settings_category_help">Допомога</string>
     <string name="settings_category_advanced">Розширене</string>
     <string name="settings_btcUnit">Біткоїнова одиниця</string>
@@ -195,7 +195,7 @@
     <string name="error_channel_close_offline">Вузол-кешування неактивний. Дозволено лише примусове закриття.</string>
     <string name="error_channel_close_timeout">Не вдалося закрити канал вчасно.</string>
     <string name="error_channel_close">Не вдалося закрити канал: %s</string>
-    <string name="error_pin_deactivation_attempt">Схоже, хтось намагався деактивувати ваш PIN-код. Зараз додаток закриється.\nВи можете перевстановити додаток і скористатися процедурою відновлення, щоб відновити доступ до своїх коштів.</string>
+    <string name="error_pin_deactivation_attempt">Схоже, хтось намагався деактивувати екран блокування вашого додатка. Додаток зараз закриється.\nВи можете перевстановити додаток і скористатися процесом відновлення, щоб відновити доступ до своїх коштів.</string>
     <string name="error_empty_node_name">Порожнє ім’я заборонено.</string>
     <plurals name="duration_minute">
         <item quantity="one">%d хвилина</item>
@@ -881,4 +881,19 @@
     <string name="quick_receive_info_on_chain_address">Це використовуватиме наступну невикористану адресу в мережі.</string>
     <string name="quick_receive_info_on_chain_and_bolt12">Цей метод використовує наступну невикористану адресу в мережі як резервний варіант, коли відправник не підтримує платіжні коди.</string>
     <string name="refer_to_docs_ln_address">Будь ласка, зверніться до документації, щоб отримати інструкції щодо отримання адреси Lightning.</string>
+    <string name="unlock_app">Розблокувати</string>
+    <string name="settings_lockScreenTimeout_description">Затримка перед блокуванням BitBanana після мінімізації програми.</string>
+    <string name="password_confirm_new">Підтвердьте новий пароль</string>"
+    <string name="use_biometrics">Використовуйте біометрію</string>
+    <string name="settings_add_password">Захист паролем</string>
+    <string name="settings_remove_password">Вилучити пароль</string>
+    <string name="settings_app_lock_summary_pin_protected">Захищено PIN-кодом</string>
+    <string name="password_enter_new">Введіть новий пароль</string>
+    <string name="settings_app_lock">Блокування програми</string>
+    <string name="password_changed">Пароль змінено!</string>
+    <string name="settings_app_lock_summary_password_protected">Захищено паролем</string>
+    <string name="settings_category_pin_options">Параметри PIN-коду</string>
+    <string name="password_enter_old">Введіть старий пароль</string>
+    <string name="settings_change_password">Зміна/Вилучити пароля</string>
+    <string name="settings_app_lock_summary_unprotected">Незахищений</string>
 </resources>
