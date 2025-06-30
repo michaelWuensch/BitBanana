@@ -230,12 +230,7 @@
     <string name="contact_name">Nome do Contato</string>
     <string name="advanced_channel_details_explanation_activity">A porcentagem total de fundos enviados e recebidos dividida pela capacidade total do canal. Um canal com atividade acima de 100 significa que mais fundos viajaram pelo canal do que ele pode manter. Esta métrica é projetada para mostrar quão efetivo um determinado canal é.</string>
     <string name="advanced_channel_details_explanation_lifetime">Isto mostra há quanto tempo este canal já existe.</string>
-    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar seus fundos, nem o backup do canal para reaver seus fundos Lightning. Os backups para reaver seus fundos têm de ser feitos fora do BitBanana.
-\n
-\nEste backup contém apenas os seguintes dados:
-\n
-\n- Dados para conectar o BitBanana a seus nós funcionais
-\n- Contatos</string>
+    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar seus fundos, nem o backup do canal para reaver seus fundos Lightning. Os backups para reaver seus fundos têm de ser feitos fora do BitBanana. \n \nEste backup contém apenas os seguintes dados: \n \n- Dados para conectar o BitBanana a seus nós funcionais \n- Contatos</string>
     <string name="backup_data_confirm_description">Eu já fiz backup da minha seed e meus canais e entendo que este backup NÃO ajuda a recuperar meus fundos.
 \n
 \nEu entendo que este backup ainda contém todas as informações necessárias para acessar meus fundos se o nó estiver atualmente online. Eu, portanto, usarei uma senha segura no próximo passo.</string>
@@ -466,8 +461,7 @@
     <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como a commit fee ou reserva local do canal) nem todos os fundos são gastáveis.</string>
     <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Reserva do Canal Remoto</string>
-    <string name="backup_data_restore_description">Restaure seus nós conectados e contatos.
-\nSe seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a reaver acesso a seus fundos.</string>
+    <string name="backup_data_restore_description">Restaure seus nós conectados e contatos. \nSe seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a reaver acesso a seus fundos.</string>
     <string name="backup_data_restore_headline">Restaurar</string>
     <string name="backup_data_password_mismatch">As senhas não correspondem.</string>
     <string name="backup_data_create_success">Backup criado</string>
