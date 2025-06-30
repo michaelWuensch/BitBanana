@@ -776,7 +776,7 @@
     <string name="advanced_channel_details_explanation_remote_minHTLC">The smallest value your peer is willing to forward on this channel in a single transaction.</string>
     <string name="advanced_channel_details_explanation_remote_maxHTLC">The maximum value your peer is willing to forward on this channel in a single transaction.</string>
 
-    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Node configs\n-Labels \n- Contacts\n- App Settings</string>
+    <string name="backup_data_create_description">The main purpose of this backup is phone migration. It does neither contain the seed to recover your on-chain funds, nor the channel backup to recover your lightning funds. The backups to recover your funds have to be made outside of BitBanana.\n\nThis backup only contains the following data:\n\n- Node configs\n- Labels \n- Contacts\n- App Settings</string>
     <string name="backup_data_confirm_description">I have already backed up my seed and my channels and understand, that this backup does NOT help to recover my funds.\n\nI understand that this backup still contains all necessary information to access my funds if the node is currently online. I therefore will use a secure password in the next step.</string>
     <string name="backup_data_confirm_headline">Please Confirm</string>
     <string name="backup_data_confirm">I confirm</string>
