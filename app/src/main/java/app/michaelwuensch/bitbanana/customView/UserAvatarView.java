@@ -182,11 +182,13 @@ public class UserAvatarView extends ConstraintLayout implements SharedPreference
     private void showQRCode() {
         mIvQRCode.setElevation(2);
         mIvUserAvatar.setElevation(1);
+        mIvQRCode.setKeepScreenOn(true);
     }
 
     private void showAvatar() {
         mIvQRCode.setElevation(1);
         mIvUserAvatar.setElevation(2);
+        mIvQRCode.setKeepScreenOn(false);
     }
 
     public void setOnStateChangedListener(OnStateChangedListener listener) {
