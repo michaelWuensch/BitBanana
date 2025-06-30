@@ -171,7 +171,7 @@
     <string name="guardian_remoteConnect">Willst du eine Verbindung mit \n\n%1$s\n\naufbauen? Bitte überprüfe den Host-Namen genau.</string>
     <string name="guardian_externalLink">Du bist dabei, einen Link mit sensiblen Informationen in deinem Browser zu öffnen. Während BitBanana den kompletten Netzwerkverkehr mit Hilfe des Tor Netzwerks anonymisiert, tut das dein Browser nicht. Wenn du diese Daten privat halten möchtest, benutze einen Tor Browser um den Link zu öffnen.</string>
     <string name="settings_category_general">Allgemein</string>
-    <string name="settings_category_security">Sicherheit</string>
+    <string name="settings_category_security">Sicherheit &amp; Privatsphäre</string>
     <string name="settings_category_help">Hilfe</string>
     <string name="settings_category_advanced">Fortgeschritten</string>
     <string name="settings_btcUnit">Bitcoin Einheit</string>
@@ -267,7 +267,7 @@
     <string name="error_channel_close_offline">Peer ist offline. Die Kanalschließung muss erzwungen werden.</string>
     <string name="error_channel_close_timeout">Zeitüberschreitung. Der Kanal konnte nicht geschlossen werden.</string>
     <string name="error_channel_close">Der Kanal konnte nicht geschlossen werden: %s</string>
-    <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine PIN zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
+    <string name="error_pin_deactivation_attempt">Es sieht so aus, als ob jemand versucht hat, deine App-Sperre zu deaktivieren. Die App wird nun beendet.\nDu kannst die App neu installieren und den Wiederherstellungsprozess nutzen, um wieder Zugriff auf dein Guthaben zu erhalten.</string>
     <string name="error_empty_node_name">Ein leerer Name ist nicht erlaubt.</string>
     <string name="error_invalid_bitcoin_request">Ungültige Bitcoinanfrage.</string>
     <string name="error_payment_invalid_details">Die Zahlungsdetails stimmen nicht mit den in der Zahlungsanfrage gefordert Details überein.</string>
@@ -432,7 +432,7 @@
     <string name="backup_data_confirm_description">Ich habe meine Seed und meine Kanäle bereits gesichert und verstehe, dass dieses Backup NICHT dabei hilft Guthaben wiederherzustellen.\n\nIch verstehe, dass dieses Backup trotzdem alle nötige Information enthält, um auf mein Guthaben zuzugreifen wenn der Knoten online ist. Ich verwende deshalb im nächsten Schritt ein sicheres Passwort.</string>
     <string name="backup_data_confirm_headline">Bitte bestätige</string>
     <string name="backup_data_confirm">Ich bestätige</string>
-    <string name="backup_data_restore_description">Stelle deine Nodes, Kontakte und App Einstellungen wieder her.\nWenn deine Nodes nicht länger online sind, wird dieser Wiederherstellungsprozess nicht dabei helfen, wieder Zugriff auf dein Guthaben zu bekommen.</string>
+    <string name="backup_data_restore_description">Stelle deine Nodes, Labels, Kontakte und App Einstellungen wieder her.\nWenn deine Nodes nicht länger online sind, wird dieser Wiederherstellungsprozess nicht dabei helfen, wieder Zugriff auf dein Guthaben zu bekommen.</string>
     <string name="backup_data_create_headline">Backup</string>
     <string name="backup_data_restore_headline">Wiederherstellen</string>
     <string name="backup_data_password_enter">Passwort eingeben</string>
@@ -1001,4 +1001,24 @@
     <string name="quick_receive_info_on_chain_and_ln_address">Diese Methode verwendet die nächste ungenutzte On-Chain-Adresse als Fallback, wenn der Absender keine Lightning-Zahlungen unterstützt.</string>
     <string name="quick_receive_info_on_chain_address_part2">Diese Methode wird jedoch nicht empfohlen, da sie keine Lightning-Zahlungen unterstützt.</string>
     <string name="refer_to_docs_ln_address">Bitte schau in die Dokumentation, um zu erfahren, wie man eine Lightning-Adresse erhält.</string>
+    <string name="password_enter_old">Altes Passwort eingeben</string>
+    <string name="password_enter_new">Neues Passwort eingeben</string>
+    <string name="password_confirm_new">Neues Passwort bestätigen</string>"
+    <string name="password_changed">Passwort geändert!</string>
+    <string name="settings_category_pin_options">PIN-Optionen</string>
+    <string name="settings_app_lock">App-Sperre</string>
+    <string name="settings_lockScreenTimeout_description">Zeit bis zur Sperrung von BitBanana, nachdem die Anwendung minimiert wurde.</string>
+    <string name="settings_add_password">Mit Passwort schützen</string>
+    <string name="settings_remove_password">Passwort entfernen</string>
+    <string name="settings_change_password">Passwort ändern/entfernen</string>
+    <string name="settings_app_lock_summary_unprotected">Ungeschützt</string>
+    <string name="settings_app_lock_summary_pin_protected">Mit PIN geschützt</string>
+    <string name="settings_app_lock_summary_password_protected">Mit Passwort geschützt</string>
+    <string name="settings_featureLabels">Labels</string>
+    <string name="settings_featureLabels_summary">Behalte die Übersicht, indem du deine eigenen Notizen zu Transaktionen und anderen Dingen hinzufügst, so dass sie leichter zu verfolgen und zu verstehen sind.</string>
+    <string name="help_dialog_label">Labels ermöglichen es dir, persönliche Notizen hinzuzufügen, um die Übersicht und den Kontext zu erleichtern. Sie werden lokal in BitBanana gespeichert, sind also nur hier sichtbar und erscheinen nicht in anderen Apps, mit denen du auf deinen Node oder deine Wallet zugreifst.</string>
+    <string name="use_biometrics">Biometrie verwenden</string>
+    <string name="unlock_app">Entsperren</string>
+    <string name="label_add">Label hinzufügen</string>
+    <string name="label_edit">Label bearbeiten</string>
 </resources>
