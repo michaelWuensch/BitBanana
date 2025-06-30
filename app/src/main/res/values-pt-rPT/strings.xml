@@ -618,8 +618,7 @@
     <string name="advanced_channel_details_initiator_peer">Par</string>
     <string name="advanced_channel_details_explanation_close_type">Canais podem ser fechados em diferentes formas. A forma ideal é um fechamento cooperativo. Se um lado decidir fechar um canal sem a cooperação do outro, um chamado \"fechamento forçado\" ocorre. Um fechamento forçado normalmente resulta em maiores taxas e o iniciador do fechamento terá de esperar um tempo até poder aceder os seus fundos. Se um lado tentar trapacear e for pego, temos um fechamento vazado.</string>
     <string name="backup_data_create_description">O principal objetivo deste backup é a migração do telefone. Ele não contém a semente para recuperar os seus fundos na cadeia, nem o backup do canal para recuperar os seus fundos Lightning. Os backups para recuperar os seus fundos devem ser feitos fora do BitBanana.\n\nEste backup contém apenas os seguintes dados:\n\n- Configurações do nó\n- Contactos\n- Configurações da aplicação</string>
-    <string name="backup_data_restore_description">Restaure os seus nós conectados e contatos.
-\nSe os seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a poder reaceder os seus fundos.</string>
+    <string name="backup_data_restore_description">Restaure os seus nós conectados e contatos. \nSe os seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a poder reaceder os seus fundos.</string>
     <string name="backup_data_password_enter">Insira a sua palavra-passe</string>
     <string name="backup_data_password_confirm">Confirme a sua palavra-passe</string>
     <string name="backup_data_restore_process">A restaurar backup</string>
