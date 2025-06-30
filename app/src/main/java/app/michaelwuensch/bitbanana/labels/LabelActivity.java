@@ -201,7 +201,7 @@ public class LabelActivity extends BaseAppCompatActivity {
                 LabelActivity.super.onBackPressed();
         } else {
             // we are in add label mode
-            if (getLabel() != null) {
+            if (getLabel() != null && !getLabel().isEmpty()) {
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.unsaved_changes)
                         .setCancelable(true)
