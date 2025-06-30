@@ -13,9 +13,9 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="featureRoutingSummary"
-        android:summary="@string/settings_featureRoutingSummary_summary"
-        android:title="@string/settings_featureRoutingSummary"
+        android:key="featureLabels"
+        android:summary="@string/settings_featureLabels_summary"
+        android:title="@string/settings_featureLabels"
         app:iconSpaceReserved="false" />
 
     <SwitchPreference
@@ -23,6 +23,13 @@
         android:key="featureContacts"
         android:summary="@string/settings_featureContacts_summary"
         android:title="@string/drawer_menu_contacts"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="featureRoutingSummary"
+        android:summary="@string/settings_featureRoutingSummary_summary"
+        android:title="@string/settings_featureRoutingSummary"
         app:iconSpaceReserved="false" />
 
     <SwitchPreference

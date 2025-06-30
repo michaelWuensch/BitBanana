@@ -401,6 +401,12 @@
             android:name=".decoyApps.CalcActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="app.michaelwuensch.bitbanana.labels.LabelActivity"
+            android:label="@string/label_add"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="android.nfc.disable_beam_default"

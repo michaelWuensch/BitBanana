@@ -14,13 +14,36 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/nodeLabel"
+            android:id="@+id/labelLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="Label:" />
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/amountLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User label" />
+
+        <TextView
+            android:id="@+id/nodeLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label"
             tools:text="Node:" />
 
         <TextView
@@ -33,7 +56,7 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/amountLabel"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label"
             tools:text="Node Name" />
 
         <TextView
@@ -234,6 +257,17 @@
             app:layout_constraintTop_toBottomOf="@id/address">
 
         </View>
+
+        <app.michaelwuensch.bitbanana.customView.BBButton
+            android:id="@+id/labelButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transactionIDLabel"
+            tools:bbbutton_text="Add a label" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_50"

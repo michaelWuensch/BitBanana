@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.utxos.itemDetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,9 @@ import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.labels.LabelActivity;
+import app.michaelwuensch.bitbanana.labels.Labels;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.models.LeaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.ReleaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.Utxo;
@@ -26,13 +30,14 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
-public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_TransactionHistory.UtxoSubscriptionListener {
+public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_TransactionHistory.UtxoSubscriptionListener, LabelsUtil.LabelChangedListener {
 
     public static final String LOG_TAG = UTXODetailBSDFragment.class.getSimpleName();
     public static final String ARGS_UTXO = "UTXO";
@@ -50,8 +55,12 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
     private TextView mConfirmations;
     private TextView mLeasedTimeoutLabel;
     private TextView mLeasedTimeout;
+    private TextView mLabelLabel;
+    private TextView mLabel;
     private ImageView mAddressCopyButton;
     private BBButton mLockUnlockButton;
+    private BBButton mLabelButton;
+    private String mLabelString;
 
     @Nullable
     @Override
@@ -72,14 +81,15 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
         mLeasedTimeoutLabel = view.findViewById(R.id.leasedTimeoutLabel);
         mLeasedTimeout = view.findViewById(R.id.leasedTimeout);
         mLockUnlockButton = view.findViewById(R.id.lockUnlockButton);
-
+        mLabelButton = view.findViewById(R.id.labelButton);
+        mLabelLabel = view.findViewById(R.id.labelLabel);
+        mLabel = view.findViewById(R.id.label);
 
         mBSDScrollableMainView.setSeparatorVisibility(true);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
 
         if (getArguments() != null) {
             mUTXO = (Utxo) getArguments().getSerializable(ARGS_UTXO);
-
             bindUTXO();
         }
 
@@ -109,6 +119,19 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
             }
         });
 
+        mLabelButton.setVisibility(FeatureManager.isLabelsEnabled() ? View.VISIBLE : View.GONE);
+        mLabelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent labelIntent = new Intent(getContext(), LabelActivity.class);
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_ID, mUTXO.getOutpoint().toString());
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_TYPE, Labels.LabelType.UTXO);
+                if (mLabelString != null)
+                    labelIntent.putExtra(LabelActivity.EXTRA_LABEL, mLabelString);
+                startActivity(labelIntent);
+            }
+        });
+
         return view;
     }
 
@@ -127,6 +150,8 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
         mConfirmationsLabel.setText(confirmationsLabel);
         String leaseTimeoutLabel = getString(R.string.locked_until) + ":";
         mLeasedTimeoutLabel.setText(leaseTimeoutLabel);
+        String labelLabel = getString(R.string.label) + ":";
+        mLabelLabel.setText(labelLabel);
 
         mAmount.setAmountMsat(mUTXO.getAmount());
 
@@ -168,6 +193,25 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
             mConfirmations.setVisibility(View.VISIBLE);
             mLeasedTimeoutLabel.setVisibility(View.GONE);
             mLeasedTimeout.setVisibility(View.GONE);
+        }
+
+        if (FeatureManager.isLabelsEnabled()) {
+            String label = LabelsUtil.getLabel(mUTXO);
+            if (label != null) {
+                mLabelLabel.setVisibility(View.VISIBLE);
+                mLabel.setVisibility(View.VISIBLE);
+                mLabel.setText(label);
+                mLabelString = label;
+                mLabelButton.setText(getString(R.string.label_edit));
+            } else {
+                mLabelLabel.setVisibility(View.GONE);
+                mLabel.setVisibility(View.GONE);
+                mLabelString = null;
+                mLabelButton.setText(getString(R.string.label_add));
+            }
+        } else {
+            mLabelLabel.setVisibility(View.GONE);
+            mLabel.setVisibility(View.GONE);
         }
     }
 
@@ -217,14 +261,21 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onStart() {
+        super.onStart();
         Wallet_TransactionHistory.getInstance().registerUtxoSubscriptionListener(this);
+        LabelsUtil.getInstance().registerLabelChangedListener(this);
     }
 
     @Override
     public void onDestroy() {
         Wallet_TransactionHistory.getInstance().unregisterUtxoSubscriptionListener(this);
+        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onLabelChanged() {
+        bindUTXO();
     }
 }

@@ -5,8 +5,10 @@ import android.view.View;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 
 
@@ -35,11 +37,17 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
 
         setTimeOfDay(onChainTransactionItem.mCreationDate);
 
+        String label = null;
+        if (FeatureManager.isLabelsEnabled()) {
+            label = LabelsUtil.getLabel(transaction);
+        }
+
         // is internal?
         if (WalletUtil.isChannelTransaction(transaction)) {
 
             setIcon(TransactionIcon.INTERNAL);
             setFee(fee, false);
+
 
             // Internal transactions are a mess in LND. Some transaction values are not populated, sometimes value and fee is switched.
             // There are transactions for force closes that never get confirmations and get deleted on restarting LND ...
@@ -51,7 +59,10 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setPrimaryDescription(mContext.getString(R.string.force_closed_channel));
                     String pubkeyForceClose = WalletUtil.getNodePubKeyFromChannelTransaction(transaction);
                     String aliasForceClose = AliasManager.getInstance().getAlias(pubkeyForceClose);
-                    setSecondaryDescription(aliasForceClose, true);
+                    if (label != null)
+                        setSecondaryDescription(label, true);
+                    else
+                        setSecondaryDescription(aliasForceClose, true);
                     break;
                 case 1:
                     // amount > 0 (Channel closed)
@@ -59,7 +70,10 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                     setPrimaryDescription(mContext.getString(R.string.closed_channel));
                     String pubkeyClosed = WalletUtil.getNodePubKeyFromChannelTransaction(transaction);
                     String aliasClosed = AliasManager.getInstance().getAlias(pubkeyClosed);
-                    setSecondaryDescription(aliasClosed, true);
+                    if (label != null)
+                        setSecondaryDescription(label, true);
+                    else
+                        setSecondaryDescription(aliasClosed, true);
                     break;
                 case -1:
                     if (transaction.hasLabel() && transaction.getLabel().toLowerCase().contains("sweep")) {
@@ -67,7 +81,10 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                         setAmount(amount, true);
                         setPrimaryDescription(mContext.getString(R.string.closed_channel));
                         String aliasClose = AliasManager.getInstance().getAlias(WalletUtil.getNodePubKeyFromChannelTransaction(transaction));
-                        setSecondaryDescription(aliasClose, true);
+                        if (label != null)
+                            setSecondaryDescription(label, true);
+                        else
+                            setSecondaryDescription(aliasClose, true);
                     } else {
                         // amount < 0 (Channel opened)
                         // Here we use the fee for the amount, as this is what we actually have to pay.
@@ -75,14 +92,23 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
                         setAmount(fee * -1, true);
                         setPrimaryDescription(mContext.getString(R.string.opened_channel));
                         String aliasOpened = AliasManager.getInstance().getAlias(WalletUtil.getNodePubKeyFromChannelTransaction(transaction));
-                        setSecondaryDescription(aliasOpened, true);
+                        if (label != null)
+                            setSecondaryDescription(label, true);
+                        else
+                            setSecondaryDescription(aliasOpened, true);
                     }
                     break;
             }
         } else {
             // It is a normal transaction
             setIcon(TransactionIcon.ONCHAIN);
-            setSecondaryDescription("", false);
+
+            // Set description
+            if (label != null) {
+                setSecondaryDescription(label, true);
+            } else {
+                setSecondaryDescription("", false);
+            }
 
             switch (amount.compareTo(0L)) {
                 case 0:
@@ -116,5 +142,9 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
     public void refreshViewHolder() {
         bindOnChainTransactionItem(mOnChainTransactionItem);
         super.refreshViewHolder();
+    }
+
+    public void rebind() {
+        bindOnChainTransactionItem(mOnChainTransactionItem);
     }
 }

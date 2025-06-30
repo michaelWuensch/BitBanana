@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +16,20 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseBSDFragment;
 import app.michaelwuensch.bitbanana.customView.AmountView;
+import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
+import app.michaelwuensch.bitbanana.labels.LabelActivity;
+import app.michaelwuensch.bitbanana.labels.Labels;
+import app.michaelwuensch.bitbanana.labels.LabelsUtil;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
+import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 
-public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
+public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment implements LabelsUtil.LabelChangedListener {
 
     public static final String TAG = OnChainTransactionDetailBSDFragment.class.getSimpleName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
@@ -48,6 +54,10 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
     private TextView mConfrimationsLabel;
     private TextView mConfirmations;
     private ImageView mAddressCopyButton;
+    private TextView mLabelLabel;
+    private TextView mLabel;
+    private BBButton mLabelButton;
+    private String mLabelString;
 
     @Nullable
     @Override
@@ -73,6 +83,9 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mAddressCopyButton = view.findViewById(R.id.addressCopyIcon);
         mConfrimationsLabel = view.findViewById(R.id.confirmationsLabel);
         mConfirmations = view.findViewById(R.id.confirmations);
+        mLabelLabel = view.findViewById(R.id.labelLabel);
+        mLabel = view.findViewById(R.id.label);
+        mLabelButton = view.findViewById(R.id.labelButton);
 
         mBSDScrollableMainView.setSeparatorVisibility(true);
         mBSDScrollableMainView.setOnCloseListener(this::dismiss);
@@ -80,6 +93,19 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         if (getArguments() != null) {
             bindOnChainTransaction((OnChainTransaction) getArguments().getSerializable(ARGS_TRANSACTION));
         }
+
+        mLabelButton.setVisibility(FeatureManager.isLabelsEnabled() ? View.VISIBLE : View.GONE);
+        mLabelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent labelIntent = new Intent(getContext(), LabelActivity.class);
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_ID, mTransaction.getTransactionId());
+                labelIntent.putExtra(LabelActivity.EXTRA_LABEL_TYPE, Labels.LabelType.ON_CHAIN_TRANSACTION);
+                if (mLabelString != null)
+                    labelIntent.putExtra(LabelActivity.EXTRA_LABEL, mLabelString);
+                startActivity(labelIntent);
+            }
+        });
 
         return view;
     }
@@ -104,6 +130,8 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
         mAddressLabel.setText(addressLabel);
         String confirmationsLabel = getString(R.string.confirmations) + ":";
         mConfrimationsLabel.setText(confirmationsLabel);
+        String labelLabel = getString(R.string.label) + ":";
+        mLabelLabel.setText(labelLabel);
 
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(mTransaction.getTimeStamp(), getActivity()));
 
@@ -126,6 +154,25 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
             bindInternal();
         } else {
             bindNormalTransaction();
+        }
+
+        if (FeatureManager.isLabelsEnabled()) {
+            String label = LabelsUtil.getLabel(mTransaction);
+            if (label != null) {
+                mLabelLabel.setVisibility(View.VISIBLE);
+                mLabel.setVisibility(View.VISIBLE);
+                mLabel.setText(label);
+                mLabelString = label;
+                mLabelButton.setText(getString(R.string.label_edit));
+            } else {
+                mLabelLabel.setVisibility(View.GONE);
+                mLabel.setVisibility(View.GONE);
+                mLabelString = null;
+                mLabelButton.setText(getString(R.string.label_add));
+            }
+        } else {
+            mLabelLabel.setVisibility(View.GONE);
+            mLabel.setVisibility(View.GONE);
         }
     }
 
@@ -200,5 +247,22 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment {
                 mFee.setAmountMsat(mTransaction.getFee());
                 break;
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LabelsUtil.getInstance().registerLabelChangedListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLabelChanged() {
+        bindOnChainTransaction(mTransaction);
     }
 }
