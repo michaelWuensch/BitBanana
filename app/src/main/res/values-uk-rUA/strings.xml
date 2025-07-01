@@ -382,7 +382,7 @@
     <string name="advanced_channel_details_explanation_time_lock">У разі закриття цього каналу без співпраці (примусового закриття) час блокування — це кількість блоків, яку вам доведеться почекати, перш ніж ви знову зможете отримати доступ до своїх коштів.</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">Мінімальна сума, яку цей вузол повинен зарезервувати на балансі цього каналу. Ви не зможете витратити цю суму. Це гарантує, що вам завжди буде що втратити, якщо ви спробуєте обдурити свого партнера.</string>
     <string name="backup_data_confirm_headline">Будь ласка, підтвердьте</string>
-    <string name="backup_data_restore_description">Відновіть підключені вузли, контакти та налаштування програми.\nЯкщо ваші вузли більше не онлайн, цей процес відновлення не допоможе вам відновити доступ до ваших коштів.</string>
+    <string name="backup_data_restore_description">Відновіть підключені вузли, мітки, контакти та налаштування додатків.\nЯкщо ваші вузли вже не в Інтернеті, цей процес відновлення не допоможе вам відновити доступ до своїх коштів.</string>
     <string name="backup_data_restore_headline">Відновити</string>
     <string name="backup_data_restore_process">Відновлення резервної копії</string>
     <string name="backup_data_creation_process">Створення резервної копії</string>
@@ -695,7 +695,7 @@
     <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Не вдалося прочитати відповідь від %1$s.</string>
     <string name="error_insufficient_on_chain_funds">Недостатньо коштів у мережі. Максимально доступно:</string>
     <string name="sign_verify">Підписати/Підтвердити</string>
-    <string name="backup_data_create_description">Основною метою цього резервного копіювання є міграція телефону. Він не містить ані вихідного коду для відновлення ваших коштів у мережі, ані резервної копії каналу для відновлення ваших блискавичних коштів. Резервні копії для відновлення ваших коштів потрібно робити за межами BitBanana. \n\nЦя резервна копія містить лише такі дані: \n\n- Конфігурації вузла \n- Контакти \n- Налаштування програми</string>
+    <string name="backup_data_create_description">Основною метою цього резервного копіювання є міграція телефону. Він не містить ані вихідного коду для відновлення ваших коштів у мережі, ані резервної копії каналу для відновлення ваших блискавичних коштів. Резервні копії для відновлення ваших коштів потрібно робити за межами BitBanana. \n\nЦя резервна копія містить лише такі дані: \n\n- Конфігурації вузла \n- Етикетки\n- Контакти \n- Налаштування програми</string>
     <string name="backup_data_confirm">Я підтверджую</string>
     <string name="error_connection_unknown">Помилка підключення.</string>
     <string name="error_exchange_rate_requires_tor_toast">Не вдалося отримати курси валют. Обраному вами провайдеру потрібен tor.</string>
@@ -896,4 +896,9 @@
     <string name="password_enter_old">Введіть старий пароль</string>
     <string name="settings_change_password">Зміна/Вилучити пароля</string>
     <string name="settings_app_lock_summary_unprotected">Незахищений</string>
+    <string name="settings_featureLabels">Етикетки</string>
+    <string name="settings_featureLabels_summary">Будьте організовані, додавши власні нотатки до транзакцій та інших предметів, полегшуючи їх відстеження та розуміння.</string>
+    <string name="help_dialog_label">Етикетки дозволяють додавати особисті нотатки для легшого відстеження та контексту. Вони зберігаються локально в Бітбанані, тому вони видно лише тут і не з’являться в інших додатках, які ви використовуєте для доступу до вашого вузла чи гаманця.</string>
+    <string name="label_add">Додайте етикетку</string>
+    <string name="label_edit">Редагувати етикетку</string>
 </resources>
