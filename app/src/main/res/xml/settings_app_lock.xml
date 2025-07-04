@@ -5,29 +5,74 @@
     android:key="topPrefScreen"
     android:title="@string/navigation_settings">
 
-    <Preference
-        android:key="pinPref"
-        android:title="@string/settings_addPin"
+    <PreferenceCategory
+        android:title="@string/settings_category_general"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="pinPref"
+            android:title="@string/settings_addPin"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="passwordPref"
+            android:title="@string/settings_add_password"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="biometricsEnabled"
+            android:title="@string/settings_enableBiometrics"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="30"
+            android:dialogMessage="@string/settings_lockScreenTimeout_description"
+            android:entryValues="@array/lockScreenTimeout"
+            android:key="lockScreenTimeoutPref"
+            android:summary="%s"
+            android:title="@string/settings_lockScreenTimeout"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <app.michaelwuensch.bitbanana.settings.CustomFakePreferenceCategory
+        android:key="appLockEmergencyCategory"
+        android:title="@string/settings_app_lock_emergency_category_pin"
         app:iconSpaceReserved="false" />
 
     <Preference
-        android:key="passwordPref"
-        android:title="@string/settings_add_password"
-        app:iconSpaceReserved="false" />
-
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="biometricsEnabled"
-        android:title="@string/settings_enableBiometrics"
+        android:key="appLockEmergencyPref"
+        android:title="@string/settings_addEmergencyPin"
         app:iconSpaceReserved="false" />
 
     <ListPreference
-        android:defaultValue="30"
-        android:dialogMessage="@string/settings_lockScreenTimeout_description"
-        android:entryValues="@array/lockScreenTimeout"
-        android:key="lockScreenTimeoutPref"
+        android:defaultValue="erase"
+        android:entries="@array/appLockEmergencyTypeDisplayValues"
+        android:entryValues="@array/appLockEmergencyType"
+        android:key="appLockEmergencyModePref"
         android:summary="%s"
-        android:title="@string/settings_lockScreenTimeout"
+        android:title="@string/settings_app_lock_emergency_mode"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:defaultValue="erase"
+        android:entries="@array/appLockEmergencyTypeDisplayValues"
+        android:entryValues="@array/appLockEmergencyType"
+        android:key="appLockEmergencyModePrefFake"
+        android:summary="%s"
+        android:title="@string/settings_app_lock_emergency_mode"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:key="appLockEmergencyWalletToShowPref"
+        android:summary="%s"
+        android:title="@string/emergency_mode_wallet_to_show"
+        app:iconSpaceReserved="false" />
+
+    <ListPreference
+        android:key="appLockEmergencyWalletToShowPrefFake"
+        android:summary="%s"
+        android:title="@string/emergency_mode_wallet_to_show"
         app:iconSpaceReserved="false" />
 
     <PreferenceCategory
@@ -47,4 +92,5 @@
             android:title="@string/settings_hapticPin"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
 </PreferenceScreen>

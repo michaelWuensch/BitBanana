@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -167,10 +168,19 @@ public class BackendConfigsManager {
      * @return
      */
     public BackendConfig getCurrentBackendConfig() {
-        BackendConfig config = getBackendConfigById(PrefsUtil.getCurrentBackendConfig());
+        BackendConfig config = null;
+        if (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only"))
+            config = getBackendConfigById(PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", ""));
+        else
+            config = getBackendConfigById(PrefsUtil.getCurrentBackendConfig());
         if (config == null && hasAnyBackendConfigs()) {
-            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, ((BackendConfig) mBackendConfigsJson.mBackendConfigs.toArray()[0]).getId()).commit();
-            return (BackendConfig) mBackendConfigsJson.mBackendConfigs.toArray()[0];
+            List<BackendConfig> backendConfigs = new ArrayList<>();
+            for (BackendConfig bc : BackendConfigsManager.getInstance().getAllBackendConfigs(true)) {
+                if (bc.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked || (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only") && PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "").equals(bc.getId())))
+                    backendConfigs.add(bc);
+            }
+            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, backendConfigs.get(0).getId()).commit();
+            return backendConfigs.get(0);
         }
         return config;
     }
@@ -258,7 +268,19 @@ public class BackendConfigsManager {
     }
 
     public boolean hasAnyBackendConfigs() {
-        return !mBackendConfigsJson.getConnections().isEmpty();
+        if (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only")) {
+            List<BackendConfig> backendConfigs = new ArrayList<>();
+            for (BackendConfig config : getAllBackendConfigs(false)) {
+                if (config.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked || (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only") && PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "").equals(config.getId())))
+                    backendConfigs.add(config);
+            }
+            if (backendConfigs.isEmpty())
+                return false;
+            else
+                return !mBackendConfigsJson.getConnections().isEmpty();
+        } else {
+            return !mBackendConfigsJson.getConnections().isEmpty();
+        }
     }
 
     /**

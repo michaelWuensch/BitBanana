@@ -42,6 +42,8 @@ public class UserGuardian {
     private static final String DIALOG_RELEASE_UTXO_FROM_3RD_PARTY = "releaseUtxoFrom3rdParty";
     private static final String DIALOG_COPY_LOG = "guardianCopyLog";
     private static final String DIALOG_CONSOLIDATE = "guardianConsolidate";
+    private static final String DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_1 = "guardianBiometricsAndEmergencyUnlock1";
+    private static final String DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_2 = "guardianBiometricsAndEmergencyUnlock2";
 
     public static final int CLIPBOARD_DATA_TYPE_ONCHAIN = 0;
     public static final int CLIPBOARD_DATA_TYPE_LIGHTNING = 1;
@@ -85,6 +87,8 @@ public class UserGuardian {
                 .putBoolean(DIALOG_RELEASE_UTXO_FROM_3RD_PARTY, true)
                 .putBoolean(DIALOG_COPY_LOG, true)
                 .putBoolean(DIALOG_CONSOLIDATE, true)
+                .putBoolean(DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_1, true)
+                .putBoolean(DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_2, true)
                 .apply();
     }
 
@@ -326,6 +330,28 @@ public class UserGuardian {
         String message = mContext.getResources().getString(R.string.guardian_custodial_lnd_accounts);
         adb.setMessage(message);
         showGuardianDialog(adb, true);
+    }
+
+    /**
+     * Warn the user if biometrics are enabled and he wants to set an emergency unlock method.
+     */
+    public void securityEmergencyUnlockIneffectiveDisableBiometrics() {
+        mCurrentDialogName = DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_1;
+        AlertDialog.Builder adb = createDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_emergency_unlock_ineffective);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
+    }
+
+    /**
+     * Warn the user if he as an emergency unlock method set and wants to enable biometrics.
+     */
+    public void securityEmergencyUnlockIneffectiveDoNotEnableBiometrics() {
+        mCurrentDialogName = DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_2;
+        AlertDialog.Builder adb = createDialog(true);
+        String message = mContext.getResources().getString(R.string.guardian_emergency_unlock_ineffective_2);
+        adb.setMessage(message);
+        showGuardianDialog(adb);
     }
 
     /**

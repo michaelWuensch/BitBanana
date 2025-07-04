@@ -11,12 +11,14 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.widget.AppCompatSpinner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class NodeSpinner extends AppCompatSpinner {
@@ -67,7 +69,12 @@ public class NodeSpinner extends AppCompatSpinner {
                 if (initFinished) {
                     int lastPos = adapterView.getCount() - 1;
                     if (position != lastPos) {
-                        mSelectedNodeId = BackendConfigsManager.getInstance().getAllBackendConfigs(true).get(position).getId();
+                        List<BackendConfig> backendConfigs = new ArrayList<>();
+                        for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(true)) {
+                            if (config.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked || (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only") && PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "").equals(config.getId())))
+                                backendConfigs.add(config);
+                        }
+                        mSelectedNodeId = backendConfigs.get(position).getId();
                         if (!BackendConfigsManager.getInstance().getCurrentBackendConfig().getId().equals(mSelectedNodeId)) {
                             // Save selected Node ID in prefs making it the current node.
                             PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, mSelectedNodeId).commit();
@@ -78,6 +85,7 @@ public class NodeSpinner extends AppCompatSpinner {
                             // Inform the listener. This is where the new node is opened.
                             mListener.onNodeChanged(mSelectedNodeId);
                         }
+
                     } else {
                         // Open node management
                         Intent intent = new Intent(getContext(), ManageBackendConfigsActivity.class);
@@ -109,15 +117,20 @@ public class NodeSpinner extends AppCompatSpinner {
     public void updateList() {
 
         initFinished = false;
-
-        String[] items = new String[BackendConfigsManager.getInstance().getAllBackendConfigs(true).size() + 1];
-        List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(true);
+        String[] items;
+        List<BackendConfig> backendConfigs = new ArrayList<>();
+        for (BackendConfig config : BackendConfigsManager.getInstance().getAllBackendConfigs(true)) {
+            if (config.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked || (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only") && PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "").equals(config.getId())))
+                backendConfigs.add(config);
+        }
+        items = new String[backendConfigs.size() + 1];
         for (int i = 0; i < backendConfigs.size(); i++) {
             if (backendConfigs.get(i).getNetwork() == BackendConfig.Network.MAINNET || backendConfigs.get(i).getNetwork() == BackendConfig.Network.UNKNOWN || backendConfigs.get(i).getNetwork() == null)
                 items[i] = backendConfigs.get(i).getAlias();
             else
                 items[i] = backendConfigs.get(i).getAlias() + " (" + backendConfigs.get(i).getNetwork().getDisplayName() + ")";
         }
+
         items[items.length - 1] = getContext().getResources().getString(R.string.spinner_manage_nodes);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.node_spinner_item, items);
 

@@ -29,6 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
@@ -357,18 +358,24 @@ public class PinEntryActivity extends BaseAppCompatActivity {
         String userEnteredPin = mUserInput.toString();
         String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
         boolean correct = false;
+        boolean emergencyUnlock = false;
         try {
-            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+            emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "").equals(hashedInput);
+            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput) || emergencyUnlock;
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         if (correct) {
             TimeOutUtil.getInstance().restartTimer();
+            AppLockUtil.isEmergencyUnlocked = emergencyUnlock;
 
             PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
-            if (mClearHistory) {
+            if (emergencyUnlock && PrefsUtil.getEmergencyUnlockMode().equals("erase"))
+                AppLockUtil.emergencyClearAll();
+
+            if (mClearHistory || emergencyUnlock || (BackendManager.getCurrentBackendConfig() != null && !PrefsUtil.getCurrentBackendConfig().equals(BackendManager.getCurrentBackendConfig().getId()))) {
                 Intent intent = new Intent(PinEntryActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

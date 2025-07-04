@@ -296,7 +296,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BBLog.d(LOG_TAG, "BitBanana moved to foreground");
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
-        // Test if PIN screen should be shown.
+        // Test if lock screen should be shown.
         AppLockUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
         });

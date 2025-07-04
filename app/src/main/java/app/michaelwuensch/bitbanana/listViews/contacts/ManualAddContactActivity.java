@@ -24,6 +24,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.InvoiceUtil;
 import app.michaelwuensch.bitbanana.util.LightningNodeUriParser;
@@ -185,7 +186,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
             showError(getResources().getString(R.string.contact_already_exists), RefConstants.ERROR_DURATION_SHORT);
             return;
         }
-        cm.addContact(contactType, data, name);
+        cm.addContact(contactType, data, name, AppLockUtil.isEmergencyUnlocked);
         try {
             cm.apply();
             finish();

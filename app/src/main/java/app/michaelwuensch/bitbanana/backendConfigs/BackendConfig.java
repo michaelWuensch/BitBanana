@@ -150,6 +150,11 @@ public class BackendConfig implements Comparable<BackendConfig> {
      */
     private Labels labels;
 
+    /**
+     * Whether or not this backend was added in emergency mode. This is used to filter the wallets list so that it is impossible to tell if you are in emergency mode or not.
+     */
+    private Boolean addedInEmergencyMode;
+
 
     public BackendConfig() {
 
@@ -380,6 +385,20 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.labels = labels;
     }
 
+    public boolean hasAddedInEmergencyMode() {
+        return this.addedInEmergencyMode != null;
+    }
+
+    public boolean wasAddedInEmergencyMode() {
+        if (this.addedInEmergencyMode == null)
+            return false;
+        return this.addedInEmergencyMode;
+    }
+
+    public void setAddedInEmergencyMode(boolean addedInEmergencyMode) {
+        this.addedInEmergencyMode = addedInEmergencyMode;
+    }
+
     public boolean isLocal() {
         if (this.location != null)
             return this.location == Location.LOCAL;
@@ -420,6 +439,7 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setAvatarMaterial(getAvatarMaterial());
         copy.setQuickReceiveConfig(getQuickReceiveConfig());
         copy.setLabels(getLabels());
+        copy.setAddedInEmergencyMode(wasAddedInEmergencyMode());
         return copy;
     }
 

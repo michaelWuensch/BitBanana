@@ -129,7 +129,7 @@ public class DataBackupUtil {
 
                         if (entry.getKey().equals(PrefsUtil.SETTINGS_VERSION))  // this should not be loaded from backup
                             continue;
-                        if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore the for backups.
+                        if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore for backups.
                             continue;
                         if (entry.getKey().equals("language")) // language change causes problems during restore...
                             continue;
@@ -233,7 +233,7 @@ public class DataBackupUtil {
                 BBLog.d(LOG_TAG, "Restoring contacts ...");
                 ContactsManager.getInstance().removeAllContacts();
                 for (Contact contact : dataBackup.getContacts()) {
-                    ContactsManager.getInstance().addContact(contact.getContactType(), contact.getContactData(), contact.getAlias());
+                    ContactsManager.getInstance().addContact(contact.getContactType(), contact.getContactData(), contact.getAlias(), contact.wasAddedInEmergencyMode());
                 }
                 try {
                     ContactsManager.getInstance().apply();

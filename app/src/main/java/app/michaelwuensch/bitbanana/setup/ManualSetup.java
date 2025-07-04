@@ -34,6 +34,7 @@ import app.michaelwuensch.bitbanana.customView.BBInputFieldView;
 import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.HexUtil;
@@ -357,6 +358,10 @@ public class ManualSetup extends BaseAppCompatActivity {
                 backendConfig.setQuickReceiveConfig(mOriginalBackendConfig.getQuickReceiveConfig());
             if (mOriginalBackendConfig.hasLabels())
                 backendConfig.setLabels(mOriginalBackendConfig.getLabels());
+            if (mOriginalBackendConfig.hasAddedInEmergencyMode())
+                backendConfig.setAddedInEmergencyMode(mOriginalBackendConfig.wasAddedInEmergencyMode());
+        } else {
+            backendConfig.setAddedInEmergencyMode(AppLockUtil.isEmergencyUnlocked);
         }
         return backendConfig;
     }

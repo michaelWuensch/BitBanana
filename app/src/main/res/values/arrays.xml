@@ -192,4 +192,14 @@
         <item>300</item>
     </string-array>
 
+    <string-array name="appLockEmergencyType">
+        <item>erase</item>
+        <item>show_selected_only</item>
+    </string-array>
+
+    <string-array name="appLockEmergencyTypeDisplayValues">
+        <item>@string/emergency_mode_erase_all</item>
+        <item>@string/emergency_mode_selected_wallet_only</item>
+    </string-array>
+
 </resources>

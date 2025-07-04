@@ -18,12 +18,14 @@ public class Contact implements Comparable<Contact>, Serializable {
     private String contactData;
     private String alias;
     private ContactType contactType;
+    private Boolean addedInEmergencyMode;
 
-    public Contact(String id, ContactType contactType, String contactData, String alias) {
+    public Contact(String id, ContactType contactType, String contactData, String alias, boolean addedInEmergencyMode) {
         this.id = id;
         this.contactType = contactType;
         this.contactData = contactData;
         this.alias = alias;
+        this.addedInEmergencyMode = addedInEmergencyMode;
     }
 
     public String getId() {
@@ -48,6 +50,12 @@ public class Contact implements Comparable<Contact>, Serializable {
 
     public LightningNodeUri getAsNodeUri() {
         return LightningNodeUriParser.parseNodeUri(contactData);
+    }
+
+    public boolean wasAddedInEmergencyMode() {
+        if (this.addedInEmergencyMode == null)
+            return false;
+        return this.addedInEmergencyMode;
     }
 
     public LnAddress getLightningAddress() {

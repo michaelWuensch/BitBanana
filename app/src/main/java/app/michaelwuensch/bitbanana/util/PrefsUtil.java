@@ -77,6 +77,8 @@ public class PrefsUtil {
     // encrypted preferences references
     public static final String PIN_HASH = "pin_hash";
     public static final String PASSWORD_HASH = "password_hash";
+    public static final String EMERGENCY_PIN_HASH = "emergency_pin_hash";
+    public static final String EMERGENCY_PASSWORD_HASH = "emergency_password_hash";
     public static final String BACKEND_CONFIGS = "wallet_configs";
     public static final String CONTACTS = "contacts";
     public static final String RANDOM_SOURCE = "random_source";
@@ -172,6 +174,24 @@ public class PrefsUtil {
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
             return true;
+        }
+    }
+
+    public static boolean isEmergencyPinEnabled() {
+        try {
+            return getEncryptedPrefs().contains(EMERGENCY_PIN_HASH);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isEmergencyPasswordEnabled() {
+        try {
+            return getEncryptedPrefs().contains(EMERGENCY_PASSWORD_HASH);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -299,5 +319,9 @@ public class PrefsUtil {
         if (timeout > 300)
             return 300;
         return timeout;
+    }
+
+    public static String getEmergencyUnlockMode() {
+        return getPrefs().getString("appLockEmergencyModePref", "erase");
     }
 }

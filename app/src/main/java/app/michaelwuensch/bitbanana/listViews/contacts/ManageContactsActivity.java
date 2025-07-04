@@ -32,6 +32,7 @@ import app.michaelwuensch.bitbanana.listViews.contacts.items.ContactItemViewHold
 import app.michaelwuensch.bitbanana.models.DecodedBolt12;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.models.LnAddress;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -149,7 +150,10 @@ public class ManageContactsActivity extends BaseAppCompatActivity implements Con
         mContactItems.clear();
         if (FeatureManager.isContactsEnabled()) {
             ContactsManager contactsManager = ContactsManager.getInstance();
-            mContactItems.addAll(contactsManager.getAllContacts());
+            for (Contact contact : contactsManager.getAllContacts()) {
+                if (contact.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked)
+                    mContactItems.add(contact);
+            }
 
             // Show "No wallets" if the list is empty
             if (mContactItems.size() == 0) {

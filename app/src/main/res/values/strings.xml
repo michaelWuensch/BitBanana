@@ -201,7 +201,17 @@
     <string name="pin_entered_wrong">Wrong PIN</string>
     <string name="pin_entered_wrong_wait" comment="Parameters:  %1$s: Number of seconds to wait">Wait %1$s seconds.</string>
     <string name="pin_changed">PIN changed!</string>
+    <string name="emergency_pin_changed">Emergency PIN changed!</string>
+    <string name="emergency_password_changed">Emergency password changed!</string>
     <string name="password_changed">Password changed!</string>
+    <string name="emergency_pin_create">Create emergency PIN</string>
+    <string name="emergency_pin_confirm">Confirm emergency PIN</string>
+    <string name="emergency_pin_enter_new">Enter new emergency PIN</string>
+    <string name="emergency_pin_confirm_new">Confirm new emergency PIN</string>
+    <string name="emergency_password_create">Enter emergency password</string>
+    <string name="emergency_password_confirm">Confirm emergency password</string>
+    <string name="emergency_password_enter_new">Enter new emergency password</string>
+    <string name="emergency_password_confirm_new">Confirm new emergency password</string>
 
     <string name="requested_payment">Requested</string>
     <string name="request_expired">Expired</string>
@@ -305,6 +315,8 @@
     <string name="guardian_release_utxo">This UTXO was not locked by you using the BitBanana UI and is likely locked for a good reason. Unlock it only if you are sure it\’s necessary.</string>
     <string name="guardian_copy_logs">Please be aware that this copied log can contain sensitive data. Double-check and edit out any confidential information before you share it with anyone.</string>
     <string name="guardian_consolidate_utxos">Consolidating UTXOs can weaken your privacy by linking addresses. It reveals that the input addresses likely belong to the same entity, making your transaction history easier to analyze and trace on the blockchain.</string>
+    <string name="guardian_emergency_unlock_ineffective">As biometric authentication is enabled, this feature can be bypassed since using biometrics will trigger the normal unlock instead of the emergency unlock. To ensure this security measure is effective, please disable biometric authentication.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">You have emergency unlock enabled. If you turn on biometric authentication, a biometric login will bypass your emergency unlock protection, triggering a normal unlock instead. To maintain the full security benefits of emergency unlock, do not enable biometrics.</string>
 
     <string name="settings_custom">Custom …</string>
     <string name="settings_category_general">General</string>
@@ -353,6 +365,19 @@
     <string name="settings_app_lock_summary_unprotected">Unprotected</string>
     <string name="settings_app_lock_summary_pin_protected">Protected with PIN</string>
     <string name="settings_app_lock_summary_password_protected">Protected with password</string>
+    <string name="settings_app_lock_emergency_category_pin">Emergency PIN</string>
+    <string name="settings_app_lock_emergency_category_password">Emergency password</string>
+    <string name="settings_app_lock_emergency_mode">Emergency mode</string>
+    <string name="settings_changeEmergencyPin">Change/Remove emergency PIN</string>
+    <string name="settings_changeEmergencyPassword">Change/Remove emergency password</string>
+    <string name="settings_addEmergencyPin">Set emergency PIN</string>
+    <string name="settings_addEmergencyPassword">Set emergency password</string>
+    <string name="emergency_mode_erase_all">Erase all</string>
+    <string name="emergency_mode_selected_wallet_only">Show selected wallet only</string>
+    <string name="emergency_mode_wallet_to_show">Wallet to show</string>
+    <string name="settings_remove_emergency_pin">Remove emergency PIN</string>
+    <string name="settings_remove_emergency_password">Remove emergency password</string>
+
 
     <string name="settings_features">Features</string>
     <string name="settings_features_summary">Personalize the app to your needs by toggling features on or off.</string>
@@ -540,6 +565,8 @@
     <string name="error_channel_rebalance_insufficient_funds">The backend responded with an \"insufficient funds\" error. Maybe some channel constraints prevent a channel from spending most of its balance.</string>
     <string name="error_no_bolt12_offer_selected">You have to select a payment code.</string>
     <string name="error_selecting_inactive_bolt12_offer">You cannot select an inactive payment code.</string>
+    <string name="error_pin_and_emergency_pin_equal">Your PIN and emergency PIN must differ.</string>
+    <string name="error_password_and_emergency_password_equal">Your password and emergency password must differ.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -647,6 +674,7 @@
     <string name="help_dialog_utxos_consolidate">When you consolidate UTXOs, you\'re combining several unspent outputs into one bigger one. This makes future transactions cheaper since on-chain transaction fees are determined by size in bytes and not by the value. Consolidating during low-fee periods allows users to pay for the blockchain space they need while it\'s cheap, helping to minimize future fees during high-fee periods. Keep in mind, however, that consolidation costs a fee and can weaken your privacy by linking addresses.</string>
     <string name="help_dialog_quick_receive_setup">Receiving Bitcoin comes with choices: On-chain, Lightning, BOLT12, and more.\nThat\’s great, but it can take a few extra taps just to view your receive QR code. BitBanana speeds it up. Pick a default receive method here, and you\’re ready with one tap while still having the option to customize everything.\n\nNot sure how to set it up? The documentation below can guide you.</string>
     <string name="help_dialog_label">Labels let you add personal notes for easier tracking and context. They\'re saved locally in BitBanana, so they\’re only visible here and won\’t appear in other apps you use to access your node or wallet.</string>
+    <string name="help_dialog_emergency_pin_password">An emergency password or PIN is designed for situations where you are being forced to unlock your wallet by someone else. If you enter this emergency password or PIN instead of your regular one, BitBanana will appear to unlock normally while quietly performing additional protective actions. Depending on your chosen emergency mode, it may erase all your connections or show only a wallet with a small amount of funds. See the documentation for details on how to configure and use this feature safely.</string>
 
     <string name="node_name">Node Name</string>
     <string name="name_duplicate">Name of duplicate</string>

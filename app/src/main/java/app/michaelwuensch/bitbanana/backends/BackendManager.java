@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkU
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNUtil;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -112,7 +113,8 @@ public class BackendManager {
         currentBackend = createBackend();
 
         // Save the new chosen node in prefs
-        PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, backendConfig.getId()).commit();
+        if (!AppLockUtil.isEmergencyUnlocked)
+            PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, backendConfig.getId()).commit();
 
         setBackendState(BackendState.ACTIVATING_BACKEND);
 
