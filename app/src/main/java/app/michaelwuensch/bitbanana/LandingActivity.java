@@ -19,8 +19,8 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
@@ -101,28 +101,15 @@ public class LandingActivity extends BaseAppCompatActivity {
         // Set new settings version
         PrefsUtil.editPrefs().putInt(PrefsUtil.SETTINGS_VERSION, RefConstants.CURRENT_SETTINGS_VERSION).commit();
 
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            AppLockUtil.askForAccess(this, true, () -> {
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                // FinishAffinity is needed here as this forces the on destroy events from previous activities to be executed before continuing.
-                finishAffinity();
-
-                startActivity(homeIntent);
-            });
-
-        } else {
-            // Clear connection data if something is there
-            PrefsUtil.editPrefs().remove(PrefsUtil.BACKEND_CONFIGS).commit();
-
+        AppLockUtil.askForAccess(this, true, () -> {
             Intent homeIntent = new Intent(this, HomeActivity.class);
+            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            // Makes sure exiting via back button from Home Screen works later (instead of going to empty activity)
+            // FinishAffinity is needed here as this forces the on destroy events from previous activities to be executed before continuing.
             finishAffinity();
 
             startActivity(homeIntent);
-        }
+        });
     }
 
     private void migrateCertificateEncodingAndMacaroon() {

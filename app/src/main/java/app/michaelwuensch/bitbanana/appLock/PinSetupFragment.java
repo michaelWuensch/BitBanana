@@ -31,6 +31,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -44,6 +45,8 @@ public class PinSetupFragment extends Fragment {
     public static final int CREATE_MODE = 0;
     public static final int CONFIRM_MODE = 1;
     public static final int ENTER_MODE = 2;
+    public static final int CREATE_EMERGENCY_MODE = 3;
+    public static final int CONFIRM_EMERGENCY_MODE = 4;
     private static final String LOG_TAG = PinSetupFragment.class.getSimpleName();
     private static final String ARG_MODE = "pinMode";
     private static final String ARG_PROMPT = "promptString";
@@ -126,10 +129,10 @@ public class PinSetupFragment extends Fragment {
         mNumFails = PrefsUtil.getPrefs().getInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0);
 
         // Get PIN length
-        if (mMode == CONFIRM_MODE) {
+        if (mMode == CONFIRM_MODE || mMode == CONFIRM_EMERGENCY_MODE) {
             String pinString = mTempPin;
             mPinLength = pinString != null ? pinString.length() : RefConstants.PIN_MIN_LENGTH;
-        } else if (mMode == ENTER_MODE) {
+        } else if (mMode == ENTER_MODE || mMode == CREATE_EMERGENCY_MODE) {
             mPinLength = PrefsUtil.getPrefs().getInt(PrefsUtil.PIN_LENGTH, RefConstants.PIN_MIN_LENGTH);
         } else {
             mPinLength = RefConstants.PIN_MIN_LENGTH;
@@ -288,7 +291,7 @@ public class PinSetupFragment extends Fragment {
                     displayUserInput();
 
                     // Auto accept if PIN input length was reached
-                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE) {
+                    if (mUserInput.toString().length() == mPinLength && mMode != CREATE_MODE && mMode != CREATE_EMERGENCY_MODE) {
                         Handler handler = new Handler();
                         handler.post(new Runnable() {
                             @Override
@@ -312,15 +315,26 @@ public class PinSetupFragment extends Fragment {
         mBtnPinRemove.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.PIN_HASH).commit();
-                } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    new KeystoreUtil().removeAppLockActiveKey();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (mMode == CREATE_MODE) {
+                    try {
+                        PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.PIN_HASH).remove(PrefsUtil.EMERGENCY_PIN_HASH).commit();
+                    } catch (GeneralSecurityException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        new KeystoreUtil().removeAppLockActiveKey();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    // Make sure to delete all connections but the displayed one when the PIN is removed during an emergency unlock
+                    if (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only"))
+                        AppLockUtil.emergencyClearAllButWalletToShow();
+                } else if (mMode == CREATE_EMERGENCY_MODE) {
+                    try {
+                        PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.EMERGENCY_PIN_HASH).commit();
+                    } catch (GeneralSecurityException | IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 getActivity().finish();
             }
@@ -421,7 +435,7 @@ public class PinSetupFragment extends Fragment {
 
 
         // Disable numpad if max PIN length reached
-        if (mUserInput.toString().length() >= RefConstants.PIN_MAX_LENGTH) {
+        if (mUserInput.toString().length() >= RefConstants.PIN_MAX_LENGTH || (mMode == CREATE_EMERGENCY_MODE && mUserInput.toString().length() >= mPinLength)) {
             for (Button btn : mBtnNumpad) {
                 btn.setEnabled(false);
                 btn.setAlpha(0.3f);
@@ -447,6 +461,19 @@ public class PinSetupFragment extends Fragment {
                     mBtnPinRemove.setVisibility(View.INVISIBLE);
                 }
             }
+        } else if (mMode == CREATE_EMERGENCY_MODE) {
+            // Show confirm button only if the PIN has a valid length.
+            if (mUserInput.toString().length() == mPinLength) {
+                mBtnPinConfirm.setVisibility(View.VISIBLE);
+                mBtnPinRemove.setVisibility(View.INVISIBLE);
+            } else {
+                mBtnPinConfirm.setVisibility(View.INVISIBLE);
+                if (PrefsUtil.isEmergencyPinEnabled() && !AppLockUtil.isEmergencyUnlocked) {
+                    mBtnPinRemove.setVisibility(View.VISIBLE);
+                } else {
+                    mBtnPinRemove.setVisibility(View.INVISIBLE);
+                }
+            }
         } else {
             mBtnPinConfirm.setVisibility(View.INVISIBLE);
             mBtnPinRemove.setVisibility(View.INVISIBLE);
@@ -461,6 +488,11 @@ public class PinSetupFragment extends Fragment {
             mBtnPinBack.setAlpha(0.3f);
         }
 
+        if (mMode == CREATE_MODE) {
+            mBtnPinRemove.setText(R.string.settings_removePin);
+        } else {
+            mBtnPinRemove.setText(R.string.settings_remove_emergency_pin);
+        }
     }
 
     public void pinEntered() {
@@ -470,34 +502,31 @@ public class PinSetupFragment extends Fragment {
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
             String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
+            boolean emergencyUnlock = false;
             try {
-                correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput);
+                emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "").equals(hashedInput);
+                correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput) || emergencyUnlock;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        if (mMode == CONFIRM_MODE) {
+        } else if (mMode == CONFIRM_MODE || mMode == CONFIRM_EMERGENCY_MODE) {
             correct = mUserInput.toString().equals(mTempPin);
         }
 
         if (correct) {
             // Go to next step
             if (mMode == ENTER_MODE) {
-
-                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
-                        .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
+                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0).apply();
 
                 ((AppLockInterface) getActivity()).correctAccessDataEntered();
-            } else if (mMode == CONFIRM_MODE) {
+            } else if (mMode == CONFIRM_MODE || mMode == CONFIRM_EMERGENCY_MODE) {
                 ((PinSetupActivity) getActivity()).pinConfirmed(mUserInput.toString());
             }
         } else {
             if (mMode == ENTER_MODE) {
                 mNumFails++;
 
-                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, mNumFails)
-                        .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
+                PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, mNumFails).apply();
 
                 final Animation animShake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
                 View view = getActivity().findViewById(R.id.pinInputLayout);

@@ -29,6 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
@@ -221,6 +222,16 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
     }
 
     public void onContinueClicked() {
+        // Ensure app lock delay is enforced even if Android Software Keyboard is used to get here...
+        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
+            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
+            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
+                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000));
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
         if (mPasswordInput.getData() == null || mPasswordInput.getData().isEmpty()) {
             Toast.makeText(this, getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
             return;
@@ -228,18 +239,24 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
         // Check if password was correct
         String hashedInput = UtilFunctions.appLockDataHash(mPasswordInput.getData());
         boolean correct = false;
+        boolean emergencyUnlock = false;
         try {
-            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "").equals(hashedInput);
+            emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, "").equals(hashedInput);
+            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "").equals(hashedInput) || emergencyUnlock;
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         if (correct) {
             TimeOutUtil.getInstance().restartTimer();
+            AppLockUtil.isEmergencyUnlocked = emergencyUnlock;
 
             PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
 
-            if (mClearHistory) {
+            if (emergencyUnlock && PrefsUtil.getEmergencyUnlockMode().equals("erase"))
+                AppLockUtil.emergencyClearAll();
+
+            if (mClearHistory || emergencyUnlock || (BackendManager.getCurrentBackendConfig() != null && !PrefsUtil.getCurrentBackendConfig().equals(BackendManager.getCurrentBackendConfig().getId()))) {
                 Intent intent = new Intent(PasswordEntryActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

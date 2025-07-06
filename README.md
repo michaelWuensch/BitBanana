@@ -74,7 +74,8 @@ For setup instructions and to get everything up and running, check out our [docu
 - [x] Available on F-Droid
 - [x] Coin Control
 - [x] Tor support
-- [x] PIN protected access
+- [x] Password/PIN protected access
+- [x] Emergency password/PIN
 - [x] Scrambled PIN by default
 - [x] Stealth mode (hide app)
 - [x] Hide balances

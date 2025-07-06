@@ -103,6 +103,7 @@ public class RefConstants {
     public static final String URL_LNPLUS = "https://lightningnetwork.plus";
     public static final String URL_DOCS_QUICK_RECEIVE_SETUP = "https://docs.bitbanana.app/using-bitbanana/quick-receive-setup";
     public static final String URL_DOCS_LIGHTNING_ADDRESS = "https://docs.bitbanana.app/using-bitbanana/lightning-address";
+    public static final String URL_DOCS_EMERGENCY_PASSWORD_PIN = "https://docs.bitbanana.app/using-bitbanana/emergency-password-pin";
 
     // Age in seconds for alias entries to be considered outdated.
     public static final int ALIAS_CACHE_AGE = 3600;

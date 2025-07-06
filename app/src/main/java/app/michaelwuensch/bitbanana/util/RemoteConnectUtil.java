@@ -239,6 +239,7 @@ public class RemoteConnectUtil {
                     config.setLocation(BackendConfig.Location.REMOTE);
                 if (!config.hasQuickReceiveConfig())
                     config.setQuickReceiveConfig(new QuickReceiveConfig());
+                config.setAddedInEmergencyMode(AppLockUtil.isEmergencyUnlocked);
                 id = backendConfigsManager.addBackendConfig(config).getId();
             } else {
                 id = walletUUID;

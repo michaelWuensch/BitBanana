@@ -39,6 +39,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.models.NodeAliasInfo;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -157,13 +158,13 @@ public class ContactsManager {
      *
      * @param alias Name of the contact
      */
-    public Contact addContact(Contact.ContactType contactType, @NonNull String contactData, @NonNull String alias) {
+    public Contact addContact(Contact.ContactType contactType, @NonNull String contactData, @NonNull String alias, boolean addedInEmergencyMode) {
 
         // Create the UUID for the new config
         String id = UUID.randomUUID().toString();
 
         // Create the config
-        Contact contact = new Contact(id, contactType, contactData, alias);
+        Contact contact = new Contact(id, contactType, contactData, alias, addedInEmergencyMode);
 
         // Add the config to our configurations array
         boolean contactAdded = mContactsJson.addContact(contact);
@@ -338,7 +339,7 @@ public class ContactsManager {
                     if (cm.doesContactDataExist(contactData)) {
                         cm.renameContact(cm.getContactByContactData(contactData), input.getText().toString());
                     } else {
-                        cm.addContact(contactType, contactData, input.getText().toString());
+                        cm.addContact(contactType, contactData, input.getText().toString(), AppLockUtil.isEmergencyUnlocked);
                     }
                     try {
                         cm.apply();

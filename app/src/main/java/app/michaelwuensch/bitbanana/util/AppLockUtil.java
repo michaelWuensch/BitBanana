@@ -8,15 +8,18 @@ import android.content.Intent;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.appLock.PasswordEntryActivity;
 import app.michaelwuensch.bitbanana.appLock.PinEntryActivity;
+import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
+import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 
 public class AppLockUtil {
 
     private static final String LOG_TAG = AppLockUtil.class.getSimpleName();
     public static boolean isLockScreenShown;
+    public static boolean isEmergencyUnlocked;
 
     static public void askForAccess(Activity activity, boolean forceRestart, OnSecurityCheckPerformedListener onSecurityCheckPerformedListener) {
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && TimeOutUtil.getInstance().isTimedOut()) {
+        if (TimeOutUtil.getInstance().isTimedOut()) {
             if (PrefsUtil.isPinEnabled()) {
                 if (TimeOutUtil.getInstance().isFullyTimedOut() || forceRestart) {
                     // Go to PIN entry screen, remove all history, full reconnect is needed.
@@ -84,6 +87,43 @@ public class AppLockUtil {
         } else {
             // Access granted
             onSecurityCheckPerformedListener.onAccessGranted();
+        }
+    }
+
+    public static void emergencyClearAll() {
+        BackendConfigsManager bcm = BackendConfigsManager.getInstance();
+        bcm.removeAllBackendConfigs();
+        try {
+            bcm.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ContactsManager cm = ContactsManager.getInstance();
+        cm.removeAllContacts();
+        try {
+            cm.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void emergencyClearAllButWalletToShow() {
+        BackendConfigsManager bcm = BackendConfigsManager.getInstance();
+        for (BackendConfig bc : bcm.getAllBackendConfigs(false)) {
+            if (!bc.getId().equals(PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "")))
+                bcm.removeBackendConfig(bc);
+        }
+        try {
+            bcm.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ContactsManager cm = ContactsManager.getInstance();
+        cm.removeAllContacts();
+        try {
+            cm.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

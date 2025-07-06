@@ -17,6 +17,8 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
 public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
@@ -82,7 +84,10 @@ public class ManageBackendConfigsActivity extends BaseAppCompatActivity {
 
         mNodeItems.clear();
         BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
-        mNodeItems.addAll(backendConfigsManager.getAllBackendConfigs(false));
+        for (BackendConfig config : backendConfigsManager.getAllBackendConfigs(false)) {
+            if (config.wasAddedInEmergencyMode() == AppLockUtil.isEmergencyUnlocked || (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only") && PrefsUtil.getPrefs().getString("appLockEmergencyWalletToShowPref", "").equals(config.getId())))
+                mNodeItems.add(config);
+        }
 
         // Show "No nodes" if the list is empty
         if (mNodeItems.size() == 0) {
