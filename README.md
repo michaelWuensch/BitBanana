@@ -20,16 +20,16 @@ Download and install the app from [GitHub](https://github.com/michaelWuensch/Bit
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/app.michaelwuensch.bitbanana/)
+     height="80" width="220">](https://f-droid.org/packages/app.michaelwuensch.bitbanana/)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana)
+     height="80" width="220">](https://play.google.com/store/apps/details?id=app.michaelwuensch.bitbanana)
 [<img src="https://www.openapk.net/images/openapk-badge.png"
      alt="Get it on OpenApk"
-     height="80">](https://www.openapk.net/bitbanana/app.michaelwuensch.bitbanana/)
+     height="80" width="220">](https://www.openapk.net/bitbanana/app.michaelwuensch.bitbanana/)
 [<img src="https://www.androidfreeware.net/images/androidfreeware-badge.png"
      alt="Get it on Android Freeware"
-     height="80">](https://www.androidfreeware.net/download-bitbanana-apk.html)
+     height="80" width="220">](https://www.androidfreeware.net/download-bitbanana-apk.html)
 
 For setup instructions and to get everything up and running, check out our [documentation](https://docs.bitbanana.app/).
 
