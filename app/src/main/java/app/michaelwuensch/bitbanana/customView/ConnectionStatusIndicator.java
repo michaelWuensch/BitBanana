@@ -47,7 +47,7 @@ public class ConnectionStatusIndicator extends ConstraintLayout {
     }
 
     public void setError() {
-        int paddingInDp = 12;
+        int paddingInDp = 11;
         int topMarginInDp = 3;
         int bottomMarginInDp = 0;
         mStatusIcon.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.red)));
