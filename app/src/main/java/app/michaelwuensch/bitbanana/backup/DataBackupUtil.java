@@ -4,10 +4,11 @@ import android.content.SharedPreferences;
 
 import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -32,6 +33,7 @@ import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
+import app.michaelwuensch.bitbanana.util.GsonUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
@@ -45,19 +47,28 @@ public class DataBackupUtil {
 
 
     public static byte[] createBackup(String password, int backupVersion) {
-        String backupJson = "{";
+        DataBackup backupObject = new DataBackup();
+
         // Contacts
         if (ContactsManager.getInstance().hasAnyContacts()) {
-            String contactsJsonString = new Gson().toJson(ContactsManager.getInstance().getContactsJson());
-            contactsJsonString = contactsJsonString.substring(1, contactsJsonString.length() - 1);
-            backupJson = backupJson + contactsJsonString + ",";
+            List<Contact> contactsList = ContactsManager.getInstance().getAllContacts();
+            Contact[] contacts = new Contact[contactsList.size()];
+            for (int i = 0; i < contactsList.size(); i++) {
+                contacts[i] = contactsList.get(i);
+            }
+            backupObject.setContacts(contacts);
         }
+
         // Wallets
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
-            String backendConfigsJsonString = new Gson().toJson(BackendConfigsManager.getInstance().getBackendConfigsJson());
-            backendConfigsJsonString = backendConfigsJsonString.substring(1, backendConfigsJsonString.length() - 1);
-            backupJson = backupJson + backendConfigsJsonString + ",";
+            List<BackendConfig> backendConfigList = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
+            BackendConfig[] configs = new BackendConfig[backendConfigList.size()];
+            for (int i = 0; i < backendConfigList.size(); i++) {
+                configs[i] = backendConfigList.get(i);
+            }
+            backupObject.setWalletConfigs(configs);
         }
+
         // Settings
         Map<String, ?> allEntries = PrefsUtil.getPrefs().getAll();
         Map<String, Object> filteredEntries = new HashMap<>();
@@ -67,12 +78,11 @@ public class DataBackupUtil {
             filteredEntries.put(entry.getKey(), entry.getValue());
         }
 
-        String settingsJsonString = "\"settings\":" + new Gson().toJson(filteredEntries);
-        backupJson = backupJson + settingsJsonString + ",";
+        String settingsJsonString = new Gson().toJson(filteredEntries);
+        backupObject.setSettingsJson(settingsJsonString);
 
-        backupJson = backupJson.substring(0, backupJson.length() - 1) + "}";
-
-        // Encrypting the backup.
+        // Serialize backupObject as JSON
+        String backupJson = new Gson().toJson(backupObject);
 
         // Convert json backup to bytes
         byte[] backupBytes = backupJson.getBytes(StandardCharsets.UTF_8);
@@ -98,7 +108,7 @@ public class DataBackupUtil {
     }
 
     public static boolean restoreBackup(String backup, int backupVersion) {
-        if (backupVersion < 5) {
+        if (backupVersion < 6) {
             DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
 
             // restore backend configs
@@ -115,8 +125,51 @@ public class DataBackupUtil {
                     return false;
                 }
             }
+            if (backupVersion > 4) {
+                // restore settings with the new method
+                if (dataBackup.getSettingsJson() != null) {
+                    BBLog.d(LOG_TAG, "Restoring settings ...");
+                    Type type = new TypeToken<Map<String, Object>>() {
+                    }.getType();
+                    Map<String, Object> restoredMap = GsonUtil.getTypeSafeGson()
+                            .fromJson(dataBackup.getSettingsJson(), type);
 
-            if (backupVersion > 3) {
+                    // Save to SharedPreferences
+                    SharedPreferences.Editor editor = PrefsUtil.editPrefs();
+
+                    for (Map.Entry<String, ?> entry : restoredMap.entrySet()) {
+                        Object value = entry.getValue();
+
+                        if (entry.getKey().equals(PrefsUtil.SETTINGS_VERSION))  // this should not be loaded from backup
+                            continue;
+                        if (entry.getKey().equals("stealthModeActive")) // stealth mode changes require additional code to execute. Ignore for backups.
+                            continue;
+                        if (entry.getKey().equals("language")) // language change causes problems during restore...
+                            continue;
+                        if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
+                            continue;
+                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) // As we don't save the PIN which is in the encryptedPrefs, we also don't want to have the PIN length.
+                            continue;
+
+                        if (value instanceof Boolean) {
+                            editor.putBoolean(entry.getKey(), (Boolean) value);
+                        } else if (value instanceof Float) {
+                            editor.putFloat(entry.getKey(), (Float) value);
+                        } else if (value instanceof Integer) {
+                            editor.putInt(entry.getKey(), (Integer) value);
+                        } else if (value instanceof Long) {
+                            editor.putLong(entry.getKey(), (Long) value);
+                        } else if (value instanceof String) {
+                            editor.putString(entry.getKey(), (String) value);
+                        }
+                    }
+                    editor.apply();
+                    BBLog.d(LOG_TAG, "Settings restored.");
+                }
+            }
+
+            if (backupVersion == 4) {
+                // restore settings with the old method
                 if (dataBackup.getSettings() != null) {
                     BBLog.d(LOG_TAG, "Restoring settings ...");
                     Map<String, ?> restoredMap = dataBackup.getSettings();
@@ -134,6 +187,8 @@ public class DataBackupUtil {
                         if (entry.getKey().equals("language")) // language change causes problems during restore...
                             continue;
                         if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
+                            continue;
+                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH))
                             continue;
 
                         if (value instanceof Boolean) {

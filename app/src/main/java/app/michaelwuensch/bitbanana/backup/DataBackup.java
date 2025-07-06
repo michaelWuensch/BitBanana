@@ -8,7 +8,13 @@ import app.michaelwuensch.bitbanana.contacts.Contact;
 public class DataBackup {
     private BackendConfig[] connections;
     private Contact[] contacts;
+
+    /**
+     * deprecated!
+     */
     private Map<String, ?> settings;
+
+    private String settingsJson;
 
     public BackendConfig[] getBackendConfigs() {
         return connections;
@@ -32,5 +38,13 @@ public class DataBackup {
 
     public void setSettings(Map<String, ?> settings) {
         this.settings = settings;
+    }
+
+    public String getSettingsJson() {
+        return settingsJson;
+    }
+
+    public void setSettingsJson(String settingsJson) {
+        this.settingsJson = settingsJson;
     }
 }
