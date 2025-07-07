@@ -919,5 +919,13 @@
     <string name="settings_changeEmergencyPin">Зміна/видалення екстреного PIN-коду</string>
     <string name="settings_changeEmergencyPassword">Зміна/видалення пароля для екстреної допомоги</string>
     <string name="settings_addEmergencyPin">Встановити екстрений PIN-код</string>
-    <string name="settings_addEmergencyPassword">Set emergency password</string>
+    <string name="settings_addEmergencyPassword">Встановити пароль для екстреної допомоги</string>
+    <string name="emergency_mode_erase_all">Стерти все</string>
+    <string name="emergency_mode_selected_wallet_only">Показати лише вибраний гаманець</string>
+    <string name="emergency_mode_wallet_to_show">Гаманець для показу</string>
+    <string name="settings_remove_emergency_pin">Видалити екстрений PIN-код</string>
+    <string name="settings_remove_emergency_password">Видалити аварійний пароль</string>
+    <string name="error_pin_and_emergency_pin_equal">Ваш PIN-код та екстрений PIN-код мають відрізнятися.</string>
+    <string name="error_password_and_emergency_password_equal">Ваш пароль та пароль для екстреного доступу мають відрізнятися.</string>
+    <string name="help_dialog_emergency_pin_password">Екстрений пароль або PIN-код призначений для ситуацій, коли вас змушує розблокувати гаманець хтось інший. Якщо ви введете цей екстрений пароль або PIN-код замість звичайного, BitBanana розблокується звичайним способом, непомітно виконуючи додаткові захисні дії. Залежно від обраного вами екстреного режиму, він може стерти всі ваші з’єднання або відобразити лише гаманець з невеликою сумою коштів. Дивіться документацію, щоб дізнатися більше про те, як безпечно налаштувати та використовувати цю функцію.</string>
 </resources>
