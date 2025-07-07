@@ -390,9 +390,9 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                     // Disable 0 sat invoices
                     BBLog.e(LOG_TAG, "LNURL: 0 sat payments are not allowed.");
                     switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
-                } else if (decodedBolt11.getAmountRequested() != mAmountInput.getAmount()) {
+                } else if (Math.abs(decodedBolt11.getAmountRequested() - mAmountInput.getAmount()) > 999) { // We allow a difference of 999 msat, so LNURLServices that only have sat precision won't fail.
                     BBLog.e(LOG_TAG, "LNURL: The amount in the payment request is not equal to what you wanted to send.");
-                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request, mServiceURLString));
+                    switchToFailedScreen(getString(R.string.lnurl_pay_received_invalid_payment_request_different_amount, mServiceURLString, mAmountInput.getAmount(), decodedBolt11.getAmountRequested()));
                 } else {
                     SendLnPaymentRequest sendPaymentRequest = PaymentUtil.prepareBolt11InvoicePayment(decodedBolt11, decodedBolt11.getAmountRequested(), mPickChannelsView.getFirstHop(), mPickChannelsView.getLastHop(), -1);
                     BBLog.d(LOG_TAG, "The received invoice was validated successfully.");
