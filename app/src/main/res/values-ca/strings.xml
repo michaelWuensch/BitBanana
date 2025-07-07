@@ -74,5 +74,16 @@
     <string name="network">Xarxa</string>
     <string name="duplicate">Duplicat</string>
     <string name="username">Nom d\'usuari</string>
-    <string name="password">Contrassenya</string>
+    <string name="password">Contrasenya</string>
+    <string name="remove">Esborrar</string>
+    <string name="deactivate">Desactivar</string>
+    <string name="reactivate">Reactivar</string>
+    <string name="active">Actiu</string>
+    <string name="inactive">Inactiu</string>
+    <string name="terminated">Finalitzat</string>
+    <string name="state">Estat</string>
+    <string name="label">Etiqueta</string>
+    <string name="used">Utilitzat</string>
+    <string name="unused">Inutilitzat</string>
+    <string name="enable">Permetre</string>
 </resources>
