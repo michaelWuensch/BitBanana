@@ -477,4 +477,19 @@
     <string name="forwarded">Lähetetty edelleen</string>
     <string name="summary">Yhteenveto</string>
     <string name="settings_hideBalanceType_all">Kaikki saldot</string>
+    <string name="help">Apua</string>
+    <string name="adjust">Säädä</string>
+    <string name="state">Tila</string>
+    <string name="peer">Vertainen</string>
+    <string name="security">Turvallisuus</string>
+    <string name="target">Kohde</string>
+    <string name="status">Tila</string>
+    <string name="nostr_relay">Välitä edelleen</string>
+    <string name="clear">Tyhjennä</string>
+    <string name="copy_all">Kopioi kaikki</string>
+    <string name="settings_showHelpButtons">Näytä tietonappulat</string>
+    <string name="sort_by">Lajittele jonkin mukaan</string>
+    <string name="label">Nimike</string>
+    <string name="guardian_custodial_nwc">Olet yhdistyneenä lompakkoon, joka käyttää Nostr Wallet Connect -protokollaa. Kyseinen järjestely on holhoava. Täten palvelun holhoavalla entiteetillä on valta rahoihisi ja pääsy maksuhistoriaasi. Talleta vain keskenäisen luottamuksenne rajoissa.</string>
+    <string name="guardian_copy_logs">Olethan tietoinen, että tämä loki voi sisältää arkaluontoisia tietoja. Siispä tarkista ja poista mahdolliset arkaluontoiset tiedot ennen kenellekään jakamista.</string>
 </resources>

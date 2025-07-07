@@ -363,8 +363,7 @@
 \n- pubkey@host:puerto
 \n- Canal LNURL</string>
     <string name="error_channel_open_node_setup">Primero hay que conectarse a un nodo antes de abrir un canal.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora.
-\nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguien ha intentado desactivar tu PIN. La aplicación se cerrará ahora. \nPuedes reinstalar la aplicación y utilizar el proceso de recuperación para recuperar el acceso a tus fondos.</string>
     <string name="error_invalid_bitcoin_request">Petición de bitcoin inválida.</string>
     <string name="settings_hideBalance">Ocultar el saldo</string>
     <string name="error_lightning_uri_invalid">Formato no válido.
@@ -713,17 +712,11 @@
     <string name="explanation_channel_commitment_type">Cada parte tiene una transacción de compromiso que sólo ella puede transmitir a la cadena de bloques para reclamar su parte de bitcoins. Los distintos tipos de transacciones de compromiso dan lugar a canales con propiedades diferentes.</string>
     <string name="advanced_channel_details_explanation_remote_channel_reserve">La cantidad mínima que el otro nodo debe reservar en el saldo de este canal. Esto asegura que el otro nodo siempre tendrá algo que perder si intenta engañarte.</string>
     <string name="advanced_channel_details_explanation_local_maxHTLC">El valor máximo que está dispuesto a reenviar por este canal en una sola transacción.</string>
-    <string name="backup_data_create_description">El objetivo principal de esta copia de seguridad es la migración telefónica. No contiene ni la semilla para recuperar tus fondos on-chain, ni la copia de seguridad del canal para recuperar tus fondos lightning. Las copias de seguridad para recuperar tus fondos tienen que hacerse fuera de BitBanana.
-\n
-\nEsta copia de seguridad sólo contiene los siguientes datos:
-\n
-\n- Datos para conectar BitBanana a tus nodos en ejecución
-\n- Contactos</string>
+    <string name="backup_data_create_description">El objetivo principal de esta copia de seguridad es la migración telefónica. No contiene ni la semilla para recuperar tus fondos on-chain, ni la copia de seguridad del canal para recuperar tus fondos lightning. Las copias de seguridad para recuperar tus fondos tienen que hacerse fuera de BitBanana. \n \nEsta copia de seguridad sólo contiene los siguientes datos: \n \n- Datos para conectar BitBanana a tus nodos en ejecución \n- Contactos</string>
     <string name="backup_data_confirm_description">Ya he hecho una copia de seguridad de mi semilla y mis canales y entiendo, que esta copia de seguridad NO ayuda a recuperar mis fondos.
 \n
 \nEntiendo que esta copia de seguridad todavía contiene toda la información necesaria para acceder a mis fondos si el nodo está actualmente en línea. Por lo tanto, utilizaré una contraseña segura en el siguiente paso.</string>
-    <string name="backup_data_restore_description">Restaura tus nodos y contactos conectados.
-\nSi tus nodos ya no están conectados, este proceso de restauración no te ayudará a recuperar el acceso a tus fondos.</string>
+    <string name="backup_data_restore_description">Restaura tus nodos y contactos conectados. \nSi tus nodos ya no están conectados, este proceso de restauración no te ayudará a recuperar el acceso a tus fondos.</string>
     <string name="backup_data_restore_success">Copia de seguridad restaurada</string>
     <string name="backup_data_restore_failed_title">Restauración fallida</string>
     <string name="backup_data_restore_failed_description">Lo más probable es que haya introducido una contraseña no válida.</string>
