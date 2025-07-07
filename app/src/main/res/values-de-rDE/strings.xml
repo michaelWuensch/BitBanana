@@ -1032,7 +1032,7 @@
     <string name="emergency_password_enter_new">Neues Notfallpasswort eingeben</string>
     <string name="emergency_password_confirm_new">Neues Notfallpasswort bestätigen</string>
     <string name="guardian_emergency_unlock_ineffective">Wenn die biometrische Authentifizierung aktiviert ist, kann diese Funktion umgangen werden, da die Verwendung biometrischer Daten die normale Entsperrung statt der Notentsperrung auslöst. Um sicherzustellen, dass diese Sicherheitsmaßnahme wirksam ist, sollte die biometrische Authentifizierung deaktiviert werden.</string>
-    <string name="guardian_emergency_unlock_ineffective_2">Du hast die Notfallentsperrung aktiviert. Wenn du die biometrische Authentifizierung einschaltest, wird ein biometrischer Login den Schutz der Notfallentsperrung umgehen und stattdessen eine normale Entsperrung auslösen. Um die vollständigen Sicherheitsvorteile der Notfallentsperrung zu erhalten, aktiviere keine biometrische Authentifizierung.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Du hast die Notfallentsperrung aktiviert. Wenn du die biometrische Authentifizierung einschaltest, wird ein biometrischer Login den Schutz der Notfallentsperrung umgehen und stattdessen eine normale Entsperrung auslösen. Um die volle Sicherheit der Notfallentsperrung zu behalten, solltest du die biometrische Authentifizierung nicht aktivieren..</string>
     <string name="settings_app_lock_emergency_category_pin">Notfall-PIN</string>
     <string name="settings_app_lock_emergency_category_password">Notfallpasswort</string>
     <string name="settings_app_lock_emergency_mode">Notfallmodus</string>
@@ -1042,4 +1042,11 @@
     <string name="settings_addEmergencyPassword">Notfallpasswort festlegen</string>
     <string name="emergency_mode_erase_all">Alles löschen</string>
     <string name="emergency_mode_selected_wallet_only">Nur ausgewählte Wallet anzeigen</string>
+    <string name="emergency_mode_wallet_to_show">Anzuzeigende Wallet</string>
+    <string name="settings_remove_emergency_pin">Notfall-PIN entfernen</string>
+    <string name="settings_remove_emergency_password">Notfallpasswort entfernen</string>
+    <string name="error_pin_and_emergency_pin_equal">Deine PIN und die Notfall-PIN müssen sich unterscheiden.</string>
+    <string name="error_password_and_emergency_password_equal">Dein Passwort und das Notfallpasswort müssen sich unterscheiden.</string>
+    <string name="help_dialog_emergency_pin_password">Ein Notfallpasswort oder eine Notfall-PIN ist für Situationen gedacht, in denen du von jemandem gezwungen wirst, deine Wallet zu entsperren. Wenn du dieses Notfallpasswort oder diese Notfall-PIN anstelle deines regulären Passworts oder deiner regulären PIN eingibst, wird BitBanana scheinbar normal entsperrt, während im Hintergrund zusätzliche Schutzmaßnahmen ausgeführt werden. Je nach gewähltem Notfallmodus können dabei alle deine Verbindungen gelöscht oder nur eine Wallet mit einem kleinen Guthaben angezeigt werden. Details zur sicheren Einrichtung und Nutzung dieser Funktion findest du in der Dokumentation.</string>
+    <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsaufforderung gesendet. Du wolltest %2$d msat senden, aber der Betrag der Zahlungsaufforderung beträgt %3$d msat.</string>
 </resources>
