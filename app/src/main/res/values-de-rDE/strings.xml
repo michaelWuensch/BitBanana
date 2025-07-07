@@ -1021,4 +1021,25 @@
     <string name="unlock_app">Entsperren</string>
     <string name="label_add">Label hinzufügen</string>
     <string name="label_edit">Label bearbeiten</string>
+    <string name="emergency_pin_changed">Notfall-PIN geändert!</string>
+    <string name="emergency_password_changed">Notfallpasswort geändert!</string>
+    <string name="emergency_pin_create">Notfall-PIN erstellen</string>
+    <string name="emergency_pin_confirm">Notfall-PIN bestätigen</string>
+    <string name="emergency_pin_enter_new">Neue Notfall-PIN eingeben</string>
+    <string name="emergency_pin_confirm_new">Neue Notfall-PIN bestätigen</string>
+    <string name="emergency_password_create">Notfallpasswort eingeben</string>
+    <string name="emergency_password_confirm">Notfallpasswort bestätigen</string>
+    <string name="emergency_password_enter_new">Neues Notfallpasswort eingeben</string>
+    <string name="emergency_password_confirm_new">Neues Notfallpasswort bestätigen</string>
+    <string name="guardian_emergency_unlock_ineffective">Wenn die biometrische Authentifizierung aktiviert ist, kann diese Funktion umgangen werden, da die Verwendung biometrischer Daten die normale Entsperrung statt der Notentsperrung auslöst. Um sicherzustellen, dass diese Sicherheitsmaßnahme wirksam ist, sollte die biometrische Authentifizierung deaktiviert werden.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Du hast die Notfallentsperrung aktiviert. Wenn du die biometrische Authentifizierung einschaltest, wird ein biometrischer Login den Schutz der Notfallentsperrung umgehen und stattdessen eine normale Entsperrung auslösen. Um die vollständigen Sicherheitsvorteile der Notfallentsperrung zu erhalten, aktiviere keine biometrische Authentifizierung.</string>
+    <string name="settings_app_lock_emergency_category_pin">Notfall-PIN</string>
+    <string name="settings_app_lock_emergency_category_password">Notfallpasswort</string>
+    <string name="settings_app_lock_emergency_mode">Notfallmodus</string>
+    <string name="settings_changeEmergencyPin">Notfall-PIN ändern/entfernen</string>
+    <string name="settings_changeEmergencyPassword">Notfallpasswort ändern/entfernen</string>
+    <string name="settings_addEmergencyPin">Notfall-PIN festlegen</string>
+    <string name="settings_addEmergencyPassword">Notfallpasswort festlegen</string>
+    <string name="emergency_mode_erase_all">Alles löschen</string>
+    <string name="emergency_mode_selected_wallet_only">Nur ausgewählte Wallet anzeigen</string>
 </resources>
