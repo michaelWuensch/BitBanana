@@ -205,6 +205,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
         mDescriptionView.setClearFocusListener(this);
 
         mAmountInput.setupView();
+        mAmountInput.setAllowMsats(false); // lots of LNURL servers round to full sats
         mAmountInput.setSendAllEnabled(false);
         mAmountInput.setOnChain(false);
         mAmountInput.setOnAmountInputActionListener(new BBAmountInput.OnAmountInputActionListener() {
@@ -218,17 +219,17 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 }
 
                 if (amount > mPaymentData.getMaxSendable()) {
-                    String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMaxSendable(), true);
+                    String maxAmount = getResources().getString(R.string.max_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMaxSendable(), false);
                     showError(maxAmount, 2000);
                     return false;
                 } else if (amount < mPaymentData.getMinSendable()) {
-                    String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMinSendable(), true);
+                    String minAmount = getResources().getString(R.string.min_amount) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(mPaymentData.getMinSendable(), false);
                     showError(minAmount, 2000);
                     return false;
                 } else {
                     long maxSendable = WalletUtil.getMaxLightningSendAmount();
                     if (amount > maxSendable) {
-                        String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxSendable, true);
+                        String message = getResources().getString(R.string.error_insufficient_lightning_sending_liquidity) + " " + MonetaryUtil.getInstance().getCurrentCurrencyDisplayStringFromMSats(maxSendable, false);
                         showError(message, 6000);
                         return false;
                     } else {
@@ -313,7 +314,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 // Create send request
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
-                        .setAmount(mAmountInput.getAmount())
+                        .setAmount(MonetaryUtil.getInstance().mSatsTruncatedToSats(mAmountInput.getAmount()))
                         .setComment(mPcvComment.getData())
                         .setPayerData(mPayerData)
                         .build();
