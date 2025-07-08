@@ -349,13 +349,7 @@
     <string name="activity_utxos">Moedas (UTXOs)</string>
     <string name="channel_close_type_force_close">Fechamento Forçado</string>
     <string name="channel_close_type_breach">Vazamento</string>
-    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem!
-\nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar:
-\n
-\n- Dados de Conexão de Nós
-\n- Contatos
-\n
-\nContinuar\?</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n \nContinuar?</string>
     <string name="settings_hapticPin">Feedback Tátil de PIN</string>
     <string name="settings_payer_data">Identificação de pagamento</string>
     <string name="settings_resetSecurityWarnings">Reiniciar Avisos de Segurança</string>
