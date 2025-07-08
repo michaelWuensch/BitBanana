@@ -461,7 +461,7 @@
     <string name="guardian_certificate_verification">Wenn das Zertifikat nicht verifiziert wird, kannst du Oper einer man-in-the-middle Attacke werden. Deaktiviere diese Einstellung nur, wenn du weißt, was du tust.\n\nEs wird empfohlen stattdessen das Zertifikat richtig zu verwenden.\nDas bedeutet, dass das Zertifikat deines Knotens den Hostnamen, der in dieser Verbindungseinstellung verwendet wird, beinhaltet. Füge den Hostnamen als tlsextradomain in der lnd.conf hinzu, bevor du das Zertifikat neu erstellst.</string>
     <string name="navigation_node">Knoten</string>
     <string name="activity_forwarding">Routing</string>
-    <string name="guardian_backup_overrides_existing_data">Einige Daten sind bereits vorhanden! \nBeim Wiederherstellen eines Backups werden alle folgenden Daten vor dem Wiederherstellen gelöscht: \n \n- Verbindungsdaten der Knoten \n- Kontakte \n \nFortfahren?</string>
+    <string name="guardian_backup_overrides_existing_data">Einige Daten sind bereits vorhanden! \nBeim Wiederherstellen eines Backups werden alle folgenden Daten vor dem Wiederherstellen gelöscht: \n \n- Verbindungsdaten der Knoten \n- Kontakte \n- Labels\n \nFortfahren?</string>
     <string name="activity_utxos">Coins (UTXOs)</string>
     <string name="settings_showHelpButtons">Infobuttons anzeigen</string>
     <string name="help_dialog_forwarding">In dieser Ansicht werden alle Zahlungen angezeigt, die du für andere Teilnehmer des Lightning Netzwerks weitergeleitet hast. Außerdem kannst du sehen, wie viel Geld du für die Erbringung dieser Dienstleistung verdient hast.
