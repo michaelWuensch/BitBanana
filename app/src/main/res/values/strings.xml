@@ -1042,4 +1042,6 @@
 
     <string name="label_add">Add a label</string>
     <string name="label_edit">Edit label</string>
+
+    <string name="pulling_payment_data">Pulling payment data…</string>
 </resources>

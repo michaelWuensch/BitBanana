@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -63,6 +64,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     private ImageView mCustodialButton;
     private ConnectionStatusIndicator mConnectionStatusIndicator;
     private ConnectionInfoDialog mConnectionInfoDialog;
+    private ProgressBar mLoadingStringAnalyzerSpinner;
+    private TextView mTvLoadingStringAnalyzerText;
+    private View mScanButton;
 
     private boolean mPreferenceChangeListenerRegistered = false;
     private boolean mBalanceChangeListenerRegistered = false;
@@ -97,6 +101,9 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         mBtnVpnSettings = view.findViewById(R.id.vpnSettingsButton);
         mCustodialButton = view.findViewById(R.id.custodialButton);
         mConnectionStatusIndicator = view.findViewById(R.id.connectionStatusIndicator);
+        mLoadingStringAnalyzerSpinner = view.findViewById(R.id.loadingStringAnalyzerProgressBar);
+        mTvLoadingStringAnalyzerText = view.findViewById(R.id.loadingStringAnalyzerText);
+        mScanButton = view.findViewById(R.id.scanButton);
 
 
         mConnectionInfoDialog = new ConnectionInfoDialog(getContext());
@@ -172,8 +179,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
 
 
         // Action when clicked on "scan"
-        View btnScan = view.findViewById(R.id.scanButton);
-        btnScan.setOnClickListener(new OnSingleClickListener() {
+        mScanButton.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View v) {
                 Intent intent = new Intent(getActivity(), ScanActivity.class);
@@ -240,6 +246,22 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
         updateTotalBalanceDisplay();
 
         return view;
+    }
+
+    public void showStringAnalyzerProgress() {
+        mTvLoadingStringAnalyzerText.setVisibility(View.VISIBLE);
+        mLoadingStringAnalyzerSpinner.setVisibility(View.VISIBLE);
+        mSendButton.setVisibility(View.GONE);
+        mReceiveButton.setVisibility(View.GONE);
+        mScanButton.setVisibility(View.GONE);
+    }
+
+    public void hideStringAnalyzerProgress() {
+        mTvLoadingStringAnalyzerText.setVisibility(View.GONE);
+        mLoadingStringAnalyzerSpinner.setVisibility(View.GONE);
+        mSendButton.setVisibility(View.VISIBLE);
+        mReceiveButton.setVisibility(View.VISIBLE);
+        mScanButton.setVisibility(View.VISIBLE);
     }
 
     private void walletLoadingCompleted() {

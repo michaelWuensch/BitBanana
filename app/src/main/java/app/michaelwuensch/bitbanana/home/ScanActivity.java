@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.StaticInternetIdentifierReader;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ScanActivity extends BaseScannerActivity {
@@ -83,6 +84,10 @@ public class ScanActivity extends BaseScannerActivity {
             readableDataFound(data);
             return;
         }
+        if (StaticInternetIdentifierReader.isLnAddress(data)) {
+            readableDataFound(data);
+            return;
+        }
 
         BitcoinStringAnalyzer.analyze(ScanActivity.this, compositeDisposable, data, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
@@ -98,6 +103,11 @@ public class ScanActivity extends BaseScannerActivity {
             @Override
             public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                 readableDataFound(data);
+            }
+
+            @Override
+            public void onLnAddressFound() {
+
             }
 
             @Override

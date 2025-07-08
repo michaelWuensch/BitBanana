@@ -84,6 +84,11 @@ public class ScanNodePubKeyActivity extends BaseScannerActivity {
             }
 
             @Override
+            public void onLnAddressFound() {
+
+            }
+
+            @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
                 showError(getResources().getString(R.string.error_invalid_data_to_create_channel), RefConstants.ERROR_DURATION_LONG);
             }

@@ -89,6 +89,11 @@ public class BitcoinStringAnalyzerTest {
             }
 
             @Override
+            public void onLnAddressFound() {
+
+            }
+
+            @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
                 if (!BitcoinStringAnalyzer.isLnUrl(input))
                     mResultListener.onFailed(input, expected, RESULT_LNURL_WITHDRAW, ERROR_LNURL_CHECK_FAILED);
