@@ -7,17 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
-import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBTextInputBox;
-import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 
 public class LabelActivity extends BaseAppCompatActivity {
@@ -84,66 +77,20 @@ public class LabelActivity extends BaseAppCompatActivity {
             showError("Label cannot be empty", 3000);
             return;
         }
-        Labels currentBackendLabels = BackendManager.getCurrentBackendConfig().getLabels();
         Label label = new Label();
         label.setId(mLabelID);
         label.setLabel(mLabel.getData());
-        switch (mLabelType) {
-            case UTXO:
-                currentBackendLabels.setUtxoLabels(updateLabel(BackendManager.getCurrentBackendConfig().getLabels().getUtxoLabels(), label));
-                break;
-            case ON_CHAIN_TRANSACTION:
-                currentBackendLabels.setTransactionLabels(updateLabel(BackendManager.getCurrentBackendConfig().getLabels().getTransactionLabels(), label));
-                break;
-            case LN_PAYMENT:
-                currentBackendLabels.setPaymentLabels(updateLabel(BackendManager.getCurrentBackendConfig().getLabels().getPaymentLabels(), label));
-                break;
-            case LN_INVOICE:
-                currentBackendLabels.setInvoiceLabels(updateLabel(BackendManager.getCurrentBackendConfig().getLabels().getInvoiceLabels(), label));
-                break;
-        }
-        BackendManager.getCurrentBackendConfig().setLabels(currentBackendLabels);
-        BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
-        backendConfigsManager.updateBackendConfig(BackendManager.getCurrentBackendConfig());
-        try {
-            backendConfigsManager.apply();
-        } catch (GeneralSecurityException | IOException e) {
-            BBLog.e(LOG_TAG, "Error saving label.");
-            throw new RuntimeException(e);
-        }
-        LabelsUtil.getInstance().broadcastLabelChanged();
+        LabelsManager.getInstance().saveLabel(label, mLabelType);
+        LabelsManager.getInstance().broadcastLabelChanged();
         finish();
     }
 
     private void delete() {
-        Labels currentBackendLabels = BackendManager.getCurrentBackendConfig().getLabels();
         Label label = new Label();
         label.setId(mLabelID);
         label.setLabel(mOriginalLabel);
-        switch (mLabelType) {
-            case UTXO:
-                currentBackendLabels.setUtxoLabels(deleteLabel(BackendManager.getCurrentBackendConfig().getLabels().getUtxoLabels(), label));
-                break;
-            case ON_CHAIN_TRANSACTION:
-                currentBackendLabels.setTransactionLabels(deleteLabel(BackendManager.getCurrentBackendConfig().getLabels().getTransactionLabels(), label));
-                break;
-            case LN_PAYMENT:
-                currentBackendLabels.setPaymentLabels(deleteLabel(BackendManager.getCurrentBackendConfig().getLabels().getPaymentLabels(), label));
-                break;
-            case LN_INVOICE:
-                currentBackendLabels.setInvoiceLabels(deleteLabel(BackendManager.getCurrentBackendConfig().getLabels().getInvoiceLabels(), label));
-                break;
-        }
-        BackendManager.getCurrentBackendConfig().setLabels(currentBackendLabels);
-        BackendConfigsManager backendConfigsManager = BackendConfigsManager.getInstance();
-        backendConfigsManager.updateBackendConfig(BackendManager.getCurrentBackendConfig());
-        try {
-            backendConfigsManager.apply();
-        } catch (GeneralSecurityException | IOException e) {
-            BBLog.e(LOG_TAG, "Error deleting label.");
-            throw new RuntimeException(e);
-        }
-        LabelsUtil.getInstance().broadcastLabelChanged();
+        LabelsManager.getInstance().deleteLabel(label, mLabelType);
+        LabelsManager.getInstance().broadcastLabelChanged();
         finish();
     }
 
@@ -221,28 +168,5 @@ public class LabelActivity extends BaseAppCompatActivity {
                 LabelActivity.super.onBackPressed();
             }
         }
-    }
-
-    // This adds a label to the set if it is not present and updates it if it was present.
-    private ArrayList<Label> updateLabel(ArrayList<Label> labels, Label label) {
-        // remove old label if one was available
-        for (Label l : labels) {
-            if (l.getId().equals(label.getId())) {
-                labels.remove(l);
-                break;
-            }
-        }
-        labels.add(label);
-        return labels;
-    }
-
-    private ArrayList<Label> deleteLabel(ArrayList<Label> labels, Label label) {
-        for (Label l : labels) {
-            if (l.getId().equals(label.getId())) {
-                labels.remove(l);
-                break;
-            }
-        }
-        return labels;
     }
 }

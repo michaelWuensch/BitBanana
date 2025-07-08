@@ -58,6 +58,7 @@ public class RefConstants {
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;
     public static final int BACKEND_CONFIG_JSON_VERSION = 0;
+    public static final int LABELS_JSON_VERSION = 0;
 
     // API request timeouts
     public static final int TOR_TIMEOUT_MULTIPLIER = 3;

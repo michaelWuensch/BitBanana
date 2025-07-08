@@ -24,7 +24,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.AmountView;
 import app.michaelwuensch.bitbanana.customView.BBButton;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.listViews.utxos.itemDetails.UTXODetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.utxos.items.UTXOListItem;
 import app.michaelwuensch.bitbanana.models.Outpoint;
@@ -36,7 +36,7 @@ import app.michaelwuensch.bitbanana.wallet.Wallet;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_TransactionHistory.UtxoSubscriptionListener, LabelsUtil.LabelChangedListener {
+public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectListener, SwipeRefreshLayout.OnRefreshListener, Wallet_TransactionHistory.UtxoSubscriptionListener, LabelsManager.LabelChangedListener {
 
     public static final String EXTRA_UTXO_ACTIVITY_MODE = "utxoActivityMode";
     public static final String EXTRA_UTXO_SELECTED = "selectedUTXOs";
@@ -104,7 +104,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         mUTXOItems = new ArrayList<>();
 
         Wallet_TransactionHistory.getInstance().registerUtxoSubscriptionListener(this);
-        LabelsUtil.getInstance().registerLabelChangedListener(this);
+        LabelsManager.getInstance().registerLabelChangedListener(this);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(UTXOsActivity.this);
@@ -352,7 +352,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
     protected void onDestroy() {
         compositeDisposable.dispose();
         Wallet_TransactionHistory.getInstance().unregisterUtxoSubscriptionListener(this);
-        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        LabelsManager.getInstance().unregisterLabelChangedListener(this);
         super.onDestroy();
     }
 

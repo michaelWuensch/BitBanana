@@ -31,6 +31,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
 import app.michaelwuensch.bitbanana.util.GsonUtil;
@@ -77,6 +78,9 @@ public class DataBackupUtil {
                 continue;
             filteredEntries.put(entry.getKey(), entry.getValue());
         }
+
+        // Labels
+        backupObject.setLabelsJson(LabelsManager.getInstance().getWalletLabelsCollectionJson());
 
         String settingsJsonString = new Gson().toJson(filteredEntries);
         backupObject.setSettingsJson(settingsJsonString);
@@ -125,14 +129,29 @@ public class DataBackupUtil {
                     return false;
                 }
             }
+            if (backupVersion < 5) {
+                // AvatarMaterial -> WalletID
+                BBLog.d(LOG_TAG, "Updating connections from old backup version (<5) ...");
+                List<BackendConfig> backendConfigs = BackendConfigsManager.getInstance().getAllBackendConfigs(false);
+                for (BackendConfig backendConfig : backendConfigs) {
+                    backendConfig.setWalletID(backendConfig.getAvatarMaterial());
+                    BackendConfigsManager.getInstance().updateBackendConfig(backendConfig);
+                }
+                try {
+                    BackendConfigsManager.getInstance().apply();
+                    BBLog.d(LOG_TAG, "Connections updated.");
+                } catch (GeneralSecurityException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             if (backupVersion > 4) {
                 // restore settings with the new method
                 if (dataBackup.getSettingsJson() != null) {
                     BBLog.d(LOG_TAG, "Restoring settings ...");
                     Type type = new TypeToken<Map<String, Object>>() {
                     }.getType();
-                    Map<String, Object> restoredMap = GsonUtil.getTypeSafeGson()
-                            .fromJson(dataBackup.getSettingsJson(), type);
+                    Map<String, Object> restoredMap = GsonUtil.getTypeSafeGson().fromJson(dataBackup.getSettingsJson(), type);
 
                     // Save to SharedPreferences
                     SharedPreferences.Editor editor = PrefsUtil.editPrefs();
@@ -166,6 +185,11 @@ public class DataBackupUtil {
                     editor.apply();
                     BBLog.d(LOG_TAG, "Settings restored.");
                 }
+
+                // restore labels
+                BBLog.d(LOG_TAG, "Restoring labels ...");
+                LabelsManager.getInstance().restoreWalletLabelsCollectionJson(dataBackup.getLabelsJson());
+                BBLog.d(LOG_TAG, "Labels restored.");
             }
 
             if (backupVersion == 4) {
@@ -188,8 +212,7 @@ public class DataBackupUtil {
                             continue;
                         if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
                             continue;
-                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH))
-                            continue;
+                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) continue;
 
                         if (value instanceof Boolean) {
                             editor.putBoolean(entry.getKey(), (Boolean) value);

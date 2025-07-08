@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.AmountView;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.listViews.utxos.UTXOSelectListener;
 import app.michaelwuensch.bitbanana.models.Utxo;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -68,7 +68,7 @@ public class UTXOItemViewHolder extends RecyclerView.ViewHolder {
 
         // Label
         if (FeatureManager.isLabelsEnabled()) {
-            String label = LabelsUtil.getLabel(utxo);
+            String label = LabelsManager.getLabel(utxo);
             if (label != null) {
                 mLabel.setText(label);
                 mLabel.setVisibility(View.VISIBLE);

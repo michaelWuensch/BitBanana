@@ -136,7 +136,15 @@ public class BackendConfig implements Comparable<BackendConfig> {
     private String tempRefreshToken;
 
     /**
-     * This allows us to display avatars on the node management screen. We fill this information after getting the GetCurrentNodeInfo information.
+     * The walletID is a unique id on a per wallet basis, not on a connection basis.
+     * You can for example have two connections in BitBanana both connecting to the same LND instance.
+     * For example one over Tor and the other over Tailscale.
+     * The WalletID can for example be used to display an Avatar images or to reference labels.
+     */
+    private String walletID;
+
+    /**
+     * DEPRECATED
      */
     private String avatarMaterial;
 
@@ -348,6 +356,14 @@ public class BackendConfig implements Comparable<BackendConfig> {
         this.tempRefreshToken = tempRefreshToken;
     }
 
+    public String getWalletID() {
+        return walletID;
+    }
+
+    public void setWalletID(String walletID) {
+        this.walletID = walletID;
+    }
+
     public String getAvatarMaterial() {
         return avatarMaterial;
     }
@@ -369,20 +385,6 @@ public class BackendConfig implements Comparable<BackendConfig> {
 
     public void setQuickReceiveConfig(QuickReceiveConfig quickReceiveConfig) {
         this.quickReceiveConfig = quickReceiveConfig;
-    }
-
-    public Labels getLabels() {
-        if (this.labels == null)
-            return new Labels();
-        return labels;
-    }
-
-    public boolean hasLabels() {
-        return this.labels != null;
-    }
-
-    public void setLabels(Labels labels) {
-        this.labels = labels;
     }
 
     public boolean hasAddedInEmergencyMode() {
@@ -436,9 +438,9 @@ public class BackendConfig implements Comparable<BackendConfig> {
         copy.setClientKey(getClientKey());
         copy.setTempAccessToken(getTempAccessToken());
         copy.setTempRefreshToken(getTempRefreshToken());
+        copy.setWalletID(getWalletID());
         copy.setAvatarMaterial(getAvatarMaterial());
         copy.setQuickReceiveConfig(getQuickReceiveConfig());
-        copy.setLabels(getLabels());
         copy.setAddedInEmergencyMode(wasAddedInEmergencyMode());
         return copy;
     }
