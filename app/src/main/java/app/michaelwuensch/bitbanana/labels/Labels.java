@@ -3,7 +3,7 @@ package app.michaelwuensch.bitbanana.labels;
 import java.util.ArrayList;
 
 /**
- * Class to store labels for a BackendConfig.
+ * Class to store labels for a wallet.
  */
 public class Labels {
 
@@ -30,25 +30,25 @@ public class Labels {
 
     public ArrayList<Label> getUtxoLabels() {
         if (utxoLabels == null)
-            return new ArrayList<>();
+            utxoLabels = new ArrayList<>();
         return utxoLabels;
     }
 
     public ArrayList<Label> getTransactionLabels() {
         if (transactionLabels == null)
-            return new ArrayList<>();
+            transactionLabels = new ArrayList<>();
         return transactionLabels;
     }
 
     public ArrayList<Label> getPaymentLabels() {
         if (paymentLabels == null)
-            return new ArrayList<>();
+            paymentLabels = new ArrayList<>();
         return paymentLabels;
     }
 
     public ArrayList<Label> getInvoiceLabels() {
         if (invoiceLabels == null)
-            return new ArrayList<>();
+            invoiceLabels = new ArrayList<>();
         return invoiceLabels;
     }
 

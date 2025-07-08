@@ -352,12 +352,11 @@ public class ManualSetup extends BaseAppCompatActivity {
             backendConfig.setLocation(mOriginalBackendConfig.getLocation());
             backendConfig.setTempAccessToken(mOriginalBackendConfig.getTempAccessToken());
             backendConfig.setTempRefreshToken(mOriginalBackendConfig.getTempRefreshToken());
+            backendConfig.setWalletID(mOriginalBackendConfig.getWalletID());
             backendConfig.setAvatarMaterial(mOriginalBackendConfig.getAvatarMaterial());
             // If we are editing a NWC connection we always want to keep the quick receive settings. The place to edit these is in the receive dialog.
             if (mOriginalBackendConfig.hasQuickReceiveConfig())
                 backendConfig.setQuickReceiveConfig(mOriginalBackendConfig.getQuickReceiveConfig());
-            if (mOriginalBackendConfig.hasLabels())
-                backendConfig.setLabels(mOriginalBackendConfig.getLabels());
             if (mOriginalBackendConfig.hasAddedInEmergencyMode())
                 backendConfig.setAddedInEmergencyMode(mOriginalBackendConfig.wasAddedInEmergencyMode());
         } else {

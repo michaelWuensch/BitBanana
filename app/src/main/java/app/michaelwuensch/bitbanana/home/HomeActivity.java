@@ -769,8 +769,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     public void updateDrawerNavigationMenu() {
         UserAvatarView userAvatarView = mNavigationView.getHeaderView(0).findViewById(R.id.userAvatarView);
-        if (BackendManager.getCurrentBackendConfig().getAvatarMaterial() != null)
-            userAvatarView.setupWithArbitraryString(BackendManager.getCurrentBackendConfig().getAvatarMaterial(), false);
+        if (BackendManager.getCurrentBackendConfig().getWalletID() != null)
+            userAvatarView.setupWithArbitraryString(BackendManager.getCurrentBackendConfig().getWalletID(), false);
         else
             userAvatarView.reset();
         TextView userWalletName = mNavigationView.getHeaderView(0).findViewById(R.id.userWalletName);

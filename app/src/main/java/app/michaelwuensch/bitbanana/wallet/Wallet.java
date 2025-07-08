@@ -226,9 +226,9 @@ public class Wallet {
 
                     // Save the network info to our backend configuration if it is different
                     if (response.getNetwork() != BackendManager.getCurrentBackendConfig().getNetwork() ||
-                            !response.getAvatarMaterial().equals(BackendManager.getCurrentBackendConfig().getAvatarMaterial())) {
+                            !response.getAvatarMaterial().equals(BackendManager.getCurrentBackendConfig().getWalletID())) {
                         BackendManager.getCurrentBackendConfig().setNetwork(response.getNetwork());
-                        BackendManager.getCurrentBackendConfig().setAvatarMaterial(response.getAvatarMaterial());
+                        BackendManager.getCurrentBackendConfig().setWalletID(response.getAvatarMaterial());
                         BackendConfigsManager.getInstance().updateBackendConfig(BackendManager.getCurrentBackendConfig());
                         BackendConfigsManager.getInstance().apply();
                     }

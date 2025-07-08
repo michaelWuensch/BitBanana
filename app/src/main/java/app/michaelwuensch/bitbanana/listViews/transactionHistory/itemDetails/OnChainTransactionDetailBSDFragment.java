@@ -20,7 +20,7 @@ import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.labels.LabelActivity;
 import app.michaelwuensch.bitbanana.labels.Labels;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BlockExplorer;
@@ -29,7 +29,7 @@ import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
 
-public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment implements LabelsUtil.LabelChangedListener {
+public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment implements LabelsManager.LabelChangedListener {
 
     public static final String TAG = OnChainTransactionDetailBSDFragment.class.getSimpleName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
@@ -157,7 +157,7 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment impleme
         }
 
         if (FeatureManager.isLabelsEnabled()) {
-            String label = LabelsUtil.getLabel(mTransaction);
+            String label = LabelsManager.getLabel(mTransaction);
             if (label != null) {
                 mLabelLabel.setVisibility(View.VISIBLE);
                 mLabel.setVisibility(View.VISIBLE);
@@ -252,12 +252,12 @@ public class OnChainTransactionDetailBSDFragment extends BaseBSDFragment impleme
     @Override
     public void onStart() {
         super.onStart();
-        LabelsUtil.getInstance().registerLabelChangedListener(this);
+        LabelsManager.getInstance().registerLabelChangedListener(this);
     }
 
     @Override
     public void onDestroy() {
-        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        LabelsManager.getInstance().unregisterLabelChangedListener(this);
         super.onDestroy();
     }
 

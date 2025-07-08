@@ -81,6 +81,7 @@ public class PrefsUtil {
     public static final String EMERGENCY_PASSWORD_HASH = "emergency_password_hash";
     public static final String BACKEND_CONFIGS = "wallet_configs";
     public static final String CONTACTS = "contacts";
+    public static final String LABELS = "labels";
     public static final String RANDOM_SOURCE = "random_source";
 
     private static SharedPreferences encryptedPrefs;

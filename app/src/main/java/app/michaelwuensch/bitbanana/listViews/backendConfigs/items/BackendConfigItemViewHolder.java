@@ -67,8 +67,8 @@ public class BackendConfigItemViewHolder extends RecyclerView.ViewHolder {
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(() -> {
             // Background
-            if (BackendConfig.getAvatarMaterial() != null) {
-                Bitmap avatar = AvathorUtil.getAvathorWithCache(mContext, BackendConfig.getAvatarMaterial(), 150);
+            if (BackendConfig.getWalletID() != null) {
+                Bitmap avatar = AvathorUtil.getAvathorWithCache(mContext, BackendConfig.getWalletID(), 150);
                 handler.post(() -> {
                     // UI Thread work
                     mAvatar.setImageBitmap(avatar);

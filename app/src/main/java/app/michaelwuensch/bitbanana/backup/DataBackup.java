@@ -15,6 +15,7 @@ public class DataBackup {
     private Map<String, ?> settings;
 
     private String settingsJson;
+    private String labelsJson;
 
     public BackendConfig[] getBackendConfigs() {
         return connections;
@@ -46,5 +47,13 @@ public class DataBackup {
 
     public void setSettingsJson(String settingsJson) {
         this.settingsJson = settingsJson;
+    }
+
+    public String getLabelsJson() {
+        return labelsJson;
+    }
+
+    public void setLabelsJson(String labelsJson) {
+        this.labelsJson = labelsJson;
     }
 }

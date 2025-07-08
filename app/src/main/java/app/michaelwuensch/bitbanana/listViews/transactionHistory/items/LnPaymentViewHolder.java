@@ -4,7 +4,7 @@ import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 
@@ -43,7 +43,7 @@ public class LnPaymentViewHolder extends TransactionViewHolder {
         // Set description
         String label = null;
         if (FeatureManager.isLabelsEnabled()) {
-            label = LabelsUtil.getLabel(payment);
+            label = LabelsManager.getLabel(payment);
         }
         if (label != null) {
             setSecondaryDescription(label, true);

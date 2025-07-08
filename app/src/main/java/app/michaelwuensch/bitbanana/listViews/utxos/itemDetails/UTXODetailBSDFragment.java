@@ -22,7 +22,7 @@ import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.labels.LabelActivity;
 import app.michaelwuensch.bitbanana.labels.Labels;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.models.LeaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.ReleaseUTXORequest;
 import app.michaelwuensch.bitbanana.models.Utxo;
@@ -37,7 +37,7 @@ import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet_Balance;
 import app.michaelwuensch.bitbanana.wallet.Wallet_TransactionHistory;
 
-public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_TransactionHistory.UtxoSubscriptionListener, LabelsUtil.LabelChangedListener {
+public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_TransactionHistory.UtxoSubscriptionListener, LabelsManager.LabelChangedListener {
 
     public static final String LOG_TAG = UTXODetailBSDFragment.class.getSimpleName();
     public static final String ARGS_UTXO = "UTXO";
@@ -196,7 +196,7 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
         }
 
         if (FeatureManager.isLabelsEnabled()) {
-            String label = LabelsUtil.getLabel(mUTXO);
+            String label = LabelsManager.getLabel(mUTXO);
             if (label != null) {
                 mLabelLabel.setVisibility(View.VISIBLE);
                 mLabel.setVisibility(View.VISIBLE);
@@ -264,13 +264,13 @@ public class UTXODetailBSDFragment extends BaseBSDFragment implements Wallet_Tra
     public void onStart() {
         super.onStart();
         Wallet_TransactionHistory.getInstance().registerUtxoSubscriptionListener(this);
-        LabelsUtil.getInstance().registerLabelChangedListener(this);
+        LabelsManager.getInstance().registerLabelChangedListener(this);
     }
 
     @Override
     public void onDestroy() {
         Wallet_TransactionHistory.getInstance().unregisterUtxoSubscriptionListener(this);
-        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        LabelsManager.getInstance().unregisterLabelChangedListener(this);
         super.onDestroy();
     }
 

@@ -32,7 +32,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails.InvoiceDetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails.LnPaymentDetailBSDFragment;
 import app.michaelwuensch.bitbanana.listViews.transactionHistory.itemDetails.OnChainTransactionDetailBSDFragment;
@@ -60,7 +60,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionHistoryFragment extends Fragment implements Wallet_TransactionHistory.HistoryListener, Wallet_TransactionHistory.InvoiceSubscriptionListener, Wallet_Channels.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener, LabelsUtil.LabelChangedListener {
+public class TransactionHistoryFragment extends Fragment implements Wallet_TransactionHistory.HistoryListener, Wallet_TransactionHistory.InvoiceSubscriptionListener, Wallet_Channels.ChannelsUpdatedSubscriptionListener, SwipeRefreshLayout.OnRefreshListener, TransactionSelectListener, LabelsManager.LabelChangedListener {
 
     private static final String LOG_TAG = TransactionHistoryFragment.class.getSimpleName();
 
@@ -153,7 +153,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
         Wallet_TransactionHistory.getInstance().registerHistoryListener(this);
         Wallet_TransactionHistory.getInstance().registerInvoiceSubscriptionListener(this);
         Wallet_Channels.getInstance().registerChannelsUpdatedSubscriptionListener(this);
-        LabelsUtil.getInstance().registerLabelChangedListener(this);
+        LabelsManager.getInstance().registerLabelChangedListener(this);
 
 
         // use a linear layout manager
@@ -389,7 +389,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
         Wallet_TransactionHistory.getInstance().unregisterHistoryListener(this);
         Wallet_TransactionHistory.getInstance().unregisterInvoiceSubscriptionListener(this);
         Wallet_Channels.getInstance().unregisterChannelsUpdatedSubscriptionListener(this);
-        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        LabelsManager.getInstance().unregisterLabelChangedListener(this);
     }
 
     @Override

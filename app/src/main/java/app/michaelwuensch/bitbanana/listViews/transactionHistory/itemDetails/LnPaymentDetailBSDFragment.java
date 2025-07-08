@@ -19,14 +19,14 @@ import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BSDScrollableMainView;
 import app.michaelwuensch.bitbanana.labels.LabelActivity;
 import app.michaelwuensch.bitbanana.labels.Labels;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.listViews.paymentRoute.PaymentRouteActivity;
 import app.michaelwuensch.bitbanana.models.LnPayment;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.TimeFormatUtil;
 
-public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements LabelsUtil.LabelChangedListener {
+public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements LabelsManager.LabelChangedListener {
 
     public static final String TAG = LnPaymentDetailBSDFragment.class.getSimpleName();
     public static final String ARGS_TRANSACTION = "TRANSACTION";
@@ -175,7 +175,7 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements Label
             mPayerNoteLabel.setVisibility(View.GONE);
         }
         if (FeatureManager.isLabelsEnabled()) {
-            String label = LabelsUtil.getLabel(payment);
+            String label = LabelsManager.getLabel(payment);
             if (label != null) {
                 mLabelLabel.setVisibility(View.VISIBLE);
                 mLabel.setVisibility(View.VISIBLE);
@@ -197,12 +197,12 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements Label
     @Override
     public void onStart() {
         super.onStart();
-        LabelsUtil.getInstance().registerLabelChangedListener(this);
+        LabelsManager.getInstance().registerLabelChangedListener(this);
     }
 
     @Override
     public void onDestroy() {
-        LabelsUtil.getInstance().unregisterLabelChangedListener(this);
+        LabelsManager.getInstance().unregisterLabelChangedListener(this);
         super.onDestroy();
     }
 

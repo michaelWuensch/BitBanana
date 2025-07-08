@@ -3,7 +3,7 @@ package app.michaelwuensch.bitbanana.listViews.transactionHistory.items;
 import android.view.View;
 
 import app.michaelwuensch.bitbanana.R;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.models.LnInvoice;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 
@@ -29,7 +29,7 @@ public class LnInvoiceViewHolder extends TransactionViewHolder {
         // Set description
         String label = null;
         if (FeatureManager.isLabelsEnabled()) {
-            label = LabelsUtil.getLabel(invoice);
+            label = LabelsManager.getLabel(invoice);
         }
         if (label != null) {
             setSecondaryDescription(label, true);

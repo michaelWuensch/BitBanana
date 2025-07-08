@@ -5,7 +5,7 @@ import android.view.View;
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
-import app.michaelwuensch.bitbanana.labels.LabelsUtil;
+import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.models.OnChainTransaction;
 import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
@@ -39,7 +39,7 @@ public class OnChainTransactionViewHolder extends TransactionViewHolder {
 
         String label = null;
         if (FeatureManager.isLabelsEnabled()) {
-            label = LabelsUtil.getLabel(transaction);
+            label = LabelsManager.getLabel(transaction);
         }
 
         // is internal?
