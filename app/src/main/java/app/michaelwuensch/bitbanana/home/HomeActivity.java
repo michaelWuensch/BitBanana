@@ -85,6 +85,7 @@ import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.settings.SettingsActivity;
 import app.michaelwuensch.bitbanana.signVerify.SignVerifyActivity;
 import app.michaelwuensch.bitbanana.support.SupportActivity;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
@@ -92,7 +93,6 @@ import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
-import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -516,6 +516,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BitcoinStringAnalyzer.analyze(HomeActivity.this, compositeDisposable, input, new BitcoinStringAnalyzer.OnDataDecodedListener() {
             @Override
             public void onValidLightningInvoice(DecodedBolt11 decodedBolt11, Bip21Invoice fallbackOnChainInvoice) {
+                hideStringAnalyzerProgress();
                 if (fallbackOnChainInvoice != null && WalletUtil.getMaxLightningSendAmount() < decodedBolt11.getAmountRequested()) {
                     if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
                         // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
@@ -549,6 +550,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidBitcoinInvoice(Bip21Invoice onChainInvoice) {
+                hideStringAnalyzerProgress();
                 if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
                     SendBSDFragment sendBSDFragment = SendBSDFragment.createOnChainDialog(onChainInvoice);
                     sendBSDFragment.show(getSupportFragmentManager(), "sendBottomSheetDialog");
@@ -558,6 +560,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
+                hideStringAnalyzerProgress();
                 if (fallbackOnChainInvoice != null && WalletUtil.getMaxLightningSendAmount() < decodedBolt12.getAmount()) {
                     if (BackendManager.getCurrentBackend().supportsOnChainSending()) {
                         // Not enough funds available in channels to send this lightning payment. Fallback to onChain.
@@ -574,47 +577,60 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             }
 
             @Override
+            public void onLnAddressFound() {
+                showStringAnalyzerProgress();
+            }
+
+            @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
+                hideStringAnalyzerProgress();
                 LnUrlWithdrawBSDFragment lnUrlWithdrawBSDFragment = LnUrlWithdrawBSDFragment.createWithdrawDialog(withdrawResponse);
                 lnUrlWithdrawBSDFragment.show(getSupportFragmentManager(), "lnurlWithdrawBottomSheetDialog");
             }
 
             @Override
             public void onValidLnUrlChannel(LnUrlChannelResponse channelResponse) {
+                hideStringAnalyzerProgress();
                 LnUrlChannelBSDFragment lnUrlChannelBSDFragment = LnUrlChannelBSDFragment.createLnURLChannelDialog(channelResponse);
                 lnUrlChannelBSDFragment.show(getSupportFragmentManager(), "lnurlChannelBottomSheetDialog");
             }
 
             @Override
             public void onValidLnUrlHostedChannel(LnUrlHostedChannelResponse hostedChannelResponse) {
+                hideStringAnalyzerProgress();
                 showError(getResources().getString(R.string.lnurl_unsupported_type), RefConstants.ERROR_DURATION_SHORT);
             }
 
             @Override
             public void onValidLnUrlPay(LnUrlPayResponse payResponse) {
+                hideStringAnalyzerProgress();
                 LnUrlPayBSDFragment lnUrlPayBSDFragment = LnUrlPayBSDFragment.createLnUrlPayDialog(payResponse);
                 lnUrlPayBSDFragment.show(getSupportFragmentManager(), "lnurlPayBottomSheetDialog");
             }
 
             @Override
             public void onValidLnUrlAuth(URL url) {
+                hideStringAnalyzerProgress();
                 LnUrlAuthBSDFragment lnUrlAuthBSDFragment = LnUrlAuthBSDFragment.createLnUrlAuthDialog(url);
                 lnUrlAuthBSDFragment.show(getSupportFragmentManager(), "lnurlAuthBottomSheetDialog");
             }
 
             @Override
             public void onValidConnectData(BackendConfig backendConfig) {
+                hideStringAnalyzerProgress();
                 addWallet(backendConfig);
             }
 
             @Override
             public void onValidNodeUri(LightningNodeUri nodeUri) {
+                hideStringAnalyzerProgress();
                 ChooseNodeActionBSDFragment chooseNodeActionBSDFragment = ChooseNodeActionBSDFragment.createChooseActionDialog(nodeUri);
                 chooseNodeActionBSDFragment.show(getSupportFragmentManager(), "choseNodeActionDialog");
             }
 
             @Override
             public void onValidURL(String urlAsString) {
+                hideStringAnalyzerProgress();
                 URL url = null;
                 try {
                     url = new URL(urlAsString);
@@ -634,13 +650,30 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
             @Override
             public void onError(String error, int duration) {
+                hideStringAnalyzerProgress();
                 showError(error, duration);
             }
 
             @Override
             public void onNoReadableData() {
+                hideStringAnalyzerProgress();
                 showError(getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
             }
+        });
+    }
+
+    private void showStringAnalyzerProgress() {
+        mPagerAdapter.getWalletFragment().showStringAnalyzerProgress();
+    }
+
+    private void hideStringAnalyzerProgress() {
+        runOnUiThread(() -> {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPagerAdapter.getWalletFragment().hideStringAnalyzerProgress();
+                }
+            }, 500);
         });
     }
 

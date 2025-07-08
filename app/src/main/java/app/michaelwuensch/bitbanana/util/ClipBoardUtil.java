@@ -109,6 +109,11 @@ public class ClipBoardUtil {
             }
 
             @Override
+            public void onLnAddressFound() {
+
+            }
+
+            @Override
             public void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse) {
                 // never reached
             }

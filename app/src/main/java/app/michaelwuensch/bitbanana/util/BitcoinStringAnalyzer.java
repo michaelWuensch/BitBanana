@@ -179,6 +179,11 @@ public class BitcoinStringAnalyzer {
         StaticInternetIdentifierReader.checkIfValidStaticInternetIdentifier(ctx, inputString, new StaticInternetIdentifierReader.OnStaticIdentifierChecked() {
 
             @Override
+            public void onLnAddressFound() {
+                listener.onLnAddressFound();
+            }
+
+            @Override
             public void onValidLnurlPay(LnUrlPayResponse lnUrlPayResponse) {
                 listener.onValidLnUrlPay(lnUrlPayResponse);
             }
@@ -219,6 +224,8 @@ public class BitcoinStringAnalyzer {
         void onValidBitcoinInvoice(Bip21Invoice onChainInvoice);
 
         void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice);
+
+        void onLnAddressFound();
 
         void onValidLnUrlWithdraw(LnUrlWithdrawResponse withdrawResponse);
 

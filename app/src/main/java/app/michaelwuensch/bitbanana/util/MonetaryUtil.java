@@ -310,4 +310,11 @@ public class MonetaryUtil {
         nf.setCurrency(Currency.getInstance(getCurrentCurrency().getCode()));
         return nf.format(fiatValue);
     }
+
+    /**
+     * Makes the last three digits 0 in the msat amount truncating it to full satoshis
+     */
+    public long mSatsTruncatedToSats(long mSats) {
+        return (mSats / 1000L) * 1000L;
+    }
 }

@@ -42,6 +42,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
     private OnAmountInputActionListener mOnAmountInputActionListener;
     private boolean mBlockOnTextChangedValidation;
     private long mUtxoSelectionAmount;
+    private boolean mAllowMsats = true;
 
     public BBAmountInput(Context context) {
         super(context);
@@ -130,7 +131,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
                     return;
 
                 // validate input
-                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mIsOnChain);
+                mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mIsOnChain && mAllowMsats);
 
                 if (mAmountValid && !mIsFixedAmount)
                     mAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
@@ -179,6 +180,10 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
         }
     }
 
+    public void setAllowMsats(boolean allowMsats) {
+        mAllowMsats = allowMsats;
+    }
+
     public void setOnChain(boolean onChain) {
         mIsOnChain = onChain;
     }
@@ -195,7 +200,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
         mAmount = msats;
         mAmountValid = true;
         mBlockOnTextChangedValidation = true;
-        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(msats, !mIsOnChain));
+        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(msats, !mIsOnChain && mAllowMsats));
         mBlockOnTextChangedValidation = false;
         mAllFundsLayout.setVisibility(GONE);
         mEtAmount.clearFocus();
@@ -244,7 +249,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
     public void setAmount(long amount) {
         mAmount = amount;
         mBlockOnTextChangedValidation = true;
-        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(amount, !mIsOnChain));
+        mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(amount, !mIsOnChain && mAllowMsats));
         mBlockOnTextChangedValidation = false;
     }
 
@@ -265,7 +270,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
             if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
                 mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
                 mBlockOnTextChangedValidation = true;
-                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain));
+                mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats));
                 mBlockOnTextChangedValidation = false;
             }
         }

@@ -29,6 +29,7 @@ import app.michaelwuensch.bitbanana.models.LightningNodeUri;
 import app.michaelwuensch.bitbanana.util.BitcoinStringAnalyzer;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.StaticInternetIdentifierReader;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ManualSendInputView extends ConstraintLayout {
@@ -122,6 +123,11 @@ public class ManualSendInputView extends ConstraintLayout {
                  */
                 if (BitcoinStringAnalyzer.isLnUrl(mData)) {
                     mListener.onValid(mData);
+                    return;
+                }
+                if (StaticInternetIdentifierReader.isLnAddress(mData)) {
+                    mListener.onValid(mData);
+                    return;
                 }
                 BitcoinStringAnalyzer.analyze(getContext(), mCompositeDisposable, mData, new BitcoinStringAnalyzer.OnDataDecodedListener() {
                     @Override
@@ -137,6 +143,11 @@ public class ManualSendInputView extends ConstraintLayout {
                     @Override
                     public void onValidBolt12Offer(DecodedBolt12 decodedBolt12, Bip21Invoice fallbackOnChainInvoice) {
                         mListener.onValid(mData);
+                    }
+
+                    @Override
+                    public void onLnAddressFound() {
+
                     }
 
                     @Override

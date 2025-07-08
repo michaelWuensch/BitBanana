@@ -34,8 +34,20 @@ public class StaticInternetIdentifierReader {
 
     private static final String LOG_TAG = StaticInternetIdentifierReader.class.getSimpleName();
 
+    /**
+     * This function only checks if the syntax is correct, not if the LnAddress actually exists.
+     */
+    public static boolean isLnAddress(String address) {
+        address = UriUtil.removeURI(address);
+        LnAddress lnAddress = new LnAddress(address);
+        return (lnAddress.isValidLnurlAddress() || lnAddress.isValidBip353DnsRecordAddress());
+    }
+
     public static void checkIfValidStaticInternetIdentifier(Context ctx, String address, OnStaticIdentifierChecked listener) {
         LnAddress lnAddress = new LnAddress(address);
+
+        if (lnAddress.isValidLnurlAddress() || lnAddress.isValidBip353DnsRecordAddress())
+            listener.onLnAddressFound();
 
         if (lnAddress.isValidBip353DnsRecordAddress()) {
             Bip353DNSLookup(lnAddress, ctx, listener);
@@ -188,6 +200,8 @@ public class StaticInternetIdentifierReader {
 
 
     public interface OnStaticIdentifierChecked {
+
+        void onLnAddressFound();
 
         void onValidLnurlPay(LnUrlPayResponse lnUrlPayResponse);
 
