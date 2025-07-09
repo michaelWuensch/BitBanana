@@ -135,7 +135,7 @@
     <string name="guardian_disableScreenProtection">Se você permitir a gravação na tela, um software mal-intencionado poderá gravar um vídeo ou fazer capturas de tela enquanto estiver usando o BitBanana. Recomendamos desativar isso apenas enquanto você deseja gravar um vídeo ou tirar uma captura de tela.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Você está prestes a pagar %1$s%% em taxas de rede.\n\nSoluções possíveis:\n- tente um canal de lighting\n- seleccione uma taxa menor, espere mais\n- tente de novo mais tarde\n- transacionar uma quantidade maior\n\nDeseja continuar mesmo assim?</string>
     <string name="settings_category_general">Geral</string>
-    <string name="settings_category_security">Segurança</string>
+    <string name="settings_category_security">Segurança e Privacidade</string>
     <string name="settings_category_help">Ajuda</string>
     <string name="settings_category_advanced">Avançado</string>
     <string name="settings_btcUnit">Unidade de Bitcoin</string>
@@ -349,7 +349,7 @@
     <string name="activity_utxos">Moedas (UTXOs)</string>
     <string name="channel_close_type_force_close">Fechamento Forçado</string>
     <string name="channel_close_type_breach">Vazamento</string>
-    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n \nContinuar?</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n- Rótulos\n \nContinuar?</string>
     <string name="settings_hapticPin">Feedback Tátil de PIN</string>
     <string name="settings_payer_data">Identificação de pagamento</string>
     <string name="settings_resetSecurityWarnings">Reiniciar Avisos de Segurança</string>
@@ -520,7 +520,7 @@
     <string name="port">Porta</string>
     <string name="activity_contact_details">Detalhes do Contato</string>
     <string name="settings_scan_clipboard_summary">Automaticamente checar a área de transferência por dados com os quais o BitBanana pode lidar.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar seu PIN. O app fechará agora. \nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar sua tela de bloqueio do app. O app fechará agora. \nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
     <string name="fee_limit_title">Alerta de Limite de Taxa</string>
     <string name="biometricPrompt_title">Autenticação Biométrica</string>
     <string name="help_dialog_scanPaymentRequest">Códigos QR contendo o seguinte são válidos:
@@ -1068,5 +1068,39 @@
     <string name="password_changed">Senha alterada!</string>
     <string name="emergency_pin_create">Criar PIN de emergência</string>
     <string name="emergency_pin_confirm">Confirmar PIN de emergência</string>
-    <string name="emergency_pin_enter_new">Insira novo PIN de emergência</string>
+    <string name="emergency_pin_enter_new">Insira um novo PIN de emergência</string>
+    <string name="emergency_pin_confirm_new">Confirme o novo PIN de emergência</string>
+    <string name="emergency_password_create">Insira senha de emergência</string>
+    <string name="emergency_password_confirm">Confirme senha de emergência</string>
+    <string name="emergency_password_enter_new">Insira uma nova senha de emergência</string>
+    <string name="emergency_password_confirm_new">Confirme a nova senha de emergência</string>
+    <string name="guardian_emergency_unlock_ineffective">Como a autenticação biométrica está ativada, esta função pode ser contornada, uma vez que usar biometria ativará o desbloqueio normal, em vez do desbloqueio de emergência. Para garantir que esta medida de segurança seja efetiva, por favor desative a autenticação biométrica.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Você tem o desbloqueio de emergência ativado. Se ativar a autenticação biométrica, um login biométrico contornará sua proteção de desbloqueio de emergência, ativando um desbloqueio normal. Para manter os benefícios de segurança do desbloqueio de emergência, não ative a biometria.</string>
+    <string name="settings_category_pin_options">Opções de PIN</string>
+    <string name="settings_app_lock">Bloqueio do App</string>
+    <string name="settings_lockScreenTimeout_description">Atraso antes do BitBanana ser bloqueado após minimização do app.</string>
+    <string name="settings_add_password">Proteger com senha</string>
+    <string name="settings_remove_password">Remover senha</string>
+    <string name="settings_change_password">Mudar/Remover senha</string>
+    <string name="settings_app_lock_summary_unprotected">Desprotegido</string>
+    <string name="settings_app_lock_summary_pin_protected">Protegido com PIN</string>
+    <string name="settings_app_lock_summary_password_protected">Protegido com senha</string>
+    <string name="settings_app_lock_emergency_category_pin">PIN de Emergência</string>
+    <string name="settings_app_lock_emergency_category_password">Senha de emergência</string>
+    <string name="settings_app_lock_emergency_mode">Modo de emergência</string>
+    <string name="settings_changeEmergencyPin">Mudar/Remover PIN de emergência</string>
+    <string name="settings_changeEmergencyPassword">Mudar/Remover senha de emergência</string>
+    <string name="settings_addEmergencyPin">Definir PIN de emergência</string>
+    <string name="settings_addEmergencyPassword">Definir senha de emergência</string>
+    <string name="emergency_mode_erase_all">Apagar tudo</string>
+    <string name="emergency_mode_selected_wallet_only">Mostrar carteira selecionada apenas</string>
+    <string name="emergency_mode_wallet_to_show">Carteira a exibir</string>
+    <string name="settings_remove_emergency_pin">Remover PIN de emergência</string>
+    <string name="settings_remove_emergency_password">Remover senha de emergência</string>
+    <string name="settings_featureLabels">Rótulos</string>
+    <string name="settings_featureLabels_summary">Organize-se adicionando suas próprias notas a transações e outros itens, fazendo-os mais fáceis de rastrear e entender.</string>
+    <string name="error_pin_and_emergency_pin_equal">Seu PIN e o PIN de emergência devem divergir.</string>
+    <string name="error_password_and_emergency_password_equal">Sua senha e a senha de emergência devem divergir.</string>
+    <string name="help_dialog_label">Rótulos permitem que você adicione notas pessoais para rastreamento e contextualização mais fáceis. Eles são salvos automaticamente no BitBanana, portanto estarão visíveis somente aqui e não aparecerão em outros apps que você usa para acessar seu nó ou carteira.</string>
+    <string name="help_dialog_emergency_pin_password">Uma senha ou PIN de emergência é feita para situações em que você é forçado a desbloquear sua carteira por outrem. Se inserir sua senha ou PIN de emergência ao invés do normal, o BitBanana aparentará estar desbloqueado normalmente enquanto toma ações de proteção adicionais. Dependendo do modo de emergência escolhido, ele poderá apagar todas as suas conexões ou mostrar uma carteira com poucos fundos. Veja a documentação para detalhes sobre como configurar e usar esta função com segurança.</string>
 </resources>
