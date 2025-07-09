@@ -1060,4 +1060,13 @@
     <string name="refer_to_docs_ln_address">Por favor, dirija-se à documentação para orientação sobre como obter um endereço Lightning.</string>
     <string name="activity_quick_receive_setup">Recebimento Rápido</string>
     <string name="help_dialog_quick_receive_setup">Receber Bitcoins vem com escolhas: on-chain, Lightning, BOLT12 e mais.\nIsto é bom, mas pode levar alguns toques a mais apenas para ver seu código QR de recebimento. O BitBanana acelera isto. Escolha um método de pagamento padrão aqui, e estará pronto com um toque enquanto ainda tem a opção de personalizar tudo.\n\nNão tem certeza de como configurar? A documentação abaixo pode o guiar.</string>
+    <string name="password_enter_old">Insira a senha antiga</string>
+    <string name="password_enter_new">Insira a senha nova</string>
+    <string name="password_confirm_new">Confirme a senha nova</string>"
+    <string name="emergency_pin_changed">PIN de Emergência alterado!</string>
+    <string name="emergency_password_changed">Senha de emergência alterada!</string>
+    <string name="password_changed">Senha alterada!</string>
+    <string name="emergency_pin_create">Criar PIN de emergência</string>
+    <string name="emergency_pin_confirm">Confirmar PIN de emergência</string>
+    <string name="emergency_pin_enter_new">Insira novo PIN de emergência</string>
 </resources>
