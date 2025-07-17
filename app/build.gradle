@@ -21,7 +21,7 @@ android {
          We want to keep all languages that we actually have translations for, so listed are basically the ones found in the strings folder.
          We have to do this for reproducibility reasons, as PlayStore changes a few language codes (e.g. for hebrew)
          */
-        resConfigs "ar", "ar-rSA", "bg", "bg-rBG", "cs", "cs-rCZ", "da", "da-rDK", "de", "de-rDE", "es", "es-rES", "fi", "fi-rFI", "fr", "fr-rFR", "it", "it-rIT", "ja", "ja-rJP", "ko", "my", "nb", "nb-rNO", "nl", "nl-rNL", "pl", "pl-rPL", "pt", "pt-rBR", "pt-rPT", "ro", "ro-rRO", "ru", "ru-rRU", "ta", "tr", "tr-rTR", "uk", "uk-rUA", "vi", "vi-rVN", "zh", "zh-rCN"
+        resConfigs "ar", "ar-rSA", "bg", "bg-rBG", "ca", "cs", "cs-rCZ", "da", "da-rDK", "de", "de-rDE", "es", "fa", "es-rES", "fi", "fi-rFI", "fr", "fr-rFR", "it", "it-rIT", "ja", "ja-rJP", "ko", "my", "nb", "nb-rNO", "nl", "nl-rNL", "pl", "pl-rPL", "pt", "pt-rBR", "pt-rPT", "ro", "ro-rRO", "ru", "ru-rRU", "ta", "tr", "tr-rTR", "uk", "uk-rUA", "vi", "vi-rVN", "zh", "zh-rCN"
     }
     buildTypes {
         debug {
