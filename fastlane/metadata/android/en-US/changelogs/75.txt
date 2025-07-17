@@ -1,0 +1,9 @@
+- Add labels to your transactions and UTXOs
+- Lock the app with a password
+- Emergency password / PIN
+- Display loading indicator while resolving LnAddresses
+- Your screen will now stay awake only when it needs to, like during QR scanning or payments.
+- Fixed possible payment failures for fiat amounts sent to Lightning Addresses
+- Fixed an issue where settings weren’t fully restored from backup
+- Other small UX improvements
+- Updated translations
