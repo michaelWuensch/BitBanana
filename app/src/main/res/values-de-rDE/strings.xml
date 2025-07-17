@@ -461,13 +461,7 @@
     <string name="guardian_certificate_verification">Wenn das Zertifikat nicht verifiziert wird, kannst du Oper einer man-in-the-middle Attacke werden. Deaktiviere diese Einstellung nur, wenn du weißt, was du tust.\n\nEs wird empfohlen stattdessen das Zertifikat richtig zu verwenden.\nDas bedeutet, dass das Zertifikat deines Knotens den Hostnamen, der in dieser Verbindungseinstellung verwendet wird, beinhaltet. Füge den Hostnamen als tlsextradomain in der lnd.conf hinzu, bevor du das Zertifikat neu erstellst.</string>
     <string name="navigation_node">Knoten</string>
     <string name="activity_forwarding">Routing</string>
-    <string name="guardian_backup_overrides_existing_data">Einige Daten sind bereits vorhanden!
-\nBeim Wiederherstellen eines Backups werden alle folgenden Daten vor dem Wiederherstellen gelöscht:
-\n
-\n- Verbindungsdaten der Knoten
-\n- Kontakte
-\n
-\nFortfahren\?</string>
+    <string name="guardian_backup_overrides_existing_data">Einige Daten sind bereits vorhanden! \nBeim Wiederherstellen eines Backups werden alle folgenden Daten vor dem Wiederherstellen gelöscht: \n \n- Verbindungsdaten der Knoten \n- Kontakte \n- Labels\n \nFortfahren?</string>
     <string name="activity_utxos">Coins (UTXOs)</string>
     <string name="settings_showHelpButtons">Infobuttons anzeigen</string>
     <string name="help_dialog_forwarding">In dieser Ansicht werden alle Zahlungen angezeigt, die du für andere Teilnehmer des Lightning Netzwerks weitergeleitet hast. Außerdem kannst du sehen, wie viel Geld du für die Erbringung dieser Dienstleistung verdient hast.
@@ -1049,4 +1043,5 @@
     <string name="error_password_and_emergency_password_equal">Dein Passwort und das Notfallpasswort müssen sich unterscheiden.</string>
     <string name="help_dialog_emergency_pin_password">Ein Notfallpasswort oder eine Notfall-PIN ist für Situationen gedacht, in denen du von jemandem gezwungen wirst, deine Wallet zu entsperren. Wenn du dieses Notfallpasswort oder diese Notfall-PIN anstelle deines regulären Passworts oder deiner regulären PIN eingibst, wird BitBanana scheinbar normal entsperrt, während im Hintergrund zusätzliche Schutzmaßnahmen ausgeführt werden. Je nach gewähltem Notfallmodus können dabei alle deine Verbindungen gelöscht oder nur eine Wallet mit einem kleinen Guthaben angezeigt werden. Details zur sicheren Einrichtung und Nutzung dieser Funktion findest du in der Dokumentation.</string>
     <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsaufforderung gesendet. Du wolltest %2$d msat senden, aber der Betrag der Zahlungsaufforderung beträgt %3$d msat.</string>
+    <string name="pulling_payment_data">Zahlungsdaten werden abgerufen…</string>
 </resources>

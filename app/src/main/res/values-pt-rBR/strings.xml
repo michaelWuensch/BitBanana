@@ -135,7 +135,7 @@
     <string name="guardian_disableScreenProtection">Se você permitir a gravação na tela, um software mal-intencionado poderá gravar um vídeo ou fazer capturas de tela enquanto estiver usando o BitBanana. Recomendamos desativar isso apenas enquanto você deseja gravar um vídeo ou tirar uma captura de tela.</string>
     <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Você está prestes a pagar %1$s%% em taxas de rede.\n\nSoluções possíveis:\n- tente um canal de lighting\n- seleccione uma taxa menor, espere mais\n- tente de novo mais tarde\n- transacionar uma quantidade maior\n\nDeseja continuar mesmo assim?</string>
     <string name="settings_category_general">Geral</string>
-    <string name="settings_category_security">Segurança</string>
+    <string name="settings_category_security">Segurança e Privacidade</string>
     <string name="settings_category_help">Ajuda</string>
     <string name="settings_category_advanced">Avançado</string>
     <string name="settings_btcUnit">Unidade de Bitcoin</string>
@@ -158,10 +158,7 @@
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
     <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- String Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu arquivo de configuração do BTCPay Server</string>
     <string name="error_unableToFetchBTCPayConfig">Não foi possível buscar a configuração do BTCPay Server.</string>
-    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.
-\nCertifique-se de usar o seguinte formato:
-\n
-\nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
+    <string name="error_connection_invalidLndConnectString">String lndconnect é inválida.\nCertifique-se de usar o seguinte formato: \n \nlndconnect://[ip]:[port]?cert=[...]&amp;macaroon=[...]</string>
     <string name="error_connection_invalid_certificate">O certificado é inválido.</string>
     <string name="error_connection_no_macaroon">Suas informações de conexão não contêm um macaroon. Isto é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -230,7 +227,7 @@
     <string name="contact_name">Nome do Contato</string>
     <string name="advanced_channel_details_explanation_activity">A porcentagem total de fundos enviados e recebidos dividida pela capacidade total do canal. Um canal com atividade acima de 100 significa que mais fundos viajaram pelo canal do que ele pode manter. Esta métrica é projetada para mostrar quão efetivo um determinado canal é.</string>
     <string name="advanced_channel_details_explanation_lifetime">Isto mostra há quanto tempo este canal já existe.</string>
-    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar seus fundos, nem o backup do canal para reaver seus fundos Lightning. Os backups para reaver seus fundos têm de ser feitos fora do BitBanana. \n \nEste backup contém apenas os seguintes dados: \n \n- Dados para conectar o BitBanana a seus nós funcionais \n- Contatos</string>
+    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar seus fundos, nem o backup do canal para reaver seus fundos Lightning. Os backups para reaver seus fundos têm de ser feitos fora do BitBanana. \n \nEste backup contém apenas os seguintes dados: \n \n- Configurações de nó\n- Rótulos\n- Contatos\n- Configurações do app</string>
     <string name="backup_data_confirm_description">Eu já fiz backup da minha seed e meus canais e entendo que este backup NÃO ajuda a recuperar meus fundos.
 \n
 \nEu entendo que este backup ainda contém todas as informações necessárias para acessar meus fundos se o nó estiver atualmente online. Eu, portanto, usarei uma senha segura no próximo passo.</string>
@@ -349,13 +346,7 @@
     <string name="activity_utxos">Moedas (UTXOs)</string>
     <string name="channel_close_type_force_close">Fechamento Forçado</string>
     <string name="channel_close_type_breach">Vazamento</string>
-    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem!
-\nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar:
-\n
-\n- Dados de Conexão de Nós
-\n- Contatos
-\n
-\nContinuar\?</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n- Rótulos\n \nContinuar?</string>
     <string name="settings_hapticPin">Feedback Tátil de PIN</string>
     <string name="settings_payer_data">Identificação de pagamento</string>
     <string name="settings_resetSecurityWarnings">Reiniciar Avisos de Segurança</string>
@@ -461,7 +452,7 @@
     <string name="advanced_channel_details_explanation_capacity">A quantia total de fundos neste canal. Devido a alguns entraves (como a commit fee ou reserva local do canal) nem todos os fundos são gastáveis.</string>
     <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
     <string name="advanced_channel_details_remote_channel_reserve">Reserva do Canal Remoto</string>
-    <string name="backup_data_restore_description">Restaure seus nós conectados e contatos. \nSe seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a reaver acesso a seus fundos.</string>
+    <string name="backup_data_restore_description">Restaure seus nós conectados, rótulos, contatos e configurações do app.\nSe seus nós não estiverem mais online, este processo de restauração não vai lhe ajudar a reaver acesso a seus fundos.</string>
     <string name="backup_data_restore_headline">Restaurar</string>
     <string name="backup_data_password_mismatch">As senhas não correspondem.</string>
     <string name="backup_data_create_success">Backup criado</string>
@@ -526,7 +517,7 @@
     <string name="port">Porta</string>
     <string name="activity_contact_details">Detalhes do Contato</string>
     <string name="settings_scan_clipboard_summary">Automaticamente checar a área de transferência por dados com os quais o BitBanana pode lidar.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar seu PIN. O app fechará agora. \nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar sua tela de bloqueio do app. O app fechará agora. \nVocê pode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
     <string name="fee_limit_title">Alerta de Limite de Taxa</string>
     <string name="biometricPrompt_title">Autenticação Biométrica</string>
     <string name="help_dialog_scanPaymentRequest">Códigos QR contendo o seguinte são válidos:
@@ -797,10 +788,7 @@
     <string name="on_chain_fallback_invalid_data">Pedido Lightning inválido. Recorrendo a pagamento on-chain.</string>
     <string name="username">Nome de usuário</string>
     <string name="password">Senha</string>
-    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">A estimativa atual de taxa sugere que esta transação com uma taxa de %1$d sat/vB pode nunca ser confirmada. Considere aumentar a taxa para evitar que sua transação fique presa por muito tempo.
-\n
-\n
-\nDeseja proceder mesmo assim?</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">A estimativa atual de taxa sugere que esta transação com uma taxa de %1$d sat/vB pode nunca ser confirmada. Considere aumentar a taxa para evitar que sua transação fique presa por muito tempo.\n \nDeseja proceder mesmo assim?</string>
     <string name="settings_custom_exchange_rate_provider">Provedor Personalizado de Taxa de Câmbio</string>
     <string name="settings_avatarStyleDisplayValues_0">Misto</string>
     <string name="settings_avatarStyleDisplayValues_1">Robôs</string>
@@ -825,10 +813,7 @@
     <string name="settings_custom_fee_estimation_provider">Estimativa de Taxa Personalizada</string>
     <string name="settings_avatarStyle">Estilo de Avatar</string>
     <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor cheque se seu nó compartilha detalhes de conexão cln-grpc e use estes para conexão.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">String de conexão cln-grpc inválida.
-\nPor favor certifique-se que usou o seguinte formato:
-\n
-\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">String de conexão cln-grpc inválida. \nPor favor certifique-se que usou o seguinte formato: \n \ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
     <string name="error_payment_no_route_small_amount">Nenhuma rota foi encontrada. Você está tentando enviar uma quantia tão pequena que muitos canais podem não rotear. Por favor que as configurações de roteamento para seus próprios canais e adapte o valor MinHTLC se necessário.</string>
     <string name="error_input_invalid_data">O campo de entrada %1$s contém dados inválidos.</string>
     <string name="error_unsupported_network">A rede Bitcoin à qual você está conectado não é suportada.</string>
@@ -982,7 +967,7 @@
     <string name="reset">Reiniciar</string>
     <string name="error_channel_selection_pending">Você não pode selecionar canais que ainda estão pendentes.</string>
     <string name="error_channel_selection_offline">Você não pode selecionar canais que estão atualmente off-line.</string>
-    <string name="help_dialog_utxos_locking">Ao bloquear UTXOs específicas aqui, você garante que que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas você tem a opção de desbloqueá-las manualmente quando necessário.</string>
+    <string name="help_dialog_utxos_locking">Ao bloquear UTXOs específicas aqui, você garante que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas você tem a opção de desbloqueá-las manualmente quando necessário.</string>
     <string name="settings_featureLogs_summary">Se ativado, o BitBanana vai gravar registros que podem ser visualizados na seção Registros do menu principal. Ative apenas se estiver tentando resolver um problema e precisa inspecionar os registros.</string>
     <string name="error_channel_selection_insufficient_liquidity_incoming">O balanço de entrada do canal selecionado é insuficiente.</string>
     <string name="error_channel_selection_insufficient_liquidity_outgoing">O balanço de saída do canal selecionado é insuficiente.</string>
@@ -1066,4 +1051,53 @@
     <string name="refer_to_docs_ln_address">Por favor, dirija-se à documentação para orientação sobre como obter um endereço Lightning.</string>
     <string name="activity_quick_receive_setup">Recebimento Rápido</string>
     <string name="help_dialog_quick_receive_setup">Receber Bitcoins vem com escolhas: on-chain, Lightning, BOLT12 e mais.\nIsto é bom, mas pode levar alguns toques a mais apenas para ver seu código QR de recebimento. O BitBanana acelera isto. Escolha um método de pagamento padrão aqui, e estará pronto com um toque enquanto ainda tem a opção de personalizar tudo.\n\nNão tem certeza de como configurar? A documentação abaixo pode o guiar.</string>
+    <string name="password_enter_old">Insira a senha antiga</string>
+    <string name="password_enter_new">Insira a senha nova</string>
+    <string name="password_confirm_new">Confirme a senha nova</string>"
+    <string name="emergency_pin_changed">PIN de Emergência alterado!</string>
+    <string name="emergency_password_changed">Senha de emergência alterada!</string>
+    <string name="password_changed">Senha alterada!</string>
+    <string name="emergency_pin_create">Criar PIN de emergência</string>
+    <string name="emergency_pin_confirm">Confirmar PIN de emergência</string>
+    <string name="emergency_pin_enter_new">Insira um novo PIN de emergência</string>
+    <string name="emergency_pin_confirm_new">Confirme o novo PIN de emergência</string>
+    <string name="emergency_password_create">Insira senha de emergência</string>
+    <string name="emergency_password_confirm">Confirme senha de emergência</string>
+    <string name="emergency_password_enter_new">Insira uma nova senha de emergência</string>
+    <string name="emergency_password_confirm_new">Confirme a nova senha de emergência</string>
+    <string name="guardian_emergency_unlock_ineffective">Como a autenticação biométrica está ativada, esta função pode ser contornada, uma vez que usar biometria ativará o desbloqueio normal, em vez do desbloqueio de emergência. Para garantir que esta medida de segurança seja efetiva, por favor desative a autenticação biométrica.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Você tem o desbloqueio de emergência ativado. Se ativar a autenticação biométrica, um login biométrico contornará sua proteção de desbloqueio de emergência, ativando um desbloqueio normal. Para manter os benefícios de segurança do desbloqueio de emergência, não ative a biometria.</string>
+    <string name="settings_category_pin_options">Opções de PIN</string>
+    <string name="settings_app_lock">Bloqueio do App</string>
+    <string name="settings_lockScreenTimeout_description">Atraso antes do BitBanana ser bloqueado após minimização do app.</string>
+    <string name="settings_add_password">Proteger com senha</string>
+    <string name="settings_remove_password">Remover senha</string>
+    <string name="settings_change_password">Mudar/Remover senha</string>
+    <string name="settings_app_lock_summary_unprotected">Desprotegido</string>
+    <string name="settings_app_lock_summary_pin_protected">Protegido com PIN</string>
+    <string name="settings_app_lock_summary_password_protected">Protegido com senha</string>
+    <string name="settings_app_lock_emergency_category_pin">PIN de Emergência</string>
+    <string name="settings_app_lock_emergency_category_password">Senha de emergência</string>
+    <string name="settings_app_lock_emergency_mode">Modo de emergência</string>
+    <string name="settings_changeEmergencyPin">Mudar/Remover PIN de emergência</string>
+    <string name="settings_changeEmergencyPassword">Mudar/Remover senha de emergência</string>
+    <string name="settings_addEmergencyPin">Definir PIN de emergência</string>
+    <string name="settings_addEmergencyPassword">Definir senha de emergência</string>
+    <string name="emergency_mode_erase_all">Apagar tudo</string>
+    <string name="emergency_mode_selected_wallet_only">Mostrar carteira selecionada apenas</string>
+    <string name="emergency_mode_wallet_to_show">Carteira a exibir</string>
+    <string name="settings_remove_emergency_pin">Remover PIN de emergência</string>
+    <string name="settings_remove_emergency_password">Remover senha de emergência</string>
+    <string name="settings_featureLabels">Rótulos</string>
+    <string name="settings_featureLabels_summary">Organize-se adicionando suas próprias notas a transações e outros itens, fazendo-os mais fáceis de rastrear e entender.</string>
+    <string name="error_pin_and_emergency_pin_equal">Seu PIN e o PIN de emergência devem divergir.</string>
+    <string name="error_password_and_emergency_password_equal">Sua senha e a senha de emergência devem divergir.</string>
+    <string name="help_dialog_label">Rótulos permitem que você adicione notas pessoais para rastreamento e contextualização mais fáceis. Eles são salvos automaticamente no BitBanana, portanto estarão visíveis somente aqui e não aparecerão em outros apps que você usa para acessar seu nó ou carteira.</string>
+    <string name="help_dialog_emergency_pin_password">Uma senha ou PIN de emergência é feita para situações em que você é forçado a desbloquear sua carteira por outrem. Se inserir sua senha ou PIN de emergência ao invés do normal, o BitBanana aparentará estar desbloqueado normalmente enquanto toma ações de proteção adicionais. Dependendo do modo de emergência escolhido, ele pode apagar todas as suas conexões ou mostrar uma carteira com poucos fundos. Veja a documentação para detalhes sobre como configurar e usar esta função com segurança.</string>
+    <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s enviou uma solicitação de pagamento inválida. Você queria enviar %2$d msat, mas a quantia da solicitação de pagamento é %3$d msat.</string>
+    <string name="use_biometrics">Usar biometria</string>
+    <string name="unlock_app">Desbloquear</string>
+    <string name="label_add">Adicionar rótulo</string>
+    <string name="label_edit">Editar rótulo</string>
+    <string name="pulling_payment_data">Extraindo dados de pagamento…</string>
 </resources>

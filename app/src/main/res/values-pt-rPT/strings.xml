@@ -385,13 +385,7 @@
 \n%1$s
 \n
 \nPor favor verifique o nome do host cuidadosamente.</string>
-    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem!
-\nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar:
-\n
-\n- Dados de Conexão de Nós
-\n- Contatos
-\n
-\nContinuar\?</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n \nContinuar?</string>
     <string name="settings_addPin">Proteger com PIN</string>
     <string name="settings_removePin">Remover PIN</string>
     <string name="settings_blockExplorer">Explorador de Blocos</string>

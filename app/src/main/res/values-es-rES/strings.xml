@@ -299,13 +299,7 @@
     <string name="settings_tor_summary">Anonimizar todo el tráfico web usando la red Tor. Esto sólo afecta a cosas como obtener los tipos de cambio o interactuar con los servicios LNURL. El uso o no de Tor para conectarse a un nodo puede establecerse individualmente para cada nodo en la configuración de la conexión.</string>
     <string name="channel_visibility_private">privado</string>
     <string name="settings">Configuración</string>
-    <string name="guardian_backup_overrides_existing_data">¡Algunos datos ya existen!
-\nAl restaurar una copia de seguridad se borrarán todos los datos siguientes antes de la restauración:
-\n
-\n- Datos de la conexión al nodo
-\n- Contactos
-\n
-\n¿Continuar\?</string>
+    <string name="guardian_backup_overrides_existing_data">¡Algunos datos ya existen! \nAl restaurar una copia de seguridad se borrarán todos los datos siguientes antes de la restauración: \n \n- Datos de la conexión al nodo \n- Contactos \n \n¿Continuar?</string>
     <string name="pin_changed">Cambió el PIN.</string>
     <string name="activity_manage_contacts">Gestionar contactos</string>
     <string name="channel_close_type_force_close">Forzar el cierre</string>
