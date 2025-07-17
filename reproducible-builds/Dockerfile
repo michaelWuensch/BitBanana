@@ -14,10 +14,10 @@ ENV ANDROID_SDK_ROOT=/sdk
 ENV ANDROID_SDK=/sdk
 ENV ANDROID_HOME=/sdk
 ENV ANDROID_SDK_URL=https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-ENV ANDROID_BUILD_TOOLS_VERSION=34.0.0
-ENV ANDROID_VERSION=34
-ENV ANDROID_NDK_VERSION=25.1.8937393
-ENV ANDROID_CMAKE_VERSION=3.18.1
+ENV ANDROID_BUILD_TOOLS_VERSION=35.0.0
+ENV ANDROID_VERSION=35
+ENV ANDROID_NDK_VERSION=27.2.12479018
+ENV ANDROID_CMAKE_VERSION=3.22.1
 ENV ANDROID_NDK_HOME=${ANDROID_HOME}/ndk/${ANDROID_NDK_VERSION}/
 ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 ENV PATH=${ANDROID_NDK_HOME}:$PATH
@@ -42,7 +42,7 @@ RUN $ANDROID_HOME/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_HOME \
     "ndk;$ANDROID_NDK_VERSION"
 
 # 5) Preinstall gradle
-ENV GRADLE_VERSION=8.12
+ENV GRADLE_VERSION=8.14
 RUN set -ex; \
     curl -fSL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-all.zip" -o /tmp/gradle.zip; \
     unzip /tmp/gradle.zip -d /opt; \

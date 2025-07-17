@@ -9,11 +9,11 @@ buildscript {
         maven { url "https://jitpack.io" } // For libraries hosted on JitPack
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
+        classpath 'com.android.tools.build:gradle:8.10.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
 
         // Needed for gRPC
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.1'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.5'
 
         // OSS Licenses
         // classpath 'com.jaredsburrows:gradle-license-plugin:0.9.0'  // Uncomment when generating license report
