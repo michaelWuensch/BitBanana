@@ -1,6 +1,9 @@
 package app.michaelwuensch.bitbanana.backends.lnd.connection;
 
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -42,6 +45,7 @@ import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.connection.tor.TorProxyDetector;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.okhttp.OkHttpChannelBuilder;
 
@@ -70,6 +74,7 @@ public class LndConnection {
     private LndWatchtowerService mLndWatchtowerService;
     private LndWatchtowerClientService mLndWatchtowerClientService;
     private boolean isConnected = false;
+    private boolean isConnectionProcess = false;
 
     private LndConnection() {
     }
@@ -138,6 +143,12 @@ public class LndConnection {
     }
 
     private void generateChannelAndStubs() {
+        if (mSecureChannel != null && !mSecureChannel.isShutdown()) {
+            BBLog.d(LOG_TAG, "Closing old gRPC channel...");
+            mSecureChannel.shutdownNow();
+        }
+
+        BBLog.d(LOG_TAG, "Generating channels and stubs.");
         String host = BackendManager.getCurrentBackendConfig().getHostWithOverride();
         int port = BackendManager.getCurrentBackendConfig().getPort();
 
@@ -186,22 +197,49 @@ public class LndConnection {
             mLndWatchtowerService = new RemoteLndWatchtowerService(mSecureChannel, macaroon);
             mLndWatchtowerClientService = new RemoteLndWatchtowerClientService(mSecureChannel, macaroon);
             mLndWalletUnlockerService = new RemoteLndWalletUnlockerService(mSecureChannel, macaroon);
+
+            monitorChannelState(mSecureChannel);
+            mSecureChannel.getState(true); // This initiates the connection without a request
         } catch (Exception e) {
             BackendManager.setError(BackendManager.ERROR_GRPC_CREATING_STUBS);
         }
     }
 
+    private void monitorChannelState(ManagedChannel channel) {
+        ConnectivityState state = channel.getState(false);
+
+        channel.notifyWhenStateChanged(state, () -> {
+            ConnectivityState newState = channel.getState(false);
+
+            BBLog.d(LOG_TAG, "GRPC channel state changed from " + state + " to " + newState);
+
+            if (newState == ConnectivityState.READY && isConnectionProcess) { // We check for isConnectionProcess here as we don't want to continue the connection procedure and wallet loading if it was just a gRPC internal reconnection.
+                isConnectionProcess = false;
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    BackendManager.activateBackendConfig5();
+                });
+            }
+
+            if (state == ConnectivityState.SHUTDOWN) {
+                return;
+            }
+
+            // Continue monitoring recursively
+            monitorChannelState(channel);
+        });
+    }
+
     public void openConnection() {
         if (!isConnected) {
             isConnected = true;
-            BBLog.d(LOG_TAG, "Starting LND connection...(Open Http Channel)");
+            this.isConnectionProcess = true;
             generateChannelAndStubs();
         }
     }
 
     public void closeConnection() {
         if (mSecureChannel != null) {
-            BBLog.d(LOG_TAG, "Shutting down LND connection...(Closing Http Channel)");
+            BBLog.d(LOG_TAG, "Shutting down LND connection...");
             shutdownChannel();
         }
         isConnected = false;
@@ -209,6 +247,7 @@ public class LndConnection {
 
     public void restartConnection() {
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
+            BBLog.d(LOG_TAG, "Restarting LND connection.");
             closeConnection();
             openConnection();
         }
@@ -220,7 +259,7 @@ public class LndConnection {
      */
     private void shutdownChannel() {
         try {
-            if (mSecureChannel.shutdownNow().awaitTermination(1, TimeUnit.SECONDS)) {
+            if (mSecureChannel.shutdownNow().awaitTermination(3, TimeUnit.SECONDS)) {
                 BBLog.d(LOG_TAG, "LND channel shutdown successfully...");
             } else {
                 BBLog.e(LOG_TAG, "LND channel shutdown failed...");

@@ -170,13 +170,12 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         // Show loading spinners
         mSwipeRefreshLayout.setRefreshing(true);
+        refreshData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        refreshData();
     }
 
     private void updateForwardingEventDisplayList() {

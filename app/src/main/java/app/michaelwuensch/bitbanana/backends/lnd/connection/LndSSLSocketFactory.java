@@ -32,6 +32,7 @@ public class LndSSLSocketFactory {
     }
 
     public static SSLSocketFactory create(BackendConfig backendConfig) {
+        BBLog.d(LOG_TAG, "Creating LndSSLSocketFactory.");
         SSLContext sslCtx = null;
 
         try {

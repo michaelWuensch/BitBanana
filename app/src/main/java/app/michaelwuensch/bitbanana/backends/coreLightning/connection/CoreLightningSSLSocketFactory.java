@@ -36,6 +36,7 @@ public class CoreLightningSSLSocketFactory {
     }
 
     public static SSLSocketFactory create(BackendConfig backendConfig) {
+        BBLog.d(LOG_TAG, "Creating CoreLightningSSLSocketFactory.");
         SSLContext sslCtx = null;
 
         try {
