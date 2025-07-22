@@ -31,6 +31,7 @@ import app.michaelwuensch.bitbanana.customView.MainBalanceView;
 import app.michaelwuensch.bitbanana.customView.NodeSpinner;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.setup.ConnectRemoteNodeActivity;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -257,11 +258,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     public void hideStringAnalyzerProgress() {
-        mTvLoadingStringAnalyzerText.setVisibility(View.GONE);
-        mLoadingStringAnalyzerSpinner.setVisibility(View.GONE);
-        mSendButton.setVisibility(View.VISIBLE);
-        mReceiveButton.setVisibility(View.VISIBLE);
-        mScanButton.setVisibility(View.VISIBLE);
+        try {
+            mTvLoadingStringAnalyzerText.setVisibility(View.GONE);
+            mLoadingStringAnalyzerSpinner.setVisibility(View.GONE);
+            mSendButton.setVisibility(View.VISIBLE);
+            mReceiveButton.setVisibility(View.VISIBLE);
+            mScanButton.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "hideStringAnalyzerProgress failed.", e);
+        }
     }
 
     private void walletLoadingCompleted() {
