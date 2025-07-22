@@ -46,7 +46,13 @@ public class CustomViewPager extends ViewPager {
             return false;
         }
         if (isSwipeable) {
-            return super.onTouchEvent(ev);
+            if (ev.getX() < 0 || ev.getY() < 0) {
+                return false;
+            }
+            MotionEvent safeEvent = MotionEvent.obtain(ev);
+            boolean result = super.onTouchEvent(safeEvent);
+            safeEvent.recycle();
+            return result;
         } else {
             return false;
         }
