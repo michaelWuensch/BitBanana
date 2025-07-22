@@ -18,6 +18,10 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="com.wireguard.android.permission.CONTROL_TUNNELS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name="app.michaelwuensch.bitbanana.baseClasses.App"
@@ -30,6 +34,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <!-- Foreground Service -->
+        <service
+            android:name=".connection.ConnectionKeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|dataSync" />
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

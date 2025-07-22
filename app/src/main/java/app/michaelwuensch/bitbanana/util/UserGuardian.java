@@ -89,6 +89,7 @@ public class UserGuardian {
                 .putBoolean(DIALOG_CONSOLIDATE, true)
                 .putBoolean(DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_1, true)
                 .putBoolean(DIALOG_BIOMETRICS_AND_EMERGENCY_UNLOCK_2, true)
+                .putBoolean(PrefsUtil.NOTIFICATIONS_DECLINED, false)
                 .apply();
     }
 

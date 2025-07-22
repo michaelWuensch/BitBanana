@@ -236,6 +236,8 @@ public class Wallet_TransactionHistory {
                     fetchOnChainTransactions(); // update internal transaction list
                     Wallet_Balance.getInstance().fetchBalancesWithDebounce(); // Always update balances if a transaction event occurs.
                     broadcastTransactionUpdate(transaction);
+                }, throwable -> {
+
                 }));
     }
 
@@ -282,6 +284,8 @@ public class Wallet_TransactionHistory {
                         mInvoiceList.add(invoice);
                         broadcastInvoiceAdded(invoice);
                     }
+                }, throwable -> {
+
                 }));
     }
 

@@ -189,20 +189,27 @@ public class BackendManager {
         setBackendState(BackendState.CONNECTING_TO_BACKEND);
         switch (currentBackendConfig.getBackendType()) {
             case LND_GRPC:
+                // The openConnection() function will call activateBackendConfig5() once the gRPC channel becomes active.
                 LndConnection.getInstance().openConnection();
                 break;
             case CORE_LIGHTNING_GRPC:
+                // The openConnection() function will call activateBackendConfig5() once the gRPC channel becomes active.
                 CoreLightningConnection.getInstance().openConnection();
                 break;
             case LND_HUB:
                 LndHubHttpClient.getInstance().createHttpClient();
+                activateBackendConfig5();
                 break;
             case NOSTR_WALLET_CONNECT:
                 NostrWalletConnectClient.getInstance().openConnection();
+                activateBackendConfig5();
                 break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
         }
+    }
+
+    public static void activateBackendConfig5() {
         if (currentBackendState == BackendState.ERROR)
             return;
 

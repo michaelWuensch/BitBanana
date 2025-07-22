@@ -47,7 +47,7 @@ public class ClipBoardUtil {
 
     public static String getPrimaryContent(Context context, boolean addToScanHistory) throws NullPointerException {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-        if (clipboard.getPrimaryClip() == null)
+        if (clipboard.getPrimaryClip() == null || clipboard.getPrimaryClip().getItemAt(0) == null || clipboard.getPrimaryClip().getItemAt(0).getText() == null)
             return null;
 
         String data = clipboard.getPrimaryClip().getItemAt(0).getText().toString();

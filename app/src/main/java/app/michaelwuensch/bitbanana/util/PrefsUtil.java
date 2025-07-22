@@ -66,6 +66,7 @@ public class PrefsUtil {
     public static final String BACKEND_TIMEOUT = "backendTimeout";
     public static final String PAYMENT_TIMEOUT = "paymentTimeout";
     public static final String APP_NUM_UNLOCK_FAILS = "numAppUnlockFails";
+    public static final String NOTIFICATIONS_DECLINED = "notificationPermissionDeclined";
 
 
     // default values

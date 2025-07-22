@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -52,6 +53,7 @@ import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backup.BackupActivity;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
+import app.michaelwuensch.bitbanana.connection.ConnectionKeepAliveService;
 import app.michaelwuensch.bitbanana.connection.internetConnectionStatus.NetworkChangeReceiver;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.customView.UserAvatarView;
@@ -93,6 +95,7 @@ import app.michaelwuensch.bitbanana.util.ExchangeRateUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.NfcUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
+import app.michaelwuensch.bitbanana.util.PermissionsUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -117,7 +120,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public static final int RESULT_CODE_GENERIC_SCAN = 203;
 
     private static final String LOG_TAG = HomeActivity.class.getSimpleName();
-    private Handler mHandler;
     private InputMethodManager mInputMethodManager;
     private ScheduledExecutorService mExchangeRateScheduler;
     private ScheduledExecutorService mNodeInfoScheduler;
@@ -145,7 +147,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        mHandler = new Handler();
 
 
         // Setup navigation drawer menu
@@ -235,6 +236,42 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         // Register observer to detect if app goes to background
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+
+        // Request Notifications permission
+        if (!PermissionsUtil.hasNotificationPermission(this) && !PrefsUtil.getPrefs().getBoolean(PrefsUtil.NOTIFICATIONS_DECLINED, false)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.notification_permission_rationale_title)
+                    .setMessage(R.string.notification_permission_rationale)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            PermissionsUtil.requestNotificationPermission(HomeActivity.this, true);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new AlertDialog.Builder(HomeActivity.this)
+                                    .setMessage(R.string.notification_permission_rationale_cancelled)
+                                    .setCancelable(false)
+                                    .setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            PermissionsUtil.requestNotificationPermission(HomeActivity.this, true);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            PrefsUtil.editPrefs().putBoolean(PrefsUtil.NOTIFICATIONS_DECLINED, true).apply();
+                                            dialog.cancel();
+                                        }
+                                    })
+                                    .show();
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        }
     }
 
     // This schedule keeps us up to date on exchange rates
@@ -296,6 +333,9 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BBLog.d(LOG_TAG, "BitBanana moved to foreground");
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
+        // Stop foreground service to keep connection alive.
+        App.getAppContext().stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+
         // Test if lock screen should be shown.
         AppLockUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
@@ -339,6 +379,10 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToBackground() {
         BBLog.d(LOG_TAG, "BitBanana moved to background");
 
+        // Start foreground service to keep connection alive.
+        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && BackendManager.getBackendState() != BackendManager.BackendState.NO_BACKEND_SELECTED && BackendManager.getBackendState() != BackendManager.BackendState.ERROR)
+            ContextCompat.startForegroundService(App.getAppContext(), new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+
         // ToDo: check if this works here!
         if (TimeOutUtil.getInstance().getCanBeRestarted()) {
             TimeOutUtil.getInstance().restartTimer();
@@ -351,6 +395,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
     private void disconnectTimeoutReached() {
         BBLog.i(LOG_TAG, "Disconnect timeout reached.");
+        App.getAppContext().stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
         stopListenersAndSchedules();
     }
 
@@ -371,8 +416,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         FeatureManager.unregisterFeatureChangedListener(this);
         BackendManager.unregisterBackendStateChangedListener(this);
         mBackendChangedListenerRegistred = false;
-
-        mHandler.removeCallbacksAndMessages(null);
 
         PrefsUtil.getPrefs().unregisterOnSharedPreferenceChangeListener(this);
 

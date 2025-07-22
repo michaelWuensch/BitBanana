@@ -256,6 +256,8 @@ public class Wallet_Channels {
                         updateChannelsWithDebounce(); // Always update channels if a htlc event occurs.
                     }
                     broadcastHtlcEvent(htlcEvent);
+                }, throwable -> {
+
                 }));
     }
 
@@ -297,6 +299,8 @@ public class Wallet_Channels {
 
                     updateChannelsWithDebounce();
                     broadcastChannelEvent(channelEventUpdate);
+                }, throwable -> {
+
                 }));
     }
 
