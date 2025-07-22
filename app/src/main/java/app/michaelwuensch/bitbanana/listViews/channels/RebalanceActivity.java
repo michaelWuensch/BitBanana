@@ -200,7 +200,8 @@ public class RebalanceActivity extends BaseAppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 PrefsUtil.editPrefs().putString(PrefsUtil.REBALANCE_FEE_LIMIT_PERCENT, charSequence.toString() + "%").apply();
-                updateBalancing(mSlider.getProgress() * 1000L);
+                if (mChannelA != null && mChannelB != null)
+                    updateBalancing(mSlider.getProgress() * 1000L);
             }
 
             @Override
