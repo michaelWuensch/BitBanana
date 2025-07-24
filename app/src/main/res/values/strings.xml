@@ -1047,7 +1047,7 @@
     <string name="pulling_payment_data">Pulling payment data…</string>
 
     <string name="notification_permission_rationale_title">Allow Notifications</string>
-    <string name="notification_permission_rationale">After you minimize the app, BitBanana stays connected for a few minutes. This is achieved using a background service, for which Android requires a notification. Enabling notifications helps keep your connection stable while switching apps.</string>
+    <string name="notification_permission_rationale">To keep your connection stable when switching apps, BitBanana runs a background service after the app is minimized. Android requires a notification for this service to work, so enabling notifications ensures the connection remains active for a few minutes in the background.</string>
     <string name="notification_permission_rationale_cancelled">Without notification permission, the app will lose connection when minimized. Please consider allowing notifications.</string>
 
     <string name="keep_alive_notification_title">Active connection</string>

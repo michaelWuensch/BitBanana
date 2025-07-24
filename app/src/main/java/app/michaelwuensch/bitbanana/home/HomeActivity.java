@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -333,9 +332,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BBLog.d(LOG_TAG, "BitBanana moved to foreground");
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
-        // Stop foreground service to keep connection alive.
-        App.getAppContext().stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
-
         // Test if lock screen should be shown.
         AppLockUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
@@ -378,10 +374,6 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onMoveToBackground() {
         BBLog.d(LOG_TAG, "BitBanana moved to background");
-
-        // Start foreground service to keep connection alive.
-        if (BackendConfigsManager.getInstance().hasAnyBackendConfigs() && BackendManager.getBackendState() != BackendManager.BackendState.NO_BACKEND_SELECTED && BackendManager.getBackendState() != BackendManager.BackendState.ERROR)
-            ContextCompat.startForegroundService(App.getAppContext(), new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
 
         // ToDo: check if this works here!
         if (TimeOutUtil.getInstance().getCanBeRestarted()) {
