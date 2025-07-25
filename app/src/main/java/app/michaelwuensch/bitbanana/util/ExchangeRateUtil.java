@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.util.Currency;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -333,6 +335,15 @@ public class ExchangeRateUtil {
             Iterator<String> iter = responseRates.keys();
             while (iter.hasNext()) {
                 String rateCode = iter.next();
+
+                try {
+                    Currency curr = Currency.getInstance(rateCode);
+                    if (curr.getName(Locale.US, Currency.LONG_NAME, null).equals(rateCode)
+                            && curr.getName(Locale.US, Currency.NARROW_SYMBOL_NAME, null).equals(rateCode))
+                        continue;
+                } catch (Exception e) {
+                    continue;
+                }
 
                 try {
                     JSONObject currentCurrency = new JSONObject();

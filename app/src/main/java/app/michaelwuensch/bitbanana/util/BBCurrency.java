@@ -3,8 +3,6 @@ package app.michaelwuensch.bitbanana.util;
 import android.icu.util.Currency;
 import android.os.Build;
 
-import androidx.annotation.Nullable;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -148,7 +146,12 @@ public class BBCurrency {
         } else {
             // return iso4217 Symbol if available.
             try {
-                String iso4217Symbol = Currency.getInstance(mCode).getSymbol();
+                String iso4217Symbol = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    iso4217Symbol = Currency.getInstance(mCode).getName(Locale.getDefault(), Currency.NARROW_SYMBOL_NAME, null);
+                } else {
+                    iso4217Symbol = Currency.getInstance(mCode).getSymbol(Locale.getDefault());
+                }
                 if (!iso4217Symbol.equals(mCode))
                     return iso4217Symbol;
             } catch (Exception ignored) {
@@ -193,6 +196,16 @@ public class BBCurrency {
             }
         } else {
             // Fiat
+            // return iso4217 Symbol if available.
+            try {
+                Currency curr = Currency.getInstance(getCode());
+                if (curr != null) {
+                    return curr.getDefaultFractionDigits();
+                }
+            } catch (Exception ignored) {
+
+            }
+            // in all other cases return 2
             return 2;
         }
     }

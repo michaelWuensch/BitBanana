@@ -261,7 +261,20 @@ public class MonetaryUtil {
      */
     public String getCurrencyNameFromCurrencyCode(String currencyCode) {
         try {
-            return android.icu.util.Currency.getInstance(currencyCode).getDisplayName(Locale.US);
+            return android.icu.util.Currency.getInstance(currencyCode).getDisplayName(Locale.getDefault());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * This function will return the narrow symbol from the given ISO4217 code (3 Letters).
+     *
+     * @return The narrow symbol of the currency. Returns null if the currency code was not found.
+     */
+    public String getCurrencyNarrowSymbolFromCurrencyCode(String currencyCode) {
+        try {
+            return android.icu.util.Currency.getInstance(currencyCode).getName(Locale.getDefault(), android.icu.util.Currency.NARROW_SYMBOL_NAME, null);
         } catch (Exception e) {
             return null;
         }
