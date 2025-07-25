@@ -21,7 +21,7 @@
             app:iconSpaceReserved="false" />
 
         <ListPreference
-            android:defaultValue="Blockchain.info"
+            android:defaultValue="Coinbase"
             android:dialogTitle="@string/settings_exchangeRateProvider"
             android:entries="@array/exchangeRateProviderDisplayValues"
             android:entryValues="@array/exchangeRateProvider"

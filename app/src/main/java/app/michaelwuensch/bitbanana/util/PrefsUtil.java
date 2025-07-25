@@ -230,7 +230,7 @@ public class PrefsUtil {
     }
 
     public static String getExchangeRateProvider() {
-        return getPrefs().getString(EXCHANGE_RATE_PROVIDER, "Blockchain.info");
+        return getPrefs().getString(EXCHANGE_RATE_PROVIDER, "Coinbase");
     }
 
     public static String getFeeEstimationProvider() {

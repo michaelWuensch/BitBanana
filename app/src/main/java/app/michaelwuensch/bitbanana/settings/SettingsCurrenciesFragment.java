@@ -2,6 +2,7 @@ package app.michaelwuensch.bitbanana.settings;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Pair;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import app.michaelwuensch.bitbanana.R;
@@ -124,20 +126,36 @@ public class SettingsCurrenciesFragment extends BBPreferenceFragmentCompat {
             JSONArray currencies = jsonAvailableCurrencies.getJSONArray("currencies");
             fiatEntryValues = new CharSequence[currencies.length()];
             fiatEntryDisplayValue = new CharSequence[currencies.length()];
-            for (int i = 0, count = currencies.length(); i < count; i++) {
-                try {
-                    fiatEntryValues[i] = currencies.getString(i);
 
-                    String currencyName = MonetaryUtil.getInstance().getCurrencyNameFromCurrencyCode(currencies.getString(i));
-                    if (currencyName == null) {
-                        currencyName = currencies.getString(i);
-                    } else {
-                        currencyName = currencyName + " (" + currencies.getString(i) + ")";
-                    }
-                    fiatEntryDisplayValue[i] = currencyName;
-                } catch (JSONException e) {
-                    BBLog.d(LOG_TAG, "Error reading JSON from Preferences: " + e.getMessage());
+            List<Pair<String, String>> fiatCurrencyList = new ArrayList<>();
+
+            for (int i = 0, count = currencies.length(); i < count; i++) {
+                String code = currencies.getString(i);
+                String name = MonetaryUtil.getInstance().getCurrencyNameFromCurrencyCode(code);
+                String narrowSymbol = MonetaryUtil.getInstance().getCurrencyNarrowSymbolFromCurrencyCode(code);
+                if (name == null) {
+                    name = code;
+                } else {
+                    name = name + " (" + narrowSymbol + ")";
                 }
+                fiatCurrencyList.add(new Pair<>(code, name));
+            }
+
+            // Sort alphabetically by display name (second in the Pair)
+            Collections.sort(fiatCurrencyList, new Comparator<Pair<String, String>>() {
+                @Override
+                public int compare(Pair<String, String> o1, Pair<String, String> o2) {
+                    return o1.second.compareToIgnoreCase(o2.second);
+                }
+            });
+
+            // Convert back to arrays
+            fiatEntryValues = new CharSequence[fiatCurrencyList.size()];
+            fiatEntryDisplayValue = new CharSequence[fiatCurrencyList.size()];
+
+            for (int i = 0; i < fiatCurrencyList.size(); i++) {
+                fiatEntryValues[i] = fiatCurrencyList.get(i).first;
+                fiatEntryDisplayValue[i] = fiatCurrencyList.get(i).second;
             }
 
         } catch (JSONException e) {
