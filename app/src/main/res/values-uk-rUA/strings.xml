@@ -932,7 +932,7 @@
     <string name="pulling_payment_data">Отримання даних про оплату…</string>
     <string name="allow">Дозволити</string>
     <string name="notification_permission_rationale_title">Дозволити сповіщення</string>
-    <string name="notification_permission_rationale">Після того, як ви згорнете додаток, BitBanana залишатиметься підключеним протягом кількох хвилин. Це досягається за допомогою фонової служби, для якої Android потребує сповіщення. Увімкнення сповіщень допомагає підтримувати стабільність з’єднання під час перемикання між додатками.</string>
+    <string name="notification_permission_rationale">Щоб забезпечити стабільність з’єднання під час перемикання між програмами, BitBanana запускає фонову службу після згортання програми. Для роботи цієї служби Android потрібне сповіщення, тому ввімкнення сповіщень гарантує, що з’єднання залишатиметься активним протягом кількох хвилин у фоновому режимі.</string>
     <string name="notification_permission_rationale_cancelled">Без дозволу на сповіщення програма втратить з’єднання після згортання. Будь ласка, спробуйте дозволити сповіщення.</string>
     <string name="keep_alive_notification_title">Активне з\'єднання</string>
     <string name="keep_alive_notification_description">Ваше з\'єднання все ще активне.</string>
