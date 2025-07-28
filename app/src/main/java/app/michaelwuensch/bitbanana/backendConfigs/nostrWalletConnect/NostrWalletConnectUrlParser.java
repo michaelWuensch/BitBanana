@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect;
 
+import android.os.Build;
+
 import java.net.URI;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
@@ -138,12 +140,14 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
                 }
 
                 // Use the parser form rust.nostr to validate the rest. It does not give very helpful error messages, therefore we validated lots of things first before running this parser.
-                try {
-                    NostrWalletConnectUri.Companion.parse(mConnectionString);
-                } catch (Exception e) {
-                    BBLog.e(LOG_TAG, "Rust.nostr nwc uri parsing failed. Exception message: " + e.getMessage());
-                    mError = ERROR_INVALID_CONNECT_STRING;
-                    return this;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    try {
+                        NostrWalletConnectUri.Companion.parse(mConnectionString);
+                    } catch (Exception e) {
+                        BBLog.e(LOG_TAG, "Rust.nostr nwc uri parsing failed. Exception message: " + e.getMessage());
+                        mError = ERROR_INVALID_CONNECT_STRING;
+                        return this;
+                    }
                 }
 
                 // everything is ok

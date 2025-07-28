@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputFilter;
@@ -73,6 +74,8 @@ public class ManualSetup extends BaseAppCompatActivity {
     private Spinner mSpType;
     private View mVerifyCertVisibilityLayout;
 
+    private int mPreviousSpinnerPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +141,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
+                        mPreviousSpinnerPosition = 0;
                         break;
                     case 1:
                         // Core Lightning gRPC
@@ -153,6 +157,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.VISIBLE);
+                        mPreviousSpinnerPosition = 1;
                         break;
                     case 2:
                         // Lnd Hub
@@ -168,24 +173,31 @@ public class ManualSetup extends BaseAppCompatActivity {
                         mVpnAutomationLayout.setVisibility(View.VISIBLE);
                         mSwTor.setVisibility(View.VISIBLE);
                         mVerifyCertVisibilityLayout.setVisibility(View.GONE);
+                        mPreviousSpinnerPosition = 2;
                         break;
                     case 3:
                         // Nostr Wallet Connect
-                        mEtFullConnectString.setVisibility(View.VISIBLE);
-                        mEtHost.setVisibility(View.GONE);
-                        mEtPort.setVisibility(View.GONE);
-                        mEtAuthenticationToken.setVisibility(View.GONE);
-                        mEtServerCertificate.setVisibility(View.GONE);
-                        mEtClientCertificate.setVisibility(View.GONE);
-                        mEtClientKey.setVisibility(View.GONE);
-                        mEtUser.setVisibility(View.GONE);
-                        mEtPassword.setVisibility(View.GONE);
-                        mVpnAutomationLayout.setVisibility(View.VISIBLE);
-                        mSwTor.setVisibility(View.GONE);
-                        mVerifyCertVisibilityLayout.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                            showError(getString(R.string.error_nwc_min_android_version), RefConstants.ERROR_DURATION_MEDIUM);
+                            mSpType.setSelection(mPreviousSpinnerPosition);
+                        } else {
+                            mEtFullConnectString.setVisibility(View.VISIBLE);
+                            mEtHost.setVisibility(View.GONE);
+                            mEtPort.setVisibility(View.GONE);
+                            mEtAuthenticationToken.setVisibility(View.GONE);
+                            mEtServerCertificate.setVisibility(View.GONE);
+                            mEtClientCertificate.setVisibility(View.GONE);
+                            mEtClientKey.setVisibility(View.GONE);
+                            mEtUser.setVisibility(View.GONE);
+                            mEtPassword.setVisibility(View.GONE);
+                            mVpnAutomationLayout.setVisibility(View.VISIBLE);
+                            mSwTor.setVisibility(View.GONE);
+                            mVerifyCertVisibilityLayout.setVisibility(View.GONE);
 
-                        mEtFullConnectString.setDescription("Nostr Wallet Connect URL");
-                        mEtFullConnectString.getEditText().setHint("nostr+walletconnect://");
+                            mEtFullConnectString.setDescription("Nostr Wallet Connect URL");
+                            mEtFullConnectString.getEditText().setHint("nostr+walletconnect://");
+                            mPreviousSpinnerPosition = 3;
+                        }
                         break;
                 }
             }

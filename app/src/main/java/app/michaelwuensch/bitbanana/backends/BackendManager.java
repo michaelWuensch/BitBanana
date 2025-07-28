@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.backends;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 
 import java.util.HashSet;
@@ -40,6 +41,7 @@ public class BackendManager {
     public static final int ERROR_UNKNOWN_BACKEND_TYPE = 5;
     public static final int ERROR_GRPC_CREATING_STUBS = 6;
     public static final int ERROR_NWC_CONNECTION_FAILED = 7;
+    public static final int ERROR_NWC_REQUIRES_ANDROID_11 = 8;
 
     private static final String LOG_TAG = BackendManager.class.getSimpleName();
 
@@ -201,8 +203,12 @@ public class BackendManager {
                 activateBackendConfig5();
                 break;
             case NOSTR_WALLET_CONNECT:
-                NostrWalletConnectClient.getInstance().openConnection();
-                activateBackendConfig5();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    NostrWalletConnectClient.getInstance().openConnection();
+                    activateBackendConfig5();
+                } else {
+                    setError(ERROR_NWC_REQUIRES_ANDROID_11);
+                }
                 break;
             default:
                 setError(ERROR_UNKNOWN_BACKEND_TYPE);
@@ -334,6 +340,8 @@ public class BackendManager {
             case ERROR_NWC_CONNECTION_FAILED:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_nwc_setup_failed), errorCode);
                 break;
+            case ERROR_NWC_REQUIRES_ANDROID_11:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_nwc_min_android_version), errorCode);
         }
     }
 

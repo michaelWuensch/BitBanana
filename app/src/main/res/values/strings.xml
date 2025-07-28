@@ -568,6 +568,7 @@
     <string name="error_selecting_inactive_bolt12_offer">You cannot select an inactive payment code.</string>
     <string name="error_pin_and_emergency_pin_equal">Your PIN and emergency PIN must differ.</string>
     <string name="error_password_and_emergency_password_equal">Your password and emergency password must differ.</string>
+    <string name="error_nwc_min_android_version">Android 11 or higher is required to use Nostr Wallet Connect.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
