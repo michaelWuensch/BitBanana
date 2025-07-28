@@ -162,7 +162,7 @@ dependencies {
     implementation("io.matthewnelson.kmp-tor:runtime-service:2.4.0")
 
     // Nostr Wallet Connect (NWC) implementations
-    implementation("org.rust-nostr:nostr-sdk:0.42.3")
+    implementation("org.rust-nostr:nostr-sdk:0.43.0")
 
     // gRPC implementation to communicate with lnd
     implementation 'io.grpc:grpc-okhttp:1.73.0'
