@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -211,6 +212,12 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             changeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (getWalletConfig().getBackendType() == BackendConfig.BackendType.NOSTR_WALLET_CONNECT)
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                            showError(getString(R.string.error_nwc_min_android_version), RefConstants.ERROR_DURATION_MEDIUM);
+                            return;
+                        }
+
                     Intent intent = new Intent(BackendConfigDetailsActivity.this, ManualSetup.class);
                     intent.putExtra(ManageBackendConfigsActivity.NODE_ID, mId);
                     startActivity(intent);
