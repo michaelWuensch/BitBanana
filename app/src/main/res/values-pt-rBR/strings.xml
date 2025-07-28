@@ -1108,4 +1108,5 @@
     <string name="keep_alive_notification_description">Sua conexão ainda está ativa.</string>
     <string name="keep_alive_notification_channel_name">Conexão em Segundo Plano</string>
     <string name="keep_alive_notification_channel_description">Mantém a conexão ativa em segundo plano</string>
+    <string name="error_nwc_min_android_version">É necessário Android 11 ou superior para usar Nostr Wallet Connect.</string>
 </resources>
