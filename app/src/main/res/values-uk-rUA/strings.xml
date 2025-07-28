@@ -938,4 +938,5 @@
     <string name="keep_alive_notification_description">Ваше з\'єднання все ще активне.</string>
     <string name="keep_alive_notification_channel_name">Фонове підключення</string>
     <string name="keep_alive_notification_channel_description">Підтримує з\'єднання активним у фоновому режимі</string>
+    <string name="error_nwc_min_android_version">Для використання Nostr Wallet Connect потрібна версія Android 11 або вище.</string>
 </resources>
