@@ -131,6 +131,12 @@ public class BackendManager {
         if (vpnConfig != null && vpnConfig.getVpnType() != VPNConfig.VPNType.NONE && vpnConfig.getStartVPNOnOpen()) {
             setBackendState(BackendState.STARTING_VPN);
 
+            // If the required VPN app is not installed, show an error immediately.
+            if (!VPNUtil.isVpnAppInstalled(getCurrentBackendConfig().getVpnConfig(), ctx)) {
+                setError(ERROR_VPN_NOT_INSTALLED);
+                return;
+            }
+
             // If this VPN is already active, nothing will happen and it doesn't harm to call it here again.
             // If another VPN is already active, it will stop that other VPN automatically before starting the new one.
             VPNUtil.startVPN(vpnConfig, ctx);
