@@ -906,4 +906,13 @@
     <string name="label_add">라벨 추가</string>
     <string name="label_edit">라벨 편집</string>
     <string name="pulling_payment_data">결제 데이터 가져오기…</string>
+    <string name="allow">허용</string>
+    <string name="error_nwc_min_android_version">노스터 월렛 커넥트를 사용하려면 안드로이드 11 이상이 필요합니다.</string>
+    <string name="notification_permission_rationale_title">알림 허용</string>
+    <string name="notification_permission_rationale">앱을 전환할 때 연결을 안정적으로 유지하기 위해 비트바나나는 앱을 최소화한 후 백그라운드 서비스를 실행합니다. 안드로이드에서는 이 서비스가 작동하려면 알림이 필요하므로 알림을 활성화하면 백그라운드에서 몇 분 동안 연결이 활성화된 상태로 유지됩니다.</string>
+    <string name="notification_permission_rationale_cancelled">알림 권한이 없으면 앱이 최소화될 때 연결이 끊어집니다. 알림 허용을 고려해 보세요.</string>
+    <string name="keep_alive_notification_title">연결 활성</string>
+    <string name="keep_alive_notification_description">연결이 아직 활성 상태입니다.</string>
+    <string name="keep_alive_notification_channel_name">백그라운드 연결</string>
+    <string name="keep_alive_notification_channel_description">백그라운드에서 연결을 유지합니다</string>
 </resources>
