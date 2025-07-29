@@ -118,6 +118,15 @@ public class CoreLightningConnection {
                 });
             }
 
+            if (newState == ConnectivityState.TRANSIENT_FAILURE && isConnectionProcess) {
+                BBLog.w(LOG_TAG, "GRPC channel failed! We still continue so that actual gRPC requests are emitted and gRPC tries to reconnect with its internal logic. Let's hope it works...");
+                isConnectionProcess = false;
+                mSecureChannel.resetConnectBackoff();
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    BackendManager.activateBackendConfig5();
+                });
+            }
+
             if (state == ConnectivityState.SHUTDOWN) {
                 return;
             }
