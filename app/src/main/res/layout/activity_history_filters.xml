@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.michaelwuensch.bitbanana.listViews.transactionHistory.HistoryFilterActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/deep_sea_blue"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:paddingVertical="10dp"
+                android:text="@string/type"
+                android:textColor="@color/banana_yellow" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchSent"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/sent"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchReceive"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/received"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchInternal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/internal"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/headingProtocol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:paddingTop="25dp"
+                android:paddingBottom="10dp"
+                android:text="@string/protocol"
+                android:textColor="@color/banana_yellow" />
+
+            <LinearLayout
+                android:id="@+id/OnChainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchOnChain"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="@string/on_chain"
+                    android:textSize="18sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchUnconfirmed"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:paddingStart="15dp"
+                    android:text="@string/unconfirmed"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchLightning"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/lightning"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchUnpaid"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingStart="15dp"
+                android:text="@string/transaction_filter_unpaid_requests"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchExpired"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingStart="15dp"
+                android:text="@string/expired_requests"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/headingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:paddingTop="25dp"
+                android:paddingBottom="10dp"
+                android:text="@string/amount"
+                android:textColor="@color/banana_yellow" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/min"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/minAmountEditText"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_clickable_item_bright"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="8dp"
+                    android:textAlignment="textEnd"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:id="@+id/minAmountUnitLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <app.michaelwuensch.bitbanana.customView.NonClippingTextView
+                        android:id="@+id/minAmountUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="22sp"
+                        android:textStyle="italic"
+                        tools:text="UNIT" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingStart="4dp"
+                        android:paddingTop="4dp"
+                        app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                        app:tint="@color/banana_yellow" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/max"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/maxAmountEditText"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_clickable_item_bright"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:paddingHorizontal="8dp"
+                    android:textAlignment="textEnd"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:id="@+id/maxAmountUnitLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <app.michaelwuensch.bitbanana.customView.NonClippingTextView
+                        android:id="@+id/maxAmountUnit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="22sp"
+                        android:textStyle="italic"
+                        tools:text="UNIT" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingStart="4dp"
+                        android:paddingTop="4dp"
+                        app:srcCompat="@drawable/ic_swap_vert_black_24dp"
+                        app:tint="@color/banana_yellow" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/headingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:paddingTop="25dp"
+                android:paddingBottom="10dp"
+                android:text="@string/date"
+                android:textColor="@color/banana_yellow" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/start_date"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/startDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:text="30.05.2025" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/buttonPickStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:bbbutton_text="@string/pick" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/buttonDeleteStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:bbbutton_contentColor="@color/white"
+                    app:bbbutton_horizontalContentPadding="0dp"
+                    app:bbbutton_image="@drawable/ic_delete_24" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/end_date"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/endDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="15dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:text="30.05.2025" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/buttonPickEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:bbbutton_text="@string/pick" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/buttonDeleteEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:bbbutton_contentColor="@color/white"
+                    app:bbbutton_horizontalContentPadding="0dp"
+                    app:bbbutton_image="@drawable/ic_delete_24" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

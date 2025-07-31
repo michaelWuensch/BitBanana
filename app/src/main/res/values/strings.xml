@@ -158,6 +158,12 @@
     <string name="status">Status</string>
     <string name="info">Info</string>
     <string name="allow">Allow</string>
+    <string name="on_chain">On-Chain</string>
+    <string name="unconfirmed">Unconfirmed</string>
+    <string name="protocol">Protocol</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="pick">Pick</string>
 
     <string name="activity_receive">Receive</string>
     <string name="activity_send">Pay</string>
@@ -224,6 +230,7 @@
     <string name="normal_payments">Normal Payments</string>
     <string name="expired_requests">Expired Requests</string>
     <string name="no_transactions">No transactions</string>
+    <string name="transaction_filter_unpaid_requests">Unpaid requests</string>
 
 
     <string name="channel_capacity">Capacity</string>
@@ -1055,4 +1062,7 @@
     <string name="keep_alive_notification_description">Your connection is still active.</string>
     <string name="keep_alive_notification_channel_name">Background Connection</string>
     <string name="keep_alive_notification_channel_description">Keeps connection alive in background</string>
+
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
 </resources>
