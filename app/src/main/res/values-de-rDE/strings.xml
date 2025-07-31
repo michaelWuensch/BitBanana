@@ -1044,4 +1044,22 @@
     <string name="help_dialog_emergency_pin_password">Ein Notfallpasswort oder eine Notfall-PIN ist für Situationen gedacht, in denen du von jemandem gezwungen wirst, deine Wallet zu entsperren. Wenn du dieses Notfallpasswort oder diese Notfall-PIN anstelle deines regulären Passworts oder deiner regulären PIN eingibst, wird BitBanana scheinbar normal entsperrt, während im Hintergrund zusätzliche Schutzmaßnahmen ausgeführt werden. Je nach gewähltem Notfallmodus können dabei alle deine Verbindungen gelöscht oder nur eine Wallet mit einem kleinen Guthaben angezeigt werden. Details zur sicheren Einrichtung und Nutzung dieser Funktion findest du in der Dokumentation.</string>
     <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s hat eine ungültige Zahlungsaufforderung gesendet. Du wolltest %2$d msat senden, aber der Betrag der Zahlungsaufforderung beträgt %3$d msat.</string>
     <string name="pulling_payment_data">Zahlungsdaten werden abgerufen…</string>
+    <string name="allow">Zulassen</string>
+    <string name="on_chain">On-Chain</string>
+    <string name="unconfirmed">Unbestätigte</string>
+    <string name="protocol">Protokoll</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="pick">Wählen</string>
+    <string name="transaction_filter_unpaid_requests">Unbezahlte Anfragen</string>
+    <string name="error_nwc_min_android_version">Android 11 oder höher ist erforderlich, um Nostr Wallet Connect zu verwenden.</string>
+    <string name="notification_permission_rationale_title">Benachrichtigungen zulassen</string>
+    <string name="notification_permission_rationale">Um deine Verbindung beim Wechseln zwischen Apps stabil zu halten, führt BitBanana nach dem Minimieren der App einen Hintergrunddienst aus. Android verlangt dafür eine Benachrichtigung, damit der Dienst funktioniert. Wenn du Benachrichtigungen aktivierst, bleibt die Verbindung noch einige Minuten im Hintergrund bestehen.</string>
+    <string name="notification_permission_rationale_cancelled">Wenn du keine Benachrichtigungen zulässt, verliert die App die Verbindung, wenn sie minimiert wird. Bitte erwäge, Benachrichtigungen zuzulassen.</string>
+    <string name="keep_alive_notification_title">Aktive Verbindung</string>
+    <string name="keep_alive_notification_description">Deine Verbindung ist noch aktiv.</string>
+    <string name="keep_alive_notification_channel_name">Hintergrundverbindung</string>
+    <string name="keep_alive_notification_channel_description">Hält die Verbindung im Hintergrund aufrecht</string>
+    <string name="start_date">Beginn</string>
+    <string name="end_date">Ende</string>
 </resources>
