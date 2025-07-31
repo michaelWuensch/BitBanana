@@ -1,17 +1,12 @@
 package app.michaelwuensch.bitbanana.listViews.transactionHistory;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -179,49 +173,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
         mListOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                LayoutInflater adbInflater = LayoutInflater.from(getActivity());
-                View DialogLayout = adbInflater.inflate(R.layout.dialog_history_list_settings, null);
-                Switch normalSwitch = DialogLayout.findViewById(R.id.switchNormal);
-                Switch expiredSwitch = DialogLayout.findViewById(R.id.switchExpired);
-                Switch internalSwitch = DialogLayout.findViewById(R.id.switchInternal);
-                normalSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showNormalTransactions", true));
-                expiredSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showExpiredRequests", false));
-                internalSwitch.setChecked(PrefsUtil.getPrefs().getBoolean("showInternalTransactions", true));
-                normalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.editPrefs().putBoolean("showNormalTransactions", isChecked).commit();
-                        updateHistoryDisplayList();
-                    }
-                });
-                expiredSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.editPrefs().putBoolean("showExpiredRequests", isChecked).commit();
-                        updateHistoryDisplayList();
-                    }
-                });
-                internalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        PrefsUtil.editPrefs().putBoolean("showInternalTransactions", isChecked).commit();
-                        updateHistoryDisplayList();
-                    }
-                });
-                adb.setView(DialogLayout);
-                adb.setTitle(R.string.filter_transactions);
-                adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                Dialog dlg = adb.create();
-                // Apply FLAG_SECURE to dialog to prevent screen recording
-                if (PrefsUtil.isScreenRecordingPrevented()) {
-                    dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                }
-                dlg.show();
+                Intent filterIntent = new Intent(getActivity(), HistoryFilterActivity.class);
+                startActivity(filterIntent);
             }
         });
 
@@ -250,9 +203,6 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
 
         mHistoryItems.clear();
 
-        List<HistoryListItem> normalPayments = new LinkedList<>();
-        List<HistoryListItem> expiredRequest = new LinkedList<>();
-        List<HistoryListItem> internalTransactions = new LinkedList<>();
         Set<HistoryListItem> dateLines = new HashSet<>();
 
         if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()) {
@@ -260,58 +210,112 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
             // Add all payment relevant items to one of the lists above
 
             if (Wallet_TransactionHistory.getInstance().getOnChainTransactionList() != null) {
-                for (OnChainTransaction t : Wallet_TransactionHistory.getInstance().getOnChainTransactionList()) {
-                    OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
+                if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_ON_CHAIN_TRANSACTIONS, true)) {
+                    for (OnChainTransaction t : Wallet_TransactionHistory.getInstance().getOnChainTransactionList()) {
+                        OnChainTransactionItem onChainTransactionItem = new OnChainTransactionItem(t);
 
-                    if (WalletUtil.isChannelTransaction(t)) {
-                        internalTransactions.add(onChainTransactionItem);
-                    } else {
-                        if (t.getAmount() != 0) {
-                            normalPayments.add(onChainTransactionItem);
+                        if (!PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_ON_CHAIN_UNCONFIRMED, true))
+                            if (!t.isConfirmed())
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0) > 0)
+                            if (t.getTimeStamp() < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0) > 0)
+                            if (t.getTimeStamp() > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0) > 0)
+                            if (Math.abs(t.getAmount()) < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0) > 0)
+                            if (Math.abs(t.getAmount()) > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0))
+                                continue;
+
+                        if (WalletUtil.isChannelTransaction(t)) {
+                            if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_INTERNAL_TRANSACTIONS, true))
+                                mHistoryItems.add(onChainTransactionItem);
+                        } else {
+                            if (t.getAmount() != 0) {
+                                if (t.getAmount() < 0) {
+                                    if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_SENT, true))
+                                        mHistoryItems.add(onChainTransactionItem);
+                                } else {
+                                    if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_RECEIVED, true))
+                                        mHistoryItems.add(onChainTransactionItem);
+                                }
+                            }
                         }
                     }
                 }
             }
 
             if (Wallet_TransactionHistory.getInstance().getInvoiceList() != null) {
-                for (LnInvoice i : Wallet_TransactionHistory.getInstance().getInvoiceList()) {
+                if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_LIGHTNING_PAYMENTS, true)) {
+                    for (LnInvoice i : Wallet_TransactionHistory.getInstance().getInvoiceList()) {
 
-                    LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
+                        LnInvoiceItem lnInvoiceItem = new LnInvoiceItem(i);
 
-                    // add to list according to current state of the invoice
-                    if (i.isPaid()) {
-                        normalPayments.add(lnInvoiceItem);
-                    } else {
-                        if (i.isExpired()) {
-                            expiredRequest.add(lnInvoiceItem);
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0) > 0)
+                            if (i.getCreatedAt() < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0) > 0)
+                            if (i.getCreatedAt() > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0) > 0)
+                            if (i.getAmountRequested() < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0) > 0)
+                            if (i.getAmountRequested() > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0))
+                                continue;
+
+                        // add to list according to current state of the invoice
+                        if (i.isPaid()) {
+                            if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_RECEIVED, true))
+                                mHistoryItems.add(lnInvoiceItem);
                         } else {
-                            normalPayments.add(lnInvoiceItem);
+                            if (i.isExpired()) {
+                                if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_EXPIRED_REQUESTS, false))
+                                    mHistoryItems.add(lnInvoiceItem);
+                            } else {
+                                if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_UNPAID_REQUESTS, true))
+                                    mHistoryItems.add(lnInvoiceItem);
+                            }
                         }
                     }
                 }
             }
 
             if (Wallet_TransactionHistory.getInstance().getPaymentsList() != null) {
-                for (LnPayment p : Wallet_TransactionHistory.getInstance().getPaymentsList()) {
-                    LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
-                    normalPayments.add(lnPaymentItem);
+                if (PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_LIGHTNING_PAYMENTS, true)
+                        && PrefsUtil.getPrefs().getBoolean(PrefsUtil.FILTER_HISTORY_SENT, true)) {
+                    for (LnPayment p : Wallet_TransactionHistory.getInstance().getPaymentsList()) {
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0) > 0)
+                            if (p.getCreatedAt() < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_START, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0) > 0)
+                            if (p.getCreatedAt() > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_DATE_END, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0) > 0)
+                            if (p.getAmountPaid() < PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, 0))
+                                continue;
+
+                        if (PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0) > 0)
+                            if (p.getAmountPaid() > PrefsUtil.getPrefs().getLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, 0))
+                                continue;
+
+                        LnPaymentItem lnPaymentItem = new LnPaymentItem(p);
+                        mHistoryItems.add(lnPaymentItem);
+                    }
                 }
             }
-
-        }
-
-        // Apply filters
-
-        if (PrefsUtil.getPrefs().getBoolean("showNormalTransactions", true)) {
-            mHistoryItems.addAll(normalPayments);
-        }
-
-        if (PrefsUtil.getPrefs().getBoolean("showExpiredRequests", false)) {
-            mHistoryItems.addAll(expiredRequest);
-        }
-
-        if (PrefsUtil.getPrefs().getBoolean("showInternalTransactions", true)) {
-            mHistoryItems.addAll(internalTransactions);
         }
 
 
@@ -377,8 +381,8 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
 
     @Override
     public void onResume() {
+        updateHistoryDisplayList();
         super.onResume();
-
     }
 
     @Override

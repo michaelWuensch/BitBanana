@@ -25,6 +25,19 @@ public class TimeFormatUtil {
     }
 
     /**
+     * Returns a nicely formatted date.
+     *
+     * @param time    in seconds
+     * @param context
+     * @return
+     */
+    public static String formatDate(long time, Context context) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, context.getResources().getConfiguration().locale);
+        String formattedDate = df.format(new Date(time * 1000L));
+        return (formattedDate);
+    }
+
+    /**
      * Returns a nicely formatted duration.
      *
      * @param duration in seconds

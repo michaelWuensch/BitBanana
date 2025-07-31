@@ -67,7 +67,18 @@ public class PrefsUtil {
     public static final String PAYMENT_TIMEOUT = "paymentTimeout";
     public static final String APP_NUM_UNLOCK_FAILS = "numAppUnlockFails";
     public static final String NOTIFICATIONS_DECLINED = "notificationPermissionDeclined";
-
+    public static final String FILTER_HISTORY_INTERNAL_TRANSACTIONS = "showInternalTransactions";
+    public static final String FILTER_HISTORY_EXPIRED_REQUESTS = "showExpiredRequests";
+    public static final String FILTER_HISTORY_UNPAID_REQUESTS = "historyFilterUnpaidRequests";
+    public static final String FILTER_HISTORY_ON_CHAIN_TRANSACTIONS = "historyFilterOnChainTransactions";
+    public static final String FILTER_HISTORY_ON_CHAIN_UNCONFIRMED = "historyFilterUnconfirmedTransactions";
+    public static final String FILTER_HISTORY_LIGHTNING_PAYMENTS = "historyFilterLightningPayments";
+    public static final String FILTER_HISTORY_SENT = "historyFilterSent";
+    public static final String FILTER_HISTORY_RECEIVED = "historyFilterReceived";
+    public static final String FILTER_HISTORY_VALUE_MIN = "historyFilterValueMin";
+    public static final String FILTER_HISTORY_VALUE_MAX = "historyFilterValueMax";
+    public static final String FILTER_HISTORY_DATE_START = "historyFilterDateStart";
+    public static final String FILTER_HISTORY_DATE_END = "historyFilterDateEnd";
 
     // default values
     public static final String DEFAULT_FIAT_CURRENCIES = "[]";
@@ -325,5 +336,20 @@ public class PrefsUtil {
 
     public static String getEmergencyUnlockMode() {
         return getPrefs().getString("appLockEmergencyModePref", "erase");
+    }
+
+    public static boolean areDefaultHistoryFiltersActive() {
+        return !getPrefs().getBoolean(FILTER_HISTORY_EXPIRED_REQUESTS, false)
+                && getPrefs().getBoolean(FILTER_HISTORY_UNPAID_REQUESTS, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_INTERNAL_TRANSACTIONS, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_ON_CHAIN_TRANSACTIONS, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_ON_CHAIN_UNCONFIRMED, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_LIGHTNING_PAYMENTS, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_SENT, true)
+                && getPrefs().getBoolean(FILTER_HISTORY_RECEIVED, true)
+                && getPrefs().getLong(FILTER_HISTORY_VALUE_MIN, 0) == 0
+                && getPrefs().getLong(FILTER_HISTORY_VALUE_MAX, 0) == 0
+                && getPrefs().getLong(FILTER_HISTORY_DATE_START, 0) == 0
+                && getPrefs().getLong(FILTER_HISTORY_DATE_END, 0) == 0;
     }
 }
