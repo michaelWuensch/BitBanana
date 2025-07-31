@@ -442,23 +442,6 @@
     "dependency": "androidx.asynclayoutinflater:asynclayoutinflater:1.0.0"
   },
   {
-    "project": "Android Support Library collections",
-    "description": "Standalone efficient collections.",
-    "version": "1.1.0",
-    "developers": [
-      "The Android Open Source Project"
-    ],
-    "url": "http://developer.android.com/tools/extras/support-library.html",
-    "year": "2018",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "androidx.collection:collection:1.1.0"
-  },
-  {
     "project": "Android Support Library Coordinator Layout",
     "description": "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren\u0027t a part of the framework APIs. Compatible on devices running API 14 or later.",
     "version": "1.1.0",
@@ -529,23 +512,6 @@
   {
     "project": "Android Support Library Custom View",
     "description": "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren\u0027t a part of the framework APIs. Compatible on devices running API 14 or later.",
-    "version": "1.1.0",
-    "developers": [
-      "The Android Open Source Project"
-    ],
-    "url": "https://developer.android.com/jetpack/androidx",
-    "year": "2018",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "androidx.customview:customview:1.1.0"
-  },
-  {
-    "project": "Android Support Library Custom View",
-    "description": "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren\u0027t a part of the framework APIs. Compatible on devices running API 14 or later.",
     "version": "1.0.0",
     "developers": [
       "The Android Open Source Project"
@@ -559,6 +525,23 @@
       }
     ],
     "dependency": "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+  },
+  {
+    "project": "Android Support Library Custom View",
+    "description": "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren\u0027t a part of the framework APIs. Compatible on devices running API 14 or later.",
+    "version": "1.1.0",
+    "developers": [
+      "The Android Open Source Project"
+    ],
+    "url": "https://developer.android.com/jetpack/androidx",
+    "year": "2018",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "androidx.customview:customview:1.1.0"
   },
   {
     "project": "Android Support Library Document File",
@@ -833,23 +816,6 @@
     "dependency": "androidx.preference:preference:1.2.1"
   },
   {
-    "project": "AndroidX Security",
-    "description": "AndroidX Security",
-    "version": "1.1.0-alpha06",
-    "developers": [
-      "The Android Open Source Project"
-    ],
-    "url": "https://developer.android.com/jetpack/androidx/releases/security#1.1.0-alpha06",
-    "year": "2019",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "androidx.security:security-crypto:1.1.0-alpha06"
-  },
-  {
     "project": "AndroidX Widget ViewPager2",
     "description": "AndroidX Widget ViewPager2",
     "version": "1.0.0",
@@ -901,11 +867,11 @@
   {
     "project": "AppCompat",
     "description": "Provides backwards-compatible implementations of UI-related Android SDK functionality, including dark mode and Material theming.",
-    "version": "1.7.0",
+    "version": "1.7.1",
     "developers": [
       "The Android Open Source Project"
     ],
-    "url": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.0",
+    "url": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1",
     "year": "2011",
     "licenses": [
       {
@@ -913,16 +879,16 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "androidx.appcompat:appcompat:1.7.0"
+    "dependency": "androidx.appcompat:appcompat:1.7.1"
   },
   {
     "project": "AppCompat Resources",
     "description": "Provides backward-compatible implementations of resource-related Android SDKfunctionality, including color state list theming.",
-    "version": "1.7.0",
+    "version": "1.7.1",
     "developers": [
       "The Android Open Source Project"
     ],
-    "url": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.0",
+    "url": "https://developer.android.com/jetpack/androidx/releases/appcompat#1.7.1",
     "year": "2019",
     "licenses": [
       {
@@ -930,12 +896,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "androidx.appcompat:appcompat-resources:1.7.0"
+    "dependency": "androidx.appcompat:appcompat-resources:1.7.1"
   },
   {
     "project": "Base16 Encoding",
     "description": "Base16 Encoding",
-    "version": "2.2.2",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -947,12 +913,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.encoding:base16-jvm:2.2.2"
+    "dependency": "io.matthewnelson.encoding:base16-jvm:2.4.0"
   },
   {
     "project": "Base32 Encoding",
     "description": "Base32 Encoding",
-    "version": "2.2.2",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -964,12 +930,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.encoding:base32-jvm:2.2.2"
+    "dependency": "io.matthewnelson.encoding:base32-jvm:2.4.0"
   },
   {
     "project": "Base64 Encoding",
     "description": "Base64 Encoding",
-    "version": "2.2.2",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -981,7 +947,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.encoding:base64-jvm:2.2.2"
+    "dependency": "io.matthewnelson.encoding:base64-jvm:2.4.0"
   },
   {
     "project": "Biometric",
@@ -1003,7 +969,7 @@
   {
     "project": "Checker Qual",
     "description": "checker-qual contains annotations (type qualifiers) that a programmer\nwrites to specify Java code for type-checking by the Checker Framework.",
-    "version": "3.42.0",
+    "version": "3.43.0",
     "developers": [
       "Michael Ernst",
       "Suzanne Millstein"
@@ -1016,16 +982,16 @@
         "license_url": "http://opensource.org/licenses/MIT"
       }
     ],
-    "dependency": "org.checkerframework:checker-qual:3.42.0"
+    "dependency": "org.checkerframework:checker-qual:3.43.0"
   },
   {
-    "project": "Collections Kotlin Extensions",
-    "description": "Kotlin extensions for \u0027collection\u0027 artifact",
-    "version": "1.1.0",
+    "project": "collections",
+    "description": "Standalone efficient collections.",
+    "version": "1.4.2",
     "developers": [
       "The Android Open Source Project"
     ],
-    "url": "http://developer.android.com/tools/extras/support-library.html",
+    "url": "https://developer.android.com/jetpack/androidx/releases/collection#1.4.2",
     "year": "2018",
     "licenses": [
       {
@@ -1033,16 +999,33 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "androidx.collection:collection-ktx:1.1.0"
+    "dependency": "androidx.collection:collection-jvm:1.4.2"
+  },
+  {
+    "project": "Collections Kotlin Extensions",
+    "description": "Kotlin extensions for \u0027collection\u0027 artifact",
+    "version": "1.4.2",
+    "developers": [
+      "The Android Open Source Project"
+    ],
+    "url": "https://developer.android.com/jetpack/androidx/releases/collection#1.4.2",
+    "year": "2018",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "androidx.collection:collection-ktx:1.4.2"
   },
   {
     "project": "ConstraintLayout",
     "description": "This library offers a flexible and adaptable way to position and animate widgets",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "developers": [
       "The Android Open Source Project"
     ],
-    "url": "https://developer.android.com/jetpack/androidx/releases/constraintlayout#2.2.0",
+    "url": "https://developer.android.com/jetpack/androidx/releases/constraintlayout#2.2.1",
     "year": "2022",
     "licenses": [
       {
@@ -1050,16 +1033,16 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "androidx.constraintlayout:constraintlayout:2.2.0"
+    "dependency": "androidx.constraintlayout:constraintlayout:2.2.1"
   },
   {
     "project": "ConstraintLayout Core",
     "description": "This library contains engines and algorithms for constraint based layout and complex animations (it is used by the ConstraintLayout library)",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "developers": [
       "The Android Open Source Project"
     ],
-    "url": "https://developer.android.com/jetpack/androidx/releases/constraintlayout#1.1.0",
+    "url": "https://developer.android.com/jetpack/androidx/releases/constraintlayout#1.1.1",
     "year": "2022",
     "licenses": [
       {
@@ -1067,7 +1050,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "androidx.constraintlayout:constraintlayout-core:1.1.0"
+    "dependency": "androidx.constraintlayout:constraintlayout-core:1.1.1"
   },
   {
     "project": "Core",
@@ -1089,7 +1072,7 @@
   {
     "project": "Core Encoding Abstractions",
     "description": "Core Encoding Abstractions",
-    "version": "2.2.2",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1101,7 +1084,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.encoding:core-jvm:2.2.2"
+    "dependency": "io.matthewnelson.encoding:core-jvm:2.4.0"
   },
   {
     "project": "Core Kotlin Extensions",
@@ -1123,7 +1106,7 @@
   {
     "project": "error-prone annotations",
     "description": null,
-    "version": "2.28.0",
+    "version": "2.30.0",
     "developers": [],
     "url": null,
     "year": null,
@@ -1133,7 +1116,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.errorprone:error_prone_annotations:2.28.0"
+    "dependency": "com.google.errorprone:error_prone_annotations:2.30.0"
   },
   {
     "project": "ExpandableFab",
@@ -1172,7 +1155,7 @@
   {
     "project": "File",
     "description": "A simple File API for Kotlin Multiplatform modeled after java.io.File",
-    "version": "0.1.1",
+    "version": "0.3.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1184,7 +1167,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-file:file-jvm:0.1.1"
+    "dependency": "io.matthewnelson.kmp-file:file-jvm:0.3.0"
   },
   {
     "project": "FindBugs-jsr305",
@@ -1283,7 +1266,7 @@
   {
     "project": "Guava: Google Core Libraries for Java",
     "description": "Guava is a suite of core and expanded libraries that include\n    utility classes, Google\u0027s collections, I/O classes, and\n    much more.",
-    "version": "33.2.1-android",
+    "version": "33.3.1-android",
     "developers": [],
     "url": "https://github.com/google/guava",
     "year": null,
@@ -1293,7 +1276,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "com.google.guava:guava:33.2.1-android"
+    "dependency": "com.google.guava:guava:33.3.1-android"
   },
   {
     "project": "Hamcrest Core",
@@ -1313,7 +1296,7 @@
   {
     "project": "Immutable Collections",
     "description": "Utilities for creating immutable (non-modifiable) collections",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1325,12 +1308,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.immutable:collections-jvm:0.1.4"
+    "dependency": "io.matthewnelson.immutable:collections-jvm:0.2.0"
   },
   {
     "project": "io.grpc:grpc-api",
     "description": "gRPC: API",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1342,12 +1325,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-api:1.68.2"
+    "dependency": "io.grpc:grpc-api:1.73.0"
   },
   {
     "project": "io.grpc:grpc-context",
     "description": "gRPC: Context",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1359,12 +1342,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-context:1.68.2"
+    "dependency": "io.grpc:grpc-context:1.73.0"
   },
   {
     "project": "io.grpc:grpc-core",
     "description": "gRPC: Core",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1376,12 +1359,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-core:1.68.2"
+    "dependency": "io.grpc:grpc-core:1.73.0"
   },
   {
     "project": "io.grpc:grpc-okhttp",
     "description": "gRPC: OkHttp",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1393,12 +1376,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-okhttp:1.68.2"
+    "dependency": "io.grpc:grpc-okhttp:1.73.0"
   },
   {
     "project": "io.grpc:grpc-protobuf-lite",
     "description": "gRPC: Protobuf Lite",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1410,12 +1393,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-protobuf-lite:1.68.2"
+    "dependency": "io.grpc:grpc-protobuf-lite:1.73.0"
   },
   {
     "project": "io.grpc:grpc-stub",
     "description": "gRPC: Stub",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1427,12 +1410,12 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-stub:1.68.2"
+    "dependency": "io.grpc:grpc-stub:1.73.0"
   },
   {
     "project": "io.grpc:grpc-util",
     "description": "gRPC: Util",
-    "version": "1.68.2",
+    "version": "1.73.0",
     "developers": [
       "gRPC Contributors"
     ],
@@ -1444,7 +1427,46 @@
         "license_url": "https://opensource.org/licenses/Apache-2.0"
       }
     ],
-    "dependency": "io.grpc:grpc-util:1.68.2"
+    "dependency": "io.grpc:grpc-util:1.73.0"
+  },
+  {
+    "project": "J2ObjC Annotations",
+    "description": "A set of annotations that provide additional information to the J2ObjC\n    translator to modify the result of translation.",
+    "version": "3.0.0",
+    "developers": [
+      "Tom Ball"
+    ],
+    "url": "https://github.com/google/j2objc/",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "com.google.j2objc:j2objc-annotations:3.0.0"
+  },
+  {
+    "project": "Java Native Access",
+    "description": "Java Native Access",
+    "version": "5.17.0",
+    "developers": [
+      "Timothy Wall",
+      "Matthias Bläsing"
+    ],
+    "url": "https://github.com/java-native-access/jna",
+    "year": null,
+    "licenses": [
+      {
+        "license": "LGPL-2.1-or-later",
+        "license_url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1"
+      },
+      {
+        "license": "Apache-2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "net.java.dev.jna:jna:5.17.0"
   },
   {
     "project": "JetBrains Java Annotations",
@@ -1479,6 +1501,23 @@
       }
     ],
     "dependency": "androidx.window:window:1.0.0"
+  },
+  {
+    "project": "JSpecify annotations",
+    "description": "An artifact of well-named and well-specified annotations to power static analysis checks",
+    "version": "1.0.0",
+    "developers": [
+      "Kevin Bourrillion"
+    ],
+    "url": "http://jspecify.org/",
+    "year": null,
+    "licenses": [
+      {
+        "license": "The Apache License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.jspecify:jspecify:1.0.0"
   },
   {
     "project": "JUnit",
@@ -1588,7 +1627,7 @@
   {
     "project": "KmpTor Runtime",
     "description": "Library for running tor",
-    "version": "2.0.0-alpha02",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1600,12 +1639,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:runtime-jvm:2.0.0-alpha02"
+    "dependency": "io.matthewnelson.kmp-tor:runtime-jvm:2.4.0"
   },
   {
     "project": "KmpTor Runtime Core",
     "description": "Core APIs for KmpTor Runtime",
-    "version": "2.0.0-alpha02",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1617,12 +1656,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:runtime-core-jvm:2.0.0-alpha02"
+    "dependency": "io.matthewnelson.kmp-tor:runtime-core-jvm:2.4.0"
   },
   {
     "project": "KmpTor Runtime Ctrl",
     "description": "Tor Controller implementation utilized by runtime",
-    "version": "2.0.0-alpha02",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1634,12 +1673,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:runtime-ctrl-jvm:2.0.0-alpha02"
+    "dependency": "io.matthewnelson.kmp-tor:runtime-ctrl-jvm:2.4.0"
   },
   {
     "project": "KmpTor Runtime For TorService",
     "description": "TorRuntime.ServiceFactory specific runtime implementation",
-    "version": "2.0.0-alpha02",
+    "version": "2.4.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1651,7 +1690,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:runtime-service-android:2.0.0-alpha02"
+    "dependency": "io.matthewnelson.kmp-tor:runtime-service-android:2.4.0"
   },
   {
     "project": "Kotlin Multiplatform Bitcoin Library",
@@ -1690,7 +1729,7 @@
   {
     "project": "Kotlin Multiplatform Process",
     "description": "Process for Kotlin Multiplatform",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1702,12 +1741,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-process:process-jvm:0.1.0"
+    "dependency": "io.matthewnelson.kmp-process:process-jvm:0.3.0"
   },
   {
     "project": "Kotlin Multiplatform Tor Common API",
     "description": "KmpTor common API dependency",
-    "version": "2.1.0",
+    "version": "2.3.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1719,12 +1758,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:common-api-jvm:2.1.0"
+    "dependency": "io.matthewnelson.kmp-tor:common-api-jvm:2.3.0"
   },
   {
     "project": "Kotlin Multiplatform Tor Common Core",
     "description": "KmpTor common core dependency",
-    "version": "2.1.0",
+    "version": "2.3.0",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1736,12 +1775,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:common-core-jvm:2.1.0"
+    "dependency": "io.matthewnelson.kmp-tor:common-core-jvm:2.3.0"
   },
   {
-    "project": "Kotlin Multiplatform Tor Executable Resources",
-    "description": "Tor resources for running as a child process",
-    "version": "408.13.0",
+    "project": "Kotlin Multiplatform Tor Executable Compilations",
+    "description": "Tor executable compilations for android",
+    "version": "408.16.4",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1753,12 +1792,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:resource-exec-tor-jvm:408.13.0"
+    "dependency": "io.matthewnelson.kmp-tor:resource-compilation-exec-tor-android:408.16.4"
   },
   {
     "project": "Kotlin Multiplatform Tor Executable Resources",
     "description": "Tor resources for running as a child process",
-    "version": "408.13.0",
+    "version": "408.16.4",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1770,12 +1809,29 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:resource-exec-tor-android:408.13.0"
+    "dependency": "io.matthewnelson.kmp-tor:resource-exec-tor-jvm:408.16.4"
+  },
+  {
+    "project": "Kotlin Multiplatform Tor Executable Resources",
+    "description": "Tor resources for running as a child process",
+    "version": "408.16.4",
+    "developers": [
+      "Matthew Nelson"
+    ],
+    "url": "https://github.com/05nelsonm/kmp-tor-resource/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    ],
+    "dependency": "io.matthewnelson.kmp-tor:resource-exec-tor-android:408.16.4"
   },
   {
     "project": "Kotlin Multiplatform Tor Geoip Resources",
     "description": "Tor geoip and geoip6 resource files",
-    "version": "408.13.0",
+    "version": "408.16.4",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1787,29 +1843,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:resource-geoip-jvm:408.13.0"
+    "dependency": "io.matthewnelson.kmp-tor:resource-geoip-jvm:408.16.4"
   },
   {
-    "project": "Kotlin Multiplatform Tor Native Lib Locator",
-    "description": "Android utils for locating native libs within application nativeLibraryDir",
-    "version": "2.1.0",
-    "developers": [
-      "Matthew Nelson"
-    ],
-    "url": "https://github.com/05nelsonm/kmp-tor-common/",
-    "year": "2023",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "io.matthewnelson.kmp-tor:common-lib-locator-android:2.1.0"
-  },
-  {
-    "project": "Kotlin Multiplatform Tor Shared Library Resources",
-    "description": "Tor shared library resources",
-    "version": "408.13.0",
+    "project": "Kotlin Multiplatform Tor Shared Library Compilations",
+    "description": "Tor shared library compilations for android",
+    "version": "408.16.4",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1821,12 +1860,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:resource-lib-tor-jvm:408.13.0"
+    "dependency": "io.matthewnelson.kmp-tor:resource-compilation-lib-tor-android:408.16.4"
   },
   {
     "project": "Kotlin Multiplatform Tor Shared Library Resources",
     "description": "Tor shared library resources",
-    "version": "408.13.0",
+    "version": "408.16.4",
     "developers": [
       "Matthew Nelson"
     ],
@@ -1838,12 +1877,29 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
       }
     ],
-    "dependency": "io.matthewnelson.kmp-tor:resource-lib-tor-android:408.13.0"
+    "dependency": "io.matthewnelson.kmp-tor:resource-lib-tor-jvm:408.16.4"
+  },
+  {
+    "project": "Kotlin Multiplatform Tor Shared Library Resources",
+    "description": "Tor shared library resources",
+    "version": "408.16.4",
+    "developers": [
+      "Matthew Nelson"
+    ],
+    "url": "https://github.com/05nelsonm/kmp-tor-resource/",
+    "year": "2021",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    ],
+    "dependency": "io.matthewnelson.kmp-tor:resource-lib-tor-android:408.16.4"
   },
   {
     "project": "Kotlin Stdlib",
     "description": "Kotlin Standard Library",
-    "version": "1.9.24",
+    "version": "2.1.21",
     "developers": [
       "Kotlin Team"
     ],
@@ -1855,29 +1911,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
-  },
-  {
-    "project": "Kotlin Stdlib Common",
-    "description": "Kotlin Common Standard Library",
-    "version": "1.8.0",
-    "developers": [
-      "Kotlin Team"
-    ],
-    "url": "https://kotlinlang.org/",
-    "year": null,
-    "licenses": [
-      {
-        "license": "The Apache License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.0"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib:2.1.21"
   },
   {
     "project": "Kotlin Stdlib Jdk7",
     "description": "Kotlin Standard Library JDK 7 extension",
-    "version": "1.9.24",
+    "version": "1.9.10",
     "developers": [
       "Kotlin Team"
     ],
@@ -1889,12 +1928,12 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10"
   },
   {
     "project": "Kotlin Stdlib Jdk8",
     "description": "Kotlin Standard Library JDK 8 extension",
-    "version": "1.9.24",
+    "version": "1.9.10",
     "developers": [
       "Kotlin Team"
     ],
@@ -1906,7 +1945,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24"
+    "dependency": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10"
   },
   {
     "project": "Kotlin Test",
@@ -1943,9 +1982,26 @@
     "dependency": "org.jetbrains.kotlin:kotlin-test-junit:1.9.10"
   },
   {
+    "project": "KotlinCrypto Bit \u0026 Byte Utilities",
+    "description": "Bit \u0026 Byte Utilities",
+    "version": "0.2.0",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/bitops/",
+    "year": "2025",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto.bitops:bits-jvm:0.2.0"
+  },
+  {
     "project": "KotlinCrypto Core Common",
     "description": "Common core cryptography components",
-    "version": "0.5.3",
+    "version": "0.7.0",
     "developers": [
       "Kotlin Crypto"
     ],
@@ -1957,12 +2013,29 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.kotlincrypto.core:common-jvm:0.5.3"
+    "dependency": "org.kotlincrypto.core:core-jvm:0.7.0"
+  },
+  {
+    "project": "KotlinCrypto CryptoRand",
+    "description": "KotlinCrypto library for obtaining cryptographically secure random data from the system",
+    "version": "0.5.1",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/random/",
+    "year": "2023",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto.random:crypto-rand-jvm:0.5.1"
   },
   {
     "project": "KotlinCrypto Digest Abstraction",
     "description": "Core component for creating Digests",
-    "version": "0.5.3",
+    "version": "0.7.0",
     "developers": [
       "Kotlin Crypto"
     ],
@@ -1974,16 +2047,50 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.kotlincrypto.core:digest-jvm:0.5.3"
+    "dependency": "org.kotlincrypto.core:digest-jvm:0.7.0"
   },
   {
-    "project": "KotlinCrypto SecureRandom",
-    "description": "KotlinCrypto library for obtaining cryptographically secure random data from the system",
-    "version": "0.3.2",
+    "project": "KotlinCrypto Endian",
+    "description": "Big \u0026 Little Endian Utils",
+    "version": "0.2.0",
     "developers": [
       "Kotlin Crypto"
     ],
-    "url": "https://github.com/KotlinCrypto/secure-random/",
+    "url": "https://github.com/KotlinCrypto/bitops/",
+    "year": "2025",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto.bitops:endian-jvm:0.2.0"
+  },
+  {
+    "project": "KotlinCrypto Error",
+    "description": "Error Handling and types for KotlinCrypto",
+    "version": "0.3.0",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/error/",
+    "year": "2025",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto:error-jvm:0.3.0"
+  },
+  {
+    "project": "KotlinCrypto Extendable-Output Functions",
+    "description": "Extendable-Output Functions",
+    "version": "0.7.0",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/core/",
     "year": "2023",
     "licenses": [
       {
@@ -1991,12 +2098,29 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.kotlincrypto:secure-random-jvm:0.3.2"
+    "dependency": "org.kotlincrypto.core:xof-jvm:0.7.0"
   },
   {
-    "project": "KotlinCrypto SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/t",
-    "description": "SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/t",
-    "version": "0.5.3",
+    "project": "KotlinCrypto Keccak State and Permutations",
+    "description": "Keccak Sponge Function",
+    "version": "0.4.0",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/sponges/",
+    "year": "2023",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto.sponges:keccak-jvm:0.4.0"
+  },
+  {
+    "project": "KotlinCrypto SHA2 Hashing",
+    "description": "Digests for SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/t",
+    "version": "0.7.0",
     "developers": [
       "Kotlin Crypto"
     ],
@@ -2008,12 +2132,29 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.kotlincrypto.hash:sha2-jvm:0.5.3"
+    "dependency": "org.kotlincrypto.hash:sha2-jvm:0.7.0"
+  },
+  {
+    "project": "KotlinCrypto SHA3 Hashing",
+    "description": "Digests for SHA3-224, SHA3-256, SHA3-384, SHA3-512, Keccak-224, Keccak-256, Keccak-384, Keccak-512, SHAKE128, SHAKE256, CSHAKE128, CSHAKE256, ParallelHash128, ParallelHash256, TupleHash128, TupleHash256",
+    "version": "0.7.0",
+    "developers": [
+      "Kotlin Crypto"
+    ],
+    "url": "https://github.com/KotlinCrypto/hash/",
+    "year": "2023",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.kotlincrypto.hash:sha3-jvm:0.7.0"
   },
   {
     "project": "kotlinx-coroutines-android",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.8.1",
+    "version": "1.10.2",
     "developers": [
       "JetBrains Team"
     ],
@@ -2021,16 +2162,16 @@
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
+        "license": "Apache-2.0",
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
   },
   {
     "project": "kotlinx-coroutines-core",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.8.1",
+    "version": "1.10.2",
     "developers": [
       "JetBrains Team"
     ],
@@ -2038,16 +2179,16 @@
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
+        "license": "Apache-2.0",
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2"
   },
   {
     "project": "kotlinx-coroutines-jdk8",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.8.1",
+    "version": "1.10.2",
     "developers": [
       "JetBrains Team"
     ],
@@ -2055,16 +2196,16 @@
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
+        "license": "Apache-2.0",
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2"
   },
   {
     "project": "kotlinx-coroutines-slf4j",
     "description": "Coroutines support libraries for Kotlin",
-    "version": "1.8.1",
+    "version": "1.10.2",
     "developers": [
       "JetBrains Team"
     ],
@@ -2072,11 +2213,11 @@
     "year": null,
     "licenses": [
       {
-        "license": "The Apache Software License, Version 2.0",
+        "license": "Apache-2.0",
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.1"
+    "dependency": "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.10.2"
   },
   {
     "project": "kotlinx-datetime",
@@ -2506,25 +2647,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.minidns:minidns-hla:1.0.5"
-  },
-  {
-    "project": "minidns",
-    "description": "A DNS library for Java and Android systems",
-    "version": "1.0.5",
-    "developers": [
-      "Rene Treffer",
-      "Florian Schmaus"
-    ],
-    "url": "https://github.com/minidns/minidns",
-    "year": "2014",
-    "licenses": [
-      {
-        "license": "The Apache Software License, Version 2.0",
-        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
-      }
-    ],
-    "dependency": "org.minidns:minidns-core:1.0.5"
+    "dependency": "org.minidns:minidns-iterative-resolver:1.0.5"
   },
   {
     "project": "minidns",
@@ -2560,7 +2683,7 @@
         "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
       }
     ],
-    "dependency": "org.minidns:minidns-iterative-resolver:1.0.5"
+    "dependency": "org.minidns:minidns-hla:1.0.5"
   },
   {
     "project": "minidns",
@@ -2579,6 +2702,24 @@
       }
     ],
     "dependency": "org.minidns:minidns-client:1.0.5"
+  },
+  {
+    "project": "minidns",
+    "description": "A DNS library for Java and Android systems",
+    "version": "1.0.5",
+    "developers": [
+      "Rene Treffer",
+      "Florian Schmaus"
+    ],
+    "url": "https://github.com/minidns/minidns",
+    "year": "2014",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "org.minidns:minidns-core:1.0.5"
   },
   {
     "project": "okhttp",
@@ -2782,29 +2923,12 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-extract:0.15.0"
-  },
-  {
-    "project": "secp256k1 for Kotlin/Multiplatform",
-    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
-    "version": "0.15.0",
-    "developers": [
-      "ACINQ"
-    ],
-    "url": "https://github.com/ACINQ/secp256k1-kmp",
-    "year": null,
-    "licenses": [
-      {
-        "license": "Apache License v2.0",
-        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
-      }
-    ],
     "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-linux:0.15.0"
   },
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
     "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
-    "version": "0.15.0",
+    "version": "0.18.0",
     "developers": [
       "ACINQ"
     ],
@@ -2816,7 +2940,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jvm:0.15.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-common:0.18.0"
   },
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
@@ -2833,7 +2957,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-common:0.15.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm:0.15.0"
   },
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
@@ -2855,7 +2979,7 @@
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
     "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
-    "version": "0.11.0",
+    "version": "0.18.0",
     "developers": [
       "ACINQ"
     ],
@@ -2867,7 +2991,7 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.11.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jvm:0.18.0"
   },
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
@@ -2889,6 +3013,23 @@
   {
     "project": "secp256k1 for Kotlin/Multiplatform",
     "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
+    "version": "0.18.0",
+    "developers": [
+      "ACINQ"
+    ],
+    "url": "https://github.com/ACINQ/secp256k1-kmp",
+    "year": null,
+    "licenses": [
+      {
+        "license": "Apache License v2.0",
+        "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
+      }
+    ],
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.18.0"
+  },
+  {
+    "project": "secp256k1 for Kotlin/Multiplatform",
+    "description": "Bitcoin\u0027s secp256k1 library ported to Kotlin/Multiplatform for JVM, Android, iOS \u0026 Linux",
     "version": "0.15.0",
     "developers": [
       "ACINQ"
@@ -2901,7 +3042,41 @@
         "license_url": "https://www.apache.org/licenses/LICENSE-2.0"
       }
     ],
-    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm:0.15.0"
+    "dependency": "fr.acinq.secp256k1:secp256k1-kmp-jni-jvm-extract:0.15.0"
+  },
+  {
+    "project": "Security",
+    "description": "AndroidX Security",
+    "version": "1.1.0-beta01",
+    "developers": [
+      "The Android Open Source Project"
+    ],
+    "url": "https://developer.android.com/jetpack/androidx/releases/security#1.1.0-beta01",
+    "year": "2019",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "androidx.security:security-crypto:1.1.0-beta01"
+  },
+  {
+    "project": "Security Kotlin Extensions",
+    "description": "Kotlin Extensions for the androidx.security:Security-crypto artifact",
+    "version": "1.1.0-beta01",
+    "developers": [
+      "The Android Open Source Project"
+    ],
+    "url": "https://developer.android.com/jetpack/androidx/releases/security#1.1.0-beta01",
+    "year": "2020",
+    "licenses": [
+      {
+        "license": "The Apache Software License, Version 2.0",
+        "license_url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      }
+    ],
+    "dependency": "androidx.security:security-crypto-ktx:1.1.0-beta01"
   },
   {
     "project": "SLF4J API Module",
