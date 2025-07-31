@@ -189,7 +189,7 @@
 \n
 \nDeseja continuar mesmo assim\?</string>
     <string name="settings_category_general">Geral</string>
-    <string name="settings_category_security">Segurança</string>
+    <string name="settings_category_security">Segurança e Privacidade</string>
     <string name="error_connection_btcpay_invalid_config">A configuração do servidor BTCPay não contém uma configuração BTC GRPC.</string>
     <string name="error_connect_peer_refused">A conexão foi recusada pelo par.</string>
     <string name="error_channel_open">Não pôde abrir canal com o nó conectado: %s</string>
@@ -385,7 +385,7 @@
 \n%1$s
 \n
 \nPor favor verifique o nome do host cuidadosamente.</string>
-    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n \nContinuar?</string>
+    <string name="guardian_backup_overrides_existing_data">Alguns dados já existem! \nRestaurar um backup irá deletar todos os dados seguintes antes de restaurar: \n \n- Dados de Conexão de Nós \n- Contatos \n- Rótulos\n \nContinuar?</string>
     <string name="settings_addPin">Proteger com PIN</string>
     <string name="settings_removePin">Remover PIN</string>
     <string name="settings_blockExplorer">Explorador de Blocos</string>
@@ -510,7 +510,7 @@
     <string name="error_connect_peer">Não foi possível estabelecer uma conexão ao nó do par.</string>
     <string name="error_channel_close_timeout">Canal não pôde ser fechado dentro do prazo.</string>
     <string name="error_connect_peer_self">Não é possível conectar a si mesmo.</string>
-    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar o seu PIN. O app fechará agora. \nPode reinstalar o app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
+    <string name="error_pin_deactivation_attempt">Parece que alguém tentou desativar o seu ecrã de bloqueio da app. A app fechará agora. \nPode reinstalar a app e usar o método de recuperação para reaver acesso aos seus fundos.</string>
     <string name="error_tor_exchange_rate">Taxa de câmbio não pôde ser obtida. O serviço que usa parece bloquear solicitações vindas da rede Tor. Tente mudar o provedor de taxa de câmbio nas configurações avançadas.</string>
     <plurals name="duration_second">
         <item quantity="one">%d Segundo</item>
@@ -611,8 +611,8 @@
     <string name="advanced_channel_details_explanation_visibility">Um canal pode ser público ou privado. Canais privados não são mais seguros, apenas não estão visíveis na rede.</string>
     <string name="advanced_channel_details_initiator_peer">Par</string>
     <string name="advanced_channel_details_explanation_close_type">Canais podem ser fechados em diferentes formas. A forma ideal é um fechamento cooperativo. Se um lado decidir fechar um canal sem a cooperação do outro, um chamado \"fechamento forçado\" ocorre. Um fechamento forçado normalmente resulta em maiores taxas e o iniciador do fechamento terá de esperar um tempo até poder aceder os seus fundos. Se um lado tentar trapacear e for pego, temos um fechamento vazado.</string>
-    <string name="backup_data_create_description">O principal objetivo deste backup é a migração do telefone. Ele não contém a semente para recuperar os seus fundos na cadeia, nem o backup do canal para recuperar os seus fundos Lightning. Os backups para recuperar os seus fundos devem ser feitos fora do BitBanana.\n\nEste backup contém apenas os seguintes dados:\n\n- Configurações do nó\n- Contactos\n- Configurações da aplicação</string>
-    <string name="backup_data_restore_description">Restaure os seus nós conectados e contatos. \nSe os seus nós não estiverem mais online, este processo de restauração não irá lhe ajudar a poder reaceder os seus fundos.</string>
+    <string name="backup_data_create_description">O propósito principal deste backup é a migração de telefones. Ele não contém a seed para recuperar os seus fundos, nem o backup do canal para reaver os seus fundos Lightning. Os backups para reaver os seus fundos têm de ser feitos fora do BitBanana. \n \nEste backup contém apenas os seguintes dados: \n \n- Configurações de nó\n- Rótulos\n- Contatos\n- Configurações do app</string>
+    <string name="backup_data_restore_description">Restaure os seus nós conectados, rótulos, contatos e configurações do app.\nSe os seus nós não estiverem mais online, este processo de restauração não vai lhe ajudar a reaver acesso aos seus fundos.</string>
     <string name="backup_data_password_enter">Insira a sua palavra-passe</string>
     <string name="backup_data_password_confirm">Confirme a sua palavra-passe</string>
     <string name="backup_data_restore_process">A restaurar backup</string>
@@ -1050,4 +1050,77 @@
     <string name="consolidate">Consolidar</string>
     <string name="consolidate_utxos">Consolidar UTXOs</string>
     <string name="help_dialog_utxos_consolidate">Ao consolidar UTXOs, está a combinar várias saídas não gastas numa única saída maior. Isso torna as transações futuras mais baratas, uma vez que as taxas de transação na cadeia são determinadas pelo tamanho em bytes e não pelo valor. A consolidação durante períodos de taxas baixas permite que os utilizadores paguem pelo espaço de blockchain de que precisam enquanto está barato, ajudando a minimizar as taxas futuras durante períodos de taxas altas. No entanto, tenha em mente que a consolidação tem um custo e pode enfraquecer a sua privacidade ao vincular endereços.</string>
+    <string name="info">Informações</string>
+    <string name="allow">Permitir</string>
+    <string name="activity_quick_receive_setup">Recebimento rápido</string>
+    <string name="password_enter_old">Insira a palavra-passe antiga</string>
+    <string name="password_enter_new">Insira a palavra-passe nova</string>
+    <string name="password_confirm_new">Confirme a palavra-passe nova</string>"
+    <string name="emergency_pin_changed">PIN de Emergência alterado!</string>
+    <string name="emergency_password_changed">Palavra-passe de emergência alterada!</string>
+    <string name="password_changed">Palavra-passe alterada!</string>
+    <string name="emergency_pin_create">Criar PIN de emergência</string>
+    <string name="emergency_pin_confirm">Confirmar PIN de emergência</string>
+    <string name="emergency_pin_enter_new">Insira um novo PIN de emergência</string>
+    <string name="emergency_pin_confirm_new">Confirme o novo PIN de emergência</string>
+    <string name="emergency_password_create">Insira palavra-passe de emergência</string>
+    <string name="emergency_password_confirm">Confirme palavra-passe de emergência</string>
+    <string name="emergency_password_enter_new">Insira uma nova palavra-passe de emergência</string>
+    <string name="emergency_password_confirm_new">Confirme a nova palavra-passe de emergência</string>
+    <string name="guardian_emergency_unlock_ineffective">Como a autenticação biométrica está ativada, esta função pode ser contornada, uma vez que usar biometria ativará o desbloqueio normal, em vez do desbloqueio de emergência. Para garantir que esta medida de segurança seja efetiva, por favor desative a autenticação biométrica.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Tem o desbloqueio de emergência ativado. Se ativar a autenticação biométrica, um login biométrico contornará a sua proteção de desbloqueio de emergência, ativando um desbloqueio normal. Para manter os benefícios de segurança do desbloqueio de emergência, não ative a biometria.</string>
+    <string name="settings_category_pin_options">Opções de PIN</string>
+    <string name="settings_app_lock">Bloqueio do App</string>
+    <string name="settings_lockScreenTimeout_description">Atraso antes do BitBanana ser bloqueado após minimização do app.</string>
+    <string name="settings_add_password">Proteger com palavra-passe</string>
+    <string name="settings_remove_password">Remover palavra-passe</string>
+    <string name="settings_change_password">Mudar/Remover palavra-passe</string>
+    <string name="settings_app_lock_summary_unprotected">Desprotegido</string>
+    <string name="settings_app_lock_summary_pin_protected">Protegido com PIN</string>
+    <string name="settings_app_lock_summary_password_protected">Protegido com palavra-passe</string>
+    <string name="settings_app_lock_emergency_category_pin">PIN de Emergência</string>
+    <string name="settings_app_lock_emergency_category_password">Palavra-passe de emergência</string>
+    <string name="settings_app_lock_emergency_mode">Modo de emergência</string>
+    <string name="settings_changeEmergencyPin">Mudar/Remover PIN de emergência</string>
+    <string name="settings_changeEmergencyPassword">Mudar/Remover palavra-passe de emergência</string>
+    <string name="settings_addEmergencyPin">Definir PIN de emergência</string>
+    <string name="settings_addEmergencyPassword">Definir palavra-passe de emergência</string>
+    <string name="emergency_mode_erase_all">Apagar tudo</string>
+    <string name="emergency_mode_selected_wallet_only">Mostrar carteira selecionada apenas</string>
+    <string name="emergency_mode_wallet_to_show">Carteira a exibir</string>
+    <string name="settings_remove_emergency_pin">Remover PIN de emergência</string>
+    <string name="settings_remove_emergency_password">Remover palavra-passe de emergência</string>
+    <string name="settings_featureLabels">Rótulos</string>
+    <string name="settings_featureLabels_summary">Organize-se adicionando as suas próprias notas a transações e outros elementos, fazendo-os mais fáceis de rastrear e perceber.</string>
+    <string name="error_no_bolt12_offer_selected">Precisa selecionar um código de pagamento.</string>
+    <string name="error_selecting_inactive_bolt12_offer">Não pode selecionar um código de pagamento inativo.</string>
+    <string name="error_pin_and_emergency_pin_equal">O seu PIN e o PIN de emergência devem divergir.</string>
+    <string name="error_password_and_emergency_password_equal">A sua palavra-passe e a palavra-passe de emergência devem divergir.</string>
+    <string name="help_dialog_quick_receive_setup">Receber Bitcoins vem com escolhas: on-chain, Lightning, BOLT12 e mais.\nIsto é bom, mas pode levar alguns toques a mais apenas para ver o seu código QR de recebimento. O BitBanana acelera isto. Escolha um método de pagamento padrão aqui e estará pronto com um toque enquanto ainda tem a opção de personalizar tudo.\n\nNão tem certeza de como configurar? A documentação abaixo pode o guiar.</string>
+    <string name="help_dialog_label">Rótulos permitem que adicione notas pessoais para rastreamento e contextualização mais fáceis. Eles são gravados automaticamente no BitBanana, portanto estarão visíveis somente aqui e não aparecerão em outras apps que usa para aceder o seu nó ou carteira.</string>
+    <string name="help_dialog_emergency_pin_password">Uma palavra-passe ou PIN de emergência é feita para situações em que é forçado a desbloquear a sua carteira por outrem. Se inserir a sua palavra-passe ou PIN de emergência ao invés do normal, o BitBanana aparentará estar desbloqueado normalmente enquanto toma ações de proteção adicionais. Dependendo do modo de emergência escolhido, ele pode apagar todas as suas conexões ou mostrar uma carteira com poucos fundos. Veja a documentação para pormenores sobre como configurar e usar esta função com segurança.</string>
+    <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s enviou uma solicitação de pagamento inválida. Queria enviar %2$d msat, mas a quantia da solicitação de pagamento é %3$d msat.</string>
+    <string name="quick_receive_info_off">Com o Recebimento Rápido desligado, será solicitado que selecione o que quer toda vez que apertar “Receber”.</string>
+    <string name="quick_receive_info_bolt12">Também chamado de BOLT12, um código de pagamento é um identificador estático e reutilizável que não requer serviço web. Ele contém toda informação necessária para enviar um pagamento diretamente pela rede Lightning.</string>
+    <string name="quick_receive_info_on_chain_address">Isto usará o próximo endereço on-chain não utilizado.</string>
+    <string name="quick_receive_info_on_chain_address_part2">No entanto, este método não é recomendado por não suportar pagamentos Lightning.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">Este método usará o próximo endereço on-chain não utilizado como uma alternativa quando o remetente não suportar pagamentos Lightning.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">Este método usará o próximo endereço on-chain não utilizado como uma alternativa quando o remetente não suportar códigos de pagamento.</string>
+    <string name="quick_receive_type_on_chain_address">Endereço On-Chain</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">Endereço Lightning + On-Chain</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">On-Chain + Código de Pagamento</string>
+    <string name="refer_to_docs_ln_address">Por favor, dirija-se à documentação para orientação sobre como obter um endereço Lightning.</string>
+    <string name="use_biometrics">Usar biometria</string>
+    <string name="unlock_app">Desbloquear</string>
+    <string name="label_add">Adicionar rótulo</string>
+    <string name="label_edit">Editar rótulo</string>
+    <string name="pulling_payment_data">A extrair dados de pagamento…</string>
+    <string name="notification_permission_rationale_title">Permitir Notificações</string>
+    <string name="notification_permission_rationale">Para manter a sua conexão estável ao trocar de apps, o BitBanana executa um serviço em segundo plano depois que o app é minimizado. O Android requer uma notificação para este serviço funcionar, então ativar as notificações garante que a conexão permaneça ativa por alguns minutos em segundo plano.</string>
+    <string name="notification_permission_rationale_cancelled">Sem a permissão de notificação, o app perderá a conexão quando for minimizado. Por favor, cogite ativar as notificações.</string>
+    <string name="keep_alive_notification_title">Conexão Ativa</string>
+    <string name="keep_alive_notification_description">A sua conexão ainda está ativa.</string>
+    <string name="keep_alive_notification_channel_name">Conexão em Segundo Plano</string>
+    <string name="keep_alive_notification_channel_description">Mantém a conexão ativa em segundo plano</string>
+    <string name="error_nwc_min_android_version">Android 11 ou superior é necessário para usar o Nostr Wallet Connect.</string>
 </resources>

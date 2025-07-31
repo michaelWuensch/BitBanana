@@ -1100,4 +1100,13 @@
     <string name="label_add">Adicionar rótulo</string>
     <string name="label_edit">Editar rótulo</string>
     <string name="pulling_payment_data">Extraindo dados de pagamento…</string>
+    <string name="allow">Permitir</string>
+    <string name="notification_permission_rationale_title">Permitir Notificações</string>
+    <string name="notification_permission_rationale">Para manter sua conexão estável ao trocar de aplicativo, o BitBanana executa um serviço em segundo plano depois que o app é minimizado. O Android requer uma notificação para este serviço funcionar, então ativar as notificações garante que a conexão permaneça ativa por alguns minutos em segundo plano.</string>
+    <string name="notification_permission_rationale_cancelled">Sem a permissão de notificação, o app perderá a conexão quando for minimizado. Por favor, cogite ativar as notificações.</string>
+    <string name="keep_alive_notification_title">Conexão Ativa</string>
+    <string name="keep_alive_notification_description">Sua conexão ainda está ativa.</string>
+    <string name="keep_alive_notification_channel_name">Conexão em Segundo Plano</string>
+    <string name="keep_alive_notification_channel_description">Mantém a conexão ativa em segundo plano</string>
+    <string name="error_nwc_min_android_version">É necessário Android 11 ou superior para usar Nostr Wallet Connect.</string>
 </resources>

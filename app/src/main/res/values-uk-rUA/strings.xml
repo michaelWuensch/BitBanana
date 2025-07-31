@@ -930,4 +930,13 @@
     <string name="help_dialog_emergency_pin_password">Екстрений пароль або PIN-код призначений для ситуацій, коли вас змушує розблокувати гаманець хтось інший. Якщо ви введете цей екстрений пароль або PIN-код замість звичайного, BitBanana розблокується звичайним способом, непомітно виконуючи додаткові захисні дії. Залежно від обраного вами екстреного режиму, він може стерти всі ваші з’єднання або відобразити лише гаманець з невеликою сумою коштів. Дивіться документацію, щоб дізнатися більше про те, як безпечно налаштувати та використовувати цю функцію.</string>
     <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s надіслав недійсний запит на платіж. Ви хотіли надіслати %2$d msat, але сума запиту на платіж становить %3$d msat.</string>
     <string name="pulling_payment_data">Отримання даних про оплату…</string>
+    <string name="allow">Дозволити</string>
+    <string name="notification_permission_rationale_title">Дозволити сповіщення</string>
+    <string name="notification_permission_rationale">Щоб забезпечити стабільність з’єднання під час перемикання між програмами, BitBanana запускає фонову службу після згортання програми. Для роботи цієї служби Android потрібне сповіщення, тому ввімкнення сповіщень гарантує, що з’єднання залишатиметься активним протягом кількох хвилин у фоновому режимі.</string>
+    <string name="notification_permission_rationale_cancelled">Без дозволу на сповіщення програма втратить з’єднання після згортання. Будь ласка, спробуйте дозволити сповіщення.</string>
+    <string name="keep_alive_notification_title">Активне з\'єднання</string>
+    <string name="keep_alive_notification_description">Ваше з\'єднання все ще активне.</string>
+    <string name="keep_alive_notification_channel_name">Фонове підключення</string>
+    <string name="keep_alive_notification_channel_description">Підтримує з\'єднання активним у фоновому режимі</string>
+    <string name="error_nwc_min_android_version">Для використання Nostr Wallet Connect потрібна версія Android 11 або вище.</string>
 </resources>
