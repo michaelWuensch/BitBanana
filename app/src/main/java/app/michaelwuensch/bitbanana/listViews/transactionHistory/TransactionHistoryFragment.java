@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -372,6 +373,16 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
         mAdapter.notifyDataSetChanged();
     }
 
+    private void updateFilterIcon() {
+        if (getContext() == null)
+            return;
+        if (PrefsUtil.areDefaultHistoryFiltersActive()) {
+            mListOptions.setColorFilter(ContextCompat.getColor(getContext(), R.color.white));
+        } else {
+            mListOptions.setColorFilter(ContextCompat.getColor(getContext(), R.color.banana_yellow));
+        }
+    }
+
     @Override
     public void onHistoryUpdated() {
         updateHistoryDisplayList();
@@ -382,6 +393,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
     @Override
     public void onResume() {
         updateHistoryDisplayList();
+        updateFilterIcon();
         super.onResume();
     }
 
