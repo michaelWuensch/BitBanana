@@ -939,4 +939,13 @@
     <string name="keep_alive_notification_channel_name">Фонове підключення</string>
     <string name="keep_alive_notification_channel_description">Підтримує з\'єднання активним у фоновому режимі</string>
     <string name="error_nwc_min_android_version">Для використання Nostr Wallet Connect потрібна версія Android 11 або вище.</string>
+    <string name="on_chain">У мережі</string>
+    <string name="unconfirmed">Непідтверджено</string>
+    <string name="protocol">Протокол</string>
+    <string name="min">Хв</string>
+    <string name="max">Макс</string>
+    <string name="pick">Вибрати</string>
+    <string name="transaction_filter_unpaid_requests">Неоплачені запити</string>
+    <string name="start_date">Дата початку</string>
+    <string name="end_date">Дата завершення</string>
 </resources>
