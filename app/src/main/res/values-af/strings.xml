@@ -1,3 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ok">Okei</string>
+    <string name="cancel">Kanselleer</string>
+    <string name="lightning">Weerlig</string>
+    <string name="onChain">Aan-ketting</string>
+    <string name="share">Deel</string>
+    <string name="copy">Kopieer</string>
+    <string name="paste">Plak</string>
+    <string name="details">Besonderhede</string>
+    <string name="amount">Bedrag</string>
+    <string name="memo">Memo</string>
+    <string name="shareDialogTitle">Kies Toep</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="copied_to_clipboard">Gekopieer na knipbord</string>
+    <string name="receive">Ontvang</string>
+    <string name="optional">optioneel</string>
+    <string name="next">Volgende</string>
+    <string name="coming_soon">Binnekort beskikbaar...</string>
+    <string name="needHelp">Hulp nodig?</string>
+    <string name="offline">vanlyn</string>
+    <string name="sent">Gestuur</string>
+    <string name="received">Ontvang</string>
+    <string name="today">Vandag</string>
+    <string name="yesterday">Gister</string>
+    <string name="fee">Fooi</string>
+    <string name="confirmExit">Wil jy regtig BitBanana verlaat?</string>
+    <string name="or">of</string>
+    <string name="max_amount">Maksimum bedrag:</string>
+    <string name="min_amount">Minimum Bedrag:</string>
+    <string name="retry">Probeer weer</string>
+    <string name="loading">Laai tans</string>
+    <string name="pay">Betaal</string>
+    <string name="date">Datum</string>
+    <string name="expiry">Verlooptyd</string>
 </resources>
