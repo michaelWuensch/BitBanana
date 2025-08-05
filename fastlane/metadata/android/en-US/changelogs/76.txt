@@ -1,0 +1,8 @@
+- Updated to target Android 15 for improved compatibility.
+- Background service now maintains reliable connectivity when app is sent to the background for a few minutes.
+- Ensured proper VPN termination with VPN-Automation on app exit.
+- Added many filter options for transaction history.
+- Improved fiat currency display formatting and selection UX.
+- Fixed issue where NWC transaction history wouldn’t load for large wallets.
+- Stability fixes.
+- Updated translations.
