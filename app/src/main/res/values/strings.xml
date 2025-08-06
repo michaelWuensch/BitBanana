@@ -469,7 +469,7 @@
     <string name="error_emptyClipboardPayment">Your clipboard does not contain any payment data.</string>
     <string name="error_emptyClipboardConnect">Your clipboard does not contain any connection data.</string>
     <string name="error_qr_code_result_null">Unable to read QR-Code, please try again.</string>
-    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Full content of your BTCPay Server config file</string>
+    <string name="error_connection_unsupported_format">Unsupported connection format.\nPlease use one of the following formats:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Full content of your BTCPay Server config file</string>
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalidLndHubConnectString">Invalid LndHub connection data.\nPlease make sure you used the following format:\n\nlndhub://[user]:[password]@[host]</string>
@@ -494,12 +494,12 @@
     <string name="error_connection_btcpay_invalid_config">The BTCPay server configuration does not contain a BTC GRPC configuration.</string>
     <string name="error_connection_internal_server">The node is reachable but returns an internal error. This error might be caused by using a wrong port.</string>
     <string name="error_connection_internal_server_clearnet">The node is reachable but returns an internal error. This error might be caused by using a wrong port. As you are trying to connect to a node on clearnet, disabling Tor in the nodes connection settings might solve your problem.</string>
-    <string name="error_connection_no_c_lightning_rest_support">Connecting BitBanana to Core Lightning via C-Lightning-Rest is not supported. Please check if your node shares cln-grpc connection details and use those for connection instead.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Invalid cln-grpc connect string.\nPlease make sure you used the following format:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_no_c_lightning_rest_support">Connecting BitBanana to Core Lightning via C-Lightning-Rest is not supported. Please check if your node shares clngrpc connection details and use those for connection instead.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Invalid clngrpc connect string.\nPlease make sure you used the following format:\n\nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">A provided certificate or key is invalid.</string>
     <string name="error_connection_clngrpc_missingClientCert">The mandatory client certificate is missing.</string>
     <string name="error_connection_clngrpc_missingClientKey">The mandatory client key is missing.</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for cln-grpc is invalid as the parameters are not encoded in base64url format.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for clngrpc is invalid as the parameters do not follow the specification.</string>
     <string name="error_connection_rest_authentication">Failed to authenticate with the Rest API.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
@@ -642,7 +642,7 @@
     <string name="help_dialog_scanPaymentRequest">QR-Codes containing the following are valid:\n\n- Bitcoin Address\n- Bitcoin Payment Request\n- Lightning Payment Request</string>
     <string name="help_dialog_scanNodePublicKey">QR-Codes containing the following are valid:\n\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="help_dialog_scanContact">QR-Codes containing the following are valid:\n\n- Lightning Address\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- Payment Code</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Full content of your BTCPay Server config file</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes containing the following are valid:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Full content of your BTCPay Server config file</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ instant\n+ low fees\n- not always possible\n\nPerfect for small transactions.\nUse whenever possible.\n\n\nOn-Chain:\n\n+ always possible\n- slower\n- higher fees\n\nGood for big transactions.\nUse this when Lightning is not possible.</string>
     <string name="help_dialog_scanGeneric">Anything is allowed here.\nJust scan a QR-Code and BitBanana will automatically determine which action to take depending on the data.</string>
     <string name="help_dialog_private_channels">Private channels are not more secure, they are just not visible to the network.\nOnly use private channels if you open a channel to a node that does not route payments or when you do not route payments yourself.\nTo route payments your node should have a very high uptime. If you run your node on a mobile device or a device that is often offline, you should not route payments and stick to private channels.</string>

@@ -14,7 +14,7 @@ public class UriUtil {
     public static final String URI_PREFIX_LNURLW = "lnurlw://";
     public static final String URI_PREFIX_LNURLA = "keyauth://";
     public static final String URI_PREFIX_LND_HUB = "lndhub://";
-    public static final String URI_PREFIX_CORE_LIGHTNING_GRPC = "cln-grpc://";
+    public static final String URI_PREFIX_CORE_LIGHTNING_GRPC = "clngrpc://";
     public static final String URI_PREFIX_C_LIGHTNING_REST = "c-lightning-rest://";
     public static final String URI_NOSTR_WALLET_CONNECT = "nostr+walletconnect://";
 

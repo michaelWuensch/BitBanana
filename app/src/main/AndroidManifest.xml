@@ -100,7 +100,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
-                <data android:scheme="cln-grpc" />
+                <data android:scheme="clngrpc" />
                 <data android:scheme="lndhub" />
                 <data android:scheme="nostr+walletconnect" />
             </intent-filter>
@@ -118,7 +118,7 @@
                 <data android:scheme="lnurlp" />
                 <data android:scheme="lnurlw" />
                 <data android:scheme="keyauth" />
-                <data android:scheme="cln-grpc" />
+                <data android:scheme="clngrpc" />
                 <data android:scheme="lndhub" />
                 <data android:scheme="nostr+walletconnect" />
             </intent-filter>
