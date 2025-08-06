@@ -795,10 +795,7 @@
     <string name="wallet_load_state_fetching_data">Obteniendo los datos…</string>
     <string name="settings_avatarStyleDisplayValues_3">Humanos</string>
     <string name="settings_avatarStyleDisplayValues_4">Animales</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida.
-\nAsegúrate de haber utilizado el siguiente formato:
-\n
-\ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida. \nAsegúrate de haber utilizado el siguiente formato: \n \ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">El certificado o la clave proporcionados no son válidos.</string>
     <string name="error_connection_clngrpc_missingClientKey">Falta la clave del cliente obligatoria.</string>
     <string name="error_connection_no_c_lightning_rest_support">La conexión de BitBanana a Core Lightning a través de C-Lightning-Rest no está soportada. Compruebe si su nodo comparte detalles de conexión cln-grpc y utilícelos para la conexión.</string>
