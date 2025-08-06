@@ -25,12 +25,15 @@ public class App extends Application {
 
     // keep the data from the URI Scheme in memory, so we can access it from anywhere.
     private String uriSchemeData;
+    private long ForegroundServiceStartTimestamp;
 
     private Handler mBackgroundCloseHandler;
+    private Handler mBackgroundServiceHandler;
 
     public App() {
         mContext = this;
         mBackgroundCloseHandler = new Handler();
+        mBackgroundServiceHandler = new Handler();
 
         RxJavaPlugins.setErrorHandler(e -> {
             if (e.getMessage() != null && e.getMessage().contains("shutdownNow")) {
@@ -54,7 +57,13 @@ public class App extends Application {
                     // App enters foreground
 
                     // Stop foreground service to keep connection alive.
-                    stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+                    if (System.currentTimeMillis() - ForegroundServiceStartTimestamp > 5000)
+                        stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+                    else {
+                        mBackgroundServiceHandler.postDelayed(() -> {
+                            stopService(new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+                        }, 5000 - (System.currentTimeMillis() - ForegroundServiceStartTimestamp));
+                    }
                 }
             }
 
@@ -77,8 +86,11 @@ public class App extends Application {
                     if (BackendConfigsManager.getInstance().hasAnyBackendConfigs()
                             && BackendManager.getBackendState() != BackendManager.BackendState.NO_BACKEND_SELECTED
                             && BackendManager.getBackendState() != BackendManager.BackendState.ERROR
-                            && PermissionsUtil.hasNotificationPermission(App.this))
+                            && PermissionsUtil.hasNotificationPermission(App.this)) {
+                        mBackgroundServiceHandler.removeCallbacksAndMessages(null);
                         ContextCompat.startForegroundService(App.this, new Intent(App.getAppContext(), ConnectionKeepAliveService.class));
+                        ForegroundServiceStartTimestamp = System.currentTimeMillis();
+                    }
                 }
             }
 
