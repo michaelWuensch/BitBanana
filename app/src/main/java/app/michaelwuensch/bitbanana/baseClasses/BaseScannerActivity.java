@@ -167,7 +167,16 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                     barcodeReader.setOptions(getBarcodeReaderOptions());
                     List<BarcodeReader.Result> resultsList = barcodeReader.read(image);
                     if (!resultsList.isEmpty()) {
-                        runOnUiThread(() -> handleCameraResult(resultsList.get(0).getText()));
+                        if (resultsList.get(0).getText() != null && !resultsList.get(0).getText().isEmpty()) {
+                            if (!(resultsList.get(0).getText().equals(mLastScannedText) && (System.currentTimeMillis() - mLastScanTimestamp < 3000))) {
+                                // prevent scanning the same over and over
+                                mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
+                                mLastScanTimestamp = System.currentTimeMillis();
+                                mLastScannedText = resultsList.get(0).getText();
+                                BBLog.v(LOG_TAG, "Scanned content: " + resultsList.get(0).getText());
+                                runOnUiThread(() -> handleCameraResult(resultsList.get(0).getText()));
+                            }
+                        }
                     }
 
                     image.close(); // MUST close to avoid memory leaks
@@ -302,18 +311,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
     }
 
     public void handleCameraResult(String result) {
-        if (result == null || result.isEmpty())
-            return;
-        if (result.equals(mLastScannedText)) {
-            if (System.currentTimeMillis() - mLastScanTimestamp < 3000) {
-                // prevent scanning the same over and over
-                return;
-            }
-        }
-        mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
-        mLastScanTimestamp = System.currentTimeMillis();
-        mLastScannedText = result;
-        BBLog.v(LOG_TAG, "Scanned content: " + result);
+
     }
 
     public void onButtonPasteClick() {
