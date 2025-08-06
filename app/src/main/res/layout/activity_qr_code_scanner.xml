@@ -6,19 +6,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+    <androidx.camera.view.PreviewView
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:zxing_scanner_layout="@layout/custom_barcode_scanner" />
+        android:layout_height="match_parent" />
 
     <View
-        android:id="@+id/zxing_viewfinder_border"
-        android:layout_width="285dp"
-        android:layout_height="285dp"
-        android:layout_gravity="center"
-        android:background="@drawable/qr_frame"
-        android:keepScreenOn="true" />
+        android:id="@+id/fallbackOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/deep_sea_blue" /> <!-- Fallback color -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/zxing_viewfinder_border"
+            android:layout_width="285dp"
+            android:layout_height="285dp"
+            android:layout_gravity="center"
+            android:background="@drawable/qr_frame"
+            android:keepScreenOn="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toTopOf="@id/zxing_viewfinder_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/zxing_viewfinder_border" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toBottomOf="@id/zxing_viewfinder_border"
+            app:layout_constraintEnd_toStartOf="@id/zxing_viewfinder_border"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/zxing_viewfinder_border" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toBottomOf="@id/zxing_viewfinder_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/zxing_viewfinder_border"
+            app:layout_constraintTop_toTopOf="@id/zxing_viewfinder_border" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
