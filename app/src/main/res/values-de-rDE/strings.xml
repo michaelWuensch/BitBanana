@@ -750,10 +750,7 @@
     <string name="settings_avatarStyleDisplayValues_0">Gemischt</string>
     <string name="settings_avatarStyleDisplayValues_4">Tiere</string>
     <string name="error_connection_no_c_lightning_rest_support">Die Verbindung von BitBanana zu Core Lightning über C-Lightning-Rest wird nicht unterstützt. Bitte prüfe, ob dein Knoten cln-grpc-Verbindungsdetails bereitstellt und verwende stattdessen diese für die Verbindung.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Ungültige cln-grpc-Verbindungsdaten.
-\nBitte stelle sicher, dass du das folgende Format verwendest:
-\n
-\ncln-grpc://[ip]:[port]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Ungültige cln-grpc-Verbindungsdaten. \nBitte stelle sicher, dass du das folgende Format verwendest: \n \ncln-grpc://[ip]:[port]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_payment_no_route_small_amount">Es wurde keine Route gefunden. Du versuchst, einen Betrag zu senden, der so klein ist, dass viele Kanäle ihn nicht weiterleiten können. Bitte überprüfe die Routing-Einstellungen für deine eigenen Kanäle und passe den MinHTLC-Wert an, falls nötig.</string>
     <string name="error_fee_estimation_requires_tor_toast">Gebührenschätzungen konnten nicht abgefragt werden. Der von dir gewählte Anbieter benötigt tor.</string>
     <string name="error_insufficient_funds">Diese Zahlung übersteigt dein verfügbares Guthaben.</string>
