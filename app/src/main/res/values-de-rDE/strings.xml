@@ -216,7 +216,7 @@
     <string name="error_emptyClipboardPayment">Die Zwischenablage enthält keine Zahlungsinformationen.</string>
     <string name="error_emptyClipboardConnect">Die Zwischenablage enthält keine Verbindungsinformationen.</string>
     <string name="error_qr_code_result_null">QR-Code konnte nicht gelesen werden, bitte versuch es noch einmal.</string>
-    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt. \nBitte verwende eines der folgenden Formate: \n \n- Lndconnect string (lndconnect://...) \n- Core Lightning grpc (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
+    <string name="error_connection_unsupported_format">Dieses Format wird leider nicht unterstützt. \nBitte verwende eines der folgenden Formate: \n \n- Lndconnect string (lndconnect://...) \n- Core Lightning grpc (clngrpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- BtcPay Server Verbindung (config=...) \n- Gesamter Inhalt deiner BTCPay Server Konfigurationsdatei</string>
     <string name="error_unableToFetchBTCPayConfig">Konfiguration vom BTCPay Server konnte nicht heruntergeladen werden.</string>
     <string name="error_connection_invalidLndConnectString">Ungültiges lndconnect Format.
 \nBitte stelle sicher, dass du folgendes Format verwendet hast:
@@ -342,7 +342,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- Zahlungscode</string>
-    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
+    <string name="help_dialog_scanConnectionInfo">QR-Codes, die Folgendes enthalten, sind gültig:\n\n- Lndconnect string (lndconnect://...)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server Verbindung (config=...)\n- Gesamter Inhalt deiner BtcPay Server Konfigurationsdatei</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ sofort Bestätigt\n+ kaum Gebühren\n- nicht immer möglich\n\nPerfekt für kleine Transaktionen.\nWenn möglich verwenden.\n\n\nOn-Chain:\n\n+ immer möglich\n- langsamer\n- höhere Gebühren\n\nGeeignet für große Transaktionen.\nNur verwenden wenn Lightning nicht möglich.</string>
     <string name="help_dialog_scanGeneric">Alles ist hier erlaubt.\nScanne einfache einen QR-Code und BitBanana wird automatisch die entsprechende Aktion ausführen.</string>
     <string name="help_dialog_private_channels">Private Kanäle sind nicht sicherer, sie sind nur nicht für das Netzwerk sichtbar.
@@ -749,8 +749,8 @@
     <string name="settings_requires_tor_toast">Dafür ist Tor erforderlich. Aktiviere es in den Einstellungen.</string>
     <string name="settings_avatarStyleDisplayValues_0">Gemischt</string>
     <string name="settings_avatarStyleDisplayValues_4">Tiere</string>
-    <string name="error_connection_no_c_lightning_rest_support">Die Verbindung von BitBanana zu Core Lightning über C-Lightning-Rest wird nicht unterstützt. Bitte prüfe, ob dein Knoten cln-grpc-Verbindungsdetails bereitstellt und verwende stattdessen diese für die Verbindung.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Ungültige cln-grpc-Verbindungsdaten. \nBitte stelle sicher, dass du das folgende Format verwendest: \n \ncln-grpc://[ip]:[port]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
+    <string name="error_connection_no_c_lightning_rest_support">Die Verbindung von BitBanana zu Core Lightning über C-Lightning-Rest wird nicht unterstützt. Bitte prüfe, ob dein Knoten clngrpc-Verbindungsdetails bereitstellt und verwende stattdessen diese für die Verbindung.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Ungültige clngrpc-Verbindungsdaten. \nBitte stelle sicher, dass du das folgende Format verwendest: \n \nclngrpc://[ip]:[port]?pubkey=[...]&amp;certs=[...]</string>
     <string name="error_payment_no_route_small_amount">Es wurde keine Route gefunden. Du versuchst, einen Betrag zu senden, der so klein ist, dass viele Kanäle ihn nicht weiterleiten können. Bitte überprüfe die Routing-Einstellungen für deine eigenen Kanäle und passe den MinHTLC-Wert an, falls nötig.</string>
     <string name="error_fee_estimation_requires_tor_toast">Gebührenschätzungen konnten nicht abgefragt werden. Der von dir gewählte Anbieter benötigt tor.</string>
     <string name="error_insufficient_funds">Diese Zahlung übersteigt dein verfügbares Guthaben.</string>
@@ -775,7 +775,7 @@
 \nDer Hostname deiner Verbindung stimmt nicht mit dem im Host-Zertifikat angegebenen Hostnamen überein.
 \n
 \nDu musst entweder die Zertifikatsüberprüfung in den Verbindungseinstellungen des Knotens deaktivieren oder dein Zertifikat neu erstellen. Stelle sicher, dass der Hostname in der lnd.conf als tlsextradomain eingetragen ist, bevor du es neu erstellst.</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">Die bereitgestellten Verbindungsdaten für cln-grpc sind ungültig, da die Parameter nicht im base64url-Format kodiert sind.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Die bereitgestellten Verbindungsdaten für clngrpc sind ungültig, da die Parameter nicht der Spezifikation entsprechen.</string>
     <string name="error_feature_not_supported_by_backend">Bei Verwendung von %1$s unterstützt BitBanana die folgende Funktion nicht: %2$s</string>
     <string name="settings_custom_exchange_rate_provider">Benutzerdefinierter Wechselkursanbieter</string>
     <string name="settings_node_fee_estimates">Intern</string>
