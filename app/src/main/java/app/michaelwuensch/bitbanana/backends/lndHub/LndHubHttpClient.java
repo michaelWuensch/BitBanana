@@ -125,6 +125,19 @@ public class LndHubHttpClient {
                 }
             }
 
+            // LnBits seems to sometimes als throw strange messages when not authenticated that have an response code of 500 and look like this: Unexpected error! ID: 4fKnRv56AwHEzUD4FZTJop
+            // So for maximum compatibility, whenever a call fails, we try do authentication.
+            if (!response.isSuccessful()) {
+                // Call the TokenRefreshAuthenticator to get a new token
+                TokenRefreshAuthenticator authenticator = new TokenRefreshAuthenticator();
+                Request newRequest = authenticator.authenticate(null, response);
+
+                if (newRequest != null) {
+                    response.close(); // Close the original response
+                    return chain.proceed(newRequest); // Retry with the new token
+                }
+            }
+
             return response; // Return the original response if no authentication is needed
         }
     }

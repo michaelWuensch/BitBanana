@@ -91,7 +91,7 @@ public class LndHubConnectStringParser extends BaseConnectionParser {
             - host only consists of following characters: alphanumeric, ":", ".", "-", "/"
         */
 
-        String regexPattern = "^\\w+:\\w+@[\\w:.-/]+$";
+        String regexPattern = "^\\w+:\\w+@[\\w:./-]+$";
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(connectString);
 
