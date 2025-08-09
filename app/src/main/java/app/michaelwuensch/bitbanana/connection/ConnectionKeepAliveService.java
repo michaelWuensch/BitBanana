@@ -5,8 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -54,7 +56,11 @@ public class ConnectionKeepAliveService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Do nothing, just keep alive
         BBLog.i(LOG_TAG, "ConnectionKeepAliveService started.");
-        startForeground(1, createNotification());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(1, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC | ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+        } else {
+            startForeground(1, createNotification());
+        }
         return START_STICKY;
     }
 
@@ -69,6 +75,16 @@ public class ConnectionKeepAliveService extends Service {
     public void onDestroy() {
         super.onDestroy();
         BBLog.i(LOG_TAG, "ConnectionKeepAliveService stopped.");
+    }
+
+    @Override
+    public void onTimeout(int startId, int fgsType) {
+        // Android 15+ only allows foreground services of specific types to be active for 6 hours (ACROSS APPS!!!) every 24 hours.
+        // Therefore we need to stop it if the limit is reached. See: https://developer.android.com/develop/background-work/services/fgs/timeout
+        BBLog.w(LOG_TAG, "Foreground service timed out: type=" + fgsType + ", startId=" + startId);
+        BBLog.w(LOG_TAG, "Stopping ConnectionKeepAliveService. The Android limit for foreground services (across apps!) has been reached. We have to do this as Android will crash the app if we don't stop the service now.");
+        stopForeground(STOP_FOREGROUND_REMOVE);
+        stopSelf(startId);
     }
 
     @Nullable
