@@ -169,7 +169,7 @@
     <string name="error_emptyClipboardPayment">Ваш буфер обміну не містить платіжних даних.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обміну не містить даних про з\'єднання.</string>
     <string name="error_qr_code_result_null">Не вдається прочитати QR-код, спробуйте ще раз.</string>
-    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nБудь ласка, використовуйте один з наступних форматів:\n\n- Рядок Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Непідтримуваний формат підключення.\nБудь ласка, використовуйте один із наступних форматів:\n\n- Рядок Lndconnect (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Підключення до сервера BtcPay (config=…)\n- Повний вміст вашого конфігураційного файлу сервера BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Не вдалося отримати конфігурацію з BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Недійсний рядок lndconnect.\nПереконайтеся, що ви використали наступний формат:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalid_certificate">Сертифікат недійсний.</string>
@@ -254,7 +254,7 @@
     <string name="nfc_type_not_supported">Непідтримуваний тип NFC</string>
     <string name="help_dialog_scanPaymentRequest">QR-коди, що містять таке, є дійсними:\n\n- Bitcoin адреса\n- Запит на оплату Bitcoin\n- Lightning Запит на оплату</string>
     <string name="help_dialog_scanContact">Дійсні QR-коди, які містять:\n\n- Адреса блискавки\n- pubkey\n- pubkey@host\n- pubkey@host:порт\n- Код платежу</string>
-    <string name="help_dialog_scanConnectionInfo">Дійсними є QR-коди, що містять наступне:\n\n- Lndconnect рядок (lndconnect://...)\n- Core Lightning grpc (cln-grpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
+    <string name="help_dialog_scanConnectionInfo">Дійсними є QR-коди, що містять наступне:\n\n- Lndconnect рядок (lndconnect://...)\n- Core Lightning grpc (clngrpc://...)\n- Nostr Wallet Connect (nostr+walletconnect://...)\n- LndHub (lndhub://...)\n- Підключення до сервера BtcPay (config=...)\n- Повний вміст конфігураційного файлу вашого BTCPay Server</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:\n\n+ поточний\n+ lнизька коміся\n- не завжди можливо\n\nІдеально для невеликих транзакцій\nВикористовуйте, коли це можливо.\n\n\nOn-Chain:\n\n+ завжди можливо\n- повільніше\n- вища комісія\n\nДобре підходить для великих угод.\nВикористовуйте, коли Lightning недоступний.</string>
     <string name="delete">Видалити</string>
     <string name="rename">Перейменувати</string>
@@ -472,8 +472,8 @@
     <string name="error_connection_network_unreachable">Не вдалося зв’язатися з хостом.\n\nПереконайтеся, що у вас є підключення до Інтернету.</string>
     <string name="error_connection_tor_unreachable">Помилка підключення до Tor.\nБудь ласка, увімкніть Tor у налаштуваннях підключення вузлів.</string>
     <string name="error_connection_internal_server">Вузол доступний, але повертає внутрішню помилку. Ця помилка може бути викликана використанням неправильного порту.</string>
-    <string name="error_connection_no_c_lightning_rest_support">Підключення BitBanana до Core Lightning через C-Lightning-Rest не підтримується. Будь ласка, перевірте, чи ваш вузол ділиться деталями з’єднання cln-grpc, і замість цього використовуйте їх для з’єднання.</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">Наданий рядок підключення для cln-grpc недійсний, оскільки параметри не закодовані у форматі base64url.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Підключення BitBanana до Core Lightning через C-Lightning-Rest не підтримується. Будь ласка, перевірте, чи ваш вузол використовує спільні дані підключення clngrpc, і використовуйте їх для підключення.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Наданий рядок підключення для clngrpc недійсний, оскільки параметри не відповідають специфікації.</string>
     <string name="error_payment_keysend_not_enabled_on_remote">Переконайтеся, що одержувач увімкнув функцію надсилання ключа.</string>
     <string name="error_lnd_connection_failed">Помилка підключення до LND, повторіть спробу.</string>
     <string name="error_invalid_bitcoin_request">Недійсний запит на біткойни.</string>
@@ -588,7 +588,7 @@
     <string name="error_connection_clngrpc_invalidCertificateOrKey">Наданий сертифікат або ключ недійсні.</string>
     <string name="error_lightning_uri_invalid">Недійсний формат.\nБудь ласка, скористайтеся одним із наведених нижче способів.\n- pubkey\n- pubkey@host\n- pubkey@host:порт</string>
     <string name="settings_custom_fee_estimation_provider_host_description">Будь ласка, надайте адресу хосту для вашого постачальника оцінки комісії. Коли ви самостійно розміщуєте постачальника оцінки комісії, ваша конфіденційність повністю зберігається.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Недійсний рядок підключення cln-grpc.\nПереконайтеся, що ви використали такий формат:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Недійсний рядок підключення clngrpc.\nПереконайтеся, що ви використали такий формат:\n\nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
     <string name="error_funds_not_confirmed_yet">У вас достатньо коштів у мережі, але їх підтвердження ще очікується. Будь ласка, зачекайте підтвердження ваших коштів у ланцюжку. Ви можете відстежувати статус своїх коштів через перегляд або транзакцію UTXO.</string>
     <string name="error_connection_host_verification_failed_lnd">Помилка перевірки імені хоста. \n\nІм\'я хоста вашого з\'єднання не збігається з ім\'ям хоста, указаним у сертифікаті хоста. \n\nПотрібно або вимкнути перевірку сертифіката в налаштуваннях з’єднання вузлів, або повторно створити сертифікат. Переконайтеся, що ім’я хоста додано до lnd.conf як tlsextradomain перед його повторним створенням.</string>
     <string name="error_connection_lnd_unavailable">Помилка підключення. Доступ до хосту доступний, але служба вузла не відповідає. \n\nБудь ласка, переконайтеся, що вузол працює, чи номер порту (%1$s) правильний і що перенаправлення портів налаштовано.</string>
