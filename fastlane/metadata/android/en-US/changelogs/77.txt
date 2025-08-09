@@ -1,0 +1,5 @@
+- Massively improved QR Code scanning.
+- Support for the new Core Lightning connection URI (clngrpc://)
+- Fixed some LndHub connection issues.
+- Stability fixes.
+- Updated translations.
