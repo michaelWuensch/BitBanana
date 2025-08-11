@@ -21,8 +21,6 @@
             android:id="@+id/amountLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#00000000"
-            android:ems="10"
             android:maxLength="50"
             android:text="@string/amount"
             android:textAlignment="viewStart"
@@ -36,15 +34,17 @@
             android:id="@+id/amountEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
             android:background="#00000000"
             android:ems="10"
             android:inputType="numberDecimal"
             android:textAlignment="textEnd"
+            android:textDirection="ltr"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/unitLayout"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/amountLabel"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout

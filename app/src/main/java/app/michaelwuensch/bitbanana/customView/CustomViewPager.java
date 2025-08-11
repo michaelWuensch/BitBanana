@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.customView;
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
@@ -27,6 +28,28 @@ public class CustomViewPager extends ViewPager {
         init();
     }
 
+    private boolean isRtl() {
+        return getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL;
+    }
+
+    private void mirrorAnimation() {
+        setPageTransformer(false, (page, position) -> {
+            page.setTranslationX(-position * page.getWidth() * 2);
+        });
+    }
+
+    /**
+     * Mirror the MotionEvent horizontally around the center of this View.
+     */
+    private MotionEvent mirrorEvent(MotionEvent ev) {
+        MotionEvent copy = MotionEvent.obtain(ev);
+        // Matrix mirror: x' = width - x (i.e., scaleX = -1 around center)
+        Matrix m = new Matrix();
+        m.setScale(-1f, 1f, getWidth() / 2f, 0f);
+        copy.transform(m); // applies to all pointers (multi-touch safe)
+        return copy;
+    }
+
     public void setSwipeable(boolean swipeable) {
         isSwipeable = swipeable;
     }
@@ -38,6 +61,9 @@ public class CustomViewPager extends ViewPager {
     // lets us disable scrolling
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (isRtl()) {
+            mirrorAnimation();
+        }
         if (ev.getAction() == MotionEvent.ACTION_UP) {
             // Always reenable swiping on an up event
             isSwipeable = true;
@@ -50,6 +76,12 @@ public class CustomViewPager extends ViewPager {
                 return false;
             }
             MotionEvent safeEvent = MotionEvent.obtain(ev);
+            if (isRtl()) {
+                MotionEvent mirrored = mirrorEvent(safeEvent);
+                boolean result = super.onTouchEvent(mirrored);
+                mirrored.recycle();
+                return result;
+            }
             boolean result = super.onTouchEvent(safeEvent);
             safeEvent.recycle();
             return result;
@@ -70,6 +102,9 @@ public class CustomViewPager extends ViewPager {
             mScroller = new FixedSpeedScroller(getContext(),
                     new DecelerateInterpolator());
             scroller.set(this, mScroller);
+            if (isRtl()) {
+                mirrorAnimation();
+            }
         } catch (Exception ignored) {
         }
     }
@@ -115,12 +150,24 @@ public class CustomViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        return !mForceNoSwipe && super.onInterceptTouchEvent(event);
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (mForceNoSwipe) return false;
+        if (!isSwipeable) return false;
+
+        if (isRtl()) {
+            MotionEvent mirrored = mirrorEvent(ev);
+            boolean handled = super.onInterceptTouchEvent(mirrored);
+            mirrored.recycle();
+            return handled;
+        }
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean canScrollHorizontally(int direction) {
-        return !mForceNoSwipe && super.canScrollHorizontally(direction);
+        // Flip direction queries so edge-glow/overscroll logic stays correct.
+        if (mForceNoSwipe) return false;
+        if (isRtl()) direction = -direction;
+        return super.canScrollHorizontally(direction);
     }
 }
