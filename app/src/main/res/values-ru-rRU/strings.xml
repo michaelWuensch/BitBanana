@@ -278,11 +278,11 @@
     <string name="error_payment_timeout">Таймаут. Маршрут не найден.</string>
     <string name="error_payment_no_route">Не найден маршрут, который соответствует вашему пределу комиссии %1$.1f%%. Увеличение предела комиссии в настройках или открытие новых каналов может решить проблему.</string>
     <string name="error_no_permission_to_read_file">Доступ отказан: невозможно прочитать файл. Мы рекомендуем перенести его в другое место, например, папку «Загрузки» и взять его оттуда.</string>
-    <string name="help_dialog_scanContact">QR-коды, содержащие следующее являются действительными:\n\n- Lightning адрес\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- Платёжный код</string>
+    <string name="help_dialog_scanContact">QR-коды, содержащие следующее являются действительными:\n\n- Lightning адрес\n- публичный ключ\n- публичный_ключ@сервер\n- публичный_ключ@сервер:порт\n- Платёжный код</string>
     <string name="fee_limit_exceeded">Комиссия за этот платёж (%1$.1f%%) превышает установленный предел (%2$.1f%%).\n\nВы действительно хотите оплатить этот счёт?</string>
     <string name="help_dialog_scanConnectionInfo">QR-коды, содержащие следующее являются действительными:\n\n- Строка Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr кошелёк строка подключения (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay строка подключения (config=…)\n- Полное содержимое файла конфигурации BTCPay сервера</string>
     <string name="help_dialog_connect_node_help">К сожалению, эти QR-коды настолько велики, что некоторые устройства не могут их отсканировать. Если это именно для вас, вам придётся вернуться к копированию/вставке.\n\nЕсли вам нужна дальнейшая помощь, обратитесь к нашей документации по установке.</string>
-    <string name="help_dialog_scan_watchtower">QR-коды, содержащие следующее являются действительными:\n\n- публичный_ключ@хост:порт</string>
+    <string name="help_dialog_scan_watchtower">QR-коды, содержащие следующее являются действительными:\n\n- публичный_ключ@сервер:порт</string>
     <string name="name">Название</string>
     <string name="client_key">Ключ Клиента</string>
     <string name="spinner_manage_nodes">Управление…</string>
@@ -417,7 +417,7 @@
     </plurals>
     <string name="settings_mediumFee">Средняя Транзакция</string>
     <string name="error_connection_internal_server_clearnet">Узел доступен, но возвращает внутреннюю ошибку. Эта ошибка может быть вызвана неправильным портом. Когда вы пытаетесь подключиться к узлу при очистке, отключение Tor в настройках подключения узлов может решить вашу проблему.</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">Введенная строка подключения для cln-grpc является недопустимой, так как параметры не кодируются в формате base64url.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Введенная строка подключения для clngrpc является недопустимой, так как параметры не следуют спецификации.</string>
     <string name="error_lightning_uri_invalid">Неверный формат.\nПожалуйста, используйте один из следующих:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
     <string name="error_funds_not_confirmed_yet">У вас достаточно средств на блокчейне, но их подтверждение всё ещё ожидается. Пожалуйста, дождитесь подтверждения ваших средств на блокчейне. Вы можете отслеживать состояние ваших средств на странице Монет UTXO или Истории транзакций.</string>
     <string name="fee_limit_title">Предупреждение об пределе комиссии</string>
@@ -631,7 +631,7 @@
     <string name="error_emptyClipboardPayment">Буфер обмена не содержит платёжных данных.</string>
     <string name="error_emptyClipboardConnect">Ваш буфер обмена не содержит данных для подключения.</string>
     <string name="error_qr_code_result_null">Не удаётся прочитать QR-код, пожалуйста, попробуйте ещё раз.</string>
-    <string name="error_connection_unsupported_format">Неподдерживаемый формат подключения.\nПожалуйста, используйте один из следующих форматов:\n\n- Lndconnect string (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server connection (config=…)\n- Полное содержимое файла конфигурации BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Неподдерживаемый формат подключения.\nПожалуйста, используйте один из следующих форматов:\n\n- Строка Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Соединение кошелёк Nostr Wallet (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Соединение сервера BtcPay (config=…)\n- Полное содержимое файла конфигурации сервера BTCPay</string>
     <string name="error_unableToFetchBTCPayConfig">Не удалось получить конфигурацию с BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Недопустимая строка lndconnect.\nПожалуйста, убедитесь, что вы использовали следующий формат:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalidNostrWalletConnectString">Недопустимые данные подключения кошелька Nostr.\nПожалуйста, убедитесь, что вы использовали следующий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
@@ -640,8 +640,8 @@
     <string name="error_connection_lnd_unavailable">Сбой соединения. Хост может быть доступ, но служба узлов не отвечает.\n\nПожалуйста, убедитесь, что сам узел работоспособен, что номер порта (%1$s) правильный, и настроена переадресация порта.</string>
     <string name="error_connection_btcpay_invalid_json">Неправильный синтаксис JSON конфигурации сервера BTCPay.</string>
     <string name="error_connection_btcpay_invalid_config">Конфигурация сервера BTCPay не содержит конфигурации BTC GRPC.</string>
-    <string name="error_connection_no_c_lightning_rest_support">Подключение BitBanana к Core Lightning через C-Lightning-Rest не поддерживается. Пожалуйста, проверьте, поделитесь ли ваш узел деталями подключения cln-grpc и используйте их для подключения.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Недопустимая строка подключения cln-grpc.\nПожалуйста, убедитесь, что вы использовали следующий формат:\n\ncln-grpc://[ip]:[port]? lientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_no_c_lightning_rest_support">Подключение BitBanana к Core Lightning через C-Lightning-Rest не поддерживается. Пожалуйста, проверьте, показывает ли ваш узел подробности подключения clngrpc и используйте их для подключения.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Недопустимая строка подключения clngrpc.\nПожалуйста, убедитесь, что вы использовали следующий формат:\n\nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
     <string name="error_connection_clngrpc_missingClientKey">Отсутствует обязательный ключ клиента.</string>
     <string name="error_channel_open_node_setup">Сначала вы должны подключиться к узлу перед открытием канала.</string>
     <string name="error_connect_peer">Не удалось установить соединение с узлом контрагента.</string>
@@ -712,7 +712,7 @@
     <string name="duplication_successful">Дублирование прошло успешно.</string>
     <string name="help_dialog_scanNodePublicKey">QR-коды, содержащие следующее являются действительными:\n\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт\n- LNURL канал</string>
     <string name="help_dialog_scanGeneric">Здесь всё разрешено.\nПросто отсканируйте QR-код и BitBanana автоматически определит какое действие совершить в зависимости от данных.</string>
-    <string name="help_dialog_scanPeer">QR-коды, содержащие следующее являются действительными:\n\n- публичный ключ\n- публичный_ключ@хост\n- публичный_ключ@хост:порт</string>
+    <string name="help_dialog_scanPeer">QR-коды, содержащие следующее являются действительными:\n\n- публичный ключ\n- публичный_ключ@сервер\n- публичный_ключ@сервер:порт</string>
     <string name="lnurl_channel_pending_hint">Канал открывается. Это может занять некоторое время.\nВы можете проверить состояние каналов на странице Каналы.</string>
     <string name="lnurl_pay_comment_for_payee">Примечание для получателя</string>
     <string name="lnurl_invalid_response">Сервис ответил с неверным ответом.</string>
@@ -939,4 +939,13 @@
     <string name="keep_alive_notification_description">Ваше подключение все еще активно.</string>
     <string name="keep_alive_notification_channel_name">Фоновое подключение</string>
     <string name="keep_alive_notification_channel_description">Поддерживает соединение в фоновом режиме</string>
+    <string name="on_chain">На блокчейне</string>
+    <string name="unconfirmed">Неподтверждено</string>
+    <string name="protocol">Протокол</string>
+    <string name="min">Мин</string>
+    <string name="max">Макс</string>
+    <string name="pick">Выбрать</string>
+    <string name="transaction_filter_unpaid_requests">Неоплаченные запросы</string>
+    <string name="start_date">Дата начала</string>
+    <string name="end_date">Дата окончания</string>
 </resources>
