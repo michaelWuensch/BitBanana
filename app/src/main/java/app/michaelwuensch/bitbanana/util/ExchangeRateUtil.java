@@ -226,7 +226,7 @@ public class ExchangeRateUtil {
                     }
                 }
                 if (responseJson != null) {
-                    JSONObject responseRates = parseCoinbaseResponse(responseJson);
+                    JSONObject responseRates = parseCoinbaseResponse(responseJson, false);
                     applyExchangeRatesAndSaveInPreferences(responseRates);
                 }
             }
@@ -321,7 +321,7 @@ public class ExchangeRateUtil {
      * @param response a JSON response that comes from Coinbases API
      * @return
      */
-    public JSONObject parseCoinbaseResponse(JSONObject response) {
+    public JSONObject parseCoinbaseResponse(JSONObject response, boolean isUnitTest) {
 
         JSONObject responseRates = null;
         try {
@@ -337,10 +337,14 @@ public class ExchangeRateUtil {
                 String rateCode = iter.next();
 
                 try {
-                    Currency curr = Currency.getInstance(rateCode);
-                    if (curr.getName(Locale.US, Currency.LONG_NAME, null).equals(rateCode)
-                            && curr.getName(Locale.US, Currency.NARROW_SYMBOL_NAME, null).equals(rateCode))
-                        continue;
+                    if (isUnitTest) {
+                        // We cannot call android.icu stuff in unit tests. Anyway, that is just for filtering out shitcoins which we don't need to cover in the test. Therefore we just skip that part during tests.
+                    } else {
+                        Currency curr = Currency.getInstance(rateCode);
+                        if (curr.getName(Locale.US, Currency.LONG_NAME, null).equals(rateCode)
+                                && curr.getName(Locale.US, Currency.NARROW_SYMBOL_NAME, null).equals(rateCode))
+                            continue;
+                    }
                 } catch (Exception e) {
                     continue;
                 }

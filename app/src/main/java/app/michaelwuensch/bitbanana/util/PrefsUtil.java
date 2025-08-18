@@ -209,7 +209,12 @@ public class PrefsUtil {
     }
 
     public static boolean isLoggingEnabled() {
-        return getPrefs().getBoolean("featureLogs", false);
+        try {
+            return getPrefs().getBoolean("featureLogs", false);
+        } catch (Exception e) {
+            // In unit tests this will fail. We don't care and return false in that case.
+            return false;
+        }
     }
 
     public static String getFirstCurrencyCode() {

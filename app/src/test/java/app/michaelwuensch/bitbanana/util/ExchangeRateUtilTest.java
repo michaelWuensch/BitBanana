@@ -28,7 +28,7 @@ public class ExchangeRateUtilTest {
     @Test
     public void parseCoinbaseResponse() throws JSONException {
         JSONObject in = new JSONObject(readStringFromFile("exchange_rate_coinbase_response.json"));
-        JSONObject out = ExchangeRateUtil.getInstance().parseCoinbaseResponse(in);
+        JSONObject out = ExchangeRateUtil.getInstance().parseCoinbaseResponse(in, true);
 
         assertEquals(2, out.length());
         assertEquals(1E-11, out.getJSONObject("USD").getDouble("rate"));
