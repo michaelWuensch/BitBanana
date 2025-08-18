@@ -250,11 +250,15 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
     }
 
     public void showStringAnalyzerProgress() {
-        mTvLoadingStringAnalyzerText.setVisibility(View.VISIBLE);
-        mLoadingStringAnalyzerSpinner.setVisibility(View.VISIBLE);
-        mSendButton.setVisibility(View.GONE);
-        mReceiveButton.setVisibility(View.GONE);
-        mScanButton.setVisibility(View.GONE);
+        try {
+            mTvLoadingStringAnalyzerText.setVisibility(View.VISIBLE);
+            mLoadingStringAnalyzerSpinner.setVisibility(View.VISIBLE);
+            mSendButton.setVisibility(View.GONE);
+            mReceiveButton.setVisibility(View.GONE);
+            mScanButton.setVisibility(View.GONE);
+        } catch (Exception e) {
+            BBLog.w(LOG_TAG, "showStringAnalyzerProgress failed.");
+        }
     }
 
     public void hideStringAnalyzerProgress() {
@@ -265,7 +269,7 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
             mReceiveButton.setVisibility(View.VISIBLE);
             mScanButton.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            BBLog.w(LOG_TAG, "hideStringAnalyzerProgress failed.", e);
+            BBLog.w(LOG_TAG, "hideStringAnalyzerProgress failed.");
         }
     }
 
