@@ -143,6 +143,7 @@
                     android:inputType="numberDecimal"
                     android:paddingHorizontal="8dp"
                     android:textAlignment="textEnd"
+                    android:textDirection="ltr"
                     android:textSize="22sp" />
 
                 <LinearLayout
@@ -202,6 +203,7 @@
                     android:inputType="numberDecimal"
                     android:paddingHorizontal="8dp"
                     android:textAlignment="textEnd"
+                    android:textDirection="ltr"
                     android:textSize="22sp" />
 
                 <LinearLayout
