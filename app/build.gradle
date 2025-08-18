@@ -81,6 +81,11 @@ android {
     }
 }
 
+// Suppress only the dep-ann warning for Java compilation in this module. This suppresses the missing deprecation annotation warnings for the generated code from lnd protos.
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:-dep-ann']
+}
+
 /* Uncomment when generating license report
 licenseReport {
     generateHtmlReport = false
