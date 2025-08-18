@@ -319,7 +319,7 @@ public class ContactsManager {
         adb.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 if (listener != null) {
                     listener.onCancelled();
                 }
@@ -346,7 +346,7 @@ public class ContactsManager {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     if (listener != null) {
                         listener.onNameAccepted();
                     }

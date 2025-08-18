@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.home;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -33,7 +34,6 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.net.MalformedURLException;
@@ -175,7 +175,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                NavigationMenuView navigationMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
+                View navigationMenuView = mNavigationView.getChildAt(0);
                 // Blends in the scrollbar on menu open.
                 navigationMenuView.setScrollBarDefaultDelayBeforeFade(1500);
                 navigationMenuView.scrollBy(0, 0);
@@ -435,6 +435,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BackendManager.deactivateCurrentBackendConfig(this, false, false);
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -477,13 +478,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
             mPagerAdapter.getWalletFragment().showLoadingScreen();
             Wallet.getInstance().unlockWallet(input.getText().toString());
-            mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
             mIsFirstUnlockAttempt = false;
             dialog.dismiss();
         });
         adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
             InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
             mPagerAdapter.getWalletFragment().showErrorAfterNotUnlockedScreen();
             mIsFirstUnlockAttempt = true;
             dialog.cancel();

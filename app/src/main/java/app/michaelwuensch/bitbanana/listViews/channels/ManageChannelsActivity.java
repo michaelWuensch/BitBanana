@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.channels;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -470,6 +471,7 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);

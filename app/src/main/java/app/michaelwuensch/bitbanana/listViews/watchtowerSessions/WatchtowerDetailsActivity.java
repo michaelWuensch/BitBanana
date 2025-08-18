@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.watchtowerSessions;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -123,7 +124,6 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
 
     private void updateSessionsDisplayList() {
 
-
         if (Wallet.getInstance().isConnectedToNode()) {
 
             BBLog.v(LOG_TAG, "Update Sessions list.");
@@ -149,6 +149,8 @@ public class WatchtowerDetailsActivity extends BaseAppCompatActivity implements 
         }
     }
 
+    @SuppressLint("RestrictedApi")
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.watchtower_details_menu, menu);

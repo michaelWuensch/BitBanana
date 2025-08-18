@@ -261,7 +261,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                 dialog.cancel();
             }
         });
@@ -290,7 +290,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                         }
                     }
 
-                    mInputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     dialog.dismiss();
                 }
             }

@@ -1,5 +1,6 @@
 package app.michaelwuensch.bitbanana.listViews.utxos;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -271,6 +272,7 @@ public class UTXOsActivity extends BaseAppCompatActivity implements UTXOSelectLi
         }
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
