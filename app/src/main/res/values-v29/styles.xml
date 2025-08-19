@@ -16,6 +16,8 @@
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:ignore="NewApi">true</item>
+
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimations</item>
     </style>
 
     <!-- Base application theme with action bar. -->
@@ -33,6 +35,8 @@
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:ignore="NewApi">true</item>
+
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimations</item>
     </style>
 
 
@@ -55,6 +59,8 @@
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:ignore="NewApi">true</item>
+
+        <item name="android:windowAnimationStyle">@style/AppWindowAnimations</item>
     </style>
 
 
