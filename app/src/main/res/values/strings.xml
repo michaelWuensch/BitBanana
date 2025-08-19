@@ -473,7 +473,7 @@
     <string name="error_unableToFetchBTCPayConfig">Could not fetch configuration from BTCPay Server.</string>
     <string name="error_connection_invalidLndConnectString">Invalid lndconnect string.\nPlease make sure you used the following format:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_invalidLndHubConnectString">Invalid LndHub connection data.\nPlease make sure you used the following format:\n\nlndhub://[user]:[password]@[host]</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Invalid Nostr Wallet Connect data.\nPlease make sure you used the following format:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Invalid Nostr Wallet Connect data.\nPlease make sure you used the following format:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="error_connection_invalid_certificate">The certificate is invalid.</string>
     <string name="error_connection_no_macaroon">Your connection information does not contain a macaroon. This is mandatory.</string>
     <string name="error_connection_invalid_macaroon">The macaroon is invalid.</string>
