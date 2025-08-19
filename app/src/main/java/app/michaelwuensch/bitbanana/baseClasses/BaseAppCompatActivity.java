@@ -1,9 +1,12 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -12,8 +15,39 @@ import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.RtlTransitions;
 
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        RtlTransitions.applyOpenTransition(this);
+    }
+
+    @Override
+    public void startActivity(Intent intent, @Nullable Bundle options) {
+        super.startActivity(intent, options);
+        RtlTransitions.applyOpenTransition(this);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        RtlTransitions.applyOpenTransition(this);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        super.startActivityForResult(intent, requestCode, options);
+        RtlTransitions.applyOpenTransition(this);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        RtlTransitions.applyCloseTransition(this);
+    }
 
     @Override
     protected void onResume() {
