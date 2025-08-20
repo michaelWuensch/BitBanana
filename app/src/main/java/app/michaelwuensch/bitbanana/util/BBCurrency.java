@@ -2,10 +2,16 @@ package app.michaelwuensch.bitbanana.util;
 
 import android.icu.util.Currency;
 import android.os.Build;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 
+import java.text.AttributedCharacterIterator;
+import java.text.CharacterIterator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -210,7 +216,7 @@ public class BBCurrency {
         }
     }
 
-    public String formatValueAsDisplayString(long msats, boolean MsatPrecision) {
+    public CharSequence formatValueAsDisplayString(long msats, boolean MsatPrecision) {
         NumberFormat nf = NumberFormat.getNumberInstance(SystemUtil.getSystemLocale());
         DecimalFormat df = (DecimalFormat) nf;
         df.setMinimumIntegerDigits(1);
@@ -218,7 +224,7 @@ public class BBCurrency {
 
         if (mIsBitcoin) {
             int maxFractionDigits = 0;
-            if (MsatPrecision)
+            if (MsatPrecision && getCode().equals(CURRENCY_CODE_SATOSHI))
                 maxFractionDigits = getMaxFractionsDigits() + 3;
             else
                 maxFractionDigits = getMaxFractionsDigits();
@@ -236,7 +242,42 @@ public class BBCurrency {
             df.setMinimumFractionDigits(2);
             df.setMaximumFractionDigits(getMaxFractionsDigits());
         }
-        return df.format(msats * getRate());
+
+        double value = msats * getRate();
+
+        // Format with attributes so we can span only the fraction
+        AttributedCharacterIterator it = df.formatToCharacterIterator(value);
+
+        // Reconstruct text
+        StringBuilder txt = new StringBuilder();
+        for (char c = it.first(); c != CharacterIterator.DONE; c = it.next()) {
+            txt.append(c);
+        }
+
+        SpannableStringBuilder sp = new SpannableStringBuilder(txt);
+        if (getCode().equals(CURRENCY_CODE_SATOSHI)) {
+
+            // Apply spans: shrink fraction (and optionally the separator)
+            for (char c = it.first(); c != CharacterIterator.DONE; ) {
+                int start = it.getIndex();
+                int end = it.getRunLimit();
+                Map<AttributedCharacterIterator.Attribute, Object> attrs = it.getAttributes();
+
+                if (attrs.containsKey(NumberFormat.Field.FRACTION)) {
+                    sp.setSpan(new RelativeSizeSpan(0.8f), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    //sp.setSpan(new AlphaSpan(0.8f), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                // Optional: also scale the decimal separator
+                if (attrs.containsKey(NumberFormat.Field.DECIMAL_SEPARATOR)) {
+                    // sp.setSpan(new RelativeSizeSpan(0.8f), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+                it.setIndex(end);
+                c = it.current();
+            }
+        }
+
+        return sp;
     }
 
     public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero, boolean MsatPrecision) {

@@ -96,6 +96,10 @@ public class BSDResultView extends ConstraintLayout {
         mDetails.setText(text);
     }
 
+    public void setDetailsText(CharSequence text) {
+        mDetails.setText(text);
+    }
+
     public void setDetailsVisibility(boolean visible) {
         mDetails.setVisibility(visible ? VISIBLE : GONE);
     }

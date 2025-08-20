@@ -493,13 +493,13 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
                 case HistoryListItem.TYPE_LN_INVOICE:
                     String invoiceMemo = ((LnInvoiceItem) item).getInvoice().getMemo();
                     String invoiceKeysendMessage = ((LnInvoiceItem) item).getInvoice().getKeysendMessage();
-                    String invoiceAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((LnInvoiceItem) item).getInvoice().getAmountRequested(), true);
+                    CharSequence invoiceAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((LnInvoiceItem) item).getInvoice().getAmountRequested(), true);
                     text = invoiceMemo + invoiceKeysendMessage + invoiceAmount;
                     break;
                 case HistoryListItem.TYPE_LN_PAYMENT:
                     String paymentMemo = ((LnPaymentItem) item).getPayment().getDescription();
                     String paymentKeysendMessage = ((LnPaymentItem) item).getPayment().getKeysendMessage();
-                    String paymentAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((LnPaymentItem) item).getPayment().getAmountPaid(), true);
+                    CharSequence paymentAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((LnPaymentItem) item).getPayment().getAmountPaid(), true);
 
                     String payeeName = "";
                     if (((LnPaymentItem) item).getPayment().hasDestinationPubKey()) {
@@ -510,7 +510,7 @@ public class TransactionHistoryFragment extends Fragment implements Wallet_Trans
                     text = paymentMemo + paymentKeysendMessage + paymentAmount + payeeName;
                     break;
                 case HistoryListItem.TYPE_ON_CHAIN_TRANSACTION:
-                    String transactionAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount(), false);
+                    CharSequence transactionAmount = MonetaryUtil.getInstance().getCurrentCurrencyDisplayAmountStringFromMSats(((OnChainTransactionItem) item).getOnChainTransaction().getAmount(), false);
                     // Searching for the nodeNames will probably have bad performance when there are a lot of Channels, Contacts & Transactions.
                     String nodePubKey = WalletUtil.getNodePubKeyFromChannelTransaction(((OnChainTransactionItem) item).getOnChainTransaction());
                     String nodeName = AliasManager.getInstance().getAlias(nodePubKey);

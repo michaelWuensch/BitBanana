@@ -1,5 +1,7 @@
 package app.michaelwuensch.bitbanana.util;
 
+import android.text.TextUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -175,8 +177,8 @@ public class MonetaryUtil {
      * @param msats in milli Satoshis
      * @return formatted string
      */
-    public String getCurrentCurrencyDisplayStringFromMSats(long msats, boolean msatPrecision) {
-        return getCurrentCurrencyDisplayAmountStringFromMSats(msats, msatPrecision) + " " + getCurrentCurrencyDisplayUnit();
+    public CharSequence getCurrentCurrencyDisplayStringFromMSats(long msats, boolean msatPrecision) {
+        return TextUtils.concat(getCurrentCurrencyDisplayAmountStringFromMSats(msats, msatPrecision), " ", getCurrentCurrencyDisplayUnit());
     }
 
     /**
@@ -185,7 +187,7 @@ public class MonetaryUtil {
      * @param msats milli Satoshis
      * @return formatted string
      */
-    public String getCurrentCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+    public CharSequence getCurrentCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
         return getCurrentCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
@@ -205,7 +207,7 @@ public class MonetaryUtil {
      * @param msats
      * @return formatted string
      */
-    public String getNextCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
+    public CharSequence getNextCurrencyDisplayAmountStringFromMSats(long msats, boolean msatPrecision) {
         return getNextCurrency().formatValueAsDisplayString(msats, msatPrecision);
     }
 
@@ -243,7 +245,7 @@ public class MonetaryUtil {
      * This function ensures that if we have an msat value that is not a multiple of 1000 it will display as msat,
      * while it will display in the chosen currency if it is a multiple of 1000
      */
-    public String getDisplayStringFromMsats(long msats) {
+    public CharSequence getDisplayStringFromMsats(long msats) {
         if (isCurrentCurrencyBitcoin()) {
             if (msats % 1000 == 0)
                 return getCurrentCurrencyDisplayStringFromMSats(msats, true);

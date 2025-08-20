@@ -47,7 +47,7 @@
                 android:layout_weight="0"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 tools:text="12:23" />
         </LinearLayout>
 
@@ -92,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                app:amountView_msatPrecision="false"
                 app:styleBasedOnValue="true"
                 app:textSize="16sp" />
 
@@ -100,8 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                app:amountView_msatPrecision="false"
                 app:showLabel="true"
-                app:textSize="10sp" />
+                app:textSize="12sp" />
 
         </LinearLayout>
     </LinearLayout>

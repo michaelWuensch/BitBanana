@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.BlurMaskFilter;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -32,7 +33,7 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
     private CountDownTimer mCountDownTimer;
     private boolean mCanBlur;
     private boolean mIsBlurred = false;
-    private String mAmountText;
+    private CharSequence mAmountText;
     private boolean mSubscribeToPrefChange;
     private boolean mIsOverriddenWithText = false;
 
@@ -179,12 +180,16 @@ public class AmountView extends LinearLayout implements SharedPreferences.OnShar
                     break;
                 case 1:
                     // amount > 0
-                    mAmountText = ("+ " + mAmountText);
+                    mAmountText = TextUtils.concat("+ ", mAmountText);
                     setTextColor(ContextCompat.getColor(mContext, R.color.green));
                     break;
                 case -1:
                     // amount < 0
-                    mAmountText = (mAmountText.replace("-", "- "));
+                    mAmountText = TextUtils.replace(
+                            mAmountText,
+                            new String[]{"-"},
+                            new CharSequence[]{"- "}
+                    );
                     setTextColor(ContextCompat.getColor(mContext, R.color.red));
                     break;
             }
