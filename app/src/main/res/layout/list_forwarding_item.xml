@@ -38,7 +38,7 @@
                 android:paddingStart="10dp"
                 android:textAlignment="textStart"
                 android:textColor="@color/gray"
-                android:textSize="10sp"
+                android:textSize="16sp"
                 tools:text="12:23" />
         </LinearLayout>
 
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textAlignment="textEnd"
-                app:textSize="14sp" />
+                app:textSize="16sp" />
 
             <app.michaelwuensch.bitbanana.customView.AmountView
                 android:id="@+id/forwardingAmount"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textAlignment="textEnd"
-                app:textSize="10sp" />
+                app:textSize="12sp" />
 
         </LinearLayout>
     </LinearLayout>
