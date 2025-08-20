@@ -798,7 +798,7 @@
     <string name="error_connection_clngrpc_invalidConnectString">Cadena de conexión cln-grpc no válida. \nAsegúrate de haber utilizado el siguiente formato: \n \ncln-grpc://[ip]:[puerto]?clientKey=[...]&amp;clientCert=[...]&amp;caCert=[...]</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">El certificado o la clave proporcionados no son válidos.</string>
     <string name="error_connection_clngrpc_missingClientKey">Falta la clave del cliente obligatoria.</string>
-    <string name="error_connection_no_c_lightning_rest_support">La conexión de BitBanana a Core Lightning a través de C-Lightning-Rest no está soportada. Compruebe si su nodo comparte detalles de conexión cln-grpc y utilícelos para la conexión.</string>
+    <string name="error_connection_no_c_lightning_rest_support">La conexión de BitBanana a Core Lightning a través de C-Lightning-Rest no está soportada. Compruebe si su nodo comparte detalles de conexión clngrpc y utilícelos para la conexión.</string>
     <string name="error_connection_clngrpc_missingClientCert">Falta el certificado del cliente obligatorio.</string>
     <string name="error_payment_no_route_small_amount">No se ha encontrado ninguna ruta. Está intentando enviar una cantidad tan pequeña que es posible que muchos canales no la enruten. Por favor, comprueba la configuración de enrutamiento de tus propios canales y adapta el valor MinHTLC si es necesario.</string>
     <string name="error_input_invalid_data">El campo de entrada %1$s contiene datos no válidos.</string>
