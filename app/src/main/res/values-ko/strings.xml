@@ -257,7 +257,7 @@
     <string name="settings_customBlockExplorer_address_suffix_description">탐색기에서 주소를 쿼리할 때 호출되는 링크는 다음과 같습니다:\n호스트 + 주소 접미사 + 주소.</string>
     <string name="settings_featurePeers_summary">피어 관리는 자동화되어 있지만, 이 기능은 연결된 피어를 보고 관리할 수 있는 수동 제어 기능도 제공합니다.</string>
     <string name="settings_custom_fee_estimation_provider_host_description">수수료 견적 제공자의 호스트 주소를 입력하세요. 수수료 견적 제공자를 직접 호스팅하면 개인정보가 완전히 보호됩니다.</string>
-    <string name="error_connection_unsupported_format">지원되지 않는 연결 형식입니다.\n다음 형식 중 하나를 사용하세요:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- 노스터 지갑 커텍트 (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
+    <string name="error_connection_unsupported_format">지원되지 않는 연결 형식입니다.\n다음 형식 중 하나를 사용하세요:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (clngrpc://…)\n- 노스터 지갑 커텍트 (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
     <string name="settings_stealth_mode_summary">스텔스 모드를 활성화하여 기기의 물리적 검색으로부터 보호</string>
     <string name="error_zeroAmountPaymentRequest">이것은 제로 금액 결제 요청입니다. 비트바나나는 제로 금액 결제 요청과 관련된 보안 문제로 인해 제로 금액 결제 요청을 지원하지 않습니다.</string>
     <string name="error_connection_no_macaroon">연결 정보에 마카롱이 포함되어 있지 않습니다. 이는 필수 입력 사항입니다.</string>
@@ -414,9 +414,9 @@
     <string name="error_connection_btcpay_invalid_config">BTC페이 서버 구성에는 BTC GRPC 구성이 포함되어 있지 않습니다.</string>
     <string name="error_connection_internal_server">노드에 연결할 수 있지만 내부 오류를 반환합니다. 이 오류는 잘못된 포트를 사용해서 발생할 수 있습니다.</string>
     <string name="error_connection_internal_server_clearnet">노드에 연결할 수 있지만 내부 오류를 반환합니다. 이 오류는 잘못된 포트를 사용했기 때문에 발생할 수 있습니다. 클리어넷의 노드에 연결하려고 할 때 노드 연결 설정에서 토르를 비활성화하면 문제가 해결될 수 있습니다.</string>
-    <string name="error_connection_no_c_lightning_rest_support">C-Lightning-Rest를 통해 비트바나나를 코어 라이트닝에 연결하는 것은 지원되지 않습니다. 노드에서 cln-grpc 연결 세부 정보를 공유하고 있는지 확인한 후 이를 연결에 사용하세요.</string>
+    <string name="error_connection_no_c_lightning_rest_support">C-Lightning-Rest를 통해 비트바나나를 코어 라이트닝에 연결하는 것은 지원되지 않습니다. 노드에서 clngrpc 연결 세부 정보를 공유하고 있는지 확인한 후 이를 연결에 사용하세요.</string>
     <string name="error_connection_clngrpc_invalidCertificateOrKey">제공한 인증서 또는 키가 유효하지 않습니다.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">잘못된 cln-grpc 연결 문자열입니다.\n다음 형식을 사용했는지 확인하세요:\n\ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
+    <string name="error_connection_clngrpc_invalidConnectString">잘못된 clngrpc 연결 문자열입니다.\n다음 형식을 사용했는지 확인하세요:\n\nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
     <string name="error_connection_clngrpc_missingClientCert">필수 클라이언트 인증서가 누락되었습니다.</string>
     <string name="error_connection_clngrpc_missingClientKey">필수 클라이언트 키가 누락되었습니다.</string>
     <string name="error_connection_rest_authentication">Rest API로 인증하지 못했습니다.</string>
@@ -703,7 +703,7 @@
     <string name="help_dialog_scanGeneric">여기에서는 무엇이든 허용됩니다.\nQR 코드를 스캔하기만 하면 비트바나나가 데이터에 따라 어떤 조치를 취할지 자동으로 결정합니다.</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">이 노드가 이 채널 잔액에 보유해야 하는 최소 금액입니다. 이 금액은 사용할 수 없습니다. 따라서 채널 파트너를 속이려고 하면 항상 잃을 것이 있습니다.</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">이 채널에서 단일 트랜잭션으로 전달할 수 있는 최소값입니다.</string>
-    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
+    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
     <string name="help_dialog_scanContact">다음이 포함된 QR 코드가 유효합니다:\n\n- 라이트닝 주소\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- 결제 코드</string>
     <string name="help_dialog_private_channels">비공개 채널은 더 안전한 것이 아니라 네트워크에 보이지 않을 뿐입니다.\n결제를 라우팅하지 않는 노드에 채널을 개설하거나 직접 결제를 라우팅하지 않는 경우에만 비공개 채널을 사용하세요.\n결제를 라우팅하려면 노드의 가동 시간이 매우 높아야 합니다. 모바일 기기나 자주 오프라인 상태인 기기에서 노드를 실행하는 경우 결제를 라우팅하지 말고 비공개 채널을 고수해야 합니다.</string>
     <string name="help_dialog_sign_verify">노드로 메시지에 서명하면 자신이 이 노드의 소유자임을 증명할 수 있습니다. 서명에는 노드의 공개키가 포함되어 있으므로 다른 사람들이 서명된 메시지를 확인할 수 있습니다.\n\n이 기능은 신원을 증명하거나 일부 서비스에서 노드로 로그인하는 등 다양한 시나리오에서 사용할 수 있습니다.</string>
@@ -807,7 +807,7 @@
     <string name="sort_by">정렬 조건</string>
     <string name="nostr_relay">중계</string>
     <string name="guardian_remoteConnect_nwc">대상에 연결하시겠습니까 \n\n%1$s\n\n지갑을 추가하기 전에 공개 키를 확인해 주세요.</string>
-    <string name="error_connection_invalidNostrWalletConnectString">잘못된 노스터 지갑 커넥트 데이터입니다.\n다음 형식을 사용했는지 확인하세요:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">잘못된 노스터 지갑 커넥트 데이터입니다.\n다음 형식을 사용했는지 확인하세요:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="fee_paid">지불 수수료</string>
     <string name="sort_by_inbound_capacity_desc">수신 유동성 (가장 큰 것부터)</string>
     <string name="logs_no_logs">로그 없음</string>
