@@ -814,7 +814,7 @@
     <string name="help_dialog_rebalancing">Ребалансування каналів тримає ваші платіжні канали готовими до роботи! Якщо на одній стороні закінчуються кошти, ваш канал працюватиме лише в одному напрямку, і платежі можуть почати збоїти. Відправлення блискавичного платежу за круговим маршрутом до себе перерозподіляє баланси між вашими каналами без необхідності проведення транзакцій у ланцюжку. Цей вид дозволяє вам виконати такий круговий платіж. Для досягнення найкращих результатів оберіть канал з високою пропускною здатністю і об\'єднайте його з іншим каналом, який має надлишкову пропускну здатність.</string>
     <string name="rebalance">Відновити баланс</string>
     <string name="fee_paid">Сплачена комісія</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використали такий формат:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Недійсні дані Nostr Wallet Connect.\nПереконайтеся, що ви використали такий формат:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="nostr_relay">Готові</string>
     <string name="guardian_remoteConnect_nwc">Ви впевнені, що хочете підключитися до \n\n%1$s\n\nПерш ніж додавати гаманець, перевірте відкритий ключ.</string>
     <string name="error_nwc_setup_failed">Не вдалося ініціювати підключення Nostr Wallet Connect.</string>

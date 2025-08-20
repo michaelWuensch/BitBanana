@@ -208,7 +208,7 @@
 \n- pubkey@host
 \n- pubkey@host:port
 \n- LNURL-Channel</string>
-    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- Cadeia Lndconnect (lndconnect://...)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Códigos QR contendo o seguinte são válidos: \n \n- Cadeia Lndconnect (lndconnect://...)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Conexão de servidor BtcPay (config=...) \n- O conteúdo completo do seu ficheiro de configuração do servidor BTCPay</string>
     <string name="help_dialog_LightningVsOnChain">Lightning:
 \n
 \n+ instantâneo
@@ -480,7 +480,7 @@
     <string name="error_useRegtestRequest">Está conectado a uma rede REGTEST. Por favor use as solicitações de pagamento ou endereços REGTEST.</string>
     <string name="error_emptyClipboardPayment">A sua área de transferência não contém nenhum dado de pagamento.</string>
     <string name="error_qr_code_result_null">Não foi possível ler o código QR, tente novamente.</string>
-    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- grpc Core Lightning (cln-grpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Formato de conexão não suportado. \nPor favor, use um dos seguintes formatos: \n \n- Cadeia Lndconnect (lndconnect://...) \n- grpc Core Lightning (clngrpc://…) \n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…) \n- Conexão de BtcPay Server (config=...) \n- Conteúdo completo do seu ficheiro de configuração do BTCPay Server</string>
     <string name="error_connection_invalidLndConnectString">A cadeia lndconnect é inválida. \nCertifique-se de usar o formato seguinte: \n \nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
     <string name="error_connection_no_macaroon">As suas informações de conexão não contêm um macaroon. Isso é obrigatório.</string>
     <string name="error_connection_invalid_macaroon">O macaroon é inválido.</string>
@@ -829,7 +829,7 @@
     <string name="settings_avatarStyleDisplayValues_0">Misto</string>
     <string name="settings_avatarStyleDisplayValues_1">Robôs</string>
     <string name="settings_avatarStyleDisplayValues_2">Alienígenas</string>
-    <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor verifique se o seu nó partilha pormenores de conexão cln-grpc e use estes para conexão.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor verifique se o seu nó partilha pormenores de conexão clngrpc e use estes para conexão.</string>
     <string name="error_connection_clngrpc_invalidConnectString">Cadeia de conexão cln-grpc inválida. \nSe faz favor, certifique-se que usou o seguinte formato: \n \ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">A cadeia de conexão providenciada para cln-grpc é inválida já que os parâmetros não estão codificados no formato base64url.</string>
     <string name="error_unknown_backend">Tipo de backend desconhecido.</string>

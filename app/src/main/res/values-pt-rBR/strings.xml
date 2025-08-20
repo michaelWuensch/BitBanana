@@ -988,7 +988,7 @@
     <string name="sort_by">Classificar por</string>
     <string name="error_nwc_setup_failed">Falha ao iniciar conexão Nostr Wallet Connect.</string>
     <string name="guardian_custodial_nwc">Você está conectado a uma carteira usando o protocolo Nostr Wallet Connect. A não ser que seja o host desse serviço, esse arranjo é custodial. A entidade gerenciando o serviço tem controle sobre seu dinheiro e pode ver seu histórico de transação. Apenas deposite o quanto confiar a eles.</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="settings_backendTimeout_dialogMessage">Especifica o número de segundos que o app aguardará por uma resposta do backend. Se nenhuma resposta chegar antes do tempo acabar, a solicitação falhará. Para conexões a internet lentas, considere aumentar esse limite. Ao usar o Tor, o app multiplica esse número por 3 para compensar a latência do Tor.</string>
     <string name="settings_paymentTimeout_dialogMessage">Esse ajuste define o número máximo de segundos que o app vai gastar tentando um pagamento Lightning. Se nenhuma rota for encontrada nesse tempo, o pagamento será cancelado. Se o tempo expira com frequência, tente aumentar esse limite.</string>
     <string name="settings_paymentTimeout">Tempo-limite de pagamento</string>

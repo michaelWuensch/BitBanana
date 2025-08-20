@@ -921,7 +921,7 @@
     <string name="adjust">Anpassen</string>
     <string name="error_channel_rebalance_no_fee_rate">Du musst einen maximalen Gebührensatz festlegen.</string>
     <string name="error_nwc_setup_failed">Verbindung mit Nostr Wallet Connect konnte nicht hergestellt werden.</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Ungültige Nostr Wallet Connect Daten.\n\nBitte stelle sicher, dass du das folgende Format verwendet hast:\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Ungültige Nostr Wallet Connect Daten.\n\nBitte stelle sicher, dass du das folgende Format verwendet hast:\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="nostr_relay">Relay</string>
     <string name="sort_by_name_asc">Name (A-Z)</string>
     <string name="sort_by_name_desc">Name (Z-A)</string>
