@@ -444,7 +444,7 @@
     <string name="error_connection_no_macaroon">Twoje dane połączenia nie zawierają macaroon. To pole jest obowiązkowe.</string>
     <string name="error_connection_host_verification_failed_lnd">Weryfikacja nazwy hosta nie powiodła się.\n\nNazwa hosta twojego połączenia nie pasuje do nazwy hosta podanej w certyfikacie hosta.\n\nMusisz albo wyłączyć weryfikację certyfikatu w ustawieniach połączenia węzła, albo ponownie wygenerować certyfikat. Upewnij się, że nazwa hosta została dodana do pliku lnd.conf jako tlsextradomain przed jego ponownym wygenerowaniem.</string>
     <string name="error_connection_lnd_unavailable">Połączenie nie powiodło się. Host jest dostępny, ale usługa węzła nie odpowiada.\n\nUpewnij się, że węzeł działa poprawnie, numer portu (%1$s) jest prawidłowy oraz że przekierowanie portów jest poprawnie skonfigurowane.</string>
-    <string name="error_connection_no_c_lightning_rest_support">Łączenie BitBanana z Core Lightning za pośrednictwem C-Lightning-Rest nie jest obsługiwane. Sprawdź, czy twój węzeł udostępnia dane połączenia cln-grpc i użyj ich do nawiązania połączenia.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Łączenie BitBanana z Core Lightning za pośrednictwem C-Lightning-Rest nie jest obsługiwane. Sprawdź, czy twój węzeł udostępnia dane połączenia clngrpc i użyj ich do nawiązania połączenia.</string>
     <string name="error_empty_node_name">Pusta nazwa nie jest dozwolona.</string>
     <string name="error_only_payment_data_allowed">Tylko dane płatności są tutaj dozwolone.</string>
     <string name="error_invalid_fee_preset_value">Wartość musi być większa niż 0.</string>
@@ -532,7 +532,7 @@
     <string name="error_cameraPermissionRequired">Aby skanować kody QR, musisz zezwolić aplikacji BitBanana na użycie aparatu.</string>
     <string name="error_emptyClipboardPayment">Twój schowek nie zawiera żadnych danych dotyczących płatności.</string>
     <string name="error_qr_code_result_null">Nie można odczytać kodu QR, spróbuj ponownie.</string>
-    <string name="error_connection_unsupported_format">Nieobsługiwany format połączenia.\nUżyj jednego z poniższych formatów:\n\n- Ciąg Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Połączenie z BtcPay Server (config=…)\n- Pełna zawartość pliku konfiguracyjnego BTCPay Server</string>
+    <string name="error_connection_unsupported_format">Nieobsługiwany format połączenia.\nUżyj jednego z poniższych formatów:\n\n- Ciąg Lndconnect (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- Połączenie z BtcPay Server (config=…)\n- Pełna zawartość pliku konfiguracyjnego BTCPay Server</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) nie może zostać odnaleziony. Zaktualizuj ustawienia połączenia z węzłem, jeśli twój węzeł jest teraz dostępny pod innym adresem lub nazwą hosta.</string>
     <string name="error_connection_wallet_locked">Odblokuj portfel.</string>
     <string name="error_connection_btcpay_invalid_config">Konfiguracja BTCPay Server nie zawiera konfiguracji BTC gRPC.</string>
@@ -636,7 +636,7 @@
     <string name="help_dialog_scanPaymentRequest">Kody QR zawierające poniższe elementy są prawidłowe:\n\n- adres Bitcoin\n- żądanie płatności Bitcoin\n- żądanie płatności Lightning</string>
     <string name="help_dialog_allFunds_2">Jeśli jednak masz otwarte kanały, część tych środków może zostać zatrzymana jako rezerwa awaryjna w celu zapewnienia stabilnego działania kanałów. Możesz również otrzymać część tych środków z powrotem jako resztę.</string>
     <string name="help_dialog_lastHop">Opcji ostatniego przeskoku używaj tylko wtedy, gdy chcesz zrównoważyć swoje kanały. Aby to zrobić, możesz skutecznie wysłać środki do siebie. Wygeneruj fakturę i opłać ją, używając konkretnego zestawu własnych kanałów – wybierz kanał z dużą pojemnością wychodzącą jako pierwszy przeskok i kanał z dużym saldem przychodzącym jako ostatni przeskok. Takie podejście wiąże się z opłatami, ale pozwala na zbalansowanie kanałów.</string>
-    <string name="help_dialog_scanConnectionInfo">Kody QR zawierające poniższe elementy są prawidłowe:\n\n- ciąg Lndconnect (lndconnect://…)\n- Core Lightning grpc (cln-grpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- połączenie z serwerem BTCPay (config=…)\n- pełna zawartość pliku konfiguracyjnego twojego serwera BTCPay</string>
+    <string name="help_dialog_scanConnectionInfo">Kody QR zawierające poniższe elementy są prawidłowe:\n\n- ciąg Lndconnect (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- połączenie z serwerem BTCPay (config=…)\n- pełna zawartość pliku konfiguracyjnego twojego serwera BTCPay</string>
     <string name="error_payment_canceled">Nadawca anulował płatność.</string>
     <string name="nfc_type_not_supported">Nieobsługiwany rodzaj NFC</string>
     <string name="error_zeroAmountPaymentRequest">To żądanie płatności na zerową kwotę. BitBanana nie obsługuje żądań płatności na zerową kwotę ze względu na związane z nimi zagrożenia bezpieczeństwa.</string>
