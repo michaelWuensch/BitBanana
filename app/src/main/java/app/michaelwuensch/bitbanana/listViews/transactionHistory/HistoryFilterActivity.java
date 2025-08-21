@@ -4,7 +4,9 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +19,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
+import java.util.Locale;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
@@ -77,6 +81,18 @@ public class HistoryFilterActivity extends BaseAppCompatActivity implements Shar
         mEndDateText = findViewById(R.id.endDateText);
         mPickEndDateButton = findViewById(R.id.buttonPickEndDate);
         mDeleteEndDateButton = findViewById(R.id.buttonDeleteEndDate);
+
+
+        DigitsKeyListener digitsKeyListener = new DigitsKeyListener(Locale.getDefault(), /*sign*/ false, /*decimal*/ true) {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            }
+        };
+        mMinInput.setImeHintLocales(new android.os.LocaleList(Locale.getDefault()));
+        mMaxInput.setImeHintLocales(new android.os.LocaleList(Locale.getDefault()));
+        mMinInput.setKeyListener(digitsKeyListener);
+        mMaxInput.setKeyListener(digitsKeyListener);
 
         // Set the current values
         updateToPreferences();
@@ -232,6 +248,21 @@ public class HistoryFilterActivity extends BaseAppCompatActivity implements Shar
                 if (!amountValid) {
                     removeOneDigit(mMinInput);
                 } else {
+                    int lastSelectionEnd = Math.max(mMinInput.getSelectionEnd(), 0);
+                    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                    int decimalSeparatorPosition = mMinInput.getText().toString().lastIndexOf(symbols.getDecimalSeparator());
+                    if (decimalSeparatorPosition == -1 || lastSelectionEnd <= decimalSeparatorPosition) {
+                        String formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString()), false);
+                        if (!formattedString.equals(arg0.toString()) && !formattedString.isEmpty()) {
+                            int newSelectionEnd = formattedString.length() - (arg0.toString().length() - lastSelectionEnd);
+                            mMinInput.setText(formattedString);
+                            try {
+                                mMinInput.setSelection(newSelectionEnd);
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+                    }
                     PrefsUtil.editPrefs().putLong(PrefsUtil.FILTER_HISTORY_VALUE_MIN, MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString())).commit();
                     updateResetButton();
                 }
@@ -261,6 +292,21 @@ public class HistoryFilterActivity extends BaseAppCompatActivity implements Shar
                 if (!amountValid) {
                     removeOneDigit(mMaxInput);
                 } else {
+                    int lastSelectionEnd = Math.max(mMaxInput.getSelectionEnd(), 0);
+                    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                    int decimalSeparatorPosition = mMaxInput.getText().toString().lastIndexOf(symbols.getDecimalSeparator());
+                    if (decimalSeparatorPosition == -1 || lastSelectionEnd <= decimalSeparatorPosition) {
+                        String formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString()), false);
+                        if (!formattedString.equals(arg0.toString()) && !formattedString.isEmpty()) {
+                            int newSelectionEnd = formattedString.length() - (arg0.toString().length() - lastSelectionEnd);
+                            mMaxInput.setText(formattedString);
+                            try {
+                                mMaxInput.setSelection(newSelectionEnd);
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+                    }
                     PrefsUtil.editPrefs().putLong(PrefsUtil.FILTER_HISTORY_VALUE_MAX, MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString())).commit();
                     updateResetButton();
                 }
@@ -288,17 +334,21 @@ public class HistoryFilterActivity extends BaseAppCompatActivity implements Shar
         String before = editText.getText().toString().substring(0, start);
         String after = editText.getText().toString().substring(end);
 
-        if (selection) {
-            String outputText = before + after;
-            editText.setText(outputText);
-            editText.setSelection(start);
-        } else {
-            if (before.length() >= 1) {
-                String newBefore = before.substring(0, before.length() - 1);
-                String outputText = newBefore + after;
+        try {
+            if (selection) {
+                String outputText = before + after;
                 editText.setText(outputText);
-                editText.setSelection(start - 1);
+                editText.setSelection(start);
+            } else {
+                if (before.length() >= 1) {
+                    String newBefore = before.substring(0, before.length() - 1);
+                    String outputText = newBefore + after;
+                    editText.setText(outputText);
+                    editText.setSelection(start - 1);
+                }
             }
+        } catch (Exception ignored) {
+
         }
     }
 
