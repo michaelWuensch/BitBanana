@@ -302,7 +302,10 @@ public class BBCurrency {
     public long TextInputToValueInMsats(String textInput) {
         String textInputMSatString = TextInputToValueInMsatsString(textInput);
         try {
-            return Long.parseLong(textInputMSatString);
+            if (getCode().equals(CURRENCY_CODE_SATOSHI))
+                return Long.parseLong(textInputMSatString);
+            else
+                return MonetaryUtil.getInstance().mSatsTruncatedToSats((Long.parseLong(textInputMSatString))); // We want it to be truncated to full satoshis when entering feat amounts.
         } catch (NumberFormatException e) {
             // This ensures it returns 0 instead of crashing for huge numbers.
             return 0L;
