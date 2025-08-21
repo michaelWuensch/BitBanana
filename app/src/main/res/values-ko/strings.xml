@@ -703,7 +703,7 @@
     <string name="help_dialog_scanGeneric">여기에서는 무엇이든 허용됩니다.\nQR 코드를 스캔하기만 하면 비트바나나가 데이터에 따라 어떤 조치를 취할지 자동으로 결정합니다.</string>
     <string name="advanced_channel_details_explanation_local_channel_reserve">이 노드가 이 채널 잔액에 보유해야 하는 최소 금액입니다. 이 금액은 사용할 수 없습니다. 따라서 채널 파트너를 속이려고 하면 항상 잃을 것이 있습니다.</string>
     <string name="advanced_channel_details_explanation_local_minHTLC">이 채널에서 단일 트랜잭션으로 전달할 수 있는 최소값입니다.</string>
-    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
+    <string name="help_dialog_scanConnectionInfo">다음이 포함된 QR 코드가 유효합니다:\n\n- Lnd커넥트 문자열 (lndconnect://…)\n- 코어 라이트닝 grpc (clngrpc://…)\n- 노스터 지갑 커텍트 (nostr+walletconnect://…)\n- Lnd허브 (lndhub://…)\n- BTC페이 서버 연결 (config=…)\n- BTC페이 서버 구성 파일의 전체 내용</string>
     <string name="help_dialog_scanContact">다음이 포함된 QR 코드가 유효합니다:\n\n- 라이트닝 주소\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- 결제 코드</string>
     <string name="help_dialog_private_channels">비공개 채널은 더 안전한 것이 아니라 네트워크에 보이지 않을 뿐입니다.\n결제를 라우팅하지 않는 노드에 채널을 개설하거나 직접 결제를 라우팅하지 않는 경우에만 비공개 채널을 사용하세요.\n결제를 라우팅하려면 노드의 가동 시간이 매우 높아야 합니다. 모바일 기기나 자주 오프라인 상태인 기기에서 노드를 실행하는 경우 결제를 라우팅하지 말고 비공개 채널을 고수해야 합니다.</string>
     <string name="help_dialog_sign_verify">노드로 메시지에 서명하면 자신이 이 노드의 소유자임을 증명할 수 있습니다. 서명에는 노드의 공개키가 포함되어 있으므로 다른 사람들이 서명된 메시지를 확인할 수 있습니다.\n\n이 기능은 신원을 증명하거나 일부 서비스에서 노드로 로그인하는 등 다양한 시나리오에서 사용할 수 있습니다.</string>
