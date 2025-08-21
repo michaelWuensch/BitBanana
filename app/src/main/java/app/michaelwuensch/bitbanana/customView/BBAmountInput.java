@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +19,9 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
@@ -40,7 +45,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
     private boolean mIsOnChain;
     private long mAmount;
     private OnAmountInputActionListener mOnAmountInputActionListener;
-    private boolean mBlockOnTextChangedValidation;
+    private boolean mBlockUpdatingValue;
     private long mUtxoSelectionAmount;
     private boolean mAllowMsats = true;
 
@@ -74,6 +79,14 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
 
     public void setupView() {
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
+        mEtAmount.setImeHintLocales(new android.os.LocaleList(Locale.getDefault()));
+        DigitsKeyListener digitsKeyListener = new DigitsKeyListener(Locale.getDefault(), /*sign*/ false, /*decimal*/ true) {
+            @Override
+            public int getInputType() {
+                return InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            }
+        };
+        mEtAmount.setKeyListener(digitsKeyListener);
 
         // set unit to current primary unit
         mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
@@ -101,10 +114,26 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
 
                 // remove the last inputted character if not valid
                 if (!mAmountValid) {
-                    mBlockOnTextChangedValidation = true;
+                    mBlockUpdatingValue = true;
                     removeOneDigit();
-                    mBlockOnTextChangedValidation = false;
+                    mBlockUpdatingValue = false;
                     return;
+                }
+
+                int lastSelectionEnd = Math.max(mEtAmount.getSelectionEnd(), 0);
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+                int decimalSeparatorPosition = mEtAmount.getText().toString().lastIndexOf(symbols.getDecimalSeparator());
+                if (decimalSeparatorPosition == -1 || lastSelectionEnd <= decimalSeparatorPosition) {
+                    String formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats);
+                    if (!formattedString.equals(arg0.toString()) && !formattedString.isEmpty()) {
+                        int newSelectionEnd = formattedString.length() - (arg0.toString().length() - lastSelectionEnd);
+                        mEtAmount.setText(formattedString);
+                        try {
+                            mEtAmount.setSelection(newSelectionEnd);
+                        } catch (Exception ignored) {
+
+                        }
+                    }
                 }
 
                 boolean valid = mOnAmountInputActionListener.onAfterTextChanged(mEtAmount.getText().toString(), mAmount, mIsFixedAmount, mIsOnChain);
@@ -126,15 +155,16 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
             public void onTextChanged(CharSequence arg0, int start, int before,
                                       int count) {
 
-                // We only want to validate the input if it was done through the keyboard, not when it was set by code
-                if (mBlockOnTextChangedValidation || mAllFundsCheckBox.isChecked())
+                if (mAllFundsCheckBox.isChecked())
                     return;
+
 
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mIsOnChain && mAllowMsats);
 
-                if (mAmountValid && !mIsFixedAmount)
+                if (mAmountValid && !mIsFixedAmount && !mBlockUpdatingValue) {
                     mAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
+                }
             }
         });
 
@@ -199,9 +229,9 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
         mIsFixedAmount = true;
         mAmount = msats;
         mAmountValid = true;
-        mBlockOnTextChangedValidation = true;
+        mBlockUpdatingValue = true;
         mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(msats, !mIsOnChain && mAllowMsats));
-        mBlockOnTextChangedValidation = false;
+        mBlockUpdatingValue = false;
         mAllFundsLayout.setVisibility(GONE);
         mEtAmount.clearFocus();
         mEtAmount.setFocusable(false);
@@ -216,17 +246,21 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
         String before = mEtAmount.getText().toString().substring(0, start);
         String after = mEtAmount.getText().toString().substring(end);
 
-        if (selection) {
-            String outputText = before + after;
-            mEtAmount.setText(outputText);
-            mEtAmount.setSelection(start);
-        } else {
-            if (before.length() >= 1) {
-                String newBefore = before.substring(0, before.length() - 1);
-                String outputText = newBefore + after;
+        try {
+            if (selection) {
+                String outputText = before + after;
                 mEtAmount.setText(outputText);
-                mEtAmount.setSelection(start - 1);
+                mEtAmount.setSelection(start);
+            } else {
+                if (before.length() >= 1) {
+                    String newBefore = before.substring(0, before.length() - 1);
+                    String outputText = newBefore + after;
+                    mEtAmount.setText(outputText);
+                    mEtAmount.setSelection(start - 1);
+                }
             }
+        } catch (Exception ignored) {
+
         }
     }
 
@@ -248,9 +282,9 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
 
     public void setAmount(long amount) {
         mAmount = amount;
-        mBlockOnTextChangedValidation = true;
+        mBlockUpdatingValue = true;
         mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(amount, !mIsOnChain && mAllowMsats));
-        mBlockOnTextChangedValidation = false;
+        mBlockUpdatingValue = false;
     }
 
     public void requestFocusDelayed() {
@@ -269,9 +303,9 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
         if (key != null) {
             if (key.equals(PrefsUtil.CURRENT_CURRENCY_INDEX)) {
                 mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
-                mBlockOnTextChangedValidation = true;
+                mBlockUpdatingValue = true;
                 mEtAmount.setText(MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats));
-                mBlockOnTextChangedValidation = false;
+                mBlockUpdatingValue = false;
             }
         }
     }

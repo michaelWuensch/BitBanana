@@ -9,6 +9,7 @@ import android.text.style.RelativeSizeSpan;
 import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -281,17 +282,16 @@ public class BBCurrency {
     }
 
     public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero, boolean MsatPrecision) {
-        // We have to use the Locale.US here to ensure Double.parse works correctly later.
         if (msats == 0)
             if (returnEmptyForZero)
                 return "";
             else
                 return "0";
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat df = (DecimalFormat) nf;
-        df.setGroupingUsed(false);
+        df.setGroupingUsed(true);
 
-        if (isBitcoin() && MsatPrecision)
+        if (MsatPrecision && getCode().equals(CURRENCY_CODE_SATOSHI))
             df.setMaximumFractionDigits(getMaxFractionsDigits() + 3);
         else
             df.setMaximumFractionDigits(getMaxFractionsDigits());
@@ -311,10 +311,12 @@ public class BBCurrency {
 
     private String TextInputToValueInMsatsString(String textInput) {
         String textInputMSatString;
-        NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+        NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
+        textInput = stripGrouping(textInput);
+        textInput = textInput.replace(",", "."); // This is needed as parseDouble needs a "." as decimal separator.
         if (textInput == null || textInput.equals("") || textInput.equals(".")) {
             textInputMSatString = "0";
         } else {
@@ -327,21 +329,28 @@ public class BBCurrency {
 
     public boolean validateInput(String input, boolean MsatPrecision) {
 
+        input = stripGrouping(input);
+
         int numberOfDecimals = getMaxFractionsDigits();
 
         // Override decimals for sats
         if (getCode().equals(CURRENCY_CODE_SATOSHI))
             numberOfDecimals = 0;
 
-        if (isBitcoin() && MsatPrecision)
+        if (MsatPrecision && getCode().equals(CURRENCY_CODE_SATOSHI))
             numberOfDecimals = numberOfDecimals + 3;
 
-        if (input.equals(".")) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        String decimalSeparator = String.valueOf(symbols.getDecimalSeparator());
+        if (input.equals(decimalSeparator) && numberOfDecimals != 0) {
             return true;
         }
 
+        if (numberOfDecimals == 0 && input.contains(decimalSeparator))
+            return false;
+
         // Regex selecting any or no number of digits optionally followed by "." or "," that is followed by up to numberOfDecimals digits
-        String regexPattern = "[0-9]*([\\.,]{0,1}[0-9]{0," + numberOfDecimals + "})";
+        String regexPattern = "[0-9]*([" + decimalSeparator + "]{0,1}[0-9]{0," + numberOfDecimals + "})";
 
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(input);
@@ -360,7 +369,7 @@ public class BBCurrency {
         boolean validZeros;
         if (input.startsWith("0")) {
             if (input.length() > 1) {
-                if (input.startsWith("0.")) {
+                if (input.startsWith("0" + decimalSeparator)) {
                     validZeros = true;
                 } else {
                     validZeros = false;
@@ -371,7 +380,6 @@ public class BBCurrency {
         } else {
             validZeros = true;
         }
-
         return matchedPattern && notTooBig && validZeros;
     }
 
@@ -381,5 +389,37 @@ public class BBCurrency {
 
     public static boolean isBitcoinCurrencyCode(String currencyCode) {
         return (currencyCode.equals(CURRENCY_CODE_BTC) || currencyCode.equals(CURRENCY_CODE_MBTC) || currencyCode.equals(CURRENCY_CODE_BIT) || currencyCode.equals(CURRENCY_CODE_SATOSHI));
+    }
+
+    public static String stripGrouping(String input) {
+        if (input == null) return null;
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        char grouping = symbols.getGroupingSeparator();
+
+        // Remove the locale's grouping separator when it's between digits.
+        String pattern;
+        if (isSpaceLike(grouping)) {
+            // In space-grouping locales, remove any of these anywhere.
+            pattern = "[\\u0020\\u00A0\\u202F\\u2009\\u2007\\u2060]+";
+        } else {
+            // Quote the literal grouping char and remove all occurrences.
+            pattern = Pattern.quote(String.valueOf(grouping)) + "+";
+        }
+
+        // Only remove grouping characters; keep decimal separator and sign.
+        String withoutGroups = input.replaceAll(pattern, "");
+
+        // Optional: trim outer whitespace; inner spaces between digits were handled above.
+        return withoutGroups.trim();
+    }
+
+    private static boolean isSpaceLike(char c) {
+        return c == '\u0020'   // space
+                || c == '\u00A0'   // no-break space
+                || c == '\u202F'   // narrow no-break space
+                || c == '\u2009'   // thin space
+                || c == '\u2007'   // figure space
+                || c == '\u2060';  // word joiner
     }
 }

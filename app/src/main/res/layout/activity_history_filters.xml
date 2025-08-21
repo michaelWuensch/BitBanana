@@ -135,7 +135,7 @@
 
                 <EditText
                     android:id="@+id/minAmountEditText"
-                    android:layout_width="100dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/bg_clickable_item_bright"
@@ -195,7 +195,7 @@
 
                 <EditText
                     android:id="@+id/maxAmountEditText"
-                    android:layout_width="100dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/bg_clickable_item_bright"
