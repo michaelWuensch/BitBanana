@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -177,5 +178,23 @@ public class BBInputFieldView extends LinearLayout {
     public void setLineCount(int min, int max) {
         getEditText().setMinLines(min);
         getEditText().setMaxLines(max);
+    }
+
+    public void setEditTextPaddingEnd(int paddingDp) {
+        if (mEtInput != null) {
+            // Convert dp → px
+            int paddingPx = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    paddingDp,
+                    mEtInput.getResources().getDisplayMetrics()
+            );
+
+            mEtInput.setPaddingRelative(
+                    mEtInput.getPaddingStart(),
+                    mEtInput.getPaddingTop(),
+                    paddingPx,
+                    mEtInput.getPaddingBottom()
+            );
+        }
     }
 }

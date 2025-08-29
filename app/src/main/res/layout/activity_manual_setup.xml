@@ -196,7 +196,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/useTor" />
+                android:text="@string/useTor"
+                android:textAlignment="viewStart" />
 
             <FrameLayout
                 android:id="@+id/verifyCertVisibilityLayout"
@@ -208,7 +209,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@string/verify_certificate" />
+                    android:text="@string/verify_certificate"
+                    android:textAlignment="viewStart" />
             </FrameLayout>
 
             <app.michaelwuensch.bitbanana.customView.BBButton

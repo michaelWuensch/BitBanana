@@ -32,11 +32,12 @@
                 android:id="@+id/offerLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:ellipsize="end"
                 android:maxWidth="180dp"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:textAlignment="viewStart"
                 android:textSize="16sp"
                 tools:text="Label" />
 
@@ -44,11 +45,12 @@
                 android:id="@+id/offerDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:ellipsize="end"
                 android:maxWidth="180dp"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
+                android:textAlignment="viewStart"
                 android:textColor="@color/gray"
                 android:textSize="12sp"
                 tools:text="Offer Description" />
@@ -71,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:maxLines="1"
-                android:textAlignment="textEnd"
+                android:textAlignment="viewEnd"
                 android:textSize="16sp"
                 tools:text="Active" />
 
@@ -81,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:maxLines="1"
-                android:textAlignment="textEnd"
+                android:textAlignment="viewEnd"
                 android:textSize="16sp"
                 tools:text="Unused" />
 

@@ -80,6 +80,7 @@ public class BBPasswordInputFieldView extends ConstraintLayout {
         }
 
         getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        mPasswordInput.setEditTextPaddingEnd(42); // Make sure the text won't overlap the eye icon.
 
         mPasswordVisibilityToggle.setOnClickListener(new View.OnClickListener() {
             @Override

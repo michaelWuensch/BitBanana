@@ -26,10 +26,11 @@
             android:id="@+id/watchtowerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:ellipsize="middle"
             android:maxLines="1"
             android:paddingHorizontal="10dp"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             tools:text="Watchtower Name or Pubkey" />
     </LinearLayout>

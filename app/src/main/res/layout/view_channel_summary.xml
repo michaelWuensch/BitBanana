@@ -27,7 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/channel_summary_total_outbound" />
+            android:text="@string/channel_summary_total_outbound"
+            android:textAlignment="viewStart" />
 
         <app.michaelwuensch.bitbanana.customView.AmountView
             android:id="@+id/totalOutbound"
@@ -59,7 +60,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/channel_summary_total_inbound" />
+            android:text="@string/channel_summary_total_inbound"
+            android:textAlignment="viewStart" />
 
         <app.michaelwuensch.bitbanana.customView.AmountView
             android:id="@+id/totalInbound"
@@ -91,7 +93,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/channel_summary_total_unavailable" />
+            android:text="@string/channel_summary_total_unavailable"
+            android:textAlignment="viewStart" />
 
         <app.michaelwuensch.bitbanana.customView.AmountView
             android:id="@+id/totalUnavailable"

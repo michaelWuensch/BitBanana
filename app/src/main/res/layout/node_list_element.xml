@@ -67,9 +67,10 @@
             android:id="@+id/nodeName"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAlignment="viewStart"
             android:textSize="16sp"
             tools:text="Name" />
 
@@ -77,9 +78,10 @@
             android:id="@+id/networkName"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="start|center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAlignment="viewStart"
             android:textColor="@color/gray"
             android:textSize="12sp"
             android:visibility="gone"
