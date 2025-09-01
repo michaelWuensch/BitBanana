@@ -223,4 +223,8 @@
     <string name="settings_blockExplorer">סייר בלוקים</string>
     <string name="settings_customBlockExplorer_host_description">אנא ספקו את כתובת המארח לסייר המותאם שלכם. כאשר אתם מארחים סייר בלוקים בעצמכם, הפרטיות שלכם נשמרת במלואה.</string>
     <string name="settings_customBlockExplorer_address_suffix">סיומת כתובת</string>
+    <string name="settings_featureLabels_summary">הישארו מסודרים על ידי הוספת הערות שלכם לפעולות ופריטים אחרים, והפיכתם לקלים יותר למעקב והבנה.</string>
+    <string name="settings_exchangeRateProvider">ספק שער חליפין</string>
+    <string name="settings_custom_exchange_rate_provider">ספק שער חליפין מותאם אישית</string>
+    <string name="settings_requires_tor_toast">זה דורש Tor. אפשרו זאת בהגדרות.</string>
 </resources>
