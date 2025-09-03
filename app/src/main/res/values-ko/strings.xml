@@ -386,7 +386,7 @@
     <string name="fee_limit_title">수수료 한도 알림</string>
     <string name="error_provided_data_invalid">제공된 데이터가 유효하지 않습니다.</string>
     <string name="fee_limit_threshold">%1$d 사토시를 초과하는 결제 수수료 한도: %2$s</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">cln-grpc에 제공된 연결 문자열은 매개 변수가 base64url 형식으로 인코딩되지 않았으므로 유효하지 않습니다.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">매개 변수가 사양을 따르지 않으므로 cln-grpc에 제공된 연결 문자열이 유효하지 않습니다.</string>
     <string name="error_invalid_data_to_create_channel">잘못된 형식입니다.\n다음 중 하나를 사용하세요:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_connect_peer_no_host">IP 주소 또는 호스트가 없는 노드에 연결할 수 없습니다.</string>
     <string name="error_channel_close_timeout">기한 내에 채널을 닫을 수 없습니다.</string>
@@ -915,4 +915,13 @@
     <string name="keep_alive_notification_description">연결이 아직 활성 상태입니다.</string>
     <string name="keep_alive_notification_channel_name">백그라운드 연결</string>
     <string name="keep_alive_notification_channel_description">백그라운드에서 연결을 유지합니다</string>
+    <string name="on_chain">온체인</string>
+    <string name="unconfirmed">미검증</string>
+    <string name="protocol">프로토콜</string>
+    <string name="min">최소</string>
+    <string name="max">최대</string>
+    <string name="pick">선택</string>
+    <string name="transaction_filter_unpaid_requests">미지급 요청</string>
+    <string name="start_date">시작 날짜</string>
+    <string name="end_date">종료 날짜</string>
 </resources>
