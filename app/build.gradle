@@ -190,7 +190,7 @@ dependencies {
     implementation 'fr.acinq.lightning:lightning-kmp:1.7.2'
 
     // secp256k1 implementation (Used for LNURL Auth)
-    implementation 'fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.18.0'
+    implementation 'fr.acinq.secp256k1:secp256k1-kmp-jni-android:0.19.0'
 
     // Used for base encoding and URI escaping
     implementation 'com.google.guava:guava:29.0-android'
