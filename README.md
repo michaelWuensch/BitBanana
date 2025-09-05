@@ -36,8 +36,9 @@ For setup instructions and to get everything up and running, check out our [docu
 ## Features
 **General**
 - [x] Connect to remote lightning nodes/wallets (LND, Core Lightning, Nostr Wallet Connect & LndHub)
-- [x] Available in many languages
 - [x] Explanations and help across the app
+- [x] Available in many languages
+- [x] Full right-to-left (RTL) compatibility for Arabic languages
 - [x] Convenient VPN automation
 - [x] And of course, BitBanana is Bitcoin only!
 
