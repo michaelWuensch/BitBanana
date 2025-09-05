@@ -1,5 +1,5 @@
 # Use Debian slim as the base
-FROM docker.io/debian:stable-20240722-slim
+FROM docker.io/debian:bookworm-slim
 
 # 1) Install required system packages (including Java)
 RUN set -ex; \
