@@ -1,0 +1,6 @@
+- Full right-to-left (RTL) compatibility for Arabic languages.
+- Localized number formatting with group separators in amount input fields
+- Enhanced visual clarity for fractions of satoshis (msats).
+- When creating a lightning invoice, inputting fiat amounts now converts to full sats instead of milli-satoshis.
+- Stability fixes.
+- Updated translations.
