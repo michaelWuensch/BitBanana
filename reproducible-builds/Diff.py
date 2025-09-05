@@ -13,7 +13,8 @@ IGNORE_LIST = [ "META-INF",
         "stamp-cert-sha256",
         "unknown",
         "AndroidManifest.xml",
-        "apktool.yml"]
+        "apktool.yml",
+        "splits0.xml"]
 
 def files_are_identical(file1, file2, chunk_size=4096):
     """
