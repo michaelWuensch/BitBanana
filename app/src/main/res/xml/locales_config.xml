@@ -8,6 +8,7 @@
     <locale android:name="fr"/> <!-- French -->
     <locale android:name="de"/> <!-- German -->
     <locale android:name="it"/> <!-- Italian -->
+    <locale android:name="iw"/> <!-- Hebrew -->
     <locale android:name="ja"/> <!-- Japanese -->
     <locale android:name="ko"/> <!-- Korean -->
     <locale android:name="pl"/> <!-- Polish -->
