@@ -123,6 +123,8 @@ public interface CoreLightningNodeService {
 
     Single<com.github.ElementsProject.lightning.cln.FeeratesResponse> feerates(com.github.ElementsProject.lightning.cln.FeeratesRequest request);
 
+    Single<com.github.ElementsProject.lightning.cln.Fetchbip353Response> fetchBip353(com.github.ElementsProject.lightning.cln.Fetchbip353Request request);
+
     Single<com.github.ElementsProject.lightning.cln.FetchinvoiceResponse> fetchInvoice(com.github.ElementsProject.lightning.cln.FetchinvoiceRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.FundchannelCancelResponse> fundChannelCancel(com.github.ElementsProject.lightning.cln.FundchannelCancelRequest request);
@@ -272,6 +274,8 @@ public interface CoreLightningNodeService {
     Single<com.github.ElementsProject.lightning.cln.InjectonionmessageResponse> injectOnionMessage(com.github.ElementsProject.lightning.cln.InjectonionmessageRequest request);
 
     Single<com.github.ElementsProject.lightning.cln.XpayResponse> xpay(com.github.ElementsProject.lightning.cln.XpayRequest request);
+
+    Single<com.github.ElementsProject.lightning.cln.SignmessagewithkeyResponse> signMessageWithKey(com.github.ElementsProject.lightning.cln.SignmessagewithkeyRequest request);
 
     Observable<com.github.ElementsProject.lightning.cln.BlockAddedNotification> subscribeBlockAdded(com.github.ElementsProject.lightning.cln.StreamBlockAddedRequest request);
 
