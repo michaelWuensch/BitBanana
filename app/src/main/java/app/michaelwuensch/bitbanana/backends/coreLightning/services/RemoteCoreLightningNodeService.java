@@ -315,6 +315,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     }
 
     @Override
+    public Single<com.github.ElementsProject.lightning.cln.Fetchbip353Response> fetchBip353(com.github.ElementsProject.lightning.cln.Fetchbip353Request request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.fetchBip353(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
     public Single<com.github.ElementsProject.lightning.cln.FetchinvoiceResponse> fetchInvoice(com.github.ElementsProject.lightning.cln.FetchinvoiceRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.fetchInvoice(request, new RemoteSingleObserver<>(emitter)));
     }
@@ -687,6 +692,11 @@ public class RemoteCoreLightningNodeService implements CoreLightningNodeService 
     @Override
     public Single<com.github.ElementsProject.lightning.cln.XpayResponse> xpay(com.github.ElementsProject.lightning.cln.XpayRequest request) {
         return DefaultSingle.createDefault(emitter -> asyncStub.xpay(request, new RemoteSingleObserver<>(emitter)));
+    }
+
+    @Override
+    public Single<com.github.ElementsProject.lightning.cln.SignmessagewithkeyResponse> signMessageWithKey(com.github.ElementsProject.lightning.cln.SignmessagewithkeyRequest request) {
+        return DefaultSingle.createDefault(emitter -> asyncStub.signMessageWithKey(request, new RemoteSingleObserver<>(emitter)));
     }
 
     @Override
