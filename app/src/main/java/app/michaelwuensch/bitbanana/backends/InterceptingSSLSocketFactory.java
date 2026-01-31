@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSocket;
@@ -25,8 +26,15 @@ public class InterceptingSSLSocketFactory extends SSLSocketFactory {
 
     private Socket intercept(Socket socket) throws IOException {
         if (socket instanceof SSLSocket sslSocket) {
+            BBLog.d(LOG_TAG, "Supported protocols: " + Arrays.toString(sslSocket.getSupportedProtocols()));
+            BBLog.d(LOG_TAG, "Enabled protocols: " + Arrays.toString(sslSocket.getEnabledProtocols()));
+            //BBLog.d(LOG_TAG, "Supported cipher suites: " + Arrays.toString(sslSocket.getSupportedCipherSuites()));
+            //BBLog.d(LOG_TAG, "Enabled cipher suites: " + Arrays.toString(sslSocket.getEnabledCipherSuites()));
+
             sslSocket.addHandshakeCompletedListener(event -> {
                 try {
+                    BBLog.d(LOG_TAG, "Negotiated protocol: " + event.getSession().getProtocol());
+                    BBLog.d(LOG_TAG, "Negotiated Cipher suite: " + event.getCipherSuite());
                     Certificate[] certs = event.getPeerCertificates();
                     if (certs.length > 0 && certs[0] instanceof X509Certificate cert) {
                         CertificateInfoStore.setServerCertificate(cert);
