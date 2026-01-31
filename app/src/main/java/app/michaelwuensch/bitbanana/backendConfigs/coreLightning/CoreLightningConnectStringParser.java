@@ -183,9 +183,9 @@ public class CoreLightningConnectStringParser extends BaseConnectionParser {
                 backendConfig.setLocation(BackendConfig.Location.REMOTE);
                 backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
                 if (caCert != null)
-                    backendConfig.setServerCert(BaseEncoding.base64().encode(caCert.getBytes(StandardCharsets.UTF_8)));
-                backendConfig.setClientCert(BaseEncoding.base64().encode(clientCert.getBytes(StandardCharsets.UTF_8)));
-                backendConfig.setClientKey(BaseEncoding.base64().encode(clientKey.getBytes(StandardCharsets.UTF_8)));
+                    backendConfig.setServerCert(BaseEncoding.base64().encode(CertificateUtil.cert_PEM_To_DER(caCert)));
+                backendConfig.setClientCert(BaseEncoding.base64().encode(CertificateUtil.cert_PEM_To_DER(clientCert)));
+                backendConfig.setClientKey(BaseEncoding.base64().encode(CertificateUtil.privateKey_PEM_To_DER(clientKey)));
                 backendConfig.setUseTor(RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 backendConfig.setVerifyCertificate(!RemoteConnectUtil.isTorHostAddress(connectURI.getHost()));
                 setBackendConfig(backendConfig);
