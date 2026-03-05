@@ -581,7 +581,7 @@
     <string name="lnurl_withdraw_success">Retirar
 \nexitoso</string>
     <string name="lnurl_unsupported_type">Tipo de LNURL no soportada</string>
-    <string name="lnurl_channel_opening_question">¿De verdad quieres abrir un canal con:?</string>
+    <string name="lnurl_channel_opening_question">¿De verdad quieres abrir un canal con?:</string>
     <string name="lnurl_pay_insufficient_channel_balance">La cantidad a pagar es superior a la que puedes enviar por lightning con tus actuales canales abiertos.</string>
     <string name="lnurl_payer_data_identifier">Dirección relámpago</string>
     <string name="lnurl_payer_data_choose">Elija los datos que desea enviar:</string>
