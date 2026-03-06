@@ -1,0 +1,19 @@
+⚡️ ¡Superpoderes para ti y tu nodo Bitcoin Lightning! Usa y gestiona tu nodo dondequiera que estés. ⚡️
+
+BitBanana es una app nativa de Android para operadores de nodos, centrada en la experiencia del usuario y la facilidad de uso.
+Si bien no es una billetera en sí misma, BitBanana funciona como un control remoto, permitiéndote usar tu nodo como billetera dondequiera que vayas.
+La app está diseñada con un enfoque educativo, brindando al usuario orientación sobre todos los aspectos del funcionamiento del nodo.
+
+BitBanana es de código abierto y totalmente autocustodiado, lo que significa que tienes el control total de tus fondos.
+
+Características:
+- Gestiona múltiples nodos
+- Transacciones en cadena y pagos Lightning
+- Gestión de canales
+- Resumen de enrutamiento
+- Contactos
+- Firma/Verificación
+- Compatibilidad con NFC
+- Compatibilidad con Tor
+- 100 % de código abierto
+... ¡y muchas otras funciones para explorar!
