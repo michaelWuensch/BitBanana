@@ -105,8 +105,7 @@
     <string name="send_onChainPayment">Enviar pago en cadena</string>
     <string name="send_sendPayment">Enviar pago</string>
     <string name="send_success">Pago\ncorrecto</string>
-    <string name="send_fail">Pago 
-\nfallido</string>
+    <string name="send_fail">Pago \nincorrecto</string>
     <string name="receive_generateRequest">Generar Solicitud</string>
     <string name="receive_generateRequest_failed">La solicitud no pudo ser generada.</string>
     <string name="receive_lightning_request">Solicitud Lightning</string>
@@ -871,7 +870,7 @@
     <string name="watchtower_session_pending_backups">Respaldos pendientes</string>
     <string name="watchtower_session_max_backups">Respaldos Máx</string>
     <string name="watchtower_session_sweep_fee">Tarifa de barrido</string>
-    <string name="guardian_remove_watchtower">Al eliminar la torre de vigilancia, se terminarán todas las sesiones actuales asociadas con la torre. Algunas sesiones aún no se han agotado. Las copias de seguridad restantes se perderán y no se reembolsarán, incluso si pagaste por el servicio.</string>
+    <string name="guardian_remove_watchtower">Al eliminar la torre de vigilancia, se terminarán todas las sesiones actuales asociadas con la torre. Algunas sesiones aún no se han agotado. Los respaldos restantes se perderán y no se reembolsarán, incluso si pagaste por el servicio.</string>
     <string name="help_dialog_own_watchtower">Esta es su torre de vigilancia en la red Lightning.
 \n
 \nAl tocar la imagen del avatar se revelará un código QR.
@@ -934,7 +933,7 @@
     <string name="guardian_remoteConnect_nwc">¿Seguro que quiere conectar a\n\n%1$s\n\nCompruebe la clave pública antes de añadir el monedero.</string>
     <string name="forwarded">Reenviado</string>
     <string name="summary">Resumen</string>
-    <string name="settings_lockScreenTimeout">Tiempo de espera auto-bloqueado</string>
+    <string name="settings_lockScreenTimeout">Tiempo para el bloqueo automático</string>
     <string name="auto_scroll">Auto-Arrastrar</string>
     <string name="security">Seguridad</string>
     <string name="target">Destino</string>
@@ -1007,7 +1006,7 @@
     <string name="settings_featureLabels">Etiquetas</string>
     <string name="settings_backendTimeout">Segundo plano agotado</string>
     <string name="settings_paymentTimeout">Vencimiento agotado</string>
-    <string name="error_payment_canceled">El pagador canceló el pago.</string>
+    <string name="error_payment_canceled">El remitente canceló el pago.</string>
     <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Cantidad Máxima: %1$s\n\nLiquidación Lightning insuficiente. Incremente la capacidad de receptor de sus canales para elevar este límite.</string>
     <string name="error_nwc_setup_failed">Incorrecto al inicializar la conexión Nostr Wallet Connect.</string>
     <string name="error_no_bolt12_offer_selected">Tiene que seleccionar un código del pago.</string>
