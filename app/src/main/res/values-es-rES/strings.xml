@@ -871,7 +871,7 @@
     <string name="watchtower_session_pending_backups">Respaldos pendientes</string>
     <string name="watchtower_session_max_backups">Respaldos Máx</string>
     <string name="watchtower_session_sweep_fee">Tarifa de barrido</string>
-    <string name="guardian_remove_watchtower">Al quitar la torre, todas las sesiones actuales asociadas con la torre serán terminadas. Algunas sesiones aún no se han agotado. Los respaldos restantes se perderán y no serán reembolsados, incluso si usted pagó por el servicio.</string>
+    <string name="guardian_remove_watchtower">Al eliminar la torre de vigilancia, se terminarán todas las sesiones actuales asociadas con la torre. Algunas sesiones aún no se han agotado. Las copias de seguridad restantes se perderán y no se reembolsarán, incluso si pagaste por el servicio.</string>
     <string name="help_dialog_own_watchtower">Esta es su torre de vigilancia en la red Lightning.
 \n
 \nAl tocar la imagen del avatar se revelará un código QR.
