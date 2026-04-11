@@ -10,6 +10,7 @@ import android.nfc.tech.Ndef;
 import android.os.Parcelable;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import app.michaelwuensch.bitbanana.R;
@@ -49,15 +50,27 @@ public class NfcUtil {
                     NdefRecord[] records = message.getRecords();
                     BBLog.v(LOG_TAG, "Ndef record: " + records[0]);
                     if (records[0].getTnf() == NdefRecord.TNF_WELL_KNOWN) {
+                        byte[] rawPayload = records[0].getPayload();
+                        String payload = null;
                         if (Arrays.equals(records[0].getType(), NdefRecord.RTD_URI)) {
-                            byte[] rawPayload = records[0].getPayload();
                             StringBuilder sb = new StringBuilder();
                             for (int i = 1; i < rawPayload.length; i++) {
                                 sb.append((char) rawPayload[i]);
                             }
-                            String payload = sb.toString();
+                            payload = sb.toString();
                             BBLog.d(LOG_TAG, "Ndef payload: " + payload);
                             listener.onSuccess(payload);
+                        } else if (Arrays.equals(records[0].getType(), NdefRecord.RTD_TEXT)) {
+                            int statusByte = rawPayload[0];
+                            boolean isUtf16 = (statusByte & 0x80) != 0;
+                            int langCodeLen = statusByte & 0x3F;
+                            String charset = isUtf16 ? "UTF-16" : "UTF-8";
+                            try {
+                                payload = new String(rawPayload, 1 + langCodeLen, rawPayload.length - 1 - langCodeLen, charset);
+                                listener.onSuccess(payload);
+                            } catch (UnsupportedEncodingException e) {
+                                BBLog.e(LOG_TAG, "Unsupported encoding: " + charset);
+                            }
                         } else {
                             BBLog.w(LOG_TAG, "This NdefRecord is not supported");
                             showNotSupportedToast(ctx);

@@ -74,31 +74,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/requestQRCode" />
 
-        <app.michaelwuensch.bitbanana.customView.BBButton
-            android:id="@+id/shareBtn"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="15dp"
-            app:bbbutton_image="@drawable/ic_share_black_24dp"
-            app:bbbutton_text="@string/share"
-            app:layout_constraintBottom_toTopOf="@id/copyBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <app.michaelwuensch.bitbanana.customView.BBButton
-            android:id="@+id/copyBtn"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/button_height"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="50dp"
-            app:bbbutton_image="@drawable/ic_content_copy_black_24dp"
-            app:bbbutton_text="@string/copy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/buttonsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/shareBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginBottom="15dp"
+                    app:bbbutton_image="@drawable/ic_share_black_24dp"
+                    app:bbbutton_text="@string/share" />
+
+                <app.michaelwuensch.bitbanana.customView.BBButton
+                    android:id="@+id/copyBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    app:bbbutton_image="@drawable/ic_content_copy_black_24dp"
+                    app:bbbutton_text="@string/copy" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/withdrawProgressLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/withdrawProgressBar"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:keepScreenOn="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_in_progress"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
