@@ -830,8 +830,8 @@
     <string name="settings_avatarStyleDisplayValues_1">Robôs</string>
     <string name="settings_avatarStyleDisplayValues_2">Alienígenas</string>
     <string name="error_connection_no_c_lightning_rest_support">Conectar o BitBanana ao Core Lightning via C-Lightning-Rest não é suportado. Por favor verifique se o seu nó partilha pormenores de conexão clngrpc e use estes para conexão.</string>
-    <string name="error_connection_clngrpc_invalidConnectString">Cadeia de conexão cln-grpc inválida. \nSe faz favor, certifique-se que usou o seguinte formato: \n \ncln-grpc://[ip]:[port]?clientKey=[…]&amp;clientCert=[…]&amp;caCert=[…]</string>
-    <string name="error_connection_clngrpc_parameterDecodingFailed">A cadeia de conexão providenciada para cln-grpc é inválida já que os parâmetros não estão codificados no formato base64url.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Cadeia de conexão clngrpc inválida. \nSe faz favor, certifique-se que usou o seguinte formato: \n \nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">A cadeia de conexão providenciada para clngrpc é inválida já que os parâmetros não seguem a especificação.</string>
     <string name="error_unknown_backend">Tipo de backend desconhecido.</string>
     <string name="error_input_field_empty">O campo de entrada %1$s não pode estar vazio.</string>
     <string name="error_input_invalid_data">O campo de entrada %1$s contém dados inválidos.</string>
@@ -931,7 +931,7 @@
     <string name="help_dialog_offers">Códigos de pagamento podem ser usados várias vezes. Qualquer um com o código pode fazer um pagamento para si sem requerer o seu envolvimento imediato. Entretanto, o seu nó deve estar on-line para que o pagamento avance. Além disso, códigos de pagamento oferecem funções avançadas como pagamentos recorrentes e privacidade aumentada ao recipiente.</string>
     <string name="help_dialog_settings_currencies">Tocar no campo de qualquer quantia permite que mude as moedas que configurou aqui. Se selecionar apenas unidades Bitcoin, o app irá parar de contatar os provedores de taxa de câmbio.</string>
     <string name="lnd_watchtower_client_inactive">O cliente da torre de guarda está atualmente inativo. Por favor certifique-se que o lnd é iniciado com a flag --wtclient.active.</string>
-    <string name="watchtower_session_backups">Backups</string>
+    <string name="watchtower_session_backups">Cópias de Segurança</string>
     <string name="watchtower_session_pending_backups">Backups Pendentes</string>
     <string name="offer_no_bolt12_offers">Sem códigos de pagamento</string>
     <string name="offer_single_use">Uso único</string>
@@ -995,7 +995,7 @@
     <string name="guardian_copy_logs">Por favor note que este registo copiado pode conter dados sensíveis. Analise-o e edite qualquer informação confidencial antes de partilhar com alguém.</string>
     <string name="settings_currency_none">Nenhuma</string>
     <string name="settings_featureWatchtowers">Gestão de Torres de Guarda</string>
-    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+nostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Dados Nostr Wallet Connect inválidos.\nPor favor, certifique-se que usou o seguinte formato:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
     <string name="nostr_relay">Reposição</string>
     <string name="guardian_custodial_nwc">Está conectado a uma carteira usando o protocolo Nostr Wallet Connect. A não ser que seja o host desse serviço, este arranjo é custodial. A entidade a gerir o serviço tem controle sobre o seu dinheiro e pode ver o seu histórico de transação. Apenas deposite o quanto lhes confiar.</string>
     <string name="help_dialog_utxos_locking">Ao bloquear UTXOs específicas aqui, garante que não serão selecionadas para transações on-chain ou aberturas de canal. UTXOs bloqueadas com o BitBanana ficarão bloqueadas por 24 horas, mas tem a opção de desbloqueá-las manualmente quando necessário.</string>
@@ -1131,4 +1131,5 @@
     <string name="transaction_filter_unpaid_requests">Solicitações não pagas</string>
     <string name="start_date">Data de início</string>
     <string name="end_date">Data final</string>
+    <string name="on_chain">On-Chain</string>
 </resources>

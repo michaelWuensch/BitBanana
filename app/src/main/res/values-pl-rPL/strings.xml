@@ -866,4 +866,7 @@
     <string name="target_remote_lightning_node_lnd">Zdalny węzeł Lightning (LND)</string>
     <string name="target_remote_lightning_node_core_lightning">Zdalny węzeł Lightning (Core Lightning)</string>
     <string name="connection_security_info_tor">Tor zapewnia anonimowość i szyfrowanie na poziomie routowania. Certyfikaty TLS nie są wymagane.</string>
+    <string name="info">Informacje</string>
+    <string name="allow">Zezwól</string>
+    <string name="on_chain">On-Chain</string>
 </resources>
