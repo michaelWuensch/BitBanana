@@ -1,0 +1,6 @@
+- Receive funds via NFC on a generated LN invoice (LNURL-withdraw)
+- Support reading NFC Tags of type text
+- Fixed incorrect cert and key encoding when parsing CLN connect strings
+- Fixed an issue where RoutHints were omitted in certain edge cases
+- Full persian and spanish translation
+- Updated translations
