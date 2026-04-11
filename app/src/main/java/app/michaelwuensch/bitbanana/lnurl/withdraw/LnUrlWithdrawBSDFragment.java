@@ -204,7 +204,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFo
                         .setAmount(mAmountInput.getAmount())
                         .setDescription(mWithdrawData.getDefaultDescription())
                         .setExpiry(300L)
-                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                        .setIncludeRouteHints(true)
                         .build();
 
                 getCompositeDisposable().add(BackendManager.api().createInvoice(request)

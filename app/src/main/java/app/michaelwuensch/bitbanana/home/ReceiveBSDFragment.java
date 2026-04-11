@@ -494,7 +494,7 @@ public class ReceiveBSDFragment extends BaseBSDFragment {
                         .setAmount(mAmountInput.getAmount())
                         .setDescription(mDescriptionView.getData())
                         .setExpiry(Long.parseLong(PrefsUtil.getPrefs().getString("lightning_expiry", "86400"))) // in seconds
-                        .setIncludeRouteHints(PrefsUtil.getPrefs().getBoolean("includePrivateChannelHints", true))
+                        .setIncludeRouteHints(true)
                         .build();
 
                 getCompositeDisposable().add(BackendManager.api().createInvoice(invoiceRequest)
