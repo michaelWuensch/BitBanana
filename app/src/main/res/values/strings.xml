@@ -576,6 +576,9 @@
     <string name="error_pin_and_emergency_pin_equal">Your PIN and emergency PIN must differ.</string>
     <string name="error_password_and_emergency_password_equal">Your password and emergency password must differ.</string>
     <string name="error_nwc_min_android_version">Android 11 or higher is required to use Nostr Wallet Connect.</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">The maximum amount allowed by the payer is %1$s</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">The minimum amount allowed by the payer is %1$s</string>
+    <string name="error_nfc_no_withdrawal">Invalid NFC data: Only withdrawal instructions are accepted here.</string>
 
     <plurals name="blocks">
         <item quantity="one">%d Block</item>
@@ -1065,4 +1068,6 @@
 
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
+
+    <string name="payment_in_progress">Payment in progress…</string>
 </resources>
