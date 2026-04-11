@@ -1059,4 +1059,8 @@
     <string name="keep_alive_notification_channel_description">Hält die Verbindung im Hintergrund aufrecht</string>
     <string name="start_date">Beginn</string>
     <string name="end_date">Ende</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">Der vom Zahler zugelassene Höchstbetrag beträgt %1$s</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">Der vom Zahler zugelassene Mindestbetrag beträgt %1$s</string>
+    <string name="error_nfc_no_withdrawal">Ungültige NFC-Daten: Hier werden nur Anweisungen zur Auszahlung akzeptiert.</string>
+    <string name="payment_in_progress">Zahlung läuft…</string>
 </resources>
