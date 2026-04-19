@@ -2,6 +2,9 @@ package app.michaelwuensch.bitbanana.util;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CipherSuite;
+import okhttp3.TlsVersion;
+
 public class RefConstants {
 
     /* This value has to be increased if any changes are made, that break the current implementation.
@@ -113,4 +116,26 @@ public class RefConstants {
     // Other
     public static final String SETUP_MODE = "setupMode";
     public static final String BITBANANA_UTXO_LEASE_ID = "bb21212121212121212121212121212121212121212121212121212121212121";
+
+    // TLS versions to use for SSL connections
+    public static final String[] TLS_VERSIONS = {
+            TlsVersion.TLS_1_2.javaName(),
+            TlsVersion.TLS_1_3.javaName()
+    };
+    // Ciphers to use for SSL connections
+    public static final String[] CIPHER_SUITES = {
+            // TLS v1.3
+            CipherSuite.TLS_AES_128_GCM_SHA256.javaName(),
+            CipherSuite.TLS_AES_256_GCM_SHA384.javaName(),
+            CipherSuite.TLS_CHACHA20_POLY1305_SHA256.javaName(),
+            CipherSuite.TLS_AES_128_CCM_SHA256.javaName(),
+            CipherSuite.TLS_AES_128_CCM_8_SHA256.javaName(),
+            // TLS v1.2
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256.javaName(),
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256.javaName(),
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384.javaName(),
+            CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384.javaName(),
+            CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256.javaName(),
+            CipherSuite.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256.javaName()
+    };
 }

@@ -88,6 +88,7 @@ public class CoreLightningConnection {
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
+                        .tlsConnectionSpec(RefConstants.TLS_VERSIONS, RefConstants.CIPHER_SUITES)
                         .overrideAuthority("cln") // the grpc plugin for core lightning does not know the domain, therefore it uses 'cln' by default. See https://docs.corelightning.org/docs/grpc.
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();

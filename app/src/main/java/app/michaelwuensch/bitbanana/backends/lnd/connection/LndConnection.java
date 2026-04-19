@@ -177,6 +177,7 @@ public class LndConnection {
                         .forAddress(host, port)
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
+                        .tlsConnectionSpec(RefConstants.TLS_VERSIONS, RefConstants.CIPHER_SUITES)
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             }
