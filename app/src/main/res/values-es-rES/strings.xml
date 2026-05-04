@@ -1100,4 +1100,8 @@
     <string name="quick_receive_info_off">Con Quick Receive apagado, será solicitado para seleccionar que desea cada vez que presione \'Recibir\'.</string>
     <string name="quick_receive_info_bolt12">Además es referenciado como un BOLT 12, un Código de Abonación es un identificador reusable estático, que no requiere ningún servicio web. Contiene toda la información necesaria para enviar un pago directamente sobre la Red Lightning.</string>
     <string name="quick_receive_info_on_chain_address">Esto utilizará la dirección siguiente no utilizada en la cadena.</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">El importe máximo permitido por el pagador es %1$s</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">El importe mínimo permitido por el pagador es %1$s</string>
+    <string name="error_nfc_no_withdrawal">Datos NFC no válidos: aquí solo se aceptan instrucciones de retiro.</string>
+    <string name="payment_in_progress">Pago en curso…</string>
 </resources>
