@@ -926,7 +926,7 @@
     <string name="reset">Restablecer</string>
     <string name="total">Total</string>
     <string name="change">Cambiar</string>
-    <string name="activity_payment_route">Ruta de pago</string>
+    <string name="activity_payment_route">Método de pago</string>
     <string name="clear">Vaciar</string>
     <string name="copy_all">Copiar todo</string>
     <string name="sort_by">Ordenar por</string>
