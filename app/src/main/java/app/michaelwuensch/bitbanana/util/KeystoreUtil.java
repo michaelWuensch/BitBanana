@@ -35,11 +35,14 @@ public class KeystoreUtil {
         }
     }
 
-    public boolean isAppLockActive() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+public boolean isAppLockActive() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    Object lock = new Object();
+    synchronized (lock) {
         KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
         keyStore.load(null);
         return keyStore.containsAlias(KEY_APP_LOCK_ACTIVE);
     }
+}
 
     protected void generateKey(String keyAlias) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         synchronized (s_keyInitLock) {
