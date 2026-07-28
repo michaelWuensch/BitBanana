@@ -23,14 +23,12 @@ public class KeystoreUtil {
         keyStore.load(null);
 
         if (!keyStore.containsAlias(KEY_APP_LOCK_ACTIVE)) {
-            generateKey(KEY_APP_LOCK_ACTIVE);
-        }
-public void removeAppLockActiveKey() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-    synchronized (s_keyInitLock) {
-        KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
-        keyStore.load(null, null); // Added a null parameter for the password
-        keyStore.deleteEntry(KEY_APP_LOCK_ACTIVE);
-    }
+synchronized (s_keyInitLock) {
+    KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE_NAME);
+    char[] password = "my-password".toCharArray(); // Replace with a valid password
+    keyStore.load(null, password);
+    keyStore.deleteEntry(KEY_APP_LOCK_ACTIVE);
+}
 }
     }
 
