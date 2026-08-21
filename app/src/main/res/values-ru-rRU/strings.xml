@@ -948,4 +948,8 @@
     <string name="transaction_filter_unpaid_requests">Неоплаченные запросы</string>
     <string name="start_date">Дата начала</string>
     <string name="end_date">Дата окончания</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">Максимум, который позволен плательщиком: %1$s</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">Минимум, который позволен плательщиком: %1$s</string>
+    <string name="error_nfc_no_withdrawal">Неправильные данные NFC: здесь принимаются только инструкции по выводу.</string>
+    <string name="payment_in_progress">Платеж в процессее…</string>
 </resources>
