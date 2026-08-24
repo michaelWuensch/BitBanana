@@ -283,7 +283,15 @@ public class MonetaryUtil {
     }
 
     public String msatsToCurrentCurrencyTextInputString(long msats, boolean allowMsat) {
-        return getCurrentCurrency().formatValueAsTextInputString(msats, true, allowMsat);
+        return msatsToCurrentCurrencyTextInputString(msats, allowMsat, -1);
+    }
+
+    public String msatsToCurrentCurrencyTextInputString(long msats, boolean allowMsat, int minFractionDigits) {
+        return msatsToCurrentCurrencyTextInputString(msats, allowMsat, -1, true);
+    }
+
+    public String msatsToCurrentCurrencyTextInputString(long msats, boolean allowMsat, int minFractionDigits, boolean returnEmptyForZero) {
+        return getCurrentCurrency().formatValueAsTextInputString(msats, returnEmptyForZero, allowMsat, minFractionDigits);
     }
 
     /**
@@ -302,7 +310,7 @@ public class MonetaryUtil {
      */
     public String msatsToBitcoinString(long msats) {
         BBCurrency btcCurrency = new BBCurrency(BBCurrency.CURRENCY_CODE_BTC);
-        return btcCurrency.formatValueAsTextInputString(msats, false, false);
+        return btcCurrency.formatValueAsTextInputString(msats, false, false, -1);
     }
 
     /**
@@ -331,5 +339,60 @@ public class MonetaryUtil {
      */
     public long mSatsTruncatedToSats(long mSats) {
         return (mSats / 1000L) * 1000L;
+    }
+
+    public String normalizeDigits(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(input.length());
+
+        for (char c : input.toCharArray()) {
+
+            // Persian digits: ۰۱۲۳۴۵۶۷۸۹
+            if (c >= '۰' && c <= '۹') {
+                sb.append((char) ('0' + (c - '۰')));
+            }
+
+            // Arabic-Indic digits: ٠١٢٣٤٥٦٧٨٩
+            else if (c >= '٠' && c <= '٩') {
+                sb.append((char) ('0' + (c - '٠')));
+            }
+
+            // Arabic decimal separator → .
+            else if (c == '٫') {
+                sb.append('.');
+            }
+
+            // Arabic thousands separator → remove
+            else if (c == '٬') {
+                // skip
+            }
+
+            else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String normalizeFractionSeparator(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(input.length());
+
+        for (char c : input.toCharArray()) {
+            // Persian digits: ۰۱۲۳۴۵۶۷۸۹
+            if (c == ',' || c == '٫') {
+                sb.append('.');
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }
