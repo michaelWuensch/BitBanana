@@ -281,12 +281,11 @@ public class BBCurrency {
         return sp;
     }
 
-    public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero, boolean MsatPrecision) {
+    public String formatValueAsTextInputString(long msats, boolean returnEmptyForZero, boolean MsatPrecision, int minFractionDigits) {
         if (msats == 0)
             if (returnEmptyForZero)
                 return "";
-            else
-                return "0";
+
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(true);
@@ -295,6 +294,9 @@ public class BBCurrency {
             df.setMaximumFractionDigits(getMaxFractionsDigits() + 3);
         else
             df.setMaximumFractionDigits(getMaxFractionsDigits());
+
+        if (minFractionDigits > -1)
+            df.setMinimumFractionDigits(Math.min(minFractionDigits, df.getMaximumFractionDigits()));
 
         return df.format(msats * getRate());
     }
@@ -318,9 +320,10 @@ public class BBCurrency {
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
+        textInput = MonetaryUtil.getInstance().normalizeDigits(textInput);
         textInput = stripGrouping(textInput);
-        textInput = textInput.replace(",", "."); // This is needed as parseDouble needs a "." as decimal separator.
-        if (textInput == null || textInput.equals("") || textInput.equals(".")) {
+        textInput = MonetaryUtil.getInstance().normalizeFractionSeparator(textInput);
+        if (textInput == null || textInput.isEmpty() || textInput.equals(".")) {
             textInputMSatString = "0";
         } else {
             double value = Double.parseDouble(textInput);
@@ -331,8 +334,19 @@ public class BBCurrency {
     }
 
     public boolean validateInput(String input, boolean MsatPrecision) {
+        if (input.isEmpty())
+            return false;
 
+        String tempInput = input;
         input = stripGrouping(input);
+
+        // Test if last char was actually a grouping char
+        if (!input.isEmpty() && input.charAt(input.length() - 1)
+                != tempInput.charAt(tempInput.length() - 1))
+            return false;
+
+        input = MonetaryUtil.getInstance().normalizeFractionSeparator(input);
+        input = MonetaryUtil.getInstance().normalizeDigits(input);
 
         int numberOfDecimals = getMaxFractionsDigits();
 
@@ -343,8 +357,7 @@ public class BBCurrency {
         if (MsatPrecision && getCode().equals(CURRENCY_CODE_SATOSHI))
             numberOfDecimals = numberOfDecimals + 3;
 
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-        String decimalSeparator = String.valueOf(symbols.getDecimalSeparator());
+        String decimalSeparator = ".";
         if (input.equals(decimalSeparator) && numberOfDecimals != 0) {
             return true;
         }
@@ -370,9 +383,12 @@ public class BBCurrency {
         }
 
         boolean validZeros;
-        if (input.startsWith("0")) {
+        char zero = DecimalFormatSymbols
+                .getInstance(Locale.getDefault())
+                .getZeroDigit();
+        if (input.startsWith("0") || input.charAt(0) == zero) {
             if (input.length() > 1) {
-                if (input.startsWith("0" + decimalSeparator)) {
+                if (input.charAt(1) == decimalSeparator.charAt(0)) {
                     validZeros = true;
                 } else {
                     validZeros = false;

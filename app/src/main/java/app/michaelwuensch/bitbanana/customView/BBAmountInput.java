@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +26,7 @@ import java.util.Locale;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.MonetaryUtil;
@@ -48,6 +50,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
     private boolean mBlockUpdatingValue;
     private long mUtxoSelectionAmount;
     private boolean mAllowMsats = true;
+    private boolean mEndsWithFractionSeparator = false;
 
     public BBAmountInput(Context context) {
         super(context);
@@ -80,13 +83,24 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
     public void setupView() {
         PrefsUtil.getPrefs().registerOnSharedPreferenceChangeListener(this);
         mEtAmount.setImeHintLocales(new android.os.LocaleList(Locale.getDefault()));
-        DigitsKeyListener digitsKeyListener = new DigitsKeyListener(Locale.getDefault(), /*sign*/ false, /*decimal*/ true) {
+        mEtAmount.setKeyListener(new NumberKeyListener() {
+            private final char[] ACCEPTED = (
+                    "0123456789" +           // Latin
+                            "۰۱۲۳۴۵۶۷۸۹" +   // Persian
+                            "٠١٢٣٤٥٦٧٨٩" +   // Arabic-Indic
+                            ".,٫"           // separators: dot, comma, Arabic decimal
+            ).toCharArray();
+
+            @Override
+            protected char[] getAcceptedChars() {
+                return ACCEPTED;
+            }
+
             @Override
             public int getInputType() {
                 return InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
             }
-        };
-        mEtAmount.setKeyListener(digitsKeyListener);
+        });
 
         // set unit to current primary unit
         mTvUnit.setText(MonetaryUtil.getInstance().getCurrentCurrencyDisplayUnit());
@@ -120,19 +134,30 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
                     return;
                 }
 
+                String unformattedString = mEtAmount.getText().toString();
                 int lastSelectionEnd = Math.max(mEtAmount.getSelectionEnd(), 0);
                 DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-                int decimalSeparatorPosition = mEtAmount.getText().toString().lastIndexOf(symbols.getDecimalSeparator());
-                if (decimalSeparatorPosition == -1 || lastSelectionEnd <= decimalSeparatorPosition) {
-                    String formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats);
-                    if (!formattedString.equals(arg0.toString()) && !formattedString.isEmpty()) {
-                        int newSelectionEnd = formattedString.length() - (arg0.toString().length() - lastSelectionEnd);
-                        mEtAmount.setText(formattedString);
-                        try {
-                            mEtAmount.setSelection(newSelectionEnd);
-                        } catch (Exception ignored) {
+                int decimalSeparatorPosition = unformattedString.lastIndexOf(symbols.getDecimalSeparator());
+                String formattedString = "";
+                if (mEndsWithFractionSeparator) {
+                    formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, -1, false);
+                    formattedString += symbols.getDecimalSeparator();
+                } else {
+                    if (decimalSeparatorPosition != -1) {
+                        int nrMinFactionDigits = unformattedString.length() - 1 - decimalSeparatorPosition;
+                        formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, nrMinFactionDigits, false);
+                    } else {
+                        formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, -1, false);
+                    }
+                }
 
-                        }
+                if (!formattedString.equals(arg0.toString()) && !unformattedString.isEmpty()) {
+                    int newSelectionEnd = formattedString.length() - (arg0.toString().length() - lastSelectionEnd);
+                    mEtAmount.setText(formattedString);
+                    try {
+                        mEtAmount.setSelection(newSelectionEnd);
+                    } catch (Exception ignored) {
+
                     }
                 }
 
@@ -164,6 +189,7 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
 
                 if (mAmountValid && !mIsFixedAmount && !mBlockUpdatingValue) {
                     mAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
+                    mEndsWithFractionSeparator = arg0.toString().endsWith(".") || arg0.toString().endsWith(",") || arg0.toString().endsWith("٫");
                 }
             }
         });
