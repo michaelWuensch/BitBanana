@@ -932,4 +932,8 @@
     <string name="keep_alive_notification_channel_description">اتصال را در پس‌زمینه زنده نگه می‌دارد</string>
     <string name="start_date">تاریخ شروع</string>
     <string name="end_date">تاریخ پایان</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">حداکثر مبلغ مجاز توسط پرداخت‌کننده %1$s است</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">حداقل مبلغ مجاز توسط پرداخت‌کننده %1$s است</string>
+    <string name="error_nfc_no_withdrawal">داده NFC نامعتبر است: فقط دستورهای برداشت در اینجا پذیرفته می‌شوند.</string>
+    <string name="payment_in_progress">پرداخت در حال انجام…</string>
 </resources>

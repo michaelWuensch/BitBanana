@@ -188,4 +188,6 @@
     <string name="disable">停止</string>
     <string name="watchtower_session_backups">备份</string>
     <string name="active">活动的</string>
+    <string name="currency">货币</string>
+    <string name="security">安全</string>
 </resources>
