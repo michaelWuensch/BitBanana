@@ -836,7 +836,7 @@
     <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">Det lägsta belopp som betalaren tillåter är %1$s</string>
     <string name="error_nfc_no_withdrawal">Ogiltiga NFC-data: endast uttagsinstruktioner accepteras här.</string>
     <string name="payment_in_progress">Betalning pågår…</string>
-    <string name="advanced_channel_details_explanation_capacity">Kanalkapacitet</string>
+    <string name="advanced_channel_details_explanation_capacity">Det sammanlagda beloppet av medel som hålls i denna kanal. På grund av vissa begränsningar, exempelvis åtagandeavgift eller lokal kanalreserv, kan inte alla medel användas.</string>
     <string name="advanced_channel_details_explanation_activity">Tid sedan kanalen öppnades.</string>
     <string name="advanced_channel_details_explanation_lifetime">Tiden som kanalen har varit öppen.</string>
     <string name="advanced_channel_details_explanation_lifetime_closed">Tiden som kanalen var öppen.</string>
