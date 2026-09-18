@@ -397,4 +397,37 @@
     <string name="error_emptyClipboardPayment">Urklipp innehåller inga betalningsdata.</string>
     <string name="error_emptyClipboardConnect">Urklipp innehåller inga anslutningsdata.</string>
     <string name="error_qr_code_result_null">Det gick inte att läsa QR-koden, försök igen.</string>
+    <string name="error_connection_unsupported_format">Anslutningsformatet stöds inte.\nAnvänd något av följande format:\n\n- Lndconnect-sträng (lndconnect://…)\n- Core Lightning grpc (clngrpc://…)\n- Nostr Wallet Connect (nostr+walletconnect://…)\n- LndHub (lndhub://…)\n- BtcPay Server-anslutning (config=…)\n- Hela innehållet i din BTCPay Server-konfigurationsfil</string>
+    <string name="error_unableToFetchBTCPayConfig">Kunde inte hämta konfiguration från BTCPay Server.</string>
+    <string name="error_connection_invalidLndConnectString">Ogiltig lndconnect-sträng.\nKontrollera att du använder följande format:\n\nlndconnect://[ip]:[port]?cert=[…]&amp;macaroon=[…]</string>
+    <string name="error_connection_invalidLndHubConnectString">Ogiltiga LndHub-anslutningsdata.\nKontrollera att du använder följande format:\n\nlndhub://[user]:[password]@[host]</string>
+    <string name="error_connection_invalidNostrWalletConnectString">Ogiltiga Nostr Wallet Connect-data.\nKontrollera att du använder följande format:\n\nnostr+walletconnect://[PUBKEY]?relay=[RELAY]&amp;secret=[SECRET]</string>
+    <string name="error_connection_invalid_certificate">Certifikatet är ogiltigt.</string>
+    <string name="error_connection_no_macaroon">Anslutningsinformationen innehåller ingen macaroon. Det är obligatoriskt.</string>
+    <string name="error_connection_invalid_macaroon">Macaroonen är ogiltig.</string>
+    <string name="error_connection_invalid_host_or_port">Angiven värd eller port är ogiltig.</string>
+    <string name="error_connection_invalid_macaroon2">Åtkomst nekades!\n\nMacaroonen är ogiltig.</string>
+    <string name="error_connection_server_unreachable">Timeout.\nServern svarar inte.\n\n- Kontrollera att du har en bra internetanslutning\n\n- Kontrollera att servern körs och fortfarande har följande IP-adress:\n\n%1$s</string>
+    <string name="error_connection_host_verification_failed_lnd">Verifiering av värdnamn misslyckades.\n\nVärdnamnet i anslutningen stämmer inte med värdnamnet i värdcertifikatet.\n\nDu måste antingen inaktivera certifikatverifiering i nodens anslutningsinställningar eller återskapa certifikatet. Kontrollera att värdnamnet är tillagt som tlsextradomain i lnd.conf innan du återskapar det.</string>
+    <string name="error_connection_host_verification_failed">Verifiering av värdnamn misslyckades.\n\nVärdnamnet i anslutningen stämmer inte med värdnamnet i värdcertifikatet.</string>
+    <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Värden (%1$s) kan inte slås upp. Uppdatera nodens anslutningsinställningar om noden nu nås under en annan adress eller ett annat värdnamn.</string>
+    <string name="error_connection_lnd_unavailable">Anslutningen misslyckades. Värden kan nås, men nodtjänsten svarar inte.\n\nKontrollera att noden fungerar, att portnumret (%1$s) är korrekt och att portvidarebefordran är konfigurerad.</string>
+    <string name="error_connection_network_unreachable">Kunde inte nå värden.\n\nKontrollera att du har internetanslutning.</string>
+    <string name="error_connection_unknown">Anslutningen misslyckades.</string>
+    <string name="error_connection_no_internet">Ingen internetanslutning!</string>
+    <string name="error_connection_tor_unreachable">Tor-anslutningen misslyckades.\nAktivera Tor i nodens anslutningsinställningar.</string>
+    <string name="error_connection_tor_bootstrapping">Tor kunde inte startas.\n\nBitBanana har inbyggt stöd för Tor. Om du använder Orbot tar du bort BitBanana från Orbots lista över Tor-aktiverade appar eller stänger av Orbot helt.</string>
+    <string name="error_connection_wallet_locked">Lås upp plånboken.</string>
+    <string name="error_connection_btcpay_invalid_json">JSON-syntaxen för BTCPay-serverkonfigurationen är ogiltig.</string>
+    <string name="error_connection_btcpay_invalid_config">BTCPay-serverkonfigurationen innehåller ingen BTC GRPC-konfiguration.</string>
+    <string name="error_connection_internal_server">Noden kan nås men returnerar ett internt fel. Felet kan orsakas av fel port.</string>
+    <string name="error_connection_internal_server_clearnet">Noden kan nås men returnerar ett internt fel. Felet kan orsakas av fel port. Eftersom du försöker ansluta till en nod på clearnet kan det hjälpa att inaktivera Tor i nodens anslutningsinställningar.</string>
+    <string name="error_connection_no_c_lightning_rest_support">Det går inte att ansluta BitBanana till Core Lightning via C-Lightning-Rest. Kontrollera om noden delar clngrpc-anslutningsuppgifter och använd dem i stället.</string>
+    <string name="error_connection_clngrpc_invalidConnectString">Ogiltig clngrpc-anslutningssträng.\nKontrollera att du använder följande format:\n\nclngrpc://[ip]:[port]?pubkey=[…]&amp;certs=[…]</string>
+    <string name="error_connection_clngrpc_invalidCertificateOrKey">Ett angivet certifikat eller en nyckel är ogiltig.</string>
+    <string name="error_connection_clngrpc_missingClientCert">Det obligatoriska klientcertifikatet saknas.</string>
+    <string name="error_connection_clngrpc_missingClientKey">Den obligatoriska klientnyckeln saknas.</string>
+    <string name="error_connection_clngrpc_parameterDecodingFailed">Den angivna anslutningssträngen för clngrpc är ogiltig eftersom parametrarna inte följer specifikationen.</string>
+    <string name="error_connection_rest_authentication">Autentisering med Rest API misslyckades.</string>
+    <string name="error_wrong_password">Fel lösenord</string>
 </resources>
