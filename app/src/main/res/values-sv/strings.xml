@@ -627,4 +627,55 @@
     <string name="submit_routing_policy">Uppdatera routningsprincip</string>
     <string name="routing_policy_applies_for_all_channels">Observera! Om du skickar in detta tillämpas inställningarna på alla dina kanaler!</string>
     <string name="routing_policy_update_success">Routningsprincipen har uppdaterats.</string>
+    <plurals name="blocks">
+        <item quantity="one">%d block</item>
+        <item quantity="other">%d block</item>
+    </plurals>
+    <plurals name="duration_second">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
+    <plurals name="duration_minute">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minuter</item>
+    </plurals>
+    <plurals name="duration_hour">
+        <item quantity="one">%d timme</item>
+        <item quantity="other">%d timmar</item>
+    </plurals>
+    <plurals name="duration_day">
+        <item quantity="one">%d dag</item>
+        <item quantity="other">%d dagar</item>
+    </plurals>
+    <plurals name="duration_week">
+        <item quantity="one">%d vecka</item>
+        <item quantity="other">%d veckor</item>
+    </plurals>
+    <plurals name="duration_month">
+        <item quantity="one">%d månad</item>
+        <item quantity="other">%d månader</item>
+    </plurals>
+    <plurals name="duration_year">
+        <item quantity="one">%d år</item>
+        <item quantity="other">%d år</item>
+    </plurals>
+    <string name="channel_commitment_type">Åtagandetyp</string>
+    <string name="stealth_mode_explanation_popup">Från och med nu ser BitBanana ut som en enkel kalkylator. För att komma åt BitBanana använder du kalkylatorn och utför en beräkning som blir 21.</string>
+    <string name="stealth_mode_description_calc">BitBanana ser nu ut som en kalkylator!</string>
+    <string name="stealth_mode_enable">Aktivera smygläge:</string>
+    <string name="stealth_mode_enable_instruction">Stäng appen</string>
+    <string name="stealth_mode_disable">Inaktivera smygläge:</string>
+    <string name="stealth_mode_disable_instruction_calc">Utför en beräkning som blir 21</string>
+    <string name="peers_no_peers">Inga motparter</string>
+    <string name="peers_add">Lägg till motpart</string>
+    <string name="peer_ping">Pinga</string>
+    <string name="peer_ping_explanation">Tiden det tar för motparten att svara.</string>
+    <string name="peer_flap_count">Fladderantal</string>
+    <string name="peer_flap_count_explanation">Det totala antalet gånger motparten har kopplats från eller anslutits, dokumenterat över omstarter. Antalet minskar gradvis om motparten inte nyligen har fladdrat, vilket gör att historiskt höga fladderantal kan förlåtas.</string>
+    <string name="peer_last_flap">Senaste fladder</string>
+    <string name="peer_last_flap_explanation">Förfluten tid sedan motpartens senaste frånkoppling.</string>
+    <string name="peer_last_errors">Senaste fel</string>
+    <string name="peer_mutual_channels">Gemensamma kanaler</string>
+    <string name="peer_mutual_channels_explanation">Antalet kanaler du har öppna med denna motpart.</string>
+    <string name="peer_total_channels">Totalt antal kanaler</string>
 </resources>
