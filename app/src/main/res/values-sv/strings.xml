@@ -232,4 +232,41 @@
     <string name="send_onChainPayment">Skicka betalning i kedjan</string>
     <string name="send_sendPayment">Skicka betalning</string>
     <string name="send_success">Betalning\ngenomförd</string>
+    <string name="send_fail">Betalning\nmisslyckades</string>
+    <string name="send_SendOnChainInstead">Skicka i kedjan</string>
+    <string name="receive_generateRequest">Skapa begäran</string>
+    <string name="receive_generateRequest_failed">Det gick inte att skapa begäran.</string>
+    <string name="receive_lightning_request">Lightning-begäran</string>
+    <string name="receive_on_chain_request">Begäran i kedjan</string>
+    <string name="receive_noActiveChannels">För att ta emot bitcoin via Lightning-nätverket måste du först öppna kanaler.</string>
+    <string name="receive_noIncomeBalance">För att ta emot bitcoin via Lightning-nätverket behöver minst en av dina kanaler ha ett saldo på motpartens sida.\n\nFör att uppnå det måste du först använda något i Lightning-nätverket.\n\nI området för kanalhantering kan du alltid se hur mycket du kan skicka eller ta emot via Lightning-nätverket just nu.</string>
+    <string name="receive_requestFullfilled">Faktura\nbetald</string>
+    <string name="guardian_doNotShowAgain">Visa inte igen.</string>
+    <string name="guardian_Title">Observera</string>
+    <string name="guardian_reset">Alla säkerhetsvarningar är aktiverade igen.</string>
+    <string name="guardian_copyToClipboard_onChain" comment="Parameters are:  %1$s: compare string">Om du kopierar dessa data till urklipp kan andra appar, även skadliga sådana, få åtkomst till och ändra dem.\n\nFör att säkerställa att inget har ändrats vid inklistringen, jämför början med:\n\n%1$s\n</string>
+    <string name="guardian_copyToClipboard_lightning">Om du kopierar dessa data till urklipp kan andra appar, även skadliga sådana, få åtkomst till och ändra dem.\n\nFör att säkerställa att inget har ändrats vid inklistringen, jämför slutet med:\n\n%1$s\n</string>
+    <string name="guardian_pasteFromClipboard">Kontrollera alltid de sista 3 till 5 siffrorna när du klistrar in från urklipp. En skadlig app kan ha ändrat adressen i bakgrunden utan att du märker det.</string>
+    <string name="guardian_disableScrambledPin">Om PIN-koden inte blandas är den lätt att gissa genom att se dina fingerrörelser.</string>
+    <string name="guardian_disableScreenProtection">Om du tillåter skärminspelning kan skadlig programvara spela in video eller ta skärmbilder medan du använder BitBanana. Vi rekommenderar att du endast inaktiverar detta medan du vill spela in video eller ta en skärmbild.</string>
+    <string name="guardian_highOnChainFee" comment="Parameters are:  %1$s%%: % of transaction value. E.g: 13.2%">Du är på väg att betala %1$s %% i nätverksavgifter.\n\nMöjliga lösningar:\n- försök med en Lightning-betalning i stället\n- välj en lägre avgift och vänta längre\n- försök igen senare\n- överför ett större belopp\n\nVill du fortsätta ändå?</string>
+    <string name="guardian_oldExchangeRate" comment="Parameters are:  %1$s: Number of hours. E.g: 7.5">Du angav ett belopp som fiatvärde, men växelkursdata är gamla (hämtades för %1$s timmar sedan).\nKontrollera att du har en internetanslutning eller överväg att begära direkt i bitcoin.\n\nVill du fortsätta ändå?</string>
+    <string name="guardian_remoteConnect">Vill du verkligen ansluta till \n\n%1$s\n\nKontrollera värdnamnet noggrant.</string>
+    <string name="guardian_remoteConnect_nwc">Vill du verkligen ansluta till \n\n%1$s\n\nKontrollera den offentliga nyckeln innan du lägger till plånboken.</string>
+    <string name="guardian_externalLink">Du är på väg att öppna en länk med känsliga data i webbläsaren. BitBanana anonymiserar all trafik med Tor-nätverket, men det gör inte din webbläsare. Om du vill hålla dessa data privata använder du en Tor-webbläsare för att öppna länken.</string>
+    <string name="guardian_oldNodeSoftwareVersion">Dags för en uppdatering!\n\nNoden du är ansluten till kör en föråldrad version av %1$s. Versioner före %2$s stöds inte längre av BitBanana.</string>
+    <string name="guardian_zero_amount_invoice">Den här fakturan anger inget belopp. Fakturor utan ett specifikt belopp kan, även om det är mycket osannolikt, utnyttjas så att mottagaren får mindre än förväntat. Använd om möjligt en faktura med ett specifikt belopp.</string>
+    <string name="guardian_certificate_verification">Om certifikatverifiering är inaktiverad är du sårbar för en man-in-the-middle-attack. Gör bara detta om du vet vad du gör.\n\nDet rekommenderas att konfigurera certifikatet korrekt i stället.\nDet innebär att certifikatet från din nod måste innehålla det värdnamn som du använder i denna anslutningsinställning. Lägg till värdnamnet i tlsextradomain i lnd.conf innan du återskapar certifikatet.</string>
+    <string name="guardian_backup_overrides_existing_data">Vissa data finns redan!\nNär en säkerhetskopia återställs raderas följande data före återställningen:\n\n- Nodanslutningsdata\n- Kontakter\n- Etiketter\n\nFortsätta?</string>
+    <string name="guardian_invoices_without_specified_amount">Fakturor utan specifikt belopp medför en säkerhetsrisk. Mellanhänder längs vägen kan, även om det är mycket osannolikt, utnyttja sådana fakturor så att mottagaren får mindre än förväntat utan att det upptäcks. Denna risk finns inte vid betalningar över en direkt kanal.</string>
+    <string name="guardian_custodial_lndhub">Detta är ett LndHub-konto. Om du inte är värd för LndHub-tjänsten är upplägget förvaltande. Den som hanterar tjänsten kontrollerar dina pengar och kan se din transaktionshistorik. Sätt endast in belopp som du är villig att anförtro dem.</string>
+    <string name="guardian_custodial_nwc">Du är ansluten till en plånbok med protokollet Nostr Wallet Connect. Om du inte är värd för Nostr Wallet Connect-tjänsten är upplägget förvaltande. Den som hanterar tjänsten kontrollerar dina pengar och kan se din transaktionshistorik. Sätt endast in belopp som du är villig att anförtro dem.</string>
+    <string name="guardian_low_onchain_fee" comment="Parameters are:  %1$d: Number of hours. E.g: 7.5">Den aktuella avgiftsberäkningen föreslår att denna transaktion med avgiftssatsen %1$d sat/vB kanske aldrig bekräftas. Överväg att höja avgiften så att transaktionen inte fastnar under lång tid.\n\nVill du fortsätta ändå?</string>
+    <string name="guardian_remove_watchtower">Om du tar bort vaktorn avslutas alla aktuella sessioner som är kopplade till den. Vissa sessioner är inte förbrukade ännu. Återstående säkerhetskopior går förlorade och återbetalas inte, även om du har betalat för tjänsten.</string>
+    <string name="guardian_custodial_lnd_accounts">Du har endast åtkomst till ett konto på LND-noden. Om du inte är nodoperatören är upplägget förvaltande. Den som hanterar noden kontrollerar dina pengar och kan se din transaktionshistorik. Sätt endast in belopp som du är villig att anförtro personen.</string>
+    <string name="guardian_release_utxo">Denna UTXO låstes inte av dig med BitBananas gränssnitt och är troligen låst av en god anledning. Lås endast upp den om du är säker på att det är nödvändigt.</string>
+    <string name="guardian_copy_logs">Tänk på att den kopierade loggen kan innehålla känsliga data. Kontrollera och ta bort konfidentiell information innan du delar den med någon.</string>
+    <string name="guardian_consolidate_utxos">Att konsolidera UTXO:er kan försämra din integritet genom att koppla ihop adresser. Det visar att ingångsadresserna sannolikt tillhör samma part, vilket gör transaktionshistoriken lättare att analysera och spåra i blockkedjan.</string>
+    <string name="guardian_emergency_unlock_ineffective">Eftersom biometrisk autentisering är aktiverad kan denna funktion kringgås, eftersom biometrin utlöser vanlig upplåsning i stället för nödupplåsning. Inaktivera biometrisk autentisering för att säkerhetsåtgärden ska vara effektiv.</string>
+    <string name="guardian_emergency_unlock_ineffective_2">Du har aktiverat nödupplåsning. Om du aktiverar biometrisk autentisering kringgår en biometrisk inloggning nödupplåsningsskyddet och utlöser vanlig upplåsning i stället. Aktivera inte biometri om du vill behålla det fulla skyddet från nödupplåsning.</string>
 </resources>
