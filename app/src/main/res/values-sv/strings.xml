@@ -807,4 +807,33 @@
     <string name="advanced_channel_details_close_initiator">Initiativtagare till stängning</string>
     <string name="advanced_channel_details_commit_fee">Åtagandeavgift</string>
     <string name="advanced_channel_details_time_lock">Tidslås</string>
+    <string name="connection_security_info_tls_certificate_issuer">Certifikatutfärdare</string>
+    <string name="quick_receive_info_off">När Snabb mottagning är avstängd får du välja vad du vill ha varje gång du trycker på ”Ta emot”.</string>
+    <string name="quick_receive_info_bolt12">En betalningskod, även kallad BOLT 12, är en statisk återanvändbar identifierare som inte kräver någon webbtjänst. Den innehåller all information som behövs för att skicka en betalning direkt över Lightning-nätverket.</string>
+    <string name="quick_receive_info_on_chain_address">Detta använder nästa oanvända adress i kedjan.</string>
+    <string name="quick_receive_info_on_chain_address_part2">Den här metoden rekommenderas dock inte eftersom den inte stöder Lightning-betalningar.</string>
+    <string name="quick_receive_info_on_chain_and_ln_address">Den här metoden använder nästa oanvända adress i kedjan som reserv när avsändaren inte stöder Lightning-betalningar.</string>
+    <string name="quick_receive_info_on_chain_and_bolt12">Den här metoden använder nästa oanvända adress i kedjan som reserv när avsändaren inte stöder betalningskoder.</string>
+    <string name="quick_receive_type_on_chain_address">Adress i kedjan</string>
+    <string name="quick_receive_type_on_chain_and_ln_address">Adress i kedjan + Lightning-adress</string>
+    <string name="quick_receive_type_on_chain_and_bolt12">Adress i kedjan + betalningskod</string>
+    <string name="refer_to_docs_ln_address">Se dokumentationen för vägledning om hur du skaffar en Lightning-adress.</string>
+    <string name="use_biometrics">Använd biometri</string>
+    <string name="unlock_app">Lås upp</string>
+    <string name="label_add">Lägg till en etikett</string>
+    <string name="label_edit">Redigera etikett</string>
+    <string name="pulling_payment_data">Hämtar betalningsdata…</string>
+    <string name="notification_permission_rationale_title">Tillåt aviseringar</string>
+    <string name="notification_permission_rationale">För att anslutningen ska vara stabil när du växlar app kör BitBanana en bakgrundstjänst efter att appen minimerats. Android kräver en avisering för att tjänsten ska fungera, så aviseringar gör att anslutningen förblir aktiv i bakgrunden några minuter.</string>
+    <string name="notification_permission_rationale_cancelled">Utan behörighet för aviseringar förlorar appen anslutningen när den minimeras. Överväg att tillåta aviseringar.</string>
+    <string name="keep_alive_notification_title">Aktiv anslutning</string>
+    <string name="keep_alive_notification_description">Anslutningen är fortfarande aktiv.</string>
+    <string name="keep_alive_notification_channel_name">Bakgrundsanslutning</string>
+    <string name="keep_alive_notification_channel_description">Håller anslutningen aktiv i bakgrunden</string>
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Slutdatum</string>
+    <string name="error_withdraw_max_amount" comment="Parameters are:  %1$s: amount">Det högsta belopp som betalaren tillåter är %1$s</string>
+    <string name="error_withdraw_min_amount" comment="Parameters are:  %1$s: amount">Det lägsta belopp som betalaren tillåter är %1$s</string>
+    <string name="error_nfc_no_withdrawal">Ogiltiga NFC-data: endast uttagsinstruktioner accepteras här.</string>
+    <string name="payment_in_progress">Betalning pågår…</string>
 </resources>
