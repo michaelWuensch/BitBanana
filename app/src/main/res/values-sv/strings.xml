@@ -430,4 +430,48 @@
     <string name="error_connection_clngrpc_parameterDecodingFailed">Den angivna anslutningssträngen för clngrpc är ogiltig eftersom parametrarna inte följer specifikationen.</string>
     <string name="error_connection_rest_authentication">Autentisering med Rest API misslyckades.</string>
     <string name="error_wrong_password">Fel lösenord</string>
+    <string name="error_invalid_data_to_create_channel">Ogiltigt format.\nAnvänd något av följande:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-kanal</string>
+    <string name="error_lightning_uri_invalid">Ogiltigt format.\nAnvänd något av följande:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
+    <string name="error_channel_open_node_setup">Du måste först ansluta till en nod innan du öppnar en kanal.</string>
+    <string name="error_connect_peer">Kunde inte upprätta anslutning till motpartsnoden.</string>
+    <string name="error_connect_peer_refused">Anslutningen nekades av motparten.</string>
+    <string name="error_connect_peer_self">Det går inte att ansluta till dig själv.</string>
+    <string name="error_connect_peer_no_host">Det går inte att ansluta till nod utan IP-adress eller värd.</string>
+    <string name="error_connect_peer_timeout">Kunde inte ansluta till motparten inom tidsgränsen.</string>
+    <string name="error_channel_open_pending_max">Antalet väntande kanaler överskrider maxvärdet.</string>
+    <string name="error_channel_open_timeout">Kanalen kunde inte öppnas inom tidsgränsen.</string>
+    <string name="error_channel_open">Kunde inte öppna kanal med ansluten nod: %s</string>
+    <string name="error_get_peers">Kunde inte hämta listan över motparter.</string>
+    <string name="error_get_peers_timeout">Motparter kunde inte hämtas inom tidsgränsen.</string>
+    <string name="error_channel_close_offline">Motparten är frånkopplad. Endast tvångsstängning är tillåten.</string>
+    <string name="error_channel_close_timeout">Kanalen kunde inte stängas inom tidsgränsen.</string>
+    <string name="error_channel_close">Kunde inte stänga kanal: %s</string>
+    <string name="error_pin_deactivation_attempt">Det verkar som att någon försökte inaktivera applåsskärmen. Appen stängs nu.\nDu kan installera om appen och använda återställningsprocessen för att återfå åtkomst till dina medel.</string>
+    <string name="error_empty_node_name">Ett tomt namn är inte tillåtet.</string>
+    <string name="error_invalid_bitcoin_request">Ogiltig bitcoinbegäran.</string>
+    <string name="error_payment_invalid_details">Betalningsuppgifterna stämde inte med uppgifterna i fakturan som du försöker betala.</string>
+    <string name="error_payment_timeout">Timeout. Ingen rutt kunde hittas.</string>
+    <string name="error_payment_no_route">Ingen rutt hittades som respekterar din avgiftsgräns på %1$.1f%%. Att höja avgiftsgränsen i inställningarna eller öppna nya kanaler kan lösa problemet.</string>
+    <string name="error_payment_no_route_small_amount">Ingen rutt hittades. Du försöker skicka ett så litet belopp att många kanaler kanske inte dirigerar det. Kontrollera dirigeringsinställningarna för dina egna kanaler och anpassa vid behov MinHTLC-värdet.</string>
+    <string name="error_payment_insufficient_balance">Beloppet som ska betalas är större än vad du kan skicka via Lightning med dina nuvarande öppna kanaler.</string>
+    <string name="error_payment_keysend_not_enabled_on_remote">Kontrollera att mottagaren har aktiverat funktionen keysend.</string>
+    <string name="error_payment_canceled">Avsändaren avbröt betalningen.</string>
+    <string name="error_only_payment_data_allowed">Endast betalningsdata är tillåtna här.</string>
+    <string name="error_node_not_yet_ready">Noden är inte helt synkroniserad ännu. Försök igen senare.</string>
+    <string name="error_tor_blocked_lnurl" comment="Parameters are:  %1$s: hostname">%1$s verkar blockera begäranden från Tor-nätverket. Du kan prova att stänga av Tor i inställningarna eller kontakta tjänsten och be dem uppdatera sina Cloudflare-regler.</string>
+    <string name="error_tor_exchange_rate">Det gick inte att hämta växelkursen. Tjänsten du använder verkar blockera begäranden från Tor-nätverket. Försök byta växelkursleverantör i de avancerade inställningarna.</string>
+    <string name="error_static_identifier_response_unknown" comment="Parameters are:  %1$s: hostname">Svaret från %1$s kunde inte läsas.</string>
+    <string name="error_lnd_connection_failed">Anslutning till LND misslyckades, försök igen.</string>
+    <string name="error_invalid_fee_preset_value">Värdet måste vara större än 0.</string>
+    <string name="error_invalid_ln_address_format">Ogiltigt format för Lightning-adress. En Lightning-adress liknar en e-postadress.\n\nanvändarnamn@domän</string>
+    <string name="error_invalid_bolt12_offer_format">Ogiltig betalningskod.</string>
+    <string name="error_routing_policy_only_partially_updated" comment="Parameters are:  %1$d: number of channels">Dirigeringsprinciperna uppdaterades, men de nya reglerna kunde inte tillämpas för %1$d av dina kanaler.</string>
+    <string name="error_routing_policy_fee_rate_too_high" comment="Parameters are:  %1$.2f: percent">Avgiftssatsen är för hög. Högst %1$.2f%% tillåts.</string>
+    <string name="error_no_permission_to_read_file">Åtkomst nekades: filen kunde inte läsas. Vi rekommenderar att du flyttar den till en annan plats, till exempel mappen ”Hämtade filer”, och öppnar den därifrån.</string>
+    <string name="error_block_explorer_setup_invalid">Konfigurationen av blockutforskaren är ogiltig.</string>
+    <string name="error_funds_not_confirmed_yet">Du har tillräckligt med medel i kedjan, men bekräftelsen väntar fortfarande. Vänta tills dina medel i kedjan har bekräftats. Du kan följa statusen via UTXO-vyn eller transaktionshistoriken.</string>
+    <string name="error_insufficient_on_chain_funds">Otillräckliga medel i kedjan. Högsta tillgängliga:</string>
+    <string name="error_insufficient_lightning_sending_liquidity">Otillräcklig Lightning-likviditet för att skicka. Öppna fler kanaler för att öka den.\nNuvarande högsta belopp:</string>
+    <string name="error_insufficient_lightning_receive_liquidity" comment="Parameters are:  %1$s: amount">Högsta belopp: %1$s\n\nOtillräcklig Lightning-likviditet. Öka dina kanalers mottagningskapacitet för att höja denna gräns.</string>
+    <string name="error_tor_might_cause_problem">Tor kan orsaka problemet. Försök inaktivera Tor i inställningarna.</string>
 </resources>
