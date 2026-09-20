@@ -1,0 +1,19 @@
+⚡️ Superkrafter för dig och din Bitcoin Lightning-nod! Använd och hantera din nod var du än befinner dig. ⚡️
+
+BitBanana är en inbyggd Android-app för nodoperatörer, med fokus på användarupplevelse och enkelhet.
+Även om appen inte är en plånbok i sig, fungerar BitBanana som en fjärrkontroll som låter dig använda din nod som en plånbok var du än är.
+Appen är utformad med ett pedagogiskt fokus och ger användaren vägledning kring alla aspekter av nodhantering.
+
+BitBanana är öppen källkod och ger dig full kontroll över dina tillgångar (self-custodial).
+
+Funktioner:
+- Hantera flera noder
+- On-chain-transaktioner och Lightning-betalningar
+- Kanalhantering
+- Sammanfattning av routing
+- Kontakter
+- Signera/Verifiera
+- NFC-stöd
+- Tor-stöd
+- 100 % öppen källkod
+... och många fler funktioner att utforska!
