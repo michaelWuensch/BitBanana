@@ -16,6 +16,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.lnurl.auth.LnUrlAuth;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -93,6 +94,12 @@ public class SignView extends LinearLayout {
     private void sign() {
         if (BackendManager.hasBackendConfigs()) {
             String message = mEtMessageToSign.getText().toString();
+            if (message.trim().equals(LnUrlAuth.CANONICAL_PHRASE)) {
+                // Signing this phrase would disclose the secret all LNURL-auth identities of this node are derived from (LUD-13).
+                BBLog.w(LOG_TAG, "Refused to sign the LNURL-auth canonical phrase.");
+                ((BaseAppCompatActivity) mContext).showError(mContext.getString(R.string.sign_message_lnurl_auth_phrase_refused), RefConstants.ERROR_DURATION_LONG);
+                return;
+            }
             if (!message.isEmpty()) {
                 mCompositeDisposable.add(BackendManager.api().signMessageWithNode(message)
                         .subscribe(response -> {
