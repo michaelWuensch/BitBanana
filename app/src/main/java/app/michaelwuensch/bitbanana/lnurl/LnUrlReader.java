@@ -93,7 +93,8 @@ public class LnUrlReader {
             try {
                 // Check the full data or the extracted LNURL from above to see if it is a valid LNURL
                 String decodedLnUrl = LnurlDecoder.decode(data);
-                BBLog.v(LOG_TAG, "Decoded LNURL: " + decodedLnUrl);
+                // The LNURL might be a bearer token (e.g. an unused LNURL-withdraw link). It is only logged completely in debug builds.
+                BBLog.v(LOG_TAG, "Decoded LNURL: " + BBLog.redactSensitive(decodedLnUrl));
 
                 boolean lnurlHandled = handleLNURLAuth(ctx, decodedLnUrl, listener);
                 if (lnurlHandled)

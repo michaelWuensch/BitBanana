@@ -196,7 +196,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
                 .setIsPrivate(mPrivateCheckbox.isChecked())
                 .build();
 
-        BBLog.v(TAG, lnUrlFinalOpenChannelRequest.requestAsString());
+        BBLog.v(TAG, BBLog.redactSensitive(lnUrlFinalOpenChannelRequest.requestAsString())); // Contains k1
 
 
         okhttp3.Request lnUrlRequest = new okhttp3.Request.Builder()

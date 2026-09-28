@@ -150,7 +150,7 @@ public class LnUrlAuth {
                 .setLinkingKey(HexUtil.bytesToHex(linkingKey))
                 .build();
 
-        BBLog.d(LOG_TAG, "Final auth request: " + lnUrlFinalAuthRequest.requestAsString());
+        BBLog.d(LOG_TAG, "Final auth request: " + BBLog.redactSensitive(lnUrlFinalAuthRequest.requestAsString())); // Contains signature and the linking key (the users identity at this service)
 
         okhttp3.Request lnUrlRequest = new Request.Builder()
                 .url(lnUrlFinalAuthRequest.requestAsString())

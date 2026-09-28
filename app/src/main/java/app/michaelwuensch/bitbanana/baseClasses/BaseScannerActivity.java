@@ -173,7 +173,8 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
                                 mVibrator.vibrate(RefConstants.VIBRATE_SHORT);
                                 mLastScanTimestamp = System.currentTimeMillis();
                                 mLastScannedText = resultsList.get(0).getText();
-                                BBLog.v(LOG_TAG, "Scanned content: " + resultsList.get(0).getText());
+                                // The content might contain credentials (e.g. lndconnect or nostr+walletconnect). They are only logged in debug builds.
+                                BBLog.v(LOG_TAG, "Scanned content: " + BBLog.redactSensitive(resultsList.get(0).getText()));
                                 runOnUiThread(() -> handleCameraResult(resultsList.get(0).getText()));
                             }
                         }

@@ -319,7 +319,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                         .setPayerData(mPayerData)
                         .build();
 
-                BBLog.d(LOG_TAG, "Sent following request to service: " + lnUrlSecondPayRequest.requestAsString());
+                BBLog.d(LOG_TAG, "Sent following request to service: " + BBLog.redactSensitive(lnUrlSecondPayRequest.requestAsString())); // Might contain payer data
 
 
                 okhttp3.Request lnUrlRequest = new Request.Builder()
@@ -361,7 +361,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
 
     private void validateSecondResponse(@NonNull String secondPayResponse) {
 
-        BBLog.d(LOG_TAG, "Second pay response: " + secondPayResponse);
+        BBLog.d(LOG_TAG, "Second pay response: " + BBLog.redactSensitive(secondPayResponse)); // Might contain a success action with a secret
 
         LnUrlPaySecondResponse lnUrlPaySecondResponse = null;
         try {
@@ -477,10 +477,10 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             BBLog.d(LOG_TAG, "No Success action.");
             mTvSuccessActionText.setVisibility(View.GONE);
         } else if (successAction.isMessage()) {
-            BBLog.d(LOG_TAG, "SuccessAction: Message: " + successAction.getMessage());
+            BBLog.d(LOG_TAG, "SuccessAction: Message: " + BBLog.redactSensitive(successAction.getMessage())); // Might be a voucher code or similar
             mTvSuccessActionText.setText(successAction.getMessage());
         } else if (successAction.isUrl()) {
-            BBLog.d(LOG_TAG, "SuccessAction: Url: " + successAction.getUrl());
+            BBLog.d(LOG_TAG, "SuccessAction: Url: " + BBLog.redactSensitive(successAction.getUrl())); // Might contain a token
             mTvSuccessActionText.setVisibility(View.GONE);
 
             ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl());
@@ -516,7 +516,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             BBLog.d(LOG_TAG, "SuccessAction: Aes.");
             try {
                 String decrypted = decrypt(successAction.getCiphertext(), HexUtil.hexToBytes(sendLnPaymentResponse.getPaymentPreimage()), successAction.getIv());
-                BBLog.d(LOG_TAG, "Decrypted secret is: " + decrypted);
+                BBLog.d(LOG_TAG, "Decrypted secret is: " + BBLog.redactSensitive(decrypted)); // This is what the user paid for (e.g. a voucher code)
                 mTvSuccessActionText.setVisibility(View.GONE);
 
                 ClipBoardUtil.copyToClipboard(getActivity(), "Code", decrypted);
