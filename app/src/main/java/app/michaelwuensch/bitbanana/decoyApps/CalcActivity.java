@@ -8,12 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.mariuszgromada.math.mxparser.Expression;
 
 import app.michaelwuensch.bitbanana.LandingActivity;
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.EdgeToEdgeUtil;
 
 /**
  * A simple calculator app that actually works and can be used as decoy app to hide BitBanana
@@ -23,6 +25,13 @@ public class CalcActivity extends AppCompatActivity {
 
     private TextView mTvResult;
     private EditText mEtInput;
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Keep the look from before edge-to-edge was enforced (Android 15+).
+        EdgeToEdgeUtil.applyLegacySystemBarLayout(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
