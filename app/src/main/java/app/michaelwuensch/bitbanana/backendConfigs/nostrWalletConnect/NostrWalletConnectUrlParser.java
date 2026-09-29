@@ -144,7 +144,7 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
                     try {
                         NostrWalletConnectUri.Companion.parse(mConnectionString);
                     } catch (Exception e) {
-                        BBLog.e(LOG_TAG, "Rust.nostr nwc uri parsing failed. Exception message: " + e.getMessage());
+                        BBLog.e(LOG_TAG, "Rust.nostr nwc uri parsing failed. Exception message: " + BBLog.redactSensitiveException(e)); // The message might contain the connection string including its secret.
                         mError = ERROR_INVALID_CONNECT_STRING;
                         return this;
                     }
@@ -179,7 +179,7 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
             }
 
         } catch (Exception e) {
-            BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + e.getMessage());
+            BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + BBLog.redactSensitiveException(e)); // The message contains the connection string including its credentials.
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }

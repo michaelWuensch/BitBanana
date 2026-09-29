@@ -864,6 +864,7 @@
     <string name="signature_valid">Signature is valid!</string>
     <string name="signature_invalid">Signature is invalid!</string>
     <string name="signature_pubkey">Pubkey:</string>
+    <string name="sign_message_lnurl_auth_phrase_refused">This message cannot be signed. Its signature would give away access to all accounts you log in to with LNURL-auth. Whoever asked you to sign it is most likely trying to steal your identity.</string>
 
     <string name="channel_summary_total_outbound">Sending capacity</string>
     <string name="channel_summary_total_inbound">Receiving capacity</string>

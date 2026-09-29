@@ -46,9 +46,10 @@ public class NfcUtil {
                     // Process the messages array.
                     NdefMessage message = messages[0];
 
-                    BBLog.v(LOG_TAG, "Ndef message: " + message);
+                    // The toString() of message and record contains the payload, which might contain credentials. They are only logged completely in debug builds.
+                    BBLog.v(LOG_TAG, "Ndef message: " + BBLog.redactSensitive(String.valueOf(message)));
                     NdefRecord[] records = message.getRecords();
-                    BBLog.v(LOG_TAG, "Ndef record: " + records[0]);
+                    BBLog.v(LOG_TAG, "Ndef record: " + BBLog.redactSensitive(String.valueOf(records[0])));
                     if (records[0].getTnf() == NdefRecord.TNF_WELL_KNOWN) {
                         byte[] rawPayload = records[0].getPayload();
                         String payload = null;
@@ -58,7 +59,8 @@ public class NfcUtil {
                                 sb.append((char) rawPayload[i]);
                             }
                             payload = sb.toString();
-                            BBLog.d(LOG_TAG, "Ndef payload: " + payload);
+                            // The payload might contain credentials (e.g. lndconnect or nostr+walletconnect). They are only logged in debug builds.
+                            BBLog.d(LOG_TAG, "Ndef payload: " + BBLog.redactSensitive(payload));
                             listener.onSuccess(payload);
                         } else if (Arrays.equals(records[0].getType(), NdefRecord.RTD_TEXT)) {
                             int statusByte = rawPayload[0];

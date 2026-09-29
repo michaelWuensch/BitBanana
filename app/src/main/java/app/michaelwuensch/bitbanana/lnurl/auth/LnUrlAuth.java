@@ -34,7 +34,8 @@ import okhttp3.Response;
  */
 public class LnUrlAuth {
     private static final String LOG_TAG = LnUrlAuth.class.getSimpleName();
-    private static final String CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
+    // LUD-13: The signature of this phrase is the secret all LNURL-auth identities are derived from. It must never be signed for anything else.
+    public static final String CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
     public static final int ACTION_REGISTER = 0;
     public static final int ACTION_LOGIN = 1;
     public static final int ACTION_LINK = 2;
@@ -149,7 +150,7 @@ public class LnUrlAuth {
                 .setLinkingKey(HexUtil.bytesToHex(linkingKey))
                 .build();
 
-        BBLog.d(LOG_TAG, "Final auth request: " + lnUrlFinalAuthRequest.requestAsString());
+        BBLog.d(LOG_TAG, "Final auth request: " + BBLog.redactSensitive(lnUrlFinalAuthRequest.requestAsString())); // Contains signature and the linking key (the users identity at this service)
 
         okhttp3.Request lnUrlRequest = new Request.Builder()
                 .url(lnUrlFinalAuthRequest.requestAsString())

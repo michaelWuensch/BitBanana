@@ -137,7 +137,7 @@ public class LndConnectStringParser extends BaseConnectionParser {
             }
 
         } catch (Exception e) {
-            BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + e.getMessage());
+            BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + BBLog.redactSensitiveException(e)); // The message contains the connection string including its credentials.
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
         }

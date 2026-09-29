@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -76,6 +77,11 @@ public class BaseBSDFragment extends RxBSDFragment {
             });
 
         } catch (Exception ignored) {
+        }
+
+        // With enforced edge-to-edge (Android 15+) the system would draw a translucent scrim behind the 3-button navigation bar.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && getDialog().getWindow() != null) {
+            getDialog().getWindow().setNavigationBarContrastEnforced(false);
         }
 
         // Apply FLAG_SECURE to dialog to prevent screen recording

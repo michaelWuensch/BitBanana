@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.util.EdgeToEdgeUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RtlTransitions;
 
@@ -47,6 +48,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         RtlTransitions.applyCloseTransition(this);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Keep the look from before edge-to-edge was enforced (Android 15+).
+        EdgeToEdgeUtil.applyLegacySystemBarLayout(this);
     }
 
     @Override
