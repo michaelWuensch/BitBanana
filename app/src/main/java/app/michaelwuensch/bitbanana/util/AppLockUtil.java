@@ -2,8 +2,10 @@ package app.michaelwuensch.bitbanana.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.SystemClock;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.appLock.PasswordEntryActivity;
@@ -15,6 +17,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 public class AppLockUtil {
 
     private static final String LOG_TAG = AppLockUtil.class.getSimpleName();
+    private static final String FAILED_UNLOCK_ELAPSED_REALTIME = "failedUnlockElapsedRealtime";
     public static boolean isLockScreenShown;
     public static boolean isEmergencyUnlocked;
 
@@ -88,6 +91,61 @@ public class AppLockUtil {
             // Access granted
             onSecurityCheckPerformedListener.onAccessGranted();
         }
+    }
+
+    /**
+     * Has to be called after a failed unlock attempt, once APP_NUM_UNLOCK_FAILS was increased.
+     * Starts the input delay if the number of failed attempts requires one.
+     *
+     * @param numFails number of failed attempts including the current one
+     * @return the input delay in milliseconds, 0 if there is none
+     */
+    public static long registerFailedUnlockAttempt(int numFails) {
+        long delay = getUnlockDelayMillis(numFails);
+        if (delay > 0) {
+            // We use the time since boot instead of the wall clock, as the wall clock can be changed by the user to skip the delay.
+            PrefsUtil.editPrefs().putLong(FAILED_UNLOCK_ELAPSED_REALTIME, SystemClock.elapsedRealtime()).apply();
+        }
+        return delay;
+    }
+
+    /**
+     * Returns how long the user still has to wait before the next unlock attempt is allowed.
+     *
+     * @param numFails number of failed attempts so far
+     * @return remaining input delay in milliseconds, 0 if input is allowed
+     */
+    public static long getRemainingUnlockDelayMillis(int numFails) {
+        long delay = getUnlockDelayMillis(numFails);
+        if (delay == 0)
+            return 0;
+
+        long now = SystemClock.elapsedRealtime();
+        long start = PrefsUtil.getPrefs().getLong(FAILED_UNLOCK_ELAPSED_REALTIME, -1);
+        if (start < 0 || start > now) {
+            // Either no start is known (e.g. update from a version that used the wall clock) or the device was rebooted since the failed attempt.
+            // In both cases we cannot know how much time passed, therefore the full delay starts again.
+            PrefsUtil.editPrefs().putLong(FAILED_UNLOCK_ELAPSED_REALTIME, now).apply();
+            return delay;
+        }
+        // If a reboot happened and the uptime already exceeds the stored value, the calculated time is shorter than the actual time passed.
+        // This only results in a longer delay, never in a shorter one.
+        return Math.max(0, delay - (now - start));
+    }
+
+    /**
+     * The delay starts after APP_LOCK_MAX_FAILS failed attempts and doubles with every further failed attempt up to APP_LOCK_MAX_DELAY_TIME.
+     */
+    private static long getUnlockDelayMillis(int numFails) {
+        if (numFails < RefConstants.APP_LOCK_MAX_FAILS)
+            return 0;
+        int doublings = Math.min(numFails - RefConstants.APP_LOCK_MAX_FAILS, 20);
+        long delay = (RefConstants.APP_LOCK_START_DELAY_TIME * 1000L) << doublings;
+        return Math.min(delay, RefConstants.APP_LOCK_MAX_DELAY_TIME * 1000L);
+    }
+
+    public static String getUnlockDelayMessage(Context context, long delayMillis) {
+        return context.getString(R.string.pin_entered_wrong_wait, String.valueOf((delayMillis + 999) / 1000));
     }
 
     public static void emergencyClearAll() {

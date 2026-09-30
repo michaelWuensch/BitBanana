@@ -373,35 +373,30 @@ public class PinSetupFragment extends Fragment {
 
 
         // If the user closed and restarted the activity he still has to wait until the PIN input delay is over.
-        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
-
-            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
-
-            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
-
-                for (Button btn : mBtnNumpad) {
-                    btn.setEnabled(false);
-                    btn.setAlpha(0.3f);
-                }
-
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000)));
-                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (Button btn : mBtnNumpad) {
-                            btn.setEnabled(true);
-                            btn.setAlpha(1f);
-                        }
-                    }
-                }, RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff);
-            }
+        long remainingDelay = AppLockUtil.getRemainingUnlockDelayMillis(mNumFails);
+        if (remainingDelay > 0) {
+            Toast.makeText(getActivity(), AppLockUtil.getUnlockDelayMessage(getActivity(), remainingDelay), Toast.LENGTH_LONG).show();
+            disableNumpadFor(remainingDelay);
         }
 
 
         return view;
+    }
+
+    private void disableNumpadFor(long millis) {
+        for (Button btn : mBtnNumpad) {
+            btn.setEnabled(false);
+            btn.setAlpha(0.3f);
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (Button btn : mBtnNumpad) {
+                    btn.setEnabled(true);
+                    btn.setAlpha(1f);
+                }
+            }
+        }, millis);
     }
 
     private void displayUserInput() {
@@ -496,6 +491,18 @@ public class PinSetupFragment extends Fragment {
     }
 
     public void pinEntered() {
+        // Ensure the input delay is enforced, even if the numpad was not disabled for some reason.
+        if (mMode == ENTER_MODE) {
+            long remainingDelay = AppLockUtil.getRemainingUnlockDelayMillis(mNumFails);
+            if (remainingDelay > 0) {
+                mUserInput.setLength(0);
+                displayUserInput();
+                Toast.makeText(getActivity(), AppLockUtil.getUnlockDelayMessage(getActivity(), remainingDelay), Toast.LENGTH_LONG).show();
+                disableNumpadFor(remainingDelay);
+                return;
+            }
+        }
+
         // Check if PIN was correct
 
         boolean correct = false;
@@ -540,27 +547,11 @@ public class PinSetupFragment extends Fragment {
                 mUserInput.setLength(0);
                 displayUserInput();
 
-                if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
-                    for (Button btn : mBtnNumpad) {
-                        btn.setEnabled(false);
-                        btn.setAlpha(0.3f);
-                    }
-                    String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.APP_LOCK_DELAY_TIME));
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-
-                    // Save timestamp. This way the delay can also be forced upon restart of the activity.
-                    PrefsUtil.editPrefs().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Button btn : mBtnNumpad) {
-                                btn.setEnabled(true);
-                                btn.setAlpha(1f);
-                            }
-                        }
-                    }, RefConstants.APP_LOCK_DELAY_TIME * 1000);
+                // Start the input delay if required. It is persisted, this way the delay is also enforced upon restart of the activity.
+                long delay = AppLockUtil.registerFailedUnlockAttempt(mNumFails);
+                if (delay > 0) {
+                    Toast.makeText(getActivity(), AppLockUtil.getUnlockDelayMessage(getActivity(), delay), Toast.LENGTH_LONG).show();
+                    disableNumpadFor(delay);
                 } else {
                     // Show error
                     Toast.makeText(getActivity(), R.string.pin_entered_wrong, Toast.LENGTH_SHORT).show();
