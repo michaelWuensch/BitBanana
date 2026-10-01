@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
+import app.michaelwuensch.bitbanana.lnurl.LnUrlSecurityInterceptor;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import okhttp3.OkHttpClient;
@@ -14,11 +15,13 @@ import okhttp3.OkHttpClient;
 public class HttpClient {
     private static HttpClient mHttpClientInstance;
     private OkHttpClient mHttpClient;
+    private OkHttpClient mLnUrlHttpClient;
     private static final String LOG_TAG = HttpClient.class.getSimpleName();
 
 
     private HttpClient() {
         mHttpClient = createHttpClient();
+        mLnUrlHttpClient = createLnUrlHttpClient();
     }
 
     private OkHttpClient createHttpClient() {
@@ -33,6 +36,16 @@ public class HttpClient {
         }
     }
 
+    /**
+     * Derived from the default client. It shares its connection pool, dispatcher and Tor proxy,
+     * but additionally refuses all unencrypted connections that are not allowed for LNURL (LUD-01), including redirects to them.
+     */
+    private OkHttpClient createLnUrlHttpClient() {
+        return mHttpClient.newBuilder()
+                .addNetworkInterceptor(new LnUrlSecurityInterceptor())
+                .build();
+    }
+
     public void restartHttpClient() {
         if (PrefsUtil.isTorEnabled()) {
             BBLog.d(LOG_TAG, "HttpClient restarted. Socks Proxy Port: " + TorManager.getInstance().getSocksProxyPort());
@@ -41,6 +54,7 @@ public class HttpClient {
         }
         mHttpClient.dispatcher().cancelAll();
         mHttpClient = createHttpClient();
+        mLnUrlHttpClient = createLnUrlHttpClient();
     }
 
     public static synchronized HttpClient getInstance() {
@@ -52,5 +66,12 @@ public class HttpClient {
 
     public OkHttpClient getClient() {
         return mHttpClient;
+    }
+
+    /**
+     * Use this client for all requests to LNURL services (including lightning addresses).
+     */
+    public OkHttpClient getLnUrlClient() {
+        return mLnUrlHttpClient;
     }
 }

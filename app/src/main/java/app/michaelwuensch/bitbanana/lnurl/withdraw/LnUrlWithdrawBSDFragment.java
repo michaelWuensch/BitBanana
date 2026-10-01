@@ -221,7 +221,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFo
                                     .url(lnUrlFinalWithdrawRequest.requestAsString())
                                     .build();
 
-                            HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+                            HttpClient.getInstance().getLnUrlClient().newCall(lnUrlRequest).enqueue(new Callback() {
                                 @Override
                                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                                     if (mServiceURLString != null) {

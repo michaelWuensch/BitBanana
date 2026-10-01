@@ -23,6 +23,7 @@ import java.util.Set;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.models.LnAddress;
 import okhttp3.Call;
@@ -151,7 +152,7 @@ public class StaticInternetIdentifierReader {
                     .url(requestUrl)
                     .build();
 
-            HttpClient.getInstance().getClient().newCall(lightningAddressRequest).enqueue(new Callback() {
+            HttpClient.getInstance().getLnUrlClient().newCall(lightningAddressRequest).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     BBLog.e(LOG_TAG, e.getMessage());
@@ -168,6 +169,12 @@ public class StaticInternetIdentifierReader {
                         LnUrlPayResponse lnUrlPayResponse = new Gson().fromJson(responseAsString, LnUrlPayResponse.class);
                         if (lnUrlPayResponse.hasError()) {
                             listener.onError(lnUrlPayResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
+                            return;
+                        }
+                        // The callback is where we will receive the invoice to pay. It has to be secured the same way as any other LNURL (LUD-01).
+                        String callbackError = LnUrlReader.getUrlSecurityError(ctx, lnUrlPayResponse.getCallback());
+                        if (callbackError != null) {
+                            listener.onError(callbackError, RefConstants.ERROR_DURATION_MEDIUM);
                             return;
                         }
                         listener.onValidLnurlPay(lnUrlPayResponse);
