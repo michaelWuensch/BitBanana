@@ -216,13 +216,8 @@ public class BackendConfig implements Comparable<BackendConfig> {
      *  If no override is present, the original host will be returned
      */
     public String getHostWithOverride() {
-        if (host == null)
-            return null;
-        String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
-        if (source.isEmpty())
-            return host;
-        String target = PrefsUtil.getPrefs().getString("overrideHostTarget", "");
-        return host.replace(source, target);
+        // Only applied in debug builds, see PrefsUtil.applyHostOverride().
+        return PrefsUtil.applyHostOverride(host);
     }
 
     public void setHost(String host) {
