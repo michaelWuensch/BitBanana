@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.GeneralSecurityException;
 
+import app.michaelwuensch.bitbanana.BuildConfig;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.customView.OnChainFeeView;
 
@@ -42,6 +43,9 @@ public class PrefsUtil {
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
     public static final String NODE_ALIAS_CACHE = "nodeAliasCache";
+    // Development settings, only visible and active in debug builds. See applyHostOverride().
+    public static final String OVERRIDE_HOST_SOURCE = "overrideHostSource";
+    public static final String OVERRIDE_HOST_TARGET = "overrideHostTarget";
     public static final String FEE_PRESET_FAST = "feePresetFast";
     public static final String FEE_PRESET_MEDIUM = "feePresetMedium";
     public static final String FEE_PRESET_SLOW = "feePresetSlow";
@@ -255,11 +259,23 @@ public class PrefsUtil {
 
     public static String getCustomBlockExplorerHost() {
         String host = getPrefs().getString(CUSTOM_BLOCK_EXPLORER_HOST, "https://mempool.space");
+        return applyHostOverride(host);
+    }
 
-        String source = PrefsUtil.getPrefs().getString("overrideHostSource", "");
+    /**
+     * Development setting: Replaces a part of a host with another string (e.g. if the IP address of a regtest host changed).
+     * <p>
+     * It is only applied in debug builds. In release builds the setting is hidden, so the user could neither see nor undo it.
+     * If it got set anyway (e.g. by restoring a manipulated backup), it would silently redirect all node connections to another host,
+     * which would receive the authentication token (e.g. the macaroon).
+     */
+    public static String applyHostOverride(String host) {
+        if (host == null || !BuildConfig.BUILD_TYPE.equals("debug"))
+            return host;
+        String source = getPrefs().getString(OVERRIDE_HOST_SOURCE, "");
         if (source.isEmpty())
             return host;
-        String target = PrefsUtil.getPrefs().getString("overrideHostTarget", "");
+        String target = getPrefs().getString(OVERRIDE_HOST_TARGET, "");
         return host.replace(source, target);
     }
 
