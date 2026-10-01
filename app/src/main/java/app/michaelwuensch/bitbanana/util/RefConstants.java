@@ -40,7 +40,8 @@ public class RefConstants {
     public static final int PIN_MIN_LENGTH = 4;
     public static final int PIN_MAX_LENGTH = 10;
     public static final int APP_LOCK_MAX_FAILS = 3;
-    public static final int APP_LOCK_DELAY_TIME = 30;
+    public static final int APP_LOCK_START_DELAY_TIME = 30; // Start delay in seconds after APP_LOCK_MAX_FAILS failed attempts. It doubles with every further failed attempt.
+    public static final int APP_LOCK_MAX_DELAY_TIME = 3600; // Upper limit in seconds for the doubling delay.
 
     /* This value has to be increased when something changes that affects the data backup.
     By keeping track of this number backwards compatibility can be ensured

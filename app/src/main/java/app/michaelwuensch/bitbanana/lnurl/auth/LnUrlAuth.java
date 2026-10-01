@@ -156,7 +156,7 @@ public class LnUrlAuth {
                 .url(lnUrlFinalAuthRequest.requestAsString())
                 .build();
 
-        HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+        HttpClient.getInstance().getLnUrlClient().newCall(lnUrlRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 BBLog.e(LOG_TAG, "LNURL: Final Auth request failed: " + e.getMessage());

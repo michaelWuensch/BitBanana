@@ -152,7 +152,7 @@ public class LnPaymentDetailBSDFragment extends BaseBSDFragment implements Label
         mAmount.setAmountMsat(payment.getAmountPaid());
         mFee.setAmountMsat(payment.getFee());
         mPreimage.setText(payment.getPaymentPreimage());
-        mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage()));
+        mPreimageCopyIcon.setOnClickListener(view -> ClipBoardUtil.copyToClipboard(getContext(), "Payment Preimage", payment.getPaymentPreimage(), true));
         mDate.setText(TimeFormatUtil.formatTimeAndDateLong(payment.getCreatedAt(), getActivity()));
 
 

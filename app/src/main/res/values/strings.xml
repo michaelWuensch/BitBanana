@@ -713,6 +713,7 @@
     <string name="lnurl_withdraw_fail">Withdraw\nfailed</string>
     <string name="lnurl_decoding_no_lnurl_data">The data does not contain a valid LNURL.</string>
     <string name="lnurl_withdraw_insufficient_channel_balance">The withdraw amount is bigger than what you can receive over lightning with your current open channels.</string>
+    <string name="lnurl_insecure_connection" comment="Parameters:  %1$s: Host name of the service">%1$s uses an unencrypted connection (http). To protect you, BitBanana only connects to LNURL services that use https or Tor (.onion).</string>
     <string name="lnurl_unsupported_type">Unsupported LNURL type</string>
     <string name="lnurl_service_not_responding">%s is not responding</string>
     <string name="lnurl_service">Service</string>

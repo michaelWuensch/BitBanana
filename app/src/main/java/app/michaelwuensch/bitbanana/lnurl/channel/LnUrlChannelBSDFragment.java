@@ -203,7 +203,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
                 .url(lnUrlFinalOpenChannelRequest.requestAsString())
                 .build();
 
-        HttpClient.getInstance().getClient().newCall(lnUrlRequest).enqueue(new Callback() {
+        HttpClient.getInstance().getLnUrlClient().newCall(lnUrlRequest).enqueue(new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

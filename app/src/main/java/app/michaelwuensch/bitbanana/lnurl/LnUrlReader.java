@@ -3,6 +3,8 @@ package app.michaelwuensch.bitbanana.lnurl;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -27,6 +29,7 @@ import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -56,11 +59,11 @@ public class LnUrlReader {
                 listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
                 return;
             }
-            String lnurl;
-            if (data.toLowerCase().contains(".onion")) {
-                lnurl = "http://" + UriUtil.removeURI(data);
-            } else {
-                lnurl = "https://" + UriUtil.removeURI(data);
+            String lnurl = lud17ToUrl(data);
+            String urlError = getUrlSecurityError(ctx, lnurl);
+            if (urlError != null) {
+                listener.onError(urlError, RefConstants.ERROR_DURATION_MEDIUM);
+                return;
             }
 
             boolean lnurlHandled = handleLNURLAuth(ctx, lnurl, listener);
@@ -95,6 +98,12 @@ public class LnUrlReader {
                 String decodedLnUrl = LnurlDecoder.decode(data);
                 // The LNURL might be a bearer token (e.g. an unused LNURL-withdraw link). It is only logged completely in debug builds.
                 BBLog.v(LOG_TAG, "Decoded LNURL: " + BBLog.redactSensitive(decodedLnUrl));
+
+                String urlError = getUrlSecurityError(ctx, decodedLnUrl);
+                if (urlError != null) {
+                    listener.onError(urlError, RefConstants.ERROR_DURATION_MEDIUM);
+                    return;
+                }
 
                 boolean lnurlHandled = handleLNURLAuth(ctx, decodedLnUrl, listener);
                 if (lnurlHandled)
@@ -146,7 +155,7 @@ public class LnUrlReader {
                 .build();
 
         BBLog.v(LOG_TAG, "LNURL: Requesting data...");
-        HttpClient.getInstance().getClient().newCall(lnurlRequest).enqueue(new Callback() {
+        HttpClient.getInstance().getLnUrlClient().newCall(lnurlRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 URL url = null;
@@ -194,6 +203,15 @@ public class LnUrlReader {
             BBLog.w(LOG_TAG, "LNURL: Request invalid. Reason: " + lnUrlResponse.getReason());
             listener.onError(lnUrlResponse.getReason(), RefConstants.ERROR_DURATION_MEDIUM);
         } else {
+            // The callback is where we send our invoice (withdraw), receive the invoice to pay (pay) or request the channel (channel).
+            // It has to be secured the same way as the LNURL itself.
+            if (lnUrlResponse.isWithdraw() || lnUrlResponse.isPayRequest() || lnUrlResponse.isChannelRequest()) {
+                String callbackError = getUrlSecurityError(ctx, lnUrlResponse.getCallback());
+                if (callbackError != null) {
+                    listener.onError(callbackError, RefConstants.ERROR_DURATION_MEDIUM);
+                    return;
+                }
+            }
             try {
                 if (lnUrlResponse.isWithdraw()) {
                     BBLog.d(LOG_TAG, "LNURL: valid withdraw data received...");
@@ -219,6 +237,50 @@ public class LnUrlReader {
                 listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
             }
         }
+    }
+
+    /**
+     * LUD-01: LNURL services have to use https. The only exception are Tor onion services, which may use http,
+     * as Tor already encrypts and authenticates the connection.
+     * This applies to the LNURL itself as well as to all callback URLs a service returns.
+     *
+     * @return true if the url is a valid https url or a valid http url of an onion service.
+     */
+    public static boolean isSecureLnUrlUrl(@Nullable String url) {
+        HttpUrl httpUrl = url == null ? null : HttpUrl.parse(url);
+        if (httpUrl == null)
+            return false;
+        return httpUrl.isHttps() || httpUrl.host().endsWith(".onion");
+    }
+
+    /**
+     * @return null if the url can be used for LNURL communication, otherwise an error message that can be shown to the user.
+     */
+    @Nullable
+    public static String getUrlSecurityError(Context ctx, @Nullable String url) {
+        HttpUrl httpUrl = url == null ? null : HttpUrl.parse(url);
+        if (httpUrl == null) {
+            BBLog.w(LOG_TAG, "LNURL: Invalid url.");
+            return ctx.getString(R.string.lnurl_decoding_no_lnurl_data);
+        }
+        if (!isSecureLnUrlUrl(url)) {
+            BBLog.w(LOG_TAG, "LNURL: Refused unencrypted connection to " + httpUrl.host());
+            return ctx.getString(R.string.lnurl_insecure_connection, httpUrl.host());
+        }
+        return null;
+    }
+
+    /**
+     * LUD-17: Converts lnurlc://, lnurlw://, lnurlp:// and keyauth:// URIs to the URL that has to be called.
+     * The scheme is replaced with https, or with http if the host is an onion service.
+     */
+    @VisibleForTesting
+    static String lud17ToUrl(String data) {
+        String withoutScheme = UriUtil.removeURI(data);
+        HttpUrl httpsUrl = HttpUrl.parse("https://" + withoutScheme);
+        if (httpsUrl != null && httpsUrl.host().endsWith(".onion"))
+            return "http://" + withoutScheme;
+        return "https://" + withoutScheme;
     }
 
     public interface OnLnUrlReadListener {

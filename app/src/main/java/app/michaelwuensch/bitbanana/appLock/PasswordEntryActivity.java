@@ -182,25 +182,10 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
         });
 
         // If the user closed and restarted the app he still has to wait until the password input delay is over.
-        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
-
-            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
-
-            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
-
-                mBtnContinue.setButtonEnabled(false);
-
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((int) ((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000)));
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBtnContinue.setButtonEnabled(true);
-                    }
-                }, RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff);
-            }
+        long remainingDelay = AppLockUtil.getRemainingUnlockDelayMillis(mNumFails);
+        if (remainingDelay > 0) {
+            Toast.makeText(this, AppLockUtil.getUnlockDelayMessage(this, remainingDelay), Toast.LENGTH_LONG).show();
+            disableContinueButtonFor(remainingDelay);
         }
 
         // Make sure the "Ok" button from the software keyboard works as well
@@ -223,13 +208,10 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
 
     public void onContinueClicked() {
         // Ensure app lock delay is enforced even if Android Software Keyboard is used to get here...
-        if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
-            long timeDiff = System.currentTimeMillis() - PrefsUtil.getPrefs().getLong("failedLoginTimestamp", 0L);
-            if (timeDiff < RefConstants.APP_LOCK_DELAY_TIME * 1000) {
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf((RefConstants.APP_LOCK_DELAY_TIME * 1000 - timeDiff) / 1000));
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-                return;
-            }
+        long remainingDelay = AppLockUtil.getRemainingUnlockDelayMillis(mNumFails);
+        if (remainingDelay > 0) {
+            Toast.makeText(this, AppLockUtil.getUnlockDelayMessage(this, remainingDelay), Toast.LENGTH_LONG).show();
+            return;
         }
 
         if (mPasswordInput.getData() == null || mPasswordInput.getData().isEmpty()) {
@@ -275,25 +257,25 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
             view.startAnimation(animShake);
             mVibrator.vibrate(RefConstants.VIBRATE_LONG);
 
-            if (mNumFails >= RefConstants.APP_LOCK_MAX_FAILS) {
-                mBtnContinue.setButtonEnabled(false);
-                String message = getResources().getString(R.string.pin_entered_wrong_wait, String.valueOf(RefConstants.APP_LOCK_DELAY_TIME));
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-                // Save timestamp. This way the delay can also be forced upon app restart.
-                PrefsUtil.editPrefs().putLong("failedLoginTimestamp", System.currentTimeMillis()).apply();
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBtnContinue.setButtonEnabled(true);
-                    }
-                }, RefConstants.APP_LOCK_DELAY_TIME * 1000);
+            // Start the input delay if required. It is persisted, this way the delay is also enforced upon app restart.
+            long delay = AppLockUtil.registerFailedUnlockAttempt(mNumFails);
+            if (delay > 0) {
+                Toast.makeText(this, AppLockUtil.getUnlockDelayMessage(this, delay), Toast.LENGTH_LONG).show();
+                disableContinueButtonFor(delay);
             } else {
                 Toast.makeText(this, R.string.error_wrong_password, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void disableContinueButtonFor(long millis) {
+        mBtnContinue.setButtonEnabled(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBtnContinue.setButtonEnabled(true);
+            }
+        }, millis);
     }
 
     private void showBiometricsPrompt() {
