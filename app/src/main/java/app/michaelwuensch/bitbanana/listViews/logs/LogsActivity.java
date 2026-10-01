@@ -205,7 +205,7 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
                 completeLog = completeLog + log.getLogItem().getMessage() + "\n";
             else
                 completeLog = completeLog + log.getLogItem().getVerbosity() + " | " + log.getLogItem().getTag() + " | " + log.getLogItem().getMessage() + "\n";
-        ClipBoardUtil.copyToClipboard(LogsActivity.this, "CompleteLog", completeLog);
+        ClipBoardUtil.copyToClipboard(LogsActivity.this, "CompleteLog", completeLog, true);
     }
 
     private void fetchLogsAndUpdateList(boolean showLoading) {
@@ -423,7 +423,7 @@ public class LogsActivity extends BaseAppCompatActivity implements LogSelectList
             logMessage = logItem.getMessage();
         else
             logMessage = logItem.getVerbosity().name() + " | " + logItem.getTag() + " | " + logItem.getMessage();
-        ClipBoardUtil.copyToClipboard(LogsActivity.this, "log", logMessage);
+        ClipBoardUtil.copyToClipboard(LogsActivity.this, "log", logMessage, true);
     }
 
     @Override

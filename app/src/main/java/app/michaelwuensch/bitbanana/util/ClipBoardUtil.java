@@ -2,12 +2,15 @@ package app.michaelwuensch.bitbanana.util;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -29,9 +32,23 @@ public class ClipBoardUtil {
     private static final String LOG_TAG = ClipBoardUtil.class.getSimpleName();
 
     public static void copyToClipboard(Context context, String label, CharSequence data) {
+        copyToClipboard(context, label, data, false);
+    }
+
+    /**
+     * @param sensitive Marks the data as sensitive. Android 13+ then hides the content in the preview it shows after copying
+     *                  and keyboards are asked not to show it as suggestion. Use this for secrets, not for data the user intends to share.
+     */
+    @SuppressLint("InlinedApi") // The extra is simply ignored on Android versions below 13.
+    public static void copyToClipboard(Context context, String label, CharSequence data, boolean sensitive) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText(label, data);
+            if (sensitive) {
+                PersistableBundle extras = new PersistableBundle();
+                extras.putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true);
+                clip.getDescription().setExtras(extras);
+            }
             clipboard.setPrimaryClip(clip);
 
             // On Android 13+ clipboard toasts are handled automatically. For older ones we provide it.

@@ -483,7 +483,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             BBLog.d(LOG_TAG, "SuccessAction: Url: " + BBLog.redactSensitive(successAction.getUrl())); // Might contain a token
             mTvSuccessActionText.setVisibility(View.GONE);
 
-            ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl());
+            ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl(), true);
             String message = successAction.getDescription() + "\n\n" + successAction.getUrl() + "\n";
             LayoutInflater adbInflater = LayoutInflater.from(getActivity());
             View titleView = adbInflater.inflate(R.layout.dialog_warning_header, null);
@@ -519,7 +519,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 BBLog.d(LOG_TAG, "Decrypted secret is: " + BBLog.redactSensitive(decrypted)); // This is what the user paid for (e.g. a voucher code)
                 mTvSuccessActionText.setVisibility(View.GONE);
 
-                ClipBoardUtil.copyToClipboard(getActivity(), "Code", decrypted);
+                ClipBoardUtil.copyToClipboard(getActivity(), "Code", decrypted, true);
                 String message = successAction.getDescription() + "\n\n" + decrypted + "\n";
                 LayoutInflater adbInflater = LayoutInflater.from(getActivity());
                 View titleView = adbInflater.inflate(R.layout.dialog_warning_header, null);
