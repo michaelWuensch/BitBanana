@@ -24,9 +24,14 @@ public class LauncherActivity extends BaseAppCompatActivity {
         Intent intent = getIntent();
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
-            App.getAppContext().setUriSchemeData(uri.toString());
-            // The URI might contain credentials (e.g. lndconnect or nostr+walletconnect). They are only logged in debug builds.
-            BBLog.d(LOG_TAG, "URI was detected: " + BBLog.redactSensitive(uri.toString()));
+            if (uri != null) {
+                App.getAppContext().setUriSchemeData(uri.toString());
+                // The URI might contain credentials (e.g. lndconnect or nostr+walletconnect). They are only logged in debug builds.
+                BBLog.d(LOG_TAG, "URI was detected: " + BBLog.redactSensitive(uri.toString()));
+            } else {
+                // This activity is exported, so any app can start it. A VIEW intent without data must not crash the app.
+                BBLog.w(LOG_TAG, "VIEW intent without data received. It is ignored.");
+            }
         }
 
         // BitBanana was started using NFC.
