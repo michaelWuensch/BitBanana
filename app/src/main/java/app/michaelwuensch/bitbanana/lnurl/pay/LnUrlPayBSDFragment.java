@@ -483,28 +483,45 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             BBLog.d(LOG_TAG, "SuccessAction: Url: " + BBLog.redactSensitive(successAction.getUrl())); // Might contain a token
             mTvSuccessActionText.setVisibility(View.GONE);
 
-            ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl(), true);
+            boolean urlAllowed = successAction.isUrlAllowed(mPaymentData.getCallback());
             String message = successAction.getDescription() + "\n\n" + successAction.getUrl() + "\n";
             LayoutInflater adbInflater = LayoutInflater.from(getActivity());
             View titleView = adbInflater.inflate(R.layout.dialog_warning_header, null);
-            ((TextView) titleView.findViewById(R.id.warningMessage)).setText(R.string.lnurl_pay_save_url);
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                     .setMessage(message)
                     .setCustomTitle(titleView)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.open, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // Call the url
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(successAction.getUrl()));
-                            getActivity().startActivity(browserIntent);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    .setCancelable(false);
+            // Always copy the url. This dialog is only shown once and the user must not lose what they paid for.
+            ClipBoardUtil.copyToClipboard(getActivity(), "URL", successAction.getUrl(), true);
+            if (urlAllowed) {
+                ((TextView) titleView.findViewById(R.id.warningMessage)).setText(R.string.lnurl_pay_save_url);
+                adb.setPositiveButton(R.string.open, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Call the url. CATEGORY_BROWSABLE makes sure it is only opened by apps that handle web links.
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(successAction.getUrl()));
+                                browserIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                                getActivity().startActivity(browserIntent);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
+                            }
+                        });
+            } else {
+                // The url does not use https or leads to a different website than the service we paid (LUD-09).
+                // We do not offer to open it and warn the user. It is still copied (see above), so it is not lost.
+                BBLog.w(LOG_TAG, "SuccessAction: Url not allowed: " + BBLog.redactSensitive(successAction.getUrl()));
+                // The existing (already translated) text about the copied url, followed by the warning.
+                String warning = getString(R.string.lnurl_pay_save_url) + "\n\n" + getString(R.string.lnurl_pay_success_url_not_allowed);
+                ((TextView) titleView.findViewById(R.id.warningMessage)).setText(warning);
+                adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                });
+            }
             Dialog dlg = adb.create();
             // Apply FLAG_SECURE to dialog to prevent screen recording
             if (PrefsUtil.isScreenRecordingPrevented()) {

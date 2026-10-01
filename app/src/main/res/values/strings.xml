@@ -725,6 +725,7 @@
     <string name="lnurl_pay_received_invalid_payment_request_different_amount" comment="Parameters are:  %1$s = name of service (host)">%1$s sent an invalid payment request. You wanted to send %2$d msat, but the amount of the payment request is %3$d msat.</string>
     <string name="lnurl_pay_success_secret_decrypt_error">Your payment was successful, but the secret that you received could not be decrypted.</string>
     <string name="lnurl_pay_save_url">IMPORTANT:\nThe URL has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
+    <string name="lnurl_pay_success_url_not_allowed">BitBanana does not open this URL, because it does not use a secure connection or leads to a different website than the service you paid. Only open it if you trust it.</string>
     <string name="lnurl_pay_save_secret">IMPORTANT:\nThe code has been copied to your clipboard. Please save it if you need it later. This dialog won\'t be shown again.</string>
     <string name="lnurl_pay_comment_for_payee">Comment for payee</string>
     <string name="lnurl_invalid_response">The Service answered with an invalid response.</string>
