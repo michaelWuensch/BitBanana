@@ -7,6 +7,7 @@ import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlSecurityInterceptor;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
+import app.michaelwuensch.bitbanana.util.StaticInternetIdentifierReader;
 import okhttp3.OkHttpClient;
 
 /**
@@ -55,11 +56,15 @@ public class HttpClient {
         mHttpClient.dispatcher().cancelAll();
         mHttpClient = createHttpClient();
         mLnUrlHttpClient = createLnUrlHttpClient();
+        // The network path changed (e.g. Tor got connected). Prefetch TrustChain again.
+        StaticInternetIdentifierReader.prefetchDnssecTrustChain();
     }
 
     public static synchronized HttpClient getInstance() {
         if (mHttpClientInstance == null) {
             mHttpClientInstance = new HttpClient();
+            // Runs asynchronously, as it uses this client itself.
+            StaticInternetIdentifierReader.prefetchDnssecTrustChain();
         }
         return mHttpClientInstance;
     }

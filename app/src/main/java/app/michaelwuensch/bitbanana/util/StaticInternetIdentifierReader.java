@@ -11,6 +11,8 @@ import org.minidns.constants.DnssecConstants;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.hla.DnssecResolverApi;
 import org.minidns.hla.ResolverResult;
+import org.minidns.iterative.ReliableDnsClient;
+import org.minidns.record.DNSKEY;
 import org.minidns.record.Data;
 import org.minidns.record.RRSIG;
 import org.minidns.record.Record;
@@ -20,9 +22,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import app.michaelwuensch.bitbanana.R;
+import app.michaelwuensch.bitbanana.connection.DohDnsDataSource;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
+import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.lnurl.LnUrlReader;
 import app.michaelwuensch.bitbanana.lnurl.pay.LnUrlPayResponse;
 import app.michaelwuensch.bitbanana.models.LnAddress;
@@ -57,13 +64,69 @@ public class StaticInternetIdentifierReader {
         }
     }
 
+    private static DnssecResolverApi sBip353Resolver;
+
+    // The DNSSEC trust chain of the root zone and these top level domains is loaded in advance. See prefetchDnssecTrustChain().
+    private static final String[] PREFETCH_TOP_LEVEL_DOMAINS = {"com", "me", "net", "io"};
+    private static final ExecutorService sPrefetchExecutor = Executors.newSingleThreadExecutor();
+    private static final AtomicBoolean sPrefetchPending = new AtomicBoolean(false);
+
+    /**
+     * The resolver is kept, so its cache can be reused for subsequent lookups.
+     */
+    private static synchronized DnssecResolverApi getBip353Resolver() {
+        if (sBip353Resolver == null) {
+            DnssecResolverApi resolver = new DnssecResolverApi();
+            // Never use classic, unencrypted DNS. All queries go over DNS-over-HTTPS (through Tor if enabled). DNSSEC is still validated locally.
+            resolver.getDnssecClient().setDataSource(new DohDnsDataSource());
+            // Iterative resolution (asking the root servers step by step) makes no sense with DoH, as all queries go to the DoH resolvers anyway.
+            // It would only cause additional, pointless requests and delay the fallback to LNURL if the resolvers are unavailable.
+            resolver.getDnssecClient().setMode(ReliableDnsClient.Mode.recursiveOnly);
+            sBip353Resolver = resolver;
+        }
+        return sBip353Resolver;
+    }
+
+    /**
+     * Loads the DNSSEC trust chain (keys of the root zone and the most common top level domains) into the cache of the BIP 353 resolver.
+     * Every BIP 353 lookup has to validate this chain. With the chain already cached, a lookup needs only half of the DoH requests.
+     * This also speeds up the detection of addresses without BIP 353 record, after which we fall back to LNURL.
+     * The prefetch queries contain no information about any recipient.
+     * <p>
+     * Runs in the background. Failures are only logged, the chain is then simply fetched during the actual lookup.
+     * Has to be called whenever the network path changes (e.g. Tor got connected), as queries made before would have failed.
+     */
+    public static void prefetchDnssecTrustChain() {
+        // If a prefetch is already waiting to be executed, there is no need to queue another one.
+        if (!sPrefetchPending.compareAndSet(false, true))
+            return;
+        sPrefetchExecutor.execute(() -> {
+            sPrefetchPending.set(false);
+            if (PrefsUtil.isTorEnabled() && !TorManager.getInstance().isProxyRunning()) {
+                // The queries would fail anyway. This will be called again once Tor is connected.
+                return;
+            }
+            for (String topLevelDomain : PREFETCH_TOP_LEVEL_DOMAINS) {
+                try {
+                    // Validating the DNSKEY of the top level domain loads its DS record and the root DNSKEY as well.
+                    getBip353Resolver().resolve(topLevelDomain, DNSKEY.class);
+                } catch (Exception e) {
+                    // Most likely all resolvers failed. The remaining domains would fail the same way.
+                    BBLog.w(LOG_TAG, "Prefetching DNSSEC trust chain failed: " + e.getMessage());
+                    return;
+                }
+            }
+            BBLog.d(LOG_TAG, "DNSSEC trust chain prefetched.");
+        });
+    }
+
     private static void Bip353DNSLookup(LnAddress lnAddress, Context ctx, OnStaticIdentifierChecked listener) {
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
         new Thread(() -> {
 
             try {
-                ResolverResult<TXT> result = DnssecResolverApi.INSTANCE.resolve(lnAddress.getUsername() + ".user._bitcoin-payment." + lnAddress.getDomain(), TXT.class);
+                ResolverResult<TXT> result = getBip353Resolver().resolve(lnAddress.getUsername() + ".user._bitcoin-payment." + lnAddress.getDomain(), TXT.class);
                 if (!result.wasSuccessful()) {
                     DnsMessage.RESPONSE_CODE responseCode = result.getResponseCode();
                     BBLog.w(LOG_TAG, "Bip353DNSLookup result not successful. Response Code: " + responseCode);
