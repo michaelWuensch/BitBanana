@@ -172,7 +172,9 @@ public class RebalanceActivity extends BaseAppCompatActivity {
         mSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                updateBalancing(i * 1000L);
+                // The progress is also restored when the activity gets recreated, but the selected channels are not.
+                if (mChannelA != null && mChannelB != null)
+                    updateBalancing(i * 1000L);
             }
 
             @Override
