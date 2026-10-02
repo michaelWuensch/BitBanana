@@ -54,6 +54,11 @@ public class HttpClient {
             BBLog.d(LOG_TAG, "HttpClient restarted.");
         }
         mHttpClient.dispatcher().cancelAll();
+        // Close the idle keep-alive connections of the old network path (e.g. clearnet connections after Tor got enabled).
+        // The LNURL client shares this connection pool.
+        // Closing TLS connections sends data over the network, which is not allowed on the main thread.
+        OkHttpClient oldClient = mHttpClient;
+        new Thread(() -> oldClient.connectionPool().evictAll()).start();
         mHttpClient = createHttpClient();
         mLnUrlHttpClient = createLnUrlHttpClient();
         // The network path changed (e.g. Tor got connected). Prefetch TrustChain again.

@@ -18,7 +18,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
-import app.michaelwuensch.bitbanana.util.EncryptionUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 
 
@@ -111,30 +111,49 @@ public class DataBackupRestoreFragment extends Fragment implements DataBackupRes
 
     private void startRestoreProcess() {
         mHandler.postDelayed(() -> {
-            byte[] decryptedBackupBytes = EncryptionUtil.PasswordDecryptData(mEncryptedBackupBytes, mTempPassword);
+            String password = mTempPassword;
             mTempPassword = "";
-            if (decryptedBackupBytes != null) {
-                String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
-                DataBackupUtil.restoreBackup(decryptedBackup, mBackupVersion);
-                mAdapter.setBackupRestoreFinished(true, 0);
-
-                // Override actionbar on back pressed to to ensure everything gets restarted cleanly.
-                if (requireActivity() instanceof BaseAppCompatActivity) {
-                    // Add a back-press callback to the dispatcher
-                    ((BaseAppCompatActivity) requireActivity()).getOnBackPressedDispatcher().addCallback(
-                            getViewLifecycleOwner(),
-                            new OnBackPressedCallback(true) {
-                                @Override
-                                public void handleOnBackPressed() {
-                                    onFinish();
-                                }
-                            }
-                    );
-                }
-            } else {
-                mAdapter.setBackupRestoreFinished(false, R.string.backup_data_restore_failed_description);
-            }
+            // The key derivation takes a while. Do it in the background to not block the UI.
+            new Thread(() -> {
+                byte[] decryptedBackupBytes = DataBackupUtil.decryptBackup(mEncryptedBackupBytes, mBackupVersion, password);
+                mHandler.post(() -> {
+                    if (isAdded() && getView() != null)  // Make sure we don't crash if user went away in the meantime. If he did, we just ignore the backup restore.
+                        onBackupDecrypted(decryptedBackupBytes);
+                });
+            }).start();
         }, 500);
+    }
+
+    private void onBackupDecrypted(byte[] decryptedBackupBytes) {
+        boolean restored = false;
+        if (decryptedBackupBytes != null) {
+            try {
+                String decryptedBackup = new String(decryptedBackupBytes, StandardCharsets.UTF_8);
+                restored = DataBackupUtil.restoreBackup(decryptedBackup, mBackupVersion);
+            } catch (Exception e) {
+                // For example invalid json. The legacy encryption cannot reliably detect a wrong password, so this can also be the result of a wrong password.
+                BBLog.e(TAG, "Restoring backup failed: " + e.getClass().getSimpleName());
+            }
+        }
+        if (restored) {
+            mAdapter.setBackupRestoreFinished(true, 0);
+
+            // Override actionbar on back pressed to to ensure everything gets restarted cleanly.
+            if (requireActivity() instanceof BaseAppCompatActivity) {
+                // Add a back-press callback to the dispatcher
+                ((BaseAppCompatActivity) requireActivity()).getOnBackPressedDispatcher().addCallback(
+                        getViewLifecycleOwner(),
+                        new OnBackPressedCallback(true) {
+                            @Override
+                            public void handleOnBackPressed() {
+                                onFinish();
+                            }
+                        }
+                );
+            }
+        } else {
+            mAdapter.setBackupRestoreFinished(false, R.string.backup_data_restore_failed_description);
+        }
     }
 }
 

@@ -112,18 +112,36 @@ public class DataBackupCreateFragment extends Fragment implements DataBackupCrea
     public void startWritingBackupFile(OutputStream outputStream) {
         mHandler.postDelayed(() -> {
             hideKeyboard();
-            try {
-                byte[] backup = DataBackupUtil.createBackup(mTempPassword, RefConstants.DATA_BACKUP_VERSION);
-                mTempPassword = "";
-                outputStream.write(backup);
-                outputStream.close();
-                mAdapter.setBackupCreationFinished(true);
-                BBLog.d(TAG, "Backup file creation was successful.");
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-                mAdapter.setBackupCreationFinished(false);
-                BBLog.w(TAG, "Error writing backup file.");
-            }
+            String password = mTempPassword;
+            mTempPassword = "";
+            // The key derivation takes a while. Do it in the background to not block the UI.
+            new Thread(() -> {
+                boolean success = false;
+                try {
+                    byte[] backup = DataBackupUtil.createBackup(password, RefConstants.DATA_BACKUP_VERSION);
+                    if (backup != null) {
+                        outputStream.write(backup);
+                        success = true;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        success = false;
+                    }
+                }
+                boolean finalSuccess = success;
+                mHandler.post(() -> {
+                    if (finalSuccess)
+                        BBLog.d(TAG, "Backup file creation was successful.");
+                    else
+                        BBLog.w(TAG, "Error writing backup file.");
+                    if (isAdded())
+                        mAdapter.setBackupCreationFinished(finalSuccess);
+                });
+            }).start();
         }, 500);
 
     }
