@@ -32,6 +32,7 @@ import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.labels.LabelsManager;
+import app.michaelwuensch.bitbanana.util.AliasManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
 import app.michaelwuensch.bitbanana.util.GsonUtil;
@@ -46,6 +47,10 @@ public class DataBackupUtil {
     // To allow importing zap backups
     public static final String ZAP_BACKUP_FILE_IDENTIFIER = "ZapBackup:";
 
+
+    private static boolean isAliasCache(String key) {
+        return key.equals(PrefsUtil.NODE_ALIAS_CACHE_JSON) || key.equals(PrefsUtil.NODE_ALIAS_CACHE);
+    }
 
     public static byte[] createBackup(String password, int backupVersion) {
         DataBackup backupObject = new DataBackup();
@@ -169,6 +174,12 @@ public class DataBackupUtil {
                             continue;
                         if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) // As we don't save the PIN which is in the encryptedPrefs, we also don't want to have the PIN length.
                             continue;
+                        if (isAliasCache(entry.getKey())) {
+                            // The alias cache is merged instead of overwritten, see AliasManager.mergeRestoredAliasCache()
+                            if (value instanceof String)
+                                AliasManager.getInstance().mergeRestoredAliasCache(entry.getKey(), (String) value);
+                            continue;
+                        }
 
                         if (value instanceof Boolean) {
                             editor.putBoolean(entry.getKey(), (Boolean) value);
@@ -213,6 +224,12 @@ public class DataBackupUtil {
                         if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
                             continue;
                         if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) continue;
+                        if (isAliasCache(entry.getKey())) {
+                            // The alias cache is merged instead of overwritten, see AliasManager.mergeRestoredAliasCache()
+                            if (value instanceof String)
+                                AliasManager.getInstance().mergeRestoredAliasCache(entry.getKey(), (String) value);
+                            continue;
+                        }
 
                         if (value instanceof Boolean) {
                             editor.putBoolean(entry.getKey(), (Boolean) value);

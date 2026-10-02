@@ -12,11 +12,17 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.lang.reflect.Field;
 
+import app.michaelwuensch.bitbanana.util.BBLog;
+
 public class CustomViewPager extends ViewPager {
+    private static final String LOG_TAG = CustomViewPager.class.getSimpleName();
+
     private FixedSpeedScroller mScroller = null;
 
     private boolean isSwipeable = true;
     private boolean mForceNoSwipe = false;
+    // True while the ViewPager has received events of the current gesture.
+    private boolean mGestureForwarded = false;
 
     public CustomViewPager(Context context) {
         super(context);
@@ -64,29 +70,48 @@ public class CustomViewPager extends ViewPager {
         if (isRtl()) {
             mirrorAnimation();
         }
-        if (ev.getAction() == MotionEvent.ACTION_UP) {
+        int action = ev.getActionMasked();
+        if (action == MotionEvent.ACTION_UP) {
             // Always reenable swiping on an up event
             isSwipeable = true;
         }
-        if (mForceNoSwipe) {
+        if (mForceNoSwipe || !isSwipeable) {
+            cancelForwardedGesture(ev);
             return false;
         }
-        if (isSwipeable) {
-            if (ev.getX() < 0 || ev.getY() < 0) {
-                return false;
-            }
-            MotionEvent safeEvent = MotionEvent.obtain(ev);
-            if (isRtl()) {
-                MotionEvent mirrored = mirrorEvent(safeEvent);
-                boolean result = super.onTouchEvent(mirrored);
-                mirrored.recycle();
-                return result;
-            }
-            boolean result = super.onTouchEvent(safeEvent);
-            safeEvent.recycle();
-            return result;
-        } else {
+        boolean result = forwardTouchEvent(ev);
+        mGestureForwarded = action != MotionEvent.ACTION_UP && action != MotionEvent.ACTION_CANCEL;
+        return result;
+    }
+
+    /**
+     * The ViewPager tracks the pointers of a gesture. If it stops receiving events in the middle of a gesture
+     * (e.g. because swiping got disabled), it misses pointer changes and crashes with "pointerIndex out of range"
+     * on the next event it receives. Therefore we cancel its gesture instead of just withholding the events.
+     */
+    private void cancelForwardedGesture(MotionEvent ev) {
+        if (!mGestureForwarded) {
+            return;
+        }
+        mGestureForwarded = false;
+        MotionEvent cancel = MotionEvent.obtain(ev);
+        cancel.setAction(MotionEvent.ACTION_CANCEL);
+        forwardTouchEvent(cancel);
+        cancel.recycle();
+    }
+
+    private boolean forwardTouchEvent(MotionEvent ev) {
+        MotionEvent event = isRtl() ? mirrorEvent(ev) : ev;
+        try {
+            return super.onTouchEvent(event);
+        } catch (IllegalArgumentException e) {
+            // Safety net for the known ViewPager "pointerIndex out of range" issue. The ViewPager resets its state on the next down event.
+            BBLog.w(LOG_TAG, "ViewPager touch event failed: " + e.getMessage());
             return false;
+        } finally {
+            if (event != ev) {
+                event.recycle();
+            }
         }
     }
 
@@ -154,13 +179,23 @@ public class CustomViewPager extends ViewPager {
         if (mForceNoSwipe) return false;
         if (!isSwipeable) return false;
 
-        if (isRtl()) {
-            MotionEvent mirrored = mirrorEvent(ev);
-            boolean handled = super.onInterceptTouchEvent(mirrored);
-            mirrored.recycle();
-            return handled;
+        MotionEvent event = isRtl() ? mirrorEvent(ev) : ev;
+        try {
+            boolean intercepted = super.onInterceptTouchEvent(event);
+            if (intercepted) {
+                // The ViewPager started dragging, the following events of this gesture go to onTouchEvent().
+                mGestureForwarded = true;
+            }
+            return intercepted;
+        } catch (IllegalArgumentException e) {
+            // Safety net for the known ViewPager "pointerIndex out of range" issue. The ViewPager resets its state on the next down event.
+            BBLog.w(LOG_TAG, "ViewPager intercept touch event failed: " + e.getMessage());
+            return false;
+        } finally {
+            if (event != ev) {
+                event.recycle();
+            }
         }
-        return super.onInterceptTouchEvent(ev);
     }
 
     @Override

@@ -230,6 +230,10 @@ public class BackendManager {
     }
 
     public static void deactivateCurrentBackendConfig(Context context, boolean keepVPN, boolean keepTor) {
+        // Stop pending steps of a connection process (e.g. waiting for the VPN), they would act on the deactivated config.
+        if (delayHandler != null)
+            delayHandler.removeCallbacksAndMessages(null);
+
         if (currentBackendConfig != null) {
             String backendConfigAlias = currentBackendConfig.getAlias();
             BBLog.d(LOG_TAG, "Deactivating backendConfig: " + backendConfigAlias);

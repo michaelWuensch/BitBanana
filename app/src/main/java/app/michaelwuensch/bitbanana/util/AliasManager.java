@@ -103,7 +103,7 @@ public class AliasManager {
      * Used to save node aliases to the shared preferences.
      */
     public void saveAliasesToCache() {
-        PrefsUtil.putSerializable(PrefsUtil.NODE_ALIAS_CACHE, mAliases).apply();
+        PrefsUtil.editPrefs().putString(PrefsUtil.NODE_ALIAS_CACHE_JSON, NodeAliasCacheCodec.toJson(mAliases)).apply();
         BBLog.v(LOG_TAG, "Saved Alias cache.");
     }
 
@@ -111,11 +111,54 @@ public class AliasManager {
      * Loads the node alias cache from shared preferences.
      */
     private void readAliasesFromCache() {
-        Object o = PrefsUtil.getSerializable(PrefsUtil.NODE_ALIAS_CACHE, null);
-        if (o != null)
-            mAliases = (HashSet<NodeAliasInfo>) o;
-        else
+        try {
+            mAliases = NodeAliasCacheCodec.fromJson(PrefsUtil.getPrefs().getString(PrefsUtil.NODE_ALIAS_CACHE_JSON, null));
+        } catch (RuntimeException e) {
+            BBLog.w(LOG_TAG, "Alias cache could not be read: " + BBLog.redactSensitiveException(e));
             mAliases = new HashSet<>();
+        }
+        migrateLegacyAliasCache();
         BBLog.d(LOG_TAG, "Loaded Alias cache.");
+    }
+
+    /**
+     * Older versions stored the cache with Java serialization. It is migrated once to JSON.
+     * This also happens after restoring a backup created by an older version.
+     */
+    private void migrateLegacyAliasCache() {
+        String legacy = PrefsUtil.getPrefs().getString(PrefsUtil.NODE_ALIAS_CACHE, null);
+        if (legacy == null)
+            return;
+        // Remove it before reading it. If the data is manipulated and reading it crashes the app, this way it can only happen once.
+        PrefsUtil.editPrefs().remove(PrefsUtil.NODE_ALIAS_CACHE).commit();
+        try {
+            HashSet<NodeAliasInfo> legacyAliases = NodeAliasCacheCodec.fromLegacySerialization(legacy);
+            NodeAliasCacheCodec.merge(mAliases, legacyAliases);
+            saveAliasesToCache();
+            BBLog.d(LOG_TAG, "Migrated legacy alias cache with " + legacyAliases.size() + " entries.");
+        } catch (Exception | OutOfMemoryError | StackOverflowError e) {
+            BBLog.w(LOG_TAG, "Legacy alias cache could not be migrated: " + BBLog.redactSensitiveException(e));
+        }
+    }
+
+    /**
+     * Merges the alias cache of a restored backup into the current cache instead of replacing it.
+     * Aliases of nodes that went offline for good cannot be fetched again, so neither the current nor the restored ones must get lost.
+     * Replacing the stored value directly would also not work reliably, as this instance keeps the cache in memory and would overwrite it on the next save.
+     *
+     * @param key   the preference key from the backup (NODE_ALIAS_CACHE_JSON or the legacy NODE_ALIAS_CACHE)
+     * @param value the stored cache from the backup
+     */
+    public void mergeRestoredAliasCache(String key, String value) {
+        try {
+            HashSet<NodeAliasInfo> restored = key.equals(PrefsUtil.NODE_ALIAS_CACHE)
+                    ? NodeAliasCacheCodec.fromLegacySerialization(value)
+                    : NodeAliasCacheCodec.fromJson(value);
+            int changed = NodeAliasCacheCodec.merge(mAliases, restored);
+            saveAliasesToCache();
+            BBLog.d(LOG_TAG, "Merged restored alias cache. Added or updated entries: " + changed);
+        } catch (Exception | OutOfMemoryError | StackOverflowError e) {
+            BBLog.w(LOG_TAG, "Restored alias cache could not be merged: " + BBLog.redactSensitiveException(e));
+        }
     }
 }

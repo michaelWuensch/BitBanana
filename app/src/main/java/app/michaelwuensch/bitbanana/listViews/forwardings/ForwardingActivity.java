@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -364,27 +366,47 @@ public class ForwardingActivity extends BaseAppCompatActivity implements Forward
 
         public SummaryPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            mAmountEarned = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AMOUNT_EARNED);
-            mRoutedVolume = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_ROUTED_VOLUME);
-            mAverageEarned = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_EARNED);
-            mAverageVolume = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_ROUTED);
-            mAverageEventsPerDay = new ForwardingSummaryFragment(ForwardingSummaryFragment.TYPE_AVG_EVENTS_PER_DAY);
         }
 
         @Override
         public Fragment getItem(int pos) {
             switch (pos) {
                 case 0:
-                    return mAmountEarned;
+                    return ForwardingSummaryFragment.newInstance(ForwardingSummaryFragment.TYPE_AMOUNT_EARNED);
                 case 1:
-                    return mRoutedVolume;
+                    return ForwardingSummaryFragment.newInstance(ForwardingSummaryFragment.TYPE_ROUTED_VOLUME);
                 case 2:
-                    return mAverageEarned;
+                    return ForwardingSummaryFragment.newInstance(ForwardingSummaryFragment.TYPE_AVG_EARNED);
                 case 3:
-                    return mAverageVolume;
+                    return ForwardingSummaryFragment.newInstance(ForwardingSummaryFragment.TYPE_AVG_ROUTED);
                 default:
-                    return mAverageEventsPerDay;
+                    return ForwardingSummaryFragment.newInstance(ForwardingSummaryFragment.TYPE_AVG_EVENTS_PER_DAY);
             }
+        }
+
+        // getItem() is not called for fragments the FragmentManager restored after the activity got recreated.
+        // Keep references to the fragments that are actually displayed, no matter if they are new or restored.
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int pos) {
+            ForwardingSummaryFragment fragment = (ForwardingSummaryFragment) super.instantiateItem(container, pos);
+            switch (pos) {
+                case 0:
+                    mAmountEarned = fragment;
+                    break;
+                case 1:
+                    mRoutedVolume = fragment;
+                    break;
+                case 2:
+                    mAverageEarned = fragment;
+                    break;
+                case 3:
+                    mAverageVolume = fragment;
+                    break;
+                default:
+                    mAverageEventsPerDay = fragment;
+            }
+            return fragment;
         }
 
         @Override
