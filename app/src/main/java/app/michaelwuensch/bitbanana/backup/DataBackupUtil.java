@@ -96,19 +96,47 @@ public class DataBackupUtil {
         // Convert json backup to bytes
         byte[] backupBytes = backupJson.getBytes(StandardCharsets.UTF_8);
 
-        // Encrypt backup
-        byte[] encryptedBackupBytes = EncryptionUtil.PasswordEncryptData(backupBytes, password, RefConstants.DATA_BACKUP_NUM_HASH_ITERATIONS);
-
         // Construct final backup. (10 bytes file identifier + 4 bytes backupVersion + encrypted backup)
+        // The file header is authenticated by the encryption, so it cannot be manipulated.
+        byte[] fileHeader = getFileHeader(backupVersion);
+        byte[] encryptedBackupBytes = EncryptionUtil.PasswordEncryptData(backupBytes, password, RefConstants.DATA_BACKUP_NUM_HASH_ITERATIONS, fileHeader);
+        if (encryptedBackupBytes == null)
+            return null;
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            outputStream.write(fileHeader);
+            outputStream.write(encryptedBackupBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return outputStream.toByteArray();
+    }
+
+    /**
+     * Decrypts the encrypted part of a backup file (everything after the file header).
+     *
+     * @return The decrypted backup or null if the password is wrong or the file is invalid or manipulated.
+     */
+    public static byte[] decryptBackup(byte[] encryptedBackupBytes, int backupVersion, String password) {
+        if (backupVersion >= RefConstants.DATA_BACKUP_FIRST_AUTHENTICATED_ENCRYPTION_VERSION)
+            return EncryptionUtil.PasswordDecryptData(encryptedBackupBytes, password, getFileHeader(backupVersion));
+        else
+            return EncryptionUtil.PasswordDecryptDataLegacy(encryptedBackupBytes, password);
+    }
+
+    /**
+     * The file header of backups created by BitBanana: 10 bytes file identifier + 4 bytes backupVersion
+     */
+    private static byte[] getFileHeader(int backupVersion) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             outputStream.write(BACKUP_FILE_IDENTIFIER.getBytes(StandardCharsets.UTF_8));
             outputStream.write(UtilFunctions.intToByteArray(backupVersion));
-            outputStream.write(encryptedBackupBytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Return final backup as UTF-8 string
         return outputStream.toByteArray();
     }
 
@@ -117,7 +145,7 @@ public class DataBackupUtil {
     }
 
     public static boolean restoreBackup(String backup, int backupVersion) {
-        if (backupVersion < 6) {
+        if (backupVersion <= 6) {
             DataBackup dataBackup = new Gson().fromJson(backup, DataBackup.class);
 
             // restore backend configs

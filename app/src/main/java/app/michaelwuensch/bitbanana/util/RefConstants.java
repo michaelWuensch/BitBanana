@@ -54,10 +54,13 @@ public class RefConstants {
     3: Changed certificate encoding from Base64Url to Base64, macaroon to authenticationToken (0.7.6)
     4: Added app settings to data backup. (Everything except PIN, StealthMode & language) (0.8.8)
     5: Fixed integers not being restored, added walletId to configs. (0.9.7)
+    6: Same content as 5. New authenticated encryption (PBKDF2-HMAC-SHA256 + AES-256-GCM), the file header is authenticated as well.
     */
-    public static final int DATA_BACKUP_VERSION = 5;
+    public static final int DATA_BACKUP_VERSION = 6;
     public static final int DATA_BACKUP_LAST_SUPPORTED_VERSION = 0;
-    public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 250000;
+    // First backup version that uses the authenticated encryption. All versions before use the legacy encryption.
+    public static final int DATA_BACKUP_FIRST_AUTHENTICATED_ENCRYPTION_VERSION = 6;
+    public static final int DATA_BACKUP_NUM_HASH_ITERATIONS = 600000;
 
     // Versioning for JSON data structures
     public static final int CONTACTS_JSON_VERSION = 1;
