@@ -45,24 +45,32 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
+                    migrateTorClearnetCertificateVerification();
                     enterWallet();
                 } else if (ver == 22) {
                     migrateCurrencySettings();
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
+                    migrateTorClearnetCertificateVerification();
                     enterWallet();
                 } else if (ver == 23) {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
+                    migrateTorClearnetCertificateVerification();
                     enterWallet();
                 } else if (ver == 24) {
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
+                    migrateTorClearnetCertificateVerification();
                     enterWallet();
-                } else { // ver == 25
+                } else if (ver == 25) {
                     migrateCertificateEncodingAndMacaroon();
+                    migrateTorClearnetCertificateVerification();
+                    enterWallet();
+                } else { // ver == 26
+                    migrateTorClearnetCertificateVerification();
                     enterWallet();
                 }
             } else {
@@ -127,6 +135,17 @@ public class LandingActivity extends BaseAppCompatActivity {
                 BackendConfigsManager.getInstance().apply();
             } catch (GeneralSecurityException | IOException e) {
                 BBLog.w(LOG_TAG, "Certificate encoding migration failed");
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void migrateTorClearnetCertificateVerification() {
+        if (BackendConfigsManager.getInstance().enableCertificateVerificationForTorClearnetConfigs()) {
+            try {
+                BackendConfigsManager.getInstance().apply();
+            } catch (GeneralSecurityException | IOException e) {
+                BBLog.w(LOG_TAG, "Tor clearnet certificate verification migration failed");
                 throw new RuntimeException(e);
             }
         }

@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
@@ -76,6 +75,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private Spinner mSpType;
     private View mVerifyCertVisibilityLayout;
     private boolean mHasTorRelay;
+    private boolean mHostIsTor;
 
     private int mPreviousSpinnerPosition = 0;
 
@@ -236,12 +236,7 @@ public class ManualSetup extends BaseAppCompatActivity {
             mEtAuthenticationToken.setValue(BackendConfig.getAuthenticationToken());
             mSwTor.setChecked(BackendConfig.getUseTor());
             mVpnConfigView.setupWithVpnConfig(BackendConfig.getVpnConfig());
-            if (BackendConfig.getUseTor()) {
-                mSwVerify.setChecked(false);
-                mSwVerify.setVisibility(View.GONE);
-            } else {
-                mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
-            }
+            mSwVerify.setChecked(BackendConfig.getVerifyCertificate());
             if (BackendConfig.getServerCert() != null && !BackendConfig.getServerCert().isEmpty()) {
                 mEtServerCertificate.setValue(HexUtil.bytesToHex(BaseEncoding.base64().decode(BackendConfig.getServerCert())));
             }
@@ -265,6 +260,8 @@ public class ManualSetup extends BaseAppCompatActivity {
         } else {
             mVpnConfigView.setupWithVpnConfig(null); // This makes sure start on open and stop on close are set to true;
             mSpType.setSelection(0);
+            // Certificate verification is enabled by default.
+            mSwVerify.setChecked(true);
         }
 
         // A Tor relay can only be reached using Tor. Therefore we enable Tor as soon as a Tor relay gets entered.
@@ -290,15 +287,29 @@ public class ManualSetup extends BaseAppCompatActivity {
             }
         });
 
-        mSwTor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // Tor authenticates hidden services itself, therefore certificates of .onion hosts are not verified and the switch is hidden.
+        // For all other hosts the certificate has to be verified, even when using Tor, as the connection from the Tor exit node to the host could be intercepted.
+        // This is registered after the values of an edited connection got filled in, so a deliberately disabled verification stays disabled.
+        mHostIsTor = RemoteConnectUtil.isTorHostAddress(mEtHost.getData());
+        mSwVerify.setVisibility(mHostIsTor ? View.GONE : View.VISIBLE);
+        mEtHost.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    mSwVerify.setChecked(false);
-                    mSwVerify.setVisibility(View.GONE);
-                } else {
-                    mSwVerify.setChecked(true);
-                    mSwVerify.setVisibility(View.VISIBLE);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean hostIsTor = RemoteConnectUtil.isTorHostAddress(s.toString().trim());
+                if (hostIsTor != mHostIsTor) {
+                    mSwVerify.setChecked(!hostIsTor);
+                    mSwVerify.setVisibility(hostIsTor ? View.GONE : View.VISIBLE);
+                    mHostIsTor = hostIsTor;
                 }
             }
         });

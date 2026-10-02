@@ -16,6 +16,7 @@ import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
+import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 
 /**
  * This SINGLETON class is used to load and save configurations for backends (nodes).
@@ -289,6 +290,29 @@ public class BackendConfigsManager {
      */
     public void removeAllBackendConfigs() {
         mBackendConfigsJson = createEmptyBackendConfigsJson();
+    }
+
+    /**
+     * Before settings version 27, enabling Tor in the manual setup silently disabled the certificate verification, also for clearnet hosts.
+     * A clearnet host is reached through a Tor exit node though, which could intercept the unverified TLS connection. Only Tor hidden services are authenticated by Tor itself.
+     * This enables the certificate verification for all those connections. The changes still have to be saved using apply().
+     *
+     * @return true if at least one connection was changed
+     */
+    public boolean enableCertificateVerificationForTorClearnetConfigs() {
+        int changed = 0;
+        for (BackendConfig config : getAllBackendConfigs(false)) {
+            boolean isGrpc = config.getBackendType() == BackendConfig.BackendType.LND_GRPC || config.getBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC;
+            // The stored host is relevant here, not the debug host override.
+            if (isGrpc && config.getUseTor() && !RemoteConnectUtil.isTorHostAddress(config.getHost()) && !config.getVerifyCertificate()) {
+                config.setVerifyCertificate(true);
+                updateBackendConfig(config);
+                changed++;
+            }
+        }
+        if (changed > 0)
+            BBLog.i(LOG_TAG, "Enabled certificate verification for " + changed + " Tor connection(s) to clearnet hosts.");
+        return changed > 0;
     }
 
     /**

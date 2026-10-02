@@ -81,6 +81,7 @@ public class CoreLightningConnection {
                         .proxyDetector(new TorProxyDetector(TorManager.getInstance().getHttpProxyPort()))
                         .hostnameVerifier(hostnameVerifier) // null = default hostnameVerifier
                         .sslSocketFactory(inspectingFactory) // null = default SSLSocketFactory
+                        .overrideAuthority("cln") // the grpc plugin for core lightning does not know the domain, therefore it uses 'cln' by default. See https://docs.corelightning.org/docs/grpc.
                         .maxInboundMessageSize(RefConstants.MAX_GRPC_MESSAGE_SIZE)
                         .build();
             } else {
