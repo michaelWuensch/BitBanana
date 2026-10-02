@@ -35,6 +35,7 @@ import okhttp3.Route;
 public class LndHubHttpClient {
     private static LndHubHttpClient mHttpClientInstance;
     private OkHttpClient mHttpClient;
+    private OkHttpClient mAuthHttpClient;
     private static final String LOG_TAG = LndHubHttpClient.class.getSimpleName();
 
 
@@ -42,26 +43,25 @@ public class LndHubHttpClient {
     }
 
     public void createHttpClient() {
+        // Base client that is used for authentication. It must use the same network path (e.g. Tor) as all other requests.
+        OkHttpClient.Builder baseBuilder = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new LndHubCleartextInterceptor())
+                .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS);
+
         if (BackendManager.getCurrentBackendConfig().getUseTor()) {
             Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorManager.getInstance().getSocksProxyPort()));
-
-            mHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new AccessTokenInterceptor())
-                    .addNetworkInterceptor(new CertificateCapturingInterceptor())
-                    .authenticator(new TokenRefreshAuthenticator())
-                    .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
-                    .proxy(torProxy)
-                    .build();
+            baseBuilder.proxy(torProxy);
             BBLog.d(LOG_TAG, "LndHubHttpClient created. Socks Proxy Port: " + TorManager.getInstance().getSocksProxyPort());
         } else {
-            mHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new AccessTokenInterceptor())
-                    .addNetworkInterceptor(new CertificateCapturingInterceptor())
-                    .authenticator(new TokenRefreshAuthenticator())
-                    .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
-                    .build();
             BBLog.d(LOG_TAG, "LndHubHttpClient created.");
         }
+
+        mAuthHttpClient = baseBuilder.build();
+        mHttpClient = mAuthHttpClient.newBuilder()
+                .addInterceptor(new AccessTokenInterceptor())
+                .addNetworkInterceptor(new CertificateCapturingInterceptor())
+                .authenticator(new TokenRefreshAuthenticator())
+                .build();
     }
 
     public void restartHttpClient() {
@@ -80,6 +80,13 @@ public class LndHubHttpClient {
 
     public OkHttpClient getClient() {
         return mHttpClient;
+    }
+
+    /**
+     * Client for the authentication requests. Same network configuration as getClient(), but without the token handling.
+     */
+    public OkHttpClient getAuthClient() {
+        return mAuthHttpClient;
     }
 
     public void cancelAllRequests() {
@@ -227,9 +234,14 @@ public class LndHubHttpClient {
         }
 
         private LndHubAuthResponse makeAuthCall(Request request) {
+            OkHttpClient authClient = LndHubHttpClient.getInstance().getAuthClient();
+            if (authClient == null) {
+                BBLog.e(LOG_TAG, "Lnd Hub auth failed. No http client available.");
+                return null;
+            }
             try {
                 // Execute the request synchronously
-                Response response = new OkHttpClient().newCall(request).execute();
+                Response response = authClient.newCall(request).execute();
 
                 // Check if the request was successful
                 if (response.isSuccessful() && response.body() != null) {
