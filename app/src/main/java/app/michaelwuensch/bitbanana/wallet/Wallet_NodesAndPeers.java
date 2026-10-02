@@ -112,6 +112,12 @@ public class Wallet_NodesAndPeers {
      * The AliasManager takes care of the result so we can use aliases in a non async way.
      */
     public void fetchNodeInfo(String pubkey, boolean lastNode, boolean saveAliasToCache, NodeInfoFetchedListener listener) {
+        // Without a connection the backend services are not available and the request would crash.
+        if (!Wallet.getInstance().isConnectedToNode()) {
+            BBLog.w(LOG_TAG, "Skipped fetching node info, not connected to node.");
+            return;
+        }
+
         compositeDisposable.add(BackendManager.api().getNodeInfo(pubkey)
                 .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
                 .subscribe(response -> {
