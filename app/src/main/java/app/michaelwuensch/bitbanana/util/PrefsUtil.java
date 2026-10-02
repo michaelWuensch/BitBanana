@@ -9,7 +9,6 @@ import androidx.security.crypto.MasterKey;
 import com.github.michaelwuensch.avathorlibrary.AvathorFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.GeneralSecurityException;
 
 import app.michaelwuensch.bitbanana.BuildConfig;
@@ -42,7 +41,9 @@ public class PrefsUtil {
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
+    // Node alias cache as Java serialization (used by older versions). Only read once to migrate it to NODE_ALIAS_CACHE_JSON.
     public static final String NODE_ALIAS_CACHE = "nodeAliasCache";
+    public static final String NODE_ALIAS_CACHE_JSON = "nodeAliasCacheJson";
     // Development settings, only visible and active in debug builds. See applyHostOverride().
     public static final String OVERRIDE_HOST_SOURCE = "overrideHostSource";
     public static final String OVERRIDE_HOST_TARGET = "overrideHostTarget";
@@ -129,26 +130,6 @@ public class PrefsUtil {
             );
         }
         return encryptedPrefs;
-    }
-
-    public static SharedPreferences.Editor putSerializable(String key, Serializable obj) {
-        SharedPreferences.Editor editor = editPrefs();
-        try {
-            String serialized = ObjectSerializer.serialize(obj);
-            editor.putString(key, serialized);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return editor;
-    }
-
-    public static Object getSerializable(String key, Object defaultObject) {
-        try {
-            return ObjectSerializer.deserialize(getPrefs().getString(key, null));
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return defaultObject;
     }
 
     public static SharedPreferences.Editor editEncryptedPrefs() throws GeneralSecurityException, IOException {

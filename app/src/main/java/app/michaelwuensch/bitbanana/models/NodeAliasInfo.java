@@ -5,6 +5,11 @@ import androidx.annotation.Nullable;
 import java.io.Serializable;
 
 public class NodeAliasInfo implements Serializable {
+    // Fixed to the value Java computed automatically from the class structure before it was declared explicitly.
+    // Required to read alias caches and backups of older versions, which stored the cache with Java serialization.
+    // Do not change this value. With it declared, the class itself can be changed without breaking compatibility.
+    private static final long serialVersionUID = -8979614276125228188L;
+
     private String mPubKey;
     private String mAlias;
     private long mTimestamp;
