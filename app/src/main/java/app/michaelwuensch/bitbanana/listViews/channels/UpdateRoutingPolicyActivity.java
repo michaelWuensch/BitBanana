@@ -76,7 +76,8 @@ public class UpdateRoutingPolicyActivity extends BaseAppCompatActivity {
         if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC)
             mTimelock.setVisibility(View.GONE);
 
-        if (!(BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("0.18.0")) >= 0)) { //ToDo: Remove version check when lnd 0.17 is no longer supported
+        // The node info is not available if we are not connected (e.g. activity restored after process death). Hide inbound fees in that case.
+        if (!(BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC && Wallet.getInstance().isInfoFetched() && Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(new Version("0.18.0")) >= 0)) { //ToDo: Remove version check when lnd 0.17 is no longer supported
             mInboundBaseFee.setVisibility(View.GONE);
             mInboundFeeRate.setVisibility(View.GONE);
         }
