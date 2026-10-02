@@ -9,6 +9,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BaseConnectionParser;
 import app.michaelwuensch.bitbanana.models.LnAddress;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.HexUtil;
+import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 import rust.nostr.sdk.NostrWalletConnectUri;
@@ -37,6 +38,15 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
 
     public String getRelay() {
         return mRelay;
+    }
+
+    private boolean mHasTorRelay;
+
+    /**
+     * Returns true if at least one of the relays is a Tor hidden service.
+     */
+    public boolean hasTorRelay() {
+        return mHasTorRelay;
     }
 
     private String mSecret;
@@ -157,6 +167,9 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
                 backendConfig.setLocation(BackendConfig.Location.REMOTE);
                 backendConfig.setNetwork(BackendConfig.Network.UNKNOWN);
                 backendConfig.setFullConnectString(mConnectionString);
+                // A Tor relay can only be reached using Tor.
+                mHasTorRelay = containsTorRelay(mConnectionString);
+                backendConfig.setUseTor(mHasTorRelay);
                 if (mLud16 != null) {
                     QuickReceiveConfig quickReceiveConfig = new QuickReceiveConfig();
                     quickReceiveConfig.setQuickReceiveType(QuickReceiveConfig.QuickReceiveType.LN_ADDRESS);
@@ -182,6 +195,36 @@ public class NostrWalletConnectUrlParser extends BaseConnectionParser {
             BBLog.e(LOG_TAG, "URI could not be parsed. Exception message: " + BBLog.redactSensitiveException(e)); // The message contains the connection string including its credentials.
             mError = ERROR_INVALID_CONNECT_STRING;
             return this;
+        }
+    }
+
+    /**
+     * Returns true if at least one of the relays of the given NostrWalletConnect string is a Tor hidden service.
+     * The URI may contain multiple relays, all of them are checked.
+     * This is a lightweight check without validation and logging, so it can also be used on user input while typing.
+     */
+    public static boolean containsTorRelay(String connectString) {
+        if (connectString == null || !UriUtil.isNostrWalletConnectUri(connectString))
+            return false;
+        try {
+            String query = new URI(connectString).getQuery();
+            if (query == null)
+                return false;
+            for (String pair : query.split("&")) {
+                String[] param = pair.split("=");
+                if (param.length > 1 && param[0].equalsIgnoreCase("relay") && isTorRelay(param[1]))
+                    return true;
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
+    private static boolean isTorRelay(String relay) {
+        try {
+            return RemoteConnectUtil.isTorHostAddress(new URI(relay).getHost());
+        } catch (Exception e) {
+            return false;
         }
     }
 }

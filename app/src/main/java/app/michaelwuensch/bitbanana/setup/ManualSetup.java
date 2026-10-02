@@ -7,8 +7,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +75,7 @@ public class ManualSetup extends BaseAppCompatActivity {
     private View mSpTypeLayout;
     private Spinner mSpType;
     private View mVerifyCertVisibilityLayout;
+    private boolean mHasTorRelay;
 
     private int mPreviousSpinnerPosition = 0;
 
@@ -191,7 +194,7 @@ public class ManualSetup extends BaseAppCompatActivity {
                             mEtUser.setVisibility(View.GONE);
                             mEtPassword.setVisibility(View.GONE);
                             mVpnAutomationLayout.setVisibility(View.VISIBLE);
-                            mSwTor.setVisibility(View.GONE);
+                            mSwTor.setVisibility(View.VISIBLE);
                             mVerifyCertVisibilityLayout.setVisibility(View.GONE);
 
                             mEtFullConnectString.setDescription("Nostr Wallet Connect URL");
@@ -263,6 +266,29 @@ public class ManualSetup extends BaseAppCompatActivity {
             mVpnConfigView.setupWithVpnConfig(null); // This makes sure start on open and stop on close are set to true;
             mSpType.setSelection(0);
         }
+
+        // A Tor relay can only be reached using Tor. Therefore we enable Tor as soon as a Tor relay gets entered.
+        // This is registered after the values of an edited connection got filled in, so a deliberately disabled Tor switch stays disabled.
+        mHasTorRelay = NostrWalletConnectUrlParser.containsTorRelay(mEtFullConnectString.getData());
+        mEtFullConnectString.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean hasTorRelay = NostrWalletConnectUrlParser.containsTorRelay(s.toString());
+                if (hasTorRelay && !mHasTorRelay)
+                    mSwTor.setChecked(true);
+                mHasTorRelay = hasTorRelay;
+            }
+        });
 
         mSwTor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
