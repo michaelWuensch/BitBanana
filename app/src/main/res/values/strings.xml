@@ -501,6 +501,7 @@
     <string name="error_connection_clngrpc_missingClientKey">The mandatory client key is missing.</string>
     <string name="error_connection_clngrpc_parameterDecodingFailed">The provided connection string for clngrpc is invalid as the parameters do not follow the specification.</string>
     <string name="error_connection_rest_authentication">Failed to authenticate with the Rest API.</string>
+    <string name="error_connection_unencrypted_refused" comment="Parameters are:  %1$s: hostname/address">Unencrypted connection refused.\n\n%1$s uses http://, which would send your password and access tokens unencrypted over the internet.\n\nPlease use https://, a Tor address (.onion) or connect through your local network or a VPN.</string>
     <string name="error_wrong_password">Wrong password</string>
     <string name="error_invalid_data_to_create_channel">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port\n- LNURL-Channel</string>
     <string name="error_lightning_uri_invalid">Invalid format.\nPlease use one of the following:\n- pubkey\n- pubkey@host\n- pubkey@host:port</string>
