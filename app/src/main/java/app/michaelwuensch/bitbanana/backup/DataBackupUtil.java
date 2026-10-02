@@ -351,6 +351,17 @@ public class DataBackupUtil {
                 }
             }
 
+            if (backupVersion < 6) {
+                // Backups up to version 5 were created by app versions that silently disabled the certificate verification for Tor connections to clearnet hosts.
+                if (BackendConfigsManager.getInstance().enableCertificateVerificationForTorClearnetConfigs()) {
+                    try {
+                        BackendConfigsManager.getInstance().apply();
+                    } catch (GeneralSecurityException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             // restore contacts
             if (dataBackup.getContacts() != null && dataBackup.getContacts().length > 0) {
                 BBLog.d(LOG_TAG, "Restoring contacts ...");

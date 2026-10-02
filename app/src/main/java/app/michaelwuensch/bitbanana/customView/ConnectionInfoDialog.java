@@ -130,7 +130,8 @@ public class ConnectionInfoDialog extends LinearLayout {
         switch (mBackendConfig.getBackendType()) {
             case LND_GRPC:
             case CORE_LIGHTNING_GRPC:
-                if (mBackendConfig.getUseTor())
+                // Only hidden services are authenticated by Tor. For clearnet hosts the TLS certificate is what matters, even when using Tor.
+                if (mBackendConfig.getUseTor() && mBackendConfig.isTorHostAddress())
                     setSecurityTor();
                 else if (mBackendConfig.getVerifyCertificate())
                     if (mBackendConfig.getServerCert() != null)
