@@ -2,19 +2,22 @@ package app.michaelwuensch.bitbanana.backends.nostrWalletConnect
 
 import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser
 import app.michaelwuensch.bitbanana.backends.BackendManager
+import app.michaelwuensch.bitbanana.connection.tor.TorManager
 import app.michaelwuensch.bitbanana.util.ApiUtil
 import app.michaelwuensch.bitbanana.util.BBLog
+import rust.nostr.sdk.ConnectionMode
 import rust.nostr.sdk.NostrSdkException
 import rust.nostr.sdk.NostrWalletConnectOptions
 import rust.nostr.sdk.NostrWalletConnectUri
 import rust.nostr.sdk.NostrWalletConnectUri.Companion.parse
 import rust.nostr.sdk.Nwc
 import rust.nostr.sdk.Nwc.Companion.withOpts
+import rust.nostr.sdk.RelayOptions
 import java.time.Duration
 
 
 /**
- * Singleton to handle the LndHub http client
+ * Singleton to handle the Nostr Wallet Connect client
  */
 class NostrWalletConnectClient private constructor() {
     private var mNwc: Nwc? = null
@@ -24,6 +27,9 @@ class NostrWalletConnectClient private constructor() {
     }
 
     fun openConnection() {
+        // Never keep using a client of a previous connection attempt, it might not use the correct network path (e.g. Tor).
+        mNwc = null
+
         val parser =
             NostrWalletConnectUrlParser(BackendManager.getCurrentBackendConfig().fullConnectString).parse()
         if (parser.hasError()) {
@@ -45,6 +51,21 @@ class NostrWalletConnectClient private constructor() {
         try {
             nostrWalletConnectOptions = NostrWalletConnectOptions()
                 .timeout(Duration.ofSeconds(ApiUtil.getBackendTimeout()))
+
+            if (BackendManager.getCurrentBackendConfig().useTor) {
+                // Route the relay connection through the SOCKS proxy of our Tor instance.
+                // Never fall back to a direct connection, as this would leak the IP address to the relay.
+                val socksPort = TorManager.getInstance().socksProxyPort
+                if (!TorManager.getInstance().isProxyRunning || socksPort <= 0 || socksPort > 65535) {
+                    BBLog.e(LOG_TAG, "Tor is required for this NWC connection, but the Tor SOCKS proxy is not available.")
+                    BackendManager.setError(BackendManager.ERROR_NWC_CONNECTION_FAILED)
+                    return
+                }
+                val relayOptions = RelayOptions()
+                    .connectionMode(ConnectionMode.Proxy("127.0.0.1", socksPort.toUShort()))
+                nostrWalletConnectOptions = nostrWalletConnectOptions.relay(relayOptions)
+                BBLog.d(LOG_TAG, "NWC relay connection uses Tor. Socks Proxy Port: $socksPort")
+            }
         } catch (e: NostrSdkException) {
             BBLog.e(LOG_TAG, "Error creating NostrWalletConnectOptions. Reason: " + e.message)
             BackendManager.setError(BackendManager.ERROR_NWC_CONNECTION_FAILED)

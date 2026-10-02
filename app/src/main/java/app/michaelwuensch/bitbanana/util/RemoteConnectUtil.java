@@ -297,6 +297,9 @@ public class RemoteConnectUtil {
                         case NOSTR_WALLET_CONNECT:
                             backendConfig.setBackendType(config.getBackendType());
                             backendConfig.setFullConnectString(config.getFullConnectString());
+                            // Only enable Tor automatically (Tor relay), never disable it, as this is a user choice.
+                            if (config.getUseTor())
+                                backendConfig.setUseTor(true);
                             break;
                         default:
                             // Override everything and use the new one.

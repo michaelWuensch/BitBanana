@@ -180,13 +180,9 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
 
             // Tor
             BBInfoLineView ilTor = findViewById(R.id.tor);
-            if (getWalletConfig().getBackendType() != BackendConfig.BackendType.NOSTR_WALLET_CONNECT) {
-                ilTor.setVisibility(View.VISIBLE);
-                String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
-                ilTor.setData(torData);
-            } else {
-                ilTor.setVisibility(View.GONE);
-            }
+            ilTor.setVisibility(View.VISIBLE);
+            String torData = getResources().getString(getWalletConfig().getUseTor() ? R.string.yes : R.string.no);
+            ilTor.setData(torData);
 
             // Pubkey
             BBInfoLineView ilPubkey = findViewById(R.id.pubkey);
