@@ -24,6 +24,7 @@ public class PaymentRouteListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private PaymentRouteItemAdapter mAdapter;
+    private List<HopListItem> mItems;
 
 
     @Override
@@ -39,10 +40,15 @@ public class PaymentRouteListFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Items might have been set before the view was created.
+        if (mItems != null)
+            mAdapter.replaceAll(mItems);
+
         return view;
     }
 
     public void replaceAllItems(List<HopListItem> items) {
+        mItems = items;
         if (mAdapter != null) {
             mAdapter.replaceAll(items);
         }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -476,7 +477,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setView(viewInflated);
 
         adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-            mPagerAdapter.getWalletFragment().showLoadingScreen();
+            if (mPagerAdapter.getWalletFragment() != null)
+                mPagerAdapter.getWalletFragment().showLoadingScreen();
             Wallet.getInstance().unlockWallet(input.getText().toString());
             mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
             mIsFirstUnlockAttempt = false;
@@ -485,7 +487,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
             InputMethodManager inputMethodManager = (InputMethodManager) HomeActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            mPagerAdapter.getWalletFragment().showErrorAfterNotUnlockedScreen();
+            if (mPagerAdapter.getWalletFragment() != null)
+                mPagerAdapter.getWalletFragment().showErrorAfterNotUnlockedScreen();
             mIsFirstUnlockAttempt = true;
             dialog.cancel();
         });
@@ -699,7 +702,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     }
 
     private void showStringAnalyzerProgress() {
-        mPagerAdapter.getWalletFragment().showStringAnalyzerProgress();
+        if (mPagerAdapter.getWalletFragment() != null)
+            mPagerAdapter.getWalletFragment().showStringAnalyzerProgress();
     }
 
     private void hideStringAnalyzerProgress() {
@@ -707,7 +711,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mPagerAdapter.getWalletFragment().hideStringAnalyzerProgress();
+                    if (mPagerAdapter.getWalletFragment() != null)
+                        mPagerAdapter.getWalletFragment().hideStringAnalyzerProgress();
                 }
             }, 500);
         });
@@ -936,7 +941,8 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                 }
 
                 mInputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlockScreen();
+                if (mPagerAdapter.getWalletFragment() != null)
+                    mPagerAdapter.getWalletFragment().showBackgroundForWalletUnlockScreen();
 
                 if (!mIsFirstUnlockAttempt) {
                     Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
@@ -986,21 +992,26 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
 
         public HomePagerAdapter(FragmentManager fm) {
             super(fm);
-            mWalletFragment = new WalletFragment();
-            mHistoryFragment = new TransactionHistoryFragment();
         }
 
         @Override
         public Fragment getItem(int pos) {
-            switch (pos) {
+            if (pos == 1)
+                return new TransactionHistoryFragment();
+            return new WalletFragment();
+        }
 
-                case 0:
-                    return mWalletFragment;
-                case 1:
-                    return mHistoryFragment;
-                default:
-                    return mWalletFragment;
-            }
+        // getItem() is not called for fragments the FragmentManager restored after the activity got recreated.
+        // Keep references to the fragments that are actually displayed, no matter if they are new or restored.
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int pos) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, pos);
+            if (pos == 1)
+                mHistoryFragment = (TransactionHistoryFragment) fragment;
+            else
+                mWalletFragment = (WalletFragment) fragment;
+            return fragment;
         }
 
         @Override

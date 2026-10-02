@@ -2,8 +2,11 @@ package app.michaelwuensch.bitbanana.listViews.paymentRoute;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -20,7 +23,6 @@ import app.michaelwuensch.bitbanana.customView.CustomViewPager;
 import app.michaelwuensch.bitbanana.listViews.paymentRoute.items.HopListItem;
 import app.michaelwuensch.bitbanana.models.LnHop;
 import app.michaelwuensch.bitbanana.models.LnPayment;
-import app.michaelwuensch.bitbanana.models.LnRoute;
 
 
 public class PaymentRouteActivity extends BaseAppCompatActivity {
@@ -89,6 +91,7 @@ public class PaymentRouteActivity extends BaseAppCompatActivity {
     }
 
     private void updateRouteView() {
+        List<List<HopListItem>> routeItems = new ArrayList<>();
         for (int i = 0; i < mLnPayment.getRoutes().size(); i++) {
             List<HopListItem> listItems = new ArrayList<>();
             // Add first fake hop
@@ -102,9 +105,10 @@ public class PaymentRouteActivity extends BaseAppCompatActivity {
                 HopListItem listItem = new HopListItem(hop);
                 listItems.add(listItem);
             }
-            mPagerAdapter.getFragment(i).replaceAllItems(listItems);
-            updateSummary(mViewPager.getCurrentItem());
+            routeItems.add(listItems);
         }
+        mPagerAdapter.setRouteItems(routeItems);
+        updateSummary(mViewPager.getCurrentItem());
     }
 
     private void updateSummary(int position) {
@@ -113,27 +117,43 @@ public class PaymentRouteActivity extends BaseAppCompatActivity {
 
 
     public class PaymentRoutePagerAdapter extends FragmentPagerAdapter {
-        private List<PaymentRouteListFragment> mFragments = new ArrayList<>();
+        private final int mRouteCount;
+        private final SparseArray<PaymentRouteListFragment> mFragments = new SparseArray<>();
+        private List<List<HopListItem>> mRouteItems;
 
         public PaymentRoutePagerAdapter(FragmentManager fm, LnPayment lnPayment) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            for (LnRoute route : lnPayment.getRoutes()) {
-                mFragments.add(new PaymentRouteListFragment());
-            }
+            mRouteCount = lnPayment.getRoutes().size();
         }
 
         @Override
         public Fragment getItem(int pos) {
-            return mFragments.get(pos);
+            return new PaymentRouteListFragment();
+        }
+
+        // getItem() is not called for fragments the FragmentManager restored after the activity got recreated.
+        // Keep references to the fragments that are actually displayed, no matter if they are new or restored.
+        // Fragments are only created when their page gets close to being displayed, therefore we also pass them their items here.
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int pos) {
+            PaymentRouteListFragment fragment = (PaymentRouteListFragment) super.instantiateItem(container, pos);
+            mFragments.put(pos, fragment);
+            if (mRouteItems != null)
+                fragment.replaceAllItems(mRouteItems.get(pos));
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return mFragments.size();
+            return mRouteCount;
         }
 
-        public PaymentRouteListFragment getFragment(int pos) {
-            return mFragments.get(pos);
+        public void setRouteItems(List<List<HopListItem>> routeItems) {
+            mRouteItems = routeItems;
+            for (int i = 0; i < mFragments.size(); i++) {
+                mFragments.valueAt(i).replaceAllItems(routeItems.get(mFragments.keyAt(i)));
+            }
         }
     }
 }

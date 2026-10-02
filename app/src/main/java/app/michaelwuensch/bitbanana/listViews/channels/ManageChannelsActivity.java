@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.SearchView;
@@ -262,13 +264,17 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         // Update items in recycler views
         if (mCurrentSearchString.isEmpty()) {
-            mPagerAdapter.getOpenChannelsList().replaceAllItems(mChannelItems);
-            mPagerAdapter.getClosedChannelsList().replaceAllItems(mClosedChannelItems);
+            if (mPagerAdapter.getOpenChannelsList() != null)
+                mPagerAdapter.getOpenChannelsList().replaceAllItems(mChannelItems);
+            if (mPagerAdapter.getClosedChannelsList() != null)
+                mPagerAdapter.getClosedChannelsList().replaceAllItems(mClosedChannelItems);
         } else {
             final List<ChannelListItem> filteredChannelList = filter(mChannelItems, mCurrentSearchString);
             final List<ChannelListItem> filteredClosedChannelList = filter(mClosedChannelItems, mCurrentSearchString);
-            mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
-            mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
+            if (mPagerAdapter.getOpenChannelsList() != null)
+                mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
+            if (mPagerAdapter.getClosedChannelsList() != null)
+                mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
         }
 
         updateActivityTitle();
@@ -508,13 +514,15 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
             public boolean onQueryTextChange(String newText) {
                 mCurrentSearchString = newText;
                 final List<ChannelListItem> filteredChannelList = filter(mChannelItems, newText);
-                mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
-                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500)
+                if (mPagerAdapter.getOpenChannelsList() != null)
+                    mPagerAdapter.getOpenChannelsList().replaceAllItems(filteredChannelList);
+                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500 && mPagerAdapter.getOpenChannelsList() != null)
                     mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
 
                 final List<ChannelListItem> filteredClosedChannelList = filter(mClosedChannelItems, newText);
-                mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
-                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500)
+                if (mPagerAdapter.getClosedChannelsList() != null)
+                    mPagerAdapter.getClosedChannelsList().replaceAllItems(filteredClosedChannelList);
+                if (System.currentTimeMillis() - createOptionsMenuTimestamp > 500 && mPagerAdapter.getClosedChannelsList() != null)
                     mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
 
                 return true;
@@ -622,8 +630,10 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
     }
 
     private void scrollToTop() {
-        mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
-        mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
+        if (mPagerAdapter.getOpenChannelsList() != null)
+            mPagerAdapter.getOpenChannelsList().scrollToPosition(0);
+        if (mPagerAdapter.getClosedChannelsList() != null)
+            mPagerAdapter.getClosedChannelsList().scrollToPosition(0);
     }
 
     public class ChannelsPagerAdapter extends FragmentPagerAdapter {
@@ -632,22 +642,26 @@ public class ManageChannelsActivity extends BaseAppCompatActivity implements Cha
 
         public ChannelsPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-            mOpenChannelsList = new ChannelListFragment();
-            mOpenChannelsList.setChannelSelectListener(ManageChannelsActivity.this);
-            mClosedChannelsList = new ChannelListFragment();
-            mClosedChannelsList.setChannelSelectListener(ManageChannelsActivity.this);
         }
 
         @Override
         public Fragment getItem(int pos) {
-            switch (pos) {
-                case 0:
-                    return mOpenChannelsList;
-                case 1:
-                    return mClosedChannelsList;
-                default:
-                    return mOpenChannelsList;
-            }
+            return new ChannelListFragment();
+        }
+
+        // getItem() is not called for fragments the FragmentManager restored after the activity got recreated.
+        // Keep references to the fragments that are actually displayed, no matter if they are new or restored.
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int pos) {
+            ChannelListFragment fragment = (ChannelListFragment) super.instantiateItem(container, pos);
+            // The listener is not restored with the fragment, therefore we always set it here.
+            fragment.setChannelSelectListener(ManageChannelsActivity.this);
+            if (pos == 1)
+                mClosedChannelsList = fragment;
+            else
+                mOpenChannelsList = fragment;
+            return fragment;
         }
 
         @Override

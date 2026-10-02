@@ -637,7 +637,8 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 updateTotalBalanceDisplay();
                 updateCustodialWarningVisibility();
                 // Clear history list
-                ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
+                if (((HomeActivity) getActivity()).getHistoryFragment() != null)
+                    ((HomeActivity) getActivity()).getHistoryFragment().updateHistoryDisplayList();
                 break;
             case ACTIVATING_BACKEND:
                 if (BackendManager.hasBackendConfigs())
