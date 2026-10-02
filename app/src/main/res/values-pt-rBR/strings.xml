@@ -1125,4 +1125,5 @@
     <string name="sign_message_lnurl_auth_phrase_refused">Esta mensagem não pode ser assinada. A assinatura daria acesso a todas as contas em que você fez login com LNURL-auth. Quem pediu para você assinar provavelmente está tentando roubar sua identidade.</string>
     <string name="lnurl_insecure_connection" comment="Parameters:  %1$s: Host name of the service">%1$s usa uma conexão não criptografada (http). Para proteger você, BitBanana conecta-se apenas a serviços LNURL que usem https ou Tor (.onion).</string>
     <string name="lnurl_pay_success_url_not_allowed">BitBanana não abre esta URL porque ela não usa uma conexão segura ou leva a um site diferente do serviço que você pagou. Abra apenas se confiar.</string>
+    <string name="error_connection_unencrypted_refused" comment="Parameters are:  %1$s: hostname/address">Conexão não criptografada recusada.\n\n%1$s usa http://, que enviaria sua senha e tokens de acesso sem criptografia pela internet.\n\nPor favor, utilize https://, um endereço Tor (.onion) ou se conecte pela sua rede local ou por uma VPN.</string>
 </resources>
