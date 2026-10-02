@@ -25,13 +25,20 @@ public class ForwardingSummaryFragment extends Fragment {
     public static final int TYPE_AVG_ROUTED = 3;
     public static final int TYPE_AVG_EVENTS_PER_DAY = 4;
 
+    private static final String ARGS_TYPE = "type";
+
     private TextView mTvSummaryText;
     private AmountView mAvAmount;
     private View mProgressIndicator;
     private int mType;
 
-    public ForwardingSummaryFragment(int type) {
-        mType = type;
+    // The type is passed as argument, as the fragment gets recreated with the empty constructor when the activity is restored.
+    public static ForwardingSummaryFragment newInstance(int type) {
+        ForwardingSummaryFragment fragment = new ForwardingSummaryFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARGS_TYPE, type);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -39,6 +46,9 @@ public class ForwardingSummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forwarding_summary, container, false);
+
+        if (getArguments() != null)
+            mType = getArguments().getInt(ARGS_TYPE, TYPE_AMOUNT_EARNED);
 
         // Get View elements
         mProgressIndicator = view.findViewById(R.id.progressIndicator);
