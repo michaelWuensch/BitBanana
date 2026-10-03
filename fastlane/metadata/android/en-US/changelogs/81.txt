@@ -1,0 +1,8 @@
+Security update: This release is the result of an in-depth security review. Many areas have been hardened, e.g. encrypted connections for LNURL and LndHub, stronger backup encryption and a stricter biometric unlock. We are not aware of any issue ever being exploited, but recommend all users to update.
+
+Also:
+- Fixed value input getting corrupted while typing if Fiat currencies approached < 1 sat for their smallest fraction.
+- Improve BPI353 DNS Query performance with precaching
+- Fixed the payment route view for payments with more than two routes
+- Fixed several possible crashes, e.g. when returning to the app, switching nodes while loading, swiping with multiple fingers or handling malformed scanned or pasted data
+- Updated translations
