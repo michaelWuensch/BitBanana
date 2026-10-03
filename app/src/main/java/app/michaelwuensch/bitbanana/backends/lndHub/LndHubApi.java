@@ -101,7 +101,7 @@ public class LndHubApi extends Api {
             json.put("amt", String.valueOf(createInvoiceRequest.getAmount() / 1000L));
             json.put("memo", createInvoiceRequest.getDescription());
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         RequestBody body = RequestBody.create(json.toString(), JSON);
 
@@ -228,7 +228,7 @@ public class LndHubApi extends Api {
             json.put("invoice", sendLnPaymentRequest.getBolt11().getBolt11String());
             //json.put("amount", String.valueOf(sendLnPaymentRequest.getAmount()))   Does not work with alby to pay 0 sat invoices
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         RequestBody body = RequestBody.create(json.toString(), JSON);
 

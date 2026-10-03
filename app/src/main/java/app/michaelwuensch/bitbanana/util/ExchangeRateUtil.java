@@ -141,7 +141,7 @@ public class ExchangeRateUtil {
                     responseJson = new JSONObject(responseData);
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "mempool response could not be parsed as json");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
                         broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }
@@ -181,7 +181,7 @@ public class ExchangeRateUtil {
                     responseJson = new JSONObject(responseData);
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "blockchain.info response could not be parsed as json");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
                         broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }
@@ -220,7 +220,7 @@ public class ExchangeRateUtil {
                     responseJson = new JSONObject(responseData);
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "Coinbase response could not be parsed as json");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass") || responseData.toLowerCase().contains("challenge")) {
                         broadcastExchangeRateUpdateFailed(ExchangeRateListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }
@@ -307,7 +307,7 @@ public class ExchangeRateUtil {
             formattedRates.remove("USD");
             formattedRates.put("USD", tempCurrency);
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         return formattedRates;
@@ -327,7 +327,7 @@ public class ExchangeRateUtil {
         try {
             responseRates = response.getJSONObject("data").getJSONObject("rates");
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         JSONObject formattedRates = new JSONObject();
@@ -386,7 +386,7 @@ public class ExchangeRateUtil {
                 // Update fiat currencies of the Monetary util
                 MonetaryUtil.getInstance().updateCurrencyByCurrencyCode(rateCode);
             } catch (JSONException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
         }
 
@@ -398,7 +398,7 @@ public class ExchangeRateUtil {
             availableCurrencies.put("currencies", availableCurrenciesArray);
             editor.putString(PrefsUtil.AVAILABLE_FIAT_CURRENCIES, availableCurrencies.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         editor.commit();

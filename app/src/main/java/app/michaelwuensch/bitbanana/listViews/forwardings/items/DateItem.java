@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import app.michaelwuensch.bitbanana.util.BBLog;
+
 public class DateItem extends ForwardingListItem {
 
     public long mDate; // in milliseconds
@@ -24,7 +26,7 @@ public class DateItem extends ForwardingListItem {
                     .parse(tempDateText);
             mTimestampNS = ((d.getTime() * 1000000L) + (86400000000000L - 1));
         } catch (ParseException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 

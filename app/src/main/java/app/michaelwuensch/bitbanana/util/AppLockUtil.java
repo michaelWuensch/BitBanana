@@ -71,7 +71,7 @@ public class AppLockUtil {
                 try {
                     isAppLockActive = new KeystoreUtil().isAppLockActive();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
 
                 // Only allow access if app lock is not active in key store!
@@ -160,14 +160,14 @@ public class AppLockUtil {
         try {
             bcm.apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         ContactsManager cm = ContactsManager.getInstance();
         cm.removeAllContacts();
         try {
             cm.apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 
@@ -180,14 +180,14 @@ public class AppLockUtil {
         try {
             bcm.apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         ContactsManager cm = ContactsManager.getInstance();
         cm.removeAllContacts();
         try {
             cm.apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 

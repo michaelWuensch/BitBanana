@@ -148,7 +148,7 @@ public class TorManager {
                     BBLog.i(LOG_TAG, "Tor stopped successfully because of shutdown hook.");
                 } catch (Throwable e) {
                     BBLog.e(LOG_TAG, "Stopping tor because of shutdown hook failed: " + e.getMessage());
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }));
 
@@ -267,8 +267,7 @@ public class TorManager {
                     () -> BBLog.i(LOG_TAG, "Tor started successfully."),
                     throwable -> {
                         BBLog.e(LOG_TAG, "Starting tor failed: " + throwable.getMessage());
-                        //noinspection CallToPrintStackTrace
-                        throwable.printStackTrace(); // Optional: Print the stack trace
+                        BBLog.printStackTrace(throwable);
                     }
             );
         }
@@ -287,8 +286,7 @@ public class TorManager {
                     BBLog.i(LOG_TAG, "Tor stopped successfully.");},
                 throwable -> {
                     BBLog.e(LOG_TAG, "Stopping tor failed: " + throwable.getMessage());
-                    //noinspection CallToPrintStackTrace
-                    throwable.printStackTrace(); // Optional: Print the stack trace
+                    BBLog.printStackTrace(throwable);
                 }
         );
     }
@@ -303,8 +301,7 @@ public class TorManager {
                 () -> BBLog.i(LOG_TAG, "Tor restarted successfully."),
                 throwable -> {
                     BBLog.e(LOG_TAG, "SRestarting tor failed: " + throwable.getMessage());
-                    //noinspection CallToPrintStackTrace
-                    throwable.printStackTrace(); // Optional: Print the stack trace
+                    BBLog.printStackTrace(throwable);
                 }
         );
     }

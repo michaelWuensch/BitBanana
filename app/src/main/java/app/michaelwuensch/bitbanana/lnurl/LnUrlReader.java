@@ -111,7 +111,7 @@ public class LnUrlReader {
 
                 initialRequest(ctx, decodedLnUrl, listener);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
                 BBLog.e(LOG_TAG, "LNURL is invalid. Decoding failed.");
                 listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
             } catch (LnurlDecoder.NoLnUrlDataException e) {
@@ -166,7 +166,7 @@ public class LnUrlReader {
                 } catch (MalformedURLException error) {
                     String host = ctx.getString(R.string.host);
                     listener.onError(ctx.getString(R.string.lnurl_service_not_responding, host), RefConstants.ERROR_DURATION_SHORT);
-                    error.printStackTrace();
+                    BBLog.printStackTrace(error);
                 }
             }
 
@@ -179,7 +179,7 @@ public class LnUrlReader {
                     interpretLnUrlReadResponse(response.body().string(), listener, ctx, host);
                 } catch (MalformedURLException error) {
                     listener.onError(ctx.getString(R.string.lnurl_decoding_no_lnurl_data), RefConstants.ERROR_DURATION_MEDIUM);
-                    error.printStackTrace();
+                    BBLog.printStackTrace(error);
                 }
             }
         });

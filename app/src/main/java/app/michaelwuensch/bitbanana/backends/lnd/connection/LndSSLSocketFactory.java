@@ -38,7 +38,7 @@ public class LndSSLSocketFactory {
         try {
             sslCtx = SSLContext.getInstance("TLS");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
@@ -48,7 +48,7 @@ public class LndSSLSocketFactory {
             try {
                 sslCtx.init(null, new TrustManager[]{new BlindTrustManager()}, null);
             } catch (KeyManagementException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
                 return null;
             }
             return sslCtx.getSocketFactory();
@@ -76,7 +76,7 @@ public class LndSSLSocketFactory {
 
                 } catch (Exception e) {
                     BBLog.w(LOG_TAG, "Error creating TrustManager for server authentication.");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
         }
@@ -87,7 +87,7 @@ public class LndSSLSocketFactory {
             sslCtx.init(null, null, new SecureRandom());
             BBLog.w(LOG_TAG, "Default TrustManager is used.");
         } catch (KeyManagementException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }

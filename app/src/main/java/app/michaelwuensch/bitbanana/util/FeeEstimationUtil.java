@@ -162,7 +162,7 @@ public class FeeEstimationUtil {
                     responseJson = new JSONObject(responseData);
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "mempool response could not be parsed as json");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
                         broadcastFeeEstimationUpdateFailed(FeeEstimationListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }
@@ -201,7 +201,7 @@ public class FeeEstimationUtil {
                     responseJson = new JSONObject(responseData);
                 } catch (JSONException e) {
                     BBLog.w(LOG_TAG, "blockstream response could not be parsed as json");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     if (responseData.toLowerCase().contains("cloudflare") && responseData.toLowerCase().contains("captcha-bypass")) {
                         broadcastFeeEstimationUpdateFailed(FeeEstimationListener.ERROR_CLOUDFLARE_BLOCKED_TOR, RefConstants.ERROR_DURATION_VERY_LONG);
                     }

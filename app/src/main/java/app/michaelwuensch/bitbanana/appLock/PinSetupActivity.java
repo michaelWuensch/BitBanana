@@ -14,6 +14,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -103,7 +104,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
                         .putString(PrefsUtil.PIN_HASH, UtilFunctions.appLockDataHash(value))
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
 
             // save pin length in preferences
@@ -135,7 +136,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
                             .putString(PrefsUtil.PIN_HASH, PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, ""))
                             .commit();
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
                 // Finally we also delete the connections
                 AppLockUtil.emergencyClearAllButWalletToShow();
@@ -146,7 +147,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
                         .putString(PrefsUtil.EMERGENCY_PIN_HASH, UtilFunctions.appLockDataHash(value))
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
         }
 
@@ -154,7 +155,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
             try {
                 new KeystoreUtil().addAppLockActiveKey();
             } catch (Exception e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
             finish();
         }

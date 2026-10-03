@@ -19,6 +19,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.listViews.licenses.items.LicenseListItem;
 import app.michaelwuensch.bitbanana.util.AppUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 
 public class LicensesActivity extends BaseAppCompatActivity {
 
@@ -58,7 +59,7 @@ public class LicensesActivity extends BaseAppCompatActivity {
                 mLicenseItems.add(new LicenseListItem(licenseJson));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         // Fix errors in the report (by replacing those licenses completely)
@@ -73,7 +74,7 @@ public class LicensesActivity extends BaseAppCompatActivity {
                 mLicenseItems.add(new LicenseListItem(licenseJson));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         // Add additional licenses (licenses that are not included in the automatically generated record)
@@ -87,7 +88,7 @@ public class LicensesActivity extends BaseAppCompatActivity {
                 mLicenseItems.add(new LicenseListItem(licenseJson));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         // Update the view

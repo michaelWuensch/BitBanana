@@ -327,7 +327,7 @@ public class Wallet {
         BBLog.e(LOG_TAG, throwable.getMessage());
         if (throwable.getCause() != null) {
             BBLog.e(LOG_TAG, throwable.getCause().getMessage());
-            throwable.getCause().printStackTrace();
+            BBLog.printStackTrace(throwable.getCause());
         }
     }
 

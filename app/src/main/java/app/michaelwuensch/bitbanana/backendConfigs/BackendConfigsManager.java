@@ -36,7 +36,7 @@ public class BackendConfigsManager {
         try {
             decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.BACKEND_CONFIGS, "");
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         if (isValidJson(decrypted)) {

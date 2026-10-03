@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import app.michaelwuensch.bitbanana.util.BBLog;
+
 public class DateItem extends HistoryListItem {
 
     public long mDate;
@@ -22,7 +24,7 @@ public class DateItem extends HistoryListItem {
                     .parse(tempDateText);
             mCreationDate = d.getTime() / 1000 + (60 * 60 * 24) - 1;
         } catch (ParseException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 

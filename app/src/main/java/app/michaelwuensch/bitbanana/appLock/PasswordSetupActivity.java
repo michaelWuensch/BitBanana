@@ -14,6 +14,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -95,7 +96,7 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                         .putString(PrefsUtil.PASSWORD_HASH, hashedValue)
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
 
             // The user just set the password, so biometric unlock can be set up if it is enabled.
@@ -105,7 +106,7 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                 try {
                     new KeystoreUtil().addAppLockActiveKey();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
                 finish();
             }
@@ -126,7 +127,7 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                             .putString(PrefsUtil.PASSWORD_HASH, PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, ""))
                             .commit();
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
                 // Finally we also delete the connections
                 AppLockUtil.emergencyClearAllButWalletToShow();
@@ -147,7 +148,7 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                             .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, hashedValue)
                             .commit();
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
 

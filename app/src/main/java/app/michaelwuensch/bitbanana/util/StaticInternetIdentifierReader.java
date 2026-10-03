@@ -242,7 +242,7 @@ public class StaticInternetIdentifierReader {
                         }
                         listener.onValidLnurlPay(lnUrlPayResponse);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                         if (isBlockedByCloudflare) {
                             listener.onError(ctx.getResources().getString(R.string.error_tor_blocked_lnurl, lnAddress.getDomain()), RefConstants.ERROR_DURATION_VERY_LONG);
                         } else {

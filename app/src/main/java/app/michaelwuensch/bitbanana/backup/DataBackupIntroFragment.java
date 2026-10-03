@@ -25,6 +25,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.customView.BBButton;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
@@ -93,10 +94,10 @@ public class DataBackupIntroFragment extends Fragment {
                         byte[] encryptedBackupBytes = Arrays.copyOfRange(fileBytes, 14, fileBytes.length);
                         ((BackupActivity) getActivity()).changeFragment(DataBackupRestoreFragment.newInstance(encryptedBackupBytes, validFile, backupVersion));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                         ((BaseAppCompatActivity) getActivity()).showError(getResources().getString(R.string.backup_data_open_backupfile_error), RefConstants.ERROR_DURATION_MEDIUM);
                     } catch (RuntimeException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                         ((BaseAppCompatActivity) getActivity()).showError(getResources().getString(R.string.error_no_permission_to_read_file), RefConstants.ERROR_DURATION_LONG);
                     }
                 }

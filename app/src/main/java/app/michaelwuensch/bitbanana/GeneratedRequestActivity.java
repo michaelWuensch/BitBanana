@@ -346,7 +346,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                     URL url = new URL(withdrawResponse.getCallback());
                     mServiceURLString = url.getHost();
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
 
                 if (mLnInvoice.getAmountRequested() > withdrawResponse.getMaxWithdrawable()) {
@@ -391,7 +391,7 @@ public class GeneratedRequestActivity extends BaseAppCompatActivity implements W
                             try {
                                 validateSecondResponse(response.body().string());
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                BBLog.printStackTrace(e);
                             }
                         }
                     });

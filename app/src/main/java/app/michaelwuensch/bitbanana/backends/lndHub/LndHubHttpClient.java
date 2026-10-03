@@ -199,7 +199,7 @@ public class LndHubHttpClient {
             try {
                 json.put("refresh_token", BackendManager.getCurrentBackendConfig().getTempRefreshToken());
             } catch (Exception e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
             RequestBody body = RequestBody.create(json.toString(), JSON);
 
@@ -220,7 +220,7 @@ public class LndHubHttpClient {
                 json.put("login", BackendManager.getCurrentBackendConfig().getUser());
                 json.put("password", BackendManager.getCurrentBackendConfig().getPassword());
             } catch (Exception e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
             RequestBody body = RequestBody.create(json.toString(), JSON);
 
@@ -253,7 +253,7 @@ public class LndHubHttpClient {
                 }
             } catch (Exception e) {
                 BBLog.e(LOG_TAG, "Lnd Hub auth failed.");
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
             return null;
         }
