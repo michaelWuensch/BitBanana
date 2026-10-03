@@ -18,9 +18,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -33,6 +36,7 @@ import app.michaelwuensch.bitbanana.contacts.Contact;
 import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 import app.michaelwuensch.bitbanana.labels.LabelsManager;
 import app.michaelwuensch.bitbanana.util.AliasManager;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.EncryptionUtil;
 import app.michaelwuensch.bitbanana.util.GsonUtil;
@@ -47,6 +51,21 @@ public class DataBackupUtil {
     // To allow importing zap backups
     public static final String ZAP_BACKUP_FILE_IDENTIFIER = "ZapBackup:";
 
+
+    // App lock settings belong to the device and are therefore neither included in backups nor restored from (older) backups.
+    // PIN and password are stored in the encrypted preferences, which are not part of the backup anyway.
+    private static final Set<String> APP_LOCK_SETTINGS = new HashSet<>(Arrays.asList(
+            PrefsUtil.PIN_LENGTH,
+            PrefsUtil.BIOMETRICS_ENABLED,
+            PrefsUtil.BIOMETRICS_PREFERRED,
+            PrefsUtil.BIOMETRICS_DISABLED_NOTICE_PENDING,
+            PrefsUtil.APP_NUM_UNLOCK_FAILS,
+            AppLockUtil.FAILED_UNLOCK_ELAPSED_REALTIME
+    ));
+
+    private static boolean isAppLockSetting(String key) {
+        return APP_LOCK_SETTINGS.contains(key);
+    }
 
     private static boolean isAliasCache(String key) {
         return key.equals(PrefsUtil.NODE_ALIAS_CACHE_JSON) || key.equals(PrefsUtil.NODE_ALIAS_CACHE);
@@ -80,6 +99,8 @@ public class DataBackupUtil {
         Map<String, Object> filteredEntries = new HashMap<>();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             if (entry.getKey().startsWith("fiat_")) // don't include fiat exchange rates in backup
+                continue;
+            if (isAppLockSetting(entry.getKey()))
                 continue;
             filteredEntries.put(entry.getKey(), entry.getValue());
         }
@@ -200,7 +221,7 @@ public class DataBackupUtil {
                             continue;
                         if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
                             continue;
-                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) // As we don't save the PIN which is in the encryptedPrefs, we also don't want to have the PIN length.
+                        if (isAppLockSetting(entry.getKey())) // App lock settings belong to the device. Older backups still contain them.
                             continue;
                         if (isAliasCache(entry.getKey())) {
                             // The alias cache is merged instead of overwritten, see AliasManager.mergeRestoredAliasCache()
@@ -251,7 +272,8 @@ public class DataBackupUtil {
                             continue;
                         if (entry.getKey().startsWith("fiat_")) // we don't want outdated fiat exchange rates...
                             continue;
-                        if (entry.getKey().equals(PrefsUtil.PIN_LENGTH)) continue;
+                        if (isAppLockSetting(entry.getKey())) // App lock settings belong to the device. Older backups still contain them.
+                            continue;
                         if (isAliasCache(entry.getKey())) {
                             // The alias cache is merged instead of overwritten, see AliasManager.mergeRestoredAliasCache()
                             if (value instanceof String)
