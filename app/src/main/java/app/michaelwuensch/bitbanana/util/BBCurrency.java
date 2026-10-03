@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 
+import java.math.BigDecimal;
 import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.DecimalFormat;
@@ -286,6 +287,26 @@ public class BBCurrency {
             if (returnEmptyForZero)
                 return "";
 
+        return getTextInputFormat(MsatPrecision, minFractionDigits).format(msats * getRate());
+    }
+
+    /**
+     * Reformats a validated text input of this currency (e.g. adds grouping separators) without converting it to msats first.
+     * Fiat inputs get truncated to full satoshis when converted. If the smallest fraction of a fiat currency is worth less than
+     * a satoshi, a round trip through msats would therefore change the value the user just typed.
+     */
+    public String formatTextInputString(String textInput, boolean MsatPrecision, int minFractionDigits) {
+        String normalizedInput = normalizeTextInput(textInput);
+        BigDecimal value;
+        try {
+            value = (normalizedInput == null || normalizedInput.isEmpty() || normalizedInput.equals(".")) ? BigDecimal.ZERO : new BigDecimal(normalizedInput);
+        } catch (NumberFormatException e) {
+            value = BigDecimal.ZERO;
+        }
+        return getTextInputFormat(MsatPrecision, minFractionDigits).format(value);
+    }
+
+    private DecimalFormat getTextInputFormat(boolean MsatPrecision, int minFractionDigits) {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(true);
@@ -298,7 +319,16 @@ public class BBCurrency {
         if (minFractionDigits > -1)
             df.setMinimumFractionDigits(Math.min(minFractionDigits, df.getMaximumFractionDigits()));
 
-        return df.format(msats * getRate());
+        return df;
+    }
+
+    /**
+     * Converts a text input to a plain number string with latin digits, no grouping and "." as fraction separator.
+     */
+    private String normalizeTextInput(String textInput) {
+        textInput = MonetaryUtil.normalizeDigits(textInput);
+        textInput = stripGrouping(textInput);
+        return MonetaryUtil.normalizeFractionSeparator(textInput);
     }
 
     public long TextInputToValueInMsats(String textInput) {
@@ -307,7 +337,7 @@ public class BBCurrency {
             if (getCode().equals(CURRENCY_CODE_SATOSHI))
                 return Long.parseLong(textInputMSatString);
             else
-                return MonetaryUtil.getInstance().mSatsTruncatedToSats((Long.parseLong(textInputMSatString))); // We want it to be truncated to full satoshis when entering feat amounts.
+                return MonetaryUtil.mSatsTruncatedToSats((Long.parseLong(textInputMSatString))); // We want it to be truncated to full satoshis when entering feat amounts.
         } catch (NumberFormatException e) {
             // This ensures it returns 0 instead of crashing for huge numbers.
             return 0L;
@@ -320,9 +350,7 @@ public class BBCurrency {
         DecimalFormat df = (DecimalFormat) nf;
         df.setGroupingUsed(false);
         df.setMaximumFractionDigits(0);
-        textInput = MonetaryUtil.getInstance().normalizeDigits(textInput);
-        textInput = stripGrouping(textInput);
-        textInput = MonetaryUtil.getInstance().normalizeFractionSeparator(textInput);
+        textInput = normalizeTextInput(textInput);
         if (textInput == null || textInput.isEmpty() || textInput.equals(".")) {
             textInputMSatString = "0";
         } else {
@@ -345,8 +373,8 @@ public class BBCurrency {
                 != tempInput.charAt(tempInput.length() - 1))
             return false;
 
-        input = MonetaryUtil.getInstance().normalizeFractionSeparator(input);
-        input = MonetaryUtil.getInstance().normalizeDigits(input);
+        input = MonetaryUtil.normalizeFractionSeparator(input);
+        input = MonetaryUtil.normalizeDigits(input);
 
         int numberOfDecimals = getMaxFractionsDigits();
 

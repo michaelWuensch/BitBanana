@@ -295,6 +295,13 @@ public class MonetaryUtil {
     }
 
     /**
+     * Reformats a validated text input of the current currency (e.g. adds grouping separators) without converting it to msats.
+     */
+    public String formatCurrentCurrencyTextInput(String textInput, boolean allowMsat, int minFractionDigits) {
+        return getCurrentCurrency().formatTextInputString(textInput, allowMsat, minFractionDigits);
+    }
+
+    /**
      * Converts the supplied value to msat. The exchange rate of the current currency is used.
      *
      * @param textInputValue
@@ -337,11 +344,11 @@ public class MonetaryUtil {
     /**
      * Makes the last three digits 0 in the msat amount truncating it to full satoshis
      */
-    public long mSatsTruncatedToSats(long mSats) {
+    public static long mSatsTruncatedToSats(long mSats) {
         return (mSats / 1000L) * 1000L;
     }
 
-    public String normalizeDigits(String input) {
+    public static String normalizeDigits(String input) {
         if (input == null) {
             return null;
         }
@@ -378,7 +385,7 @@ public class MonetaryUtil {
         return sb.toString();
     }
 
-    public String normalizeFractionSeparator(String input) {
+    public static String normalizeFractionSeparator(String input) {
         if (input == null) {
             return null;
         }

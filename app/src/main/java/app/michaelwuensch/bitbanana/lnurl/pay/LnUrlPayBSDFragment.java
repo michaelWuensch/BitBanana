@@ -314,7 +314,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 // Create send request
                 LnUrlSecondPayRequest lnUrlSecondPayRequest = new LnUrlSecondPayRequest.Builder()
                         .setCallback(mPaymentData.getCallback())
-                        .setAmount(MonetaryUtil.getInstance().mSatsTruncatedToSats(mAmountInput.getAmount()))
+                        .setAmount(MonetaryUtil.mSatsTruncatedToSats(mAmountInput.getAmount()))
                         .setComment(mPcvComment.getData())
                         .setPayerData(mPayerData)
                         .build();
