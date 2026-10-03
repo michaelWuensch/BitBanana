@@ -28,6 +28,8 @@ public class PrefsUtil {
     public static final String SETTINGS_VERSION = "settings_ver";
     public static final String ON_CHAIN_FEE_TIER = "on_chain_fee_tier";
     public static final String BIOMETRICS_PREFERRED = "biometrics_preferred";
+    public static final String BIOMETRICS_ENABLED = "biometricsEnabled";
+    public static final String BIOMETRICS_DISABLED_NOTICE_PENDING = "biometricsDisabledNoticePending";
     public static final String CURRENT_BACKEND_CONFIG = "current_wallet_config";
     public static final String AVAILABLE_FIAT_CURRENCIES = "fiat_available";
     public static final String LANGUAGE = "language";
@@ -150,7 +152,8 @@ public class PrefsUtil {
     }
 
     public static boolean isBiometricEnabled() {
-        return getPrefs().getBoolean("biometricsEnabled", true);
+        // Disabled by default for new installations. For existing installations the previous default (true) was persisted during the update, see LandingActivity.
+        return getPrefs().getBoolean(BIOMETRICS_ENABLED, false);
     }
 
     public static String getCurrentBackendConfig() {

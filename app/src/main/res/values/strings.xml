@@ -637,6 +637,7 @@
 
     <string name="biometricPrompt_title">Biometric Authentication</string>
     <string name="biometricNotSetup">In order to use this feature, you have to setup biometric authentication in your Android system settings.</string>
+    <string name="biometric_unlock_disabled_biometrics_changed">The biometrics of your device have changed (e.g. a new fingerprint was added). For your security, biometric unlock was disabled.\n\nPlease unlock with your PIN or password and enable biometric authentication again in the app lock settings.</string>
 
     <string name="invoice_detail">Invoice Detail</string>
     <string name="transaction_detail">Transaction Detail</string>

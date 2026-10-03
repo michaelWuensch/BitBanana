@@ -24,7 +24,7 @@ public class RefConstants {
     24: Changed balanceHide options (0.6.8)
     25: Added additional data to backup config: Network, VPNConfig. Changed values for backend (0.7.3)
     26: Changed certificate encoding from Base64Url to Base64 & macaroon to authenticationToken (0.7.6)
-    27: Enabled certificate verification for Tor connections to clearnet hosts
+    27: Enabled certificate verification for Tor connections to clearnet hosts. Biometric unlock is disabled by default for new installations, existing installations keep the previous default
     */
     public static final int CURRENT_SETTINGS_VERSION = 27;
 

@@ -20,7 +20,7 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="biometricsEnabled"
             android:title="@string/settings_enableBiometrics"
             app:iconSpaceReserved="false" />

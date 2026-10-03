@@ -14,6 +14,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
@@ -97,6 +98,9 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
             }
+
+            // The user just set the password, so biometric unlock can be set up if it is enabled.
+            BiometricUtil.onAppLockCredentialVerified();
 
             if (mSetupMode == ADD_PASSWORD) {
                 try {
