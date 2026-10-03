@@ -91,7 +91,7 @@ public class ManualAddContactActivity extends BaseAppCompatActivity {
         });
         mSpType.setSelection(1);
 
-        mEtData.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mEtData.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
         mEtData.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         mEtData.addTextChangedListener(new TextWatcher() {

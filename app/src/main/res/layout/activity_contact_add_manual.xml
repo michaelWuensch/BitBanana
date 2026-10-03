@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/border_text_input"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionDone|flagNoPersonalizedLearning"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
                 android:maxLines="4"

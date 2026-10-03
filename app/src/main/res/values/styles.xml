@@ -15,6 +15,9 @@
         <item name="android:alertDialogTheme">@style/BBDialog</item>
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
+
+        <!-- Prevent the keyboard from learning what is typed into BitBanana (node addresses, macaroons, labels, ...) -->
+        <item name="editTextStyle">@style/BBEditText</item>
     </style>
 
     <!-- Base application theme with action bar. -->
@@ -31,6 +34,9 @@
         <item name="android:alertDialogTheme">@style/BBDialog</item>
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
+
+        <!-- Prevent the keyboard from learning what is typed into BitBanana (node addresses, macaroons, labels, ...) -->
+        <item name="editTextStyle">@style/BBEditText</item>
     </style>
 
 
@@ -52,6 +58,9 @@
         <item name="android:alertDialogTheme">@style/BBDialog</item>
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
+
+        <!-- Prevent the keyboard from learning what is typed into BitBanana (node addresses, macaroons, labels, ...) -->
+        <item name="editTextStyle">@style/BBEditText</item>
     </style>
 
 
@@ -69,6 +78,14 @@
         <item name="android:windowBackground">@drawable/transparent_dialog_background</item>
         <item name="android:backgroundDimAmount">0.7</item>
         <item name="android:scrollbarThumbVertical">@drawable/scrollbar_vertical_thumb</item>
+
+        <!-- Prevent the keyboard from learning what is typed into BitBanana (node addresses, macaroons, labels, ...) -->
+        <item name="editTextStyle">@style/BBEditText</item>
+    </style>
+
+
+    <style name="BBEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:imeOptions">flagNoPersonalizedLearning</item>
     </style>
 
 
@@ -94,6 +111,9 @@
         <item name="android:alertDialogTheme">@style/BBDialog</item>
         <item name="dialogTheme">@style/BBDialog</item>
         <item name="alertDialogTheme">@style/BBDialog</item>
+
+        <!-- Prevent the keyboard from learning what is typed into BitBanana (node addresses, macaroons, labels, ...) -->
+        <item name="editTextStyle">@style/BBEditText</item>
     </style>
 
     <style name="BBBottomSheetDialogTheme" parent="BaseBBBottomSheetDialog" />
