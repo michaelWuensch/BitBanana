@@ -104,12 +104,12 @@ public class BBTextInputBox extends LinearLayout {
     }
 
     public void setImeTypeNext() {
-        mEtComment.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mEtComment.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
         mEtComment.setRawInputType(InputType.TYPE_CLASS_TEXT);
     }
 
     public void setImeTypeDone() {
-        mEtComment.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mEtComment.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
         mEtComment.setRawInputType(InputType.TYPE_CLASS_TEXT);
     }
 
