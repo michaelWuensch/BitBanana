@@ -2,6 +2,9 @@ package app.michaelwuensch.bitbanana.util;
 
 import androidx.annotation.NonNull;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * This class is used to handle typical URIs in the bitcoin space.
  */
@@ -87,6 +90,22 @@ public class UriUtil {
 
     public static boolean isNostrWalletConnectUri(String data) {
         return hasPrefix(URI_NOSTR_WALLET_CONNECT, data);
+    }
+
+    /**
+     * Returns true if the data is a http or https URL with a host, that can be opened in a browser.
+     * Other URLs that java.net.URL accepts (e.g. file:// or ftp://) return false.
+     */
+    public static boolean isWebUrl(String data) {
+        if (data == null)
+            return false;
+        try {
+            URL url = new URL(data);
+            boolean isHttp = url.getProtocol().equals("http") || url.getProtocol().equals("https");
+            return isHttp && url.getHost() != null && !url.getHost().isEmpty();
+        } catch (MalformedURLException e) {
+            return false;
+        }
     }
 
     public static String removeURI(@NonNull String data) {

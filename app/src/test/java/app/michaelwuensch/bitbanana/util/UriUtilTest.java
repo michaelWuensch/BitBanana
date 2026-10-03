@@ -75,6 +75,25 @@ public class UriUtilTest {
         assertTrue(UriUtil.isLightningUri(lightningUri));
     }
 
+    @Test
+    public void givenWebUrl_whenIsWebUrl_ThenReturnsTrue() {
+        assertTrue(UriUtil.isWebUrl("https://bitbanana.app"));
+        assertTrue(UriUtil.isWebUrl("http://bitbanana.app/path?query=1"));
+        assertTrue(UriUtil.isWebUrl("HTTPS://BITBANANA.APP"));
+    }
+
+    @Test
+    public void givenNonWebUrl_whenIsWebUrl_ThenReturnsFalse() {
+        assertFalse(UriUtil.isWebUrl(null));
+        assertFalse(UriUtil.isWebUrl(""));
+        assertFalse(UriUtil.isWebUrl("bitbanana.app"));
+        assertFalse(UriUtil.isWebUrl("file:///sdcard/test.txt"));
+        assertFalse(UriUtil.isWebUrl("ftp://bitbanana.app"));
+        assertFalse(UriUtil.isWebUrl("jar:https://bitbanana.app/test.jar!/"));
+        assertFalse(UriUtil.isWebUrl("https://"));
+        assertFalse(UriUtil.isWebUrl("http:///path"));
+    }
+
     /**
      * Returns the amount of occurrences of findString inside sourceString.
      */

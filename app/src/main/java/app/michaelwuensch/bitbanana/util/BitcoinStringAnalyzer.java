@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import app.michaelwuensch.bitbanana.R;
@@ -208,10 +207,10 @@ public class BitcoinStringAnalyzer {
     }
 
     private static void checkIfValidUrl(Context ctx, CompositeDisposable compositeDisposable, @NonNull String inputString, OnDataDecodedListener listener) {
-        try {
-            URL url = new URL(inputString);
+        // Only web pages are offered to be opened. Other URLs (e.g. file:// or ftp://) can not be opened safely.
+        if (UriUtil.isWebUrl(inputString)) {
             listener.onValidURL(inputString);
-        } catch (MalformedURLException e) {
+        } else {
             // No URL either, we have unrecognizable data
             listener.onNoReadableData();
         }

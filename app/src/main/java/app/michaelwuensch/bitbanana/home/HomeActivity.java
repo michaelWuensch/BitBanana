@@ -3,6 +3,7 @@ package app.michaelwuensch.bitbanana.home;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -677,8 +678,13 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                         .setMessage(dialogMessage)
                         .setCancelable(true)
                         .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlAsString));
-                            startActivity(browserIntent);
+                            try {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlAsString));
+                                startActivity(browserIntent);
+                            } catch (ActivityNotFoundException e) {
+                                // For example if no browser is installed.
+                                showError(getString(R.string.string_analyzer_unrecognized_data), RefConstants.ERROR_DURATION_SHORT);
+                            }
                         }).setNegativeButton(R.string.no, (dialog, whichButton) -> {
                         }).show();
             }
