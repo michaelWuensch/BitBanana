@@ -1,13 +1,36 @@
 package app.michaelwuensch.bitbanana.util;
 
+import android.os.SystemClock;
+
+import java.util.function.LongSupplier;
+
+/**
+ * Keeps track of when the app was last closed (moved to background) or unlocked to decide if the lock screen has to be shown again.
+ * <p>
+ * The time is measured with SystemClock.elapsedRealtime(). Unlike the system time it can not be changed by the user,
+ * so the lock screen can not be circumvented by setting the time of the device manually.
+ */
 public class TimeOutUtil {
     private static final String LOG_TAG = TimeOutUtil.class.getSimpleName();
 
-    private static long appClosed = 0L;
     private static TimeOutUtil instance = null;
+    private final LongSupplier mElapsedRealtime;
+    private final LongSupplier mLockScreenTimeoutSeconds;
+    // elapsedRealtime when the app was closed or unlocked
+    private long appClosed = 0L;
+    // As long as the timer was never started (e.g. fresh process start), the app is always considered timed out.
+    // This is necessary, as elapsedRealtime starts at 0 when the device boots.
+    private boolean timerStarted = false;
     private boolean canBeRestarted = true;
 
     private TimeOutUtil() {
+        this(SystemClock::elapsedRealtime, PrefsUtil::getLockScreenTimeout);
+    }
+
+    // used for unit tests
+    TimeOutUtil(LongSupplier elapsedRealtime, LongSupplier lockScreenTimeoutSeconds) {
+        mElapsedRealtime = elapsedRealtime;
+        mLockScreenTimeoutSeconds = lockScreenTimeoutSeconds;
     }
 
     public static TimeOutUtil getInstance() {
@@ -20,24 +43,23 @@ public class TimeOutUtil {
     }
 
     public void restartTimer() {
-        appClosed = System.currentTimeMillis();
+        appClosed = mElapsedRealtime.getAsLong();
+        timerStarted = true;
         BBLog.d(LOG_TAG, "App lock timer restarted");
     }
 
     public boolean isTimedOut() {
-        boolean timedOut = (System.currentTimeMillis() - appClosed) > PrefsUtil.getLockScreenTimeout() * 1000;
-        // Do also not allow times prior to "appClosed".
-        // This would allow to circumventing timeout check by setting the time of the device manually.
-        boolean invalidTime = System.currentTimeMillis() < appClosed;
-        return timedOut || invalidTime;
+        return isTimedOut(mLockScreenTimeoutSeconds.getAsLong());
     }
 
     public boolean isFullyTimedOut() {
-        boolean timedOut = (System.currentTimeMillis() - appClosed) > RefConstants.DISCONNECT_TIMEOUT * 1000;
-        // Do also not allow times prior to "appClosed".
-        // This would allow to circumventing timeout check by setting the time of the device manually.
-        boolean invalidTime = System.currentTimeMillis() < appClosed;
-        return timedOut || invalidTime;
+        return isTimedOut(RefConstants.DISCONNECT_TIMEOUT);
+    }
+
+    private boolean isTimedOut(long timeoutSeconds) {
+        if (!timerStarted)
+            return true;
+        return (mElapsedRealtime.getAsLong() - appClosed) > timeoutSeconds * 1000;
     }
 
     public boolean getCanBeRestarted() {
