@@ -376,11 +376,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToBackground() {
         BBLog.d(LOG_TAG, "BitBanana moved to background");
 
-        // ToDo: check if this works here!
-        if (TimeOutUtil.getInstance().getCanBeRestarted()) {
-            TimeOutUtil.getInstance().restartTimer();
-        }
-        TimeOutUtil.getInstance().setCanBeRestarted(false);
+        TimeOutUtil.getInstance().onMovedToBackground();
 
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
         App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> disconnectTimeoutReached(), RefConstants.DISCONNECT_TIMEOUT * 1000);

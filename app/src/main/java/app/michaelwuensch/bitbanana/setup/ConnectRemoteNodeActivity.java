@@ -14,7 +14,6 @@ import app.michaelwuensch.bitbanana.util.HelpDialogUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 
@@ -116,8 +115,6 @@ public class ConnectRemoteNodeActivity extends BaseScannerActivity {
                 // The configuration was saved. Now make it the currently active wallet.
                 PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
-                // Do not ask for pin again...
-                TimeOutUtil.getInstance().restartTimer();
 
                 // In case another wallet was open before, we want to have all values reset.
                 Wallet.getInstance().reset();

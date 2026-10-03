@@ -5,7 +5,10 @@ import android.os.SystemClock;
 import java.util.function.LongSupplier;
 
 /**
- * Keeps track of when the app was last closed (moved to background) or unlocked to decide if the lock screen has to be shown again.
+ * Decides if the lock screen has to be shown, based on how long the unlocked app was in background.
+ * <p>
+ * While the app is unlocked and in foreground it never times out. The timeout only starts when the unlocked app is moved to background.
+ * Moving the app to background while the lock screen is shown does not start or extend anything, so the lock screen can not be circumvented this way.
  * <p>
  * The time is measured with SystemClock.elapsedRealtime(). Unlike the system time it can not be changed by the user,
  * so the lock screen can not be circumvented by setting the time of the device manually.
@@ -16,12 +19,11 @@ public class TimeOutUtil {
     private static TimeOutUtil instance = null;
     private final LongSupplier mElapsedRealtime;
     private final LongSupplier mLockScreenTimeoutSeconds;
-    // elapsedRealtime when the app was closed or unlocked
-    private long appClosed = 0L;
-    // As long as the timer was never started (e.g. fresh process start), the app is always considered timed out.
-    // This is necessary, as elapsedRealtime starts at 0 when the device boots.
-    private boolean timerStarted = false;
-    private boolean canBeRestarted = true;
+    // True if access was granted (unlocked or no app lock) and the lock screen was not shown since.
+    // It is false on a fresh process start.
+    private boolean unlocked = false;
+    // elapsedRealtime when the unlocked app was moved to background, -1 while it is in foreground.
+    private long backgroundSince = -1;
 
     private TimeOutUtil() {
         this(SystemClock::elapsedRealtime, PrefsUtil::getLockScreenTimeout);
@@ -42,31 +44,53 @@ public class TimeOutUtil {
         return instance;
     }
 
-    public void restartTimer() {
-        appClosed = mElapsedRealtime.getAsLong();
-        timerStarted = true;
-        BBLog.d(LOG_TAG, "App lock timer restarted");
+    /**
+     * Has to be called when access to the app was granted (correct PIN/password, biometrics, within timeout or no app lock active).
+     */
+    public void setUnlocked() {
+        unlocked = true;
+        backgroundSince = -1;
     }
 
+    /**
+     * Has to be called when the lock screen is shown.
+     */
+    public void setLocked() {
+        unlocked = false;
+    }
+
+    /**
+     * Has to be called when the app was moved to background. Only starts the timeout if the app is currently unlocked.
+     */
+    public void onMovedToBackground() {
+        if (unlocked && backgroundSince < 0) {
+            backgroundSince = mElapsedRealtime.getAsLong();
+            BBLog.d(LOG_TAG, "App lock timeout started");
+        }
+    }
+
+    /**
+     * @return true if the lock screen has to be shown.
+     */
     public boolean isTimedOut() {
-        return isTimedOut(mLockScreenTimeoutSeconds.getAsLong());
-    }
-
-    public boolean isFullyTimedOut() {
-        return isTimedOut(RefConstants.DISCONNECT_TIMEOUT);
-    }
-
-    private boolean isTimedOut(long timeoutSeconds) {
-        if (!timerStarted)
+        if (!unlocked)
             return true;
-        return (mElapsedRealtime.getAsLong() - appClosed) > timeoutSeconds * 1000;
+        return isInBackgroundLongerThan(mLockScreenTimeoutSeconds.getAsLong());
     }
 
-    public boolean getCanBeRestarted() {
-        return canBeRestarted;
+    /**
+     * @return true if the app was in background so long, that a full reconnect is necessary.
+     */
+    public boolean isFullyTimedOut() {
+        if (backgroundSince < 0)
+            // Either a fresh process start or the unlocked app is in foreground.
+            return !unlocked;
+        return isInBackgroundLongerThan(RefConstants.DISCONNECT_TIMEOUT);
     }
 
-    public void setCanBeRestarted(boolean canBeRestarted) {
-        this.canBeRestarted = canBeRestarted;
+    private boolean isInBackgroundLongerThan(long timeoutSeconds) {
+        if (backgroundSince < 0)
+            return false;
+        return (mElapsedRealtime.getAsLong() - backgroundSince) > timeoutSeconds * 1000;
     }
 }

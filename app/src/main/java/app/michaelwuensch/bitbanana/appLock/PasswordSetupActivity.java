@@ -18,7 +18,6 @@ import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
@@ -113,9 +112,6 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
             if (mSetupMode == CHANGE_PASSWORD) {
                 // Show success message
                 Toast.makeText(PasswordSetupActivity.this, R.string.password_changed, Toast.LENGTH_SHORT).show();
-
-                // Reset the app lock timeout. We don't want to ask for password again...
-                TimeOutUtil.getInstance().restartTimer();
 
                 // Go to home screen
                 Intent intent = new Intent(PasswordSetupActivity.this, HomeActivity.class);

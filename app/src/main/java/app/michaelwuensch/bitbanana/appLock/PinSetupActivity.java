@@ -18,7 +18,6 @@ import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
@@ -165,9 +164,6 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
         if (mSetupMode == CHANGE_PIN) {
             // Show success message
             Toast.makeText(PinSetupActivity.this, R.string.pin_changed, Toast.LENGTH_SHORT).show();
-
-            // Reset the app lock timeout. We don't want to ask for PIN again...
-            TimeOutUtil.getInstance().restartTimer();
 
             // Go to home screen
             Intent intent = new Intent(PinSetupActivity.this, HomeActivity.class);

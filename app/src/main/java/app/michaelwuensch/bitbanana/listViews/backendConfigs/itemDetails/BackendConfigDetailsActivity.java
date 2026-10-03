@@ -37,7 +37,6 @@ import app.michaelwuensch.bitbanana.setup.ManualSetup;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 
 
 public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
@@ -68,8 +67,6 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
             public void onClick(View view) {
                 PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, mId).commit();
 
-                // Do not ask for pin again...
-                TimeOutUtil.getInstance().restartTimer();
 
                 // This will automatically open the current connection previously saved in the shared prefs
                 openHome();

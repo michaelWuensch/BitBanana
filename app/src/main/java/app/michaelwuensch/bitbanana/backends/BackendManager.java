@@ -28,7 +28,6 @@ import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.wallet.Wallet;
 
 public class BackendManager {
@@ -78,9 +77,6 @@ public class BackendManager {
 
         setupDelayHandler();
         delayHandler.removeCallbacksAndMessages(null);
-
-        // Allow resetting the Pin timeout
-        TimeOutUtil.getInstance().setCanBeRestarted(true);
 
         // Stop if requested backend is already active and we don't forceCleanReload to reload
         if (!forceCleanReload && backendConfig.equals(currentBackendConfig) && currentBackendState == BackendState.BACKEND_CONNECTED) {

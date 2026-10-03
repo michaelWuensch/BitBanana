@@ -173,7 +173,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
                 PrefsUtil.editPrefs().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                TimeOutUtil.getInstance().restartTimer();
+                TimeOutUtil.getInstance().setUnlocked();
 
                 PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0).apply();
 
@@ -357,7 +357,7 @@ public class PinEntryActivity extends BaseAppCompatActivity {
             e.printStackTrace();
         }
         if (correct) {
-            TimeOutUtil.getInstance().restartTimer();
+            TimeOutUtil.getInstance().setUnlocked();
             AppLockUtil.isEmergencyUnlocked = emergencyUnlock;
 
             PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
