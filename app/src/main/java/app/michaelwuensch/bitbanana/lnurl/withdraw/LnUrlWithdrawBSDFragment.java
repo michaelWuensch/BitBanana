@@ -86,7 +86,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFo
             URL url = new URL(mWithdrawData.getCallback());
             mServiceURLString = url.getHost();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         mHandler = new Handler();
@@ -237,7 +237,7 @@ public class LnUrlWithdrawBSDFragment extends BaseBSDFragment implements ClearFo
                                     try {
                                         validateSecondResponse(response.body().string());
                                     } catch (IOException e) {
-                                        e.printStackTrace();
+                                        BBLog.printStackTrace(e);
                                     }
                                 }
                             });

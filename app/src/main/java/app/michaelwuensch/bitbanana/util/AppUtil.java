@@ -51,7 +51,7 @@ public class AppUtil {
             json = new String(buffer, StandardCharsets.UTF_8);
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            BBLog.printStackTrace(ex);
             return null;
         }
         return json;

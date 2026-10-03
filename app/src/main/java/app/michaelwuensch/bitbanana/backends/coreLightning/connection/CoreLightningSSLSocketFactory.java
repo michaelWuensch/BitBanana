@@ -42,7 +42,7 @@ public class CoreLightningSSLSocketFactory {
         try {
             sslCtx = SSLContext.getInstance("TLS");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }
@@ -86,7 +86,7 @@ public class CoreLightningSSLSocketFactory {
 
         } catch (Exception e) {
             BBLog.w(LOG_TAG, "Error creating TrustManager for server authentication.");
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         // If the above failed, use the default TrustManager which is used when set to null
@@ -95,7 +95,7 @@ public class CoreLightningSSLSocketFactory {
             sslCtx.init(km, null, new SecureRandom());
             BBLog.w(LOG_TAG, "Default TrustManager is used.");
         } catch (KeyManagementException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
             return null;
         }

@@ -227,7 +227,7 @@ public class InvoiceUtil {
 
                 } catch (URISyntaxException e) {
                     BBLog.w(LOG_TAG, "URI could not be parsed");
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     listener.onError(ctx.getString(R.string.error_invalid_bitcoin_request), RefConstants.ERROR_DURATION_MEDIUM, ERROR_UNKNOWN);
                 }
 

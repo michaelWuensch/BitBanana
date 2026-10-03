@@ -1,6 +1,7 @@
 package app.michaelwuensch.bitbanana.baseClasses;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +49,15 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         RtlTransitions.applyCloseTransition(this);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Tapjacking protection: Hide overlays of other apps while BitBanana is visible (Android 12+).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            getWindow().setHideOverlayWindows(true);
+        }
     }
 
     @Override

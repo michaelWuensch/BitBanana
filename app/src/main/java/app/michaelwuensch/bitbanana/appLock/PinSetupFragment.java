@@ -24,6 +24,7 @@ import java.security.GeneralSecurityException;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -233,12 +234,12 @@ public class PinSetupFragment extends Fragment {
                     try {
                         PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.PIN_HASH).remove(PrefsUtil.EMERGENCY_PIN_HASH).commit();
                     } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                     try {
                         new KeystoreUtil().removeAppLockActiveKey();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                     BiometricUtil.deleteKey();
                     // Make sure to delete all connections but the displayed one when the PIN is removed during an emergency unlock
@@ -248,7 +249,7 @@ public class PinSetupFragment extends Fragment {
                     try {
                         PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.EMERGENCY_PIN_HASH).commit();
                     } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                 }
                 getActivity().finish();
@@ -429,7 +430,7 @@ public class PinSetupFragment extends Fragment {
                 emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "").equals(hashedInput);
                 correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput) || emergencyUnlock;
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
         } else if (mMode == CONFIRM_MODE || mMode == CONFIRM_EMERGENCY_MODE) {
             correct = mUserInput.toString().equals(mTempPin);

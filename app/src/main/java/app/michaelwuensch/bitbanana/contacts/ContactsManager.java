@@ -62,7 +62,7 @@ public class ContactsManager {
         try {
             decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.CONTACTS, "");
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         if (isValidJson(decrypted)) {
@@ -344,7 +344,7 @@ public class ContactsManager {
                     try {
                         cm.apply();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     if (listener != null) {
@@ -381,7 +381,7 @@ public class ContactsManager {
         try {
             PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.CONTACTS, jsonString).commit();
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 
@@ -413,7 +413,7 @@ public class ContactsManager {
                      InvalidAlgorithmParameterException | NoSuchPaddingException |
                      NoSuchProviderException | BadPaddingException | KeyStoreException |
                      IllegalBlockSizeException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
                 mContactsJson = createEmptyContactsJson();
             }
         }

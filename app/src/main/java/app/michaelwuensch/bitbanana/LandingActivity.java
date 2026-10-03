@@ -95,7 +95,7 @@ public class LandingActivity extends BaseAppCompatActivity {
             try {
                 PrefsUtil.editEncryptedPrefs().clear().commit();
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
 
             new AlertDialog.Builder(LandingActivity.this)

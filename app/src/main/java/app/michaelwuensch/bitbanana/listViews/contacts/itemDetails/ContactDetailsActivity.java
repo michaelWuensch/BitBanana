@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.customView.UserAvatarView;
 import app.michaelwuensch.bitbanana.listViews.contacts.ManageContactsActivity;
 import app.michaelwuensch.bitbanana.listViews.contacts.ScanContactActivity;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.ClipBoardUtil;
 import app.michaelwuensch.bitbanana.util.FeatureManager;
 import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
@@ -197,7 +198,7 @@ public class ContactDetailsActivity extends BaseAppCompatActivity {
         try {
             ContactsManager.getInstance().apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         finish();
     }

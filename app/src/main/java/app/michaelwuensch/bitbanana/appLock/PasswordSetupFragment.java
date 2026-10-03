@@ -28,6 +28,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBButton;
 import app.michaelwuensch.bitbanana.customView.BBPasswordInputFieldView;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
@@ -192,12 +193,12 @@ public class PasswordSetupFragment extends Fragment {
                     try {
                         PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.PASSWORD_HASH).remove(PrefsUtil.EMERGENCY_PASSWORD_HASH).commit();
                     } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                     try {
                         new KeystoreUtil().removeAppLockActiveKey();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                     BiometricUtil.deleteKey();
                     // Make sure to delete all connections but the displayed one when the password is removed during an emergency unlock
@@ -207,7 +208,7 @@ public class PasswordSetupFragment extends Fragment {
                     try {
                         PrefsUtil.editEncryptedPrefs().remove(PrefsUtil.EMERGENCY_PASSWORD_HASH).commit();
                     } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                 }
                 getActivity().finish();
@@ -320,7 +321,7 @@ public class PasswordSetupFragment extends Fragment {
                     }
                 }
             } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
         }
 

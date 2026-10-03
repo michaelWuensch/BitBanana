@@ -34,6 +34,7 @@ import app.michaelwuensch.bitbanana.customView.BBInfoLineView;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.listViews.backendConfigs.ManageBackendConfigsActivity;
 import app.michaelwuensch.bitbanana.setup.ManualSetup;
+import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
@@ -279,7 +280,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
                             TextView tvWalletName = findViewById(R.id.nodeName);
                             tvWalletName.setText(input.getText().toString().trim());
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            BBLog.printStackTrace(e);
                         }
                     }
 
@@ -340,7 +341,7 @@ public class BackendConfigDetailsActivity extends BaseAppCompatActivity {
         try {
             backendConfigsManager.apply();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         if (PrefsUtil.getCurrentBackendConfig().equals(mId)) {

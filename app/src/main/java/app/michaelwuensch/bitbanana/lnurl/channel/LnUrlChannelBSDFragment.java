@@ -103,7 +103,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
             mServiceName.setText(host);
         } catch (MalformedURLException e) {
             mServiceName.setText(R.string.unknown);
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
 
@@ -218,7 +218,7 @@ public class LnUrlChannelBSDFragment extends BaseBSDFragment {
                     BBLog.v(TAG, responseData);
                     validateFinalResponse(responseData);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
         });

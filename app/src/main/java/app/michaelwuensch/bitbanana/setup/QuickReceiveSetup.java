@@ -266,7 +266,7 @@ public class QuickReceiveSetup extends BaseAppCompatActivity {
             BackendConfigsManager.getInstance().apply();
             BBLog.d(LOG_TAG, "QuickReceive method saved.");
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         Intent resultIntent = new Intent();
         setResult(Activity.RESULT_OK, resultIntent);

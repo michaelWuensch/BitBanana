@@ -129,7 +129,7 @@ public class DataBackupUtil {
             outputStream.write(fileHeader);
             outputStream.write(encryptedBackupBytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             return null;
         }
         return outputStream.toByteArray();
@@ -156,7 +156,7 @@ public class DataBackupUtil {
             outputStream.write(BACKUP_FILE_IDENTIFIER.getBytes(StandardCharsets.UTF_8));
             outputStream.write(UtilFunctions.intToByteArray(backupVersion));
         } catch (IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         return outputStream.toByteArray();
     }
@@ -179,7 +179,7 @@ public class DataBackupUtil {
                 try {
                     BackendConfigsManager.getInstance().apply();
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     return false;
                 }
             }
@@ -195,7 +195,7 @@ public class DataBackupUtil {
                     BackendConfigsManager.getInstance().apply();
                     BBLog.d(LOG_TAG, "Connections updated.");
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
 
@@ -315,7 +315,7 @@ public class DataBackupUtil {
                     BackendConfigsManager.getInstance().apply();
                     BBLog.d(LOG_TAG, "Connections restored.");
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
 
@@ -341,7 +341,7 @@ public class DataBackupUtil {
                     BackendConfigsManager.getInstance().apply();
                     BBLog.d(LOG_TAG, "Connections restored.");
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
 
@@ -369,7 +369,7 @@ public class DataBackupUtil {
                     BackendConfigsManager.getInstance().apply();
                     BBLog.d(LOG_TAG, "Connections restored.");
                 } catch (GeneralSecurityException | IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 }
             }
 
@@ -379,7 +379,7 @@ public class DataBackupUtil {
                     try {
                         BackendConfigsManager.getInstance().apply();
                     } catch (GeneralSecurityException | IOException e) {
-                        e.printStackTrace();
+                        BBLog.printStackTrace(e);
                     }
                 }
             }
@@ -399,7 +399,7 @@ public class DataBackupUtil {
                          InvalidAlgorithmParameterException | NoSuchPaddingException |
                          NoSuchProviderException | BadPaddingException | KeyStoreException |
                          IllegalBlockSizeException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                     return false;
                 }
             }

@@ -164,7 +164,7 @@ public class PrefsUtil {
         try {
             return getEncryptedPrefs().contains(PIN_HASH);
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             return true;
         }
     }
@@ -173,7 +173,7 @@ public class PrefsUtil {
         try {
             return getEncryptedPrefs().contains(PASSWORD_HASH);
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             return true;
         }
     }
@@ -182,7 +182,7 @@ public class PrefsUtil {
         try {
             return getEncryptedPrefs().contains(EMERGENCY_PIN_HASH);
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             return false;
         }
     }
@@ -191,7 +191,7 @@ public class PrefsUtil {
         try {
             return getEncryptedPrefs().contains(EMERGENCY_PASSWORD_HASH);
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             return false;
         }
     }

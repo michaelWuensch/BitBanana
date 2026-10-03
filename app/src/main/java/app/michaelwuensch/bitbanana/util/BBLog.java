@@ -125,6 +125,34 @@ public class BBLog {
     }
 
     /**
+     * Use this instead of Throwable.printStackTrace().
+     * The message of an exception might contain sensitive data (e.g. an URL with a token), therefore the stack trace is only printed in debug builds.
+     * If logging is enabled, the exception is also added to the in app log. In release builds its message is redacted.
+     */
+    public static void printStackTrace(@Nullable Throwable throwable) {
+        if (throwable == null)
+            return;
+        if (BuildConfig.BUILD_TYPE.equals("debug")) {
+            throwable.printStackTrace();
+        }
+        if (PrefsUtil.isLoggingEnabled()) {
+            String message = BuildConfig.BUILD_TYPE.equals("debug") ? throwable.toString() : redactException(throwable);
+            String tag = "BBLog";
+            // Use the location where the exception was caught, as the location where it was thrown is often inside a library.
+            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+            if (stackTrace.length > 1) {
+                StackTraceElement caller = stackTrace[1];
+                String className = caller.getClassName();
+                tag = className.substring(className.lastIndexOf('.') + 1);
+                if (tag.contains("$"))
+                    tag = tag.substring(0, tag.indexOf('$'));
+                message = message + " (" + caller.getFileName() + ":" + caller.getLineNumber() + ")";
+            }
+            addLogItem(message, tag, BBLogItem.Verbosity.ERROR);
+        }
+    }
+
+    /**
      * Use this for data that might contain secrets, like scanned QR codes, URIs or connection strings.
      * In debug builds the data is returned unchanged. In release builds everything that could be a secret is replaced,
      * while the structure (scheme, host, port, names of query parameters, lengths) stays visible for debugging.

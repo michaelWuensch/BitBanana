@@ -26,7 +26,7 @@ public class UtilFunctions {
             byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
             return HexUtil.bytesToHex(hash);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            BBLog.printStackTrace(ex);
         }
         return null;
     }
@@ -36,7 +36,7 @@ public class UtilFunctions {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             return digest.digest(data);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            BBLog.printStackTrace(ex);
         }
         return null;
     }
@@ -65,14 +65,14 @@ public class UtilFunctions {
                 createRandomSource();
             }
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         String salt = "";
         try {
             String decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.RANDOM_SOURCE, "");
             salt = "BitBanana" + decrypted;
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         return salt;
@@ -84,7 +84,7 @@ public class UtilFunctions {
             int randomNumber = random.nextInt();
             PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.RANDOM_SOURCE, String.valueOf(randomNumber)).commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 
@@ -195,9 +195,9 @@ public class UtilFunctions {
             byte[] macData = mac.doFinal(data);
             result = HexUtil.bytesToHex(macData);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
         return result;
     }

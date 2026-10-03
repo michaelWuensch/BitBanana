@@ -208,7 +208,7 @@ public abstract class BaseScannerActivity extends BaseAppCompatActivity implemen
 
             } catch (Exception e) {
                 BBLog.e(LOG_TAG, "Camera error:: " + e.getMessage());
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
             }
         }, ContextCompat.getMainExecutor(this));
 

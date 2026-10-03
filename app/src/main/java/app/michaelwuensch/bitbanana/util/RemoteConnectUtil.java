@@ -351,7 +351,7 @@ public class RemoteConnectUtil {
             backendConfigsManager.apply();
             listener.onSaved(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
             listener.onError(e.getMessage(), RefConstants.ERROR_DURATION_SHORT);
         }
     }

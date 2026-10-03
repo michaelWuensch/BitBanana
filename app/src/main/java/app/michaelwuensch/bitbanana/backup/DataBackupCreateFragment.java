@@ -88,7 +88,7 @@ public class DataBackupCreateFragment extends Fragment implements DataBackupCrea
                             OutputStream outputStream = getActivity().getContentResolver().openOutputStream(data.getData());
                             startWritingBackupFile(outputStream);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            BBLog.printStackTrace(e);
                             mAdapter.setBackupCreationFinished(false);
                             BBLog.w(TAG, "Error writing backup file.");
                         }
@@ -124,7 +124,7 @@ public class DataBackupCreateFragment extends Fragment implements DataBackupCrea
                         success = true;
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    BBLog.printStackTrace(e);
                 } finally {
                     try {
                         outputStream.close();

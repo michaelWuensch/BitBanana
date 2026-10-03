@@ -47,7 +47,7 @@ public class LabelsManager {
         try {
             decrypted = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.LABELS, "");
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         if (isValidJson(decrypted)) {
@@ -214,7 +214,7 @@ public class LabelsManager {
         try {
             PrefsUtil.editEncryptedPrefs().putString(PrefsUtil.LABELS, jsonString).commit();
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
     }
 

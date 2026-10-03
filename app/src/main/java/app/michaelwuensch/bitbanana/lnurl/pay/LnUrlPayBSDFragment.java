@@ -122,7 +122,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
             URL url = new URL(mPaymentData.getCallback());
             mServiceURLString = url.getHost();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            BBLog.printStackTrace(e);
         }
 
         mHandler = new Handler();
@@ -343,7 +343,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                             String responseContent = response.body().string();
                             validateSecondResponse(responseContent);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            BBLog.printStackTrace(e);
                         }
                     }
                 });
@@ -558,7 +558,7 @@ public class LnUrlPayBSDFragment extends BaseBSDFragment implements ClearFocusLi
                 dlg.show();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                BBLog.printStackTrace(e);
                 BBLog.e(LOG_TAG, "Decryption error!");
                 mTvSuccessActionText.setText(R.string.lnurl_pay_success_secret_decrypt_error);
             }
