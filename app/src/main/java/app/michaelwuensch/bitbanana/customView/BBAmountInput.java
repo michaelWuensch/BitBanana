@@ -138,16 +138,18 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
                 int lastSelectionEnd = Math.max(mEtAmount.getSelectionEnd(), 0);
                 DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
                 int decimalSeparatorPosition = unformattedString.lastIndexOf(symbols.getDecimalSeparator());
+                // Format the typed value itself and not mAmount. For fiat, mAmount is truncated to full satoshis,
+                // which would alter the typed digits if a fraction of the fiat currency is worth less than a satoshi.
                 String formattedString = "";
                 if (mEndsWithFractionSeparator) {
-                    formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, -1, false);
+                    formattedString = MonetaryUtil.getInstance().formatCurrentCurrencyTextInput(unformattedString, !mIsOnChain && mAllowMsats, -1);
                     formattedString += symbols.getDecimalSeparator();
                 } else {
                     if (decimalSeparatorPosition != -1) {
                         int nrMinFactionDigits = unformattedString.length() - 1 - decimalSeparatorPosition;
-                        formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, nrMinFactionDigits, false);
+                        formattedString = MonetaryUtil.getInstance().formatCurrentCurrencyTextInput(unformattedString, !mIsOnChain && mAllowMsats, nrMinFactionDigits);
                     } else {
-                        formattedString = MonetaryUtil.getInstance().msatsToCurrentCurrencyTextInputString(mAmount, !mIsOnChain && mAllowMsats, -1, false);
+                        formattedString = MonetaryUtil.getInstance().formatCurrentCurrencyTextInput(unformattedString, !mIsOnChain && mAllowMsats, -1);
                     }
                 }
 
@@ -187,10 +189,11 @@ public class BBAmountInput extends ConstraintLayout implements SharedPreferences
                 // validate input
                 mAmountValid = MonetaryUtil.getInstance().validateCurrentCurrencyInput(arg0.toString(), !mIsOnChain && mAllowMsats);
 
-                if (mAmountValid && !mIsFixedAmount && !mBlockUpdatingValue) {
-                    mAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
+                if (mAmountValid)
                     mEndsWithFractionSeparator = arg0.toString().endsWith(".") || arg0.toString().endsWith(",") || arg0.toString().endsWith("٫");
-                }
+
+                if (mAmountValid && !mIsFixedAmount && !mBlockUpdatingValue)
+                    mAmount = MonetaryUtil.getInstance().convertCurrentCurrencyTextInputToMsat(arg0.toString());
             }
         });
 
