@@ -16,7 +16,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.lnd.LndBackend;
 import app.michaelwuensch.bitbanana.backends.lnd.connection.LndConnection;
-import app.michaelwuensch.bitbanana.backends.lndHub.LndHubCleartextInterceptor;
+import app.michaelwuensch.bitbanana.connection.CleartextInterceptor;
 import app.michaelwuensch.bitbanana.models.CurrentNodeInfo;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -126,7 +126,7 @@ public class Wallet {
                     connectionTest(true);
                 }, throwable -> {
                     BBLog.e(LOG_TAG, "Exception authenticating for LndHub instance: " + throwable.getMessage());
-                    if (LndHubCleartextInterceptor.isCleartextRefused(throwable))
+                    if (CleartextInterceptor.isCleartextRefused(throwable))
                         broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_UNENCRYPTED_CONNECTION);
                     else
                         broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_AUTHENTICATION_TOKEN);

@@ -17,6 +17,7 @@ import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.backends.CertificateInfoStore;
 import app.michaelwuensch.bitbanana.backends.lndHub.models.LndHubAuthResponse;
+import app.michaelwuensch.bitbanana.connection.CleartextInterceptor;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
@@ -45,7 +46,7 @@ public class LndHubHttpClient {
     public void createHttpClient() {
         // Base client that is used for authentication. It must use the same network path (e.g. Tor) as all other requests.
         OkHttpClient.Builder baseBuilder = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new LndHubCleartextInterceptor())
+                .addNetworkInterceptor(new CleartextInterceptor())
                 .connectTimeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS);
 
         if (BackendManager.getCurrentBackendConfig().getUseTor()) {
