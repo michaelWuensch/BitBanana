@@ -14,10 +14,10 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
@@ -98,6 +98,9 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                 e.printStackTrace();
             }
 
+            // The user just set the password, so biometric unlock can be set up if it is enabled.
+            BiometricUtil.onAppLockCredentialVerified();
+
             if (mSetupMode == ADD_PASSWORD) {
                 try {
                     new KeystoreUtil().addAppLockActiveKey();
@@ -109,9 +112,6 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
             if (mSetupMode == CHANGE_PASSWORD) {
                 // Show success message
                 Toast.makeText(PasswordSetupActivity.this, R.string.password_changed, Toast.LENGTH_SHORT).show();
-
-                // Reset the app lock timeout. We don't want to ask for password again...
-                TimeOutUtil.getInstance().restartTimer();
 
                 // Go to home screen
                 Intent intent = new Intent(PasswordSetupActivity.this, HomeActivity.class);

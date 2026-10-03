@@ -89,7 +89,7 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
         showKeyboard();
 
         // Make biometrics Button visible if enabled.
-        if (PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
+        if (BiometricUtil.isBiometricUnlockOffered()) {
             mBtnBiometrics.setVisibility(View.VISIBLE);
         } else {
             mBtnBiometrics.setVisibility(View.GONE);
@@ -97,10 +97,7 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
 
         Executor executor = Executors.newSingleThreadExecutor();
 
-        mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle(getResources().getString(R.string.biometricPrompt_title))
-                .setNegativeButtonText(getResources().getString(R.string.cancel))
-                .build();
+        mPromptInfo = BiometricUtil.createPromptInfo(getResources().getString(R.string.biometricPrompt_title), getResources().getString(R.string.cancel));
 
 
         mBiometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
@@ -109,9 +106,14 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
 
+                if (!BiometricUtil.isAuthenticationValid(result)) {
+                    exitBiometricsPrompt();
+                    return;
+                }
+
                 PrefsUtil.editPrefs().putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
 
-                TimeOutUtil.getInstance().restartTimer();
+                TimeOutUtil.getInstance().setUnlocked();
 
                 PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0).apply();
 
@@ -153,7 +155,7 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
         mBtnBiometrics.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BiometricUtil.notSetup()) {
+                if (BiometricUtil.noBiometricsEnrolledOnDevice()) {
                     AlertDialog.Builder adb = new AlertDialog.Builder(PasswordEntryActivity.this)
                             .setTitle(R.string.biometricPrompt_title)
                             .setMessage(R.string.biometricNotSetup)
@@ -229,11 +231,14 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
             e.printStackTrace();
         }
         if (correct) {
-            TimeOutUtil.getInstance().restartTimer();
+            TimeOutUtil.getInstance().setUnlocked();
             AppLockUtil.isEmergencyUnlocked = emergencyUnlock;
 
             PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
                     .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, false).apply();
+
+            if (!emergencyUnlock)
+                BiometricUtil.onAppLockCredentialVerified();
 
             if (emergencyUnlock && PrefsUtil.getEmergencyUnlockMode().equals("erase"))
                 AppLockUtil.emergencyClearAll();
@@ -279,19 +284,26 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
     }
 
     private void showBiometricsPrompt() {
+        BiometricPrompt.CryptoObject cryptoObject = BiometricUtil.createCryptoObject();
+        if (cryptoObject == null) {
+            // The biometrics of the device changed. Biometric unlock got disabled.
+            mBtnBiometrics.setVisibility(View.GONE);
+            BiometricUtil.showBiometricUnlockDisabledDialogIfPending(this);
+            return;
+        }
         hideKeyboard();
         mBtnBiometrics.setVisibility(View.GONE);
         mBtnContinue.setVisibility(View.GONE);
         mPasswordInput.setVisibility(View.GONE);
         mInputPasswordTitle.setVisibility(View.GONE);
-        mBiometricPrompt.authenticate(mPromptInfo);
+        mBiometricPrompt.authenticate(mPromptInfo, cryptoObject);
     }
 
     private void exitBiometricsPrompt() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mBtnBiometrics.setVisibility(View.VISIBLE);
+                mBtnBiometrics.setVisibility(BiometricUtil.isBiometricUnlockOffered() ? View.VISIBLE : View.GONE);
                 mBtnContinue.setVisibility(View.VISIBLE);
                 mPasswordInput.setVisibility(View.VISIBLE);
                 mInputPasswordTitle.setVisibility(View.VISIBLE);
@@ -311,8 +323,10 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
         super.onResume();
 
         // Show biometric prompt if preferred
-        if (PrefsUtil.isBiometricPreferred() && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
+        if (PrefsUtil.isBiometricPreferred() && BiometricUtil.isBiometricUnlockOffered() && !BiometricUtil.noBiometricsEnrolledOnDevice()) {
             showBiometricsPrompt();
+        } else {
+            BiometricUtil.showBiometricUnlockDisabledDialogIfPending(this);
         }
     }
 

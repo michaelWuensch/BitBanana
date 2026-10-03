@@ -14,10 +14,10 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.baseClasses.BaseAppCompatActivity;
 import app.michaelwuensch.bitbanana.home.HomeActivity;
 import app.michaelwuensch.bitbanana.util.AppLockUtil;
+import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UtilFunctions;
 
 
@@ -111,6 +111,9 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
                     .putInt(PrefsUtil.PIN_LENGTH, value.length())
                     .commit();
 
+            // The user just set the PIN, so biometric unlock can be set up if it is enabled.
+            BiometricUtil.onAppLockCredentialVerified();
+
             // Make sure to delete all connections but the displayed one when the PIN is changed during an emergency unlock
             if (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only")) {
                 AppLockUtil.emergencyClearAllButWalletToShow();
@@ -161,9 +164,6 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
         if (mSetupMode == CHANGE_PIN) {
             // Show success message
             Toast.makeText(PinSetupActivity.this, R.string.pin_changed, Toast.LENGTH_SHORT).show();
-
-            // Reset the app lock timeout. We don't want to ask for PIN again...
-            TimeOutUtil.getInstance().restartTimer();
 
             // Go to home screen
             Intent intent = new Intent(PinSetupActivity.this, HomeActivity.class);

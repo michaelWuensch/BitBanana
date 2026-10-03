@@ -1,9 +1,6 @@
 package app.michaelwuensch.bitbanana.appLock;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -14,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -23,14 +19,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.biometric.BiometricPrompt;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.customView.BBButton;
@@ -58,8 +50,6 @@ public class PasswordSetupFragment extends Fragment {
     private BBPasswordInputFieldView mPasswordInput;
     private BBPasswordInputFieldView mConfirmPasswordInput;
 
-    private BiometricPrompt mBiometricPrompt;
-    private BiometricPrompt.PromptInfo mPromptInfo;
 
     private TextView mTvPrompt;
     private String mPromptString;
@@ -184,91 +174,8 @@ public class PasswordSetupFragment extends Fragment {
         showKeyboard();
 
 
-        // Make biometrics Button visible if supported.
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
-            mBtnBiometrics.setVisibility(View.VISIBLE);
-        } else {
-            mBtnBiometrics.setVisibility(View.GONE);
-        }
-
-        Executor executor = Executors.newSingleThreadExecutor();
-
-        mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle(getResources().getString(R.string.biometricPrompt_title))
-                .setNegativeButtonText(getResources().getString(R.string.cancel))
-                .build();
-
-
-        mBiometricPrompt = new BiometricPrompt(requireActivity(), executor, new BiometricPrompt.AuthenticationCallback() {
-
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-
-                // Go to next step
-                if (mMode == ENTER_MODE) {
-
-                    PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0)
-                            .putBoolean(PrefsUtil.BIOMETRICS_PREFERRED, true).apply();
-
-                    ((AppLockInterface) getActivity()).correctAccessDataEntered();
-                }
-
-            }
-
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-
-                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
-                        errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
-                        errorCode == BiometricPrompt.ERROR_CANCELED) {
-                    exitBiometricsPrompt();
-                } else {
-                    // This has to happen on the UI thread. Only this thread can change the recycler view.
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            exitBiometricsPrompt();
-                            Toast.makeText(getActivity(), errString, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
-
-
-        // Show biometric prompt if preferred
-        if (mMode == ENTER_MODE && PrefsUtil.isBiometricEnabled() && BiometricUtil.hardwareAvailable()) {
-            if (PrefsUtil.isBiometricPreferred()) {
-                // This is disabled for now, as it crashes the app when called to early
-                //showBiometricPrompt();
-            }
-        }
-
-        // Call BiometricsPrompt on click on fingerprint symbol
-        mBtnBiometrics.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (BiometricUtil.notSetup()) {
-                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.biometricPrompt_title)
-                            .setMessage(R.string.biometricNotSetup)
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                }
-                            });
-                    Dialog dlg = adb.create();
-                    // Apply FLAG_SECURE to dialog to prevent screen recording
-                    if (PrefsUtil.isScreenRecordingPrevented()) {
-                        dlg.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-                    }
-                    dlg.show();
-                } else {
-                    showBiometricPrompt();
-                }
-            }
-        });
+        // Biometrics are only used to unlock the app. Changing or removing the password requires the current password.
+        mBtnBiometrics.setVisibility(View.GONE);
 
         // Set action on continue button
         mBtnContinue.setOnClickListener(new OnClickListener() {
@@ -292,6 +199,7 @@ public class PasswordSetupFragment extends Fragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    BiometricUtil.deleteKey();
                     // Make sure to delete all connections but the displayed one when the password is removed during an emergency unlock
                     if (AppLockUtil.isEmergencyUnlocked && PrefsUtil.getEmergencyUnlockMode().equals("show_selected_only"))
                         AppLockUtil.emergencyClearAllButWalletToShow();
@@ -427,31 +335,6 @@ public class PasswordSetupFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.backup_data_password_mismatch), Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void showBiometricPrompt() {
-        mPasswordInput.setVisibility(View.GONE);
-        mBtnContinue.setVisibility(View.GONE);
-        mBtnBiometrics.setVisibility(View.GONE);
-        mBiometricPrompt.authenticate(mPromptInfo);
-    }
-
-    private void exitBiometricsPrompt() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mBtnBiometrics.setVisibility(View.VISIBLE);
-                mBtnContinue.setVisibility(View.VISIBLE);
-                mPasswordInput.setVisibility(View.VISIBLE);
-                mPasswordInput.getEditText().requestFocus();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        showKeyboard();
-                    }
-                }, 250);
-            }
-        });
     }
 
     public void showKeyboard() {

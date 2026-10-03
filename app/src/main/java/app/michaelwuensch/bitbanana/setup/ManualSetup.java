@@ -44,7 +44,6 @@ import app.michaelwuensch.bitbanana.util.OnSingleClickListener;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.inputFilters.InputFilterPortRange;
 import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
@@ -511,8 +510,6 @@ public class ManualSetup extends BaseAppCompatActivity {
                 // The configuration was saved. Now make it the currently active wallet.
                 PrefsUtil.editPrefs().putString(PrefsUtil.CURRENT_BACKEND_CONFIG, id).commit();
 
-                // Do not ask for pin again...
-                TimeOutUtil.getInstance().restartTimer();
 
                 // Show home screen, remove history stack. Going to HomeActivity will initiate the connection to our new remote configuration.
                 Intent intent = new Intent(ManualSetup.this, HomeActivity.class);

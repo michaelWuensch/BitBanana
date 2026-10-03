@@ -32,6 +32,7 @@ public class AppLockUtil {
                     pinIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(pinIntent);
                     isLockScreenShown = true;
+                    TimeOutUtil.getInstance().setLocked();
                 } else {
                     if (!isLockScreenShown) {
                         // Go to PIN entry screen, but don't clear current state. This allows the user to continue where he left but is less secure as sensitive data is still kept in memory and could theoretically be read out by malicious apps or hackers.
@@ -40,6 +41,7 @@ public class AppLockUtil {
                         pinIntent.putExtra(PinEntryActivity.EXTRA_CLEAR_HISTORY, false);
                         activity.startActivity(pinIntent);
                         isLockScreenShown = true;
+                        TimeOutUtil.getInstance().setLocked();
                     }
                 }
             } else if (PrefsUtil.isPasswordEnabled()) {
@@ -51,6 +53,7 @@ public class AppLockUtil {
                     passwordIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(passwordIntent);
                     isLockScreenShown = true;
+                    TimeOutUtil.getInstance().setLocked();
                 } else {
                     if (!isLockScreenShown) {
                         // Go to PIN entry screen, but don't clear current state. This allows the user to continue where he left but is less secure as sensitive data is still kept in memory and could theoretically be read out by malicious apps or hackers.
@@ -59,6 +62,7 @@ public class AppLockUtil {
                         passwordIntent.putExtra(PinEntryActivity.EXTRA_CLEAR_HISTORY, false);
                         activity.startActivity(passwordIntent);
                         isLockScreenShown = true;
+                        TimeOutUtil.getInstance().setLocked();
                     }
                 }
             } else {
@@ -84,11 +88,13 @@ public class AppLockUtil {
                             }).show();
                 } else {
                     // Access granted
+                    TimeOutUtil.getInstance().setUnlocked();
                     onSecurityCheckPerformedListener.onAccessGranted();
                 }
             }
         } else {
             // Access granted
+            TimeOutUtil.getInstance().setUnlocked();
             onSecurityCheckPerformedListener.onAccessGranted();
         }
     }

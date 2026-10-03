@@ -188,6 +188,7 @@ public class SettingsAppLockFragment extends BBPreferenceFragmentCompat {
                         @Override
                         public void onConfirmed() {
                             mSwBiometrics.setChecked(true);
+                            BiometricUtil.createKey();
                         }
 
                         @Override
@@ -198,6 +199,11 @@ public class SettingsAppLockFragment extends BBPreferenceFragmentCompat {
                     // the value is set from the guardian callback, that's why we don't change switch state here.
                     return false;
                 } else {
+                    // The settings can only be reached when the app is unlocked, so the key can be created here.
+                    if ((Boolean) newValue)
+                        BiometricUtil.createKey();
+                    else
+                        BiometricUtil.deleteKey();
                     return true;
                 }
             }

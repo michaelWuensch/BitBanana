@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backends.lndHub;
+package app.michaelwuensch.bitbanana.connection;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,17 +19,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Network interceptor for all LndHub requests.
- * LndHub transmits the user credentials and access tokens with every request. Over unencrypted http everyone on the network path
- * could read them and take over the (custodial) account. Therefore unencrypted http is only allowed for:
+ * Network interceptor for all requests that transmit credentials (e.g. LndHub requests or fetching a BTCPay configuration containing a macaroon).
+ * Over unencrypted http everyone on the network path could read them and take over the account or node. Therefore unencrypted http is only allowed for:
  * - Tor hidden services, as Tor encrypts and authenticates the connection itself.
  * - Private network addresses (loopback, LAN, link-local, unique local and the carrier-grade NAT range used by Tailscale).
  * <p>
  * As a network interceptor it is called after the connection was established, but before anything is sent.
  * This allows us to check the address we are actually connected to, which also covers hostnames like "umbrel.local" and redirects.
  */
-public class LndHubCleartextInterceptor implements Interceptor {
-    private static final String LOG_TAG = LndHubCleartextInterceptor.class.getSimpleName();
+public class CleartextInterceptor implements Interceptor {
+    private static final String LOG_TAG = CleartextInterceptor.class.getSimpleName();
 
     @NonNull
     @Override
@@ -38,7 +37,7 @@ public class LndHubCleartextInterceptor implements Interceptor {
         if (!request.isHttps()) {
             Connection connection = chain.connection();
             if (connection == null || !isCleartextAllowed(request.url(), connection.route().proxy(), connection.route().socketAddress())) {
-                BBLog.w(LOG_TAG, "Refused unencrypted LndHub connection to " + request.url().host());
+                BBLog.w(LOG_TAG, "Refused unencrypted connection to " + request.url().host());
                 throw new CleartextRefusedException(request.url().host());
             }
         }
@@ -86,7 +85,7 @@ public class LndHubCleartextInterceptor implements Interceptor {
 
     public static class CleartextRefusedException extends IOException {
         public CleartextRefusedException(String host) {
-            super("Refused unencrypted LndHub connection to " + host);
+            super("Refused unencrypted connection to " + host);
         }
     }
 

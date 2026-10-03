@@ -23,6 +23,7 @@ import app.michaelwuensch.bitbanana.R;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.liveTests.LiveTestingActivity;
 import app.michaelwuensch.bitbanana.util.AppUtil;
+import app.michaelwuensch.bitbanana.util.BiometricUtil;
 import app.michaelwuensch.bitbanana.util.KeystoreUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 
@@ -109,6 +110,7 @@ public class SettingsFragment extends BBPreferenceFragmentCompat {
                          NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
+                BiometricUtil.deleteKey();
                 getActivity().finishAffinity();
                 AppUtil.getInstance(getActivity()).restartApp();
                 return true;

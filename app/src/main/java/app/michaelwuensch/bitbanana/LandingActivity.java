@@ -46,6 +46,7 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 } else if (ver == 22) {
                     migrateCurrencySettings();
@@ -53,24 +54,29 @@ public class LandingActivity extends BaseAppCompatActivity {
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 } else if (ver == 23) {
                     migrateHideBalanceOptions();
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 } else if (ver == 24) {
                     migrateBackendConfigs();
                     migrateCertificateEncodingAndMacaroon();
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 } else if (ver == 25) {
                     migrateCertificateEncodingAndMacaroon();
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 } else { // ver == 26
                     migrateTorClearnetCertificateVerification();
+                    migrateBiometricsEnabledDefault();
                     enterWallet();
                 }
             } else {
@@ -149,6 +155,12 @@ public class LandingActivity extends BaseAppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void migrateBiometricsEnabledDefault() {
+        // Biometric unlock is disabled by default for new installations. Existing installations keep the previous default (enabled).
+        if (!PrefsUtil.getPrefs().contains(PrefsUtil.BIOMETRICS_ENABLED))
+            PrefsUtil.editPrefs().putBoolean(PrefsUtil.BIOMETRICS_ENABLED, true).commit();
     }
 
     private void migrateLanguageSetting() {

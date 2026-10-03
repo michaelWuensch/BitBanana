@@ -1,4 +1,4 @@
-package app.michaelwuensch.bitbanana.backends.lndHub;
+package app.michaelwuensch.bitbanana.connection;
 
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class LndHubCleartextInterceptorTest {
+public class CleartextInterceptorTest {
 
     private static final Proxy TOR_PROXY = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 9050));
 
@@ -30,7 +30,7 @@ public class LndHubCleartextInterceptorTest {
     }
 
     private static boolean allowed(String url, Proxy proxy, InetSocketAddress socketAddress) {
-        return LndHubCleartextInterceptor.isCleartextAllowed(HttpUrl.get(url), proxy, socketAddress);
+        return CleartextInterceptor.isCleartextAllowed(HttpUrl.get(url), proxy, socketAddress);
     }
 
     @Test
@@ -80,38 +80,38 @@ public class LndHubCleartextInterceptorTest {
     @Test
     public void isPrivateAddress() throws IOException {
         // Loopback
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("127.0.0.1")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("::1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("127.0.0.1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("::1")));
         // LAN
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("10.255.255.255")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("172.31.0.1")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("192.168.0.1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("10.255.255.255")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("172.31.0.1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("192.168.0.1")));
         // Link-local
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("169.254.1.1")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("fe80::1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("169.254.1.1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("fe80::1")));
         // Carrier-grade NAT (Tailscale)
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.64.0.1")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.101.102.103")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.127.255.255")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.64.0.1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.101.102.103")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.127.255.255")));
         // Unique local (Tailscale IPv6)
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("fd7a:115c:a1e0::1")));
-        assertTrue(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("fc00::1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("fd7a:115c:a1e0::1")));
+        assertTrue(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("fc00::1")));
 
         // Public
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(null));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("8.8.8.8")));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("172.32.0.1")));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.63.255.255")));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.128.0.1")));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("2001:4860:4860::8888")));
-        assertFalse(LndHubCleartextInterceptor.isPrivateAddress(InetAddress.getByName("fe00::1")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(null));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("8.8.8.8")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("172.32.0.1")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.63.255.255")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("100.128.0.1")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("2001:4860:4860::8888")));
+        assertFalse(CleartextInterceptor.isPrivateAddress(InetAddress.getByName("fe00::1")));
     }
 
     @Test
     public void givenHttpsRequest_whenIntercept_thenRequestProceeds() throws IOException {
         FakeChain chain = new FakeChain("https://lndhub.example.com/auth?type=auth");
 
-        Response response = new LndHubCleartextInterceptor().intercept(chain);
+        Response response = new CleartextInterceptor().intercept(chain);
 
         assertEquals(200, response.code());
     }
@@ -121,19 +121,19 @@ public class LndHubCleartextInterceptorTest {
         FakeChain chain = new FakeChain("http://lndhub.example.com/auth?type=auth");
 
         try {
-            new LndHubCleartextInterceptor().intercept(chain);
+            new CleartextInterceptor().intercept(chain);
             fail("IOException expected");
         } catch (IOException expected) {
-            assertTrue(LndHubCleartextInterceptor.isCleartextRefused(expected));
+            assertTrue(CleartextInterceptor.isCleartextRefused(expected));
             assertFalse(chain.proceeded);
         }
     }
 
     @Test
     public void isCleartextRefused_checksCauses() {
-        assertTrue(LndHubCleartextInterceptor.isCleartextRefused(new RuntimeException(new LndHubCleartextInterceptor.CleartextRefusedException("host"))));
-        assertFalse(LndHubCleartextInterceptor.isCleartextRefused(new IOException("other")));
-        assertFalse(LndHubCleartextInterceptor.isCleartextRefused(null));
+        assertTrue(CleartextInterceptor.isCleartextRefused(new RuntimeException(new CleartextInterceptor.CleartextRefusedException("host"))));
+        assertFalse(CleartextInterceptor.isCleartextRefused(new IOException("other")));
+        assertFalse(CleartextInterceptor.isCleartextRefused(null));
     }
 
     private static class FakeChain implements Interceptor.Chain {

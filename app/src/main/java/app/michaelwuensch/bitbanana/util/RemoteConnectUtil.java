@@ -21,11 +21,14 @@ import app.michaelwuensch.bitbanana.backendConfigs.coreLightning.CoreLightningCo
 import app.michaelwuensch.bitbanana.backendConfigs.lndConnect.LndConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.lndHub.LndHubConnectStringParser;
 import app.michaelwuensch.bitbanana.backendConfigs.nostrWalletConnect.NostrWalletConnectUrlParser;
+import app.michaelwuensch.bitbanana.connection.CleartextInterceptor;
 import app.michaelwuensch.bitbanana.connection.HttpClient;
 import app.michaelwuensch.bitbanana.connection.vpn.VPNConfig;
 import app.michaelwuensch.bitbanana.wallet.QuickReceiveConfig;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -50,45 +53,76 @@ public class RemoteConnectUtil {
             decodeNostrWalletConnectString(ctx, data, listener);
         } else if (data.startsWith("config=")) {
             // URL to BTCPayConfigJson
-            String configUrl = data.replace("config=", "");
-
-            Request btcPayConfigRequest = new Request.Builder()
-                    .url(configUrl)
-                    .build();
-
-            HttpClient.getInstance().getClient().newCall(btcPayConfigRequest).enqueue(new Callback() {
-                Handler threadHandler = new Handler(Looper.getMainLooper());
-
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    threadHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT);
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    threadHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                decodeBtcPay(ctx, response.body().string(), listener);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            });
+            fetchBtcPayConfig(ctx, data.replace("config=", ""), listener);
         } else if (BTCPayConfigParser.isValidJson(data)) {
             // Valid BTCPay JSON
             decodeBtcPay(ctx, data, listener);
         } else {
             listener.onNoConnectData();
         }
+    }
+
+    /**
+     * Fetches the BTCPay configuration. It contains the macaroon of the node, therefore it is never fetched unencrypted from a public host.
+     */
+    private static void fetchBtcPayConfig(Context ctx, String configUrl, OnRemoteConnectDecodedListener listener) {
+        Handler threadHandler = new Handler(Looper.getMainLooper());
+
+        HttpUrl httpUrl = HttpUrl.parse(configUrl);
+        if (httpUrl == null) {
+            BBLog.w(LOG_TAG, "Invalid BTCPay configuration URL.");
+            listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT);
+            return;
+        }
+
+        // The configuration is fetched with the general http client, which only uses Tor if it is enabled in the settings.
+        if (isTorHostAddress(httpUrl.host()) && !PrefsUtil.isTorEnabled()) {
+            BBLog.w(LOG_TAG, "BTCPay configuration uses a Tor address, but Tor is disabled.");
+            listener.onError(ctx.getResources().getString(R.string.error_btcpay_config_requires_tor), RefConstants.ERROR_DURATION_LONG);
+            return;
+        }
+
+        Request btcPayConfigRequest = new Request.Builder()
+                .url(httpUrl)
+                .build();
+
+        OkHttpClient client = HttpClient.getInstance().getClient().newBuilder()
+                .addNetworkInterceptor(new CleartextInterceptor())
+                .build();
+
+        client.newCall(btcPayConfigRequest).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                threadHandler.post(() -> {
+                    if (CleartextInterceptor.isCleartextRefused(e))
+                        listener.onError(ctx.getResources().getString(R.string.error_connection_unencrypted_refused, httpUrl.host()), RefConstants.ERROR_DURATION_LONG);
+                    else
+                        listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT);
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                // Read the body here. Reading it on the main thread is not allowed, as it might access the network.
+                String body = null;
+                try (response) {
+                    if (response.isSuccessful() && response.body() != null)
+                        body = response.body().string();
+                    else
+                        BBLog.w(LOG_TAG, "Fetching BTCPay configuration failed. HTTP status: " + response.code());
+                } catch (IOException e) {
+                    BBLog.w(LOG_TAG, "Reading BTCPay configuration failed.");
+                }
+                String finalBody = body;
+                threadHandler.post(() -> {
+                    if (finalBody == null)
+                        listener.onError(ctx.getResources().getString(R.string.error_unableToFetchBTCPayConfig), RefConstants.ERROR_DURATION_SHORT);
+                    else
+                        decodeBtcPay(ctx, finalBody, listener);
+                });
+            }
+        });
     }
 
     private static void decodeLndConnectString(Context ctx, String data, OnRemoteConnectDecodedListener listener) {
