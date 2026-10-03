@@ -17,7 +17,7 @@ import app.michaelwuensch.bitbanana.contacts.ContactsManager;
 public class AppLockUtil {
 
     private static final String LOG_TAG = AppLockUtil.class.getSimpleName();
-    private static final String FAILED_UNLOCK_ELAPSED_REALTIME = "failedUnlockElapsedRealtime";
+    public static final String FAILED_UNLOCK_ELAPSED_REALTIME = "failedUnlockElapsedRealtime";
     public static boolean isLockScreenShown;
     public static boolean isEmergencyUnlocked;
 
