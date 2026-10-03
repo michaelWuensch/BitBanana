@@ -75,6 +75,13 @@ public class RemoteConnectUtil {
             return;
         }
 
+        // The configuration is fetched with the general http client, which only uses Tor if it is enabled in the settings.
+        if (isTorHostAddress(httpUrl.host()) && !PrefsUtil.isTorEnabled()) {
+            BBLog.w(LOG_TAG, "BTCPay configuration uses a Tor address, but Tor is disabled.");
+            listener.onError(ctx.getResources().getString(R.string.error_btcpay_config_requires_tor), RefConstants.ERROR_DURATION_LONG);
+            return;
+        }
+
         Request btcPayConfigRequest = new Request.Builder()
                 .url(httpUrl)
                 .build();
