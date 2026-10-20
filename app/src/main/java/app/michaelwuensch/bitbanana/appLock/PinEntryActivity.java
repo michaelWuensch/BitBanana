@@ -348,12 +348,29 @@ public class PinEntryActivity extends BaseAppCompatActivity {
 
         // Check if PIN was correct
         String userEnteredPin = mUserInput.toString();
-        String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
         boolean correct = false;
         boolean emergencyUnlock = false;
         try {
-            emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "").equals(hashedInput);
-            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput) || emergencyUnlock;
+            String emergencyPinVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "");
+            String pinVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "");
+            UtilFunctions.AppLockVerificationResult emergencyVerification =
+                    UtilFunctions.verifyAppLockVerifier(userEnteredPin, emergencyPinVerifier);
+            UtilFunctions.AppLockVerificationResult pinVerification =
+                    UtilFunctions.verifyAppLockVerifier(userEnteredPin, pinVerifier);
+
+            emergencyUnlock = emergencyVerification.isVerified();
+            correct = pinVerification.isVerified() || emergencyUnlock;
+
+            if (correct) {
+                String replacementVerifier = emergencyUnlock
+                        ? emergencyVerification.getReplacementVerifier()
+                        : pinVerification.getReplacementVerifier();
+                if (replacementVerifier != null) {
+                    PrefsUtil.getEncryptedPrefs().edit()
+                            .putString(emergencyUnlock ? PrefsUtil.EMERGENCY_PIN_HASH : PrefsUtil.PIN_HASH, replacementVerifier)
+                            .apply();
+                }
+            }
         } catch (GeneralSecurityException | IOException e) {
             BBLog.printStackTrace(e);
         }
