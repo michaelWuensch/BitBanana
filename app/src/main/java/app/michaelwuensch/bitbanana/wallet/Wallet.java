@@ -5,11 +5,13 @@ import android.os.Handler;
 
 import com.github.lightningnetwork.lnd.lnrpc.GetStateRequest;
 import com.github.lightningnetwork.lnd.lnrpc.UnlockWalletRequest;
+import com.github.lightningnetwork.lnd.lnrpc.WalletState;
 import com.google.protobuf.ByteString;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
@@ -22,8 +24,10 @@ import app.michaelwuensch.bitbanana.util.ApiUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Wallet {
@@ -38,8 +42,16 @@ public class Wallet {
     private WalletLoadState mWalletLoadState;
     private CurrentNodeInfo mCurrentNodeInfo;
 
+    // How long we wait for LND to finish starting up (e.g. after an update with database migrations) before we give up.
+    private static final int LND_STARTUP_TIMEOUT_SECONDS = 120;
+    private static final int LND_STARTUP_POLL_INTERVAL_SECONDS = 2;
+
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final Handler mHandler = new Handler();
+    private Disposable mExternalUnlockWatcher;
+    private Disposable mLndStartupWaiter;
+    // Set if we already waited the maximum time for LND to start. Prevents waiting endlessly in a loop.
+    private boolean mLndStartupTimedOut;
 
     private Wallet() {
         ;
@@ -81,6 +93,9 @@ public class Wallet {
 
         mHandler.removeCallbacksAndMessages(null);
         compositeDisposable.clear();
+        mExternalUnlockWatcher = null;
+        mLndStartupWaiter = null;
+        mLndStartupTimedOut = false;
     }
 
     public void cancelSubscriptions() {
@@ -136,6 +151,8 @@ public class Wallet {
     public void checkIfLndIsLocked() {
         setWalletLoadState(WalletLoadState.TESTING_CONNECTION_BEFORE_UNLOCK);
         BBLog.d(LOG_TAG, "LND lock state test.");
+        // This is a new connection attempt, so we are willing to wait for LND again.
+        mLndStartupTimedOut = false;
 
         if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted()) {
             BBLog.d(LOG_TAG, "Restricted account macaroon. LND is assumed to be unlocked.");
@@ -151,14 +168,21 @@ public class Wallet {
 
                     switch (getStateResponse.getState()) {
                         case LOCKED:
-                            BBLog.d(LOG_TAG, "LND is locked.");
-                            setWalletLoadState(WalletLoadState.LOCKED);
-                            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LOCKED);
+                            onLndLocked();
                             break;
-                        default:
+                        case NON_EXISTING:
+                            BBLog.w(LOG_TAG, "LND wallet has not been created yet.");
+                            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED);
+                            break;
+                        case SERVER_ACTIVE:
                             BBLog.d(LOG_TAG, "LND is unlocked.");
                             setWalletLoadState(WalletLoadState.UNLOCKED);
                             connectionTest(true);
+                            break;
+                        default:
+                            // UNLOCKED, RPC_ACTIVE or WAITING_TO_START: LND is still starting up and would reject our calls.
+                            BBLog.d(LOG_TAG, "LND is still starting up. State: " + getStateResponse.getState());
+                            waitForLndToStart();
                     }
                 }, throwable -> {
                     // If something in our connection is wrong, we cannot reach the state service and end here.
@@ -166,6 +190,125 @@ public class Wallet {
                     BBLog.d(LOG_TAG, "Error testing if LND is locked. Reason: " + throwable.getMessage()); // There is a hard coded proxy connect timeout of 30 seconds that we cannot change. With tor we often reach this.
                     errorHandling(throwable);
                 }));
+    }
+
+    /**
+     * LND rejects calls while it is starting up, for example after an update with database migrations, while the wallet is being unlocked or after LND restarted.
+     * Instead of failing, we poll LND until it is ready to accept calls. Once ready, the wallet gets (re)loaded.
+     */
+    private void waitForLndToStart() {
+        setWalletLoadState(WalletLoadState.WAITING_FOR_NODE_START);
+        if (mLndStartupWaiter != null && !mLndStartupWaiter.isDisposed()) {
+            // We are already waiting. This happens if for example the scheduled node info check runs into the startup of LND as well.
+            return;
+        }
+        mLndStartupWaiter = Observable.interval(0, LND_STARTUP_POLL_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                .concatMapSingle(tick -> pollLndState())
+                .filter(state -> state == WalletState.SERVER_ACTIVE
+                        || state == WalletState.LOCKED
+                        || state == WalletState.NON_EXISTING)
+                .firstOrError()
+                .timeout(LND_STARTUP_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(state -> {
+                    mLndStartupWaiter = null;
+                    switch (state) {
+                        case LOCKED:
+                            // LND got restarted in the meantime.
+                            onLndLocked();
+                            break;
+                        case NON_EXISTING:
+                            BBLog.w(LOG_TAG, "LND wallet has not been created yet.");
+                            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED);
+                            break;
+                        default:
+                            BBLog.d(LOG_TAG, "LND finished starting up.");
+                            setWalletLoadState(WalletLoadState.UNLOCKED);
+                            connectionTest(true);
+                    }
+                }, throwable -> {
+                    mLndStartupWaiter = null;
+                    if (throwable instanceof TimeoutException) {
+                        // Try it anyway. If LND is still not ready, the connection test shows a meaningful error instead of waiting again.
+                        BBLog.w(LOG_TAG, "LND did not finish starting up within " + LND_STARTUP_TIMEOUT_SECONDS + " seconds.");
+                        mLndStartupTimedOut = true;
+                        setWalletLoadState(WalletLoadState.UNLOCKED);
+                        connectionTest(true);
+                    } else {
+                        BBLog.d(LOG_TAG, "Error while waiting for LND to start. Reason: " + throwable.getMessage());
+                        errorHandling(throwable);
+                    }
+                });
+        compositeDisposable.add(mLndStartupWaiter);
+    }
+
+    /**
+     * Returns the current state of LND.
+     * Account restricted macaroons skip the state service (see checkIfLndIsLocked()), for them we derive the state from a getInfo call.
+     */
+    private Single<WalletState> pollLndState() {
+        if (((LndBackend) BackendManager.getCurrentBackend()).getIsAccountRestricted()) {
+            return BackendManager.api().getCurrentNodeInfo()
+                    .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
+                    .map(nodeInfo -> WalletState.SERVER_ACTIVE)
+                    .onErrorResumeNext(throwable -> isLndStartingUp(throwable) ? Single.just(WalletState.RPC_ACTIVE) : Single.error(throwable));
+        }
+        return LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
+                .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS)
+                .map(response -> response.getState());
+    }
+
+    private static boolean isLndStartingUp(Throwable throwable) {
+        if (throwable == null || throwable.getMessage() == null)
+            return false;
+        String message = throwable.getMessage().toLowerCase();
+        return message.contains("in the process of starting up") || message.contains("waiting to start");
+    }
+
+    /**
+     * Shows the unlock prompt and watches if the wallet gets unlocked by something else in the meantime.
+     */
+    private void onLndLocked() {
+        BBLog.d(LOG_TAG, "LND is locked.");
+        setWalletLoadState(WalletLoadState.LOCKED);
+        broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LOCKED);
+        watchForExternalUnlock();
+    }
+
+    /**
+     * Node distributions like Umbrel unlock the wallet automatically a few seconds after LND started.
+     * While the unlock prompt is shown we therefore keep polling the state of LND and continue without the password as soon as the wallet got unlocked.
+     */
+    private void watchForExternalUnlock() {
+        stopWatchingForExternalUnlock();
+        mExternalUnlockWatcher = Observable.interval(LND_STARTUP_POLL_INTERVAL_SECONDS, LND_STARTUP_POLL_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                .concatMapSingle(tick -> LndConnection.getInstance().getStateService().getState(GetStateRequest.newBuilder().build())
+                        .timeout(ApiUtil.getBackendTimeout(), TimeUnit.SECONDS))
+                .filter(response -> response.getState() != WalletState.LOCKED)
+                .firstOrError()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    mExternalUnlockWatcher = null;
+                    if (mWalletLoadState != WalletLoadState.LOCKED)
+                        return;
+                    BBLog.d(LOG_TAG, "LND wallet got unlocked externally. State: " + response.getState());
+                    // Same as after unlocking it ourselves, see unlockWallet().
+                    setWalletLoadState(WalletLoadState.WAITING_FOR_NODE_START);
+                    LndConnection.getInstance().restartConnection();
+                }, throwable -> {
+                    // For example if the connection got lost. The user can still unlock the wallet manually.
+                    mExternalUnlockWatcher = null;
+                    BBLog.d(LOG_TAG, "Stopped watching for an external unlock. Reason: " + throwable.getMessage());
+                });
+        compositeDisposable.add(mExternalUnlockWatcher);
+    }
+
+    private void stopWatchingForExternalUnlock() {
+        if (mExternalUnlockWatcher != null) {
+            // Removing it from the CompositeDisposable also disposes it.
+            compositeDisposable.remove(mExternalUnlockWatcher);
+            mExternalUnlockWatcher = null;
+        }
     }
 
     /**
@@ -178,6 +321,9 @@ public class Wallet {
                 .setWalletPassword(ByteString.copyFrom(password.getBytes()))
                 .build();
 
+        // We unlock it ourselves now.
+        stopWatchingForExternalUnlock();
+
         compositeDisposable.add(LndConnection.getInstance().getWalletUnlockerService().unlockWallet(unlockRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unlockWalletResponse -> {
@@ -187,13 +333,8 @@ public class Wallet {
 
                     // We have to reset the connection, because until you unlock the wallet, there is no Lightning rpc service available.
                     // Thus we could not connect to it with previous channel, so we reset the connection and connect to all services when unlocked.
+                    // Once the new connection is established, the wallet gets opened again. As LND needs some time after unlocking, it then waits until LND is ready.
                     LndConnection.getInstance().restartConnection();
-
-                    mHandler.postDelayed(() -> {
-                        // We have to call this delayed, as without it, it will show as unconnected until the wallet button is hit again.
-                        // ToDo: Create a routine that retries this until successful
-                        connectionTest(true);
-                    }, 10000);
 
                     mHandler.postDelayed(() -> {
                         // The channels are already fetched before, but they are all showed and saved as offline right after unlocking.
@@ -202,9 +343,21 @@ public class Wallet {
                         Wallet_Channels.getInstance().fetchChannels();
                     }, 12000);
                 }, throwable -> {
+                    if (throwable.getMessage() != null && throwable.getMessage().toLowerCase().contains("already unlocked")) {
+                        // The wallet got unlocked by something else (e.g. automatically by Umbrel) at the same time.
+                        BBLog.d(LOG_TAG, "Wallet was already unlocked.");
+                        setWalletLoadState(WalletLoadState.RECONNECT_AFTER_UNLOCK);
+                        // Same as after a successful unlock above.
+                        LndConnection.getInstance().restartConnection();
+                        return;
+                    }
                     BBLog.e(LOG_TAG, throwable.getMessage());
-                    // Show password prompt again after error
+                    // Show password prompt again after error (e.g. wrong password).
+                    // The state is still LOCKED, so it has to be broadcast again explicitly, otherwise the prompt would not show up again.
+                    mWalletLoadState = WalletLoadState.LOCKED;
+                    broadcastWalletLoadState(WalletLoadState.LOCKED);
                     broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LOCKED);
+                    watchForExternalUnlock();
                 }));
     }
 
@@ -301,6 +454,26 @@ public class Wallet {
             // - The server is not reachable at all. (e.g. wrong IP Address or server offline)
             BBLog.e(LOG_TAG, "Cannot reach remote");
             broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_TIMEOUT);
+        } else if (isLndStartingUp(throwable)) {
+            // This is the case if:
+            // - LND is still starting up (e.g. after an update with database migrations or after a restart) and does not accept calls yet.
+            // LND returns this with the gRPC status UNKNOWN, therefore this has to be checked before the macaroon checks below.
+            if (BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC && !mLndStartupTimedOut) {
+                BBLog.d(LOG_TAG, "LND is still starting up. Waiting until it is ready.");
+                waitForLndToStart();
+                return;
+            }
+            BBLog.w(LOG_TAG, "LND is still starting up.");
+            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_NODE_STARTING);
+        } else if (throwable.getMessage().toLowerCase().contains("wallet locked")) {
+            // This is the case if:
+            // - LND got restarted and its wallet is locked again.
+            onLndLocked();
+        } else if (throwable.getMessage().toLowerCase().contains("wallet not created")) {
+            // This is the case if:
+            // - The wallet of LND has not been created yet.
+            BBLog.w(LOG_TAG, "LND wallet has not been created yet.");
+            broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED);
         } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
             // This is the case if:
             // - The macaroon is invalid
@@ -551,6 +724,8 @@ public class Wallet {
         int ERROR_INTERNAL_CLEARNET = 11;
         int ERROR_AUTHENTICATION_TOKEN = 12;
         int ERROR_UNENCRYPTED_CONNECTION = 13;
+        int ERROR_NODE_STARTING = 14;
+        int ERROR_LND_WALLET_NOT_CREATED = 15;
 
         void onConnectionTestError(int error);
 
@@ -575,6 +750,7 @@ public class Wallet {
         LOCKED,
         UNLOCKED,
         RECONNECT_AFTER_UNLOCK,
+        WAITING_FOR_NODE_START,
         TESTING_CONNECTION,
         CONNECTION_SUCCESS,
         FETCHING_DATA,

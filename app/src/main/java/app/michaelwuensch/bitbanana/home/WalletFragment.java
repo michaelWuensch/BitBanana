@@ -549,6 +549,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvConnectError.setText(R.string.error_connection_rest_authentication);
             } else if (error == Wallet.ConnectionTestListener.ERROR_UNENCRYPTED_CONNECTION) {
                 mTvConnectError.setText(getString(R.string.error_connection_unencrypted_refused, BackendManager.getCurrentBackendConfig().getHostWithOverride()));
+            } else if (error == Wallet.ConnectionTestListener.ERROR_NODE_STARTING) {
+                mTvConnectError.setText(R.string.error_connection_node_starting);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED) {
+                mTvConnectError.setText(R.string.error_connection_lnd_wallet_not_created);
             }
         }
     }
@@ -586,6 +590,11 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 break;
             case TESTING_CONNECTION_BEFORE_UNLOCK:
                 mTvLoadingText.setText(R.string.wallet_load_sate_testing_connection);
+                break;
+            case WAITING_FOR_NODE_START:
+                mTvLoadingText.setText(R.string.wallet_load_state_waiting_for_node_start);
+                // Replaces the background of the unlock prompt or the error screen, if the wallet got unlocked by something else.
+                showLoadingScreen();
                 break;
             case LOCKED:
                 break;
