@@ -487,6 +487,7 @@
     <string name="error_connection_lnd_unavailable">Connection failed. The host can be accessed, but the node service isn\'t responding.\n\nPlease verify that the node is operational, that the port number (%1$s) is correct, and that port forwarding is set up.</string>
     <string name="error_connection_node_starting">Your node is still starting up and does not accept connections yet.\n\nThis can take a while, for example after updating your node. Please try again later.</string>
     <string name="error_connection_lnd_wallet_not_created">The wallet of your node has not been created yet.\n\nPlease create it on your node first.</string>
+    <string name="error_connection_client_certificate_rejected">The node rejected the client certificate.\n\nPlease make sure the client certificate and client key belong to this node.</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_no_internet">No internet connection!</string>

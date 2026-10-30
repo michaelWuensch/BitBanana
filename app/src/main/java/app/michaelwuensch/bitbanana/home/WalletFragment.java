@@ -553,6 +553,10 @@ public class WalletFragment extends Fragment implements SharedPreferences.OnShar
                 mTvConnectError.setText(R.string.error_connection_node_starting);
             } else if (error == Wallet.ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED) {
                 mTvConnectError.setText(R.string.error_connection_lnd_wallet_not_created);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_CLIENT_CERTIFICATE_REJECTED) {
+                mTvConnectError.setText(R.string.error_connection_client_certificate_rejected);
+            } else if (error == Wallet.ConnectionTestListener.ERROR_INVALID_CLIENT_CERTIFICATE_OR_KEY) {
+                mTvConnectError.setText(R.string.error_connection_clngrpc_invalidCertificateOrKey);
             }
         }
     }

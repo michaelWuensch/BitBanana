@@ -48,6 +48,12 @@ public class CoreLightningSSLSocketFactory {
             return null;
         }
 
+        // Otherwise the error would only show up during the TLS handshake with a technical message.
+        if (!isClientKeyMatchingClientCert(backendConfig)) {
+            BBLog.e(LOG_TAG, "The client key is invalid or does not belong to the client certificate.");
+            return null;
+        }
+
         KeyManager[] km = null;
         try {
             // Initialize KeyManager for client authentication
@@ -121,6 +127,14 @@ public class CoreLightningSSLSocketFactory {
         // init key store with client's certificate and key
         keyStore.setKeyEntry("client-key", clientPrivateKey, null, certChain);
         return keyStore;
+    }
+
+    private static boolean isClientKeyMatchingClientCert(BackendConfig backendConfig) {
+        try {
+            return CertificateUtil.isPrivateKeyMatchingCertificate(BaseEncoding.base64().decode(backendConfig.getClientKey()), createClientCertificate(backendConfig));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static PKCS8EncodedKeySpec getClientEncodedKeySpec(BackendConfig backendConfig) {

@@ -402,7 +402,6 @@ public class Wallet {
     }
 
     private void errorHandling(Throwable throwable) {
-        // ToDo: This is just error handling for LND, adapt for CoreLightning if necessary.
         if (throwable.getMessage().toLowerCase().contains("unavailable") && !throwable.getMessage().toLowerCase().contains(".onion")) {
             BBLog.e(LOG_TAG, "Service unavailable");
             if (throwable.getCause() != null) {
@@ -427,10 +426,22 @@ public class Wallet {
                     // This is the case if:
                     // - tor is not used and no certificate is provided or a wrong certificate is provided
                     broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_CERTIFICATE_NOT_TRUSTED);
+                } else if (throwable.getCause().getMessage().toLowerCase().contains("connection closed")) {
+                    // This is the case if:
+                    // - The port is reachable (e.g. through Docker, Tor or a reverse proxy), but the node service behind it is not running (yet).
+                    broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_UNAVAILABLE);
+                } else if (throwable.getCause().getMessage().toLowerCase().contains("error configuring certificate")) {
+                    // This is the case if:
+                    // - The client key does not belong to the client certificate (Core Lightning).
+                    broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_INVALID_CLIENT_CERTIFICATE_OR_KEY);
                 } else {
                     // Unknown error. Print what gets returned directly, always english.
                     broadcastConnectionTestResult(throwable.getCause().getMessage());
                 }
+            } else if (throwable.getMessage().toLowerCase().contains("end of stream") && BackendManager.getCurrentBackendType() == BackendConfig.BackendType.CORE_LIGHTNING_GRPC) {
+                // This is the case if:
+                // - Core Lightning closes the connection right after the TLS handshake, because it does not accept our client certificate.
+                broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_CLIENT_CERTIFICATE_REJECTED);
             } else if (throwable.getMessage().toLowerCase().contains("404") && PrefsUtil.isTorEnabled()) {
                 // This is the case if:
                 // - Tor is turned on, but the host cannot be resolved
@@ -474,12 +485,12 @@ public class Wallet {
             // - The wallet of LND has not been created yet.
             BBLog.w(LOG_TAG, "LND wallet has not been created yet.");
             broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_LND_WALLET_NOT_CREATED);
-        } else if (throwable.getMessage().toLowerCase().contains("verification failed")) {
+        } else if (throwable.getMessage().toLowerCase().contains("verification failed") && BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC) {
             // This is the case if:
             // - The macaroon is invalid
             BBLog.e(LOG_TAG, "Macaroon is invalid!");
             broadcastConnectionTestResult(false, ConnectionTestListener.ERROR_AUTHENTICATION);
-        } else if (throwable.getMessage().contains("UNKNOWN")) {
+        } else if (throwable.getMessage().contains("UNKNOWN") && BackendManager.getCurrentBackendType() == BackendConfig.BackendType.LND_GRPC) {
             // This is the case if:
             // - The macaroon has wrong encoding
             BBLog.e(LOG_TAG, "Macaroon is invalid!");
@@ -726,6 +737,8 @@ public class Wallet {
         int ERROR_UNENCRYPTED_CONNECTION = 13;
         int ERROR_NODE_STARTING = 14;
         int ERROR_LND_WALLET_NOT_CREATED = 15;
+        int ERROR_CLIENT_CERTIFICATE_REJECTED = 16;
+        int ERROR_INVALID_CLIENT_CERTIFICATE_OR_KEY = 17;
 
         void onConnectionTestError(int error);
 

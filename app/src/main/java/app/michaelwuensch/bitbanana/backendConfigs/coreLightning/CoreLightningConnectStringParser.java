@@ -164,12 +164,16 @@ public class CoreLightningConnectStringParser extends BaseConnectionParser {
                     mError = ERROR_NO_CLIENT_KEY;
                     return this;
                 } else {
+                    // The client key has to be readable and has to belong to the client certificate, otherwise the TLS connection cannot be established.
+                    boolean isValidKey;
                     try {
-                        byte[] keyBytes = clientKey.getBytes(StandardCharsets.UTF_8);
-                        // ToDo: more sophisticated key validation
+                        isValidKey = CertificateUtil.isPrivateKeyMatchingCertificate(CertificateUtil.privateKey_PEM_To_DER(clientKey), CertificateUtil.certificateFromDER(clientCert.getBytes(StandardCharsets.UTF_8)));
                     } catch (Exception e) {
-                        BBLog.e(LOG_TAG, "clientKey decoding failed");
-                        mError = ERROR_PARAMETER_DECODING_FAILED;
+                        isValidKey = false;
+                    }
+                    if (!isValidKey) {
+                        BBLog.e(LOG_TAG, "clientKey is invalid or does not belong to the client certificate");
+                        mError = ERROR_INVALID_CERTIFICATE_OR_KEY;
                         return this;
                     }
                 }
