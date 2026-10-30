@@ -950,6 +950,16 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
                     Toast.makeText(HomeActivity.this, R.string.error_wrong_password, Toast.LENGTH_LONG).show();
                 }
                 break;
+            case WAITING_FOR_NODE_START:
+                // The wallet might have been unlocked by something else (e.g. automatically by Umbrel) while the unlock prompt was shown.
+                if (mUnlockDialog != null && mUnlockDialog.isShowing()) {
+                    View focusedView = mUnlockDialog.getCurrentFocus();
+                    if (focusedView != null)
+                        mInputMethodManager.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
+                    mUnlockDialog.dismiss();
+                }
+                mIsFirstUnlockAttempt = true;
+                break;
             case CONNECTION_SUCCESS:
                 // Warn the user if the connect node runs old software version that is no longer supported.
                 if (Wallet.getInstance().getCurrentNodeInfo().getVersion().compareTo(BackendManager.getCurrentBackend().getMinRequiredVersion()) < 0) {

@@ -72,6 +72,11 @@ public class CoreLightningConnection {
         try {
 
             SSLSocketFactory baseFactory = CoreLightningSSLSocketFactory.create(BackendManager.getCurrentBackendConfig());
+            if (baseFactory == null) {
+                // Without a socket factory no connection is possible. The most likely reason is an invalid client certificate or key.
+                BackendManager.setError(BackendManager.ERROR_CLN_INVALID_CLIENT_CERTIFICATE_OR_KEY);
+                return;
+            }
             SSLSocketFactory inspectingFactory = new InterceptingSSLSocketFactory(baseFactory);
 
             // Channels are expensive to create. We want to create it once and then reuse it on all our requests.

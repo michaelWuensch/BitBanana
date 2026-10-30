@@ -4,9 +4,15 @@ import com.google.common.io.BaseEncoding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
 /**
@@ -122,6 +128,44 @@ public class CertificateUtil {
         certificatePEM = certificatePEM.replace("-----END CERTIFICATE-----", "");
         byte[] DER = BaseEncoding.base64().decode(certificatePEM);
         return DER;
+    }
+
+    /**
+     * Checks if a private key can be read and belongs to the public key of the given certificate.
+     * This is done by signing random data with the private key and verifying the signature with the public key of the certificate.
+     *
+     * @param privateKeyDER The private key in PKCS#8 DER format
+     * @param certificate   The certificate the key should belong to
+     * @return true if the key is valid and matches the certificate
+     */
+    public static boolean isPrivateKeyMatchingCertificate(byte[] privateKeyDER, Certificate certificate) {
+        try {
+            PublicKey publicKey = certificate.getPublicKey();
+            String keyAlgorithm = publicKey.getAlgorithm();
+            String signatureAlgorithm;
+            if (keyAlgorithm.equals("EC"))
+                signatureAlgorithm = "SHA256withECDSA";
+            else if (keyAlgorithm.equals("RSA"))
+                signatureAlgorithm = "SHA256withRSA";
+            else
+                return false;
+
+            PrivateKey privateKey = KeyFactory.getInstance(keyAlgorithm).generatePrivate(new PKCS8EncodedKeySpec(privateKeyDER));
+
+            byte[] data = new byte[32];
+            new SecureRandom().nextBytes(data);
+            Signature signer = Signature.getInstance(signatureAlgorithm);
+            signer.initSign(privateKey);
+            signer.update(data);
+            byte[] signature = signer.sign();
+
+            Signature verifier = Signature.getInstance(signatureAlgorithm);
+            verifier.initVerify(publicKey);
+            verifier.update(data);
+            return verifier.verify(signature);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**

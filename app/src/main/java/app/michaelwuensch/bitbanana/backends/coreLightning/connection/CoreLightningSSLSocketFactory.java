@@ -20,6 +20,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
+import app.michaelwuensch.bitbanana.connection.CaBlocklistTrustManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
 
@@ -44,6 +45,12 @@ public class CoreLightningSSLSocketFactory {
         } catch (NoSuchAlgorithmException e) {
             BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
+            return null;
+        }
+
+        // Otherwise the error would only show up during the TLS handshake with a technical message.
+        if (!isClientKeyMatchingClientCert(backendConfig)) {
+            BBLog.e(LOG_TAG, "The client key is invalid or does not belong to the client certificate.");
             return null;
         }
 
@@ -89,11 +96,11 @@ public class CoreLightningSSLSocketFactory {
             BBLog.printStackTrace(e);
         }
 
-        // If the above failed, use the default TrustManager which is used when set to null
+        // If the above failed, use the system TrustManager, extended by our CA blocklist.
         // This will be the case for btc pay for example as no self signed certificates are used
         try {
-            sslCtx.init(km, null, new SecureRandom());
-            BBLog.w(LOG_TAG, "Default TrustManager is used.");
+            sslCtx.init(km, new TrustManager[]{CaBlocklistTrustManager.getSystemInstance()}, new SecureRandom());
+            BBLog.w(LOG_TAG, "System TrustManager is used.");
         } catch (KeyManagementException e) {
             BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");
@@ -120,6 +127,14 @@ public class CoreLightningSSLSocketFactory {
         // init key store with client's certificate and key
         keyStore.setKeyEntry("client-key", clientPrivateKey, null, certChain);
         return keyStore;
+    }
+
+    private static boolean isClientKeyMatchingClientCert(BackendConfig backendConfig) {
+        try {
+            return CertificateUtil.isPrivateKeyMatchingCertificate(BaseEncoding.base64().decode(backendConfig.getClientKey()), createClientCertificate(backendConfig));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static PKCS8EncodedKeySpec getClientEncodedKeySpec(BackendConfig backendConfig) {

@@ -485,6 +485,9 @@
     <string name="error_connection_host_verification_failed">Hostname verification failed.\n\nThe hostname of your connection does not match the hostname provided in the host certificate.</string>
     <string name="error_connection_host_unresolvable" comment="Parameters are:  %1$s: hostname/address">Host (%1$s) cannot be resolved.  Please update your node connection settings if your node is now reachable under a different address or hostname.</string>
     <string name="error_connection_lnd_unavailable">Connection failed. The host can be accessed, but the node service isn\'t responding.\n\nPlease verify that the node is operational, that the port number (%1$s) is correct, and that port forwarding is set up.</string>
+    <string name="error_connection_node_starting">Your node is still starting up and does not accept connections yet.\n\nThis can take a while, for example after updating your node. Please try again later.</string>
+    <string name="error_connection_lnd_wallet_not_created">The wallet of your node has not been created yet.\n\nPlease create it on your node first.</string>
+    <string name="error_connection_client_certificate_rejected">The node rejected the client certificate.\n\nPlease make sure the client certificate and client key belong to this node.</string>
     <string name="error_connection_network_unreachable">Unable to reach the host.\n\nPlease make sure you have internet connection.</string>
     <string name="error_connection_unknown">Connection failed.</string>
     <string name="error_connection_no_internet">No internet connection!</string>
@@ -951,6 +954,7 @@
     <string name="connection_state_connecting">Connecting…</string>
     <string name="wallet_load_sate_testing_connection">Testing connection…</string>
     <string name="wallet_load_state_reconnect_after_unlock">Reconnecting…</string>
+    <string name="wallet_load_state_waiting_for_node_start">Waiting for node to start…</string>
     <string name="wallet_load_state_fetching_data">Fetching data…</string>
 
     <string name="unsaved_changes">There are unsaved changes.</string>

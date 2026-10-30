@@ -41,6 +41,7 @@ public class BackendManager {
     public static final int ERROR_GRPC_CREATING_STUBS = 6;
     public static final int ERROR_NWC_CONNECTION_FAILED = 7;
     public static final int ERROR_NWC_REQUIRES_ANDROID_11 = 8;
+    public static final int ERROR_CLN_INVALID_CLIENT_CERTIFICATE_OR_KEY = 9;
 
     private static final String LOG_TAG = BackendManager.class.getSimpleName();
 
@@ -348,6 +349,9 @@ public class BackendManager {
                 break;
             case ERROR_NWC_REQUIRES_ANDROID_11:
                 broadcastBackendStateError(App.getAppContext().getString(R.string.error_nwc_min_android_version), errorCode);
+                break;
+            case ERROR_CLN_INVALID_CLIENT_CERTIFICATE_OR_KEY:
+                broadcastBackendStateError(App.getAppContext().getString(R.string.error_connection_clngrpc_invalidCertificateOrKey), errorCode);
         }
     }
 
