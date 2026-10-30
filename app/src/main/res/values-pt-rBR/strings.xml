@@ -1128,4 +1128,8 @@
     <string name="error_connection_unencrypted_refused" comment="Parameters are:  %1$s: hostname/address">Conexão não criptografada recusada.\n\n%1$s usa http://, que enviaria sua senha e tokens de acesso sem criptografia pela internet.\n\nPor favor, utilize https://, um endereço Tor (.onion) ou se conecte pela sua rede local ou por uma VPN.</string>
     <string name="error_btcpay_config_requires_tor">Não foi possível obter a configuração do BTCPay Server. Ele usa um endereço Tor (.onion), que só pode ser acessado pelo Tor. Por favor, ative o Tor nas configurações e tente novamente.</string>
     <string name="biometric_unlock_disabled_biometrics_changed">A biometria do seu dispositivo mudou (p.ex., uma nova digital foi adicionada). Por segurança, o desbloqueio por biometria foi desativado.\n\nPor favor, desbloqueie com seu PIN ou senha e ative novamente a autenticação biométrica nas configurações de bloqueio do app.</string>
+    <string name="error_connection_node_starting">Seu nó está iniciando e não está aceitando conexões ainda.\n\nIsso pode levar um tempo, ao atualizar o nó, por exemplo. Por favor, tente novamente mais tarde.</string>
+    <string name="error_connection_lnd_wallet_not_created">A carteira do seu nó não foi criada ainda.\n\nPor favor, crie uma em seu nó primeiro.</string>
+    <string name="error_connection_client_certificate_rejected">O nó rejeitou o certificado do cliente.\n\nPor favor, certifique-se que o certificado do seu cliente e a chave do seu cliente pertencem a este nó.</string>
+    <string name="wallet_load_state_waiting_for_node_start">Esperando o nó iniciar…</string>
 </resources>
