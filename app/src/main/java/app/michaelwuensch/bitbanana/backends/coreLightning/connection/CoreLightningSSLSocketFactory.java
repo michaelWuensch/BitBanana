@@ -20,6 +20,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfig;
 import app.michaelwuensch.bitbanana.connection.BlindTrustManager;
+import app.michaelwuensch.bitbanana.connection.CaBlocklistTrustManager;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.CertificateUtil;
 
@@ -89,11 +90,11 @@ public class CoreLightningSSLSocketFactory {
             BBLog.printStackTrace(e);
         }
 
-        // If the above failed, use the default TrustManager which is used when set to null
+        // If the above failed, use the system TrustManager, extended by our CA blocklist.
         // This will be the case for btc pay for example as no self signed certificates are used
         try {
-            sslCtx.init(km, null, new SecureRandom());
-            BBLog.w(LOG_TAG, "Default TrustManager is used.");
+            sslCtx.init(km, new TrustManager[]{CaBlocklistTrustManager.getSystemInstance()}, new SecureRandom());
+            BBLog.w(LOG_TAG, "System TrustManager is used.");
         } catch (KeyManagementException e) {
             BBLog.printStackTrace(e);
             BBLog.e(LOG_TAG, "SSLSocketFactory creation failed.");

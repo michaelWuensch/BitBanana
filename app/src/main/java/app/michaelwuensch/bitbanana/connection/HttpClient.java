@@ -30,10 +30,13 @@ public class HttpClient {
             Proxy torProxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorManager.getInstance().getSocksProxyPort()));
 
             return new OkHttpClient.Builder()
+                    .sslSocketFactory(CaBlocklistTrustManager.getSystemSocketFactory(), CaBlocklistTrustManager.getSystemInstance())
                     .proxy(torProxy)
                     .build();
         } else {
-            return new OkHttpClient();
+            return new OkHttpClient.Builder()
+                    .sslSocketFactory(CaBlocklistTrustManager.getSystemSocketFactory(), CaBlocklistTrustManager.getSystemInstance())
+                    .build();
         }
     }
 
