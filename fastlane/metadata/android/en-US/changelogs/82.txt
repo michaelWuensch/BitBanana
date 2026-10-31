@@ -1,0 +1,7 @@
+Fixes connections over Tor, which stopped working on Oct 28 due to a change in the Tor network. If you connect to your node over Tor, please also make sure your node software (e.g. Umbrel) is up to date.
+
+Also:
+- Blocks the compromised eMudhra certificate authority
+- More reliable LND connection process
+- Clearer Core Lightning connection errors
+- Updated translations
