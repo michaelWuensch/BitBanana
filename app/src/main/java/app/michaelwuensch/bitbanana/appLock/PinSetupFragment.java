@@ -424,11 +424,26 @@ public class PinSetupFragment extends Fragment {
         boolean correct = false;
         if (mMode == ENTER_MODE) {
             String userEnteredPin = mUserInput.toString();
-            String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
-            boolean emergencyUnlock = false;
             try {
-                emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "").equals(hashedInput);
-                correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "").equals(hashedInput) || emergencyUnlock;
+                String emergencyPinVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "");
+                UtilFunctions.AppLockVerificationResult emergencyVerification =
+                        UtilFunctions.verifyAppLockVerifier(userEnteredPin, emergencyPinVerifier);
+                boolean emergencyUnlock = emergencyVerification.isVerified();
+                if (emergencyUnlock && emergencyVerification.getReplacementVerifier() != null) {
+                    PrefsUtil.editEncryptedPrefs()
+                            .putString(PrefsUtil.EMERGENCY_PIN_HASH, emergencyVerification.getReplacementVerifier())
+                            .apply();
+                }
+
+                String pinVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "");
+                UtilFunctions.AppLockVerificationResult pinVerification =
+                        UtilFunctions.verifyAppLockVerifier(userEnteredPin, pinVerifier);
+                if (pinVerification.isVerified() && pinVerification.getReplacementVerifier() != null) {
+                    PrefsUtil.editEncryptedPrefs()
+                            .putString(PrefsUtil.PIN_HASH, pinVerification.getReplacementVerifier())
+                            .apply();
+                }
+                correct = pinVerification.isVerified() || emergencyUnlock;
             } catch (GeneralSecurityException | IOException e) {
                 BBLog.printStackTrace(e);
             }
