@@ -100,7 +100,6 @@ import app.michaelwuensch.bitbanana.util.PermissionsUtil;
 import app.michaelwuensch.bitbanana.util.PrefsUtil;
 import app.michaelwuensch.bitbanana.util.RefConstants;
 import app.michaelwuensch.bitbanana.util.RemoteConnectUtil;
-import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import app.michaelwuensch.bitbanana.util.UriUtil;
 import app.michaelwuensch.bitbanana.util.UserGuardian;
 import app.michaelwuensch.bitbanana.util.WalletUtil;
@@ -334,7 +333,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
         BBLog.d(LOG_TAG, "BitBanana moved to foreground");
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
 
-        // Test if lock screen should be shown.
+        // Test if lock screen should be shown. If no HomeActivity exists, App does this instead (see App.onActivityStarted).
         AppLockUtil.askForAccess(this, false, () -> {
             continueMoveToForeground();
         });
@@ -377,7 +376,7 @@ public class HomeActivity extends BaseAppCompatActivity implements LifecycleObse
     public void onMoveToBackground() {
         BBLog.d(LOG_TAG, "BitBanana moved to background");
 
-        TimeOutUtil.getInstance().onMovedToBackground();
+        // The app lock timeout is started in App, as this lifecycle event is not reliable for it (see App.onActivityStopped).
 
         App.getAppContext().getBackgroundCloseHandler().removeCallbacksAndMessages(null);
         App.getAppContext().getBackgroundCloseHandler().postDelayed(() -> disconnectTimeoutReached(), RefConstants.DISCONNECT_TIMEOUT * 1000);

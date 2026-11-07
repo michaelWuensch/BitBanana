@@ -10,11 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import app.michaelwuensch.bitbanana.LandingActivity;
+import app.michaelwuensch.bitbanana.LauncherActivity;
+import app.michaelwuensch.bitbanana.appLock.PasswordEntryActivity;
+import app.michaelwuensch.bitbanana.appLock.PinEntryActivity;
 import app.michaelwuensch.bitbanana.backendConfigs.BackendConfigsManager;
 import app.michaelwuensch.bitbanana.backends.BackendManager;
 import app.michaelwuensch.bitbanana.connection.ConnectionKeepAliveService;
+import app.michaelwuensch.bitbanana.home.HomeActivity;
+import app.michaelwuensch.bitbanana.util.AppLockUtil;
 import app.michaelwuensch.bitbanana.util.BBLog;
 import app.michaelwuensch.bitbanana.util.PermissionsUtil;
+import app.michaelwuensch.bitbanana.util.TimeOutUtil;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 
@@ -46,15 +53,24 @@ public class App extends Application {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
+                if (activity instanceof HomeActivity)
+                    homeActivityRefs++;
             }
 
             int activityRefs = 0;
+            int homeActivityRefs = 0;
 
             @Override
             public void onActivityStarted(Activity activity) {
                 if (++activityRefs == 1) {
                     // App enters foreground
+
+                    // Show the lock screen if necessary. Usually the HomeActivity does this when the app is moved to foreground (see HomeActivity.onMoveToForeground).
+                    // But if the process was killed while the app was in background, Android only recreates the activity that was on top (e.g. the node details) and not the HomeActivity.
+                    // Without this check, that activity would be shown without asking for the PIN.
+                    if (homeActivityRefs == 0 && isProtectedByAppLock(activity))
+                        AppLockUtil.askForAccess(activity, false, () -> {
+                        });
 
                     // Stop foreground service to keep connection alive.
                     if (System.currentTimeMillis() - ForegroundServiceStartTimestamp > 5000)
@@ -80,6 +96,13 @@ public class App extends Application {
             @Override
             public void onActivityStopped(Activity activity) {
                 if (--activityRefs == 0) {
+                    // Start the app lock timeout. This has to happen here and not in an observer of an activity:
+                    // The ProcessLifecycleOwner reports ON_STOP with a delay of 700 ms. If the activity gets destroyed in the meantime (e.g. when the app is swiped away in the recent apps),
+                    // the event would be missed, the timeout would never start and the lock screen would not be shown when the app is opened again.
+                    // Configuration changes (e.g. rotation) are not a move to background.
+                    if (!activity.isChangingConfigurations())
+                        TimeOutUtil.getInstance().onMovedToBackground();
+
                     // App goes to background. This fires faster than our Lifecycle event on the home activity. Starting the keepAlive service faster ensures the onDestroy event of the home activity gets executed, which ensures VPN is stopped when closing the app through swiping.
 
                     // Start foreground service to keep connection alive.
@@ -101,11 +124,24 @@ public class App extends Application {
 
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
-
+                if (activity instanceof HomeActivity)
+                    homeActivityRefs--;
             }
 
             // other methods...
         });
+    }
+
+    /**
+     * Activities of other libraries and the decoy apps are not based on BaseAppCompatActivity and therefore not protected.
+     * The lock screens themselves and the activities that start the app (they check the app lock on their own) are excluded as well.
+     */
+    private static boolean isProtectedByAppLock(Activity activity) {
+        return activity instanceof BaseAppCompatActivity
+                && !(activity instanceof LauncherActivity)
+                && !(activity instanceof LandingActivity)
+                && !(activity instanceof PinEntryActivity)
+                && !(activity instanceof PasswordEntryActivity);
     }
 
     public static App getAppContext() {
