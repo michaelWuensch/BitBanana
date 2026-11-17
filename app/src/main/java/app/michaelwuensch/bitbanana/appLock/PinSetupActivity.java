@@ -63,31 +63,44 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
     }
 
     public void pinCreated(String value) {
-        String hashedValue = UtilFunctions.appLockDataHash(value);
         if (mSetupMode == ADD_EMERGENCY_PIN || mSetupMode == CHANGE_EMERGENCY_PIN) {
-            String pinHash = "";
             try {
-                pinHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "");
-            } catch (GeneralSecurityException | IOException e) {
-                throw new RuntimeException(e);
-            }
-            if (hashedValue.equals(pinHash)) {
-                showError(getString(R.string.error_pin_and_emergency_pin_equal), 3000);
-            } else {
-                showConfirmPin(value);
-            }
-        } else if (mSetupMode == ADD_PIN || mSetupMode == CHANGE_PIN) {
-            if (PrefsUtil.isEmergencyPinEnabled()) {
-                String emergencyPinHash = "";
-                try {
-                    emergencyPinHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "");
-                } catch (GeneralSecurityException | IOException e) {
-                    throw new RuntimeException(e);
-                }
-                if (hashedValue.equals(emergencyPinHash) && !AppLockUtil.isEmergencyUnlocked) {
+                String pinHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PIN_HASH, "");
+                UtilFunctions.AppLockVerificationResult verificationResult = UtilFunctions.verifyAppLockVerifier(value, pinHash);
+                if (verificationResult.isVerified()) {
+                    String replacementVerifier = verificationResult.getReplacementVerifier();
+                    if (replacementVerifier != null) {
+                        PrefsUtil.editEncryptedPrefs()
+                                .putString(PrefsUtil.PIN_HASH, replacementVerifier)
+                                .commit();
+                    }
                     showError(getString(R.string.error_pin_and_emergency_pin_equal), 3000);
                 } else {
                     showConfirmPin(value);
+                }
+            } catch (GeneralSecurityException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (mSetupMode == ADD_PIN || mSetupMode == CHANGE_PIN) {
+            if (PrefsUtil.isEmergencyPinEnabled()) {
+                try {
+                    String emergencyPinHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PIN_HASH, "");
+                    UtilFunctions.AppLockVerificationResult verificationResult = UtilFunctions.verifyAppLockVerifier(value, emergencyPinHash);
+                    if (verificationResult.isVerified()) {
+                        String replacementVerifier = verificationResult.getReplacementVerifier();
+                        if (replacementVerifier != null) {
+                            PrefsUtil.editEncryptedPrefs()
+                                    .putString(PrefsUtil.EMERGENCY_PIN_HASH, replacementVerifier)
+                                    .commit();
+                        }
+                    }
+                    if (verificationResult.isVerified() && !AppLockUtil.isEmergencyUnlocked) {
+                        showError(getString(R.string.error_pin_and_emergency_pin_equal), 3000);
+                    } else {
+                        showConfirmPin(value);
+                    }
+                } catch (GeneralSecurityException | IOException e) {
+                    throw new RuntimeException(e);
                 }
             } else {
                 showConfirmPin(value);
@@ -101,7 +114,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
             // save pin hash in encrypted prefs
             try {
                 PrefsUtil.editEncryptedPrefs()
-                        .putString(PrefsUtil.PIN_HASH, UtilFunctions.appLockDataHash(value))
+                        .putString(PrefsUtil.PIN_HASH, UtilFunctions.createAppLockVerifier(value))
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
                 BBLog.printStackTrace(e);
@@ -144,7 +157,7 @@ public class PinSetupActivity extends BaseAppCompatActivity implements AppLockIn
             // save emergency pin hash in encrypted prefs
             try {
                 PrefsUtil.editEncryptedPrefs()
-                        .putString(PrefsUtil.EMERGENCY_PIN_HASH, UtilFunctions.appLockDataHash(value))
+                        .putString(PrefsUtil.EMERGENCY_PIN_HASH, UtilFunctions.createAppLockVerifier(value))
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
                 BBLog.printStackTrace(e);

@@ -62,16 +62,23 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
     }
 
     public void passwordCreated(String value) {
-        String hashedValue = UtilFunctions.appLockDataHash(value);
+        String verifier = UtilFunctions.createAppLockVerifier(value);
         if (mSetupMode == ADD_PASSWORD || mSetupMode == CHANGE_PASSWORD) {
             if (PrefsUtil.isEmergencyPasswordEnabled()) {
-                String emergencyPasswordHash = "";
+                UtilFunctions.AppLockVerificationResult emergencyPasswordVerification;
                 try {
-                    emergencyPasswordHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, "");
+                    String emergencyPasswordVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, "");
+                    emergencyPasswordVerification = UtilFunctions.verifyAppLockVerifier(value, emergencyPasswordVerifier);
+                    if (emergencyPasswordVerification.isVerified()
+                            && emergencyPasswordVerification.getReplacementVerifier() != null) {
+                        PrefsUtil.editEncryptedPrefs()
+                                .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, emergencyPasswordVerification.getReplacementVerifier())
+                                .commit();
+                    }
                 } catch (GeneralSecurityException | IOException e) {
                     throw new RuntimeException(e);
                 }
-                if (hashedValue.equals(emergencyPasswordHash) && !AppLockUtil.isEmergencyUnlocked) {
+                if (emergencyPasswordVerification.isVerified() && !AppLockUtil.isEmergencyUnlocked) {
                     showError(getString(R.string.error_password_and_emergency_password_equal), 3000);
                     return;
                 }
@@ -93,7 +100,7 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
             // save password hash in encrypted prefs
             try {
                 PrefsUtil.editEncryptedPrefs()
-                        .putString(PrefsUtil.PASSWORD_HASH, hashedValue)
+                        .putString(PrefsUtil.PASSWORD_HASH, verifier)
                         .commit();
             } catch (GeneralSecurityException | IOException e) {
                 BBLog.printStackTrace(e);
@@ -132,20 +139,27 @@ public class PasswordSetupActivity extends BaseAppCompatActivity implements AppL
                 // Finally we also delete the connections
                 AppLockUtil.emergencyClearAllButWalletToShow();
             }
-            String passwordHash = "";
+            UtilFunctions.AppLockVerificationResult passwordVerification;
             try {
-                passwordHash = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "");
+                String passwordVerifier = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "");
+                passwordVerification = UtilFunctions.verifyAppLockVerifier(value, passwordVerifier);
+                if (passwordVerification.isVerified()
+                        && passwordVerification.getReplacementVerifier() != null) {
+                    PrefsUtil.editEncryptedPrefs()
+                            .putString(PrefsUtil.PASSWORD_HASH, passwordVerification.getReplacementVerifier())
+                            .commit();
+                }
             } catch (GeneralSecurityException | IOException e) {
                 throw new RuntimeException(e);
             }
-            if (hashedValue.equals(passwordHash)) {
+            if (passwordVerification.isVerified()) {
                 showError(getString(R.string.error_password_and_emergency_password_equal), 3000);
                 return;
             } else {
-                // save emergency password hash in encrypted prefs
+                // save emergency password verifier in encrypted prefs
                 try {
                     PrefsUtil.editEncryptedPrefs()
-                            .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, hashedValue)
+                            .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, verifier)
                             .commit();
                 } catch (GeneralSecurityException | IOException e) {
                     BBLog.printStackTrace(e);

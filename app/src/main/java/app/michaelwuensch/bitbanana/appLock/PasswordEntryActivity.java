@@ -221,17 +221,44 @@ public class PasswordEntryActivity extends BaseAppCompatActivity {
             Toast.makeText(this, getString(R.string.backup_data_password_empty), Toast.LENGTH_SHORT).show();
             return;
         }
-        // Check if password was correct
-        String hashedInput = UtilFunctions.appLockDataHash(mPasswordInput.getData());
         boolean correct = false;
         boolean emergencyUnlock = false;
+        UtilFunctions.AppLockVerificationResult emergencyVerification = null;
+        UtilFunctions.AppLockVerificationResult passwordVerification = null;
         try {
-            emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, "").equals(hashedInput);
-            correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "").equals(hashedInput) || emergencyUnlock;
+            String enteredPassword = mPasswordInput.getData();
+            emergencyVerification = UtilFunctions.verifyAppLockVerifier(
+                    enteredPassword,
+                    PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, ""));
+            passwordVerification = UtilFunctions.verifyAppLockVerifier(
+                    enteredPassword,
+                    PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, ""));
+            emergencyUnlock = emergencyVerification.isVerified();
+            correct = passwordVerification.isVerified() || emergencyUnlock;
         } catch (GeneralSecurityException | IOException e) {
             BBLog.printStackTrace(e);
         }
         if (correct) {
+            if (emergencyVerification != null && emergencyVerification.isVerified()
+                    && emergencyVerification.getReplacementVerifier() != null) {
+                try {
+                    PrefsUtil.getEncryptedPrefs().edit()
+                            .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, emergencyVerification.getReplacementVerifier())
+                            .apply();
+                } catch (GeneralSecurityException | IOException e) {
+                    BBLog.printStackTrace(e);
+                }
+            }
+            if (passwordVerification != null && passwordVerification.isVerified()
+                    && passwordVerification.getReplacementVerifier() != null) {
+                try {
+                    PrefsUtil.getEncryptedPrefs().edit()
+                            .putString(PrefsUtil.PASSWORD_HASH, passwordVerification.getReplacementVerifier())
+                            .apply();
+                } catch (GeneralSecurityException | IOException e) {
+                    BBLog.printStackTrace(e);
+                }
+            }
             TimeOutUtil.getInstance().setUnlocked();
             AppLockUtil.isEmergencyUnlocked = emergencyUnlock;
 

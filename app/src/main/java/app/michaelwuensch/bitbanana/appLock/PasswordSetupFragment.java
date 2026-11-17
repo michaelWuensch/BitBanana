@@ -292,12 +292,28 @@ public class PasswordSetupFragment extends Fragment {
             // Check if password was correct
             boolean correct = false;
             String userEnteredPin = mPasswordInput.getData();
-            String hashedInput = UtilFunctions.appLockDataHash(userEnteredPin);
-            boolean emergencyUnlock = false;
             try {
-                emergencyUnlock = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, "").equals(hashedInput);
-                correct = PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, "").equals(hashedInput) || emergencyUnlock;
+                UtilFunctions.AppLockVerificationResult emergencyVerification =
+                        UtilFunctions.verifyAppLockVerifier(userEnteredPin,
+                                PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.EMERGENCY_PASSWORD_HASH, ""));
+                UtilFunctions.AppLockVerificationResult passwordVerification =
+                        UtilFunctions.verifyAppLockVerifier(userEnteredPin,
+                                PrefsUtil.getEncryptedPrefs().getString(PrefsUtil.PASSWORD_HASH, ""));
+                boolean emergencyUnlock = emergencyVerification.isVerified();
+                correct = passwordVerification.isVerified() || emergencyUnlock;
                 if (correct) {
+                    if (emergencyVerification.isVerified()
+                            && emergencyVerification.getReplacementVerifier() != null) {
+                        PrefsUtil.editEncryptedPrefs()
+                                .putString(PrefsUtil.EMERGENCY_PASSWORD_HASH, emergencyVerification.getReplacementVerifier())
+                                .apply();
+                    }
+                    if (passwordVerification.isVerified()
+                            && passwordVerification.getReplacementVerifier() != null) {
+                        PrefsUtil.editEncryptedPrefs()
+                                .putString(PrefsUtil.PASSWORD_HASH, passwordVerification.getReplacementVerifier())
+                                .apply();
+                    }
                     PrefsUtil.editPrefs().putInt(PrefsUtil.APP_NUM_UNLOCK_FAILS, 0).apply();
 
                     ((AppLockInterface) getActivity()).correctAccessDataEntered();
